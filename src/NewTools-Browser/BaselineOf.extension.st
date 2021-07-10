@@ -1,16 +1,10 @@
 Extension { #name : #BaselineOf }
 
 { #category : #'*NewTools-Browser' }
-BaselineOf class >> browserChildren [
-	
-	^ self version packages asOrderedCollection
-]
-
-{ #category : #'*NewTools-Browser' }
 BaselineOf class >> browserClasses [
 	
-	^ self version packages 
-		flatCollect: [ :each | each browserChildren ]
+	^ self browserPackageChildren 
+		flatCollect: [ :each | each browserClasses ]
 		as: OrderedCollection
 ]
 
@@ -18,6 +12,15 @@ BaselineOf class >> browserClasses [
 BaselineOf class >> browserName [
 
 	^ self name allButFirst: 10
+]
+
+{ #category : #'*NewTools-Browser' }
+BaselineOf class >> browserPackageChildren [
+	
+	^ Array streamContents: [ :stream | 
+		self version packages do: [ :aPackageSpec | 
+			aPackageSpec browserPackage ifNotNil: [ :aPackage |
+				stream << aPackage ] ] ]
 ]
 
 { #category : #'*NewTools-Browser' }

@@ -1,5 +1,5 @@
 Class {
-	#name : #StBrowserProjectsPresenter,
+	#name : #StBrowserBaselinesPresenter,
 	#superclass : #StBrowserPanelPresenter,
 	#instVars : [
 		'projectsTreePresenter',
@@ -9,24 +9,21 @@ Class {
 }
 
 { #category : #initialization }
-StBrowserProjectsPresenter >> childrenOf: aProjectOrPackage [
+StBrowserBaselinesPresenter >> childrenOf: aProjectOrPackage [
 	
 	aProjectOrPackage ifNil: [ ^ #() ].
-	(aProjectOrPackage isClass 
-		and: [ (self isBaseline: aProjectOrPackage) not ]) 
-		ifTrue: [ ^ #() ].
-	^ aProjectOrPackage browserChildren
+	^ aProjectOrPackage browserPackageChildren
 ]
 
 { #category : #initialization }
-StBrowserProjectsPresenter >> classesOf: aProjectOrPackage [
+StBrowserBaselinesPresenter >> classesOf: aProjectOrPackage [
 	
 	aProjectOrPackage ifNil: [ ^ #() ].
 	^ aProjectOrPackage browserClasses
 ]
 
 { #category : #initialization }
-StBrowserProjectsPresenter >> initializePresenters [
+StBrowserBaselinesPresenter >> initializePresenters [
 
 	self layout: (SpPanedLayout newLeftToRight
 		add: (projectsTreePresenter := self newTree);
@@ -44,13 +41,13 @@ StBrowserProjectsPresenter >> initializePresenters [
 ]
 
 { #category : #initialization }
-StBrowserProjectsPresenter >> isBaseline: aProjectOrPackage [
+StBrowserBaselinesPresenter >> isBaseline: aProjectOrPackage [
 
 	^ aProjectOrPackage inheritsFrom: BaselineOf
 ]
 
 { #category : #initialization }
-StBrowserProjectsPresenter >> updatePresenter [
+StBrowserBaselinesPresenter >> updatePresenter [
 
 	projectsTreePresenter roots: self model projects
 ]

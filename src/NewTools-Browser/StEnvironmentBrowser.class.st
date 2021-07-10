@@ -51,7 +51,7 @@ StEnvironmentBrowser >> initializePresenters [
 	self layout: (SpPanedLayout newTopToBottom
 		add: (SpPanedLayout newLeftToRight
 			add: (SpTabLayout new 
-				add: (projectsPresenter := self newProjectsPanel) label: 'Projects';
+				add: (projectsPresenter := self newBaselinesPanel) label: 'Baselines';
 				add: (packagesPresenter := self newPackagesPanel) label: 'Packages';
 				add: (classesPresenter := self newClassesPanel) label: 'Classes';
 				yourself);
@@ -70,6 +70,14 @@ StEnvironmentBrowser >> initializeWindow: aWindowPresenter [
 ]
 
 { #category : #initialization }
+StEnvironmentBrowser >> newBaselinesPanel [
+		
+	^ self 
+		instantiate: StBrowserBaselinesPresenter 
+		on: self model
+]
+
+{ #category : #initialization }
 StEnvironmentBrowser >> newClassesPanel [
 		
 	^ self newList
@@ -79,12 +87,4 @@ StEnvironmentBrowser >> newClassesPanel [
 StEnvironmentBrowser >> newPackagesPanel [
 		
 	^ self newList
-]
-
-{ #category : #initialization }
-StEnvironmentBrowser >> newProjectsPanel [
-		
-	^ self 
-		instantiate: StBrowserProjectsPresenter 
-		on: self model
 ]
