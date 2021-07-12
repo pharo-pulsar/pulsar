@@ -9,20 +9,6 @@ Class {
 }
 
 { #category : #initialization }
-StBrowserBaselinesPresenter >> childrenOf: aProjectOrPackage [
-	
-	aProjectOrPackage ifNil: [ ^ #() ].
-	^ aProjectOrPackage browserPackageChildren
-]
-
-{ #category : #initialization }
-StBrowserBaselinesPresenter >> classesOf: aProjectOrPackage [
-	
-	aProjectOrPackage ifNil: [ ^ #() ].
-	^ aProjectOrPackage browserClasses
-]
-
-{ #category : #initialization }
 StBrowserBaselinesPresenter >> initializePresenters [
 
 	self layout: (SpPanedLayout newLeftToRight
@@ -49,5 +35,5 @@ StBrowserBaselinesPresenter >> isBaseline: aProjectOrPackage [
 { #category : #initialization }
 StBrowserBaselinesPresenter >> updatePresenter [
 
-	projectsTreePresenter roots: self model projects
+	projectsTreePresenter roots: self model baselines
 ]

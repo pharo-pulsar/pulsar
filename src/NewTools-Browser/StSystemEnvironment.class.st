@@ -5,8 +5,13 @@ Class {
 }
 
 { #category : #accessing }
-StSystemEnvironment >> projects [
+StSystemEnvironment >> baselines [
 
-	^ BaselineOf allSubclasses.
+	^ BaselineOf allSubclasses
+]
+
+{ #category : #accessing }
+StSystemEnvironment >> packages [
 	
+	^ RPackageOrganizer default packages
 ]

@@ -41,7 +41,7 @@ StEnvironmentBrowser class >> preferredExtent [
 { #category : #initialization }
 StEnvironmentBrowser >> initializeEnvironment: anEnvironment [
 
-	model := StEnvironmentModel on: anEnvironment.
+	model := StEnvironmentBrowserModel on: anEnvironment.
 	self initialize
 ]
 
@@ -86,5 +86,7 @@ StEnvironmentBrowser >> newClassesPanel [
 { #category : #initialization }
 StEnvironmentBrowser >> newPackagesPanel [
 		
-	^ self newList
+	^ self 
+		instantiate: StBrowserPackagesPresenter 
+		on: self model
 ]
