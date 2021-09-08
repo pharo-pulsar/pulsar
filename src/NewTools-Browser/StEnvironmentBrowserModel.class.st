@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'browserEnvironment'
 	],
-	#category : #'NewTools-Browser'
+	#category : #'NewTools-Browser-View'
 }
 
 { #category : #'instance creation' }

@@ -1,9 +1,7 @@
 Class {
 	#name : #StBrowserPanelPresenter,
-	#superclass : #StPresenter,
-	#traits : 'SpTModel',
-	#classTraits : 'SpTModel classTrait',
-	#category : #'NewTools-Browser'
+	#superclass : #StBrowserModelPresenter,
+	#category : #'NewTools-Browser-View'
 }
 
 { #category : #private }

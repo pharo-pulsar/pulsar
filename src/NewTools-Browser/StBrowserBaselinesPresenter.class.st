@@ -5,7 +5,7 @@ Class {
 		'projectsTreePresenter',
 		'classesTreePresenter'
 	],
-	#category : #'NewTools-Browser'
+	#category : #'NewTools-Browser-View'
 }
 
 { #category : #initialization }

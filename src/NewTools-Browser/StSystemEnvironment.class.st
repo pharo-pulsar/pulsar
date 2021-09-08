@@ -1,7 +1,7 @@
 Class {
 	#name : #StSystemEnvironment,
 	#superclass : #StEnvironment,
-	#category : #'NewTools-Browser'
+	#category : #'NewTools-Browser-Model'
 }
 
 { #category : #accessing }

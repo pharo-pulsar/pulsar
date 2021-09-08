@@ -1,5 +1,5 @@
 Class {
 	#name : #StRemoteEnvironment,
 	#superclass : #StEnvironment,
-	#category : #'NewTools-Browser'
+	#category : #'NewTools-Browser-Model'
 }

@@ -6,9 +6,10 @@ Class {
 	#instVars : [
 		'projectsPresenter',
 		'packagesPresenter',
-		'classesPresenter'
+		'hierarchyPresenter',
+		'classPanel'
 	],
-	#category : #'NewTools-Browser'
+	#category : #'NewTools-Browser-View'
 }
 
 { #category : #'instance creation' }
@@ -38,6 +39,18 @@ StEnvironmentBrowser class >> preferredExtent [
 	^ 900@650
 ]
 
+{ #category : #'private - accessing' }
+StEnvironmentBrowser >> classPanel [
+		
+	^ classPanel ifNil: [ classPanel := self newClassPanel ]
+]
+
+{ #category : #'private - accessing' }
+StEnvironmentBrowser >> hierarchyPanel [
+		
+	^ hierarchyPresenter ifNil: [ hierarchyPresenter := self newHierarchyPanel ]
+]
+
 { #category : #initialization }
 StEnvironmentBrowser >> initializeEnvironment: anEnvironment [
 
@@ -50,12 +63,12 @@ StEnvironmentBrowser >> initializePresenters [
 
 	self layout: (SpPanedLayout newTopToBottom
 		add: (SpPanedLayout newLeftToRight
-			add: (SpTabLayout new 
-				add: (projectsPresenter := self newBaselinesPanel) label: 'Baselines';
-				add: (packagesPresenter := self newPackagesPanel) label: 'Packages';
-				add: (classesPresenter := self newClassesPanel) label: 'Classes';
+			add: (self newNotebook
+				"add: (projectsPresenter := self newBaselinesPanel) label: 'Baselines';"
+				addPageTitle: 'Packages' provider: [ self packagesPanel ];
+				addPageTitle: 'Hierarchy' provider: [ self hierarchyPanel ];
 				yourself);
-			add: (SpTabLayout new);
+			add: self classPanel;
 			yourself);
 		add: (SpTabLayout new);
 		yourself)
@@ -69,7 +82,7 @@ StEnvironmentBrowser >> initializeWindow: aWindowPresenter [
 		initialExtent: self class preferredExtent
 ]
 
-{ #category : #initialization }
+{ #category : #'private - factory' }
 StEnvironmentBrowser >> newBaselinesPanel [
 		
 	^ self 
@@ -77,16 +90,29 @@ StEnvironmentBrowser >> newBaselinesPanel [
 		on: self model
 ]
 
-{ #category : #initialization }
-StEnvironmentBrowser >> newClassesPanel [
+{ #category : #'private - factory' }
+StEnvironmentBrowser >> newClassPanel [
+		
+	^ self instantiate: StBrowserClassPresenter
+]
+
+{ #category : #'private - factory' }
+StEnvironmentBrowser >> newHierarchyPanel [
 		
 	^ self newList
 ]
 
-{ #category : #initialization }
+{ #category : #'private - factory' }
 StEnvironmentBrowser >> newPackagesPanel [
 		
-	^ self 
-		instantiate: StBrowserPackagesPresenter 
-		on: self model
+	^ self instantiate: StBrowserPackageListPresenter on: self model
+]
+
+{ #category : #initialization }
+StEnvironmentBrowser >> packagesPanel [
+
+	^ packagesPresenter ifNil: [ 
+		packagesPresenter := self newPackagesPanel.
+		packagesPresenter transmitTo: self classPanel.
+		packagesPresenter ]
 ]
