@@ -13,5 +13,6 @@ StSystemEnvironment >> baselines [
 { #category : #accessing }
 StSystemEnvironment >> packages [
 	
-	^ RPackageOrganizer default packages
+	^ RPackageOrganizer default packages 
+
 ]

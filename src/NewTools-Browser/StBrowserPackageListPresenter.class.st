@@ -1,12 +1,19 @@
 Class {
 	#name : #StBrowserPackageListPresenter,
-	#superclass : #StBrowserPanelPresenter,
+	#superclass : #StBrowserModelPresenter,
 	#instVars : [
 		'packagesTreePresenter',
 		'classesPanelPresenter'
 	],
 	#category : #'NewTools-Browser-View'
 }
+
+{ #category : #private }
+StBrowserPackageListPresenter >> classesOf: aPackageTagModel [
+	
+	aPackageTagModel ifNil: [ ^ #() ].
+	^ aPackageTagModel classes
+]
 
 { #category : #transmission }
 StBrowserPackageListPresenter >> defaultInputPort [
@@ -20,12 +27,6 @@ StBrowserPackageListPresenter >> defaultOutputPort [
 	^ self outputClassSelectionPort
 ]
 
-{ #category : #private }
-StBrowserPackageListPresenter >> iconForPackage: aClass [
-		
-	^ nil
-]
-
 { #category : #initialization }
 StBrowserPackageListPresenter >> initializePresenters [
 
@@ -35,19 +36,13 @@ StBrowserPackageListPresenter >> initializePresenters [
 		yourself).
 		
 	packagesTreePresenter 
-		display: [ :aPackage | self nameForPackage: aPackage ];
-		displayIcon: [ :aPackage | self iconForPackage: aPackage ];
-		children: [ :aPackage | self childrenOf: aPackage ].
+		display: [ :aPackageModel | aPackageModel name ];
+		displayIcon: [ :aPackageModel | aPackageModel icon ];
+		children: [ :aPackageModel | aPackageModel children ].
 	
 	packagesTreePresenter 
 		transmitTo: classesPanelPresenter
 		transform: [ :aPackageOrTag | self classesOf: aPackageOrTag ]
-]
-
-{ #category : #private }
-StBrowserPackageListPresenter >> nameForPackage: aPackage [
-		
-	^ aPackage browserName
 ]
 
 { #category : #transmission }

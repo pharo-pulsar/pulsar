@@ -20,12 +20,6 @@ StBrowserClassListPresenter >> defaultOutputPort [
 	^ self outputClassSelectionPort
 ]
 
-{ #category : #private }
-StBrowserClassListPresenter >> iconForClass: aClass [
-		
-	^ nil
-]
-
 { #category : #initialization }
 StBrowserClassListPresenter >> initializePresenters [
 
@@ -34,8 +28,8 @@ StBrowserClassListPresenter >> initializePresenters [
 		yourself).
 		
 	classTree
-		display: [ :aClass | self nameForClass: aClass ];
-		displayIcon: [ :aClass | self iconForClass: aClass ];
+		display: [ :aClassModel | aClassModel name ];
+		displayIcon: [ :aClassModel | aClassModel icon ];
 		children: [ :aNode | aNode children sorted: #name ascending ]
 ]
 
@@ -43,12 +37,6 @@ StBrowserClassListPresenter >> initializePresenters [
 StBrowserClassListPresenter >> inputClassesPort [
 
 	^ classTree inputRootsPort
-]
-
-{ #category : #private }
-StBrowserClassListPresenter >> nameForClass: aClass [
-		
-	^ aClass name
 ]
 
 { #category : #transmission }

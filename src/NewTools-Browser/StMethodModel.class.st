@@ -1,0 +1,34 @@
+Class {
+	#name : #StMethodModel,
+	#superclass : #Object,
+	#instVars : [
+		'method'
+	],
+	#category : #'NewTools-Browser-Model'
+}
+
+{ #category : #'instance creation' }
+StMethodModel class >> newMethod: aMethod [ 
+
+	^ self new 
+		method: aMethod;
+		yourself
+]
+
+{ #category : #accessing }
+StMethodModel >> method [
+
+	^ method
+]
+
+{ #category : #accessing }
+StMethodModel >> method: anObject [
+
+	method := anObject
+]
+
+{ #category : #accessing }
+StMethodModel >> name [
+
+	^ self method selector
+]

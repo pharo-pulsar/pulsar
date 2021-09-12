@@ -16,23 +16,26 @@ StBrowserClassOrganizationPresenter >> initializePresenters [
 		add: (methodList := self newList);
 		yourself).
 	
+	protocolList display: [ :aProtocolModel | aProtocolModel name ]. 
+	methodList display: [ :aMethodModel | aMethodModel name ]. 
+	
 	protocolList 
 		transmitTo: methodList
-		transform: [ :aProtocol | self methodsFor: self model protocol: aProtocol ]
+		transform: [ :aProtocolModel | self methodsFor: aProtocolModel ]
 ]
 
-{ #category : #private }
-StBrowserClassOrganizationPresenter >> methodsFor: aClass protocol: aProtocol [
+{ #category : #accessing }
+StBrowserClassOrganizationPresenter >> methodsFor: aProtocolModel [
 
-	self flag: #TODO.
-	^ #()
+	aProtocolModel ifNil: [ ^ #() ].
+	^ aProtocolModel methods
 ]
 
-{ #category : #private }
-StBrowserClassOrganizationPresenter >> protocolsFor: aClass [
-
-	aClass ifNil: [ ^ #() ].
-	^ aClass protocols
+{ #category : #accessing }
+StBrowserClassOrganizationPresenter >> protocolsFor: aClassModel [ 
+	
+	aClassModel ifNil: [ ^ #() ].
+	^ aClassModel protocols
 ]
 
 { #category : #initialization }

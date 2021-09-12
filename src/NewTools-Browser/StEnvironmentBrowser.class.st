@@ -59,18 +59,25 @@ StEnvironmentBrowser >> initializeEnvironment: anEnvironment [
 ]
 
 { #category : #initialization }
+StEnvironmentBrowser >> initializePackagesPresenter [
+	
+	packagesPresenter := self newPackagesPanel.
+	packagesPresenter transmitTo: self classPanel.
+
+]
+
+{ #category : #initialization }
 StEnvironmentBrowser >> initializePresenters [
 
 	self layout: (SpPanedLayout newTopToBottom
 		add: (SpPanedLayout newLeftToRight
 			add: (self newNotebook
-				"add: (projectsPresenter := self newBaselinesPanel) label: 'Baselines';"
 				addPageTitle: 'Packages' provider: [ self packagesPanel ];
 				addPageTitle: 'Hierarchy' provider: [ self hierarchyPanel ];
 				yourself);
 			add: self classPanel;
 			yourself);
-		add: (SpTabLayout new);
+		add: self newNotebook;
 		yourself)
 ]
 
@@ -80,14 +87,6 @@ StEnvironmentBrowser >> initializeWindow: aWindowPresenter [
 	aWindowPresenter 
 		title: 'Browser';
 		initialExtent: self class preferredExtent
-]
-
-{ #category : #'private - factory' }
-StEnvironmentBrowser >> newBaselinesPanel [
-		
-	^ self 
-		instantiate: StBrowserBaselinesPresenter 
-		on: self model
 ]
 
 { #category : #'private - factory' }
@@ -112,7 +111,6 @@ StEnvironmentBrowser >> newPackagesPanel [
 StEnvironmentBrowser >> packagesPanel [
 
 	^ packagesPresenter ifNil: [ 
-		packagesPresenter := self newPackagesPanel.
-		packagesPresenter transmitTo: self classPanel.
+		self initializePackagesPresenter.
 		packagesPresenter ]
 ]

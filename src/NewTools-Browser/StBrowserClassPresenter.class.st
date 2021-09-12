@@ -5,7 +5,8 @@ Class {
 		'pages',
 		'classSidePanel',
 		'instanceSidePanel',
-		'selectedPage'
+		'selectedPage',
+		'variablesPanel'
 	],
 	#category : #'NewTools-Browser-View'
 }
@@ -26,6 +27,7 @@ StBrowserClassPresenter >> initializePresenters [
 	pages 
 		addPageTitle: 'Class' provider: [ self classSidePanel ];
 		addPageTitle: 'Instance' provider: [ self instanceSidePanel ];
+		addPageTitle: 'Variables' provider: [ self variablesPanel ];
 		whenSelectedPageChangedDo: [ :newValue | selectedPage := newValue ]
 ]
 
@@ -38,13 +40,19 @@ StBrowserClassPresenter >> instanceSidePanel [
 { #category : #initialization }
 StBrowserClassPresenter >> newClassSidePanel [
 	
-	^ self instantiate: StBrowserClassOrganizationPresenter
+	^ self instantiate: StBrowserClassOrganizationPresenter on: self model classSide
 ]
 
 { #category : #initialization }
 StBrowserClassPresenter >> newInstanceSidePanel [
 	
-	^ self instantiate: StBrowserClassOrganizationPresenter
+	^ self instantiate: StBrowserClassOrganizationPresenter on: self model
+]
+
+{ #category : #initialization }
+StBrowserClassPresenter >> newVariablesPanel [
+
+	^ self newLabel label: 'TODO'
 ]
 
 { #category : #initialization }
@@ -55,6 +63,13 @@ StBrowserClassPresenter >> updatePresenter [
 		ifNotNil: [ pages selectPage: selectedPage ]
 		ifNil: [ pages selectPageIndex: 2 ].
 		
-	instanceSidePanel ifNotNil: [ instanceSidePanel model: self model ].
-	classSidePanel ifNotNil: [ classSidePanel model: self model ]
+	instanceSidePanel ifNotNil: [ instanceSidePanel model: (self model ifNotNil: #instanceSide) ].
+	classSidePanel ifNotNil: [ classSidePanel model: (self model ifNotNil: #classSide) ].
+	"variablesPanel ifNotNil: [ variablesPanel model: (self model ifNotNil: #instanceSide) ]"
+]
+
+{ #category : #initialization }
+StBrowserClassPresenter >> variablesPanel [
+
+	^ variablesPanel ifNil: [ variablesPanel := self newVariablesPanel ]
 ]

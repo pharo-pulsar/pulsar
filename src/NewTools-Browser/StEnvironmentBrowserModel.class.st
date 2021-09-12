@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'browserEnvironment'
 	],
-	#category : #'NewTools-Browser-View'
+	#category : #'NewTools-Browser-Model'
 }
 
 { #category : #'instance creation' }
@@ -18,6 +18,7 @@ StEnvironmentBrowserModel class >> on: anEnvironment [
 { #category : #'accessing model' }
 StEnvironmentBrowserModel >> baselines [
 	
+	self halt.
 	^ self browserEnvironment baselines 
 		sorted: #browserPriority ascending, #browserName ascending
 ]
@@ -37,5 +38,7 @@ StEnvironmentBrowserModel >> browserEnvironment: anObject [
 { #category : #accessing }
 StEnvironmentBrowserModel >> packages [
 	
-	^ self browserEnvironment packages sorted: #packageName ascending
+	^ (self browserEnvironment packages 
+		collect: [ :each | StPackageModel newPackage: each ])
+		sorted: #name ascending
 ]
