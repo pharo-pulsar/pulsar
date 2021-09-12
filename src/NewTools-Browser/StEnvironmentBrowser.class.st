@@ -5,9 +5,10 @@ Class {
 	#classTraits : 'SpTModel classTrait',
 	#instVars : [
 		'projectsPresenter',
-		'packagesPresenter',
-		'hierarchyPresenter',
-		'classPanel'
+		'classPanel',
+		'editorContainer',
+		'hierarchyPanel',
+		'packagesPanel'
 	],
 	#category : #'NewTools-Browser-View'
 }
@@ -42,13 +43,42 @@ StEnvironmentBrowser class >> preferredExtent [
 { #category : #'private - accessing' }
 StEnvironmentBrowser >> classPanel [
 		
-	^ classPanel ifNil: [ classPanel := self newClassPanel ]
+	^ classPanel ifNil: [ 
+		self initializeClassPanel.
+		classPanel ]
+]
+
+{ #category : #'private - accessing' }
+StEnvironmentBrowser >> editorContainer [
+
+	^ editorContainer ifNil: [ 
+		self initializeEditorContainer.
+		editorContainer ]
 ]
 
 { #category : #'private - accessing' }
 StEnvironmentBrowser >> hierarchyPanel [
 		
-	^ hierarchyPresenter ifNil: [ hierarchyPresenter := self newHierarchyPanel ]
+	^ hierarchyPanel ifNil: [ 
+		self initializeHierarchyPanel.
+		hierarchyPanel ]
+]
+
+{ #category : #initialization }
+StEnvironmentBrowser >> initializeClassPanel [
+
+	classPanel := self instantiate: StBrowserClassPanelPresenter.
+	classPanel outputProtocolSelectionPort 
+		transmitDo: [ :aProtocolModel | "select a method template. Change method template category?" ].
+	classPanel 
+		transmitDo: [ :aMethodModel | self pushMethodEditor: aMethodModel ]
+		
+]
+
+{ #category : #initialization }
+StEnvironmentBrowser >> initializeEditorContainer [
+
+	editorContainer := self instantiate: StBrowserEditorContainerPresenter
 ]
 
 { #category : #initialization }
@@ -59,17 +89,29 @@ StEnvironmentBrowser >> initializeEnvironment: anEnvironment [
 ]
 
 { #category : #initialization }
-StEnvironmentBrowser >> initializePackagesPresenter [
-	
-	packagesPresenter := self newPackagesPanel.
-	packagesPresenter transmitTo: self classPanel.
+StEnvironmentBrowser >> initializeHierarchyPanel [
 
+	self flag: #TODO.
+	hierarchyPanel := self newList
+]
+
+{ #category : #initialization }
+StEnvironmentBrowser >> initializePackagesPanel [
+	
+	packagesPanel := self instantiate: StBrowserPackageListPresenter on: self model.
+	packagesPanel outputPackageSelectionPort 
+		transmitDo: [ :aPackageModel | "push a package editor + a class template" ].
+	packagesPanel transmitTo: self classPanel.
+	packagesPanel 
+		transmitDo: [ :aClassModel | "push a class comment + a class editor + a method template" ].
+	
 ]
 
 { #category : #initialization }
 StEnvironmentBrowser >> initializePresenters [
 
 	self layout: (SpPanedLayout newTopToBottom
+		positionOfSlider: 45 percent;
 		add: (SpPanedLayout newLeftToRight
 			add: (self newNotebook
 				addPageTitle: 'Packages' provider: [ self packagesPanel ];
@@ -77,7 +119,7 @@ StEnvironmentBrowser >> initializePresenters [
 				yourself);
 			add: self classPanel;
 			yourself);
-		add: self newNotebook;
+		add: self editorContainer;
 		yourself)
 ]
 
@@ -89,28 +131,19 @@ StEnvironmentBrowser >> initializeWindow: aWindowPresenter [
 		initialExtent: self class preferredExtent
 ]
 
-{ #category : #'private - factory' }
-StEnvironmentBrowser >> newClassPanel [
-		
-	^ self instantiate: StBrowserClassPresenter
-]
-
-{ #category : #'private - factory' }
-StEnvironmentBrowser >> newHierarchyPanel [
-		
-	^ self newList
-]
-
-{ #category : #'private - factory' }
-StEnvironmentBrowser >> newPackagesPanel [
-		
-	^ self instantiate: StBrowserPackageListPresenter on: self model
-]
-
-{ #category : #initialization }
+{ #category : #'private - accessing' }
 StEnvironmentBrowser >> packagesPanel [
 
-	^ packagesPresenter ifNil: [ 
-		self initializePackagesPresenter.
-		packagesPresenter ]
+	^ packagesPanel ifNil: [ 
+		self initializePackagesPanel.
+		packagesPanel ]
+]
+
+{ #category : #private }
+StEnvironmentBrowser >> pushMethodEditor: aMethodModel [
+
+	aMethodModel ifNil: [ 
+		self editorContainer removeEditorsMatching: [ :each | each isMethodEditor ].
+		^ self ].
+	self editorContainer pushEditors: (aMethodModel newEditors)
 ]

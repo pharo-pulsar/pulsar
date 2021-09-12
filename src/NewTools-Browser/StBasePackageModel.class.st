@@ -17,7 +17,7 @@ StBasePackageModel >> classes [
 ]
 
 { #category : #accessing }
-StBasePackageModel >> icon [
+StBasePackageModel >> iconName [
 
 	^ nil
 ]

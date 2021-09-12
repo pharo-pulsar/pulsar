@@ -15,6 +15,18 @@ StMethodModel class >> newMethod: aMethod [
 		yourself
 ]
 
+{ #category : #'instance creation' }
+StMethodModel >> editors [
+
+	^ { StBrowserMethodEditorPresenter on: self }
+]
+
+{ #category : #accessing }
+StMethodModel >> iconName [
+
+	^ nil
+]
+
 { #category : #accessing }
 StMethodModel >> method [
 
@@ -31,4 +43,16 @@ StMethodModel >> method: anObject [
 StMethodModel >> name [
 
 	^ self method selector
+]
+
+{ #category : #'instance creation' }
+StMethodModel >> newEditors [
+
+	^ {  StBrowserMethodEditorPresenter on: self }
+]
+
+{ #category : #accessing }
+StMethodModel >> sourceCode [
+	
+	^ self method sourceCode
 ]

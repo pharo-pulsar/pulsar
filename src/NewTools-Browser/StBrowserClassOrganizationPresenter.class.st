@@ -1,12 +1,18 @@
 Class {
 	#name : #StBrowserClassOrganizationPresenter,
-	#superclass : #StBrowserModelPresenter,
+	#superclass : #StBrowserPanelPresenter,
 	#instVars : [
 		'protocolList',
 		'methodList'
 	],
 	#category : #'NewTools-Browser-View'
 }
+
+{ #category : #transmission }
+StBrowserClassOrganizationPresenter >> defaultOutputPort [
+
+	^ self outputMethodSelectionPort
+]
 
 { #category : #initialization }
 StBrowserClassOrganizationPresenter >> initializePresenters [
@@ -16,8 +22,12 @@ StBrowserClassOrganizationPresenter >> initializePresenters [
 		add: (methodList := self newList);
 		yourself).
 	
-	protocolList display: [ :aProtocolModel | aProtocolModel name ]. 
-	methodList display: [ :aMethodModel | aMethodModel name ]. 
+	protocolList 
+		display: [ :aProtocolModel | aProtocolModel name ];
+		displayIcon: [ :aProtocolModel | self iconNamed: aProtocolModel iconName ]. 
+	methodList 
+		display: [ :aMethodModel | aMethodModel name ];
+		displayIcon: [ :aMethodModel | self iconNamed: aMethodModel iconName ]. 
 	
 	protocolList 
 		transmitTo: methodList
@@ -31,6 +41,22 @@ StBrowserClassOrganizationPresenter >> methodsFor: aProtocolModel [
 	^ aProtocolModel methods
 ]
 
+{ #category : #transmission }
+StBrowserClassOrganizationPresenter >> outputMethodSelectionPort [
+
+	^ (SpSelectionPort newPresenter: self)
+		delegateTo: [ methodList ];
+		yourself
+]
+
+{ #category : #transmission }
+StBrowserClassOrganizationPresenter >> outputProtocolSelectionPort [
+
+	^ (SpSelectionPort newPresenter: self)
+		delegateTo: [ protocolList ];
+		yourself
+]
+
 { #category : #accessing }
 StBrowserClassOrganizationPresenter >> protocolsFor: aClassModel [ 
 	
@@ -42,4 +68,16 @@ StBrowserClassOrganizationPresenter >> protocolsFor: aClassModel [
 StBrowserClassOrganizationPresenter >> updatePresenter [
 
 	protocolList items: (self protocolsFor: self model)
+]
+
+{ #category : #events }
+StBrowserClassOrganizationPresenter >> whenMethodSelectionChangedDo: aBlock [
+
+	methodList whenSelectionChangedDo: aBlock
+]
+
+{ #category : #events }
+StBrowserClassOrganizationPresenter >> whenProtocolSelectionChangedDo: aBlock [
+
+	protocolList whenSelectionChangedDo: aBlock
 ]

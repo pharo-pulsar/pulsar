@@ -1,6 +1,6 @@
 Class {
 	#name : #StBrowserPackageListPresenter,
-	#superclass : #StBrowserModelPresenter,
+	#superclass : #StBrowserPanelPresenter,
 	#instVars : [
 		'packagesTreePresenter',
 		'classesPanelPresenter'
@@ -37,7 +37,7 @@ StBrowserPackageListPresenter >> initializePresenters [
 		
 	packagesTreePresenter 
 		display: [ :aPackageModel | aPackageModel name ];
-		displayIcon: [ :aPackageModel | aPackageModel icon ];
+		displayIcon: [ :aPackageModel | self iconNamed: aPackageModel iconName ];
 		children: [ :aPackageModel | aPackageModel children ].
 	
 	packagesTreePresenter 

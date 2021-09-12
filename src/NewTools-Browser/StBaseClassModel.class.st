@@ -22,9 +22,9 @@ StBaseClassModel >> classSide [
 ]
 
 { #category : #accessing }
-StBaseClassModel >> icon [
+StBaseClassModel >> iconName [
 	
-	^ nil
+	^ self modelClass systemIconName
 ]
 
 { #category : #testing }

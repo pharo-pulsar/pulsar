@@ -35,6 +35,13 @@ StPackageModel >> classes [
 ]
 
 { #category : #accessing }
+StPackageModel >> iconName [
+
+	^ #package
+	
+]
+
+{ #category : #accessing }
 StPackageModel >> name [
 
 	^ self package packageName

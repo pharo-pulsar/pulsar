@@ -1,6 +1,6 @@
 Class {
 	#name : #StBrowserClassListPresenter,
-	#superclass : #StBrowserModelPresenter,
+	#superclass : #StBrowserPanelPresenter,
 	#instVars : [
 		'classTree'
 	],
@@ -29,7 +29,7 @@ StBrowserClassListPresenter >> initializePresenters [
 		
 	classTree
 		display: [ :aClassModel | aClassModel name ];
-		displayIcon: [ :aClassModel | aClassModel icon ];
+		displayIcon: [ :aClassModel | self iconNamed: aClassModel iconName ];
 		children: [ :aNode | aNode children sorted: #name ascending ]
 ]
 

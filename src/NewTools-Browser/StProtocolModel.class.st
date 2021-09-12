@@ -33,6 +33,16 @@ StProtocolModel class >> newClass: aClass protocol: aProtocol [
 ]
 
 { #category : #accessing }
+StProtocolModel >> iconName [
+
+	self protocol isPrivate ifTrue: [ ^ #protocolPrivateIcon ].
+	self protocol isProtected ifTrue: [ ^ #protocolProtectedIcon ].
+	self protocol isExtensionProtocol ifTrue: [ ^ #protocolExtension ].
+			
+	^ #blank
+]
+
+{ #category : #accessing }
 StProtocolModel >> methods [
 	
 	^ (self protocol methodSelectors 

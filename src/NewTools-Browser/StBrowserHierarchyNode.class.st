@@ -79,9 +79,9 @@ StBrowserHierarchyNode >> hasParent [
 ]
 
 { #category : #accessing }
-StBrowserHierarchyNode >> icon [
+StBrowserHierarchyNode >> iconName [
 	
-	^ self element icon
+	^ self element iconName
 ]
 
 { #category : #accessing }
