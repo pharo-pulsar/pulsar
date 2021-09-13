@@ -15,10 +15,18 @@ StMethodModel class >> newMethod: aMethod [
 		yourself
 ]
 
-{ #category : #'instance creation' }
-StMethodModel >> editors [
+{ #category : #comparing }
+StMethodModel >> = other [
 
-	^ { StBrowserMethodEditorPresenter on: self }
+	^ self species = other species 
+		and: [ self method = other method ]
+]
+
+{ #category : #comparing }
+StMethodModel >> hash [
+
+	^ self species hash 
+		bitXor: self method hash
 ]
 
 { #category : #accessing }
@@ -48,7 +56,7 @@ StMethodModel >> name [
 { #category : #'instance creation' }
 StMethodModel >> newEditors [
 
-	^ {  StBrowserMethodEditorPresenter on: self }
+	^ { StBrowserMethodEditorPresenter on: self }
 ]
 
 { #category : #accessing }

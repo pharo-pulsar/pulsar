@@ -8,7 +8,8 @@ Class {
 		'classPanel',
 		'editorContainer',
 		'hierarchyPanel',
-		'packagesPanel'
+		'packagesPanel',
+		'deferredActions'
 	],
 	#category : #'NewTools-Browser-View'
 }
@@ -49,6 +50,14 @@ StEnvironmentBrowser class >> openOnClass: aClass [
 ]
 
 { #category : #opening }
+StEnvironmentBrowser class >> openOnMethod: aMethod [
+
+	^ (self on: self defaultEnvironment)
+		selectMethod: aMethod;
+		openWithSpec
+]
+
+{ #category : #opening }
 StEnvironmentBrowser class >> openOnPackage: aPackage [
 
 	^ (self on: self defaultEnvironment)
@@ -62,6 +71,24 @@ StEnvironmentBrowser class >> preferredExtent [
 	^ 900@650
 ]
 
+{ #category : #'private - deferring' }
+StEnvironmentBrowser >> addDeferredAction: aBlock [
+	"Deferred actions are one-shot actions, performed after browser is built."
+
+	deferredActions ifNil: [ deferredActions := #() ].
+	deferredActions := deferredActions copyWith: aBlock
+]
+
+{ #category : #'accessing - selecting' }
+StEnvironmentBrowser >> basicConsumePath: aPath [
+
+		| path |
+		path := aPath.
+		path := self packagesPanel consumePath: path.
+		path ifNotEmpty: [ 
+			path := self classPanel consumePath: path ]. 
+]
+
 { #category : #'private - accessing' }
 StEnvironmentBrowser >> classPanel [
 		
@@ -70,18 +97,15 @@ StEnvironmentBrowser >> classPanel [
 		classPanel ]
 ]
 
-{ #category : #private }
+{ #category : #'accessing - selecting' }
 StEnvironmentBrowser >> consumePath: aPath [
-	| path |
-	"Opening in a speciphic place is tricky in the browser, since the actual selection *is not there* 
+	"Opening in a specific place is tricky in the browser, since the actual selection *is not there* 
 	 until you click some places (for example, to open a method you select a package, then a class, 
 	 then a method.
-	 We need to simulte this, by adding a selected path and consuming it when browser is open."
+	 We need to simulate this, by adding a selected path and consuming it when browser is open."
 
-	self packagesPanel packagesTree withAdapterPerformOrDefer: [ :anAdapter |
-		path := aPath.
-		path := self packagesPanel consumePath: path.
-		self flag: #TODO. "Missing consumation of method selection if present" ].
+	self executeOrDeferAction: [ 
+		self basicConsumePath: aPath ]
 ]
 
 { #category : #'private - accessing' }
@@ -90,6 +114,14 @@ StEnvironmentBrowser >> editorContainer [
 	^ editorContainer ifNil: [ 
 		self initializeEditorContainer.
 		editorContainer ]
+]
+
+{ #category : #'private - deferring' }
+StEnvironmentBrowser >> executeOrDeferAction: aBlock [
+
+	self isBuilt 
+		ifTrue: [ aBlock value  ]
+		ifFalse: [ self addDeferredAction: aBlock ]
 ]
 
 { #category : #'private - accessing' }
@@ -108,7 +140,6 @@ StEnvironmentBrowser >> initializeClassPanel [
 		transmitDo: [ :aProtocolModel | "select a method template. Change method template category?" ].
 	classPanel 
 		transmitDo: [ :aMethodModel | self pushMethodEditor: aMethodModel ]
-		
 ]
 
 { #category : #initialization }
@@ -156,7 +187,9 @@ StEnvironmentBrowser >> initializePresenters [
 			add: self classPanel;
 			yourself);
 		add: self editorContainer;
-		yourself)
+		yourself).
+		
+	self whenBuiltDo: [ self processDeferredActions ]
 ]
 
 { #category : #initialization }
@@ -173,6 +206,16 @@ StEnvironmentBrowser >> packagesPanel [
 	^ packagesPanel ifNil: [ 
 		self initializePackagesPanel.
 		packagesPanel ]
+]
+
+{ #category : #'private - deferring' }
+StEnvironmentBrowser >> processDeferredActions [
+
+	deferredActions ifNil: [ ^ self ].
+	[
+		deferredActions do: [ :eachBlock | eachBlock value ] ]
+	ensure: [ 
+		deferredActions := nil ]
 ]
 
 { #category : #private }
@@ -192,6 +235,21 @@ StEnvironmentBrowser >> selectClass: aClass [
 		StPackageModel newPackage: aClass package.
 		StPackageTagModel newPackageTag: (aClass package classTagForClass: aClass).
 		StClassModel newClass: aClass 
+	}
+]
+
+{ #category : #'accessing - selecting' }
+StEnvironmentBrowser >> selectMethod: aMethod [
+	"See #consumePath method."
+
+	self consumePath: { 
+		StPackageModel newPackage: aMethod package.
+		StPackageTagModel newPackageTag: (aMethod package classTagForClass: aMethod methodClass).
+		StClassModel newClass: aMethod methodClass.
+		StProtocolModel 
+			newClass: aMethod methodClass 
+			protocol: (aMethod methodClass organization protocolNamed: aMethod protocol).
+		StMethodModel newMethod: aMethod.
 	}
 ]
 

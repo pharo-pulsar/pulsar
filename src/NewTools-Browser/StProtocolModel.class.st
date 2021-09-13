@@ -32,6 +32,20 @@ StProtocolModel class >> newClass: aClass protocol: aProtocol [
 		yourself
 ]
 
+{ #category : #comparing }
+StProtocolModel >> = other [
+
+	^ self species = other species 
+		and: [ self protocol = other protocol ]
+]
+
+{ #category : #comparing }
+StProtocolModel >> hash [
+
+	^ self species hash 
+		bitXor: self protocol hash
+]
+
 { #category : #accessing }
 StProtocolModel >> iconName [
 

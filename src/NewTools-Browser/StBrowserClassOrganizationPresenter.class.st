@@ -8,6 +8,33 @@ Class {
 	#category : #'NewTools-Browser-View'
 }
 
+{ #category : #'private - consuming' }
+StBrowserClassOrganizationPresenter >> consumeMethodFromPath: path [ 
+	
+	methodList selectItem: path first.
+	^ path allButFirst
+]
+
+{ #category : #'accessing - selecting' }
+StBrowserClassOrganizationPresenter >> consumePath: aPath [
+	| path |
+	
+	path := self consumeProtocolFromPath: aPath.
+	path := self consumeMethodFromPath: path.
+	
+	^ path
+	
+]
+
+{ #category : #'private - consuming' }
+StBrowserClassOrganizationPresenter >> consumeProtocolFromPath: path [
+
+	path ifEmpty: [ ^ #() ].
+	
+	protocolList selectItem: path first.
+	^ path allButFirst
+]
+
 { #category : #transmission }
 StBrowserClassOrganizationPresenter >> defaultOutputPort [
 
@@ -62,6 +89,12 @@ StBrowserClassOrganizationPresenter >> protocolsFor: aClassModel [
 	
 	aClassModel ifNil: [ ^ #() ].
 	^ aClassModel protocols
+]
+
+{ #category : #accessing }
+StBrowserClassOrganizationPresenter >> selectedItem [
+	
+	^ methodList selectedItem
 ]
 
 { #category : #initialization }

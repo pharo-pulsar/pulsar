@@ -21,6 +21,12 @@ StBrowserClassPanelPresenter >> classSidePanel [
 		classSidePanel ]
 ]
 
+{ #category : #'accessing - selecting' }
+StBrowserClassPanelPresenter >> consumePath: aPath [
+
+	^ self instanceSidePanel consumePath: aPath
+]
+
 { #category : #transmission }
 StBrowserClassPanelPresenter >> defaultOutputPort [
 

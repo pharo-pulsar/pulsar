@@ -50,7 +50,7 @@ StBrowserPackageListPresenter >> consumePackageFromPath: path [
 	^ path allButFirst: 2
 ]
 
-{ #category : #'private - consuming' }
+{ #category : #'accessing - selecting' }
 StBrowserPackageListPresenter >> consumePath: anArray [
 	| path |
 
