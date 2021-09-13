@@ -22,6 +22,12 @@ StBaseClassModel >> = other [
 		and: [ self modelClass = other modelClass ]
 ]
 
+{ #category : #accessing }
+StBaseClassModel >> classDepth [
+	
+	^ self modelClass classDepth
+]
+
 { #category : #'accessing - parallel hierarchy' }
 StBaseClassModel >> classSide [
 

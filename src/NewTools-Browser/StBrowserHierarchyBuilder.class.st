@@ -1,3 +1,7 @@
+"
+Sort hierarchically a collection of classes.
+The method `StBrowserHierarchyBuilder>>#buildFrom:` creates a tree of `StBrowserHierarchyNode` instances.
+"
 Class {
 	#name : #StBrowserHierarchyBuilder,
 	#superclass : #Object,
@@ -10,7 +14,7 @@ StBrowserHierarchyBuilder class >> buildFrom: aCollection [
 	^ self new buildFrom: aCollection
 ]
 
-{ #category : #building }
+{ #category : #private }
 StBrowserHierarchyBuilder class >> buildFromNodes: aCollection [
 
 	^ self new buildFromNodes: aCollection
@@ -22,7 +26,7 @@ StBrowserHierarchyBuilder >> buildFrom: aCollection [
 	^ self buildFromNodes: (aCollection collect: [ :each | StBrowserHierarchyNode for: each ])
 ]
 
-{ #category : #building }
+{ #category : #private }
 StBrowserHierarchyBuilder >> buildFromNodes: nodes [
 
 	nodes do: [ :each | each findParentFrom: nodes ].

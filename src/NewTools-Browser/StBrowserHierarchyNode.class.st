@@ -50,7 +50,7 @@ StBrowserHierarchyNode >> element: anObject [
 
 { #category : #accessing }
 StBrowserHierarchyNode >> findParentFrom: nodes [
-	| parents |
+	| parents parentNodes allSuperclasses |
 
 	parent ifNotNil: [ ^ self ].
 	
@@ -63,12 +63,8 @@ StBrowserHierarchyNode >> findParentFrom: nodes [
 		^ self ].
 	
 	"sort and find"
-	(((StBrowserHierarchyBuilder buildFromNodes: parents) 
-		flatCollect: [ :each | each withChildren ])
-		reversed 
-		detect: [ :each | (self element inheritsFrom: each element) ])
-		addChildNode: self
-		
+	parentNodes := parents sorted: [ :a | a element classDepth ] ascending.
+	parentNodes last addChildNode: self
 ]
 
 { #category : #testing }
