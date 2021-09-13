@@ -15,6 +15,13 @@ StPackageModel class >> newPackage: aPackage [
 		yourself
 ]
 
+{ #category : #comparing }
+StPackageModel >> = other [
+
+	^ self species = other species 
+		and: [ self package = other package ]
+]
+
 { #category : #accessing }
 StPackageModel >> children [
 
@@ -32,6 +39,13 @@ StPackageModel >> classes [
 	^ self package definedClasses
 		collect: [ :each | StClassModel newClass: each ]
 		as: OrderedCollection
+]
+
+{ #category : #comparing }
+StPackageModel >> hash [ 
+
+	^ self species hash 
+		bitXor: self package hash
 ]
 
 { #category : #accessing }

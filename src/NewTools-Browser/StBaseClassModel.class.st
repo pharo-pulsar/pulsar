@@ -15,10 +15,24 @@ StBaseClassModel class >> newClass: aClass [
 		yourself
 ]
 
+{ #category : #comparing }
+StBaseClassModel >> = other [
+
+	^ self species = other species 
+		and: [ self modelClass = other modelClass ]
+]
+
 { #category : #'accessing - parallel hierarchy' }
 StBaseClassModel >> classSide [
 
 	^ self subclassResponsibility
+]
+
+{ #category : #comparing }
+StBaseClassModel >> hash [
+
+	^ self species hash  
+		bitXor: self modelClass hash
 ]
 
 { #category : #accessing }

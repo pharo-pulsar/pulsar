@@ -1,7 +1,7 @@
 Class {
 	#name : #StBrowserHierarchyBuilder,
 	#superclass : #Object,
-	#category : #'NewTools-Browser-Model'
+	#category : #'NewTools-Browser-Model-Hierarchy'
 }
 
 { #category : #building }

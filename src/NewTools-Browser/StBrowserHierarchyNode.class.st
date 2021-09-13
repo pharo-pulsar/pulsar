@@ -6,7 +6,7 @@ Class {
 		'children',
 		'parent'
 	],
-	#category : #'NewTools-Browser-Model'
+	#category : #'NewTools-Browser-Model-Hierarchy'
 }
 
 { #category : #'instance creation' }
@@ -23,6 +23,11 @@ StBrowserHierarchyNode >> addChildNode: aNode [
 	children ifNil: [ children := OrderedCollection new: 2 ].
 	aNode parent: self.
 	children add: aNode
+]
+
+{ #category : #accessing }
+StBrowserHierarchyNode >> allChildren [
+	self shouldBeImplemented.
 ]
 
 { #category : #accessing }
@@ -43,7 +48,7 @@ StBrowserHierarchyNode >> element: anObject [
 	element := anObject
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #accessing }
 StBrowserHierarchyNode >> findParentFrom: nodes [
 	| parents |
 
@@ -110,7 +115,21 @@ StBrowserHierarchyNode >> printOn: stream [
 ]
 
 { #category : #accessing }
-StBrowserHierarchyNode >> withChildren [ 
+StBrowserHierarchyNode >> withAllChildren [
+
+	children ifNil: [ ^ { self } ].
+	^ { self }, (children flatCollect: [ :each | each withAllChildren ])
+]
+
+{ #category : #accessing }
+StBrowserHierarchyNode >> withAllParents [
+
+	self parent ifNil: [ ^ { self } ].
+	^ self parent withAllParents, { self }
+]
+
+{ #category : #accessing }
+StBrowserHierarchyNode >> withChildren [
 
 	^ self children copyWithFirst: self
 ]

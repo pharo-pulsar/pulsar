@@ -8,8 +8,7 @@ Class {
 		'classPanel',
 		'editorContainer',
 		'hierarchyPanel',
-		'packagesPanel',
-		'selectedPath'
+		'packagesPanel'
 	],
 	#category : #'NewTools-Browser-View'
 }
@@ -72,14 +71,17 @@ StEnvironmentBrowser >> classPanel [
 ]
 
 { #category : #private }
-StEnvironmentBrowser >> consumePath [
+StEnvironmentBrowser >> consumePath: aPath [
+	| path |
 	"Opening in a speciphic place is tricky in the browser, since the actual selection *is not there* 
 	 until you click some places (for example, to open a method you select a package, then a class, 
 	 then a method.
 	 We need to simulte this, by adding a selected path and consuming it when browser is open."
 
-	selectedPath := packagesPanel consumePath: selectedPath.
-	selectedPath := nil
+	self packagesPanel packagesTree withAdapterPerformOrDefer: [ :anAdapter |
+		path := aPath.
+		path := self packagesPanel consumePath: path.
+		self flag: #TODO. "Missing consumation of method selection if present" ].
 ]
 
 { #category : #'private - accessing' }
@@ -186,7 +188,7 @@ StEnvironmentBrowser >> pushMethodEditor: aMethodModel [
 StEnvironmentBrowser >> selectClass: aClass [
 	"See #consumePath method."
 
-	selectedPath := { 
+	self consumePath: { 
 		StPackageModel newPackage: aClass package.
 		StPackageTagModel newPackageTag: (aClass package classTagForClass: aClass).
 		StClassModel newClass: aClass 
@@ -197,13 +199,7 @@ StEnvironmentBrowser >> selectClass: aClass [
 StEnvironmentBrowser >> selectPackage: aPackage [
 	"See #consumePath method."
 	
-	selectedPath := { 
+	self consumePath: { 
 		StPackageModel newPackage: aPackage.
 	}
-]
-
-{ #category : #initialization }
-StEnvironmentBrowser >> updatePresenter [
-
-	selectedPath ifNotNil: [ self consumePath ]
 ]

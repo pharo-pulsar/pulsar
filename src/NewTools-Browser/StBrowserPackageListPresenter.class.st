@@ -15,6 +15,21 @@ StBrowserPackageListPresenter >> classesOf: aPackageTagModel [
 	^ aPackageTagModel classes
 ]
 
+{ #category : #'private - accessing' }
+StBrowserPackageListPresenter >> classesPanel [
+
+	^ classesPanelPresenter
+]
+
+{ #category : #'private - consuming' }
+StBrowserPackageListPresenter >> consumeClassFromPath: path [
+	
+	path ifEmpty: [ ^ #() ].
+	
+	classesPanelPresenter selectItem: path first. 
+	^ path allButFirst
+]
+
 { #category : #'private - consuming' }
 StBrowserPackageListPresenter >> consumePackageFromPath: path [
 	"receives a path #(package), #(package tag ...) 
@@ -24,11 +39,14 @@ StBrowserPackageListPresenter >> consumePackageFromPath: path [
 	
 	"I received a simple package"
 	path size = 1 ifTrue: [ 
-		packagesTreePresenter selectPath: path.
+		packagesTreePresenter selectPathByItems: path scrollToSelection: true.
 		^ #() ].
 	
 	"I received a pachage and a tag"
-	packagesTreePresenter selectPath: (path first: 2).
+	path second isRoot 
+		ifTrue: [ packagesTreePresenter selectPathByItems: { path first } scrollToSelection: true ]
+		ifFalse: [ packagesTreePresenter selectPathByItems: (path first: 2) scrollToSelection: true ].
+	
 	^ path allButFirst: 2
 ]
 
@@ -87,6 +105,12 @@ StBrowserPackageListPresenter >> outputPackageSelectionPort [
 	^ (SpSelectionPort newPresenter: self)
 		delegateTo: [ packagesTreePresenter ];
 		yourself
+]
+
+{ #category : #'private - accessing' }
+StBrowserPackageListPresenter >> packagesTree [
+	
+	^ packagesTreePresenter
 ]
 
 { #category : #initialization }

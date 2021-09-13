@@ -20,6 +20,12 @@ StBrowserClassListPresenter >> defaultOutputPort [
 	^ self outputClassSelectionPort
 ]
 
+{ #category : #private }
+StBrowserClassListPresenter >> flatNodes: aCollection [ 
+	
+	^ aCollection flatCollect: [ :each | each withAllChildren ]
+]
+
 { #category : #initialization }
 StBrowserClassListPresenter >> initializePresenters [
 
@@ -46,6 +52,25 @@ StBrowserClassListPresenter >> outputClassSelectionPort [
 		delegateTo: [ classTree ];
 		transform: [ :aNode | aNode ifNotNil: #element ];
 		yourself
+]
+
+{ #category : #'accessing - selection' }
+StBrowserClassListPresenter >> selectItem: aClassModel [
+	| path |
+
+	path := ((self flatNodes: classTree roots)
+		detect: [ :each | each element = aClassModel ])
+		withAllParents.
+
+	classTree 
+		selectPathByItems: path 
+		scrollToSelection: true
+]
+
+{ #category : #'accessing - selection' }
+StBrowserClassListPresenter >> selectedItem [
+	
+	^ classTree selectedItem element
 ]
 
 { #category : #initialization }
