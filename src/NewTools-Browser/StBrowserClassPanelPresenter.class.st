@@ -26,6 +26,7 @@ StBrowserClassPanelPresenter >> consumePath: aPath [
 
 	^ aPath second isInstanceSide 
 		ifTrue: [ 
+			self selectInstanceSide.
 			self instanceSidePanel consumePath: aPath ]
 		ifFalse: [ 
 			self selectClassSide. 
@@ -119,13 +120,22 @@ StBrowserClassPanelPresenter >> protocolSelectionChanged: aSelection [
 { #category : #'accessing - selecting' }
 StBrowserClassPanelPresenter >> selectClassSide [
 	
+	pages selectedPageIndex = 1 ifTrue: [ ^ self ].
 	pages selectPageIndex: 1 
 ]
 
 { #category : #'accessing - selecting' }
 StBrowserClassPanelPresenter >> selectInstanceSide [
 	
+	pages selectedPageIndex = 2 ifTrue: [ ^ self ].
 	pages selectPageIndex: 2
+]
+
+{ #category : #'accessing - selecting' }
+StBrowserClassPanelPresenter >> selectVariablesSide [
+	
+	pages selectedPageIndex = 3 ifTrue: [ ^ self ].
+	pages selectPageIndex: 3
 ]
 
 { #category : #initialization }
