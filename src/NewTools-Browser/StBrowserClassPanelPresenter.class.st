@@ -24,7 +24,12 @@ StBrowserClassPanelPresenter >> classSidePanel [
 { #category : #'accessing - selecting' }
 StBrowserClassPanelPresenter >> consumePath: aPath [
 
-	^ self instanceSidePanel consumePath: aPath
+	^ aPath second isInstanceSide 
+		ifTrue: [ 
+			self instanceSidePanel consumePath: aPath ]
+		ifFalse: [ 
+			self selectClassSide. 
+			self classSidePanel consumePath: aPath ]
 ]
 
 { #category : #transmission }
@@ -109,6 +114,18 @@ StBrowserClassPanelPresenter >> protocolSelectionChanged: aSelection [
 	
 	protocolSelectionChangedBlock ifNil: [ ^ self ].
 	protocolSelectionChangedBlock cull: aSelection
+]
+
+{ #category : #'accessing - selecting' }
+StBrowserClassPanelPresenter >> selectClassSide [
+	
+	pages selectPageIndex: 1 
+]
+
+{ #category : #'accessing - selecting' }
+StBrowserClassPanelPresenter >> selectInstanceSide [
+	
+	pages selectPageIndex: 2
 ]
 
 { #category : #initialization }

@@ -35,6 +35,12 @@ StMethodModel >> iconName [
 	^ nil
 ]
 
+{ #category : #testing }
+StMethodModel >> isInstanceSide [
+	
+	^ self method methodClass isInstanceSide
+]
+
 { #category : #accessing }
 StMethodModel >> method [
 

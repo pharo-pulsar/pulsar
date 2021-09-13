@@ -50,6 +50,12 @@ StPackageTagModel >> name [
 ]
 
 { #category : #accessing }
+StPackageTagModel >> package [
+
+	^ self tag package
+]
+
+{ #category : #accessing }
 StPackageTagModel >> tag [
 
 	^ tag

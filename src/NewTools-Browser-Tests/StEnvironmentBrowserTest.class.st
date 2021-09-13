@@ -98,6 +98,24 @@ StEnvironmentBrowserTest >> testOpenOnMethod [
 ]
 
 { #category : #tests }
+StEnvironmentBrowserTest >> testOpenOnMethodClassSide [
+
+	window := StEnvironmentBrowser openOnMethod: Object class	>> #initialize.
+	
+	self 
+		assert: window presenter packagesPanel packagesTree selectedItem package
+		equals: Object package.
+		
+	self 
+		assert: window presenter packagesPanel classesPanel selectedItem modelClass
+		equals: Object.
+		
+	self 
+		assert: window presenter classPanel classSidePanel selectedItem method
+		equals: Object class	>> #initialize
+]
+
+{ #category : #tests }
 StEnvironmentBrowserTest >> testOpenOnPackage [
 
 	window := StEnvironmentBrowser openOnPackage: self class package.

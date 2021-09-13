@@ -27,3 +27,9 @@ StBasePackageModel >> name [
 
 	self subclassResponsibility
 ]
+
+{ #category : #accessing }
+StBasePackageModel >> package [
+	
+	^ self subclassResponsibility
+]

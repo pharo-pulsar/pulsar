@@ -18,7 +18,7 @@ StBrowserClassOrganizationPresenter >> consumeMethodFromPath: path [
 { #category : #'accessing - selecting' }
 StBrowserClassOrganizationPresenter >> consumePath: aPath [
 	| path |
-	
+
 	path := self consumeProtocolFromPath: aPath.
 	path := self consumeMethodFromPath: path.
 	

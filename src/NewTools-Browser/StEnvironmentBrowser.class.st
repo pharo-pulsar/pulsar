@@ -232,9 +232,9 @@ StEnvironmentBrowser >> selectClass: aClass [
 	"See #consumePath method."
 
 	self consumePath: { 
-		StPackageModel newPackage: aClass package.
-		StPackageTagModel newPackageTag: (aClass package classTagForClass: aClass).
-		StClassModel newClass: aClass 
+		StPackageModel newPackage: aClass instanceSide package.
+		StPackageTagModel newPackageTag: (aClass instanceSide package classTagForClass: aClass instanceSide).
+		StClassModel newClass: aClass instanceSide
 	}
 ]
 
@@ -244,10 +244,10 @@ StEnvironmentBrowser >> selectMethod: aMethod [
 
 	self consumePath: { 
 		StPackageModel newPackage: aMethod package.
-		StPackageTagModel newPackageTag: (aMethod package classTagForClass: aMethod methodClass).
-		StClassModel newClass: aMethod methodClass.
+		StPackageTagModel newPackageTag: (aMethod package classTagForClass: aMethod methodClass instanceSide).
+		StClassModel newClass: aMethod methodClass instanceSide.
 		StProtocolModel 
-			newClass: aMethod methodClass 
+			newClass: aMethod methodClass
 			protocol: (aMethod methodClass organization protocolNamed: aMethod protocol).
 		StMethodModel newMethod: aMethod.
 	}
