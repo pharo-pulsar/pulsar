@@ -15,6 +15,34 @@ StBrowserPackageListPresenter >> classesOf: aPackageTagModel [
 	^ aPackageTagModel classes
 ]
 
+{ #category : #'private - consuming' }
+StBrowserPackageListPresenter >> consumePackageFromPath: path [
+	"receives a path #(package), #(package tag ...) 
+	 It contains a package alone or a package with a tag (and probably more, like a class)"
+	
+	path ifEmpty: [ ^ #() ].
+	
+	"I received a simple package"
+	path size = 1 ifTrue: [ 
+		packagesTreePresenter selectPath: path.
+		^ #() ].
+	
+	"I received a pachage and a tag"
+	packagesTreePresenter selectPath: (path first: 2).
+	^ path allButFirst: 2
+]
+
+{ #category : #'private - consuming' }
+StBrowserPackageListPresenter >> consumePath: anArray [
+	| path |
+
+	path := anArray.
+	path := self consumePackageFromPath: path.
+	path := self consumeClassFromPath: path.
+	
+	^ path
+]
+
 { #category : #transmission }
 StBrowserPackageListPresenter >> defaultInputPort [
 

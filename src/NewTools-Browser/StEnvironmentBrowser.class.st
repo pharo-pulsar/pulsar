@@ -8,10 +8,17 @@ Class {
 		'classPanel',
 		'editorContainer',
 		'hierarchyPanel',
-		'packagesPanel'
+		'packagesPanel',
+		'selectedPath'
 	],
 	#category : #'NewTools-Browser-View'
 }
+
+{ #category : #accessing }
+StEnvironmentBrowser class >> defaultEnvironment [
+
+	^ StSystemEnvironment new
+]
 
 { #category : #'instance creation' }
 StEnvironmentBrowser class >> on: anEnvironment [
@@ -21,17 +28,33 @@ StEnvironmentBrowser class >> on: anEnvironment [
 		yourself
 ]
 
-{ #category : #'instance creation' }
+{ #category : #opening }
 StEnvironmentBrowser class >> open [
 	<script>
 
-	^ self openOn: StSystemEnvironment new
+	^ self openOn: self defaultEnvironment
 ]
 
-{ #category : #'instance creation' }
+{ #category : #opening }
 StEnvironmentBrowser class >> openOn: anEnvironment [
 
 	^ (self on: anEnvironment) openWithSpec
+]
+
+{ #category : #opening }
+StEnvironmentBrowser class >> openOnClass: aClass [
+
+	^ (self on: self defaultEnvironment)
+		selectClass: aClass;
+		openWithSpec
+]
+
+{ #category : #opening }
+StEnvironmentBrowser class >> openOnPackage: aPackage [
+
+	^ (self on: self defaultEnvironment)
+		selectPackage: aPackage;
+		openWithSpec
 ]
 
 { #category : #accessing }
@@ -46,6 +69,17 @@ StEnvironmentBrowser >> classPanel [
 	^ classPanel ifNil: [ 
 		self initializeClassPanel.
 		classPanel ]
+]
+
+{ #category : #private }
+StEnvironmentBrowser >> consumePath [
+	"Opening in a speciphic place is tricky in the browser, since the actual selection *is not there* 
+	 until you click some places (for example, to open a method you select a package, then a class, 
+	 then a method.
+	 We need to simulte this, by adding a selected path and consuming it when browser is open."
+
+	selectedPath := packagesPanel consumePath: selectedPath.
+	selectedPath := nil
 ]
 
 { #category : #'private - accessing' }
@@ -146,4 +180,30 @@ StEnvironmentBrowser >> pushMethodEditor: aMethodModel [
 		self editorContainer removeEditorsMatching: [ :each | each isMethodEditor ].
 		^ self ].
 	self editorContainer pushEditors: (aMethodModel newEditors)
+]
+
+{ #category : #'accessing - selecting' }
+StEnvironmentBrowser >> selectClass: aClass [
+	"See #consumePath method."
+
+	selectedPath := { 
+		StPackageModel newPackage: aClass package.
+		StPackageTagModel newPackageTag: (aClass package classTagForClass: aClass).
+		StClassModel newClass: aClass 
+	}
+]
+
+{ #category : #'accessing - selecting' }
+StEnvironmentBrowser >> selectPackage: aPackage [
+	"See #consumePath method."
+	
+	selectedPath := { 
+		StPackageModel newPackage: aPackage.
+	}
+]
+
+{ #category : #initialization }
+StEnvironmentBrowser >> updatePresenter [
+
+	selectedPath ifNotNil: [ self consumePath ]
 ]
