@@ -10,6 +10,12 @@ StBaseModel >> name [
 	^ self subclassResponsibility
 ]
 
+{ #category : #'instance creation' }
+StBaseModel >> newEditors [
+	
+	^ #()
+]
+
 { #category : #default }
 StBaseModel >> shortName [
 

@@ -2,10 +2,18 @@ Class {
 	#name : #StEnvironmentBrowserTest,
 	#superclass : #TestCase,
 	#instVars : [
-		'window'
+		'window',
+		'backup'
 	],
 	#category : #'NewTools-Browser-Tests'
 }
+
+{ #category : #running }
+StEnvironmentBrowserTest >> setUp [
+
+	super setUp.	
+	backup := SpMorphicBackendForTest new
+]
 
 { #category : #running }
 StEnvironmentBrowserTest >> tearDown [
@@ -26,6 +34,7 @@ StEnvironmentBrowserTest >> testConsumePathWithClass [
 		StPackageTagModel newPackageTag: (Object package classTagForClass: Object).
 		StClassModel newClass: Object.
 	 }.	
+	self waitUntilUIRedrawed.
 	
 	self 
 		assert: window presenter packagesPanel packagesTree selectedItem name
@@ -44,6 +53,7 @@ StEnvironmentBrowserTest >> testConsumePathWithPackage [
 	window presenter consumePath: { 
 		StPackageModel newPackage: Object package.
 	 }.	
+	self waitUntilUIRedrawed.
 	
 	self 
 		assert: window presenter packagesPanel packagesTree selectedItem package
@@ -59,6 +69,7 @@ StEnvironmentBrowserTest >> testConsumePathWithPackageAndTag [
 		StPackageModel newPackage: Object package.
 		StPackageTagModel newPackageTag: (Object package classTagForClass: Object).
 	 }.	
+	self waitUntilUIRedrawed.
 	
 	self 
 		assert: window presenter packagesPanel packagesTree selectedItem name
@@ -69,6 +80,7 @@ StEnvironmentBrowserTest >> testConsumePathWithPackageAndTag [
 StEnvironmentBrowserTest >> testOpenOnClass [
 
 	window := StEnvironmentBrowser openOnClass: self class.
+	self waitUntilUIRedrawed.
 	
 	self 
 		assert: window presenter packagesPanel packagesTree selectedItem package
@@ -83,6 +95,7 @@ StEnvironmentBrowserTest >> testOpenOnClass [
 StEnvironmentBrowserTest >> testOpenOnMethod [
 
 	window := StEnvironmentBrowser openOnMethod: self class>>#testOpenOnMethod.
+	self waitUntilUIRedrawed.
 	
 	self 
 		assert: window presenter packagesPanel packagesTree selectedItem package
@@ -101,6 +114,7 @@ StEnvironmentBrowserTest >> testOpenOnMethod [
 StEnvironmentBrowserTest >> testOpenOnMethodClassSide [
 
 	window := StEnvironmentBrowser openOnMethod: Object class	>> #initialize.
+	self waitUntilUIRedrawed.
 	
 	self 
 		assert: window presenter packagesPanel packagesTree selectedItem package
@@ -119,8 +133,15 @@ StEnvironmentBrowserTest >> testOpenOnMethodClassSide [
 StEnvironmentBrowserTest >> testOpenOnPackage [
 
 	window := StEnvironmentBrowser openOnPackage: self class package.
+	self waitUntilUIRedrawed.
 	
 	self 
 		assert: window presenter packagesPanel packagesTree selectedItem package
 		equals: self class package
+]
+
+{ #category : #utilities }
+StEnvironmentBrowserTest >> waitUntilUIRedrawed [
+
+	backup waitUntilUIRedrawed
 ]

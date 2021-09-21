@@ -5,7 +5,7 @@ Class {
 		'modelClass',
 		'protocol'
 	],
-	#category : #'NewTools-Browser-Model'
+	#category : #'NewTools-Browser-Model-Protocol'
 }
 
 { #category : #private }
@@ -99,4 +99,10 @@ StProtocolModel >> protocol [
 StProtocolModel >> protocol: anObject [
 
 	protocol := anObject
+]
+
+{ #category : #default }
+StProtocolModel >> windowName [
+
+	^ self modelClass name
 ]

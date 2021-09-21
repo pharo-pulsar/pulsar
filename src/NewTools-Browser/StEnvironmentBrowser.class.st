@@ -149,7 +149,10 @@ StEnvironmentBrowser >> initializeClassPanel [
 
 	classPanel := self instantiate: StBrowserClassPanelPresenter.
 	classPanel outputProtocolSelectionPort 
-		transmitDo: [ :aProtocolModel | "select a method template. Change method template category?" ].
+		transmitDo: [ :aProtocolModel |
+			self 
+				pushEditorsFor: aProtocolModel
+				ifNilRemoveEditorsMatching: [ :each | each isMethodEditor ] ].
 	classPanel transmitDo: [ :aMethodModel | 
 		self 
 			pushEditorsFor: aMethodModel

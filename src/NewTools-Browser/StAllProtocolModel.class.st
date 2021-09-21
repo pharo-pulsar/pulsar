@@ -1,7 +1,7 @@
 Class {
 	#name : #StAllProtocolModel,
 	#superclass : #StVirtualProtocolModel,
-	#category : #'NewTools-Browser-Model'
+	#category : #'NewTools-Browser-Model-Protocol'
 }
 
 { #category : #testing }

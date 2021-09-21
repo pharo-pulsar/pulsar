@@ -107,7 +107,7 @@ StBrowserClassPanelPresenter >> outputProtocolSelectionPort [
 
 	^ SpSelectorSelectionPort 
 		newPresenter: self
-		selector: #whenMethodSelectionChangedDo:
+		selector: #whenProtocolSelectionChangedDo:
 ]
 
 { #category : #private }
