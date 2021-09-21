@@ -50,6 +50,14 @@ StEnvironmentBrowser class >> openOnClass: aClass [
 ]
 
 { #category : #opening }
+StEnvironmentBrowser class >> openOnClass: aClass selector: aSymbol [
+
+	^ (aClass lookupSelector: aSymbol)
+		ifNotNil: [ :aMethod | self openOnMethod: aMethod ]
+		ifNil: [ self openOnClass: aClass ]
+]
+
+{ #category : #opening }
 StEnvironmentBrowser class >> openOnMethod: aMethod [
 
 	^ (self on: self defaultEnvironment)
@@ -105,7 +113,11 @@ StEnvironmentBrowser >> consumePath: aPath [
 	 We need to simulate this, by adding a selected path and consuming it when browser is open."
 
 	self executeOrDeferAction: [ 
-		self basicConsumePath: aPath ]
+		"I am defering the execution because when I have many UI operations, 
+		 better executing them all together in one single cycle (otherwise it can 
+		 look not smooth)"
+		self application defer: [  
+			self basicConsumePath: aPath ] ]
 ]
 
 { #category : #'private - accessing' }
@@ -138,8 +150,10 @@ StEnvironmentBrowser >> initializeClassPanel [
 	classPanel := self instantiate: StBrowserClassPanelPresenter.
 	classPanel outputProtocolSelectionPort 
 		transmitDo: [ :aProtocolModel | "select a method template. Change method template category?" ].
-	classPanel 
-		transmitDo: [ :aMethodModel | self pushMethodEditor: aMethodModel ]
+	classPanel transmitDo: [ :aMethodModel | 
+		self 
+			pushEditorsFor: aMethodModel
+			ifNilRemoveEditorsMatching: [ :each | each isMethodEditor ] ]
 ]
 
 { #category : #initialization }
@@ -169,8 +183,10 @@ StEnvironmentBrowser >> initializePackagesPanel [
 	packagesPanel outputPackageSelectionPort 
 		transmitDo: [ :aPackageModel | "push a package editor + a class template" ].
 	packagesPanel transmitTo: self classPanel.
-	packagesPanel 
-		transmitDo: [ :aClassModel | "push a class comment + a class editor + a method template" ].
+	packagesPanel transmitDo: [ :aClassModel | 
+		self 
+			pushEditorsFor: aClassModel 
+			ifNilRemoveEditorsMatching: [ :each | each isClassEditor ] ].
 	
 ]
 
@@ -219,12 +235,22 @@ StEnvironmentBrowser >> processDeferredActions [
 ]
 
 { #category : #private }
-StEnvironmentBrowser >> pushMethodEditor: aMethodModel [
+StEnvironmentBrowser >> pushEditorsFor: aModel ifNil: aBlock [
 
-	aMethodModel ifNil: [ 
-		self editorContainer removeEditorsMatching: [ :each | each isMethodEditor ].
+	aModel ifNil: [ 
+		aBlock value.
 		^ self ].
-	self editorContainer pushEditors: (aMethodModel newEditors)
+	
+	self updateTitle: aModel windowName.
+	self editorContainer pushEditors: (aModel newEditors)
+]
+
+{ #category : #private }
+StEnvironmentBrowser >> pushEditorsFor: aModel ifNilRemoveEditorsMatching: aBlock [
+
+	self 
+		pushEditorsFor: aModel 
+		ifNil: [ self editorContainer removeEditorsMatching: aBlock ]
 ]
 
 { #category : #'accessing - selecting' }
@@ -260,4 +286,10 @@ StEnvironmentBrowser >> selectPackage: aPackage [
 	self consumePath: { 
 		StPackageModel newPackage: aPackage.
 	}
+]
+
+{ #category : #private }
+StEnvironmentBrowser >> updateTitle: aString [
+
+	self withWindowDo: [ :aWindow | aWindow title: aString ]
 ]

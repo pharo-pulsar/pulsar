@@ -1,6 +1,6 @@
 Class {
 	#name : #StProtocolModel,
-	#superclass : #Object,
+	#superclass : #StBaseModel,
 	#instVars : [
 		'modelClass',
 		'protocol'
@@ -53,7 +53,7 @@ StProtocolModel >> iconName [
 	self protocol isProtected ifTrue: [ ^ #protocolProtectedIcon ].
 	self protocol isExtensionProtocol ifTrue: [ ^ #protocolExtension ].
 			
-	^ #blank
+	^ #protocolNone
 ]
 
 { #category : #accessing }

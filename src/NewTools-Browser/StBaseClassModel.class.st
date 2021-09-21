@@ -1,6 +1,6 @@
 Class {
 	#name : #StBaseClassModel,
-	#superclass : #Object,
+	#superclass : #StBaseModel,
 	#instVars : [
 		'modelClass'
 	],
@@ -13,6 +13,12 @@ StBaseClassModel class >> newClass: aClass [
 	^ self new 
 		modelClass: aClass;
 		yourself
+]
+
+{ #category : #accessing }
+StBaseClassModel class >> shortSize [
+	
+	^ 30
 ]
 
 { #category : #comparing }

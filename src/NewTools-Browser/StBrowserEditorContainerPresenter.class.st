@@ -11,6 +11,13 @@ Class {
 }
 
 { #category : #accessing }
+StBrowserEditorContainerPresenter >> basicPushEditor: anEditor [
+
+	editors add: anEditor.
+	anEditor addToNotebook: editorNotebook 
+]
+
+{ #category : #accessing }
 StBrowserEditorContainerPresenter >> editors [
 
 	^ editors
@@ -32,11 +39,25 @@ StBrowserEditorContainerPresenter >> initializePresenters [
 ]
 
 { #category : #accessing }
-StBrowserEditorContainerPresenter >> pushEditors: aCollection [
+StBrowserEditorContainerPresenter >> pushEditor: anEditor [
 
-	editors addAll: aCollection.
-	self updatePresenter.
-	editorNotebook selectPageIndex: (editors indexOf: aCollection last)
+	editors withIndexDo: [ :eachEditor :index |
+		(eachEditor isSameAs: anEditor) ifTrue: [ | page |
+			eachEditor replaceWith: anEditor.
+			page := editorNotebook pageAt: index.
+			eachEditor updateNotebookPage: page. 
+			editorNotebook selectPage: page.
+			^ self ] ].
+
+	self basicPushEditor: anEditor.
+	editorNotebook selectPageIndex: editors size
+]
+
+{ #category : #accessing }
+StBrowserEditorContainerPresenter >> pushEditors: aCollection [
+	
+	self application defer: [
+		aCollection do: [ :each | self pushEditor: each ] ]
 ]
 
 { #category : #accessing }
@@ -45,14 +66,8 @@ StBrowserEditorContainerPresenter >> removeEditorsMatching: aBlock [
 
 	toRemove := self editors select: aBlock.
 	toRemove ifEmpty: [ ^ self ].
-	self editors removeAll: toRemove.
-	self updatePresenter
-]
-
-{ #category : #initialization }
-StBrowserEditorContainerPresenter >> updatePresenter [
-
-	editorNotebook removeAll.
-	self editors do: [ :each | 
-		each addToNotebook: editorNotebook ]
+	(editorNotebook pages 
+		select: [ :each | toRemove includes: each activePresenter ])
+		do: [ :each | editorNotebook removePage: each ].
+	editors removeAll: toRemove
 ]

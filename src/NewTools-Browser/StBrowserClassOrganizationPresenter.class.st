@@ -61,6 +61,12 @@ StBrowserClassOrganizationPresenter >> initializePresenters [
 		transform: [ :aProtocolModel | self methodsFor: aProtocolModel ]
 ]
 
+{ #category : #private }
+StBrowserClassOrganizationPresenter >> methodList [
+
+	^ methodList
+]
+
 { #category : #accessing }
 StBrowserClassOrganizationPresenter >> methodsFor: aProtocolModel [
 

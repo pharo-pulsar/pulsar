@@ -1,6 +1,6 @@
 Class {
 	#name : #StBasePackageModel,
-	#superclass : #Object,
+	#superclass : #StBaseModel,
 	#category : #'NewTools-Browser-Model'
 }
 
