@@ -1,7 +1,7 @@
 Class {
 	#name : #StExtensionsPackageTagModel,
 	#superclass : #StVirtualPackageTagModel,
-	#category : #'NewTools-Browser-Model'
+	#category : #'NewTools-Browser-Model-Package'
 }
 
 { #category : #accessing }
@@ -12,6 +12,12 @@ StExtensionsPackageTagModel >> classes [
 			StExtendedClassModel 
 				newClass: each 
 				package: self package ]
+]
+
+{ #category : #accessing }
+StExtensionsPackageTagModel >> colorName [
+
+	^ #cyan
 ]
 
 { #category : #accessing }

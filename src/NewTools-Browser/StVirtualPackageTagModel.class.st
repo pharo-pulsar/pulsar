@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'package'
 	],
-	#category : #'NewTools-Browser-Model'
+	#category : #'NewTools-Browser-Model-Package'
 }
 
 { #category : #'instance creation' }

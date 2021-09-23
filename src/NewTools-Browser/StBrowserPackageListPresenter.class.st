@@ -84,6 +84,7 @@ StBrowserPackageListPresenter >> initializePresenters [
 	packagesTreePresenter 
 		display: [ :aPackageModel | aPackageModel name ];
 		displayIcon: [ :aPackageModel | self iconNamed: aPackageModel iconName ];
+		displayColor: [ :aPackageModel | self colorNamed: aPackageModel colorName ];
 		children: [ :aPackageModel | aPackageModel children ].
 	
 	packagesTreePresenter 

@@ -2,7 +2,8 @@ Class {
 	#name : #StBrowserMethodEditorPresenter,
 	#superclass : #StBrowserEditorPresenter,
 	#instVars : [
-		'codePresenter'
+		'codePresenter',
+		'toolbarPresenter'
 	],
 	#category : #'NewTools-Browser-View'
 }
@@ -28,6 +29,7 @@ StBrowserMethodEditorPresenter >> addToNotebook: aNotebook [
 StBrowserMethodEditorPresenter >> initializePresenters [
 
 	self layout: (SpBoxLayout newTopToBottom
+		add: (toolbarPresenter := self newToolbar) expand: false;
 		add: (codePresenter := self newCode);
 		yourself).
 		

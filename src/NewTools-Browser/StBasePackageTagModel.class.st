@@ -1,7 +1,7 @@
 Class {
 	#name : #StBasePackageTagModel,
 	#superclass : #StBasePackageModel,
-	#category : #'NewTools-Browser-Model'
+	#category : #'NewTools-Browser-Model-Package'
 }
 
 { #category : #testing }

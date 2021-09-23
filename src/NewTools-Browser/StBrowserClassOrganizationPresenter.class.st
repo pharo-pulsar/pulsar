@@ -54,7 +54,8 @@ StBrowserClassOrganizationPresenter >> initializePresenters [
 		displayIcon: [ :aProtocolModel | self iconNamed: aProtocolModel iconName ]. 
 	methodList 
 		display: [ :aMethodModel | aMethodModel name ];
-		displayIcon: [ :aMethodModel | self iconNamed: aMethodModel iconName ]. 
+		displayIcon: [ :aMethodModel | self iconNamed: aMethodModel iconName ];
+		displayColor: [ :aMethodModel | self colorNamed: aMethodModel colorName ]. 
 	
 	protocolList 
 		transmitTo: methodList

@@ -197,7 +197,7 @@ StEnvironmentBrowser >> initializePackagesPanel [
 StEnvironmentBrowser >> initializePresenters [
 
 	self layout: (SpPanedLayout newTopToBottom
-		positionOfSlider: 45 percent;
+		positionOfSlider: 40 percent;
 		add: (SpPanedLayout newLeftToRight
 			add: (self newNotebook
 				addPageTitle: 'Packages' provider: [ self packagesPanel ];

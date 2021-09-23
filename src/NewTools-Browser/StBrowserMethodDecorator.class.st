@@ -18,7 +18,7 @@ StBrowserMethodDecorator class >> allApplingTo: aMethod [
 { #category : #testing }
 StBrowserMethodDecorator class >> appliesTo: aMethod [
 
-	^ false
+	^ self subclassResponsibility
 ]
 
 { #category : #'instance creation' }
@@ -33,6 +33,12 @@ StBrowserMethodDecorator class >> uniqueInstance [
 	self = StBrowserMethodDecorator 
 		ifTrue: [ ^ self error: 'I''m an abstract class, use one of my children instead.' ].
 	^ uniqueInstance ifNil: [ uniqueInstance := super new ]
+]
+
+{ #category : #accessing }
+StBrowserMethodDecorator >> colorName [
+
+	^ nil
 ]
 
 { #category : #accessing }

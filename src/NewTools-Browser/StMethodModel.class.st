@@ -35,6 +35,30 @@ StMethodModel >> collectDecorators [
 	^ StBrowserMethodDecorator allApplingTo: self method
 ]
 
+{ #category : #'accessing decorated' }
+StMethodModel >> colorName [
+
+	^ self decorated: [ :each | each colorName ] ifNone: [ nil ]
+]
+
+{ #category : #accessing }
+StMethodModel >> compile: aString [
+
+	self method methodClass 
+		compile: aString
+		classified: self method category
+]
+
+{ #category : #private }
+StMethodModel >> decorated: aBlockOrSymbol ifNone: noneBlock [
+
+	self decorators ifEmpty: [ ^ noneBlock value ].
+	^ self decorators
+		detect: [ :each | (aBlockOrSymbol value: each) notNil ]
+		ifFound: [ :each | aBlockOrSymbol value: each ]
+		ifNone: noneBlock
+]
+
 { #category : #accessing }
 StMethodModel >> decorators [
 
@@ -48,14 +72,10 @@ StMethodModel >> hash [
 		bitXor: self method hash
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing decorated' }
 StMethodModel >> iconName [
 
-	self decorators ifEmpty: [ ^ #blank ].
-	^ self decorators  
-		detect: [ :each | each iconName notNil ]
-		ifFound: [ :each | each iconName ]
-		ifNone: [ #blank ]
+	^ self decorated: [ :each | each iconName ] ifNone: [ #blank ]
 ]
 
 { #category : #testing }

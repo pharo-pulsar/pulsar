@@ -2,8 +2,7 @@ Class {
 	#name : #StBrowserClassDefinitionPresenter,
 	#superclass : #StBrowserEditorPresenter,
 	#instVars : [
-		'codePresenter',
-		'code'
+		'codePresenter'
 	],
 	#category : #'NewTools-Browser-View'
 }
@@ -29,10 +28,10 @@ StBrowserClassDefinitionPresenter >> addToNotebook: aNotebook [
 StBrowserClassDefinitionPresenter >> initializePresenters [
 
 	self layout: (SpBoxLayout newTopToBottom
-		add: (code := self newCode);
+		add: (codePresenter := self newCode);
 		yourself).
 		
-	code beForScripting
+	codePresenter beForScripting
 ]
 
 { #category : #testing }
@@ -58,5 +57,5 @@ StBrowserClassDefinitionPresenter >> updateNotebookPage: aPage [
 { #category : #initialization }
 StBrowserClassDefinitionPresenter >> updatePresenter [
 
-	code text: self model classDefinition
+	codePresenter text: self model classDefinition
 ]

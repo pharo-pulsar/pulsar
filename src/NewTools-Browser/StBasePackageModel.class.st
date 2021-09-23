@@ -1,7 +1,7 @@
 Class {
 	#name : #StBasePackageModel,
 	#superclass : #StBaseModel,
-	#category : #'NewTools-Browser-Model'
+	#category : #'NewTools-Browser-Model-Package'
 }
 
 { #category : #accessing }
@@ -12,6 +12,12 @@ StBasePackageModel >> children [
 
 { #category : #accessing }
 StBasePackageModel >> classes [
+
+	^ nil
+]
+
+{ #category : #accessing }
+StBasePackageModel >> colorName [
 
 	^ nil
 ]

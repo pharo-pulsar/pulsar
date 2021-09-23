@@ -2,7 +2,7 @@ Class {
 	#name : #StBrowserClassCommentPresenter,
 	#superclass : #StBrowserEditorPresenter,
 	#instVars : [
-		'commentText'
+		'commentTextPresenter'
 	],
 	#category : #'NewTools-Browser-View'
 }
@@ -28,10 +28,10 @@ StBrowserClassCommentPresenter >> addToNotebook: aNotebook [
 StBrowserClassCommentPresenter >> initializePresenters [
 
 	self layout: (SpBoxLayout newTopToBottom
-		add: (commentText := self newText);
+		add: (commentTextPresenter := self newText);
 		yourself).
 	
-	commentText addStyle: 'code'
+	commentTextPresenter addStyle: 'code'
 ]
 
 { #category : #testing }
@@ -56,5 +56,5 @@ StBrowserClassCommentPresenter >> updateNotebookPage: aPage [
 { #category : #initialization }
 StBrowserClassCommentPresenter >> updatePresenter [
 
-	commentText text: self model comment
+	commentTextPresenter text: self model comment
 ]
