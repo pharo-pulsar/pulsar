@@ -36,12 +36,12 @@ StMethodModelTest >> testColorName [
 ]
 
 { #category : #tests }
-StMethodModelTest >> testCompile [
+StMethodModelTest >> testCompileNotifying [
 	| source |
 
 	source := '{1} ^ 42' format: { method selector }.
 	self deny: method sourceCode equals: source.
-	model compile: source.
+	model compile: source notifying: nil.
 	self assert: method sourceCode equals: source
 ]
 

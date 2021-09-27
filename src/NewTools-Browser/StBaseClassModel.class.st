@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'modelClass'
 	],
-	#category : #'NewTools-Browser-Model'
+	#category : #'NewTools-Browser-Model-Class'
 }
 
 { #category : #'instance creation' }

@@ -18,6 +18,18 @@ StBrowserEditorPresenter >> addToNotebook: aNotebook [
 	self subclassResponsibility
 ]
 
+{ #category : #accessing }
+StBrowserEditorPresenter >> content: aString [
+
+	self subclassResponsibility
+]
+
+{ #category : #testing }
+StBrowserEditorPresenter >> isClassDefinitionEditor [
+
+	^ false
+]
+
 { #category : #testing }
 StBrowserEditorPresenter >> isClassEditor [
 
@@ -25,7 +37,19 @@ StBrowserEditorPresenter >> isClassEditor [
 ]
 
 { #category : #testing }
+StBrowserEditorPresenter >> isCommentEditor [
+
+	^ false
+]
+
+{ #category : #testing }
 StBrowserEditorPresenter >> isMethodEditor [
+
+	^ false
+]
+
+{ #category : #testing }
+StBrowserEditorPresenter >> isPackageEditor [
 
 	^ false
 ]
@@ -40,6 +64,18 @@ StBrowserEditorPresenter >> isSameAs: anObject [
 StBrowserEditorPresenter >> replaceWith: aSimilarEditor [
 
 	self model: aSimilarEditor model
+]
+
+{ #category : #actions }
+StBrowserEditorPresenter >> reset [
+
+	self subclassResponsibility
+]
+
+{ #category : #actions }
+StBrowserEditorPresenter >> submit [
+
+	self subclassResponsibility
 ]
 
 { #category : #accessing }

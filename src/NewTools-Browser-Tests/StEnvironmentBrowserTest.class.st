@@ -1,27 +1,21 @@
 Class {
 	#name : #StEnvironmentBrowserTest,
-	#superclass : #TestCase,
-	#instVars : [
-		'window',
-		'backup'
-	],
+	#superclass : #StBaseBrowserTest,
 	#category : #'NewTools-Browser-Tests'
 }
 
-{ #category : #running }
-StEnvironmentBrowserTest >> setUp [
+{ #category : #tests }
+StEnvironmentBrowserTest >> testActiveEditor [
 
-	super setUp.	
-	backup := SpMorphicBackendForTest new
-]
+	window := StEnvironmentBrowser openOnMethod: self class>>#testActiveEditor.
+	self waitUntilUIRedrawed.
 
-{ #category : #running }
-StEnvironmentBrowserTest >> tearDown [
-
-	window ifNotNil: [ 
-		window close.
-		window := nil ].
-	super tearDown
+	self assert: window presenter activeEditor notNil.
+	self assert: window presenter activeEditor isMethodEditor.
+	
+	window presenter selectClass: Object.
+	self waitUntilUIRedrawed.
+	self assert: window presenter activeEditor isClassEditor
 ]
 
 { #category : #tests }
@@ -138,10 +132,4 @@ StEnvironmentBrowserTest >> testOpenOnPackage [
 	self 
 		assert: window presenter packagesPanel packagesTree selectedItem package
 		equals: self class package
-]
-
-{ #category : #utilities }
-StEnvironmentBrowserTest >> waitUntilUIRedrawed [
-
-	backup waitUntilUIRedrawed
 ]

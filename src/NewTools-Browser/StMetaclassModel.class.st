@@ -1,7 +1,7 @@
 Class {
 	#name : #StMetaclassModel,
 	#superclass : #StBaseClassModel,
-	#category : #'NewTools-Browser-Model'
+	#category : #'NewTools-Browser-Model-Class'
 }
 
 { #category : #'accessing - parallel hierarchy' }

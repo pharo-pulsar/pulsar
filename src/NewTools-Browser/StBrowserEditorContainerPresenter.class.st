@@ -11,6 +11,12 @@ Class {
 }
 
 { #category : #accessing }
+StBrowserEditorContainerPresenter >> activeEditor [
+	
+	^ editorNotebook selectedPage activePresenter
+]
+
+{ #category : #accessing }
 StBrowserEditorContainerPresenter >> basicPushEditor: anEditor [
 
 	editors add: anEditor.
@@ -21,6 +27,12 @@ StBrowserEditorContainerPresenter >> basicPushEditor: anEditor [
 StBrowserEditorContainerPresenter >> editors [
 
 	^ editors
+]
+
+{ #category : #testing }
+StBrowserEditorContainerPresenter >> hasEditorSuchAs: aBlock [
+
+	^ self editors anySatisfy: aBlock
 ]
 
 { #category : #initialization }

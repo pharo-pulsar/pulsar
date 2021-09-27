@@ -1,7 +1,7 @@
 Class {
 	#name : #StClassModel,
 	#superclass : #StBaseClassModel,
-	#category : #'NewTools-Browser-Model'
+	#category : #'NewTools-Browser-Model-Class'
 }
 
 { #category : #accessing }
@@ -47,11 +47,12 @@ StClassModel >> newEditors [
 
 	^ { 
 		StBrowserClassCommentPresenter on: self. 
-		StBrowserClassDefinitionPresenter on: self
+		StBrowserClassDefinitionPresenter on: self.
+		StBrowserMethodTemplateEditorPresenter on: (StMethodTemplateModel newClass: self modelClass)
 	}
 ]
 
-{ #category : #default }
+{ #category : #accessing }
 StClassModel >> shortName [
 	
 	^ self name contractTo: self class shortSize

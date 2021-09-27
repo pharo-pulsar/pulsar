@@ -35,6 +35,12 @@ StBrowserClassDefinitionPresenter >> initializePresenters [
 ]
 
 { #category : #testing }
+StBrowserClassDefinitionPresenter >> isClassDefinitionEditor [
+
+	^ true
+]
+
+{ #category : #testing }
 StBrowserClassDefinitionPresenter >> isClassEditor [
 
 	^ true

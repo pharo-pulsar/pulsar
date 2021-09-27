@@ -9,7 +9,8 @@ Class {
 		'editorContainer',
 		'hierarchyPanel',
 		'packagesPanel',
-		'deferredActions'
+		'deferredActions',
+		'selection'
 	],
 	#category : #'NewTools-Browser-View'
 }
@@ -18,6 +19,12 @@ Class {
 StEnvironmentBrowser class >> defaultEnvironment [
 
 	^ StSystemEnvironment new
+]
+
+{ #category : #'instance creation' }
+StEnvironmentBrowser class >> new [
+
+	^ self on: self defaultEnvironment
 ]
 
 { #category : #'instance creation' }
@@ -77,6 +84,12 @@ StEnvironmentBrowser class >> openOnPackage: aPackage [
 StEnvironmentBrowser class >> preferredExtent [
 
 	^ 900@650
+]
+
+{ #category : #accessing }
+StEnvironmentBrowser >> activeEditor [
+	
+	^ editorContainer activeEditor
 ]
 
 { #category : #'private - deferring' }
@@ -151,11 +164,11 @@ StEnvironmentBrowser >> initializeClassPanel [
 	classPanel outputProtocolSelectionPort 
 		transmitDo: [ :aProtocolModel |
 			self 
-				pushEditorsFor: aProtocolModel
+				select: aProtocolModel
 				ifNilRemoveEditorsMatching: [ :each | each isMethodEditor ] ].
 	classPanel transmitDo: [ :aMethodModel | 
 		self 
-			pushEditorsFor: aMethodModel
+			select: aMethodModel
 			ifNilRemoveEditorsMatching: [ :each | each isMethodEditor ] ]
 ]
 
@@ -183,14 +196,15 @@ StEnvironmentBrowser >> initializeHierarchyPanel [
 StEnvironmentBrowser >> initializePackagesPanel [
 	
 	packagesPanel := self instantiate: StBrowserPackageListPresenter on: self model.
-	packagesPanel outputPackageSelectionPort 
-		transmitDo: [ :aPackageModel | "push a package editor + a class template" ].
+	packagesPanel outputPackageSelectionPort transmitDo: [ :aPackageModel | 
+		self
+			select: aPackageModel
+			ifNilRemoveEditorsMatching: [ :each | each isPackageEditor ] ].
 	packagesPanel transmitTo: self classPanel.
 	packagesPanel transmitDo: [ :aClassModel | 
 		self 
-			pushEditorsFor: aClassModel 
-			ifNilRemoveEditorsMatching: [ :each | each isClassEditor ] ].
-	
+			select: aClassModel 
+			ifNilRemoveEditorsMatching: [ :each | each isClassEditor ] ]
 ]
 
 { #category : #initialization }
@@ -238,7 +252,9 @@ StEnvironmentBrowser >> processDeferredActions [
 ]
 
 { #category : #private }
-StEnvironmentBrowser >> pushEditorsFor: aModel ifNil: aBlock [
+StEnvironmentBrowser >> select: aModel ifNil: aBlock [
+
+	selection := aModel.
 
 	aModel ifNil: [ 
 		aBlock value.
@@ -249,10 +265,10 @@ StEnvironmentBrowser >> pushEditorsFor: aModel ifNil: aBlock [
 ]
 
 { #category : #private }
-StEnvironmentBrowser >> pushEditorsFor: aModel ifNilRemoveEditorsMatching: aBlock [
+StEnvironmentBrowser >> select: aModel ifNilRemoveEditorsMatching: aBlock [
 
 	self 
-		pushEditorsFor: aModel 
+		select: aModel 
 		ifNil: [ self editorContainer removeEditorsMatching: aBlock ]
 ]
 
@@ -289,6 +305,14 @@ StEnvironmentBrowser >> selectPackage: aPackage [
 	self consumePath: { 
 		StPackageModel newPackage: aPackage.
 	}
+]
+
+{ #category : #accessing }
+StEnvironmentBrowser >> selection [
+	"answer current selected model element.
+	 It can be nil, otherwise is an instance of StBaseModel"
+
+	^ selection
 ]
 
 { #category : #private }

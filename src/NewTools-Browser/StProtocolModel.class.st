@@ -101,7 +101,7 @@ StProtocolModel >> protocol: anObject [
 	protocol := anObject
 ]
 
-{ #category : #default }
+{ #category : #accessing }
 StProtocolModel >> windowName [
 
 	^ self modelClass name

@@ -25,17 +25,62 @@ StBrowserMethodEditorPresenter >> addToNotebook: aNotebook [
 		yourself)
 ]
 
+{ #category : #accessing }
+StBrowserMethodEditorPresenter >> content: aString [ 
+	
+	codePresenter text: aString
+]
+
+{ #category : #'actions commands' }
+StBrowserMethodEditorPresenter >> doBrowseVersions [
+	
+	(VersionBrowser 
+		newApplication: self application
+		model: self model method asRingDefinition)
+		openWithSpec
+]
+
+{ #category : #'private - actions' }
+StBrowserMethodEditorPresenter >> doCompile: aString [
+
+	self model 
+		compile: aString 
+		notifying: codePresenter interactionModel
+]
+
+{ #category : #'private - actions' }
+StBrowserMethodEditorPresenter >> doCopyToClipboard [
+	
+	Clipboard clipboardText: codePresenter text.
+	self application inform: ('Copied method {1}' format: { self model shortName })
+]
+
+{ #category : #'private - actions' }
+StBrowserMethodEditorPresenter >> doReset [
+
+	self updatePresenter
+]
+
 { #category : #initialization }
 StBrowserMethodEditorPresenter >> initializePresenters [
 
 	self layout: (SpBoxLayout newTopToBottom
-		add: (toolbarPresenter := self newToolbar) expand: false;
+		add: (SpBoxLayout newLeftToRight
+				addLast: (toolbarPresenter := self newToolbar) expand: false;
+				yourself) 
+			expand: false;
 		add: (codePresenter := self newCode);
 		yourself).
+
+	toolbarPresenter 
+		displayMode: self application toolbarDisplayMode;
+		addStyle: 'stToolbar';
+		fillWith: self toolbarActions.
 		
 	codePresenter
-		whenSubmitDo: [ :aString | self halt ];
-		whenResetDo: [ self halt ]
+		addStyle: 'stCode';
+		whenSubmitDo: [ :aString | self doCompile: aString ];
+		whenResetDo: [ self doReset ]
 
 ]
 
@@ -45,10 +90,36 @@ StBrowserMethodEditorPresenter >> isMethodEditor [
 	^ true
 ]
 
+{ #category : #actions }
+StBrowserMethodEditorPresenter >> reset [
+
+	codePresenter triggerResetAction
+]
+
+{ #category : #actions }
+StBrowserMethodEditorPresenter >> submit [
+	
+	codePresenter triggerSubmitAction
+]
+
 { #category : #accessing }
 StBrowserMethodEditorPresenter >> tabPriority [
 
 	^ 100
+]
+
+{ #category : #accessing }
+StBrowserMethodEditorPresenter >> toolbarActions [
+	| group |
+	
+	group := CmCommandGroup forSpec
+		beRoot;
+		yourself.
+
+	(StBrowserMethodEditorCommand allCommandsSuchAs: [ :each | each showInToolbar ])
+		do: [ :each | group register: (each forSpecContext: self) ].
+		
+	^ group
 ]
 
 { #category : #adding }

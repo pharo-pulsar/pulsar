@@ -1,6 +1,6 @@
 Class {
 	#name : #StMethodModel,
-	#superclass : #StBaseModel,
+	#superclass : #StBaseMethodModel,
 	#instVars : [
 		'method',
 		'decorators'
@@ -39,14 +39,6 @@ StMethodModel >> collectDecorators [
 StMethodModel >> colorName [
 
 	^ self decorated: [ :each | each colorName ] ifNone: [ nil ]
-]
-
-{ #category : #accessing }
-StMethodModel >> compile: aString [
-
-	self method methodClass 
-		compile: aString
-		classified: self method category
 ]
 
 { #category : #private }
@@ -97,6 +89,18 @@ StMethodModel >> method: anObject [
 ]
 
 { #category : #accessing }
+StMethodModel >> methodCategory [
+
+	^ self method category
+]
+
+{ #category : #accessing }
+StMethodModel >> methodClass [
+
+	^ self method methodClass
+]
+
+{ #category : #accessing }
 StMethodModel >> name [
 
 	^ self method selector
@@ -120,7 +124,7 @@ StMethodModel >> sourceCode [
 	^ self method sourceCode
 ]
 
-{ #category : #default }
+{ #category : #accessing }
 StMethodModel >> windowName [
 
 	^ String streamContents: [ :stream | 

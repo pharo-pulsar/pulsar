@@ -40,6 +40,12 @@ StBrowserClassCommentPresenter >> isClassEditor [
 	^ true
 ]
 
+{ #category : #testing }
+StBrowserClassCommentPresenter >> isCommentEditor [
+	
+	^ true
+]
+
 { #category : #accessing }
 StBrowserClassCommentPresenter >> tabPriority [
 

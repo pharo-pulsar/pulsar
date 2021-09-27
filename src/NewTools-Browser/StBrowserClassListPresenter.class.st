@@ -33,6 +33,10 @@ StBrowserClassListPresenter >> initializePresenters [
 		add: (classTree := self newTree);
 		yourself).
 		
+	classTree 
+		addStyle: 'stTree';
+		addStyle: 'stBrowserClassList'.
+		
 	classTree
 		display: [ :aClassModel | aClassModel name ];
 		displayIcon: [ :aClassModel | self iconNamed: aClassModel iconName ];

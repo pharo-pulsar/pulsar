@@ -4,7 +4,7 @@ Class {
 	#category : #'NewTools-Browser-Model'
 }
 
-{ #category : #default }
+{ #category : #accessing }
 StBaseModel >> name [
 
 	^ self subclassResponsibility
@@ -16,13 +16,13 @@ StBaseModel >> newEditors [
 	^ #()
 ]
 
-{ #category : #default }
+{ #category : #accessing }
 StBaseModel >> shortName [
 
 	^ self name
 ]
 
-{ #category : #default }
+{ #category : #accessing }
 StBaseModel >> windowName [
 
 	^ self name

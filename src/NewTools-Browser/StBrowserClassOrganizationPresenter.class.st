@@ -49,10 +49,16 @@ StBrowserClassOrganizationPresenter >> initializePresenters [
 		add: (methodList := self newList);
 		yourself).
 	
+	self addStyle: 'stBrowserClassOrganizationPanel'.
+	
 	protocolList 
+		addStyle: 'stList';
+		addStyle: 'stBrowserProtocolList';
 		display: [ :aProtocolModel | aProtocolModel name ];
 		displayIcon: [ :aProtocolModel | self iconNamed: aProtocolModel iconName ]. 
 	methodList 
+		addStyle: 'stList';
+		addStyle: 'stBrowserMethodList';
 		display: [ :aMethodModel | aMethodModel name ];
 		displayIcon: [ :aMethodModel | self iconNamed: aMethodModel iconName ];
 		displayColor: [ :aMethodModel | self colorNamed: aMethodModel colorName ]. 

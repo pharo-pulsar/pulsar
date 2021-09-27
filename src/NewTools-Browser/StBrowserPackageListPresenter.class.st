@@ -81,7 +81,9 @@ StBrowserPackageListPresenter >> initializePresenters [
 		add: (classesPanelPresenter := self instantiate: StBrowserClassListPresenter);
 		yourself).
 		
-	packagesTreePresenter 
+	packagesTreePresenter
+		addStyle: 'stTree';
+		addStyle: 'stBrowserPackagesList';
 		display: [ :aPackageModel | aPackageModel name ];
 		displayIcon: [ :aPackageModel | self iconNamed: aPackageModel iconName ];
 		displayColor: [ :aPackageModel | self colorNamed: aPackageModel colorName ];
