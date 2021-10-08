@@ -5,15 +5,15 @@ Class {
 }
 
 { #category : #accessing }
+StBaseModel >> associatedEditors [
+
+	^ StBrowserAssociatedEditorSet new
+]
+
+{ #category : #accessing }
 StBaseModel >> name [
 
 	^ self subclassResponsibility
-]
-
-{ #category : #'instance creation' }
-StBaseModel >> newEditors [
-	
-	^ #()
 ]
 
 { #category : #accessing }

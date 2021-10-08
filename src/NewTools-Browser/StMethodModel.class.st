@@ -29,6 +29,12 @@ StMethodModel >> = other [
 		and: [ self method = other method ]
 ]
 
+{ #category : #'instance creation' }
+StMethodModel >> associatedEditors [
+
+	^ StBrowserAssociatedEditorSet with: (StBrowserMethodEditorPresenter on: self)
+]
+
 { #category : #private }
 StMethodModel >> collectDecorators [
 
@@ -104,12 +110,6 @@ StMethodModel >> methodClass [
 StMethodModel >> name [
 
 	^ self method selector
-]
-
-{ #category : #'instance creation' }
-StMethodModel >> newEditors [
-
-	^ { StBrowserMethodEditorPresenter on: self }
 ]
 
 { #category : #accessing }

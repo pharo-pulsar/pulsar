@@ -55,8 +55,7 @@ StBrowserClassCommentPresenter >> tabPriority [
 { #category : #adding }
 StBrowserClassCommentPresenter >> updateNotebookPage: aPage [
 
-	aPage 
-		icon: (self application iconNamed: self model commentIconName)
+	aPage icon: (self application iconNamed: self model commentIconName)
 ]
 
 { #category : #initialization }

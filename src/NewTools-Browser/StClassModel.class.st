@@ -5,6 +5,16 @@ Class {
 }
 
 { #category : #accessing }
+StClassModel >> associatedEditors [
+
+	^ StBrowserAssociatedEditorSet new 
+		add: (StBrowserClassCommentPresenter on: self); 
+		addDefault: (StBrowserClassDefinitionPresenter on: self);
+		add: (StBrowserMethodTemplateEditorPresenter on: (StMethodTemplateModel newClass: self modelClass));
+		yourself
+]
+
+{ #category : #accessing }
 StClassModel >> classDefinition [
 
 	^ self modelClass definitionString
@@ -40,16 +50,6 @@ StClassModel >> instanceSide [
 StClassModel >> name [
 
 	^ self modelClass name
-]
-
-{ #category : #'instance creation' }
-StClassModel >> newEditors [
-
-	^ { 
-		StBrowserClassCommentPresenter on: self. 
-		StBrowserClassDefinitionPresenter on: self.
-		StBrowserMethodTemplateEditorPresenter on: (StMethodTemplateModel newClass: self modelClass)
-	}
 ]
 
 { #category : #accessing }

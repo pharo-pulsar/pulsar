@@ -261,7 +261,7 @@ StEnvironmentBrowser >> select: aModel ifNil: aBlock [
 		^ self ].
 	
 	self updateTitle: aModel windowName.
-	self editorContainer pushEditors: (aModel newEditors)
+	self editorContainer pushAssociatedEditors: aModel associatedEditors
 ]
 
 { #category : #private }

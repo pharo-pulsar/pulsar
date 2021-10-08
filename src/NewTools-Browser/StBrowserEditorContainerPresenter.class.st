@@ -16,7 +16,17 @@ StBrowserEditorContainerPresenter >> activeEditor [
 	^ editorNotebook selectedPage activePresenter
 ]
 
-{ #category : #accessing }
+{ #category : #'private - pushing' }
+StBrowserEditorContainerPresenter >> adoptEditor: anEditor intoEditor: currentEditor fromPage: index [
+	| page |
+	
+	currentEditor replaceWith: anEditor.
+	page := editorNotebook pageAt: index.
+	currentEditor updateNotebookPage: page
+
+]
+
+{ #category : #'private - pushing' }
 StBrowserEditorContainerPresenter >> basicPushEditor: anEditor [
 
 	editors add: anEditor.
@@ -50,26 +60,47 @@ StBrowserEditorContainerPresenter >> initializePresenters [
 		yourself)
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - pushing' }
+StBrowserEditorContainerPresenter >> pushAssociatedEditors: anAssociatedEditorSet [
+
+	self application defer: [
+		anAssociatedEditorSet editors
+			do: [ :each | 
+				self 
+					pushEditor: each
+					then: [ :aPage | 
+						anAssociatedEditorSet default = each 
+							ifTrue: [ editorNotebook selectPage: aPage ] ] ] ]	
+]
+
+{ #category : #'private - pushing' }
 StBrowserEditorContainerPresenter >> pushEditor: anEditor [
 
 	editors withIndexDo: [ :eachEditor :index |
-		(eachEditor isSameAs: anEditor) ifTrue: [ | page |
-			eachEditor replaceWith: anEditor.
-			page := editorNotebook pageAt: index.
-			eachEditor updateNotebookPage: page. 
-			editorNotebook selectPage: page.
-			^ self ] ].
+		(eachEditor isSameAs: anEditor) ifTrue: [ 
+			^ self 
+				adoptEditor: anEditor 
+				intoEditor: eachEditor
+				fromPage: index ] ].
 
 	self basicPushEditor: anEditor.
 	editorNotebook selectPageIndex: editors size
 ]
 
-{ #category : #accessing }
-StBrowserEditorContainerPresenter >> pushEditors: aCollection [
-	
-	self application defer: [
-		aCollection do: [ :each | self pushEditor: each ] ]
+{ #category : #'private - pushing' }
+StBrowserEditorContainerPresenter >> pushEditor: anEditor then: aBlock [
+
+	editors withIndexDo: [ :eachEditor :index |
+		(eachEditor isSameAs: anEditor) ifTrue: [ 
+			| page |
+			page := editorNotebook pageAt: index.
+			eachEditor replaceWith: anEditor.
+			eachEditor updateNotebookPage: page.
+			aBlock value: page.
+			^ self ] ].
+
+	self basicPushEditor: anEditor.
+	aBlock value: editorNotebook pages last
 ]
 
 { #category : #accessing }

@@ -16,7 +16,7 @@ StMethodModelTest >> setUp [
 	super setUp.
 	classFactory := ClassFactoryForTestCase new. 
 	class := classFactory newClass.
-	class compileSilently: 'test1 ^ self' classified: 'accessing'.
+	class compile: 'test1 ^ self' classified: 'accessing'.
 	method := class >> #test1.
 	model := StMethodModel newMethod: method
 ]
