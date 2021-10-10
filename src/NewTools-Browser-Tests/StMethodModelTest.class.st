@@ -42,7 +42,9 @@ StMethodModelTest >> testCompileNotifying [
 	source := '{1} ^ 42' format: { method selector }.
 	self deny: method sourceCode equals: source.
 	model compile: source notifying: nil.
-	self assert: method sourceCode equals: source
+	self 
+		assert: (method methodClass>>(method selector)) sourceCode 
+		equals: source
 ]
 
 { #category : #tests }
