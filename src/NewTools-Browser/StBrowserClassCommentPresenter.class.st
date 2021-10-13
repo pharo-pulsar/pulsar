@@ -16,10 +16,10 @@ StBrowserClassCommentPresenter class >> type [
 { #category : #adding }
 StBrowserClassCommentPresenter >> addToNotebook: aNotebook [
 
-	aNotebook addPage: ((SpNotebookPage   
-		title: 'Comment'
-		icon: (self application iconNamed: self model commentIconName) 
-		provider: [ self ])
+	aNotebook addPage: (StBrowserEditorPage new 
+		title: 'Comment';
+		icon: (self application iconNamed: self model windowCommentIconName);
+		editor: self;
 		beCloseable;
 		yourself)
 ]
@@ -55,7 +55,7 @@ StBrowserClassCommentPresenter >> tabPriority [
 { #category : #adding }
 StBrowserClassCommentPresenter >> updateNotebookPage: aPage [
 
-	aPage icon: (self application iconNamed: self model commentIconName)
+	aPage icon: (self application iconNamed: self model windowCommentIconName)
 ]
 
 { #category : #initialization }

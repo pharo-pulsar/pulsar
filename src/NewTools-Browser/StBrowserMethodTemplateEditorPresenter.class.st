@@ -4,6 +4,24 @@ Class {
 	#category : #'NewTools-Browser-View'
 }
 
+{ #category : #testing }
+StBrowserMethodTemplateEditorPresenter >> isMethodEditor [
+
+	^ false
+]
+
+{ #category : #accessing }
+StBrowserMethodTemplateEditorPresenter >> tabPriority [
+
+	^ 200
+]
+
+{ #category : #accessing }
+StBrowserMethodTemplateEditorPresenter >> toolbarActionKinds [
+	
+	^ { StBrowserEditorCommand }
+]
+
 { #category : #initialization }
 StBrowserMethodTemplateEditorPresenter >> updatePresenter [
 

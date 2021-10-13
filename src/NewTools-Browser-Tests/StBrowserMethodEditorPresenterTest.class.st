@@ -4,7 +4,7 @@ Class {
 	#category : #'NewTools-Browser-Tests'
 }
 
-{ #category : #tests }
+{ #category : #private }
 StBrowserMethodEditorPresenterTest >> assertActiveEditorHasCommand: aClass [ 
 	| editor |
 
@@ -13,7 +13,7 @@ StBrowserMethodEditorPresenterTest >> assertActiveEditorHasCommand: aClass [
 		anySatisfy: [ :each | each decoratedCommand class = aClass ])
 ]
 
-{ #category : #tests }
+{ #category : #'tests - commands' }
 StBrowserMethodEditorPresenterTest >> testEditorHasCopyToClipboardToolbarOption [
 
 	window := StEnvironmentBrowser openOnMethod: self class>>#testEditorHasCopyToClipboardToolbarOption.
@@ -22,11 +22,22 @@ StBrowserMethodEditorPresenterTest >> testEditorHasCopyToClipboardToolbarOption 
 	self assertActiveEditorHasCommand: StBrowseCopyToClipboardCommand
 ]
 
-{ #category : #tests }
+{ #category : #'tests - commands' }
 StBrowserMethodEditorPresenterTest >> testEditorHasVersionBrowserToolbarOption [
 
 	window := StEnvironmentBrowser openOnMethod: self class>>#testEditorHasVersionBrowserToolbarOption.
 	self waitUntilUIRedrawed.
 	
 	self assertActiveEditorHasCommand: StBrowseVersionsCommand
+]
+
+{ #category : #tests }
+StBrowserMethodEditorPresenterTest >> testTypeTextMarksTheEditorAsDirty [
+	| editor |
+
+	editor := StBrowserMethodEditorPresenter on: (StMethodModel newMethod: self class>>#testTypeTextMarksTheEditorAsDirty).
+		
+	self deny: editor isDirty.
+	editor typeByChar: 'x'.
+	self assert: editor isDirty
 ]

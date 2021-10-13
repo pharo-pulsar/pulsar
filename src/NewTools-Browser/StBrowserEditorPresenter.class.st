@@ -3,6 +3,9 @@ Class {
 	#superclass : #StPresenter,
 	#traits : 'SpTModel',
 	#classTraits : 'SpTModel classTrait',
+	#instVars : [
+		'dirty'
+	],
 	#category : #'NewTools-Browser-View'
 }
 
@@ -24,6 +27,19 @@ StBrowserEditorPresenter >> content: aString [
 	self subclassResponsibility
 ]
 
+{ #category : #private }
+StBrowserEditorPresenter >> dirty: aBoolean [
+
+	dirty := aBoolean
+]
+
+{ #category : #initialization }
+StBrowserEditorPresenter >> initialize [
+
+	self dirty: false.
+	super initialize
+]
+
 { #category : #testing }
 StBrowserEditorPresenter >> isClassDefinitionEditor [
 
@@ -40,6 +56,12 @@ StBrowserEditorPresenter >> isClassEditor [
 StBrowserEditorPresenter >> isCommentEditor [
 
 	^ false
+]
+
+{ #category : #testing }
+StBrowserEditorPresenter >> isDirty [
+
+	^ dirty
 ]
 
 { #category : #testing }
@@ -60,6 +82,12 @@ StBrowserEditorPresenter >> isSameAs: anObject [
 	^ self species = anObject species
 ]
 
+{ #category : #accessing }
+StBrowserEditorPresenter >> markDirty [
+
+	self dirty: true
+]
+
 { #category : #replacing }
 StBrowserEditorPresenter >> replaceWith: aSimilarEditor [
 
@@ -70,6 +98,12 @@ StBrowserEditorPresenter >> replaceWith: aSimilarEditor [
 StBrowserEditorPresenter >> reset [
 
 	self subclassResponsibility
+]
+
+{ #category : #accessing }
+StBrowserEditorPresenter >> resetDirty [
+
+	self dirty: false
 ]
 
 { #category : #actions }
@@ -94,4 +128,10 @@ StBrowserEditorPresenter >> type [
 StBrowserEditorPresenter >> updateNotebookPage: aPage [
 
 	self subclassResponsibility
+]
+
+{ #category : #accessing }
+StBrowserEditorPresenter >> windowName [
+	
+	^ self model windowName
 ]

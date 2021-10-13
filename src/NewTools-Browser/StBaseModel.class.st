@@ -11,6 +11,12 @@ StBaseModel >> associatedEditors [
 ]
 
 { #category : #accessing }
+StBaseModel >> iconName [
+
+	^ nil
+]
+
+{ #category : #accessing }
 StBaseModel >> name [
 
 	^ self subclassResponsibility
@@ -20,6 +26,12 @@ StBaseModel >> name [
 StBaseModel >> shortName [
 
 	^ self name
+]
+
+{ #category : #accessing }
+StBaseModel >> windowIconName [
+
+	^ self iconName
 ]
 
 { #category : #accessing }

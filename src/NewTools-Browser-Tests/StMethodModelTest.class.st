@@ -36,6 +36,18 @@ StMethodModelTest >> testColorName [
 ]
 
 { #category : #tests }
+StMethodModelTest >> testCompileDoesNotChangeMethodIfSourceIsUnchanged [
+	"this can happen if user hits 'save' method without changing content"
+	| source |
+
+	source := method sourceCode.
+	model compile: source notifying: nil.
+	self 
+		assert: (method methodClass>>(method selector)) 
+		identicalTo: method
+]
+
+{ #category : #tests }
 StMethodModelTest >> testCompileNotifying [
 	| source |
 

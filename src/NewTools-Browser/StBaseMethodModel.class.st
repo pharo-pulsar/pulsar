@@ -7,6 +7,8 @@ Class {
 { #category : #actions }
 StBaseMethodModel >> compile: aString notifying: requestor [
 
+	self sourceCode = aString ifTrue: [ ^ self ].
+
 	self methodClass 
 		compile: aString
 		classified: self methodCategory
@@ -35,4 +37,10 @@ StBaseMethodModel >> methodClass [
 StBaseMethodModel >> sourceCode [
 
 	self subclassResponsibility
+]
+
+{ #category : #accessing }
+StBaseMethodModel >> windowIconName [
+	
+	^ #scriptManager
 ]

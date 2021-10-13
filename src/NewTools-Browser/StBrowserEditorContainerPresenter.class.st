@@ -4,8 +4,8 @@ Class {
 	#traits : 'SpTModel',
 	#classTraits : 'SpTModel classTrait',
 	#instVars : [
-		'editors',
-		'editorNotebook'
+		'editorNotebook',
+		'editorChangedAction'
 	],
 	#category : #'NewTools-Browser-View'
 }
@@ -13,7 +13,7 @@ Class {
 { #category : #accessing }
 StBrowserEditorContainerPresenter >> activeEditor [
 	
-	^ editorNotebook selectedPage activePresenter
+	^ editorNotebook selectedPage editor
 ]
 
 { #category : #'private - pushing' }
@@ -29,27 +29,26 @@ StBrowserEditorContainerPresenter >> adoptEditor: anEditor intoEditor: currentEd
 { #category : #'private - pushing' }
 StBrowserEditorContainerPresenter >> basicPushEditor: anEditor [
 
-	editors add: anEditor.
 	anEditor addToNotebook: editorNotebook 
+]
+
+{ #category : #private }
+StBrowserEditorContainerPresenter >> editorChanged: anEditor [
+
+	editorChangedAction ifNil: [ ^ self ].
+	editorChangedAction value: anEditor
 ]
 
 { #category : #accessing }
 StBrowserEditorContainerPresenter >> editors [
 
-	^ editors
+	^ editorNotebook pages collect: [ :each | each editor ]
 ]
 
 { #category : #testing }
 StBrowserEditorContainerPresenter >> hasEditorSuchAs: aBlock [
 
 	^ self editors anySatisfy: aBlock
-]
-
-{ #category : #initialization }
-StBrowserEditorContainerPresenter >> initialize [
-
-	editors := OrderedCollection new.
-	super initialize.
 ]
 
 { #category : #initialization }
@@ -64,39 +63,29 @@ StBrowserEditorContainerPresenter >> initializePresenters [
 StBrowserEditorContainerPresenter >> pushAssociatedEditors: anAssociatedEditorSet [
 
 	self application defer: [
-		anAssociatedEditorSet editors
-			do: [ :each | 
-				self 
-					pushEditor: each
-					then: [ :aPage | 
-						anAssociatedEditorSet default = each 
-							ifTrue: [ editorNotebook selectPage: aPage ] ] ] ]	
-]
-
-{ #category : #'private - pushing' }
-StBrowserEditorContainerPresenter >> pushEditor: anEditor [
-
-	editors withIndexDo: [ :eachEditor :index |
-		(eachEditor isSameAs: anEditor) ifTrue: [ 
-			^ self 
-				adoptEditor: anEditor 
-				intoEditor: eachEditor
-				fromPage: index ] ].
-
-	self basicPushEditor: anEditor.
-	editorNotebook selectPageIndex: editors size
+		| pageToSelect |
+	
+		anAssociatedEditorSet editors do: [ :each | 
+			self 
+				pushEditor: each
+				then: [ :aPage | 
+					(anAssociatedEditorSet default = each) 
+						ifTrue: [ pageToSelect := aPage ] ] ].
+		self resortEditors.
+		pageToSelect ifNotNil: [ editorNotebook selectPage: pageToSelect ].
+		editorNotebook selectedPage 
+			ifNotNil: [ :aPage | self editorChanged: aPage editor ] ]
 ]
 
 { #category : #'private - pushing' }
 StBrowserEditorContainerPresenter >> pushEditor: anEditor then: aBlock [
 
-	editors withIndexDo: [ :eachEditor :index |
-		(eachEditor isSameAs: anEditor) ifTrue: [ 
-			| page |
-			page := editorNotebook pageAt: index.
-			eachEditor replaceWith: anEditor.
-			eachEditor updateNotebookPage: page.
-			aBlock value: page.
+	editorNotebook pages withIndexDo: [ :eachPage :index | | editor |
+		editor := eachPage editor.
+		(editor isSameAs: anEditor) ifTrue: [ 
+			editor replaceWith: anEditor.
+			editor updateNotebookPage: eachPage.
+			aBlock value: eachPage.
 			^ self ] ].
 
 	self basicPushEditor: anEditor.
@@ -105,12 +94,34 @@ StBrowserEditorContainerPresenter >> pushEditor: anEditor then: aBlock [
 
 { #category : #accessing }
 StBrowserEditorContainerPresenter >> removeEditorsMatching: aBlock [
-	| toRemove |
 
-	toRemove := self editors select: aBlock.
-	toRemove ifEmpty: [ ^ self ].
 	(editorNotebook pages 
-		select: [ :each | toRemove includes: each activePresenter ])
-		do: [ :each | editorNotebook removePage: each ].
-	editors removeAll: toRemove
+		select: [ :each | aBlock value: each editor ])
+		do: [ :each | editorNotebook removePage: each ]
+]
+
+{ #category : #private }
+StBrowserEditorContainerPresenter >> resortEditors [
+	| sortedPages |
+	
+	sortedPages := editorNotebook pages sorted: [ :aPage | aPage editor tabPriority ] ascending.
+	sortedPages = editorNotebook pages ifTrue: [ ^ self ].
+
+	"self application defer: [" 
+		editorNotebook removeAll.
+		sortedPages do: [ :each | editorNotebook addPage: each ] "]"
+]
+
+{ #category : #accessing }
+StBrowserEditorContainerPresenter >> selectEditor: aPresenter [
+	
+	editorNotebook selectPageIndex: (self editors indexOf: aPresenter)
+]
+
+{ #category : #events }
+StBrowserEditorContainerPresenter >> whenEditorChangedDo: aBlock [
+	
+	editorChangedAction := aBlock. 
+	editorNotebook whenSelectedPageChangedDo: [ :aPage |
+		aBlock value: aPage editor ]
 ]

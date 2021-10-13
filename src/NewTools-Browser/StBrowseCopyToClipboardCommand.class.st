@@ -1,6 +1,6 @@
 Class {
 	#name : #StBrowseCopyToClipboardCommand,
-	#superclass : #StBrowserMethodEditorCommand,
+	#superclass : #StBrowserEditorCommand,
 	#category : #'NewTools-Browser-Commands'
 }
 

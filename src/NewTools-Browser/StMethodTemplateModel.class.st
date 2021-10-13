@@ -51,3 +51,9 @@ StMethodTemplateModel >> sourceCode [
 
 	^ self methodClass sourceCodeTemplate
 ]
+
+{ #category : #accessing }
+StMethodTemplateModel >> windowIconName [
+	
+	^ #add
+]

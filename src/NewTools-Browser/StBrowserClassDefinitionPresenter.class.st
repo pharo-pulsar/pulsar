@@ -16,10 +16,10 @@ StBrowserClassDefinitionPresenter class >> type [
 { #category : #adding }
 StBrowserClassDefinitionPresenter >> addToNotebook: aNotebook [
 
-	aNotebook addPage: ((SpNotebookPage   
-		title: self model shortName
-		icon: (self application iconNamed: self model iconName) 
-		provider: [ self ])
+	aNotebook addPage: (StBrowserEditorPage new   
+		title: self model shortName;
+		icon: (self application iconNamed: self model windowIconName);
+		editor: self;
 		beCloseable;
 		yourself)
 ]
@@ -57,7 +57,7 @@ StBrowserClassDefinitionPresenter >> updateNotebookPage: aPage [
 
 	aPage 
 		title: self model shortName;
-		icon: (self application iconNamed: self model iconName)
+		icon: (self application iconNamed: self model windowIconName)
 ]
 
 { #category : #initialization }

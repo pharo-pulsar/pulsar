@@ -3,7 +3,8 @@ Class {
 	#superclass : #StBrowserEditorPresenter,
 	#instVars : [
 		'codePresenter',
-		'toolbarPresenter'
+		'toolbarPresenter',
+		'updating'
 	],
 	#category : #'NewTools-Browser-View'
 }
@@ -17,10 +18,10 @@ StBrowserMethodEditorPresenter class >> type [
 { #category : #adding }
 StBrowserMethodEditorPresenter >> addToNotebook: aNotebook [
 
-	aNotebook addPage: ((SpNotebookPage   
-		title: self model shortName
-		icon: (self application iconNamed: #scriptManager) 
-		provider: [ self ])
+	aNotebook addPage: (StBrowserEditorPage new   
+		title: self model shortName;
+		icon: (self application iconNamed: self model windowIconName);
+		editor: self;
 		beCloseable;
 		yourself)
 ]
@@ -45,7 +46,9 @@ StBrowserMethodEditorPresenter >> doCompile: aString [
 
 	self model 
 		compile: aString 
-		notifying: codePresenter interactionModel
+		notifying: codePresenter interactionModel.
+		
+	self resetDirty
 ]
 
 { #category : #'private - actions' }
@@ -59,6 +62,13 @@ StBrowserMethodEditorPresenter >> doCopyToClipboard [
 StBrowserMethodEditorPresenter >> doReset [
 
 	self updatePresenter
+]
+
+{ #category : #initialization }
+StBrowserMethodEditorPresenter >> initialize [
+
+	updating := false.
+	super initialize.
 ]
 
 { #category : #initialization }
@@ -79,9 +89,9 @@ StBrowserMethodEditorPresenter >> initializePresenters [
 		
 	codePresenter
 		addStyle: 'stCode';
+		whenTextChangedDo: [ self markDirty ];
 		whenSubmitDo: [ :aString | self doCompile: aString ];
 		whenResetDo: [ self doReset ]
-
 ]
 
 { #category : #testing }
@@ -90,10 +100,26 @@ StBrowserMethodEditorPresenter >> isMethodEditor [
 	^ true
 ]
 
+{ #category : #accessing }
+StBrowserMethodEditorPresenter >> markDirty [
+
+	updating ifTrue: [ ^ self ].
+	self isDirty ifTrue: [ ^ self ].
+	super markDirty	
+]
+
 { #category : #actions }
 StBrowserMethodEditorPresenter >> reset [
 
 	codePresenter triggerResetAction
+]
+
+{ #category : #accessing }
+StBrowserMethodEditorPresenter >> resetDirty [
+
+	updating ifTrue: [ ^ self ].
+	self isDirty ifFalse: [ ^ self ].
+	super resetDirty
 ]
 
 { #category : #actions }
@@ -109,17 +135,43 @@ StBrowserMethodEditorPresenter >> tabPriority [
 ]
 
 { #category : #accessing }
+StBrowserMethodEditorPresenter >> toolbarActionKinds [
+	
+	^ { StBrowserMethodEditorCommand. StBrowserEditorCommand }
+]
+
+{ #category : #accessing }
 StBrowserMethodEditorPresenter >> toolbarActions [
 	| group |
 	
 	group := CmCommandGroup forSpec
 		beRoot;
 		yourself.
-
-	(StBrowserMethodEditorCommand allCommandsSuchAs: [ :each | each showInToolbar ])
-		do: [ :each | group register: (each forSpecContext: self) ].
+		
+	self toolbarActionKinds do: [ :each | 
+		group register: (self toolbarActionsKind: each) ].
 		
 	^ group
+]
+
+{ #category : #private }
+StBrowserMethodEditorPresenter >> toolbarActionsKind: aClass [
+	| group |
+	
+	group := CmCommandGroup forSpec.
+	group name: aClass name.
+	(aClass allCommandsSuchAs: [ :each | each showInToolbar ])
+		do: [ :each | group register: (each forSpecContext: self) ].
+	
+	^ group
+]
+
+{ #category : #emulating }
+StBrowserMethodEditorPresenter >> typeByChar: aString [
+	"for test purposes"
+	
+	codePresenter typeByChar: aString
+	
 ]
 
 { #category : #adding }
@@ -127,13 +179,21 @@ StBrowserMethodEditorPresenter >> updateNotebookPage: aPage [
 
 	aPage 
 		title: self model shortName;
-		beCloseable
+		icon: (self application iconNamed: self model windowIconName)		
 ]
 
 { #category : #initialization }
 StBrowserMethodEditorPresenter >> updatePresenter [
 
-	codePresenter 
-		beForMethod: self model method;
-		text: self model sourceCode
+	self updatingWhile: [ 
+		codePresenter
+			beForMethod: self model method;
+			text: self model sourceCode ]
+]
+
+{ #category : #private }
+StBrowserMethodEditorPresenter >> updatingWhile: aBlock [ 
+
+	updating := true.
+	aBlock ensure: [ updating := false ]
 ]

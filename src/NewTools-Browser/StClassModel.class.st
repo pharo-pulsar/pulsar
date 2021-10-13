@@ -32,14 +32,6 @@ StClassModel >> comment [
 	^ self modelClass comment
 ]
 
-{ #category : #accessing }
-StClassModel >> commentIconName [
-
-	^ self modelClass hasComment
-		ifTrue: [ #comments ]
-		ifFalse: [ #uncommentedClass ]
-]
-
 { #category : #'accessing - parallel hierarchy' }
 StClassModel >> instanceSide [
 
@@ -49,11 +41,19 @@ StClassModel >> instanceSide [
 { #category : #accessing }
 StClassModel >> name [
 
-	^ self modelClass name
+	^ self modelClass name asString
 ]
 
 { #category : #accessing }
 StClassModel >> shortName [
 	
 	^ self name contractTo: self class shortSize
+]
+
+{ #category : #accessing }
+StClassModel >> windowCommentIconName [
+
+	^ self modelClass hasComment
+		ifTrue: [ #comments ]
+		ifFalse: [ #uncommentedClass ]
 ]

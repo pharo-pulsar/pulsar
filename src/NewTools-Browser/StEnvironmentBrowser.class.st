@@ -21,6 +21,12 @@ StEnvironmentBrowser class >> defaultEnvironment [
 	^ StSystemEnvironment new
 ]
 
+{ #category : #accessing }
+StEnvironmentBrowser class >> defaultTitle [
+
+	^ 'Browser'
+]
+
 { #category : #'instance creation' }
 StEnvironmentBrowser class >> new [
 
@@ -133,6 +139,14 @@ StEnvironmentBrowser >> consumePath: aPath [
 			self basicConsumePath: aPath ] ]
 ]
 
+{ #category : #private }
+StEnvironmentBrowser >> editorActivated: anEditor [
+
+	self updateTitle: (anEditor 
+		ifNotNil: [ anEditor windowName ]
+		ifNil: [ self class defaultTitle ])
+]
+
 { #category : #'private - accessing' }
 StEnvironmentBrowser >> editorContainer [
 
@@ -175,7 +189,8 @@ StEnvironmentBrowser >> initializeClassPanel [
 { #category : #initialization }
 StEnvironmentBrowser >> initializeEditorContainer [
 
-	editorContainer := self instantiate: StBrowserEditorContainerPresenter
+	editorContainer := self instantiate: StBrowserEditorContainerPresenter.
+	editorContainer whenEditorChangedDo: [ :editor | self editorActivated: editor ]
 ]
 
 { #category : #initialization }
@@ -229,7 +244,7 @@ StEnvironmentBrowser >> initializePresenters [
 StEnvironmentBrowser >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter 
-		title: 'Browser';
+		title: self class defaultTitle;
 		initialExtent: self class preferredExtent
 ]
 
@@ -260,7 +275,6 @@ StEnvironmentBrowser >> select: aModel ifNil: aBlock [
 		aBlock value.
 		^ self ].
 	
-	self updateTitle: aModel windowName.
 	self editorContainer pushAssociatedEditors: aModel associatedEditors
 ]
 
