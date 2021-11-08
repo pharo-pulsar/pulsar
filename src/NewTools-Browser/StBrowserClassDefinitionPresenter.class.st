@@ -13,11 +13,11 @@ StBrowserClassDefinitionPresenter class >> type [
 	^ #class
 ]
 
-{ #category : #adding }
+{ #category : #'accessing - editor' }
 StBrowserClassDefinitionPresenter >> addToNotebook: aNotebook [
 
 	aNotebook addPage: (StBrowserEditorPage new   
-		title: self model shortName;
+		title: self tabLabel;
 		icon: (self application iconNamed: self model windowIconName);
 		editor: self;
 		beCloseable;
@@ -52,11 +52,11 @@ StBrowserClassDefinitionPresenter >> tabPriority [
 	^ 55
 ]
 
-{ #category : #adding }
+{ #category : #'accessing - editor' }
 StBrowserClassDefinitionPresenter >> updateNotebookPage: aPage [
 
 	aPage 
-		title: self model shortName;
+		title: self pageTitle;
 		icon: (self application iconNamed: self model windowIconName)
 ]
 

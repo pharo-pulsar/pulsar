@@ -29,7 +29,7 @@ StMethodModel >> = other [
 		and: [ self method = other method ]
 ]
 
-{ #category : #'instance creation' }
+{ #category : #accessing }
 StMethodModel >> associatedEditors [
 
 	^ StBrowserAssociatedEditorSet with: (StBrowserMethodEditorPresenter on: self)
@@ -125,7 +125,7 @@ StMethodModel >> sourceCode [
 ]
 
 { #category : #accessing }
-StMethodModel >> windowName [
+StMethodModel >> windowTitle [
 
 	^ String streamContents: [ :stream | 
 		stream 

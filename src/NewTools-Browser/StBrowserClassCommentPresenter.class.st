@@ -13,7 +13,7 @@ StBrowserClassCommentPresenter class >> type [
 	^ #method
 ]
 
-{ #category : #adding }
+{ #category : #'accessing - editor' }
 StBrowserClassCommentPresenter >> addToNotebook: aNotebook [
 
 	aNotebook addPage: (StBrowserEditorPage new 
@@ -52,7 +52,7 @@ StBrowserClassCommentPresenter >> tabPriority [
 	^ 50
 ]
 
-{ #category : #adding }
+{ #category : #'accessing - editor' }
 StBrowserClassCommentPresenter >> updateNotebookPage: aPage [
 
 	aPage icon: (self application iconNamed: self model windowCommentIconName)

@@ -3,8 +3,7 @@ Class {
 	#superclass : #StBrowserEditorPresenter,
 	#instVars : [
 		'codePresenter',
-		'toolbarPresenter',
-		'updating'
+		'toolbarPresenter'
 	],
 	#category : #'NewTools-Browser-View'
 }
@@ -15,11 +14,11 @@ StBrowserMethodEditorPresenter class >> type [
 	^ #method
 ]
 
-{ #category : #adding }
+{ #category : #'accessing - editor' }
 StBrowserMethodEditorPresenter >> addToNotebook: aNotebook [
 
 	aNotebook addPage: (StBrowserEditorPage new   
-		title: self model shortName;
+		title: self tabLabel;
 		icon: (self application iconNamed: self model windowIconName);
 		editor: self;
 		beCloseable;
@@ -29,7 +28,8 @@ StBrowserMethodEditorPresenter >> addToNotebook: aNotebook [
 { #category : #accessing }
 StBrowserMethodEditorPresenter >> content: aString [ 
 	
-	codePresenter text: aString
+	self updatingWhile: [ 
+		codePresenter text: aString ]
 ]
 
 { #category : #'actions commands' }
@@ -65,13 +65,6 @@ StBrowserMethodEditorPresenter >> doReset [
 ]
 
 { #category : #initialization }
-StBrowserMethodEditorPresenter >> initialize [
-
-	updating := false.
-	super initialize.
-]
-
-{ #category : #initialization }
 StBrowserMethodEditorPresenter >> initializePresenters [
 
 	self layout: (SpBoxLayout newTopToBottom
@@ -89,7 +82,7 @@ StBrowserMethodEditorPresenter >> initializePresenters [
 		
 	codePresenter
 		addStyle: 'stCode';
-		whenTextChangedDo: [ self markDirty ];
+		whenTextChangedDo: [ self textChanged ];
 		whenSubmitDo: [ :aString | self doCompile: aString ];
 		whenResetDo: [ self doReset ]
 ]
@@ -100,26 +93,10 @@ StBrowserMethodEditorPresenter >> isMethodEditor [
 	^ true
 ]
 
-{ #category : #accessing }
-StBrowserMethodEditorPresenter >> markDirty [
-
-	updating ifTrue: [ ^ self ].
-	self isDirty ifTrue: [ ^ self ].
-	super markDirty	
-]
-
 { #category : #actions }
 StBrowserMethodEditorPresenter >> reset [
 
 	codePresenter triggerResetAction
-]
-
-{ #category : #accessing }
-StBrowserMethodEditorPresenter >> resetDirty [
-
-	updating ifTrue: [ ^ self ].
-	self isDirty ifFalse: [ ^ self ].
-	super resetDirty
 ]
 
 { #category : #actions }
@@ -132,6 +109,12 @@ StBrowserMethodEditorPresenter >> submit [
 StBrowserMethodEditorPresenter >> tabPriority [
 
 	^ 100
+]
+
+{ #category : #private }
+StBrowserMethodEditorPresenter >> textChanged [
+
+	self markDirty
 ]
 
 { #category : #accessing }
@@ -174,11 +157,11 @@ StBrowserMethodEditorPresenter >> typeByChar: aString [
 	
 ]
 
-{ #category : #adding }
+{ #category : #'accessing - editor' }
 StBrowserMethodEditorPresenter >> updateNotebookPage: aPage [
 
 	aPage 
-		title: self model shortName;
+		title: self pageTitle;
 		icon: (self application iconNamed: self model windowIconName)		
 ]
 
@@ -189,11 +172,4 @@ StBrowserMethodEditorPresenter >> updatePresenter [
 		codePresenter
 			beForMethod: self model method;
 			text: self model sourceCode ]
-]
-
-{ #category : #private }
-StBrowserMethodEditorPresenter >> updatingWhile: aBlock [ 
-
-	updating := true.
-	aBlock ensure: [ updating := false ]
 ]

@@ -13,7 +13,8 @@ Class {
 { #category : #accessing }
 StBrowserEditorContainerPresenter >> activeEditor [
 	
-	^ editorNotebook selectedPage editor
+	^ editorNotebook selectedPage 
+		ifNotNil: [ :aPage | aPage editor ]
 ]
 
 { #category : #'private - pushing' }
@@ -27,14 +28,36 @@ StBrowserEditorContainerPresenter >> adoptEditor: anEditor intoEditor: currentEd
 ]
 
 { #category : #'private - pushing' }
+StBrowserEditorContainerPresenter >> basicPushAssociatedEditors: anAssociatedEditorSet [
+	| pageToSelect |
+
+	anAssociatedEditorSet editors do: [ :each | 
+		self 
+			pushEditor: each
+			then: [ :aPage | 
+				(anAssociatedEditorSet default = each) 
+					ifTrue: [ pageToSelect := aPage ] ] ].
+
+	self resortEditors.
+	pageToSelect ifNotNil: [ editorNotebook selectPage: pageToSelect ].
+	editorNotebook selectedPage 
+		ifNotNil: [ :aPage | self editorChanged: aPage editor ] 
+]
+
+{ #category : #'private - pushing' }
 StBrowserEditorContainerPresenter >> basicPushEditor: anEditor [
 
-	anEditor addToNotebook: editorNotebook 
+	anEditor addToNotebook: editorNotebook.
+	anEditor whenDirtyChangedDo: [ :dirty :old |
+		old ifNotNil: [ 
+			self updateTabTitle: anEditor.
+			self editorChanged: anEditor ] ]
 ]
 
 { #category : #private }
 StBrowserEditorContainerPresenter >> editorChanged: anEditor [
 
+	"inform if subscribed"
 	editorChangedAction ifNil: [ ^ self ].
 	editorChangedAction value: anEditor
 ]
@@ -63,18 +86,7 @@ StBrowserEditorContainerPresenter >> initializePresenters [
 StBrowserEditorContainerPresenter >> pushAssociatedEditors: anAssociatedEditorSet [
 
 	self application defer: [
-		| pageToSelect |
-	
-		anAssociatedEditorSet editors do: [ :each | 
-			self 
-				pushEditor: each
-				then: [ :aPage | 
-					(anAssociatedEditorSet default = each) 
-						ifTrue: [ pageToSelect := aPage ] ] ].
-		self resortEditors.
-		pageToSelect ifNotNil: [ editorNotebook selectPage: pageToSelect ].
-		editorNotebook selectedPage 
-			ifNotNil: [ :aPage | self editorChanged: aPage editor ] ]
+		self basicPushAssociatedEditors: anAssociatedEditorSet ]
 ]
 
 { #category : #'private - pushing' }
@@ -97,7 +109,9 @@ StBrowserEditorContainerPresenter >> removeEditorsMatching: aBlock [
 
 	(editorNotebook pages 
 		select: [ :each | aBlock value: each editor ])
-		do: [ :each | editorNotebook removePage: each ]
+		do: [ :each | 
+			each editor unsubscribe: self.
+			editorNotebook removePage: each ]
 ]
 
 { #category : #private }
@@ -118,10 +132,19 @@ StBrowserEditorContainerPresenter >> selectEditor: aPresenter [
 	editorNotebook selectPageIndex: (self editors indexOf: aPresenter)
 ]
 
+{ #category : #'private - pushing' }
+StBrowserEditorContainerPresenter >> updateTabTitle: anEditor [
+	"update editor title"
+
+	editorNotebook pages 
+		detect: [ :each | each editor = anEditor ]
+		ifFound: [ :each | each editor updateNotebookPage: each ]
+]
+
 { #category : #events }
 StBrowserEditorContainerPresenter >> whenEditorChangedDo: aBlock [
 	
 	editorChangedAction := aBlock. 
 	editorNotebook whenSelectedPageChangedDo: [ :aPage |
-		aBlock value: aPage editor ]
+		aBlock value: (aPage ifNotNil: [ aPage editor ]) ]
 ]

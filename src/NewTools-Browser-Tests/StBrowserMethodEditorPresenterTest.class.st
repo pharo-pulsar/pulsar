@@ -13,6 +13,17 @@ StBrowserMethodEditorPresenterTest >> assertActiveEditorHasCommand: aClass [
 		anySatisfy: [ :each | each decoratedCommand class = aClass ])
 ]
 
+{ #category : #tests }
+StBrowserMethodEditorPresenterTest >> testDirtyEditorWindowTitleIsMarkedWithAsterisk [
+	| editor |
+
+	editor := StBrowserMethodEditorPresenter on: (StMethodModel newMethod: self class>>#testTypeTextMarksTheEditorAsDirty).
+		
+	editor markDirty.
+	self assert: (editor windowTitle beginsWith: '*')
+	
+]
+
 { #category : #'tests - commands' }
 StBrowserMethodEditorPresenterTest >> testEditorHasCopyToClipboardToolbarOption [
 
@@ -31,12 +42,29 @@ StBrowserMethodEditorPresenterTest >> testEditorHasVersionBrowserToolbarOption [
 	self assertActiveEditorHasCommand: StBrowseVersionsCommand
 ]
 
+{ #category : #'tests - commands' }
+StBrowserMethodEditorPresenterTest >> testReplaceWithCleansDirtyState [
+	| editor replace |
+
+	editor := StBrowserMethodEditorPresenter on: (StMethodModel newMethod: self class>>#testTypeTextMarksTheEditorAsDirty).
+	replace := StBrowserMethodEditorPresenter on: (StMethodModel newMethod: self class>>#testTypeTextMarksTheEditorAsDirty).
+	editor content: 'abc'.
+	
+	editor typeByChar: 'x'.
+	self assert: editor isDirty.
+	
+	editor replaceWith: replace.
+	
+	self deny: editor isDirty
+]
+
 { #category : #tests }
 StBrowserMethodEditorPresenterTest >> testTypeTextMarksTheEditorAsDirty [
 	| editor |
 
 	editor := StBrowserMethodEditorPresenter on: (StMethodModel newMethod: self class>>#testTypeTextMarksTheEditorAsDirty).
-		
+	editor content: 'abc'.
+	
 	self deny: editor isDirty.
 	editor typeByChar: 'x'.
 	self assert: editor isDirty

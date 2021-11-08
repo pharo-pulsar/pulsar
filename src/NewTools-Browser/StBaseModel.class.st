@@ -23,6 +23,12 @@ StBaseModel >> name [
 ]
 
 { #category : #accessing }
+StBaseModel >> pageTitle [
+
+	^ self shortName
+]
+
+{ #category : #accessing }
 StBaseModel >> shortName [
 
 	^ self name
@@ -35,7 +41,7 @@ StBaseModel >> windowIconName [
 ]
 
 { #category : #accessing }
-StBaseModel >> windowName [
+StBaseModel >> windowTitle [
 
 	^ self name
 ]

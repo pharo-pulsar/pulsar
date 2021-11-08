@@ -108,12 +108,12 @@ StEnvironmentBrowser >> addDeferredAction: aBlock [
 
 { #category : #'accessing - selecting' }
 StEnvironmentBrowser >> basicConsumePath: aPath [
+	| path |
 
-		| path |
-		path := aPath.
-		path := self packagesPanel consumePath: path.
-		path ifNotEmpty: [ 
-			path := self classPanel consumePath: path ]. 
+	path := aPath.
+	path := self packagesPanel consumePath: path.
+	path ifNotEmpty: [
+		path := self classPanel consumePath: path ]
 ]
 
 { #category : #'private - accessing' }
@@ -143,7 +143,7 @@ StEnvironmentBrowser >> consumePath: aPath [
 StEnvironmentBrowser >> editorActivated: anEditor [
 
 	self updateTitle: (anEditor 
-		ifNotNil: [ anEditor windowName ]
+		ifNotNil: [ anEditor windowTitle ]
 		ifNil: [ self class defaultTitle ])
 ]
 
@@ -176,14 +176,9 @@ StEnvironmentBrowser >> initializeClassPanel [
 
 	classPanel := self instantiate: StBrowserClassPanelPresenter.
 	classPanel outputProtocolSelectionPort 
-		transmitDo: [ :aProtocolModel |
-			self 
-				select: aProtocolModel
-				ifNilRemoveEditorsMatching: [ :each | each isMethodEditor ] ].
-	classPanel transmitDo: [ :aMethodModel | 
-		self 
-			select: aMethodModel
-			ifNilRemoveEditorsMatching: [ :each | each isMethodEditor ] ]
+		transmitDo: [ :aProtocolModel | self selectProtocolFromTransmission: aProtocolModel ].
+	classPanel 
+		transmitDo: [ :aMethodModel | self selectMethodFromTransmission: aMethodModel ]
 ]
 
 { #category : #initialization }
@@ -211,15 +206,11 @@ StEnvironmentBrowser >> initializeHierarchyPanel [
 StEnvironmentBrowser >> initializePackagesPanel [
 	
 	packagesPanel := self instantiate: StBrowserPackageListPresenter on: self model.
-	packagesPanel outputPackageSelectionPort transmitDo: [ :aPackageModel | 
-		self
-			select: aPackageModel
-			ifNilRemoveEditorsMatching: [ :each | each isPackageEditor ] ].
+	packagesPanel outputPackageSelectionPort 
+		transmitDo: [ :aPackageModel | self selectPackageFromTransmission: aPackageModel ].
 	packagesPanel transmitTo: self classPanel.
-	packagesPanel transmitDo: [ :aClassModel | 
-		self 
-			select: aClassModel 
-			ifNilRemoveEditorsMatching: [ :each | each isClassEditor ] ]
+	packagesPanel 
+		transmitDo: [ :aClassModel | self selectClassFromTransmission: aClassModel ]
 ]
 
 { #category : #initialization }
@@ -266,7 +257,7 @@ StEnvironmentBrowser >> processDeferredActions [
 		deferredActions := nil ]
 ]
 
-{ #category : #private }
+{ #category : #'private - selecting' }
 StEnvironmentBrowser >> select: aModel ifNil: aBlock [
 
 	selection := aModel.
@@ -278,7 +269,7 @@ StEnvironmentBrowser >> select: aModel ifNil: aBlock [
 	self editorContainer pushAssociatedEditors: aModel associatedEditors
 ]
 
-{ #category : #private }
+{ #category : #'private - selecting' }
 StEnvironmentBrowser >> select: aModel ifNilRemoveEditorsMatching: aBlock [
 
 	self 
@@ -297,6 +288,14 @@ StEnvironmentBrowser >> selectClass: aClass [
 	}
 ]
 
+{ #category : #'private - selecting' }
+StEnvironmentBrowser >> selectClassFromTransmission: aClassModel [
+
+	self 
+		select: aClassModel 
+		ifNilRemoveEditorsMatching: [ :each | each isClassEditor ]
+]
+
 { #category : #'accessing - selecting' }
 StEnvironmentBrowser >> selectMethod: aMethod [
 	"See #consumePath method."
@@ -312,6 +311,14 @@ StEnvironmentBrowser >> selectMethod: aMethod [
 	}
 ]
 
+{ #category : #'private - selecting' }
+StEnvironmentBrowser >> selectMethodFromTransmission: aMethodModel [
+
+	self 
+		select: aMethodModel
+		ifNilRemoveEditorsMatching: [ :each | each isMethodEditor ]
+]
+
 { #category : #'accessing - selecting' }
 StEnvironmentBrowser >> selectPackage: aPackage [
 	"See #consumePath method."
@@ -319,6 +326,22 @@ StEnvironmentBrowser >> selectPackage: aPackage [
 	self consumePath: { 
 		StPackageModel newPackage: aPackage.
 	}
+]
+
+{ #category : #'private - selecting' }
+StEnvironmentBrowser >> selectPackageFromTransmission: aPackageModel [
+
+	self
+		select: aPackageModel
+		ifNilRemoveEditorsMatching: [ :each | each isPackageEditor ]
+]
+
+{ #category : #'private - selecting' }
+StEnvironmentBrowser >> selectProtocolFromTransmission: aProtocolModel [
+		
+	self 
+		select: aProtocolModel
+		ifNilRemoveEditorsMatching: [ :each | each isMethodEditor ]
 ]
 
 { #category : #accessing }

@@ -25,7 +25,8 @@ StBrowserMethodTemplateEditorPresenter >> toolbarActionKinds [
 { #category : #initialization }
 StBrowserMethodTemplateEditorPresenter >> updatePresenter [
 
-	codePresenter 
-		beForBehavior: self model methodClass;
-		text: self model sourceCode
+	self updatingWhile: [ 
+		codePresenter 
+			beForBehavior: self model methodClass;
+			text: self model sourceCode ]
 ]

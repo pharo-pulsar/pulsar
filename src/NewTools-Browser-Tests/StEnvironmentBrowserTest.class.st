@@ -28,12 +28,12 @@ StEnvironmentBrowserTest >> testChangeActiveEditorChangesBrowserTitle [
 	editorContainer := window presenter editorContainer.
 	self 
 		assert: window title
-		equals: editorContainer activeEditor model windowName.
+		equals: editorContainer activeEditor model windowTitle.
 	editorContainer selectEditor: (editorContainer editors detect: [ :each | each isClassEditor ]).
 	self waitUntilUIRedrawed.
 	self 
 		assert: window title
-		equals: editorContainer activeEditor model windowName
+		equals: editorContainer activeEditor model windowTitle
 ]
 
 { #category : #tests }
@@ -142,6 +142,16 @@ StEnvironmentBrowserTest >> testOpenOnMethodClassSide [
 ]
 
 { #category : #tests }
+StEnvironmentBrowserTest >> testOpenOnMethodDoesNotMarkEditorDirty [
+
+	window := StEnvironmentBrowser openOnMethod: self class>>#testOpenOnMethodDoesNotMarkEditorDirty.
+	self waitUntilUIRedrawed.
+	
+	self deny: window presenter activeEditor isDirty
+		
+]
+
+{ #category : #tests }
 StEnvironmentBrowserTest >> testOpenOnPackage [
 
 	window := StEnvironmentBrowser openOnPackage: self class package.
@@ -150,6 +160,30 @@ StEnvironmentBrowserTest >> testOpenOnPackage [
 	self 
 		assert: window presenter packagesPanel packagesTree selectedItem package
 		equals: self class package
+]
+
+{ #category : #tests }
+StEnvironmentBrowserTest >> testSelectMethodDoesNotMarkEditorDirty [
+	| editorContainer |
+
+	window := StEnvironmentBrowser openOnClass: self class.
+	self waitUntilUIRedrawed.
+
+	editorContainer := window presenter editorContainer.
+
+	self 
+		assert: editorContainer editors last class
+		equals: StBrowserMethodTemplateEditorPresenter.
+
+	window presenter classPanel consumePath: {
+		StProtocolModel 
+			newClass: self class
+			protocol: (self class organization allProtocols first).
+		StMethodModel newMethod: self class >> #testSelectMethodDoesNotMarkEditorDirty }.
+
+	self waitUntilUIRedrawed.
+	
+	self deny: window presenter activeEditor isDirty
 ]
 
 { #category : #tests }

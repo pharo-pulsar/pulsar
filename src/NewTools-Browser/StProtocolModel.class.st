@@ -102,7 +102,7 @@ StProtocolModel >> protocol: anObject [
 ]
 
 { #category : #accessing }
-StProtocolModel >> windowName [
+StProtocolModel >> windowTitle [
 
 	^ self modelClass name
 ]

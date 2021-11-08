@@ -4,7 +4,8 @@ Class {
 	#traits : 'SpTModel',
 	#classTraits : 'SpTModel classTrait',
 	#instVars : [
-		'dirty'
+		'#dirty => ObservableSlot',
+		'#updating'
 	],
 	#category : #'NewTools-Browser-View'
 }
@@ -15,10 +16,20 @@ StBrowserEditorPresenter class >> type [
 	^ self subclassResponsibility
 ]
 
-{ #category : #adding }
+{ #category : #'accessing - editor' }
 StBrowserEditorPresenter >> addToNotebook: aNotebook [
 
 	self subclassResponsibility
+]
+
+{ #category : #'private - building' }
+StBrowserEditorPresenter >> buildAdapterWithSpecLayout: aSpecLayout [
+	"This is needed because the process of building (and setting initial state) of a 
+	 text/code presenter fires the event #whenTextChangedDo: and this will mark the editor 
+	 as dirty when it is not, since this is original state."
+
+	^ self updatingWhile: [ 
+		super buildAdapterWithSpecLayout: aSpecLayout ]
 ]
 
 { #category : #accessing }
@@ -31,13 +42,6 @@ StBrowserEditorPresenter >> content: aString [
 StBrowserEditorPresenter >> dirty: aBoolean [
 
 	dirty := aBoolean
-]
-
-{ #category : #initialization }
-StBrowserEditorPresenter >> initialize [
-
-	self dirty: false.
-	super initialize
 ]
 
 { #category : #testing }
@@ -61,7 +65,7 @@ StBrowserEditorPresenter >> isCommentEditor [
 { #category : #testing }
 StBrowserEditorPresenter >> isDirty [
 
-	^ dirty
+	^ dirty ifNil: [ dirty := false ]
 ]
 
 { #category : #testing }
@@ -82,16 +86,36 @@ StBrowserEditorPresenter >> isSameAs: anObject [
 	^ self species = anObject species
 ]
 
+{ #category : #'private - testing' }
+StBrowserEditorPresenter >> isUpdating [
+
+	^ updating ifNil: [ updating := false ]
+]
+
 { #category : #accessing }
 StBrowserEditorPresenter >> markDirty [
 
+	self isUpdating ifTrue: [ ^ self ].
+	self isDirty ifTrue: [ ^ self ].
 	self dirty: true
 ]
 
-{ #category : #replacing }
+{ #category : #accessing }
+StBrowserEditorPresenter >> pageTitle [
+	
+	^ self isDirty 
+		ifTrue: [ '*', (self model pageTitle) ]
+		ifFalse: [ self model pageTitle ]
+]
+
+{ #category : #accessing }
 StBrowserEditorPresenter >> replaceWith: aSimilarEditor [
 
-	self model: aSimilarEditor model
+	self updatingWhile: [ 
+		self model: aSimilarEditor model ].
+	"An editor should not be replaced when is dirty, but in case that happens I need to 
+	 start over with a clean state."
+	self resetDirty
 ]
 
 { #category : #actions }
@@ -103,6 +127,7 @@ StBrowserEditorPresenter >> reset [
 { #category : #accessing }
 StBrowserEditorPresenter >> resetDirty [
 
+	self isDirty ifFalse: [ ^ self ].
 	self dirty: false
 ]
 
@@ -110,6 +135,12 @@ StBrowserEditorPresenter >> resetDirty [
 StBrowserEditorPresenter >> submit [
 
 	self subclassResponsibility
+]
+
+{ #category : #accessing }
+StBrowserEditorPresenter >> tabLabel [
+
+	^ self model shortName
 ]
 
 { #category : #accessing }
@@ -124,14 +155,32 @@ StBrowserEditorPresenter >> type [
 	^ self class type
 ]
 
-{ #category : #adding }
+{ #category : #'accessing - editor' }
 StBrowserEditorPresenter >> updateNotebookPage: aPage [
 
 	self subclassResponsibility
 ]
 
+{ #category : #private }
+StBrowserEditorPresenter >> updatingWhile: aBlock [ 
+	| oldUpdating |
+
+	oldUpdating := updating.
+	updating := true.
+	^ aBlock ensure: [ 
+		updating := oldUpdating ]
+]
+
+{ #category : #events }
+StBrowserEditorPresenter >> whenDirtyChangedDo: aBlock [
+
+	self property: #dirty whenChangedDo: aBlock
+]
+
 { #category : #accessing }
-StBrowserEditorPresenter >> windowName [
+StBrowserEditorPresenter >> windowTitle [
 	
-	^ self model windowName
+	^ self isDirty 
+		ifTrue: [ '*', (self model windowTitle) ]
+		ifFalse: [ self model windowTitle ]
 ]
