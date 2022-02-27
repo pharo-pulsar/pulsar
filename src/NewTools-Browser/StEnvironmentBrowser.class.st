@@ -51,15 +51,15 @@ StEnvironmentBrowser class >> open [
 { #category : #opening }
 StEnvironmentBrowser class >> openOn: anEnvironment [
 
-	^ (self on: anEnvironment) openWithSpec
+	^ (self on: anEnvironment) open
 ]
 
 { #category : #opening }
 StEnvironmentBrowser class >> openOnClass: aClass [
 
 	^ (self on: self defaultEnvironment)
-		selectClass: aClass;
-		openWithSpec
+		  selectClass: aClass;
+		  open
 ]
 
 { #category : #opening }
@@ -74,16 +74,16 @@ StEnvironmentBrowser class >> openOnClass: aClass selector: aSymbol [
 StEnvironmentBrowser class >> openOnMethod: aMethod [
 
 	^ (self on: self defaultEnvironment)
-		selectMethod: aMethod;
-		openWithSpec
+		  selectMethod: aMethod;
+		  open
 ]
 
 { #category : #opening }
 StEnvironmentBrowser class >> openOnPackage: aPackage [
 
 	^ (self on: self defaultEnvironment)
-		selectPackage: aPackage;
-		openWithSpec
+		  selectPackage: aPackage;
+		  open
 ]
 
 { #category : #accessing }

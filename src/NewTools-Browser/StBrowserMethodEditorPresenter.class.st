@@ -34,11 +34,10 @@ StBrowserMethodEditorPresenter >> content: aString [
 
 { #category : #'actions commands' }
 StBrowserMethodEditorPresenter >> doBrowseVersions [
-	
-	(VersionBrowser 
-		newApplication: self application
-		model: self model method asRingDefinition)
-		openWithSpec
+
+	(VersionBrowser
+		 newApplication: self application
+		 model: self model method asRingDefinition) open
 ]
 
 { #category : #'private - actions' }

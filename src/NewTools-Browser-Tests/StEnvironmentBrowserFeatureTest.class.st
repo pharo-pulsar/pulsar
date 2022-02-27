@@ -42,34 +42,34 @@ StEnvironmentBrowserFeatureTest >> testBrowserCanBeOpenedInAPackage [
 
 { #category : #'tests - editing' }
 StEnvironmentBrowserFeatureTest >> testMethodEditionHasCopyMethodAction [
+
 	| method |
-
-	method := self class>>#testMethodEditionHasCopyMethodAction.
-	window := self browserClass new 
-		application: application;
-		selectMethod: method;
-		openWithSpec.
+	method := self class >> #testMethodEditionHasCopyMethodAction.
+	window := self browserClass new
+		          application: application;
+		          selectMethod: method;
+		          open.
 	self waitUntilUIRedrawed.
-	
-	window presenter activeEditor doCopyToClipboard.
-	
-	self assert: Clipboard clipboardText equals: method sourceCode
 
+	window presenter activeEditor doCopyToClipboard.
+
+	self assert: Clipboard clipboardText equals: method sourceCode
 ]
 
 { #category : #'tests - editing' }
 StEnvironmentBrowserFeatureTest >> testMethodEditionHasVersionBrowserAction [
 
-	window := self browserClass new 
-		application: application;
-		selectMethod: self class>>#testMethodEditionHasVersionBrowserAction;
-		openWithSpec.
+	window := self browserClass new
+		          application: application;
+		          selectMethod:
+			          self class >> #testMethodEditionHasVersionBrowserAction;
+		          open.
 	self waitUntilUIRedrawed.
-	
+
 	self assert: application windows size equals: 1.
 	window presenter activeEditor doBrowseVersions.
 	self assert: application windows size equals: 2.
-	self assert: (application windows includes: window).
+	self assert: (application windows includes: window)
 ]
 
 { #category : #'tests - editing' }
