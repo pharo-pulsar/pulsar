@@ -216,18 +216,7 @@ StEnvironmentBrowser >> initializePackagesPanel [
 { #category : #initialization }
 StEnvironmentBrowser >> initializePresenters [
 
-	self layout: (SpPanedLayout newTopToBottom
-		positionOfSlider: 40 percent;
-		add: (SpPanedLayout newLeftToRight
-			add: (self newNotebook
-				addPageTitle: 'Packages' provider: [ self packagesPanel ];
-				addPageTitle: 'Hierarchy' provider: [ self hierarchyPanel ];
-				yourself);
-			add: self classPanel;
-			yourself);
-		add: self editorContainer;
-		yourself).
-		
+	self layout: self newLayout.
 	self whenBuiltDo: [ self processDeferredActions ]
 ]
 
@@ -237,6 +226,22 @@ StEnvironmentBrowser >> initializeWindow: aWindowPresenter [
 	aWindowPresenter 
 		title: self class defaultTitle;
 		initialExtent: self class preferredExtent
+]
+
+{ #category : #initialization }
+StEnvironmentBrowser >> newLayout [
+	
+	^ SpPanedLayout newTopToBottom
+		positionOfSlider: 40 percent;
+		add: (SpPanedLayout newLeftToRight
+			add: (self newNotebook
+				addPageTitle: 'Packages' provider: [ self packagesPanel ];
+				addPageTitle: 'Hierarchy' provider: [ self hierarchyPanel ];
+				yourself);
+			add: self classPanel;
+			yourself);
+		add: self editorContainer;
+		yourself
 ]
 
 { #category : #'private - accessing' }

@@ -81,7 +81,7 @@ StBrowserMethodEditorPresenter >> initializePresenters [
 		
 	codePresenter
 		addStyle: 'stCode';
-		whenTextChangedDo: [ self textChanged ];
+		whenTextChangedDo: [ :newText :oldText | self textChangedFrom: oldText to: newText ];
 		whenSubmitDo: [ :aString | self doCompile: aString ];
 		whenResetDo: [ self doReset ]
 ]
@@ -111,8 +111,12 @@ StBrowserMethodEditorPresenter >> tabPriority [
 ]
 
 { #category : #private }
-StBrowserMethodEditorPresenter >> textChanged [
+StBrowserMethodEditorPresenter >> textChangedFrom: oldText to: newText [
 
+	'>>' crTrace.
+	newText crTrace.
+	'<<' crTrace. 
+	oldText = newText ifTrue: [ ^ self ].
 	self markDirty
 ]
 

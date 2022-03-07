@@ -148,7 +148,6 @@ StEnvironmentBrowserTest >> testOpenOnMethodDoesNotMarkEditorDirty [
 	self waitUntilUIRedrawed.
 	
 	self deny: window presenter activeEditor isDirty
-		
 ]
 
 { #category : #tests }
