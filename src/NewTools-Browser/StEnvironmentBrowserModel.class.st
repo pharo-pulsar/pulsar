@@ -36,6 +36,15 @@ StEnvironmentBrowserModel >> browserEnvironment: anObject [
 ]
 
 { #category : #accessing }
+StEnvironmentBrowserModel >> flatPackages [
+	"answer a list of packages that will have classes as children (not tags)"
+	
+	^ (self browserEnvironment packages 
+		collect: [ :each | StFlatPackageModel newPackage: each ])
+		sorted: #name ascending
+]
+
+{ #category : #accessing }
 StEnvironmentBrowserModel >> packages [
 	
 	^ (self browserEnvironment packages 

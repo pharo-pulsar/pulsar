@@ -11,6 +11,18 @@ StBaseModel >> associatedEditors [
 ]
 
 { #category : #accessing }
+StBaseModel >> children [
+	
+	^ #()
+]
+
+{ #category : #accessing }
+StBaseModel >> colorName [
+	
+	^ nil
+]
+
+{ #category : #accessing }
 StBaseModel >> iconName [
 
 	^ nil
