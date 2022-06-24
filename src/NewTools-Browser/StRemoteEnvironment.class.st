@@ -3,3 +3,9 @@ Class {
 	#superclass : #StEnvironment,
 	#category : #'NewTools-Browser-Model'
 }
+
+{ #category : #accessing }
+StRemoteEnvironment >> name [
+
+	^ 'Remote'
+]

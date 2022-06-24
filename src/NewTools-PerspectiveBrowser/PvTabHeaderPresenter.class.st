@@ -1,7 +1,7 @@
 Class {
 	#name : #PvTabHeaderPresenter,
 	#superclass : #PvHeaderPresenter,
-	#category : #'NewTools-PerspectiveBrowser-View-Header'
+	#category : #'NewTools-PerspectiveBrowser-View-Header-REMOVE'
 }
 
 { #category : #accessing }

@@ -1,6 +1,9 @@
 Class {
 	#name : #PvExplorePerspective,
 	#superclass : #PvPerspective,
+	#instVars : [
+		'projectPresenter'
+	],
 	#category : #'NewTools-PerspectiveBrowser-View'
 }
 
@@ -9,7 +12,7 @@ PvExplorePerspective >> defaultLayout [
 
 	^ SpPanedLayout newLeftToRight 
 		positionOfSlider: 30 percent;
-		first: (self newContainer: #overview) useHorizontalLayout;
+		first: (self newContainer: #overview) useVerticalLayout;
 		second: (SpPanedLayout newTopToBottom
 			positionOfSlider: 70 percent;
 			first: (self newContainer: #edit) useTabLayout;
@@ -24,9 +27,8 @@ PvExplorePerspective >> initialize [
 
 	super initialize.
 	self subscribeToAnnouncements.
-	self addWindow: (PvPackagesListPresenter on: self model).
-	
-
+	self addWindow: (projectPresenter := PvProjectPresenter new).
+	self addWindow: PvOutlinePresenter new.
 ]
 
 { #category : #initialization }
@@ -36,14 +38,21 @@ PvExplorePerspective >> initializeWindow: aWindowPresenter [
 	aWindowPresenter title: 'Pharo Explorer'
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'events - handling' }
 PvExplorePerspective >> itemActivated: ann [
-	self halt.
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #'events - handling' }
 PvExplorePerspective >> itemSelected: aModel [
 
+]
+
+{ #category : #actions }
+PvExplorePerspective >> openProject: aBaselineClass [
+
+	projectPresenter model: (PvProjectModel 
+		newEntity: aBaselineClass
+		environment: self model)
 ]
 
 { #category : #initialization }

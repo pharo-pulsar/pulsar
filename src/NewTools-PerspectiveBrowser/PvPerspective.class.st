@@ -9,13 +9,13 @@ Class {
 { #category : #default }
 PvPerspective class >> defaultEnvironment [
 
-	^ StSystemEnvironment new
+	^ PvSystemEnvironment new
 ]
 
 { #category : #'instance creation' }
 PvPerspective class >> new [
 
-	^ self on: (StEnvironmentBrowserModel on: self defaultEnvironment)
+	^ self on: (PvEnvironmentModel newEntity: self defaultEnvironment)
 ]
 
 { #category : #'private - windows' }

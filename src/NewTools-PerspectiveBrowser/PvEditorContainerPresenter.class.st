@@ -26,11 +26,3 @@ PvEditorContainerPresenter >> initializePresenters [
 		add: (editorNotebook := self newNotebook);
 		yourself)
 ]
-
-{ #category : #initialization }
-PvEditorContainerPresenter >> subscribeToAnnouncements [
-
-	perspective announcer 
-		when: PvSelectedAnnouncement send: #itemWasSelected: to: self;
-		when: PvActivatedAnnouncement send: #itemWasActivated: to: self.
-]

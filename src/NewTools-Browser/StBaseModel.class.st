@@ -4,6 +4,11 @@ Class {
 	#category : #'NewTools-Browser-Model'
 }
 
+{ #category : #visiting }
+StBaseModel >> accept: aVisitor [
+	
+]
+
 { #category : #accessing }
 StBaseModel >> associatedEditors [
 

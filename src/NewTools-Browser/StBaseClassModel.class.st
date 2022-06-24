@@ -28,6 +28,12 @@ StBaseClassModel >> = other [
 		and: [ self modelClass = other modelClass ]
 ]
 
+{ #category : #visiting }
+StBaseClassModel >> accept: aVisitor [
+	
+	^ aVisitor visitClassModel: self
+]
+
 { #category : #accessing }
 StBaseClassModel >> classDepth [
 	

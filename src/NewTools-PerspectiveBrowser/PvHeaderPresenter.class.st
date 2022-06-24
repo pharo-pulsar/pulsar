@@ -7,7 +7,7 @@ Class {
 		'image',
 		'contentPresenter'
 	],
-	#category : #'NewTools-PerspectiveBrowser-View-Header'
+	#category : #'NewTools-PerspectiveBrowser-View-Header-REMOVE'
 }
 
 { #category : #accessing }

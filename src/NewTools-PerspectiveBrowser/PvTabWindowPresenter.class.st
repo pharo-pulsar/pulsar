@@ -7,5 +7,5 @@ Class {
 { #category : #private }
 PvTabWindowPresenter >> headerClass [
 
-	^ PvTabHeaderPresenter
+	^ LnTabHeaderPresenter
 ]

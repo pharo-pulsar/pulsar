@@ -7,7 +7,7 @@ Class {
 { #category : #private }
 PvBoxWindowPresenter >> headerClass [
 
-	^ PvBoxHeaderPresenter
+	^ LnBoxHeaderPresenter
 	
 ]
 
