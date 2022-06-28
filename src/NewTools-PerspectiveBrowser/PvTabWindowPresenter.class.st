@@ -7,5 +7,11 @@ Class {
 { #category : #private }
 PvTabWindowPresenter >> headerClass [
 
-	^ LnTabHeaderPresenter
+	^ PvTabHeaderPresenter
+]
+
+{ #category : #initialization }
+PvTabWindowPresenter >> initializeToolbar: aToolbarPresenter [ 
+
+	self presenter initializeToolbar: aToolbarPresenter
 ]

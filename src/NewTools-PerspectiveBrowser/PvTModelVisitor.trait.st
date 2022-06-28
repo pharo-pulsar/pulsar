@@ -4,12 +4,11 @@ Trait {
 }
 
 { #category : #visiting }
-PvTModelVisitor >> visitBaselineModel: aBaselineModel [ 
-	
-	
+PvTModelVisitor >> visitClassModel: aModel [
+
 ]
 
 { #category : #visiting }
-PvTModelVisitor >> visitClassModel: aModel [
+PvTModelVisitor >> visitMethodModel: aModel [
 
 ]

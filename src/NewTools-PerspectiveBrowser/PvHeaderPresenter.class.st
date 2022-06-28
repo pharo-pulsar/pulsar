@@ -5,9 +5,10 @@ Class {
 		'titleLabel',
 		'closeButton',
 		'image',
-		'contentPresenter'
+		'contentPresenter',
+		'toolbar'
 	],
-	#category : #'NewTools-PerspectiveBrowser-View-Header-REMOVE'
+	#category : #'NewTools-PerspectiveBrowser-View-Header'
 }
 
 { #category : #accessing }
@@ -39,13 +40,14 @@ PvHeaderPresenter >> initializePresenters [
 		add: (image := self newImage) expand: false;
 		add: (titleLabel := self newLabel);
 		addLast: (toolbar := self newToolbar) expand: false;
+		addLast: (closeButton := self newButton) expand: false;
 		yourself.
-		
-	"closeButton 
+
+	closeButton 
 		addStyle: 'flat';
-		""addStyle: 'circular';""
+		"addStyle: 'circular';"
 		icon:  (self application iconNamed: 'gtk-close');
-		action: [ self delete ]"
+		action: [ self delete ]
 ]
 
 { #category : #accessing }

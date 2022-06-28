@@ -12,6 +12,12 @@ PvPackageTagModel class >> newPackageTag: aPackageTag [
 		yourself
 ]
 
+{ #category : #accessing }
+PvPackageTagModel class >> order [
+
+	^ 100
+]
+
 { #category : #comparing }
 PvPackageTagModel >> = other [
 
@@ -51,6 +57,12 @@ PvPackageTagModel >> isRoot [
 PvPackageTagModel >> name [
 
 	^ self entity name
+]
+
+{ #category : #accessing }
+PvPackageTagModel >> order [
+
+	^ self class order
 ]
 
 { #category : #accessing }

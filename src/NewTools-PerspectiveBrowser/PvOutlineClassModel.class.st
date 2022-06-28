@@ -1,18 +1,16 @@
 Class {
 	#name : #PvOutlineClassModel,
 	#superclass : #PvEntityModel,
-	#instVars : [
-		'modelClass'
-	],
 	#category : #'NewTools-PerspectiveBrowser-View-Outline'
 }
 
 { #category : #accessing }
 PvOutlineClassModel >> children [
 
-	^ self collectClassVariables,
-	  self collectVariables, 
-	  self collectClassMethods,  
+	^ { PvEntityTreeNode newName: 'Shared Variables' children: self collectClassSharedVariables },
+	  { PvEntityTreeNode newName: 'Class Slots' children: self collectClassVariables },
+	  { PvEntityTreeNode newName: 'Slots'children: self collectVariables }, 
+	  { PvEntityTreeNode newName: 'Class Methods' children: self collectClassMethods },  
 	  self collectMethods
 ]
 
@@ -20,40 +18,36 @@ PvOutlineClassModel >> children [
 PvOutlineClassModel >> collectClassMethods [
 	
 	^ (self entity classSide methods 
-		collect: [ :each | StMethodModel newMethod: each ])
+		collect: [ :each | PvMethodModel newEntity: each ])
 		sorted: #name ascending
 ]
 
 { #category : #private }
-PvOutlineClassModel >> collectClassVariables [
+PvOutlineClassModel >> collectClassSharedVariables [
 	
 	^ #()
+]
+
+{ #category : #private }
+PvOutlineClassModel >> collectClassVariables [
+		
+	^ self entity classSide slots 
+		collect: [ :each | PvSlotModel newEntity: each ]
 ]
 
 { #category : #private }
 PvOutlineClassModel >> collectMethods [
 	
 	^ (self entity instanceSide methods 
-		collect: [ :each | StMethodModel newMethod: each ])
+		collect: [ :each | PvMethodModel newEntity: each ])
 		sorted: #name ascending
 ]
 
 { #category : #private }
 PvOutlineClassModel >> collectVariables [
 	
-	^ #()
-]
-
-{ #category : #accessing }
-PvOutlineClassModel >> modelClass [
-
-	^ modelClass
-]
-
-{ #category : #accessing }
-PvOutlineClassModel >> modelClass: aClass [
-
-	modelClass := aClass
+	^ self entity instanceSide slots 
+		collect: [ :each | PvSlotModel newEntity: each ]
 ]
 
 { #category : #accessing }

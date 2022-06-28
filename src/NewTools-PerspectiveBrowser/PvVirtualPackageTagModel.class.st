@@ -1,16 +1,27 @@
 Class {
 	#name : #PvVirtualPackageTagModel,
 	#superclass : #PvEntityModel,
-	#instVars : [
-		'package'
-	],
 	#category : #'NewTools-PerspectiveBrowser-Model'
 }
+
+{ #category : #testing }
+PvVirtualPackageTagModel class >> canBeUsedFor: aPackage [
+
+	^ true
+]
 
 { #category : #'instance creation' }
 PvVirtualPackageTagModel class >> newVirtualModelsFor: aPackage [
 
-	^ self allSubclasses collect: [ :each | each newEntity: aPackage ]
+	^ self allSubclasses 
+		select: [ :each | each canBeUsedFor: aPackage ]
+		thenCollect: [ :each | each newEntity: aPackage ]
+]
+
+{ #category : #accessing }
+PvVirtualPackageTagModel class >> order [
+
+	^ 100
 ]
 
 { #category : #comparing }
@@ -20,11 +31,17 @@ PvVirtualPackageTagModel >> = other [
 		and: [ self package = other package ] 
 ]
 
+{ #category : #accessing }
+PvVirtualPackageTagModel >> colorName [
+
+	^ #cyan
+]
+
 { #category : #comparing }
 PvVirtualPackageTagModel >> hash [
 
 	^ self species hash
-		bitXor: self package hash
+		bitXor: self entity hash
 ]
 
 { #category : #testing }
@@ -34,13 +51,7 @@ PvVirtualPackageTagModel >> isRoot [
 ]
 
 { #category : #accessing }
-PvVirtualPackageTagModel >> package [
+PvVirtualPackageTagModel >> order [
 
-	^ package
-]
-
-{ #category : #accessing }
-PvVirtualPackageTagModel >> package: anObject [
-
-	package := anObject
+	^ self class order
 ]

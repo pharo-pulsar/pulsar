@@ -26,8 +26,8 @@ PvPackageModel >> children [
 		reject: [ :each | each name = self name ]) 
 		collect: [ :each | PvPackageTagModel newEntity: each ]
 		as: OrderedCollection)
-		sorted: #name ascending)
 		addAll: (PvVirtualPackageTagModel newVirtualModelsFor: self entity);
+		sorted: #order ascending, #name ascending)
 		yourself
 ]
 

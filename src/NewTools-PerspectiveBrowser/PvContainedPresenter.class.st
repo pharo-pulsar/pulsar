@@ -49,21 +49,21 @@ PvContainedPresenter >> containerName: aName [
 	containerName := aName
 ]
 
+{ #category : #'events - handling' }
+PvContainedPresenter >> entityActivated: ann [
+	"Override if presenter will react to activation"
+]
+
+{ #category : #'events - handling' }
+PvContainedPresenter >> entitySelected: ann [
+	"Override if presenter will react to selection"
+]
+
 { #category : #initialization }
 PvContainedPresenter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter title: self title
-]
-
-{ #category : #'events - handling' }
-PvContainedPresenter >> itemWasActivated: ann [
-	"Override if presenter will react to activation"
-]
-
-{ #category : #'events - handling' }
-PvContainedPresenter >> itemWasSelected: ann [
-	"Override if presenter will react to selection"
 ]
 
 { #category : #accessing }
@@ -79,8 +79,8 @@ PvContainedPresenter >> perspective: aPerspective [
 PvContainedPresenter >> subscribeToAnnouncements [
 
 	perspective announcer 
-		when: PvSelectedAnnouncement send: #itemWasSelected: to: self;
-		when: PvActivatedAnnouncement send: #itemWasActivated: to: self.
+		when: PvSelectedAnnouncement send: #entitySelected: to: self;
+		when: PvActivatedAnnouncement send: #entityActivated: to: self.
 ]
 
 { #category : #initialization }

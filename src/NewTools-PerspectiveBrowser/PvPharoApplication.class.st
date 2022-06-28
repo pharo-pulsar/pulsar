@@ -10,5 +10,7 @@ Class {
 { #category : #'private - factory' }
 PvPharoApplication >> newIconProvider [
 
-	^ StPharoDefaultIconProvider new
+	^ StPharoDefaultIconProvider new, 
+	  SgaGtkThemeIconProvider new,
+	  PvDefaultIconProvider new
 ]

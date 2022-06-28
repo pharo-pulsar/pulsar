@@ -1,8 +1,8 @@
 Class {
 	#name : #PvPerspective,
 	#superclass : #PvPresenter,
-	#traits : 'SpTModel',
-	#classTraits : 'SpTModel classTrait',
+	#traits : 'SpTModel + PvTModelVisitor',
+	#classTraits : 'SpTModel classTrait + PvTModelVisitor classTrait',
 	#category : #'NewTools-PerspectiveBrowser-View'
 }
 
@@ -96,4 +96,19 @@ PvPerspective >> newContainer: aName [
 	^ (self instantiate: PvContainerPresenter)
 		name: aName;
 		yourself
+]
+
+{ #category : #private }
+PvPerspective >> newEditorContainer: aName [
+
+	^ (self instantiate: PvEditorContainerPresenter)
+		name: aName;
+		yourself
+]
+
+{ #category : #removing }
+PvPerspective >> removeWindow: aContainerPresenter [ 
+	
+	self flag: #TODO.
+	self halt.
 ]

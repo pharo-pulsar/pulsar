@@ -1,9 +1,11 @@
+"
+A container specialised on keeping editors.
+"
 Class {
 	#name : #PvEditorContainerPresenter,
-	#superclass : #PvContainedPresenter,
-	#instVars : [
-		'editorNotebook'
-	],
+	#superclass : #PvContainerPresenter,
+	#traits : 'PvTModelVisitor',
+	#classTraits : 'PvTModelVisitor classTrait',
 	#category : #'NewTools-PerspectiveBrowser-View'
 }
 
@@ -19,10 +21,55 @@ PvEditorContainerPresenter class >> defaultTitle [
 	^ 'View'
 ]
 
-{ #category : #initialization }
-PvEditorContainerPresenter >> initializePresenters [ 
+{ #category : #converting }
+PvEditorContainerPresenter >> asEditorContainer [
 
-	self layout: (SpBoxLayout newTopToBottom
-		add: (editorNotebook := self newNotebook);
-		yourself)
+	^ self
+]
+
+{ #category : #'events - handling' }
+PvEditorContainerPresenter >> entityActivated: ann [
+
+	ann model accept: self
+]
+
+{ #category : #initialization }
+PvEditorContainerPresenter >> initialize [
+
+	super initialize.
+	self subscribeToAnnouncements.
+	self announcer 
+		when: LnTabLayoutActivated 
+		send: #tabLayoutActivated
+		to: self
+]
+
+{ #category : #private }
+PvEditorContainerPresenter >> tabLayoutActivated [
+
+	self layout announcer
+		when: SpTabSelected 
+		send: #tabSelected: 
+		to: self
+]
+
+{ #category : #private }
+PvEditorContainerPresenter >> tabSelected: ann [
+
+	"aSelection ifNil: [ ^ self ]."
+	self halt.
+	self owner announcer announce: (PvSelectedAnnouncement for: ann presenter)
+]
+
+{ #category : #visiting }
+PvEditorContainerPresenter >> visitMethodModel: aModel [
+	| editor editorWindow |
+
+	self presenters 
+		detect: [ :each | each presenter model = aModel ]
+		ifFound: [ :each | ^ self layout select: each  ].
+	"Add the editor"
+	editor := self instantiate: aModel editorClass on: aModel.
+	editorWindow := self layout addTileWindow: editor.
+	self layout select: editorWindow
 ]

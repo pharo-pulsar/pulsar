@@ -21,24 +21,58 @@ PvOutlinePresenter class >> defaultTitle [
 ]
 
 { #category : #initialization }
-PvOutlinePresenter >> initializePresenters [
+PvOutlinePresenter >> connectPresenters [
 
-	self layout: (SpBoxLayout newTopToBottom
-		add: (outlineTreePresenter := self newEntityTree);
-		yourself).
-		
-	outlineTreePresenter addStyle: 'stProjectTree'
+	outlineTreePresenter outputSelectionPort
+		transmitDo: [ :aSelection | self announceSelectionChanged: aSelection ].
+	outlineTreePresenter outputActivationPort
+		transmitDo: [ :aSelection | self announceActivated: aSelection ]
 ]
 
 { #category : #'events - handling' }
-PvOutlinePresenter >> itemWasActivated: ann [
+PvOutlinePresenter >> entityActivated: ann [
 
 	ann model accept: self
 ]
 
 { #category : #'events - handling' }
-PvOutlinePresenter >> itemWasSelected: ann [
+PvOutlinePresenter >> entitySelected: ann [
 
+	outlineTreePresenter selectedItem = ann model 
+		ifTrue: [ ^ self ].
+
+	outlineTreePresenter selectItem: ann model
+]
+
+{ #category : #initialization }
+PvOutlinePresenter >> initializePresenters [
+
+	self layout: (SpBoxLayout newTopToBottom
+		add: (outlineTreePresenter := self newTreeTable);
+		yourself).
+		
+	outlineTreePresenter
+		hideColumnHeaders;
+		addStyle: 'stTree';
+		addColumn: (SpCompositeTableColumn new 
+			addColumn: ( SpImageTableColumn  new 
+				evaluated: [ :aModel | self iconNamed: aModel iconName ];
+				beNotExpandable;
+				yourself);
+			addColumn: ( SpStringTableColumn new 
+				evaluated: [ :aModel | aModel name ];
+				displayColor: [ :aModel | self colorNamed: aModel colorName ];
+				yourself);
+"			addColumn: ( SpStringTableColumn new 
+				evaluated: [ :aModel | 'test' ];
+				displayColor: [ :aModel | Color red ];
+				displayAlignment: [ :aModel | SpColumnAlignment right ];
+				yourself);			"
+			yourself );
+		children: [ :aModel | aModel children ];
+		addNavigationShortcuts.
+		
+	outlineTreePresenter addStyle: 'stProjectTree'
 ]
 
 { #category : #initialization }

@@ -19,26 +19,32 @@ PvProjectModel class >> newEntity: anObject environment: anEnvironmentModel [
 ]
 
 { #category : #accessing }
-PvProjectModel >> baselineModel [
-
-	^ PvBaselineModel newEntity: self entity
-]
-
-{ #category : #accessing }
 PvProjectModel >> children [
-	
-	^ self collectPackages,
-	{ 
-		self environmentModel 
-	}
+
+	^ Array streamContents: [ :stream |
+		stream nextPutAll: self collectPackages.
+		self entity new project version projects do: [ :each |
+			self class environment 
+				at: each className asSymbol
+				ifPresent: [ :aBaselineClass | 
+					stream nextPut: (PvEntityTreeNode
+						newName: each name 
+						children: (self collectPackagesOn: aBaselineClass)) ] ].
+		stream nextPut: self environmentModel ]
 ]
 
 { #category : #accessing }
 PvProjectModel >> collectPackages [
+
+	^ self collectPackagesOn: self entity
+]
+
+{ #category : #private }
+PvProjectModel >> collectPackagesOn: aBaselineClass [
 	| specs | 
 	
 	"This does not resist demeters law, badly"
-	specs := self entity new project version spec packageSpecsInLoadOrder.
+	specs := aBaselineClass new project version spec packageSpecsInLoadOrder.
 	^ (specs 
 		select: [ :each | each isPackageSpec and: [ self environmentModel hasPackageNamed: each name  ] ]
 		thenCollect: [ :each | self environmentModel packageModelNamed: each name ])

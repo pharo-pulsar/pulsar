@@ -43,6 +43,5 @@ PvProjectPresenter >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	projectTreePresenter roots: self model children.
-	self withTileWindowDo: [ :window | 
-		window title: (self titleWith: self model windowTitle) ]
+	self withTileWindowDo: [ :window | window title: self title ]
 ]

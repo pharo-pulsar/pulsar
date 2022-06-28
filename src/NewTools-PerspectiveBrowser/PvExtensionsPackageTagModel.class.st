@@ -5,6 +5,12 @@ Class {
 }
 
 { #category : #accessing }
+PvExtensionsPackageTagModel class >> order [
+
+	^ 1000
+]
+
+{ #category : #accessing }
 PvExtensionsPackageTagModel >> classes [
 
 	^ self package extendedClasses 
@@ -12,12 +18,6 @@ PvExtensionsPackageTagModel >> classes [
 			StExtendedClassModel 
 				newClass: each 
 				package: self package ]
-]
-
-{ #category : #accessing }
-PvExtensionsPackageTagModel >> colorName [
-
-	^ #cyan
 ]
 
 { #category : #accessing }
