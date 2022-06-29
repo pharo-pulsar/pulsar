@@ -112,3 +112,9 @@ PvPerspective >> removeWindow: aContainerPresenter [
 	self flag: #TODO.
 	self halt.
 ]
+
+{ #category : #'accessing - navigation' }
+PvPerspective >> selectClass: aClass [
+
+	self subclassResponsibility
+]

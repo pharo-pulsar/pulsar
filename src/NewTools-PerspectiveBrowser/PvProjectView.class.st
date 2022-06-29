@@ -1,5 +1,5 @@
 Class {
-	#name : #PvProjectPresenter,
+	#name : #PvProjectView,
 	#superclass : #PvContainedPresenter,
 	#instVars : [
 		'projectTreePresenter'
@@ -8,19 +8,19 @@ Class {
 }
 
 { #category : #accessing }
-PvProjectPresenter class >> defaultContainerName [
+PvProjectView class >> defaultContainerName [
 
 	^ #overview
 ]
 
 { #category : #accessing }
-PvProjectPresenter class >> defaultTitle [
+PvProjectView class >> defaultTitle [
 
 	^ 'Project'
 ]
 
 { #category : #initialization }
-PvProjectPresenter >> connectPresenters [
+PvProjectView >> connectPresenters [
 
 	projectTreePresenter outputSelectionPort
 		transmitDo: [ :aSelection | self announceSelectionChanged: aSelection ].
@@ -29,7 +29,7 @@ PvProjectPresenter >> connectPresenters [
 ]
 
 { #category : #initialization }
-PvProjectPresenter >> initializePresenters [
+PvProjectView >> initializePresenters [
 
 	self layout: (SpBoxLayout newTopToBottom
 		add: (projectTreePresenter := self newEntityTree);
@@ -39,9 +39,11 @@ PvProjectPresenter >> initializePresenters [
 ]
 
 { #category : #initialization }
-PvProjectPresenter >> updatePresenter [
+PvProjectView >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	projectTreePresenter roots: self model children.
-	self withTileWindowDo: [ :window | window title: self title ]
+	self withTileWindowDo: [ :w | 
+		w windowIcon: (self iconNamed: self model windowIconName).
+		w title: self title ]
 ]

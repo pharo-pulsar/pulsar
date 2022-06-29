@@ -12,13 +12,6 @@ PvPackageModel class >> newPackage: aPackage [
 		yourself
 ]
 
-{ #category : #comparing }
-PvPackageModel >> = other [
-
-	^ self species = other species 
-		and: [ self entity = other entity ]
-]
-
 { #category : #accessing }
 PvPackageModel >> children [
 
@@ -37,13 +30,6 @@ PvPackageModel >> classes [
 	^ self entity definedClasses
 		collect: [ :each | PvClassModel newEntity: each ]
 		as: OrderedCollection
-]
-
-{ #category : #comparing }
-PvPackageModel >> hash [ 
-
-	^ self species hash 
-		bitXor: self entity hash
 ]
 
 { #category : #accessing }

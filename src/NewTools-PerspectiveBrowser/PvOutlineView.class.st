@@ -1,5 +1,5 @@
 Class {
-	#name : #PvOutlinePresenter,
+	#name : #PvOutlineView,
 	#superclass : #PvContainedPresenter,
 	#instVars : [
 		'classTreePresenter',
@@ -9,19 +9,19 @@ Class {
 }
 
 { #category : #accessing }
-PvOutlinePresenter class >> defaultContainerName [
+PvOutlineView class >> defaultContainerName [
 
 	^ #overview
 ]
 
 { #category : #accessing }
-PvOutlinePresenter class >> defaultTitle [
+PvOutlineView class >> defaultTitle [
 
 	^ 'Outline'
 ]
 
 { #category : #initialization }
-PvOutlinePresenter >> connectPresenters [
+PvOutlineView >> connectPresenters [
 
 	outlineTreePresenter outputSelectionPort
 		transmitDo: [ :aSelection | self announceSelectionChanged: aSelection ].
@@ -30,27 +30,26 @@ PvOutlinePresenter >> connectPresenters [
 ]
 
 { #category : #'events - handling' }
-PvOutlinePresenter >> entityActivated: ann [
+PvOutlineView >> entityActivated: ann [
 
 	ann model accept: self
 ]
 
 { #category : #'events - handling' }
-PvOutlinePresenter >> entitySelected: ann [
+PvOutlineView >> entitySelected: ann [
 
-	outlineTreePresenter selectedItem = ann model 
-		ifTrue: [ ^ self ].
-
-	outlineTreePresenter selectItem: ann model
+	ann model accept: (PvOutlineSelectionVisitor new 
+		presenter: self;
+		yourself)
 ]
 
 { #category : #initialization }
-PvOutlinePresenter >> initializePresenters [
+PvOutlineView >> initializePresenters [
 
 	self layout: (SpBoxLayout newTopToBottom
 		add: (outlineTreePresenter := self newTreeTable);
 		yourself).
-		
+
 	outlineTreePresenter
 		hideColumnHeaders;
 		addStyle: 'stTree';
@@ -63,28 +62,36 @@ PvOutlinePresenter >> initializePresenters [
 				evaluated: [ :aModel | aModel name ];
 				displayColor: [ :aModel | self colorNamed: aModel colorName ];
 				yourself);
-"			addColumn: ( SpStringTableColumn new 
+			"addColumn: ( SpStringTableColumn new 
 				evaluated: [ :aModel | 'test' ];
 				displayColor: [ :aModel | Color red ];
 				displayAlignment: [ :aModel | SpColumnAlignment right ];
-				yourself);			"
-			yourself );
+				yourself);"
+			yourself);
 		children: [ :aModel | aModel children ];
 		addNavigationShortcuts.
 		
 	outlineTreePresenter addStyle: 'stProjectTree'
 ]
 
+{ #category : #'private - accessing' }
+PvOutlineView >> treePresenter [
+
+	^ outlineTreePresenter
+]
+
 { #category : #initialization }
-PvOutlinePresenter >> updatePresenter [
+PvOutlineView >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	outlineTreePresenter roots: self model children.
-	self withTileWindowDo: [ :w | w title: self title ]
+	self withTileWindowDo: [ :w | 
+		w title: self title.
+		w windowIcon: (self iconNamed: self model windowIconName) ]
 ]
 
 { #category : #visiting }
-PvOutlinePresenter >> visitClassModel: aModel [
+PvOutlineView >> visitClassModel: aModel [
 
 	self model: (PvOutlineClassModel newEntity: aModel entity).
 	self updatePresenter

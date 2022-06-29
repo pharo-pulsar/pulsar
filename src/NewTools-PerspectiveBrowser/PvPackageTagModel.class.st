@@ -18,13 +18,6 @@ PvPackageTagModel class >> order [
 	^ 100
 ]
 
-{ #category : #comparing }
-PvPackageTagModel >> = other [
-
-	^ self species = other species
-		and: [ self entity = other entity ] 
-]
-
 { #category : #accessing }
 PvPackageTagModel >> children [
 
@@ -38,13 +31,6 @@ PvPackageTagModel >> classes [
 		collect: [ :each | PvClassModel newEntity: each ]
 		as: OrderedCollection)
 		sorted: #name ascending
-]
-
-{ #category : #comparing }
-PvPackageTagModel >> hash [
-
-	^ self species hash
-		bitXor: self entity hash
 ]
 
 { #category : #testing }

@@ -4,13 +4,6 @@ Class {
 	#category : #'NewTools-PerspectiveBrowser-Model'
 }
 
-{ #category : #comparing }
-PvClassModel >> = other [
-
-	^ self species = other species 
-		and: [ self entity = other entity ]
-]
-
 { #category : #visiting }
 PvClassModel >> accept: aVisitor [
 	
@@ -39,13 +32,6 @@ PvClassModel >> classSide [
 PvClassModel >> comment [
 
 	^ self entity comment
-]
-
-{ #category : #comparing }
-PvClassModel >> hash [
-
-	^ self species hash  
-		bitXor: self entity hash
 ]
 
 { #category : #accessing }

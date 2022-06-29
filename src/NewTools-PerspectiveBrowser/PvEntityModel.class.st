@@ -16,6 +16,13 @@ PvEntityModel class >> newEntity: anObject [
 		yourself
 ]
 
+{ #category : #comparing }
+PvEntityModel >> = other [
+
+	^ self species = other species 
+		and: [ self entity = other entity ]
+]
+
 { #category : #visiting }
 PvEntityModel >> accept: aVisitor [
 
@@ -43,6 +50,13 @@ PvEntityModel >> entity [
 PvEntityModel >> entity: anObject [
 
 	entity := anObject
+]
+
+{ #category : #comparing }
+PvEntityModel >> hash [
+
+	^ self species hash  
+		bitXor: self entity hash
 ]
 
 { #category : #accessing }

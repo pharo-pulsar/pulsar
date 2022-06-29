@@ -1,5 +1,5 @@
 Class {
-	#name : #PvEditorPresenter,
+	#name : #PvEditorView,
 	#superclass : #PvPresenter,
 	#traits : 'SpTModel',
 	#classTraits : 'SpTModel classTrait',
@@ -11,13 +11,13 @@ Class {
 }
 
 { #category : #accessing }
-PvEditorPresenter class >> type [
+PvEditorView class >> type [
 
 	^ self subclassResponsibility
 ]
 
 { #category : #'private - building' }
-PvEditorPresenter >> buildAdapterWithSpecLayout: aSpecLayout [
+PvEditorView >> buildAdapterWithSpecLayout: aSpecLayout [
 	"This is needed because the process of building (and setting initial state) of a 
 	 text/code presenter fires the event #whenTextChangedDo: and this will mark the editor 
 	 as dirty when it is not, since this is original state."
@@ -27,62 +27,76 @@ PvEditorPresenter >> buildAdapterWithSpecLayout: aSpecLayout [
 ]
 
 { #category : #accessing }
-PvEditorPresenter >> content: aString [
+PvEditorView >> content: aString [
 
 	self subclassResponsibility
 ]
 
 { #category : #private }
-PvEditorPresenter >> dirty: aBoolean [
+PvEditorView >> dirty: aBoolean [
 
 	dirty := aBoolean
 ]
 
+{ #category : #private }
+PvEditorView >> editorIcon [
+	
+	^ self iconNamed: self model windowIconName	
+
+]
+
 { #category : #initialization }
-PvEditorPresenter >> initializeWindow: aWindowPresenter [
+PvEditorView >> initialize [
+
+	super initialize.
+	self whenDirtyChangedDo: [ self updateHeader ]
+]
+
+{ #category : #initialization }
+PvEditorView >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter title: self title	
 ]
 
 { #category : #testing }
-PvEditorPresenter >> isClassDefinitionEditor [
+PvEditorView >> isClassDefinitionEditor [
 
 	^ false
 ]
 
 { #category : #testing }
-PvEditorPresenter >> isClassEditor [
+PvEditorView >> isClassEditor [
 
 	^ false
 ]
 
 { #category : #testing }
-PvEditorPresenter >> isCommentEditor [
+PvEditorView >> isCommentEditor [
 
 	^ false
 ]
 
 { #category : #testing }
-PvEditorPresenter >> isDirty [
+PvEditorView >> isDirty [
 
 	^ dirty ifNil: [ dirty := false ]
 ]
 
 { #category : #testing }
-PvEditorPresenter >> isSameAs: anObject [
+PvEditorView >> isSameAs: anObject [
 
 	^ self species = anObject species
 ]
 
 { #category : #'private - testing' }
-PvEditorPresenter >> isUpdating [
+PvEditorView >> isUpdating [
 
 	^ updating ifNil: [ updating := false ]
 ]
 
 { #category : #accessing }
-PvEditorPresenter >> markDirty [
+PvEditorView >> markDirty [
 
 	self isUpdating ifTrue: [ ^ self ].
 	self isDirty ifTrue: [ ^ self ].
@@ -90,7 +104,7 @@ PvEditorPresenter >> markDirty [
 ]
 
 { #category : #accessing }
-PvEditorPresenter >> pageTitle [
+PvEditorView >> pageTitle [
 	
 	^ self isDirty 
 		ifTrue: [ '*', (self model pageTitle) ]
@@ -98,7 +112,7 @@ PvEditorPresenter >> pageTitle [
 ]
 
 { #category : #accessing }
-PvEditorPresenter >> replaceWith: aSimilarEditor [
+PvEditorView >> replaceWith: aSimilarEditor [
 
 	self updatingWhile: [ 
 		self model: aSimilarEditor model ].
@@ -108,51 +122,65 @@ PvEditorPresenter >> replaceWith: aSimilarEditor [
 ]
 
 { #category : #actions }
-PvEditorPresenter >> reset [
+PvEditorView >> reset [
 
 	self subclassResponsibility
 ]
 
 { #category : #accessing }
-PvEditorPresenter >> resetDirty [
+PvEditorView >> resetDirty [
 
 	self isDirty ifFalse: [ ^ self ].
 	self dirty: false
 ]
 
 { #category : #actions }
-PvEditorPresenter >> submit [
+PvEditorView >> submit [
 
 	self subclassResponsibility
 ]
 
 { #category : #accessing }
-PvEditorPresenter >> tabLabel [
+PvEditorView >> tabLabel [
 
 	^ self model shortName
 ]
 
 { #category : #accessing }
-PvEditorPresenter >> tabPriority [
+PvEditorView >> tabPriority [
 
 	^ self subclassResponsibility
 ]
 
 { #category : #initialization }
-PvEditorPresenter >> title [
+PvEditorView >> title [
 
 	self subclassResponsibility
 	
 ]
 
 { #category : #accessing }
-PvEditorPresenter >> type [
+PvEditorView >> type [
 
 	^ self class type
 ]
 
+{ #category : #initialization }
+PvEditorView >> updateHeader [
+
+	self withTileWindowDo: [ :w |
+		w title: self model shortName.
+		w windowIcon: self editorIcon ]
+]
+
+{ #category : #initialization }
+PvEditorView >> updatePresenter [
+
+	self updateHeader
+]
+
 { #category : #private }
-PvEditorPresenter >> updatingWhile: aBlock [ 
+PvEditorView >> updatingWhile: aBlock [ 
 	| oldUpdating |
 
 	oldUpdating := updating.
@@ -162,13 +190,13 @@ PvEditorPresenter >> updatingWhile: aBlock [
 ]
 
 { #category : #events }
-PvEditorPresenter >> whenDirtyChangedDo: aBlock [
+PvEditorView >> whenDirtyChangedDo: aBlock [
 
 	self property: #dirty whenChangedDo: aBlock
 ]
 
 { #category : #accessing }
-PvEditorPresenter >> windowTitle [
+PvEditorView >> windowTitle [
 	
 	^ self isDirty 
 		ifTrue: [ '*', (self model windowTitle) ]

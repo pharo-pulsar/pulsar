@@ -26,9 +26,10 @@ PvProjectModel >> children [
 		self entity new project version projects do: [ :each |
 			self class environment 
 				at: each className asSymbol
-				ifPresent: [ :aBaselineClass | 
+				ifPresent: [ :aBaselineClass |
 					stream nextPut: (PvEntityTreeNode
 						newName: each name 
+						iconName: 'project'
 						children: (self collectPackagesOn: aBaselineClass)) ] ].
 		stream nextPut: self environmentModel ]
 ]
@@ -61,6 +62,12 @@ PvProjectModel >> environmentModel [
 PvProjectModel >> environmentModel: anEnvironmentModel [ 
 	
 	environmentModel := anEnvironmentModel
+]
+
+{ #category : #accessing }
+PvProjectModel >> iconName [
+
+	^ 'project'
 ]
 
 { #category : #accessing }

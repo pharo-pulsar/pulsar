@@ -65,6 +65,6 @@ PvHeaderPresenter >> toolbar [
 { #category : #updating }
 PvHeaderPresenter >> updateFrom: aWindowPresenter [
 
-	self image: aWindowPresenter taskbarIcon.
-	self label: aWindowPresenter title.
+	self image: aWindowPresenter windowIcon.
+	self label: aWindowPresenter title
 ]

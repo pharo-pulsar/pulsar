@@ -27,8 +27,8 @@ PvExplorePerspective >> initialize [
 
 	super initialize.
 	self subscribeToAnnouncements.
-	self addWindow: (projectPresenter := PvProjectPresenter new).
-	self addWindow: PvOutlinePresenter new
+	self addWindow: (projectPresenter := PvProjectView new).
+	self addWindow: PvOutlineView new
 ]
 
 { #category : #initialization }
@@ -51,6 +51,12 @@ PvExplorePerspective >> resendToPresenters: ann [
 
 	self presenters 
 		do: [ :each | each announcer announce: ann ]
+]
+
+{ #category : #'accessing - navigation' }
+PvExplorePerspective >> selectClass: aClass [
+	
+	self flag: #TODO.
 ]
 
 { #category : #initialization }

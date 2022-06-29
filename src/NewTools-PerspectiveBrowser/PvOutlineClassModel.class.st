@@ -55,3 +55,9 @@ PvOutlineClassModel >> name [
 
 	^ self entity name
 ]
+
+{ #category : #accessing }
+PvOutlineClassModel >> windowIconName [
+
+	^ self entity systemIconName
+]

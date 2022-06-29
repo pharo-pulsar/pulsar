@@ -21,13 +21,6 @@ PvMethodModel class >> shortSize [
 	^ 30
 ]
 
-{ #category : #comparing }
-PvMethodModel >> = other [
-
-	^ self species = other species 
-		and: [ self entity = other entity ]
-]
-
 { #category : #visiting }
 PvMethodModel >> accept: aVisitor [
 
@@ -76,14 +69,7 @@ PvMethodModel >> decorators [
 { #category : #'accessing - editor' }
 PvMethodModel >> editorClass [
 
-	^ PvMethodEditorPresenter
-]
-
-{ #category : #comparing }
-PvMethodModel >> hash [
-
-	^ self species hash 
-		bitXor: self method hash
+	^ PvMethodEditorView
 ]
 
 { #category : #'accessing - decorated' }
@@ -107,7 +93,7 @@ PvMethodModel >> methodCategory [
 { #category : #accessing }
 PvMethodModel >> methodClass [
 
-	^ self entity methodClass
+	^ self entity methodClass instanceSide
 ]
 
 { #category : #accessing }
@@ -130,8 +116,8 @@ PvMethodModel >> sourceCode [
 
 { #category : #accessing }
 PvMethodModel >> windowIconName [
-	
-	^ #scriptManager
+
+	^ 'method' "#scriptManager"
 ]
 
 { #category : #accessing }

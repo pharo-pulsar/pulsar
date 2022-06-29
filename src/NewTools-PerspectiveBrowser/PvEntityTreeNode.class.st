@@ -6,7 +6,8 @@ Class {
 	#superclass : #PvEntityModel,
 	#instVars : [
 		'name',
-		'children'
+		'children',
+		'iconName'
 	],
 	#category : #'NewTools-PerspectiveBrowser-Model'
 }
@@ -16,6 +17,16 @@ PvEntityTreeNode class >> newName: aName children: aCollection [
 
 	^ self new 
 		name: aName;
+		children: aCollection;
+		yourself
+]
+
+{ #category : #'instance creation' }
+PvEntityTreeNode class >> newName: aName iconName: anIconName children: aCollection [
+
+	^ self new 
+		name: aName;
+		iconName: anIconName;
 		children: aCollection;
 		yourself
 ]
@@ -30,6 +41,18 @@ PvEntityTreeNode >> children [
 PvEntityTreeNode >> children: aCollection [
 
 	children := aCollection
+]
+
+{ #category : #accessing }
+PvEntityTreeNode >> iconName [
+
+	^ iconName
+]
+
+{ #category : #accessing }
+PvEntityTreeNode >> iconName: aName [
+
+	iconName := aName
 ]
 
 { #category : #accessing }

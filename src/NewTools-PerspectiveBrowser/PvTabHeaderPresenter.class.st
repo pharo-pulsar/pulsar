@@ -6,6 +6,6 @@ Class {
 
 { #category : #accessing }
 PvTabHeaderPresenter >> labelPresenter [
-	
+
 	^ titleLabel
 ]

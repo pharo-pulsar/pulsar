@@ -57,8 +57,10 @@ PvEditorContainerPresenter >> tabLayoutActivated [
 PvEditorContainerPresenter >> tabSelected: ann [
 
 	"aSelection ifNil: [ ^ self ]."
-	self halt.
-	self owner announcer announce: (PvSelectedAnnouncement for: ann presenter)
+	self flag: #TODO. "
+	ann presenter -> the window.
+	ann presenter presenter -> the window contents"
+	self owner announcer announce: (PvSelectedAnnouncement for: ann presenter presenter model)
 ]
 
 { #category : #visiting }
@@ -71,5 +73,6 @@ PvEditorContainerPresenter >> visitMethodModel: aModel [
 	"Add the editor"
 	editor := self instantiate: aModel editorClass on: aModel.
 	editorWindow := self layout addTileWindow: editor.
-	self layout select: editorWindow
+	self layout select: editorWindow.
+	editor takeKeyboardFocus
 ]

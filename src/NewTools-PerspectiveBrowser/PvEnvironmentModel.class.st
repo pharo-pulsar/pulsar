@@ -19,6 +19,12 @@ PvEnvironmentModel >> hasPackageNamed: aString [
 ]
 
 { #category : #accessing }
+PvEnvironmentModel >> iconName [
+
+	^ 'library'
+]
+
+{ #category : #accessing }
 PvEnvironmentModel >> name [
 
 	^ self entity name

@@ -10,7 +10,8 @@ Class {
 { #category : #'private - factory' }
 PvPharoApplication >> newIconProvider [
 
-	^ StPharoDefaultIconProvider new, 
+	^ (SpLocationIconProvider newLocation: './idea-community-icons' asFileReference),
+	  StPharoDefaultIconProvider new, 
 	  SgaGtkThemeIconProvider new,
 	  PvDefaultIconProvider new
 ]

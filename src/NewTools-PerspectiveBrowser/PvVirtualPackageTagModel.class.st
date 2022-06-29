@@ -24,24 +24,10 @@ PvVirtualPackageTagModel class >> order [
 	^ 100
 ]
 
-{ #category : #comparing }
-PvVirtualPackageTagModel >> = other [
-
-	^ self species = other species
-		and: [ self package = other package ] 
-]
-
 { #category : #accessing }
 PvVirtualPackageTagModel >> colorName [
 
 	^ #cyan
-]
-
-{ #category : #comparing }
-PvVirtualPackageTagModel >> hash [
-
-	^ self species hash
-		bitXor: self entity hash
 ]
 
 { #category : #testing }
