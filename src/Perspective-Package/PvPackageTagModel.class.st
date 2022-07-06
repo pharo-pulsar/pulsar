@@ -29,7 +29,9 @@ PvPackageTagModel >> classDefinitionString [
 	
 	^ ClassDefinitionPrinter new 
 		classDefinitionTemplateInPackage: self package name
-		tag: self name
+		tag: (self entity isRoot 
+			ifTrue: [ nil ]
+			ifFalse: [ self name ])
 ]
 
 { #category : #accessing }

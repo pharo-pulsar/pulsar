@@ -22,6 +22,14 @@ PvClassEditorView >> initializePresenters [
 		yourself)
 ]
 
+{ #category : #initialization }
+PvClassEditorView >> initializeWindow: aWindowPresenter [
+	
+	super initializeWindow: aWindowPresenter.
+	self model ifNotNil: [ :aModel | 
+		aWindowPresenter windowIcon: (aModel windowIconComposite buildOn: self application) ]
+]
+
 { #category : #actions }
 PvClassEditorView >> reset [
 

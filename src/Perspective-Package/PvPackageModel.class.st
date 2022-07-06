@@ -19,8 +19,12 @@ PvPackageModel >> children [
 		reject: [ :each | each name = self name ]) 
 		collect: [ :each | PvPackageTagModel newEnvironment: self environmentModel entity: each ]
 		as: OrderedCollection)
-		addAll: ((PvVirtualPackageTagModel virtualModelsFor: self entity) 
-			collect: [ :each | each newEnvironment: self environmentModel entity: each ]);
+		addAll: ((PvVirtualPackageTagModel 
+			virtualModelsFor: self entity)
+			collect: [ :each | 
+				each 
+					newEnvironment: self environmentModel 
+					entity: self entity ]);
 		sorted: #order ascending, #name ascending)
 		yourself
 ]

@@ -78,7 +78,10 @@ PvOutlineView >> initializePresenters [
 		children: [ :aModel | aModel children ];
 		addNavigationShortcuts.
 		
-	outlineTreePresenter addStyle: 'stProjectTree'
+	outlineTreePresenter addStyle: 'stProjectTree'.
+	outlineTreePresenter contextMenu: [ self toolbarActions asMenuPresenter ].
+	outlineTreePresenter contextKeyBindings: self toolbarActions asKMCategory.
+
 ]
 
 { #category : #initialization }
@@ -107,27 +110,19 @@ PvOutlineView >> toolbar [
 	^ (toolbar := self newToolbar) 
 		addStyle: 'stSmallToolbar';
 		beIcons;
-		add: (self newToolbarButton
-			icon: ((PvCompositeIcon newName: 'variable') addNew; addClass; buildOn: self);
-			label: 'Add class variable';
-			action: [  ];
-			yourself);
-		add: (self newToolbarButton
-			icon: ((PvCompositeIcon newName: 'variable') addNew; buildOn: self);
-			label: 'Add variable';
-			action: [  ];
-			yourself);
-		add: (self newToolbarButton
-			icon: ((PvCompositeIcon newName: 'method') addNew; addClass; buildOn: self);
-			label: 'Add class method';
-			action: [  ];
-			yourself);
-		add: (self newToolbarButton
-			icon: ((PvCompositeIcon newName: 'method') addNew; buildOn: self);
-			label: 'Add method';
-			action: [  ];
-			yourself);
-		yourself
+		fillWith: self toolbarActions
+]
+
+{ #category : #initialization }
+PvOutlineView >> toolbarActions [
+	| group |
+	
+	group := (CmCommandGroup named: 'Class') asSpecGroup.
+	group beRoot.
+	PvClassCommand allCommands do: [ :each |
+		group register: (each forSpecContext: self) ].
+	
+	^ group
 ]
 
 { #category : #initialization }

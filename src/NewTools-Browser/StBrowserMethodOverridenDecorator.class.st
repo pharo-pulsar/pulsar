@@ -14,5 +14,5 @@ StBrowserMethodOverridenDecorator class >> appliesTo: aMethod [
 { #category : #accessing }
 StBrowserMethodOverridenDecorator >> iconName [
 
-	^ #arrowUp
+	^ #arrowDown
 ]

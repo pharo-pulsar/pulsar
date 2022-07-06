@@ -1,7 +1,7 @@
 Class {
 	#name : #PvNewClassCommand,
-	#superclass : #PvCommand,
-	#category : #'Perspective-Class-Model'
+	#superclass : #PvProjectCommand,
+	#category : #'Perspective-Project'
 }
 
 { #category : #'accessing - defaults' }
@@ -14,8 +14,8 @@ PvNewClassCommand class >> defaultDescription [
 PvNewClassCommand class >> defaultIconComposite [
 
 	^ PvCompositeIcon new 
-		name: 'class';
-		addNew;
+		name: 'add';
+		bottomRight: 'overlayClass';
 		yourself
 ]
 
@@ -23,6 +23,12 @@ PvNewClassCommand class >> defaultIconComposite [
 PvNewClassCommand class >> defaultName [
 
 	^ 'New class'
+]
+
+{ #category : #'accessing - defaults' }
+PvNewClassCommand class >> defaultPriority [
+
+	^ 0
 ]
 
 { #category : #executing }

@@ -1,21 +1,21 @@
 Class {
 	#name : #PvNewTraitCommand,
-	#superclass : #PvCommand,
-	#category : #'Perspective-Class-Model'
+	#superclass : #PvProjectCommand,
+	#category : #'Perspective-Project'
 }
 
 { #category : #'accessing - defaults' }
 PvNewTraitCommand class >> defaultDescription [
 
-	^ 'Add a new class to the environment'
+	^ 'Add a new trait to the environment'
 ]
 
 { #category : #'accessing - defaults' }
 PvNewTraitCommand class >> defaultIconComposite [
 
 	^ PvCompositeIcon new 
-		name: 'trait';
-		addNew;
+		name: 'add';
+		bottomRight: 'overlayTrait';
 		yourself
 ]
 
@@ -23,6 +23,12 @@ PvNewTraitCommand class >> defaultIconComposite [
 PvNewTraitCommand class >> defaultName [
 
 	^ 'New trait'
+]
+
+{ #category : #accessing }
+PvNewTraitCommand class >> defaultPriority [
+
+	^ 10
 ]
 
 { #category : #executing }

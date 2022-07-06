@@ -13,8 +13,8 @@ BaselineOfPerspective >> baseline: spec [
 		spec package: 'Perspective' with: [ spec requires: 'Linden' ]. 
 		spec package: 'Perspective-Project' with: [ spec requires: 'Perspective' ].
 		spec package: 'Perspective-Package' with: [ spec requires: 'Perspective' ].
-		spec package: 'Perspective-Class' with: [ spec requires: 'Perspective' .
-		spec package: 'Perspective-Method' with: [ spec requires: 'Perspective' ] ] ]
+		spec package: 'Perspective-Class' with: [ spec requires: 'Perspective' ].
+		spec package: 'Perspective-Method' with: [ spec requires: 'Perspective' ] ]
 ]
 
 { #category : #baselines }

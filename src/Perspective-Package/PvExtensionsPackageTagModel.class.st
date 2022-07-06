@@ -13,11 +13,11 @@ PvExtensionsPackageTagModel class >> order [
 { #category : #accessing }
 PvExtensionsPackageTagModel >> classes [
 
-	^ self package extendedClasses 
+	^ self entity extendedClasses 
 		collect: [ :each | 
 			StExtendedClassModel 
 				newClass: each 
-				package: self package ]
+				package: self entity ]
 ]
 
 { #category : #accessing }

@@ -4,6 +4,14 @@ Class {
 	#category : #'Perspective-Command'
 }
 
+{ #category : #accessing }
+PvCommand class >> allCommands [
+
+	^ (self allSubclasses 
+		reject: [ :each | each isAbstract ])
+		sorted: #defaultPriority ascending
+]
+
 { #category : #default }
 PvCommand class >> defaultIconComposite [
 
@@ -20,9 +28,21 @@ PvCommand class >> defaultIconName [
 ]
 
 { #category : #default }
+PvCommand class >> defaultPriority [
+
+	^ 100
+]
+
+{ #category : #default }
 PvCommand class >> defaultShortcut [
 
 	^ nil
+]
+
+{ #category : #testing }
+PvCommand class >> isAbstract [
+
+	^ self = PvCommand
 ]
 
 { #category : #accessing }
@@ -35,12 +55,11 @@ PvCommand >> application [
 PvCommand >> asSpecCommand [ 
 	| command |
 	
-	command := (self decorateWith: PvSpecCommand) 
-		icon: (self iconComposite buildOn: self application);
-		yourself.
-		
+	command := self decorateWith: PvSpecCommand.
+	 self iconComposite 
+		ifNotNil: [ :aCompositeIcon | command icon: (aCompositeIcon buildOn: self application) ].
 	self shortcut 
-		ifNotNil: [ :keyCombination | command shortcutKey: keyCombination ].
+		ifNotNil: [ :aKeyCombination | command shortcutKey: aKeyCombination ].
 		
 	^ command
 ]

@@ -32,6 +32,12 @@ PvUncategorizedPackageTagModel >> classes [
 ]
 
 { #category : #accessing }
+PvUncategorizedPackageTagModel >> iconName [
+
+	^ 'unknownJdk'
+]
+
+{ #category : #accessing }
 PvUncategorizedPackageTagModel >> name [
 
 	^ 'Uncategorized'

@@ -39,7 +39,9 @@ PvProjectView >> doNewClass [
 		
 	self announceActivated: (PvNewClassModel
 		newEnvironment: self model environmentModel
-		entity: (PvNewClass newParent: parentModel entity))
+		entity: (PvNewClassTemplate new
+			parentModel: parentModel;
+			yourself))
 
 	"newClass := (PvClassCreationDialog 
 			newApplication: self application 
@@ -56,7 +58,10 @@ PvProjectView >> initializePresenters [
 		add: (projectTreePresenter := self newEntityTree);
 		yourself).
 
-	projectTreePresenter addStyle: 'stProjectTree'
+	projectTreePresenter addStyle: 'stProjectTree'.
+	projectTreePresenter contextMenu: [ self toolbarActions asMenuPresenter ].
+	projectTreePresenter contextKeyBindings: self toolbarActions asKMCategory.
+	
 ]
 
 { #category : #initialization }
@@ -69,20 +74,22 @@ PvProjectView >> initializeWindow: aWindowPresenter [
 { #category : #initialization }
 PvProjectView >> toolbar [
 
-	^ self newToolbar
+	^ self newToolbar 
 		addStyle: 'stSmallToolbar';
 		beIcons;
-		add: (self newToolbarButton
-			icon: ((PvCompositeIcon newName: #class) addNew; buildOn: self);
-			label: 'Add class';
-			action: [ self doNewClass ];
-			yourself);
-		add: (self newToolbarButton
-			icon: ((PvCompositeIcon newName: #trait) addNew; buildOn: self);
-			label: 'Add trait';
-			action: [  ];
-			yourself);
-		yourself
+		fillWith: self toolbarActions
+]
+
+{ #category : #initialization }
+PvProjectView >> toolbarActions [
+	| group |
+	
+	group := (CmCommandGroup named: 'Project') asSpecGroup.
+	group beRoot.
+	PvProjectCommand allCommands do: [ :each |
+		group register: (each forSpecContext: self) ].
+	
+	^ group
 ]
 
 { #category : #initialization }

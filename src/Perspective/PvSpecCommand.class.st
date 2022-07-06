@@ -7,6 +7,12 @@ Class {
 	#category : #'Perspective-Command'
 }
 
+{ #category : #testing }
+PvSpecCommand >> hasIcon [
+
+	^ icon notNil or: [ super hasIcon ]
+]
+
 { #category : #accessing }
 PvSpecCommand >> icon [
 
