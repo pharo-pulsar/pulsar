@@ -46,9 +46,9 @@ PvEditorContainerPresenter >> initialize [
 PvEditorContainerPresenter >> initializePresenters [
 
 	super initializePresenters.
-	self 
+	"self 
 		bindKeyCombination: $w control 
-		toAction: [ self halt ]
+		toAction: [ self halt ]"
 ]
 
 { #category : #'private - activating' }

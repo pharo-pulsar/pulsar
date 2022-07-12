@@ -1,25 +1,25 @@
 Class {
-	#name : #PvPerspective,
-	#superclass : #PvPresenter,
+	#name : #PvPerspectiveBrowser,
+	#superclass : #LnContainerPresenter,
 	#traits : 'SpTModel',
 	#classTraits : 'SpTModel classTrait',
-	#category : #'Perspective-View'
+	#category : #'Perspective-View-Perspective'
 }
 
 { #category : #default }
-PvPerspective class >> defaultEnvironment [
+PvPerspectiveBrowser class >> defaultEnvironment [
 
 	^ PvSystemEnvironment new
 ]
 
 { #category : #'instance creation' }
-PvPerspective class >> new [
+PvPerspectiveBrowser class >> new [
 
 	^ self on: (PvEnvironmentModel newEntity: self defaultEnvironment)
 ]
 
 { #category : #'instance creation' }
-PvPerspective class >> newApplication: anApplication [
+PvPerspectiveBrowser class >> newApplication: anApplication [
 
 	^ self 
 		newApplication: anApplication
@@ -27,13 +27,13 @@ PvPerspective class >> newApplication: anApplication [
 ]
 
 { #category : #'private - windows' }
-PvPerspective >> addPresenter: aPresenter toContainer: aContainer [
+PvPerspectiveBrowser >> addPresenter: aPresenter toContainer: aContainer [
 	
 	aContainer addWindow: aPresenter
 ]
 
 { #category : #'accessing - windows' }
-PvPerspective >> addWindow: aPresenter [
+PvPerspectiveBrowser >> addWindow: aPresenter [
 
 	^ self 
 		addWindow: aPresenter 
@@ -41,7 +41,7 @@ PvPerspective >> addWindow: aPresenter [
 ]
 
 { #category : #'private - windows' }
-PvPerspective >> addWindow: aPresenter atContainerNamed: aName [
+PvPerspectiveBrowser >> addWindow: aPresenter atContainerNamed: aName [
 
 	self 
 		containerNamed: aName
@@ -55,7 +55,7 @@ PvPerspective >> addWindow: aPresenter atContainerNamed: aName [
 ]
 
 { #category : #'private - windows' }
-PvPerspective >> addWindow: aPresenter atContainerNamed: aName ifAbsent: absentBlock [
+PvPerspectiveBrowser >> addWindow: aPresenter atContainerNamed: aName ifAbsent: absentBlock [
 
 	aName ifNil: [ 
 		absentBlock value. 
@@ -67,8 +67,8 @@ PvPerspective >> addWindow: aPresenter atContainerNamed: aName ifAbsent: absentB
 		ifAbsent: absentBlock
 ]
 
-{ #category : #'accessing - windows' }
-PvPerspective >> addWindow: aPresenter ifContainerAbsent: aBlock [
+{ #category : #'private - windows' }
+PvPerspectiveBrowser >> addWindow: aPresenter ifContainerAbsent: aBlock [
 
 	^ self 
 		addWindow: aPresenter 
@@ -77,7 +77,7 @@ PvPerspective >> addWindow: aPresenter ifContainerAbsent: aBlock [
 ]
 
 { #category : #private }
-PvPerspective >> containerNamed: aName ifPresent: presentBlock ifAbsent: absentBlock [
+PvPerspectiveBrowser >> containerNamed: aName ifPresent: presentBlock ifAbsent: absentBlock [
 
 	^ self layout allPresenters
 		detect: [ :each | each name = aName ] 
@@ -85,74 +85,85 @@ PvPerspective >> containerNamed: aName ifPresent: presentBlock ifAbsent: absentB
 		ifNone: absentBlock
 ]
 
-{ #category : #'private settings' }
-PvPerspective >> globalShortcuts [
+{ #category : #accessing }
+PvPerspectiveBrowser >> contentPresenters [
+
+	^ (self presenters
+		select: [ :each | (each ~= self) and:[ each isContainer ] ])
+		flatCollect: [ :each | each contentPresenters ]
+]
+
+{ #category : #'private - settings' }
+PvPerspectiveBrowser >> globalShortcuts [
 
 	^ (self settings shortcutsFor: #perspective),
 	  (self settings shortcutsFor: #window)
 ]
 
 { #category : #initialization }
-PvPerspective >> initialize [
+PvPerspectiveBrowser >> initialize [
 
 	super initialize.
 	self subscribeToAnnouncements
 ]
 
 { #category : #initialization }
-PvPerspective >> initializeWindow: aWindowPresenter [
+PvPerspectiveBrowser >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
-	aWindowPresenter initialExtent: 1200@800
+	aWindowPresenter 
+		title: self title;
+		initialExtent: 1200@750.
+	self addGlobalShortcutsTo: aWindowPresenter		
 ]
 
 { #category : #testing }
-PvPerspective >> isFloatingWindow [
+PvPerspectiveBrowser >> isFloatingWindow [
 
 	^ true
 ]
 
-{ #category : #private }
-PvPerspective >> newContainer: aName [
+{ #category : #factory }
+PvPerspectiveBrowser >> newContainer: aName [
 
 	^ (self instantiate: PvContainerPresenter)
 		name: aName;
 		yourself
 ]
 
-{ #category : #private }
-PvPerspective >> newEditorContainer: aName [
+{ #category : #factory }
+PvPerspectiveBrowser >> newEditorContainer: aName [
 
 	^ (self instantiate: PvEditorContainerPresenter)
 		name: aName;
 		yourself
 ]
 
-{ #category : #removing }
-PvPerspective >> removeWindow: aContainerPresenter [ 
-	
-	self flag: #TODO.
-	self halt.
-]
-
 { #category : #'events - handling' }
-PvPerspective >> resendToPresenters: ann [
+PvPerspectiveBrowser >> resendToPresenters: ann [
 
 	self presenters 
 		do: [ :each | each announcer announce: ann ]
 ]
 
-{ #category : #'accessing - navigation' }
-PvPerspective >> selectClass: aClass [
-
-	self subclassResponsibility
-]
-
 { #category : #initialization }
-PvPerspective >> subscribeToAnnouncements [
+PvPerspectiveBrowser >> subscribeToAnnouncements [
 
 	self announcer 
 		when: PvSelectedAnnouncement send: #resendToPresenters: to: self;
 		when: PvActivatedAnnouncement send: #resendToPresenters: to: self;
 		when: PvChangedAnnouncement send: #resendToPresenters: to: self
+]
+
+{ #category : #initialization }
+PvPerspectiveBrowser >> title [
+		
+	self flag: #TODO.
+	^ 'Browser'
+]
+
+{ #category : #initialization }
+PvPerspectiveBrowser >> usePerspectiveLayout: aLayoutClass [
+
+	tileLayout := aLayoutClass activateOn: self
 ]

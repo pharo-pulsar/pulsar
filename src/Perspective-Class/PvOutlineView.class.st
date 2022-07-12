@@ -1,6 +1,6 @@
 Class {
 	#name : #PvOutlineView,
-	#superclass : #PvContainedPresenter,
+	#superclass : #PvPerspectiveView,
 	#instVars : [
 		'classTreePresenter',
 		'outlineTreePresenter',
@@ -21,14 +21,14 @@ PvOutlineView class >> defaultTitle [
 	^ 'Outline'
 ]
 
-{ #category : #'private - activating' }
+{ #category : #'private - events' }
 PvOutlineView >> classActivated: aModel [
 
 	self model: aModel newOutlineClassModel.
 	self updatePresenter	
 ]
 
-{ #category : #'private - selecting' }
+{ #category : #'private - events' }
 PvOutlineView >> classSelected: aModel [
 	| classModel |
 
@@ -80,8 +80,7 @@ PvOutlineView >> initializePresenters [
 		
 	outlineTreePresenter addStyle: 'stProjectTree'.
 	outlineTreePresenter contextMenu: [ self toolbarActions asMenuPresenter ].
-	outlineTreePresenter contextKeyBindings: self toolbarActions asKMCategory.
-
+	outlineTreePresenter contextKeyBindings: self toolbarActions asKMCategory
 ]
 
 { #category : #initialization }
@@ -91,7 +90,14 @@ PvOutlineView >> initializeWindow: aWindowPresenter [
 	aWindowPresenter toolbar: self toolbar
 ]
 
-{ #category : #'private - selecting' }
+{ #category : #'private - events' }
+PvOutlineView >> methodChanged: aModel [
+
+	outlineTreePresenter roots: { self model }.
+	outlineTreePresenter selectItem: aModel
+]
+
+{ #category : #'private - events' }
 PvOutlineView >> methodSelected: aModel [
 	| classModel |
 

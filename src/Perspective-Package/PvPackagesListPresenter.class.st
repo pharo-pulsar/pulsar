@@ -1,6 +1,6 @@
 Class {
 	#name : #PvPackagesListPresenter,
-	#superclass : #PvContainedPresenter,
+	#superclass : #PvPerspectiveView,
 	#instVars : [
 		'packagesTreePresenter'
 	],

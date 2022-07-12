@@ -19,3 +19,42 @@ PvPharoApplication >> newIconProvider [
 	  SgaGtkThemeIconProvider new,
 	  PvDefaultIconProvider new
 ]
+
+{ #category : #'private - factory' }
+PvPharoApplication >> newSettings [
+
+	self flag: #TODO. "Take this from better settings"
+	^ LnSettings new
+		defineShortcutGroup: #perspective with: { 
+			"open default tool"
+			"($p mod3 | Character cr mod3) -> [ :workspace | workspace open: StPlayground ]."
+			KeyboardKey enter 	shift 			-> [ :perspective | perspective showSpotter ].
+			"moving into workspace windows"
+			KeyboardKey up 		mod3 shift  -> [ :perspective | perspective focusUp ].
+			KeyboardKey down 	mod3 shift  -> [ :perspective | perspective focusDown ].
+			KeyboardKey left 	mod3 shift  -> [ :perspective | perspective focusLeft ].
+			KeyboardKey right 	mod3 shift  -> [ :perspective | perspective focusRight ] };
+		defineShortcutGroup: #container with: { 
+			"rotate layouts"
+			$r mod3 -> [ :container | container rotateContainerLayout ].
+			"switch layouts"
+			$v mod3 -> [ :container | container useVerticalLayout ].
+			$h mod3 -> [ :container | container useHorizontalLayout ].
+			$t mod3 -> [ :container | container useTabLayout ].
+			"split container inserting layout"
+			$v mod3 shift -> [ :container | container splitContainerVerticalLayout ].
+			$h mod3 shift -> [ :container | container splitContainerHorizontalLayout ].
+			$t mod3 shift -> [ :container | container splitContainerTabLayout ].
+		};
+		defineShortcutGroup: #window with: { 
+			$w mod1 -> [ :window | window close ].
+			$f mod1 shift -> [ :window | window toggleFullScreen ].
+			$t mod1 shift -> [ :window | window showContainerContextMenu ] 
+		}.
+]
+
+{ #category : #accessing }
+PvPharoApplication >> start [
+
+	"nothing for the moment"
+]

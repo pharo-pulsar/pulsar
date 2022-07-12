@@ -15,12 +15,6 @@ PvMethodModel class >> newMethod: aMethod [
 		yourself
 ]
 
-{ #category : #accessing }
-PvMethodModel class >> shortSize [
-
-	^ 30
-]
-
 { #category : #visiting }
 PvMethodModel >> accept: aVisitor [
 
@@ -53,7 +47,7 @@ PvMethodModel >> compile: aString notifying: requestor [
 
 	[  
 		selector := self methodClass 
-			compile: aString withInternalLineEndings
+			compile: aString
 			classified: self methodCategory
 			notifying: requestor.
 		self entity: self methodClass >> selector ]

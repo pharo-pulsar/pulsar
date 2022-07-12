@@ -18,6 +18,12 @@ PvEntityModel class >> newEnvironment: anEnvironmentModel entity: anObject [
 		yourself
 ]
 
+{ #category : #accessing }
+PvEntityModel class >> shortSize [
+
+	^ 30
+]
+
 { #category : #comparing }
 PvEntityModel >> = other [
 

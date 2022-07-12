@@ -1,6 +1,6 @@
 Class {
 	#name : #PvProjectView,
-	#superclass : #PvContainedPresenter,
+	#superclass : #PvPerspectiveView,
 	#instVars : [
 		'projectTreePresenter'
 	],
@@ -60,8 +60,7 @@ PvProjectView >> initializePresenters [
 
 	projectTreePresenter addStyle: 'stProjectTree'.
 	projectTreePresenter contextMenu: [ self toolbarActions asMenuPresenter ].
-	projectTreePresenter contextKeyBindings: self toolbarActions asKMCategory.
-	
+	projectTreePresenter contextKeyBindings: self toolbarActions asKMCategory
 ]
 
 { #category : #initialization }

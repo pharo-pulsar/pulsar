@@ -1,25 +1,22 @@
 Class {
 	#name : #PvClassEditorView,
 	#superclass : #PvEditorView,
-	#instVars : [
-		'textPresenter',
-		'templatePresenter'
-	],
 	#category : #'Perspective-Class-View'
 }
 
 { #category : #accessing }
 PvClassEditorView >> content: aString [
 
-	templatePresenter text: aString
+	editorPresenter text: aString
 ]
 
-{ #category : #initialization }
-PvClassEditorView >> initializePresenters [
+{ #category : #'private - actions' }
+PvClassEditorView >> doSubmit: aString [
 
-	self layout: (SpBoxLayout newVertical
-		add: (templatePresenter := self newCode);
-		yourself)
+	self model 
+		compile: aString withInternalLineEndings
+		notifying: editorPresenter interactionModel.		
+	self resetDirty
 ]
 
 { #category : #initialization }
@@ -28,24 +25,6 @@ PvClassEditorView >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	self model ifNotNil: [ :aModel | 
 		aWindowPresenter windowIcon: (aModel windowIconComposite buildOn: self application) ]
-]
-
-{ #category : #actions }
-PvClassEditorView >> reset [
-
-	templatePresenter triggerResetAction
-]
-
-{ #category : #actions }
-PvClassEditorView >> submit [
-
-	templatePresenter triggerSubmitAction
-]
-
-{ #category : #accessing }
-PvClassEditorView >> tabPriority [
-
-	^ 90
 ]
 
 { #category : #initialization }
@@ -57,6 +36,8 @@ PvClassEditorView >> title [
 
 { #category : #initialization }
 PvClassEditorView >> updatePresenter [
-	
-	templatePresenter text: self model classDefinitionString 
+
+	super updatePresenter.
+	self updatingWhile: [ 
+		editorPresenter text: self model classDefinitionString ]
 ]

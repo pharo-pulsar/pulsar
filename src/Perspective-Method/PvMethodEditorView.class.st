@@ -2,7 +2,6 @@ Class {
 	#name : #PvMethodEditorView,
 	#superclass : #PvEditorView,
 	#instVars : [
-		'codePresenter',
 		'toolbarPresenter',
 		'labelPresenter'
 	],
@@ -15,17 +14,20 @@ PvMethodEditorView class >> type [
 	^ #method
 ]
 
-{ #category : #accessing }
-PvMethodEditorView >> content: aString [ 
-	
-	self updatingWhile: [ 
-		codePresenter text: aString ]
-]
+{ #category : #initialization }
+PvMethodEditorView >> defaultLayout [
 
-{ #category : #accessing }
-PvMethodEditorView >> defaultKeyboardFocus [
-
-	^ codePresenter
+	^ SpBoxLayout newTopToBottom
+		add: (SpBoxLayout newLeftToRight
+				add: (SpBoxLayout newLeftToRight
+					borderWidth: 3;
+					add: labelPresenter;
+					yourself);
+				addLast: toolbarPresenter expand: false;
+				yourself) 
+			expand: false;
+		add: editorPresenter;
+		yourself
 ]
 
 { #category : #'actions commands' }
@@ -37,62 +39,42 @@ PvMethodEditorView >> doBrowseVersions [
 ]
 
 { #category : #'private - actions' }
-PvMethodEditorView >> doCompile: aString [
-
-	self model 
-		compile: aString 
-		notifying: codePresenter interactionModel.		
-	self resetDirty
-]
-
-{ #category : #'private - actions' }
 PvMethodEditorView >> doCopyToClipboard [
 	
-	Clipboard clipboardText: codePresenter text.
+	Clipboard clipboardText: editorPresenter text.
 	self application inform: ('Copied method {1}' format: { self model shortName })
 ]
 
 { #category : #'private - actions' }
-PvMethodEditorView >> doReset [
-	
-	self updatePresenter.
-	self resetDirty
-]
+PvMethodEditorView >> doSubmit: aString [
+	| oldName |
 
-{ #category : #private }
-PvMethodEditorView >> editorIcon [
-	| icon |
-	
-	icon := self model windowIconComposite.
-	self isDirty ifTrue: [ icon addDirty ].
-	^ icon buildOn: self application
+	oldName := self model name.
+	self model 
+		compile: aString withInternalLineEndings
+		notifying: editorPresenter interactionModel.		
+	self resetDirty.
+	self withWindowDo: [ :aWindow |
+		aWindow presenter announce: (PvMethodChangedAnnouncement for: self model) ]
 ]
 
 { #category : #initialization }
 PvMethodEditorView >> initializePresenters [
 
-	self layout: (SpBoxLayout newTopToBottom
-		add: (SpBoxLayout newLeftToRight
-				add: (SpBoxLayout newLeftToRight
-					borderWidth: 3;
-					add: (labelPresenter := self newLabel);
-					yourself);
-				addLast: (toolbarPresenter := self newToolbar) expand: false;
-				yourself) 
-			expand: false;
-		add: (codePresenter := self newCode);
-		yourself).
+	super initializePresenters.
+	self initializeToolbar.
+	labelPresenter := self newLabel
 
-	toolbarPresenter 
-		displayMode: self application toolbarDisplayMode;
+]
+
+{ #category : #initialization }
+PvMethodEditorView >> initializeToolbar [	
+
+	(toolbarPresenter := self newToolbar)
+		"displayMode: self application toolbarDisplayMode;"
+		beIcons;
 		addStyle: 'stToolbar';
-		fillWith: self toolbarActions.
-		
-	codePresenter
-		addStyle: 'stCode';
-		whenTextChangedDo: [ :newText :oldText | self textChangedFrom: oldText to: newText ];
-		whenSubmitDo: [ :aString | self doCompile: aString ];
-		whenResetDo: [ self doReset ]
+		fillWith: self toolbarActions
 ]
 
 { #category : #initialization }
@@ -102,31 +84,6 @@ PvMethodEditorView >> initializeWindow: aWindowPresenter [
 	aWindowPresenter 
 		title: self model shortName;
 		windowIcon: (self model windowIconComposite buildOn: self application)
-]
-
-{ #category : #actions }
-PvMethodEditorView >> reset [
-
-	codePresenter triggerResetAction
-]
-
-{ #category : #actions }
-PvMethodEditorView >> submit [
-	
-	codePresenter triggerSubmitAction
-]
-
-{ #category : #accessing }
-PvMethodEditorView >> tabPriority [
-
-	^ 100
-]
-
-{ #category : #private }
-PvMethodEditorView >> textChangedFrom: oldText to: newText [
-
-	oldText = newText ifTrue: [ ^ self ].
-	self markDirty
 ]
 
 { #category : #initialization }
@@ -168,21 +125,13 @@ PvMethodEditorView >> toolbarActionsKind: aClass [
 	^ group
 ]
 
-{ #category : #emulating }
-PvMethodEditorView >> typeByChar: aString [
-	"for test purposes"
-	
-	codePresenter typeByChar: aString
-	
-]
-
 { #category : #initialization }
 PvMethodEditorView >> updatePresenter [
 
 	super updatePresenter.
 	labelPresenter label: self model fullName.
 	self updatingWhile: [
-		codePresenter
+		editorPresenter
 			beForMethod: self model entity;
 			text: self model sourceCode ]
 ]

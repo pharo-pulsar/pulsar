@@ -5,7 +5,8 @@ Class {
 	#classTraits : 'SpTModel classTrait',
 	#instVars : [
 		'#dirty => ObservableSlot',
-		'#updating'
+		'#updating',
+		'#editorPresenter'
 	],
 	#category : #'Perspective-View'
 }
@@ -27,9 +28,24 @@ PvEditorView >> buildAdapterWithSpecLayout: aSpecLayout [
 ]
 
 { #category : #accessing }
-PvEditorView >> content: aString [
+PvEditorView >> content: aString [ 
+	
+	self updatingWhile: [ 
+		editorPresenter text: aString ]
+]
 
-	self subclassResponsibility
+{ #category : #accessing }
+PvEditorView >> defaultKeyboardFocus [
+
+	^ editorPresenter
+]
+
+{ #category : #layout }
+PvEditorView >> defaultLayout [
+
+	^ SpBoxLayout newTopToBottom
+		add: editorPresenter;
+		yourself
 ]
 
 { #category : #private }
@@ -38,11 +54,26 @@ PvEditorView >> dirty: aBoolean [
 	dirty := aBoolean
 ]
 
+{ #category : #'private - actions' }
+PvEditorView >> doReset [
+	
+	self updatePresenter.
+	self resetDirty
+]
+
+{ #category : #'private - actions' }
+PvEditorView >> doSubmit: aString [
+
+	self subclassResponsibility
+]
+
 { #category : #private }
 PvEditorView >> editorIcon [
+	| icon |
 	
-	^ self model windowIconComposite buildOn: self application
-
+	icon := self model windowIconComposite.
+	self isDirty ifTrue: [ icon addDirty ].
+	^ icon buildOn: self application
 ]
 
 { #category : #initialization }
@@ -50,6 +81,22 @@ PvEditorView >> initialize [
 
 	super initialize.
 	self whenDirtyChangedDo: [ self updateHeader ]
+]
+
+{ #category : #initialization }
+PvEditorView >> initializeEditor [
+	
+	(editorPresenter := self newCode)
+		addStyle: 'stCode';
+		whenTextChangedDo: [ :newText :oldText | self textChangedFrom: oldText to: newText ];
+		whenSubmitDo: [ :aString | self doSubmit: aString ];
+		whenResetDo: [ self doReset ]
+]
+
+{ #category : #initialization }
+PvEditorView >> initializePresenters [
+
+	self initializeEditor
 ]
 
 { #category : #initialization }
@@ -124,7 +171,7 @@ PvEditorView >> replaceWith: aSimilarEditor [
 { #category : #actions }
 PvEditorView >> reset [
 
-	self subclassResponsibility
+	editorPresenter triggerResetAction
 ]
 
 { #category : #accessing }
@@ -137,7 +184,7 @@ PvEditorView >> resetDirty [
 { #category : #actions }
 PvEditorView >> submit [
 
-	self subclassResponsibility
+	editorPresenter triggerSubmitAction
 ]
 
 { #category : #accessing }
@@ -146,10 +193,11 @@ PvEditorView >> tabLabel [
 	^ self model shortName
 ]
 
-{ #category : #accessing }
-PvEditorView >> tabPriority [
+{ #category : #private }
+PvEditorView >> textChangedFrom: oldText to: newText [
 
-	^ self subclassResponsibility
+	oldText = newText ifTrue: [ ^ self ].
+	self markDirty
 ]
 
 { #category : #initialization }
@@ -163,6 +211,14 @@ PvEditorView >> title [
 PvEditorView >> type [
 
 	^ self class type
+]
+
+{ #category : #emulating }
+PvEditorView >> typeByChar: aString [
+	"for test purposes"
+	
+	editorPresenter typeByChar: aString
+	
 ]
 
 { #category : #initialization }

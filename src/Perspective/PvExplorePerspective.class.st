@@ -14,19 +14,17 @@ PvExplorePerspective >> defaultLayout [
 		positionOfSlider: 25 percent;
 		first: (self newContainer: #overview) useVerticalLayout;
 		second: (SpPanedLayout newTopToBottom
-			positionOfSlider: 75 percent;
+			positionOfSlider: 50 percent;
 			first: (self newEditorContainer: #edit) useTabLayout;
 			second: (self newContainer: #tools) useTabLayout;
 			yourself);
 		yourself
-		
 ]
 
 { #category : #initialization }
 PvExplorePerspective >> initialize [
 
 	super initialize.
-	self subscribeToAnnouncements.
 	self addWindow: (projectPresenter := PvProjectView new).
 	self addWindow: PvOutlineView new
 ]
@@ -46,23 +44,8 @@ PvExplorePerspective >> openProject: aBaselineClass [
 		environment: self model)
 ]
 
-{ #category : #'events - handling' }
-PvExplorePerspective >> resendToPresenters: ann [
-
-	self presenters 
-		do: [ :each | each announcer announce: ann ]
-]
-
 { #category : #'accessing - navigation' }
 PvExplorePerspective >> selectClass: aClass [
 	
 	self flag: #TODO.
-]
-
-{ #category : #initialization }
-PvExplorePerspective >> subscribeToAnnouncements [
-
-	self announcer 
-		when: PvSelectedAnnouncement send: #resendToPresenters: to: self;
-		when: PvActivatedAnnouncement send: #resendToPresenters: to: self
 ]

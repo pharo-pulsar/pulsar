@@ -1,5 +1,5 @@
 Class {
-	#name : #PvContainedPresenter,
+	#name : #PvPerspectiveView,
 	#superclass : #PvPresenter,
 	#traits : 'SpTModel',
 	#classTraits : 'SpTModel classTrait',
@@ -11,26 +11,26 @@ Class {
 }
 
 { #category : #accessing }
-PvContainedPresenter class >> defaultContainerName [
+PvPerspectiveView class >> defaultContainerName [
 
 	^ nil
 ]
 
 { #category : #accessing }
-PvContainedPresenter class >> defaultTitle [
+PvPerspectiveView class >> defaultTitle [
 
 	^ 'Untitled'
 ]
 
 { #category : #'private - announcing' }
-PvContainedPresenter >> announceActivated: aModel [
+PvPerspectiveView >> announceActivated: aModel [
 
 	aModel ifNil: [ ^ self ].
 	perspective announce: aModel activatedAnnouncement
 ]
 
 { #category : #'private - announcing' }
-PvContainedPresenter >> announceSelectionChanged: aSelection [
+PvPerspectiveView >> announceSelectionChanged: aSelection [
 
 	aSelection ifNil: [ ^ self ].
 	perspective ifNil: [ ^ self ].
@@ -38,32 +38,32 @@ PvContainedPresenter >> announceSelectionChanged: aSelection [
 ]
 
 { #category : #accessing }
-PvContainedPresenter >> containerName [
+PvPerspectiveView >> containerName [
 
 	^ containerName ifNil: [ self class defaultContainerName ]
 ]
 
 { #category : #accessing }
-PvContainedPresenter >> containerName: aName [
+PvPerspectiveView >> containerName: aName [
 
 	containerName := aName
 ]
 
 { #category : #'events - handling' }
-PvContainedPresenter >> handleAnnouncement: ann [
+PvPerspectiveView >> handleAnnouncement: ann [
 	
 	ann handleOn: self
 ]
 
 { #category : #initialization }
-PvContainedPresenter >> initializeWindow: aWindowPresenter [
+PvPerspectiveView >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter title: self title
 ]
 
 { #category : #accessing }
-PvContainedPresenter >> perspective: aPerspective [
+PvPerspectiveView >> perspective: aPerspective [
 	
 	perspective ifNotNil: [ 
 		self unsubscribeFromAnnouncers  ].
@@ -72,7 +72,7 @@ PvContainedPresenter >> perspective: aPerspective [
 ]
 
 { #category : #initialization }
-PvContainedPresenter >> subscribeToAnnouncements [
+PvPerspectiveView >> subscribeToAnnouncements [
 
 	perspective announcer 
 		when: PvAnnouncement 
@@ -81,7 +81,7 @@ PvContainedPresenter >> subscribeToAnnouncements [
 ]
 
 { #category : #initialization }
-PvContainedPresenter >> title [
+PvPerspectiveView >> title [
 
 	^ self model 
 		ifNotNil: [ self titleWith: self model windowTitle ]
@@ -89,14 +89,14 @@ PvContainedPresenter >> title [
 ]
 
 { #category : #private }
-PvContainedPresenter >> titleWith: aString [
+PvPerspectiveView >> titleWith: aString [
 
 	^ String streamContents: [ :stream | 
 		stream << self class defaultTitle << ': ' << aString ]
 ]
 
 { #category : #initialization }
-PvContainedPresenter >> unsubscribeFromAnnouncers [
+PvPerspectiveView >> unsubscribeFromAnnouncers [
 	
 	perspective announcer unsubscribe: self
 ]
