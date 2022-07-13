@@ -27,14 +27,14 @@ PvPharoApplication >> newSettings [
 	^ LnSettings new
 		defineShortcutGroup: #perspective with: { 
 			"open default tool"
-			"($p mod3 | Character cr mod3) -> [ :workspace | workspace open: StPlayground ]."
 			KeyboardKey enter 	shift 			-> [ :perspective | perspective showSpotter ].
-			"moving into workspace windows"
-			KeyboardKey up 		mod3 shift  -> [ :perspective | perspective focusUp ].
-			KeyboardKey down 	mod3 shift  -> [ :perspective | perspective focusDown ].
-			KeyboardKey left 	mod3 shift  -> [ :perspective | perspective focusLeft ].
-			KeyboardKey right 	mod3 shift  -> [ :perspective | perspective focusRight ] };
+		};
 		defineShortcutGroup: #container with: { 
+			"moving into workspace windows"
+			KeyboardKey up 		mod3 shift  -> [ :container | container focusUp ].
+			KeyboardKey down 	mod3 shift  -> [ :container | container focusDown ].
+			KeyboardKey left 	mod3 shift  -> [ :container | container focusLeft ].
+			KeyboardKey right 	mod3 shift  -> [ :container | container focusRight ].
 			"rotate layouts"
 			$r mod3 -> [ :container | container rotateContainerLayout ].
 			"switch layouts"
@@ -49,7 +49,7 @@ PvPharoApplication >> newSettings [
 		defineShortcutGroup: #window with: { 
 			$w mod1 -> [ :window | window close ].
 			$f mod1 shift -> [ :window | window toggleFullScreen ].
-			$t mod1 shift -> [ :window | window showContainerContextMenu ] 
+			$t mod1 shift -> [ :window | window showContainerContextMenu ].
 		}.
 ]
 
@@ -57,4 +57,10 @@ PvPharoApplication >> newSettings [
 PvPharoApplication >> start [
 
 	"nothing for the moment"
+]
+
+{ #category : #settings }
+PvPharoApplication >> toolbarDisplayMode [
+
+	^ SpToolbarDisplayMode modeIcon
 ]

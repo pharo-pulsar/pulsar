@@ -29,6 +29,13 @@ PvContainerPresenter >> handleAnnouncement: ann [
 	ann handleOn: self
 ]
 
+{ #category : #initialization }
+PvContainerPresenter >> initializePresenters [
+
+	super initializePresenters.
+	self addGlobalShortcutsTo: self
+]
+
 { #category : #private }
 PvContainerPresenter >> maybeRemoveContainer [
 

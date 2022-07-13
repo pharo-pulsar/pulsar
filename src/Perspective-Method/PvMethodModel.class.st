@@ -46,11 +46,11 @@ PvMethodModel >> compile: aString notifying: requestor [
 	self sourceCode = aString ifTrue: [ ^ self ].
 
 	[  
-		selector := self methodClass 
+		selector := self entity methodClass 
 			compile: aString
 			classified: self methodCategory
 			notifying: requestor.
-		self entity: self methodClass >> selector ]
+		self entity: self entity methodClass >> selector ]
 	on: OCSemanticWarning 
 	do: [ :w | 
 		w resume: (w accept: PvMethodCompilationVisitor new) ]

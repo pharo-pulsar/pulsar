@@ -121,14 +121,8 @@ PvOutlineView >> toolbar [
 
 { #category : #initialization }
 PvOutlineView >> toolbarActions [
-	| group |
-	
-	group := (CmCommandGroup named: 'Class') asSpecGroup.
-	group beRoot.
-	PvClassCommand allCommands do: [ :each |
-		group register: (each forSpecContext: self) ].
-	
-	^ group
+
+	^ PvClassCommand buildToolbarOn: self
 ]
 
 { #category : #initialization }

@@ -76,6 +76,12 @@ PvPerspectiveBrowser >> addWindow: aPresenter ifContainerAbsent: aBlock [
 		ifAbsent: aBlock
 ]
 
+{ #category : #actions }
+PvPerspectiveBrowser >> close [
+	
+	self withWindowDo: [ :window | window close ]
+]
+
 { #category : #private }
 PvPerspectiveBrowser >> containerNamed: aName ifPresent: presentBlock ifAbsent: absentBlock [
 
@@ -96,7 +102,8 @@ PvPerspectiveBrowser >> contentPresenters [
 { #category : #'private - settings' }
 PvPerspectiveBrowser >> globalShortcuts [
 
-	^ (self settings shortcutsFor: #perspective),
+	^ "super globalShortcuts,"
+	  (self settings shortcutsFor: #perspective),
 	  (self settings shortcutsFor: #window)
 ]
 

@@ -1,6 +1,8 @@
 Class {
 	#name : #PvPresenter,
 	#superclass : #SgaPresenter,
+	#traits : 'PvTScripting',
+	#classTraits : 'PvTScripting classTrait',
 	#category : #'Perspective-View'
 }
 
@@ -49,28 +51,6 @@ PvPresenter >> colorNamed: aString [
 PvPresenter >> globalShortcuts [
 
 	^ nil
-]
-
-{ #category : #scripting }
-PvPresenter >> newCode [
-
-	^ super newCode
-		systemNavigation: self application systemNavigation;
-		yourself
-]
-
-{ #category : #scripting }
-PvPresenter >> newEntityTree [
-
-	^ self newTree
-		addStyle: 'stTree';
-		display: [ :aModel | aModel name ];
-		displayIcon: [ :aModel | aModel iconComposite buildOn: self application ];
-		displayColor: [ :aModel | self colorNamed: aModel colorName ];
-		children: [ :aModel | aModel children ];
-		searchMatching: [ :anEntity :pattern | anEntity matches: pattern ];
-		addNavigationShortcuts;
-		yourself
 ]
 
 { #category : #initialization }

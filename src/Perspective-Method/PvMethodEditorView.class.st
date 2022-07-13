@@ -94,35 +94,11 @@ PvMethodEditorView >> title [
 ]
 
 { #category : #accessing }
-PvMethodEditorView >> toolbarActionKinds [
-	
-	^ { StBrowserMethodEditorCommand. StBrowserEditorCommand }
-]
-
-{ #category : #accessing }
 PvMethodEditorView >> toolbarActions [
-	| group |
 	
-	group := CmCommandGroup forSpec
-		beRoot;
-		yourself.
-		
-	self toolbarActionKinds do: [ :each | 
-		group register: (self toolbarActionsKind: each) ].
-		
-	^ group
-]
-
-{ #category : #private }
-PvMethodEditorView >> toolbarActionsKind: aClass [
-	| group |
-	
-	group := CmCommandGroup forSpec.
-	group name: aClass name.
-	(aClass allCommandsSuchAs: [ :each | each showInToolbar ])
-		do: [ :each | group register: (each forSpecContext: self) ].
-	
-	^ group
+	^ PvEditorCommand 
+		buildToolbar: #(default methodEditor) 
+		on: self
 ]
 
 { #category : #initialization }

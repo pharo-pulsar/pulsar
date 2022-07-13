@@ -4,6 +4,12 @@ Class {
 	#category : #'Perspective-Project'
 }
 
+{ #category : #default }
+PvProjectCommand class >> defaultToolbarGroup [
+
+	^ #project
+]
+
 { #category : #testing }
 PvProjectCommand class >> isAbstract [
 

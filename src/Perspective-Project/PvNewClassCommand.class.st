@@ -31,6 +31,18 @@ PvNewClassCommand class >> defaultPriority [
 	^ 0
 ]
 
+{ #category : #default }
+PvNewClassCommand class >> defaultToolbarGroup [
+
+	^ #actions
+]
+
+{ #category : #testing }
+PvNewClassCommand class >> isVisibleInToolbar [
+
+	^ true
+]
+
 { #category : #executing }
 PvNewClassCommand >> execute [
 	

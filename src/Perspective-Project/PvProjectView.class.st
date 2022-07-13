@@ -73,22 +73,15 @@ PvProjectView >> initializeWindow: aWindowPresenter [
 { #category : #initialization }
 PvProjectView >> toolbar [
 
-	^ self newToolbar 
-		addStyle: 'stSmallToolbar';
-		beIcons;
-		fillWith: self toolbarActions
+	^ self 
+		newPerspectiveViewToolbar: #project 
+		actions: #actions
 ]
 
 { #category : #initialization }
 PvProjectView >> toolbarActions [
-	| group |
-	
-	group := (CmCommandGroup named: 'Project') asSpecGroup.
-	group beRoot.
-	PvProjectCommand allCommands do: [ :each |
-		group register: (each forSpecContext: self) ].
-	
-	^ group
+
+	^ PvProjectCommand buildToolbarOn: self
 ]
 
 { #category : #initialization }

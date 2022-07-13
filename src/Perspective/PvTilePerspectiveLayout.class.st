@@ -27,13 +27,17 @@ PvTilePerspectiveLayout >> focusDown: aContainer [
 { #category : #'accessing - focus' }
 PvTilePerspectiveLayout >> focusLeft: aContainer [
 
-	self focusUp: aContainer
+	self 
+		focusBefore: aContainer
+		ifFirst: [ aContainer owner focusLeft ]
 ]
 
 { #category : #'accessing - focus' }
 PvTilePerspectiveLayout >> focusRight: aContainer [
 
-	self focusDown: aContainer
+	self 
+		focusAfter: aContainer
+		ifLast: [ aContainer owner focusRight ]
 ]
 
 { #category : #'accessing - focus' }

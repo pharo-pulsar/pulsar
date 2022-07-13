@@ -31,6 +31,18 @@ PvNewTraitCommand class >> defaultPriority [
 	^ 10
 ]
 
+{ #category : #default }
+PvNewTraitCommand class >> defaultToolbarGroup [
+
+	^ #actions
+]
+
+{ #category : #testing }
+PvNewTraitCommand class >> isVisibleInToolbar [
+
+	^ true
+]
+
 { #category : #executing }
 PvNewTraitCommand >> execute [
 	
