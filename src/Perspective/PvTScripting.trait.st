@@ -3,6 +3,12 @@ Trait {
 	#category : #'Perspective-View'
 }
 
+{ #category : #building }
+PvTScripting >> buildPerspectiveToolbarWith: aBlock [
+
+	^ (PvContextActionBuilder on: self) buildToolbarWith: aBlock
+]
+
 { #category : #scripting }
 PvTScripting >> newCode [
 
@@ -35,27 +41,9 @@ PvTScripting >> newPerspectiveViewToolbar: aGroup [
 
 { #category : #scripting }
 PvTScripting >> newPerspectiveViewToolbar: groups actions: actionGroups [
-	| presenter |
 
-	presenter := self newPresenter.
-	presenter layout: SpBoxLayout newLeftToRight.	
-	
-	presenter layout add: (presenter newToolbar
-		addStyle: 'pvPerspectiveToolbar';
-		displayMode: self application toolbarDisplayMode;
-		fillWith: (PvCommand 
-			buildToolbar: groups 
-			on: self)).
-			
-	actionGroups ifNotNil: [ 
-		presenter layout 
-			addLast: (presenter newToolbar
-				addStyle: 'pvPerspectiveToolbar';
-				displayMode: self application toolbarDisplayMode;
-				fillWith: (PvCommand 
-					buildToolbar: actionGroups 
-					on: self))
-			expand: false ].
-			
-	^ presenter
+	^ self buildPerspectiveToolbarWith: [ :builder |
+		builder 
+			mainGroups: groups;
+			actionGroups: actionGroups ]
 ]

@@ -45,7 +45,7 @@ PvMethodModel >> compile: aString notifying: requestor [
 
 	self sourceCode = aString ifTrue: [ ^ self ].
 
-	[  
+	[
 		selector := self entity methodClass 
 			compile: aString
 			classified: self methodCategory

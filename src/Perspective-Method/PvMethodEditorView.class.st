@@ -70,11 +70,10 @@ PvMethodEditorView >> initializePresenters [
 { #category : #initialization }
 PvMethodEditorView >> initializeToolbar [	
 
-	(toolbarPresenter := self newToolbar)
-		"displayMode: self application toolbarDisplayMode;"
-		beIcons;
-		addStyle: 'stToolbar';
-		fillWith: self toolbarActions
+	toolbarPresenter := self buildPerspectiveToolbarWith: [ :builder |
+		builder 
+			from: PvEditorCommand;
+			actionGroups: #(action methodAction) ]
 ]
 
 { #category : #initialization }

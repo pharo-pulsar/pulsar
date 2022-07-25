@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'name'
 	],
-	#category : #'Perspective-View'
+	#category : #'Perspective-View-Container'
 }
 
 { #category : #converting }
@@ -52,6 +52,16 @@ PvContainerPresenter >> name [
 PvContainerPresenter >> name: anObject [
 
 	name := anObject
+]
+
+{ #category : #spotter }
+PvContainerPresenter >> stSpotterProcessorsFor: aSpotterStep [
+	
+	"normal processing"
+	super stSpotterProcessorsFor: aSpotterStep.
+	"traverse containers"
+	self presenters do: [ :each | 
+		each stSpotterProcessorsFor: aSpotterStep ]
 ]
 
 { #category : #initialization }

@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'closeButton'
 	],
-	#category : #'Perspective-View-Header'
+	#category : #'Perspective-View-Window'
 }
 
 { #category : #initialization }

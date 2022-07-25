@@ -27,7 +27,7 @@ PvPackageTagModel >> children [
 { #category : #accessing }
 PvPackageTagModel >> classDefinitionString [
 	
-	^ ClassDefinitionPrinter new 
+	^ PvFluidClassDefinitionPrinter new 
 		classDefinitionTemplateInPackage: self package name
 		tag: (self entity isRoot 
 			ifTrue: [ nil ]

@@ -1,6 +1,9 @@
 Class {
 	#name : #PvClassModel,
 	#superclass : #PvEntityModel,
+	#instVars : [
+		'isNew'
+	],
 	#category : #'Perspective-Class-Model'
 }
 
@@ -16,16 +19,16 @@ PvClassModel >> activatedAnnouncementClass [
 	^ PvClassActivatedAnnouncement
 ]
 
-{ #category : #accessing }
-PvClassModel >> classDefinition [
+{ #category : #visiting }
+PvClassModel >> beForNewClass [
 
-	^ self entity definitionString
+	isNew := true
 ]
 
 { #category : #accessing }
 PvClassModel >> classDefinitionString [
 	
-	^ (FluidClassDefinitionPrinter for: self entity) definitionString
+	^ (PvFluidClassDefinitionPrinter for: self entity) definitionString
 ]
 
 { #category : #accessing }
@@ -46,6 +49,25 @@ PvClassModel >> comment [
 	^ self entity comment
 ]
 
+{ #category : #compiling }
+PvClassModel >> compile: aString notifying: requestor [
+	| resultClass |
+
+ 	[ 
+		resultClass := self class compiler
+			source: '(', aString, ') install';
+			context: requestor doItContext;
+			receiver: requestor doItReceiver;
+			requestor: requestor;
+			evaluate.
+		resultClass isBehavior 
+			ifTrue: [ self entity: resultClass ] ]
+	on: OCUndeclaredVariableWarning
+	do: [ :e | 
+		"we are only interested in class definitions"
+		e compilationContext noPattern ifFalse: [ e pass ] ]
+]
+
 { #category : #accessing }
 PvClassModel >> editorClass [
 	
@@ -63,6 +85,13 @@ PvClassModel >> inheritsFrom: aClassModel [
 	
 	aClassModel ifNil: [ ^ false ].
 	^ self entity instanceSide inheritsFrom: aClassModel entity instanceSide
+]
+
+{ #category : #visiting }
+PvClassModel >> initialize [
+
+	super initialize.
+	isNew := false
 ]
 
 { #category : #accessing }

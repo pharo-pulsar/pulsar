@@ -31,3 +31,15 @@ PvNewMethodCommand class >> defaultPriority [
 
 	^ 10
 ]
+
+{ #category : #default }
+PvNewMethodCommand class >> defaultToolbarGroup [
+
+	^ #action
+]
+
+{ #category : #testing }
+PvNewMethodCommand class >> isVisibleInToolbar [
+
+	^ true
+]

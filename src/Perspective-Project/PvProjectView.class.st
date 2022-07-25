@@ -51,6 +51,13 @@ PvProjectView >> doNewClass [
 
 ]
 
+{ #category : #actions }
+PvProjectView >> doOpenProject [
+	
+	self halt
+		
+]
+
 { #category : #initialization }
 PvProjectView >> initializePresenters [
 

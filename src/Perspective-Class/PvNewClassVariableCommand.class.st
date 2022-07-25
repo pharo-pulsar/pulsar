@@ -31,3 +31,15 @@ PvNewClassVariableCommand class >> defaultPriority [
 
 	^ 110
 ]
+
+{ #category : #default }
+PvNewClassVariableCommand class >> defaultToolbarGroup [
+
+	^ #action
+]
+
+{ #category : #testing }
+PvNewClassVariableCommand class >> isVisibleInToolbar [
+
+	^ true
+]

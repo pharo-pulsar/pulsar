@@ -4,7 +4,7 @@ A container specialised on keeping editors.
 Class {
 	#name : #PvEditorContainerPresenter,
 	#superclass : #PvContainerPresenter,
-	#category : #'Perspective-View'
+	#category : #'Perspective-View-Container'
 }
 
 { #category : #accessing }

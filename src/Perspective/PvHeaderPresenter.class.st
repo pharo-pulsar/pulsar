@@ -6,7 +6,7 @@ Class {
 		'image',
 		'contentPresenter'
 	],
-	#category : #'Perspective-View-Header'
+	#category : #'Perspective-View-Window'
 }
 
 { #category : #accessing }
@@ -19,6 +19,12 @@ PvHeaderPresenter >> content: aPresenter [
 PvHeaderPresenter >> delete [
 
 	contentPresenter delete
+]
+
+{ #category : #accessing }
+PvHeaderPresenter >> image [
+
+	^ image image
 ]
 
 { #category : #accessing }
@@ -37,6 +43,12 @@ PvHeaderPresenter >> initializePresenters [
 		add: (image := self newImage) expand: false;
 		add: (titleLabel := self newLabel);
 		yourself
+]
+
+{ #category : #accessing }
+PvHeaderPresenter >> label [
+
+	^ titleLabel label
 ]
 
 { #category : #accessing }

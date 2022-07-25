@@ -1,3 +1,7 @@
+"
+A base for all perspective ""views"" (the components of a perspective).
+Extensions to this class define diferent behaviors for perspectives.
+"
 Class {
 	#name : #PvPerspectiveView,
 	#superclass : #PvPresenter,

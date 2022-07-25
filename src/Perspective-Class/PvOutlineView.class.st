@@ -113,10 +113,12 @@ PvOutlineView >> methodSelected: aModel [
 { #category : #initialization }
 PvOutlineView >> toolbar [
 
-	^ (toolbar := self newToolbar) 
-		addStyle: 'stSmallToolbar';
-		beIcons;
-		fillWith: self toolbarActions
+	^ self buildPerspectiveToolbarWith: [ :builder |
+		builder 
+			from: PvClassCommand;
+			actionGroup: #action ]
+	
+
 ]
 
 { #category : #initialization }

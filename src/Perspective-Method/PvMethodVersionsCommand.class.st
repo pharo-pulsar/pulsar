@@ -22,6 +22,12 @@ PvMethodVersionsCommand class >> defaultName [
 	^ 'Versions'
 ]
 
+{ #category : #default }
+PvMethodVersionsCommand class >> defaultToolbarGroup [
+
+	^ #methodAction
+]
+
 { #category : #testing }
 PvMethodVersionsCommand class >> isVisibleInToolbar [
 

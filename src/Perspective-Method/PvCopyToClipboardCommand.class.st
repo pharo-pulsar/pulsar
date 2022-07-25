@@ -22,6 +22,12 @@ PvCopyToClipboardCommand class >> defaultName [
 	^ 'Copy'
 ]
 
+{ #category : #default }
+PvCopyToClipboardCommand class >> defaultToolbarGroup [
+
+	^ #action
+]
+
 { #category : #testing }
 PvCopyToClipboardCommand class >> isVisibleInToolbar [
 

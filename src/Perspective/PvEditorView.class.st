@@ -1,3 +1,7 @@
+"
+A base for all editors.
+Being an editor a key component of a perspective (since editing methods and definitions is the base of them), this component defines common behavior for all extensions of it.
+"
 Class {
 	#name : #PvEditorView,
 	#superclass : #PvPresenter,

@@ -153,6 +153,44 @@ PvPerspectiveBrowser >> resendToPresenters: ann [
 		do: [ :each | each announcer announce: ann ]
 ]
 
+{ #category : #actions }
+PvPerspectiveBrowser >> showSpotter [
+	| spotter |
+	
+	spotter := self 
+		instantiate: PvSpotter 
+		on: (StSpotterModel newOrigin: self).
+	
+	spotter asModalWindow
+		centeredRelativeTo: self window;
+		open
+]
+
+{ #category : #spotter }
+PvPerspectiveBrowser >> spotterViewsFor: aStep [
+	<stSpotterOrder: 100>
+
+	aStep listProcessor
+		title: 'Views';
+		wantsToDisplayOnEmptyQuery: true;
+		candidatesLimit: Float infinity;
+		allCandidates: [ 
+				self allPresenters 
+					select: [ :each | each isTileWindow ]
+					thenCollect: [ :each | PvViewEntry on: each ] ];
+		filter: StFilterSubstring
+]
+
+{ #category : #spotter }
+PvPerspectiveBrowser >> stSpotterProcessorsFor: aSpotterStep [
+	
+	"normal processing"
+	super stSpotterProcessorsFor: aSpotterStep.
+	"traverse containers"
+	"self presenters do: [ :each | 
+		each stSpotterProcessorsFor: aSpotterStep ]"
+]
+
 { #category : #initialization }
 PvPerspectiveBrowser >> subscribeToAnnouncements [
 
