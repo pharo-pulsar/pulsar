@@ -23,7 +23,7 @@ PvVirtualPackageTagModel class >> virtualModelsFor: aPackage [
 
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - ui' }
 PvVirtualPackageTagModel >> colorName [
 
 	^ #cyan

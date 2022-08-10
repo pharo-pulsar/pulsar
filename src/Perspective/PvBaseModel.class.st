@@ -22,18 +22,12 @@ PvBaseModel >> accept: aVisitor [
 ]
 
 { #category : #accessing }
-PvBaseModel >> associatedEditors [
-
-	^ StBrowserAssociatedEditorSet new
-]
-
-{ #category : #accessing }
 PvBaseModel >> children [
 	
 	^ #()
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - ui' }
 PvBaseModel >> colorName [
 	
 	^ nil
@@ -51,7 +45,7 @@ PvBaseModel >> entity: anObject [
 	entity := anObject
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - ui' }
 PvBaseModel >> iconName [
 
 	^ nil
@@ -63,7 +57,7 @@ PvBaseModel >> name [
 	^ self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - ui' }
 PvBaseModel >> pageTitle [
 
 	^ self shortName
@@ -75,13 +69,13 @@ PvBaseModel >> shortName [
 	^ self name
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - ui' }
 PvBaseModel >> windowIconName [
 
 	^ self iconName
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - ui' }
 PvBaseModel >> windowTitle [
 
 	^ self name

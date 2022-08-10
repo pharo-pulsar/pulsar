@@ -42,7 +42,7 @@ PvEntityModel >> children [
 	^ #()
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - ui' }
 PvEntityModel >> colorName [
 	
 	^ nil
@@ -86,7 +86,7 @@ PvEntityModel >> hash [
 		bitXor: self entity hash
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - ui' }
 PvEntityModel >> iconComposite [
 
 	^ PvCompositeIcon new 
@@ -94,7 +94,7 @@ PvEntityModel >> iconComposite [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - ui' }
 PvEntityModel >> iconName [
 
 	^ nil
@@ -136,7 +136,7 @@ PvEntityModel >> name [
 	^ self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - ui' }
 PvEntityModel >> pageTitle [
 
 	^ self shortName
@@ -154,7 +154,7 @@ PvEntityModel >> spotterTitle [
 	^ self windowTitle
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - ui' }
 PvEntityModel >> windowIconComposite [
 
 	^ PvCompositeIcon new 
@@ -162,13 +162,13 @@ PvEntityModel >> windowIconComposite [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - ui' }
 PvEntityModel >> windowIconName [
 
 	^ self iconName
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - ui' }
 PvEntityModel >> windowTitle [
 
 	^ self name

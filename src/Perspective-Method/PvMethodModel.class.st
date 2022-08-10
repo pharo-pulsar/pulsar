@@ -30,7 +30,9 @@ PvMethodModel >> collectDecorators [
 { #category : #'accessing - decorated' }
 PvMethodModel >> colorName [
 
-	^ self decorated: [ :each | each colorName ] ifNone: [ nil ]
+	^ self 
+		decorated: [ :each | each colorName ] 
+		ifNone: [ nil ]
 ]
 
 { #category : #compiling }
