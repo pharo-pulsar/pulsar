@@ -4,12 +4,6 @@ Class {
 	#category : #'Perspective-Class-Model'
 }
 
-{ #category : #'accessing - announcement' }
-PvOutlineClassModel >> activatedAnnouncementClass [
-	
-	^ PvOutlineClassActivatedAnnouncement
-]
-
 { #category : #accessing }
 PvOutlineClassModel >> children [
 

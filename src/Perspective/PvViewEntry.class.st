@@ -7,7 +7,7 @@ Class {
 { #category : #converting }
 PvViewEntry >> asString [ 
 
-	^ content headerBar label
+	^ content presenter spotterTitle
 ]
 
 { #category : #evaluating }

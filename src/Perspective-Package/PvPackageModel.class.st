@@ -32,7 +32,7 @@ PvPackageModel >> children [
 { #category : #helpers }
 PvPackageModel >> classDefinitionString [
 	
-	^ ClassDefinitionPrinter new 
+	^ PvFluidClassDefinitionPrinter new 
 		classDefinitionTemplateInPackage: self name
 		tag: nil
 ]

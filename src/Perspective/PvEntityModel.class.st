@@ -36,20 +36,6 @@ PvEntityModel >> accept: aVisitor [
 
 ]
 
-{ #category : #'accessing - announcement' }
-PvEntityModel >> activatedAnnouncement [
-
-	^ self activatedAnnouncementClass new 
-		model: self;
-		yourself
-]
-
-{ #category : #'accessing - announcement' }
-PvEntityModel >> activatedAnnouncementClass [
-
-	^ PvActivatedAnnouncement
-]
-
 { #category : #accessing }
 PvEntityModel >> children [
 	
@@ -59,6 +45,13 @@ PvEntityModel >> children [
 { #category : #accessing }
 PvEntityModel >> colorName [
 	
+	^ nil
+]
+
+{ #category : #'accessing - ui' }
+PvEntityModel >> cursorPostitionWhenOpenEditor [
+	"answer where to position the cursor (an index) when opening an editor"
+
 	^ nil
 ]
 
@@ -108,6 +101,12 @@ PvEntityModel >> iconName [
 ]
 
 { #category : #testing }
+PvEntityModel >> isOutlineClassEntity [
+
+	^ false
+]
+
+{ #category : #testing }
 PvEntityModel >> isPackage [
 
 	^ false
@@ -143,24 +142,16 @@ PvEntityModel >> pageTitle [
 	^ self shortName
 ]
 
-{ #category : #'accessing - announcement' }
-PvEntityModel >> selectedAnnouncement [
-
-	^ self selectedAnnouncementClass new 
-		model: self;
-		yourself
-]
-
-{ #category : #'accessing - announcement' }
-PvEntityModel >> selectedAnnouncementClass [
-
-	^ PvSelectedAnnouncement
-]
-
 { #category : #accessing }
 PvEntityModel >> shortName [
 
 	^ self name
+]
+
+{ #category : #accessing }
+PvEntityModel >> spotterTitle [
+
+	^ self windowTitle
 ]
 
 { #category : #accessing }

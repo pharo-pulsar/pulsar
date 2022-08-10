@@ -23,9 +23,9 @@ PvPackagesListPresenter class >> defaultTitle [
 PvPackagesListPresenter >> connectPresenters [
 
 	packagesTreePresenter outputSelectionPort
-		transmitDo: [ :aSelection | self announceSelectionChanged: aSelection ].
+		transmitDo: [ :aSelection | self selectWith: aSelection ].
 	packagesTreePresenter outputActivationPort
-		transmitDo: [ :aSelection | self announceActivated: aSelection ].
+		transmitDo: [ :aSelection | self activateWith: aSelection ].
 	
 ]
 

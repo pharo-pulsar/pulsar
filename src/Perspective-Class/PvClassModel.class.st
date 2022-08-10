@@ -13,12 +13,6 @@ PvClassModel >> accept: aVisitor [
 	^ aVisitor visitClassModel: self
 ]
 
-{ #category : #'accessing - announcement' }
-PvClassModel >> activatedAnnouncementClass [
-	
-	^ PvClassActivatedAnnouncement
-]
-
 { #category : #visiting }
 PvClassModel >> beForNewClass [
 
@@ -35,12 +29,6 @@ PvClassModel >> classDefinitionString [
 PvClassModel >> classDepth [
 	
 	^ self entity classDepth
-]
-
-{ #category : #'accessing - parallel hierarchy' }
-PvClassModel >> classSide [
-
-	^ StMetaclassModel newClass: self entity classSide
 ]
 
 { #category : #accessing }
@@ -94,6 +82,12 @@ PvClassModel >> initialize [
 	isNew := false
 ]
 
+{ #category : #testing }
+PvClassModel >> isOutlineClassEntity [
+
+	^ true
+]
+
 { #category : #accessing }
 PvClassModel >> name [
 
@@ -106,12 +100,6 @@ PvClassModel >> newOutlineClassModel [
 	^ PvOutlineClassModel 
 		newEnvironment: self environmentModel 
 		entity: self entity
-]
-
-{ #category : #'accessing - announcement' }
-PvClassModel >> selectedAnnouncementClass [
-
-	^ PvClassSelectedAnnouncement
 ]
 
 { #category : #accessing }

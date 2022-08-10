@@ -4,6 +4,8 @@ A container specialised on keeping editors.
 Class {
 	#name : #PvEditorContainerPresenter,
 	#superclass : #PvContainerPresenter,
+	#traits : 'SpTSelectable - {#select}',
+	#classTraits : 'SpTSelectable classTrait',
 	#category : #'Perspective-View-Container'
 }
 
@@ -31,6 +33,26 @@ PvEditorContainerPresenter >> classActivated: aModel [
 	self methodActivated: aModel
 ]
 
+{ #category : #'private - events' }
+PvEditorContainerPresenter >> entityActivated: aModel [
+	| editor editorWindow |
+
+	self presenters 
+		detect: [ :each | each presenter model = aModel ]
+		ifFound: [ :each | ^ self layout select: each  ].
+	"Add the editor"
+	editor := self instantiate: aModel editorClass on: aModel.
+	editorWindow := self layout addTileWindow: editor.
+	self layout select: editorWindow.
+	editor takeKeyboardFocus
+]
+
+{ #category : #'private - events' }
+PvEditorContainerPresenter >> entitySelected: anEntity [
+
+	anEntity crTrace
+]
+
 { #category : #initialization }
 PvEditorContainerPresenter >> initialize [
 
@@ -49,6 +71,18 @@ PvEditorContainerPresenter >> initializePresenters [
 	"self 
 		bindKeyCombination: $w control 
 		toAction: [ self halt ]"
+]
+
+{ #category : #transmission }
+PvEditorContainerPresenter >> inputActivatedPort [
+
+	^ PvEntityActivatedPort newPresenter: self
+]
+
+{ #category : #transmission }
+PvEditorContainerPresenter >> inputSelectedPort [
+
+	^ PvEntitySelectedPort newPresenter: self
 ]
 
 { #category : #'private - activating' }
@@ -71,6 +105,14 @@ PvEditorContainerPresenter >> newClassActivated: aModel [
 	self methodActivated: aModel
 ]
 
+{ #category : #'private - actions' }
+PvEditorContainerPresenter >> selectWith: anObject [
+
+	anObject ifNil: [ ^ self ].
+	self selectionAction ifNil: [ ^ self ].
+	self selectionAction cull: (SpActivatedSelection newValue: anObject)
+]
+
 { #category : #private }
 PvEditorContainerPresenter >> tabLayoutActivated [
 
@@ -87,5 +129,5 @@ PvEditorContainerPresenter >> tabSelected: ann [
 	self flag: #TODO. "
 	ann presenter -> the window.
 	ann presenter presenter -> the window contents"
-	self owner announcer announce: (ann presenter presenter model selectedAnnouncement)
+	self selectWith: ann presenter presenter model
 ]

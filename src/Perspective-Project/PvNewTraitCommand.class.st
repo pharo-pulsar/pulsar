@@ -28,7 +28,7 @@ PvNewTraitCommand class >> defaultName [
 { #category : #accessing }
 PvNewTraitCommand class >> defaultPriority [
 
-	^ 10
+	^ 20
 ]
 
 { #category : #default }

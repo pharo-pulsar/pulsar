@@ -64,3 +64,11 @@ PvPharoApplication >> toolbarDisplayMode [
 
 	^ SpToolbarDisplayMode modeIcon
 ]
+
+{ #category : #initialization }
+PvPharoApplication >> useGtkLight [
+
+	self 
+		useBackend: #Gtk 
+		with: PvPharoGtkConfiguration new
+]

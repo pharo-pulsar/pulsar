@@ -185,6 +185,12 @@ PvEditorView >> resetDirty [
 	self dirty: false
 ]
 
+{ #category : #accessing }
+PvEditorView >> spotterTitle [
+
+	^ self model spotterTitle
+]
+
 { #category : #actions }
 PvEditorView >> submit [
 

@@ -21,33 +21,36 @@ PvOutlineView class >> defaultTitle [
 	^ 'Outline'
 ]
 
-{ #category : #'private - events' }
-PvOutlineView >> classActivated: aModel [
+{ #category : #initialization }
+PvOutlineView >> connectPresenters [
 
-	self model: aModel newOutlineClassModel.
-	self updatePresenter	
+	outlineTreePresenter outputSelectionPort
+		transmitDo: [ :aSelection | self selectWith: aSelection ].
+	outlineTreePresenter outputActivationPort
+		transmitDo: [ :aSelection | self activateWith: aSelection ]
 ]
 
 { #category : #'private - events' }
-PvOutlineView >> classSelected: aModel [
+PvOutlineView >> entityActivated: aModel [
+
+	aModel isOutlineClassEntity ifFalse: [ ^ self ].
+	self model: aModel newOutlineClassModel.
+	self updatePresenter
+]
+
+{ #category : #'private - events' }
+PvOutlineView >> entitySelected: aModel [
 	| classModel |
 
-	outlineTreePresenter selectedItem = aModel 
+	aModel isOutlineClassEntity ifFalse: [ ^ self ].
+	
+	outlineTreePresenter selectedItem = aModel
 		ifTrue: [ ^ self ].
 
 	classModel := aModel newOutlineClassModel.
 	self model = classModel
 		ifFalse: [ self model: classModel ].
 	outlineTreePresenter selectItem: aModel
-]
-
-{ #category : #initialization }
-PvOutlineView >> connectPresenters [
-
-	outlineTreePresenter outputSelectionPort
-		transmitDo: [ :aSelection | self announceSelectionChanged: aSelection ].
-	outlineTreePresenter outputActivationPort
-		transmitDo: [ :aSelection | self announceActivated: aSelection ]
 ]
 
 { #category : #initialization }
@@ -69,11 +72,11 @@ PvOutlineView >> initializePresenters [
 				evaluated: [ :aModel | aModel name ];
 				displayColor: [ :aModel | self colorNamed: aModel colorName ];
 				yourself);
-			"addColumn: ( SpStringTableColumn new 
-				evaluated: [ :aModel | 'test' ];
-				displayColor: [ :aModel | Color red ];
+			addColumn: ( SpStringTableColumn new 
+				evaluated: [ :aModel | aModel protocol ];
+				"displayColor: [ :aModel | Color darkGray ];"
 				displayAlignment: [ :aModel | SpColumnAlignment right ];
-				yourself);"
+				yourself);
 			yourself);
 		children: [ :aModel | aModel children ];
 		addNavigationShortcuts.
@@ -94,19 +97,6 @@ PvOutlineView >> initializeWindow: aWindowPresenter [
 PvOutlineView >> methodChanged: aModel [
 
 	outlineTreePresenter roots: { self model }.
-	outlineTreePresenter selectItem: aModel
-]
-
-{ #category : #'private - events' }
-PvOutlineView >> methodSelected: aModel [
-	| classModel |
-
-	outlineTreePresenter selectedItem = aModel 
-		ifTrue: [ ^ self ].
-
-	classModel := aModel newOutlineClassModel.
-	self model = classModel
-		ifFalse: [ self model: classModel ].
 	outlineTreePresenter selectItem: aModel
 ]
 

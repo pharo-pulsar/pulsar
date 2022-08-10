@@ -41,7 +41,7 @@ PvFluidClassDefinitionPrinter >> classDefinitionString [
 		  		ifFalse: [
 					forClass slots ifNotEmpty: [ self slotsOn: stream ].
 					forClass classSlots ifNotEmpty: [ self classSlotsOn: stream ]. ].
-		  forClass classVariables ifNotEmpty: [ self sharedVariablesOn: stream ].
+		  "forClass classVariables ifNotEmpty: [" self sharedVariablesOn: stream "]".
 		  forClass sharedPools ifNotEmpty: [ self sharedPoolsOn: stream ].
 
 		  self tagOn: stream.

@@ -82,6 +82,11 @@ PvPerspectiveBrowser >> close [
 	self withWindowDo: [ :window | window close ]
 ]
 
+{ #category : #initialization }
+PvPerspectiveBrowser >> connectViews [
+	"override this to connect the views of the perspective"
+]
+
 { #category : #private }
 PvPerspectiveBrowser >> containerNamed: aName ifPresent: presentBlock ifAbsent: absentBlock [
 
@@ -99,6 +104,15 @@ PvPerspectiveBrowser >> contentPresenters [
 		flatCollect: [ :each | each contentPresenters ]
 ]
 
+{ #category : #private }
+PvPerspectiveBrowser >> editorContainer [
+
+	^ self 
+		containerNamed: #edit 
+		ifPresent: [ :aContainer | aContainer ]
+		ifAbsent: [ nil ]
+]
+
 { #category : #'private - settings' }
 PvPerspectiveBrowser >> globalShortcuts [
 
@@ -111,7 +125,20 @@ PvPerspectiveBrowser >> globalShortcuts [
 PvPerspectiveBrowser >> initialize [
 
 	super initialize.
-	self subscribeToAnnouncements
+	self initializeLayout.
+	self initializeViews.
+	self connectViews
+]
+
+{ #category : #initialization }
+PvPerspectiveBrowser >> initializeLayout [
+	
+	self usePerspectiveLayout: self perspectiveLayoutClass
+]
+
+{ #category : #initialization }
+PvPerspectiveBrowser >> initializeViews [	
+	"override this to initialize the views for the perspective"
 ]
 
 { #category : #initialization }
@@ -146,6 +173,12 @@ PvPerspectiveBrowser >> newEditorContainer: aName [
 		yourself
 ]
 
+{ #category : #initialization }
+PvPerspectiveBrowser >> perspectiveLayoutClass [
+
+	^ self subclassResponsibility
+]
+
 { #category : #'events - handling' }
 PvPerspectiveBrowser >> resendToPresenters: ann [
 
@@ -175,9 +208,9 @@ PvPerspectiveBrowser >> spotterViewsFor: aStep [
 		wantsToDisplayOnEmptyQuery: true;
 		candidatesLimit: Float infinity;
 		allCandidates: [ 
-				self allPresenters 
-					select: [ :each | each isTileWindow ]
-					thenCollect: [ :each | PvViewEntry on: each ] ];
+			self allPresenters 
+				select: [ :each | each isTileWindow ]
+				thenCollect: [ :each | PvViewEntry on: each ] ];
 		filter: StFilterSubstring
 ]
 
@@ -187,17 +220,17 @@ PvPerspectiveBrowser >> stSpotterProcessorsFor: aSpotterStep [
 	"normal processing"
 	super stSpotterProcessorsFor: aSpotterStep.
 	"traverse containers"
-	"self presenters do: [ :each | 
-		each stSpotterProcessorsFor: aSpotterStep ]"
+	self presenters do: [ :each | 
+		each stSpotterProcessorsFor: aSpotterStep ]
 ]
 
 { #category : #initialization }
 PvPerspectiveBrowser >> subscribeToAnnouncements [
 
-	self announcer 
-		when: PvSelectedAnnouncement send: #resendToPresenters: to: self;
-		when: PvActivatedAnnouncement send: #resendToPresenters: to: self;
-		when: PvChangedAnnouncement send: #resendToPresenters: to: self
+	self announcer
+		when: PvChangedAnnouncement 
+		send: #resendToPresenters: 
+		to: self
 ]
 
 { #category : #initialization }

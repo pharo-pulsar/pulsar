@@ -60,6 +60,12 @@ PvPresenter >> settings [
 ]
 
 { #category : #accessing }
+PvPresenter >> spotterTitle [
+
+	self subclassResponsibility
+]
+
+{ #category : #accessing }
 PvPresenter >> tabWindowClass [
 
 	^ PvTabWindowPresenter

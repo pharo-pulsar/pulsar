@@ -5,8 +5,8 @@ Extensions to this class define diferent behaviors for perspectives.
 Class {
 	#name : #PvPerspectiveView,
 	#superclass : #PvPresenter,
-	#traits : 'SpTModel',
-	#classTraits : 'SpTModel classTrait',
+	#traits : 'SpTModel + (SpTActivable - {#activate}) + (SpTSelectable - {#select})',
+	#classTraits : 'SpTModel classTrait + SpTActivable classTrait + SpTSelectable classTrait',
 	#instVars : [
 		'containerName',
 		'perspective'
@@ -26,19 +26,12 @@ PvPerspectiveView class >> defaultTitle [
 	^ 'Untitled'
 ]
 
-{ #category : #'private - announcing' }
-PvPerspectiveView >> announceActivated: aModel [
+{ #category : #'private - actions' }
+PvPerspectiveView >> activateWith: anObject [
 
-	aModel ifNil: [ ^ self ].
-	perspective announce: aModel activatedAnnouncement
-]
-
-{ #category : #'private - announcing' }
-PvPerspectiveView >> announceSelectionChanged: aSelection [
-
-	aSelection ifNil: [ ^ self ].
-	perspective ifNil: [ ^ self ].
-	perspective announce: aSelection selectedAnnouncement
+	anObject ifNil: [ ^ self ].
+	self activationAction ifNil: [ ^ self ].
+	self activationAction cull: (SpActivatedSelection newValue: anObject)
 ]
 
 { #category : #accessing }
@@ -51,6 +44,22 @@ PvPerspectiveView >> containerName [
 PvPerspectiveView >> containerName: aName [
 
 	containerName := aName
+]
+
+{ #category : #transmission }
+PvPerspectiveView >> defaultOutputPort [
+
+	^ self outputSelectionPort
+]
+
+{ #category : #'private - actions' }
+PvPerspectiveView >> entityActivated: anEntity [
+	"override this to add functionality to your activation input"
+]
+
+{ #category : #'private - actions' }
+PvPerspectiveView >> entitySelected: anEntity [
+	"override this to add functionality to your selection input"
 ]
 
 { #category : #'events - handling' }
@@ -66,22 +75,36 @@ PvPerspectiveView >> initializeWindow: aWindowPresenter [
 	aWindowPresenter title: self title
 ]
 
+{ #category : #transmission }
+PvPerspectiveView >> inputActivatedPort [
+
+	^ PvEntityActivatedPort newPresenter: self
+]
+
+{ #category : #transmission }
+PvPerspectiveView >> inputSelectedPort [
+
+	^ PvEntitySelectedPort newPresenter: self
+]
+
 { #category : #accessing }
 PvPerspectiveView >> perspective: aPerspective [
 	
-	perspective ifNotNil: [ 
-		self unsubscribeFromAnnouncers  ].
-	perspective := aPerspective.
-	self subscribeToAnnouncements
+	perspective := aPerspective
 ]
 
-{ #category : #initialization }
-PvPerspectiveView >> subscribeToAnnouncements [
+{ #category : #'private - actions' }
+PvPerspectiveView >> selectWith: anObject [
 
-	perspective announcer 
-		when: PvAnnouncement 
-		send: #handleAnnouncement: 
-		to: self
+	anObject ifNil: [ ^ self ].
+	self selectionAction ifNil: [ ^ self ].
+	self selectionAction cull: (SpActivatedSelection newValue: anObject)
+]
+
+{ #category : #accessing }
+PvPerspectiveView >> spotterTitle [
+
+	^ self title
 ]
 
 { #category : #initialization }

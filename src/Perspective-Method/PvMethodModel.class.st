@@ -21,12 +21,6 @@ PvMethodModel >> accept: aVisitor [
 	^ aVisitor visitMethodModel: self
 ]
 
-{ #category : #'accessing - announcement' }
-PvMethodModel >> activatedAnnouncementClass [
-
-	^ PvMethodActivatedAnnouncement
-]
-
 { #category : #private }
 PvMethodModel >> collectDecorators [
 
@@ -102,6 +96,12 @@ PvMethodModel >> isInstanceSide [
 	^ self entity methodClass isInstanceSide
 ]
 
+{ #category : #testing }
+PvMethodModel >> isOutlineClassEntity [
+
+	^ true
+]
+
 { #category : #accessing }
 PvMethodModel >> methodCategory [
 
@@ -128,12 +128,6 @@ PvMethodModel >> newOutlineClassModel [
 		entity: self methodClass
 ]
 
-{ #category : #'accessing - announcement' }
-PvMethodModel >> selectedAnnouncementClass [
-
-	^ PvMethodSelectedAnnouncement
-]
-
 { #category : #accessing }
 PvMethodModel >> shortName [
 
@@ -144,6 +138,13 @@ PvMethodModel >> shortName [
 PvMethodModel >> sourceCode [
 	
 	^ self entity sourceCode
+]
+
+{ #category : #accessing }
+PvMethodModel >> spotterTitle [
+
+	^ String streamContents: [ :stream |
+		stream << self windowTitle << ' (' << self methodClass name << ')' ]
 ]
 
 { #category : #accessing }

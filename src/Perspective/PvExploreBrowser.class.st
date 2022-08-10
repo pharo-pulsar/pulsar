@@ -4,30 +4,44 @@ Class {
 	#traits : 'SpTModel',
 	#classTraits : 'SpTModel classTrait',
 	#instVars : [
-		'projectPresenter'
+		'projectView',
+		'outlineView'
 	],
 	#category : #'Perspective-View-Perspective'
 }
 
 { #category : #initialization }
-PvExploreBrowser >> initialize [
+PvExploreBrowser >> connectViews [
 
-	super initialize.
-	self useExplorerLayout.
-	self addWindow: (projectPresenter := PvProjectView new).
-	self addWindow: PvOutlineView new
+	self flag: #TODO. "Refactor"
+	projectView outputSelectionPort transmitTo: outlineView inputSelectedPort.
+	projectView outputActivationPort 
+		transmitTo: self editorContainer inputActivatedPort;
+		transmitTo: outlineView inputActivatedPort.
+	outlineView outputActivationPort 
+		transmitTo: self editorContainer inputActivatedPort.
+	self editorContainer outputSelectionPort 
+		transmitTo: outlineView inputSelectedPort;
+		transmitTo: projectView inputSelectedPort
+]
+
+{ #category : #initialization }
+PvExploreBrowser >> initializeViews [
+
+	self addWindow: (projectView := PvProjectView new) atContainerNamed: #overview.
+	self addWindow: (outlineView := PvOutlineView new) atContainerNamed: #overview
 ]
 
 { #category : #actions }
 PvExploreBrowser >> openProject: aBaselineClass [
 
-	projectPresenter model: (PvProjectModel 
+	projectView model: (PvProjectModel 
 		newEntity: aBaselineClass
 		environment: self model)
 ]
 
 { #category : #initialization }
-PvExploreBrowser >> useExplorerLayout [
+PvExploreBrowser >> perspectiveLayoutClass [
 
-	self usePerspectiveLayout: PvExplorePerspectiveLayout
+	^ PvExplorePerspectiveLayout
 ]

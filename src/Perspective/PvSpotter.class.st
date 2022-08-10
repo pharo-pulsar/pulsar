@@ -9,3 +9,10 @@ PvSpotter class >> isShowingTips [
 
 	^ false
 ]
+
+{ #category : #processing }
+PvSpotter >> startNewProcess [
+
+	self keepLastSelectedEntry.
+	self removeAll
+]

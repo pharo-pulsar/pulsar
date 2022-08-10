@@ -13,7 +13,8 @@ PvTabHeaderPresenter >> initializePresenters [
 	super initializePresenters.
 	
 	self layout
-		addLast: (closeButton := self newButton) expand: false.
+		addLast: (closeButton := self newButton) 
+		expand: false.
 
 	closeButton 
 		addStyle: 'flat';

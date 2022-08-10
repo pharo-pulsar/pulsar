@@ -28,7 +28,7 @@ PvNewClassCommand class >> defaultName [
 { #category : #'accessing - defaults' }
 PvNewClassCommand class >> defaultPriority [
 
-	^ 0
+	^ 10
 ]
 
 { #category : #default }

@@ -11,13 +11,19 @@ PvExtensionsPackageTagModel class >> order [
 ]
 
 { #category : #accessing }
+PvExtensionsPackageTagModel >> children [
+
+	^ self classes
+]
+
+{ #category : #accessing }
 PvExtensionsPackageTagModel >> classes [
 
 	^ self entity extendedClasses 
 		collect: [ :each | 
-			StExtendedClassModel 
-				newClass: each 
-				package: self entity ]
+			PvExtendedClassModel 
+				newEnvironment: self environmentModel 
+				entity: each ]
 ]
 
 { #category : #accessing }

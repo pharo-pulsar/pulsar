@@ -23,9 +23,9 @@ PvProjectView class >> defaultTitle [
 PvProjectView >> connectPresenters [
 
 	projectTreePresenter outputSelectionPort
-		transmitDo: [ :aSelection | self announceSelectionChanged: aSelection ].
+		transmitDo: [ :aSelection | self selectWith: aSelection ].
 	projectTreePresenter outputActivationPort
-		transmitDo: [ :aSelection | self announceActivated: aSelection ]
+		transmitDo: [ :aSelection | self activateWith: aSelection ]
 ]
 
 { #category : #actions }
@@ -37,7 +37,7 @@ PvProjectView >> doNewClass [
 
 	parentModel := items reversed detect: [ :each | each isPackageOrTag ].
 		
-	self announceActivated: (PvNewClassModel
+	self activateWith: (PvNewClassModel
 		newEnvironment: self model environmentModel
 		entity: (PvNewClassTemplate new
 			parentModel: parentModel;
@@ -56,6 +56,13 @@ PvProjectView >> doOpenProject [
 	
 	self halt
 		
+]
+
+{ #category : #'private - events' }
+PvProjectView >> entitySelected: aModel [
+
+	projectTreePresenter selectedItem = aModel ifTrue: [ ^ self ].
+	projectTreePresenter selectItem: aModel
 ]
 
 { #category : #initialization }

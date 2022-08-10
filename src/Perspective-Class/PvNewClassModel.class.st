@@ -8,12 +8,6 @@ Class {
 PvNewClassModel >> accept: aVisitor [
 ]
 
-{ #category : #'accessing - announcement' }
-PvNewClassModel >> activatedAnnouncementClass [
-
-	^ PvNewClassActivatedAnnouncement
-]
-
 { #category : #accessing }
 PvNewClassModel >> children [
 
@@ -32,8 +26,8 @@ PvNewClassModel >> editorClass [
 	^ PvClassEditorView
 ]
 
-{ #category : #'accessing - announcement' }
-PvNewClassModel >> selectedAnnouncementClass [
+{ #category : #testing }
+PvNewClassModel >> isOutlineClassEntity [
 
-	^ PvNewClassSelectedAnnouncement
+	^ false
 ]
