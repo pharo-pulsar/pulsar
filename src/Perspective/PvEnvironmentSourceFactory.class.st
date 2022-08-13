@@ -62,15 +62,17 @@ PvEnvironmentSourceFactory >> environment [
 
 { #category : #accessing }
 PvEnvironmentSourceFactory >> environment: anEnvironment [
-
-	environment := anEnvironment
+anEnvironment crTrace.
+	environment := anEnvironment.
+	classIterator := nil.
+	implementorIterator := nil
 ]
 
 { #category : #accessing }
 PvEnvironmentSourceFactory >> implementorIterator [
 
 	^ implementorIterator ifNil:[ 
-		implementorIterator := PvImplementorsIterator newEnvironment: self environment ]
+		implementorIterator := PvImplementorIterator newEnvironment: self environment ]
 ]
 
 { #category : #'sources - implementors' }

@@ -92,30 +92,10 @@ PvProjectView >> selectClass: aClass [
 ]
 
 { #category : #spotter }
-PvProjectView >> spotterDependencyClassesFor: aStep [
-	<spotterOrder: 20 context: #environment>
-
-	aStep listProcessor
-		title: 'Dependences';
-		allCandidates: [ #() ];
-		filter: StFilterSubstring
-]
-
-{ #category : #spotter }
 PvProjectView >> spotterProjectClassesFor: aStep [
 	<spotterOrder: 10 context: #environment>
 
 	aStep addProcessor: (PvUnifiedProcessor newEnvironment: self model projectEnvironment)
-]
-
-{ #category : #spotter }
-PvProjectView >> spotterSystemClassesFor: aStep [
-	<spotterOrder: 30 context: #environment>
-
-	aStep listProcessor
-		title: 'System';
-		allCandidates: [ #() ];
-		filter: StFilterSubstring
 ]
 
 { #category : #initialization }

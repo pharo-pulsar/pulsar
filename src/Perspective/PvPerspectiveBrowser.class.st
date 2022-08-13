@@ -207,6 +207,7 @@ PvPerspectiveBrowser >> showSpotterForCommands [
 	spotter := self 
 		instantiate: PvSpotter 
 		on: (PvSpotterModelForCommands newOrigin: self).
+	spotter perspective: self.
 	
 	spotter asModalWindow
 		centeredRelativeTo: self window;
@@ -220,6 +221,7 @@ PvPerspectiveBrowser >> showSpotterForEnvironment [
 	spotter := self 
 		instantiate: PvSpotter 
 		on: (PvSpotterModelForEnvironment newOrigin: self).
+	spotter perspective: self.
 	
 	spotter asModalWindow
 		centeredRelativeTo: self window;
@@ -233,6 +235,7 @@ PvPerspectiveBrowser >> showSpotterForWindows [
 	spotter := self 
 		instantiate: PvSpotter 
 		on: (PvSpotterModelForWindows newOrigin: self).
+	spotter perspective: self.
 	
 	spotter asModalWindow
 		centeredRelativeTo: self window;

@@ -1,5 +1,5 @@
 Class {
-	#name : #PvClassIterator,
+	#name : #PvImplementorIterator,
 	#superclass : #StGenericGenerator,
 	#instVars : [
 		'environment'
@@ -8,7 +8,7 @@ Class {
 }
 
 { #category : #'instance creation' }
-PvClassIterator class >> newEnvironment: anEnvironment [
+PvImplementorIterator class >> newEnvironment: anEnvironment [
 
 	^ self basicNew
 		environment: anEnvironment;
@@ -17,27 +17,27 @@ PvClassIterator class >> newEnvironment: anEnvironment [
 ]
 
 { #category : #enumerating }
-PvClassIterator >> elementsDo: aValuable [
+PvImplementorIterator >> elementsDo: aValuable [
 
-	self systemNavigation allBehaviorsDo: aValuable
+	self systemNavigation allBehaviorsDo: [ :aClass | aClass methodsDo: aValuable ]
 ]
 
 { #category : #accessing }
-PvClassIterator >> environment [
-		
+PvImplementorIterator >> environment [
+
 	^ environment
 ]
 
 { #category : #accessing }
-PvClassIterator >> environment: anEnvironment [
+PvImplementorIterator >> environment: anEnvironment [
 
 	environment := anEnvironment
 ]
 
-{ #category : #accessing }
-PvClassIterator >> systemNavigation [
+{ #category : #enumerating }
+PvImplementorIterator >> systemNavigation [
 
-	^ SystemNavigation new
+	^ SystemNavigation new 
 		environment: self environment;
 		yourself
 ]

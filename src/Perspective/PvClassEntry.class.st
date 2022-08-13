@@ -7,5 +7,5 @@ Class {
 { #category : #evaluating }
 PvClassEntry >> evaluateFor: aSpotter [
 
-	self halt
+	aSpotter perspective activateClass: self content
 ]

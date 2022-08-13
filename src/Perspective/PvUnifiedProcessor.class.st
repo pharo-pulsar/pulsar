@@ -23,8 +23,9 @@ PvUnifiedProcessor class >> newEnvironment: anEnvironment [
 { #category : #'instance creation' }
 PvUnifiedProcessor class >> newSourceFactory: aSourceFactory [
 
-	^ self new 
+	^ self basicNew 
 		sourceFactory: aSourceFactory;
+		initialize;
 		yourself
 ]
 
@@ -80,7 +81,7 @@ PvUnifiedProcessor >> calculateUppercaseSourcesOn: anStream [
 	
 	(self categoriesIncludes: #Classes) 
 		ifTrue: [
-			classesBeginsWith := StSourceFactory current classesBeginsWithSource.			
+			classesBeginsWith := self sourceFactory classesBeginsWithSource.			
 			textFilteringIterators add: classesBeginsWith.
 			anStream nextPut: classesBeginsWith ].
 
@@ -94,7 +95,7 @@ PvUnifiedProcessor >> calculateUppercaseSourcesOn: anStream [
 
 	(self categoriesIncludes: #Classes) 
 		ifTrue: [
-			classesIncludesString := StSourceFactory current classesSubstringSource.
+			classesIncludesString := self sourceFactory classesSubstringSource.
 			textFilteringIterators add: classesIncludesString.
 			anStream nextPut: classesIncludesString ].
 		
@@ -109,7 +110,7 @@ PvUnifiedProcessor >> calculateUppercaseSourcesOn: anStream [
 	(self categoriesIncludes: #Classes) 
 		ifTrue: [
 			wordsAwareClassesSource := StWordsAwareFilter new 
-				inner: (StSourceFactory current classesSubstringSource); 
+				inner: (self sourceFactory classesSubstringSource); 
 				yourself.
 			textFilteringIterators add: wordsAwareClassesSource.
 			anStream nextPut: wordsAwareClassesSource ].
@@ -258,7 +259,7 @@ PvUnifiedProcessor >> packagesTag [
 { #category : #accessing }
 PvUnifiedProcessor >> sourceFactory [
 	
-	^ sourceFactory ifNil: [ StSourceFactory current ]
+	^ sourceFactory
 ]
 
 { #category : #accessing }

@@ -27,12 +27,6 @@ PvEditorContainerPresenter >> asEditorContainer [
 	^ self
 ]
 
-{ #category : #'private - activating' }
-PvEditorContainerPresenter >> classActivated: aModel [
-
-	self methodActivated: aModel
-]
-
 { #category : #'private - events' }
 PvEditorContainerPresenter >> entityActivated: aModel [
 	| editor editorWindow |
@@ -83,26 +77,6 @@ PvEditorContainerPresenter >> inputActivatedPort [
 PvEditorContainerPresenter >> inputSelectedPort [
 
 	^ PvEntitySelectedPort newPresenter: self
-]
-
-{ #category : #'private - activating' }
-PvEditorContainerPresenter >> methodActivated: aModel [
-	| editor editorWindow |
-
-	self presenters 
-		detect: [ :each | each presenter model = aModel ]
-		ifFound: [ :each | ^ self layout select: each  ].
-	"Add the editor"
-	editor := self instantiate: aModel editorClass on: aModel.
-	editorWindow := self layout addTileWindow: editor.
-	self layout select: editorWindow.
-	editor takeKeyboardFocus
-]
-
-{ #category : #'private - activating' }
-PvEditorContainerPresenter >> newClassActivated: aModel [
-
-	self methodActivated: aModel
 ]
 
 { #category : #'private - actions' }
