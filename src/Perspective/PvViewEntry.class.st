@@ -1,7 +1,7 @@
 Class {
 	#name : #PvViewEntry,
 	#superclass : #StEntry,
-	#category : #'Perspective-View-Spotter'
+	#category : #'Perspective-Model-Spotter'
 }
 
 { #category : #converting }

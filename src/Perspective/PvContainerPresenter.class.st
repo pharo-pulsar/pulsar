@@ -55,6 +55,16 @@ PvContainerPresenter >> name: anObject [
 ]
 
 { #category : #spotter }
+PvContainerPresenter >> spotterProcessorsFor: aSpotterStep context: context [
+	
+	"normal processing"
+	super spotterProcessorsFor: aSpotterStep context: context.
+	"traverse containers"
+	self presenters do: [ :each | 
+		each spotterProcessorsFor: aSpotterStep context: context ]
+]
+
+{ #category : #spotter }
 PvContainerPresenter >> stSpotterProcessorsFor: aSpotterStep [
 	
 	"normal processing"

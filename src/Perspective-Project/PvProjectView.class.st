@@ -42,13 +42,6 @@ PvProjectView >> doNewClass [
 		entity: (PvNewClassTemplate new
 			parentModel: parentModel;
 			yourself))
-
-	"newClass := (PvClassCreationDialog 
-			newApplication: self application 
-			model: packageModel) 
-		openModalWithParent: self window.
-	newClass ifNil: [ ^ self ]."
-
 ]
 
 { #category : #actions }
@@ -60,9 +53,12 @@ PvProjectView >> doOpenProject [
 
 { #category : #'private - events' }
 PvProjectView >> entitySelected: aModel [
+	| classModel |
 
-	projectTreePresenter selectedItem = aModel ifTrue: [ ^ self ].
-	projectTreePresenter selectItem: aModel
+	aModel includesClassModel ifFalse:[ ^ self ]. 
+	classModel := aModel asClassModel.
+	projectTreePresenter selectedItem = classModel ifTrue: [ ^ self ].
+	projectTreePresenter selectItem: classModel
 ]
 
 { #category : #initialization }
@@ -82,6 +78,44 @@ PvProjectView >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter toolbar: self toolbar
+]
+
+{ #category : #selecting }
+PvProjectView >> selectClass: aClass [
+	| classModel |
+
+	classModel := PvClassModel 
+		newEnvironment: self model environmentModel 
+		entity: aClass.
+		
+	projectTreePresenter selectItem: classModel
+]
+
+{ #category : #spotter }
+PvProjectView >> spotterDependencyClassesFor: aStep [
+	<spotterOrder: 20 context: #environment>
+
+	aStep listProcessor
+		title: 'Dependences';
+		allCandidates: [ #() ];
+		filter: StFilterSubstring
+]
+
+{ #category : #spotter }
+PvProjectView >> spotterProjectClassesFor: aStep [
+	<spotterOrder: 10 context: #environment>
+
+	aStep addProcessor: (PvUnifiedProcessor newEnvironment: self model projectEnvironment)
+]
+
+{ #category : #spotter }
+PvProjectView >> spotterSystemClassesFor: aStep [
+	<spotterOrder: 30 context: #environment>
+
+	aStep listProcessor
+		title: 'System';
+		allCandidates: [ #() ];
+		filter: StFilterSubstring
 ]
 
 { #category : #initialization }

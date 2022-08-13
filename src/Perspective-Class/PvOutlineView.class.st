@@ -34,7 +34,7 @@ PvOutlineView >> connectPresenters [
 PvOutlineView >> entityActivated: aModel [
 
 	aModel isOutlineClassEntity ifFalse: [ ^ self ].
-	self model: aModel newOutlineClassModel.
+	self model: aModel asOutlineClassModel.
 	self updatePresenter
 ]
 
@@ -47,7 +47,7 @@ PvOutlineView >> entitySelected: aModel [
 	outlineTreePresenter selectedItem = aModel
 		ifTrue: [ ^ self ].
 
-	classModel := aModel newOutlineClassModel.
+	classModel := aModel asOutlineClassModel.
 	self model = classModel
 		ifFalse: [ self model: classModel ].
 	outlineTreePresenter selectItem: aModel
@@ -63,6 +63,7 @@ PvOutlineView >> initializePresenters [
 	outlineTreePresenter
 		hideColumnHeaders;
 		addStyle: 'stTree';
+		addStyle: 'pvOutlineView';
 		addColumn: (SpCompositeTableColumn new 
 			addColumn: ( SpImageTableColumn  new 
 				evaluated: [ :aModel | aModel iconComposite buildOn: self application ];
@@ -72,16 +73,14 @@ PvOutlineView >> initializePresenters [
 				evaluated: [ :aModel | aModel name ];
 				displayColor: [ :aModel | self colorNamed: aModel colorName ];
 				yourself);
-			addColumn: ( SpStringTableColumn new 
-				evaluated: [ :aModel | aModel protocol ];
-				"displayColor: [ :aModel | Color darkGray ];"
+			"addColumn: (SpLinkTableColumn new 
+				evaluated: [ :aModel | aModel protocol ifNil: [ '' ] ];
 				displayAlignment: [ :aModel | SpColumnAlignment right ];
-				yourself);
+				yourself);"
 			yourself);
 		children: [ :aModel | aModel children ];
 		addNavigationShortcuts.
 		
-	outlineTreePresenter addStyle: 'stProjectTree'.
 	outlineTreePresenter contextMenu: [ self toolbarActions asMenuPresenter ].
 	outlineTreePresenter contextKeyBindings: self toolbarActions asKMCategory
 ]

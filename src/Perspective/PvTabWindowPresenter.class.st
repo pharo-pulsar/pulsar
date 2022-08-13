@@ -11,6 +11,14 @@ PvTabWindowPresenter >> headerClass [
 ]
 
 { #category : #spotter }
+PvTabWindowPresenter >> spotterProcessorsFor: aSpotterStep context: context [
+	
+	self presenter 
+		spotterProcessorsFor: aSpotterStep 
+		context: context
+]
+
+{ #category : #spotter }
 PvTabWindowPresenter >> stSpotterProcessorsFor: aSpotterStep [
 	
 	self presenter stSpotterProcessorsFor: aSpotterStep

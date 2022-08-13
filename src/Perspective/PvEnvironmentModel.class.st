@@ -43,5 +43,11 @@ PvEnvironmentModel >> packageModelNamed: aString [
 	
 	^ PvPackageModel 
 		newEnvironment: self 
-		entity: (self entity packageNamed: aString)
+		entity: (self packageNamed: aString)
+]
+
+{ #category : #accessing }
+PvEnvironmentModel >> packageNamed: aString [ 
+	
+	^ self entity packageNamed: aString
 ]

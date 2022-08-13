@@ -27,7 +27,9 @@ PvPharoApplication >> newSettings [
 	^ LnSettings new
 		defineShortcutGroup: #perspective with: { 
 			"open default tool"
-			KeyboardKey enter 	shift 			-> [ :perspective | perspective showSpotter ].
+			KeyboardKey enter 	shift 			-> [ :perspective | perspective showSpotterForWindows ].
+			KeyboardKey enter 	ctrl 			-> [ :perspective | perspective showSpotterForEnvironment ].
+			KeyboardKey enter 	alt 			-> [ :perspective | perspective showSpotterForCommands ].
 		};
 		defineShortcutGroup: #container with: { 
 			"moving into workspace windows"
@@ -48,8 +50,8 @@ PvPharoApplication >> newSettings [
 		};
 		defineShortcutGroup: #window with: { 
 			$w mod1 -> [ :window | window close ].
-			$f mod1 shift -> [ :window | window toggleFullScreen ].
-			$t mod1 shift -> [ :window | window showContainerContextMenu ].
+			"$f mod1 shift -> [ :window | window toggleFullScreen ].
+			$t mod1 shift -> [ :window | window showContainerContextMenu ]."
 		}.
 ]
 

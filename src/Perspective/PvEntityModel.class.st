@@ -101,6 +101,13 @@ PvEntityModel >> iconName [
 ]
 
 { #category : #testing }
+PvEntityModel >> includesClassModel [
+
+	self flag: #TODO. "This has to be solved in a better way (a double dispatch or something like that)"
+	^ false
+]
+
+{ #category : #testing }
 PvEntityModel >> isOutlineClassEntity [
 
 	^ false
@@ -140,6 +147,12 @@ PvEntityModel >> name [
 PvEntityModel >> pageTitle [
 
 	^ self shortName
+]
+
+{ #category : #'accessing - compatibility' }
+PvEntityModel >> protocol [
+	
+	^ nil
 ]
 
 { #category : #accessing }

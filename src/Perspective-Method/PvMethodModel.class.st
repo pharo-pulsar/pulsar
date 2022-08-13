@@ -21,6 +21,22 @@ PvMethodModel >> accept: aVisitor [
 	^ aVisitor visitMethodModel: self
 ]
 
+{ #category : #converting }
+PvMethodModel >> asClassModel [
+	
+	^ PvClassModel 
+		newEnvironment: self environmentModel 
+		entity: self methodClass
+]
+
+{ #category : #converting }
+PvMethodModel >> asOutlineClassModel [
+	
+	^ PvOutlineClassModel 
+		newEnvironment: self environmentModel 
+		entity: self methodClass
+]
+
 { #category : #private }
 PvMethodModel >> collectDecorators [
 
@@ -93,6 +109,12 @@ PvMethodModel >> iconName [
 ]
 
 { #category : #testing }
+PvMethodModel >> includesClassModel [
+
+	^ true
+]
+
+{ #category : #testing }
 PvMethodModel >> isInstanceSide [
 	
 	^ self entity methodClass isInstanceSide
@@ -122,12 +144,10 @@ PvMethodModel >> name [
 	^ self entity selector
 ]
 
-{ #category : #'instance creation' }
-PvMethodModel >> newOutlineClassModel [
-	
-	^ PvOutlineClassModel 
-		newEnvironment: self environmentModel 
-		entity: self methodClass
+{ #category : #accessing }
+PvMethodModel >> protocol [
+
+	^ self entity protocol
 ]
 
 { #category : #accessing }

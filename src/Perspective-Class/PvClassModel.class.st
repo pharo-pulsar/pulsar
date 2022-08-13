@@ -13,6 +13,20 @@ PvClassModel >> accept: aVisitor [
 	^ aVisitor visitClassModel: self
 ]
 
+{ #category : #converting }
+PvClassModel >> asClassModel [
+
+	^ self
+]
+
+{ #category : #converting }
+PvClassModel >> asOutlineClassModel [
+
+	^ PvOutlineClassModel 
+		newEnvironment: self environmentModel 
+		entity: self entity
+]
+
 { #category : #visiting }
 PvClassModel >> beForNewClass [
 
@@ -69,6 +83,12 @@ PvClassModel >> iconName [
 ]
 
 { #category : #testing }
+PvClassModel >> includesClassModel [
+
+	^ true
+]
+
+{ #category : #testing }
 PvClassModel >> inheritsFrom: aClassModel [ 
 	
 	aClassModel ifNil: [ ^ false ].
@@ -92,14 +112,6 @@ PvClassModel >> isOutlineClassEntity [
 PvClassModel >> name [
 
 	^ self entity name asString
-]
-
-{ #category : #'instance creation' }
-PvClassModel >> newOutlineClassModel [
-
-	^ PvOutlineClassModel 
-		newEnvironment: self environmentModel 
-		entity: self entity
 ]
 
 { #category : #accessing }

@@ -26,6 +26,20 @@ PvPerspectiveBrowser class >> newApplication: anApplication [
 		model: (PvEnvironmentModel newEntity: self defaultEnvironment)
 ]
 
+{ #category : #activating }
+PvPerspectiveBrowser >> activateClass: aClass [
+	"different perspectives can have different meanings to activate a class :)"
+	
+	self subclassResponsibility
+]
+
+{ #category : #activating }
+PvPerspectiveBrowser >> activateMethod: aMethod [
+	"different perspectives can have different meanings to activate a class :)"
+	
+	self subclassResponsibility
+]
+
 { #category : #'private - windows' }
 PvPerspectiveBrowser >> addPresenter: aPresenter toContainer: aContainer [
 	
@@ -40,7 +54,7 @@ PvPerspectiveBrowser >> addWindow: aPresenter [
 		atContainerNamed: aPresenter containerName
 ]
 
-{ #category : #'private - windows' }
+{ #category : #'accessing - windows' }
 PvPerspectiveBrowser >> addWindow: aPresenter atContainerNamed: aName [
 
 	self 
@@ -187,12 +201,38 @@ PvPerspectiveBrowser >> resendToPresenters: ann [
 ]
 
 { #category : #actions }
-PvPerspectiveBrowser >> showSpotter [
+PvPerspectiveBrowser >> showSpotterForCommands [
 	| spotter |
 	
 	spotter := self 
 		instantiate: PvSpotter 
-		on: (StSpotterModel newOrigin: self).
+		on: (PvSpotterModelForCommands newOrigin: self).
+	
+	spotter asModalWindow
+		centeredRelativeTo: self window;
+		open
+]
+
+{ #category : #actions }
+PvPerspectiveBrowser >> showSpotterForEnvironment [
+	| spotter |
+	
+	spotter := self 
+		instantiate: PvSpotter 
+		on: (PvSpotterModelForEnvironment newOrigin: self).
+	
+	spotter asModalWindow
+		centeredRelativeTo: self window;
+		open
+]
+
+{ #category : #actions }
+PvPerspectiveBrowser >> showSpotterForWindows [
+	| spotter |
+	
+	spotter := self 
+		instantiate: PvSpotter 
+		on: (PvSpotterModelForWindows newOrigin: self).
 	
 	spotter asModalWindow
 		centeredRelativeTo: self window;
@@ -201,7 +241,7 @@ PvPerspectiveBrowser >> showSpotter [
 
 { #category : #spotter }
 PvPerspectiveBrowser >> spotterViewsFor: aStep [
-	<stSpotterOrder: 100>
+	<spotterOrder: 10 context: #windows>
 
 	aStep listProcessor
 		title: 'Views';
@@ -215,13 +255,15 @@ PvPerspectiveBrowser >> spotterViewsFor: aStep [
 ]
 
 { #category : #spotter }
-PvPerspectiveBrowser >> stSpotterProcessorsFor: aSpotterStep [
-	
+PvPerspectiveBrowser >> stSpotterProcessorsFor: aStep [
+	"Entry point for all spotter from perspectives, I will not use the regular way to 
+	 collect processors but a special mechanism with a context, to pre-filter processors"
+
 	"normal processing"
-	super stSpotterProcessorsFor: aSpotterStep.
+	self spotterProcessorsFor: aStep context: aStep model context.
 	"traverse containers"
-	self presenters do: [ :each | 
-		each stSpotterProcessorsFor: aSpotterStep ]
+	self layout allPresenters do: [ :each | 
+		each spotterProcessorsFor: aStep context: aStep model context ]
 ]
 
 { #category : #initialization }

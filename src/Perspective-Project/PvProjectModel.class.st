@@ -63,3 +63,9 @@ PvProjectModel >> name [
 	self entity ifNil: [ ^ 'None' ].
 	^ self entity name allButFirst: 10 "BaselineOf"
 ]
+
+{ #category : #accessing }
+PvProjectModel >> projectEnvironment [
+
+	^ self class environment
+]

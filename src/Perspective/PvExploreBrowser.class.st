@@ -10,6 +10,22 @@ Class {
 	#category : #'Perspective-View-Perspective'
 }
 
+{ #category : #activating }
+PvExploreBrowser >> activateClass: aClass [
+
+	self editorContainer entityActivated: (PvClassModel 
+		newEnvironment: self model environmentModel 
+		entity: aClass)
+]
+
+{ #category : #activating }
+PvExploreBrowser >> activateMethod: aMethod [
+
+	self editorContainer entityActivated: (PvMethodModel 
+		newEnvironment: self model environmentModel 
+		entity: aMethod)
+]
+
 { #category : #initialization }
 PvExploreBrowser >> connectViews [
 
