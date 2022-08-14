@@ -92,10 +92,58 @@ PvProjectView >> selectClass: aClass [
 ]
 
 { #category : #spotter }
+PvProjectView >> spotterDependencesClassesFor: aStep [
+	<spotterOrder: 100 context: #environment>
+
+	aStep addProcessor: ((PvClassProcessor newEnvironment: self model dependencesEnvironment)
+		label: 'Dependences';
+		yourself)
+]
+
+{ #category : #spotter }
+PvProjectView >> spotterDependencesImplementorsFor: aStep [
+	<spotterOrder: 110 context: #environment>
+
+	aStep addProcessor: ((PvImplementorsProcessor newEnvironment: self model dependencesEnvironment)
+		label: 'Dependences';
+		yourself)
+]
+
+{ #category : #spotter }
 PvProjectView >> spotterProjectClassesFor: aStep [
 	<spotterOrder: 10 context: #environment>
 
-	aStep addProcessor: (PvUnifiedProcessor newEnvironment: self model projectEnvironment)
+	aStep addProcessor: ((PvClassProcessor newEnvironment: self model projectEnvironment)
+		label: 'Project';
+		wantsToDisplayOnEmptyQuery: true;
+		yourself)
+]
+
+{ #category : #spotter }
+PvProjectView >> spotterProjectImplementorsFor: aStep [
+	<spotterOrder: 20 context: #environment>
+
+	aStep addProcessor: ((PvImplementorsProcessor newEnvironment: self model projectEnvironment)
+		label: 'Project';
+		yourself)
+]
+
+{ #category : #spotter }
+PvProjectView >> spotterSystemClassesFor: aStep [
+	<spotterOrder: 200 context: #environment>
+
+	aStep addProcessor: ((PvClassProcessor newEnvironment: self model systemEnvironment)
+		label: 'System';
+		yourself)
+]
+
+{ #category : #spotter }
+PvProjectView >> spotterSystemImplementorsFor: aStep [
+	<spotterOrder: 210 context: #environment>
+
+	aStep addProcessor: ((PvImplementorsProcessor newEnvironment: self model systemEnvironment)
+		label: 'System';
+		yourself)
 ]
 
 { #category : #initialization }

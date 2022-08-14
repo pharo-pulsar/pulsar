@@ -21,7 +21,7 @@ PvProjectModel class >> newEntity: anObject environment: anEnvironmentModel [
 PvProjectModel >> children [
 
 	^ Array streamContents: [ :stream |
-		stream nextPutAll: self collectPackages.
+		stream nextPutAll: self collectPackageModels.
 		self entity new project version projects do: [ :each |
 			self class environment 
 				at: each className asSymbol
@@ -29,26 +29,38 @@ PvProjectModel >> children [
 					stream nextPut: (PvEntityTreeNode
 						newName: each name 
 						iconName: 'project'
-						children: (self collectPackagesOn: aBaselineClass)) ] ].
+						children: (self collectPackageModelsOn: aBaselineClass)) ] ].
 		stream nextPut: self environmentModel ]
 ]
 
 { #category : #accessing }
-PvProjectModel >> collectPackages [
+PvProjectModel >> collectPackageModels [
 
-	^ self collectPackagesOn: self entity
+	^ self collectPackageModelsOn: self entity
 ]
 
 { #category : #private }
-PvProjectModel >> collectPackagesOn: aBaselineClass [
+PvProjectModel >> collectPackageModelsOn: aBaselineClass [
 	| specs | 
 	
 	"This does not resist demeters law, badly"
-	specs := aBaselineClass new project version spec packageSpecsInLoadOrder.
+	specs := aBaselineClass new project version packages.
 	^ (specs 
-		select: [ :each | each isPackageSpec and: [ self environmentModel hasPackageNamed: each name  ] ]
+		select: [ :each | self environmentModel hasPackageNamed: each name ]
 		thenCollect: [ :each | self environmentModel packageModelNamed: each name ])
 		sorted: #name ascending
+]
+
+{ #category : #accessing }
+PvProjectModel >> dependencesEnvironment [
+	| dict |
+
+	dict := SystemDictionary new.
+	self entity new project version projects do: [ :eachProject |  
+		(self packagesOn: eachProject projectClass) 
+			do: [ :eachPackage | 
+				eachPackage definedClasses do: [ :each | dict at: each name put: each ] ] ].
+	^ dict
 ]
 
 { #category : #accessing }
@@ -64,8 +76,31 @@ PvProjectModel >> name [
 	^ self entity name allButFirst: 10 "BaselineOf"
 ]
 
+{ #category : #private }
+PvProjectModel >> packagesOn: aBaselineClass [
+	| specs | 
+	
+	"This does not resist demeters law, badly"
+	specs := aBaselineClass new project version packages.
+	^ (specs 
+		select: [ :each | self environmentModel hasPackageNamed: each name ]
+		thenCollect: [ :each | self environmentModel packageNamed: each name ])
+		sorted: #name ascending
+]
+
 { #category : #accessing }
 PvProjectModel >> projectEnvironment [
+	| dict |
+
+	dict := SystemDictionary new.
+	(self packagesOn: self entity) 
+		do: [ :eachPackage | 
+			eachPackage definedClasses do: [ :each | dict at: each name put: each ] ].
+	^ dict
+]
+
+{ #category : #accessing }
+PvProjectModel >> systemEnvironment [
 
 	^ self class environment
 ]

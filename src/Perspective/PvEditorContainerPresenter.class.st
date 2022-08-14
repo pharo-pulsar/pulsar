@@ -44,7 +44,7 @@ PvEditorContainerPresenter >> entityActivated: aModel [
 { #category : #'private - events' }
 PvEditorContainerPresenter >> entitySelected: anEntity [
 
-	anEntity crTrace
+	self halt
 ]
 
 { #category : #initialization }

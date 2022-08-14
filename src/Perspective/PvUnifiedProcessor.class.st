@@ -3,7 +3,9 @@ Class {
 	#superclass : #StSpotterProcessor,
 	#instVars : [
 		'categories',
-		'sourceFactory'
+		'sourceFactory',
+		'label',
+		'showForEmptyQuery'
 	],
 	#category : #'Perspective-Model-Spotter'
 }
@@ -177,6 +179,13 @@ PvUnifiedProcessor >> implementorsTag [
 	^ #Implementors
 ]
 
+{ #category : #initialization }
+PvUnifiedProcessor >> initialize [
+
+	super initialize.
+	self wantsToDisplayOnEmptyQuery: false
+]
+
 { #category : #'key-bindings' }
 PvUnifiedProcessor >> installKeymappingsOn: aPresenter onExecution: aBlock [
 
@@ -223,6 +232,36 @@ PvUnifiedProcessor >> keyBindingForPackages [
 	^ $p meta
 ]
 
+{ #category : #accessing }
+PvUnifiedProcessor >> label [
+
+	^ label
+]
+
+{ #category : #accessing }
+PvUnifiedProcessor >> label: aString [
+
+	label := aString
+]
+
+{ #category : #'accessing - ui' }
+PvUnifiedProcessor >> labelForClasses [
+
+	^ '#Classes in {1}' format: { self label }
+]
+
+{ #category : #'accessing - ui' }
+PvUnifiedProcessor >> labelForImplementors [
+
+	^ '#Implementors in {1}' format: { self label }
+]
+
+{ #category : #'accessing - ui' }
+PvUnifiedProcessor >> labelForPackages [
+
+	^ '#Packages in {1}' format: { self label }
+]
+
 { #category : #filtering }
 PvUnifiedProcessor >> newSource [
 	| uppercaseIterators lowercaseIterators caseSelectorIterator root |
@@ -256,6 +295,12 @@ PvUnifiedProcessor >> packagesTag [
 	^ #Packages
 ]
 
+{ #category : #testing }
+PvUnifiedProcessor >> showForEmptyQuery [
+
+	^ showForEmptyQuery
+]
+
 { #category : #accessing }
 PvUnifiedProcessor >> sourceFactory [
 	
@@ -266,4 +311,10 @@ PvUnifiedProcessor >> sourceFactory [
 PvUnifiedProcessor >> sourceFactory: aSourceFactory [
 	
 	sourceFactory := aSourceFactory
+]
+
+{ #category : #accessing }
+PvUnifiedProcessor >> wantsToDisplayOnEmptyQuery: aBoolean [
+	
+	showForEmptyQuery := aBoolean
 ]

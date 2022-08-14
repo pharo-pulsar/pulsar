@@ -104,7 +104,7 @@ PvMethodEditorView >> toolbarActions [
 PvMethodEditorView >> updatePresenter [
 
 	super updatePresenter.
-	labelPresenter label: self model fullName.
+	labelPresenter label: self model methodClassName.
 	self updatingWhile: [
 		editorPresenter
 			beForMethod: self model entity;

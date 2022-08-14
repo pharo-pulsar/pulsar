@@ -95,7 +95,7 @@ PvMethodModel >> fullName [
 
 	^ String streamContents: [ :stream | 
 		stream 
-			<< self entity methodClass name 
+			<< self methodClassName
 			<< '>>'
 			<< self name ]
 ]
@@ -136,6 +136,12 @@ PvMethodModel >> methodCategory [
 PvMethodModel >> methodClass [
 
 	^ self entity methodClass instanceSide
+]
+
+{ #category : #accessing }
+PvMethodModel >> methodClassName [
+
+	^ self entity methodClass name
 ]
 
 { #category : #accessing }

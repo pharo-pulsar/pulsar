@@ -113,9 +113,6 @@ StBrowserMethodEditorPresenter >> tabPriority [
 { #category : #private }
 StBrowserMethodEditorPresenter >> textChangedFrom: oldText to: newText [
 
-	'>>' crTrace.
-	newText crTrace.
-	'<<' crTrace. 
 	oldText = newText ifTrue: [ ^ self ].
 	self markDirty
 ]

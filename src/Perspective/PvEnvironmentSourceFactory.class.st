@@ -62,7 +62,7 @@ PvEnvironmentSourceFactory >> environment [
 
 { #category : #accessing }
 PvEnvironmentSourceFactory >> environment: anEnvironment [
-anEnvironment crTrace.
+
 	environment := anEnvironment.
 	classIterator := nil.
 	implementorIterator := nil
