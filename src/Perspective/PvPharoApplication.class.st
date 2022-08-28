@@ -55,6 +55,14 @@ PvPharoApplication >> newSettings [
 		}.
 ]
 
+{ #category : #'instance creation' }
+PvPharoApplication >> newSystemTools [
+
+	^ super newSystemTools
+		register: MessageBrowser as: #messageList;
+		yourself
+]
+
 { #category : #accessing }
 PvPharoApplication >> start [
 

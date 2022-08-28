@@ -92,6 +92,8 @@ PvEditorView >> initializeEditor [
 	
 	(editorPresenter := self newCode)
 		addStyle: 'stCode';
+		addStyle: 'pvEditor';
+		addScrollBarStyle: 'pvEditorScrollBar';
 		whenTextChangedDo: [ :newText :oldText | self textChangedFrom: oldText to: newText ];
 		whenSubmitDo: [ :aString | self doSubmit: aString ];
 		whenResetDo: [ self doReset ]
@@ -132,6 +134,12 @@ PvEditorView >> isCommentEditor [
 PvEditorView >> isDirty [
 
 	^ dirty ifNil: [ dirty := false ]
+]
+
+{ #category : #testing }
+PvEditorView >> isEditor [
+
+	^ true
 ]
 
 { #category : #testing }

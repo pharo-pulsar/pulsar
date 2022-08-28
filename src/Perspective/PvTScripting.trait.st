@@ -13,7 +13,7 @@ PvTScripting >> buildPerspectiveToolbarWith: aBlock [
 PvTScripting >> newCode [
 
 	^ super newCode
-		systemNavigation: self application systemNavigation;
+		systemNavigation: (PvSystemNavigation newPerspective: self perspective);
 		yourself
 ]
 

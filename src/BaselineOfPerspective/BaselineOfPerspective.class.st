@@ -10,7 +10,8 @@ BaselineOfPerspective >> baseline: spec [
 	
 	spec for: #common do: [ 
 		self linden: spec.
-		spec package: 'Perspective' with: [ spec requires: 'Linden' ]. 
+		spec package: 'Perspective-Spotter' with: [ spec requires: 'Linden' ]. 
+		spec package: 'Perspective' with: [ spec requires: #('Linden' 'Perspective-Spotter') ]. 
 		spec package: 'Perspective-Project' with: [ spec requires: 'Perspective' ].
 		spec package: 'Perspective-Package' with: [ spec requires: 'Perspective' ].
 		spec package: 'Perspective-Class' with: [ spec requires: 'Perspective' ].

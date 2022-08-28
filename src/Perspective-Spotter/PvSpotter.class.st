@@ -4,7 +4,7 @@ Class {
 	#instVars : [
 		'perspective'
 	],
-	#category : #'Perspective-View-Spotter'
+	#category : #'Perspective-Spotter-View'
 }
 
 { #category : #testing }

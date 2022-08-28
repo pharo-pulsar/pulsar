@@ -171,6 +171,12 @@ PvPerspectiveBrowser >> isFloatingWindow [
 	^ true
 ]
 
+{ #category : #testing }
+PvPerspectiveBrowser >> isPerspective [
+
+	^ true
+]
+
 { #category : #factory }
 PvPerspectiveBrowser >> newContainer: aName [
 
@@ -243,6 +249,21 @@ PvPerspectiveBrowser >> showSpotterForWindows [
 ]
 
 { #category : #spotter }
+PvPerspectiveBrowser >> spotterEditorsFor: aStep [
+	<spotterOrder: 20 context: #windows>
+
+	aStep listProcessor
+		title: 'Editors';
+		wantsToDisplayOnEmptyQuery: true;
+		candidatesLimit: Float infinity;
+		allCandidates: [ 
+			self editorContainer allPresenters 
+				select: [ :each | each isTileWindow ]
+				thenCollect: [ :each | PvViewEntry on: each ] ];
+		filter: StFilterSubstring
+]
+
+{ #category : #spotter }
 PvPerspectiveBrowser >> spotterViewsFor: aStep [
 	<spotterOrder: 10 context: #windows>
 
@@ -251,8 +272,8 @@ PvPerspectiveBrowser >> spotterViewsFor: aStep [
 		wantsToDisplayOnEmptyQuery: true;
 		candidatesLimit: Float infinity;
 		allCandidates: [ 
-			self allPresenters 
-				select: [ :each | each isTileWindow ]
+			self allPresenters
+				select: [ :each | each isTileWindow and: [ each presenter isEditor not ] ]
 				thenCollect: [ :each | PvViewEntry on: each ] ];
 		filter: StFilterSubstring
 ]

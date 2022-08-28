@@ -1,7 +1,7 @@
 Class {
 	#name : #PvSpotterModel,
 	#superclass : #StSpotterModel,
-	#category : #'Perspective-Model-Spotter'
+	#category : #'Perspective-Spotter-Model'
 }
 
 { #category : #accessing }

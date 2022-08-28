@@ -1,7 +1,7 @@
 Class {
 	#name : #PvSpotterModelForWindows,
 	#superclass : #PvSpotterModel,
-	#category : #'Perspective-Model-Spotter'
+	#category : #'Perspective-Spotter-Model'
 }
 
 { #category : #accessing }

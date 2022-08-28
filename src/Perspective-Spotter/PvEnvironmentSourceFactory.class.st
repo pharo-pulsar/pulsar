@@ -6,7 +6,7 @@ Class {
 		'environment',
 		'implementorIterator'
 	],
-	#category : #'Perspective-Model-Spotter'
+	#category : #'Perspective-Spotter-Model-Processor'
 }
 
 { #category : #testing }

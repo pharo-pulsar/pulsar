@@ -36,8 +36,8 @@ PvEditorContainerPresenter >> entityActivated: aModel [
 		ifFound: [ :each | ^ self layout select: each  ].
 	"Add the editor"
 	editor := self instantiate: aModel editorClass on: aModel.
-	editorWindow := self layout addTileWindow: editor.
-	self layout select: editorWindow.
+	editorWindow := self contentLayout addTileWindow: editor.
+	self contentLayout select: editorWindow.
 	editor takeKeyboardFocus
 ]
 

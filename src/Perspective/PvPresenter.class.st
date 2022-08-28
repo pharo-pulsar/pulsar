@@ -53,6 +53,12 @@ PvPresenter >> globalShortcuts [
 	^ nil
 ]
 
+{ #category : #testing }
+PvPresenter >> isEditor [
+
+	^ false
+]
+
 { #category : #initialization }
 PvPresenter >> settings [
 

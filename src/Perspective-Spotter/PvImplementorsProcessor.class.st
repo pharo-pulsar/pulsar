@@ -6,7 +6,7 @@ Class {
 	#instVars : [
 		'label'
 	],
-	#category : #'Perspective-Model-Spotter'
+	#category : #'Perspective-Spotter-Model-Processor'
 }
 
 { #category : #'default-settings' }

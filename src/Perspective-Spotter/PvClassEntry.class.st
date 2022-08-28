@@ -1,7 +1,7 @@
 Class {
 	#name : #PvClassEntry,
 	#superclass : #StClassEntry,
-	#category : #'Perspective-Model-Spotter'
+	#category : #'Perspective-Spotter-Model-Entry'
 }
 
 { #category : #evaluating }

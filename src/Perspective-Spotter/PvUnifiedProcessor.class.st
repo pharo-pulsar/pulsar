@@ -7,7 +7,7 @@ Class {
 		'label',
 		'showForEmptyQuery'
 	],
-	#category : #'Perspective-Model-Spotter'
+	#category : #'Perspective-Spotter-Model-Processor'
 }
 
 { #category : #'default-settings' }
@@ -158,7 +158,6 @@ PvUnifiedProcessor >> configureFilter [
 		ifTrue: [
 			categories := self query categoriesSelected.
 			filter := nil ].
-
 	super configureFilter.
 	
 	"I will clear the duplicates, as a new query have done"
@@ -267,10 +266,10 @@ PvUnifiedProcessor >> newSource [
 	| uppercaseIterators lowercaseIterators caseSelectorIterator root |
 	
 	textFilteringIterators := OrderedCollection new.
-	lowercaseIterators := OrderedCollection streamContents: [ :stream | 
-		self calculateLowercaseSourcesOn: stream ].
 	uppercaseIterators := OrderedCollection streamContents: [ :stream | 
 		self calculateUppercaseSourcesOn: stream ].
+	lowercaseIterators := OrderedCollection streamContents: [ :stream | 
+		self calculateLowercaseSourcesOn: stream ].
 
 	caseSelectorIterator := StCaseSelectorIterator new 
 		lowercaseIterator: (StSequenceIterator with: lowercaseIterators);

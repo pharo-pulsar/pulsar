@@ -3,7 +3,7 @@ Trait {
 	#instVars : [
 		'sourceFactory'
 	],
-	#category : #'Perspective-Model-Spotter'
+	#category : #'Perspective-Spotter-Model-Processor'
 }
 
 { #category : #'instance creation' }

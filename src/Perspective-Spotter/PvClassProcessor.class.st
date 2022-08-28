@@ -7,7 +7,7 @@ Class {
 		'label',
 		'wantsToDisplayOnEmptyQuery'
 	],
-	#category : #'Perspective-Model-Spotter'
+	#category : #'Perspective-Spotter-Model-Processor'
 }
 
 { #category : #'default-settings' }

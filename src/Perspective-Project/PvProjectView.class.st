@@ -113,7 +113,7 @@ PvProjectView >> spotterDependencesImplementorsFor: aStep [
 PvProjectView >> spotterProjectClassesFor: aStep [
 	<spotterOrder: 10 context: #environment>
 
-	aStep addProcessor: ((PvClassProcessor newEnvironment: self model projectEnvironment)
+	aStep addProcessor: ((PvUnifiedProcessor newEnvironment: self model projectEnvironment)
 		label: 'Project';
 		wantsToDisplayOnEmptyQuery: true;
 		yourself)
@@ -121,7 +121,7 @@ PvProjectView >> spotterProjectClassesFor: aStep [
 
 { #category : #spotter }
 PvProjectView >> spotterProjectImplementorsFor: aStep [
-	<spotterOrder: 20 context: #environment>
+	"<spotterOrder: 20 context: #environment>"
 
 	aStep addProcessor: ((PvImplementorsProcessor newEnvironment: self model projectEnvironment)
 		label: 'Project';
