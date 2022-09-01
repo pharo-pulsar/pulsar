@@ -24,12 +24,6 @@ PvPresenter >> addShortcutCategory: aCategory to: aPresenter [
 			toAction: each action ]
 ]
 
-{ #category : #accessing }
-PvPresenter >> boxWindowClass [
-
-	^ PvBoxWindowPresenter
-]
-
 { #category : #private }
 PvPresenter >> buildIcon: aBlock [
 	| compositeIcon |
@@ -69,10 +63,4 @@ PvPresenter >> settings [
 PvPresenter >> spotterTitle [
 
 	self subclassResponsibility
-]
-
-{ #category : #accessing }
-PvPresenter >> tabWindowClass [
-
-	^ PvTabWindowPresenter
 ]

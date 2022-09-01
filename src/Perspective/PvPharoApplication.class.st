@@ -7,6 +7,12 @@ Class {
 	#category : #'Perspective-Application'
 }
 
+{ #category : #accessing }
+PvPharoApplication >> boxWindowClass [
+
+	^ PvBoxWindowPresenter
+]
+
 { #category : #'private - factory' }
 PvPharoApplication >> newIconProvider [
 
@@ -67,6 +73,12 @@ PvPharoApplication >> newSystemTools [
 PvPharoApplication >> start [
 
 	"nothing for the moment"
+]
+
+{ #category : #accessing }
+PvPharoApplication >> tabWindowClass [
+
+	^ PvTabWindowPresenter
 ]
 
 { #category : #settings }
