@@ -161,7 +161,7 @@ PvPerspectiveBrowser >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
 		title: self title;
-		initialExtent: 1200@750.
+		initialExtent: 1560@860.
 	self addGlobalShortcutsTo: aWindowPresenter		
 ]
 
