@@ -69,7 +69,7 @@ PvPharoApplication >> newSystemTools [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : #running }
 PvPharoApplication >> start [
 
 	"nothing for the moment"
