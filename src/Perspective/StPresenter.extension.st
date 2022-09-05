@@ -7,6 +7,12 @@ StPresenter >> containerName [
 ]
 
 { #category : #'*Perspective' }
+StPresenter >> isCloseable [
+
+	^ true
+]
+
+{ #category : #'*Perspective' }
 StPresenter >> perspective: aPresenter [
 
 ]

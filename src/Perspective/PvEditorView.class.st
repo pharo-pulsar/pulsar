@@ -125,6 +125,12 @@ PvEditorView >> isClassEditor [
 ]
 
 { #category : #testing }
+PvEditorView >> isCloseable [
+	
+	^ true
+]
+
+{ #category : #testing }
 PvEditorView >> isCommentEditor [
 
 	^ false

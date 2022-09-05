@@ -4,10 +4,22 @@ Class {
 	#category : #'Perspective-View-Window'
 }
 
+{ #category : #'opening-closing' }
+PvTabWindowPresenter >> close [
+
+	self delete
+]
+
 { #category : #private }
 PvTabWindowPresenter >> headerClass [
 
 	^ PvTabHeaderPresenter
+]
+
+{ #category : #testing }
+PvTabWindowPresenter >> isCloseable [
+	
+	^ presenter isCloseable
 ]
 
 { #category : #spotter }

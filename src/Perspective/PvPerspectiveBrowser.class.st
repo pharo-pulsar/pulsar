@@ -92,7 +92,12 @@ PvPerspectiveBrowser >> addWindow: aPresenter ifContainerAbsent: aBlock [
 
 { #category : #actions }
 PvPerspectiveBrowser >> close [
+	| presenter |
 	
+	presenter := self activePresenter.
+	(presenter notNil and: [ presenter isCloseable ]) ifTrue: [
+		presenter close.
+		^ self ].
 	self withWindowDo: [ :window | window close ]
 ]
 

@@ -1,3 +1,6 @@
+"
+A base for all perspective presenters.
+"
 Class {
 	#name : #PvPresenter,
 	#superclass : #SgaPresenter,
@@ -45,6 +48,12 @@ PvPresenter >> colorNamed: aString [
 PvPresenter >> globalShortcuts [
 
 	^ nil
+]
+
+{ #category : #testing }
+PvPresenter >> isCloseable [
+
+	self subclassResponsibility
 ]
 
 { #category : #testing }

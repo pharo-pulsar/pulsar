@@ -87,6 +87,12 @@ PvPerspectiveView >> inputSelectedPort [
 	^ PvEntitySelectedPort newPresenter: self
 ]
 
+{ #category : #testing }
+PvPerspectiveView >> isCloseable [
+
+	^ false
+]
+
 { #category : #accessing }
 PvPerspectiveView >> perspective: aPerspective [
 	

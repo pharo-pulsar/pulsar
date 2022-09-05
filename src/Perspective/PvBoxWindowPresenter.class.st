@@ -11,6 +11,12 @@ PvBoxWindowPresenter >> headerClass [
 	
 ]
 
+{ #category : #testing }
+PvBoxWindowPresenter >> isCloseable [
+
+	^ self presenter isCloseable
+]
+
 { #category : #spotter }
 PvBoxWindowPresenter >> spotterProcessorsFor: aSpotterStep context: context [
 	
