@@ -1,3 +1,6 @@
+"
+A base command for projects
+"
 Class {
 	#name : #PvProjectCommand,
 	#superclass : #PvCommand,
@@ -5,9 +8,9 @@ Class {
 }
 
 { #category : #default }
-PvProjectCommand class >> defaultToolbarGroup [
+PvProjectCommand class >> groups [
 
-	^ #project
+	^ #(project)
 ]
 
 { #category : #testing }

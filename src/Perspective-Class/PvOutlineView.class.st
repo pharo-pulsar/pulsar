@@ -53,6 +53,13 @@ PvOutlineView >> entitySelected: aModel [
 	outlineTreePresenter selectItem: aModel
 ]
 
+{ #category : #'private - actions' }
+PvOutlineView >> filterByProtocol: aProtocol [
+
+	self model toggleFilterByProtocol: aProtocol.
+	self updatePresenter
+]
+
 { #category : #initialization }
 PvOutlineView >> initializePresenters [
 
@@ -64,7 +71,7 @@ PvOutlineView >> initializePresenters [
 		hideColumnHeaders;
 		addStyle: 'stTree';
 		addStyle: 'pvOutlineView';
-		addColumn: (SpCompositeTableColumn new 
+		addColumn: (SpCompositeTableColumn new
 			addColumn: ( SpImageTableColumn  new 
 				evaluated: [ :aModel | aModel iconComposite buildOn: self application ];
 				beNotExpandable;
@@ -73,10 +80,12 @@ PvOutlineView >> initializePresenters [
 				evaluated: [ :aModel | aModel name ];
 				displayColor: [ :aModel | self colorNamed: aModel colorName ];
 				yourself);
-			"addColumn: (SpLinkTableColumn new 
-				evaluated: [ :aModel | aModel protocol ifNil: [ '' ] ];
-				displayAlignment: [ :aModel | SpColumnAlignment right ];
-				yourself);"
+			yourself);
+		addColumn: (SpLinkTableColumn new 
+			evaluated: [ :aModel | aModel protocol ifNil: [ '' ] ];
+			displayAlignment: [ :aModel | SpColumnAlignment right ];
+			action: [ :aModel | self filterByProtocol: aModel protocol ];
+			beNotExpandable;
 			yourself);
 		children: [ :aModel | aModel children ];
 		addNavigationShortcuts.
@@ -113,7 +122,7 @@ PvOutlineView >> toolbar [
 { #category : #initialization }
 PvOutlineView >> toolbarActions [
 
-	^ PvClassCommand buildToolbarOn: self
+	^ PvClassCommand buildToolbar: #default on: self
 ]
 
 { #category : #initialization }

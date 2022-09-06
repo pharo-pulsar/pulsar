@@ -41,5 +41,4 @@ PvTabWindowPresenter >> takeKeyboardFocus [
 
 	self owner layout select: self.
 	super takeKeyboardFocus
-
 ]

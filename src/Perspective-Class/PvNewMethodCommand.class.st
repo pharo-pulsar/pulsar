@@ -33,9 +33,9 @@ PvNewMethodCommand class >> defaultPriority [
 ]
 
 { #category : #default }
-PvNewMethodCommand class >> defaultToolbarGroup [
+PvNewMethodCommand class >> groups [
 
-	^ #action
+	^ #(action)
 ]
 
 { #category : #testing }

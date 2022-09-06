@@ -9,7 +9,9 @@ PvPharoGtkConfiguration >> configureGeneral: anApplication [
 
 	super configureGeneral: anApplication.
 	self addCSSProviderFromString: '
-.pvEditorScrollBar { min-height: 150px }	
+.link { font-size: smaller; font-weight: normal; color: gray }
+.pvEditorScrollBar { min-height: 150px }
+	
 	'
 ]
 

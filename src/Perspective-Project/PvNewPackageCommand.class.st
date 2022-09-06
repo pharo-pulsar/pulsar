@@ -32,9 +32,9 @@ PvNewPackageCommand class >> defaultPriority [
 ]
 
 { #category : #default }
-PvNewPackageCommand class >> defaultToolbarGroup [
+PvNewPackageCommand class >> groups [
 
-	^ #actions
+	^ #(actions)
 ]
 
 { #category : #testing }

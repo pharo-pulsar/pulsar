@@ -1,7 +1,7 @@
 Class {
 	#name : #PvCopyToClipboardCommand,
 	#superclass : #PvEditorCommand,
-	#category : #'Perspective-Method'
+	#category : #'Perspective-Method-Commands'
 }
 
 { #category : #accessing }
@@ -23,9 +23,9 @@ PvCopyToClipboardCommand class >> defaultName [
 ]
 
 { #category : #default }
-PvCopyToClipboardCommand class >> defaultToolbarGroup [
+PvCopyToClipboardCommand class >> groups [
 
-	^ #action
+	^ #(action)
 ]
 
 { #category : #testing }

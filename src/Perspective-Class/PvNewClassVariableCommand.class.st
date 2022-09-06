@@ -33,13 +33,7 @@ PvNewClassVariableCommand class >> defaultPriority [
 ]
 
 { #category : #default }
-PvNewClassVariableCommand class >> defaultToolbarGroup [
+PvNewClassVariableCommand class >> groups [
 
-	^ #action
-]
-
-{ #category : #testing }
-PvNewClassVariableCommand class >> isVisibleInToolbar [
-
-	^ true
+	^ #(action)
 ]

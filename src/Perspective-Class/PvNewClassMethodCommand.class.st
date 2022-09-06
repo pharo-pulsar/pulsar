@@ -32,13 +32,7 @@ PvNewClassMethodCommand class >> defaultPriority [
 ]
 
 { #category : #default }
-PvNewClassMethodCommand class >> defaultToolbarGroup [
+PvNewClassMethodCommand class >> groups [
 
-	^ #action
-]
-
-{ #category : #testing }
-PvNewClassMethodCommand class >> isVisibleInToolbar [
-
-	^ true
+	^ #(action)
 ]

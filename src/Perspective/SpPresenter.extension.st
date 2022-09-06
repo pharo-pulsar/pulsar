@@ -21,6 +21,13 @@ SpPresenter >> perspective [
 ]
 
 { #category : #'*Perspective' }
+SpPresenter >> systemNavigation [
+
+	self withPerspectiveDo: [ :perspective | ^ perspective systemNavigation ].
+	^ super systemNavigation
+]
+
+{ #category : #'*Perspective' }
 SpPresenter >> withPerspectiveDo: aBlock [
 
 	self perspective ifNotNil: aBlock

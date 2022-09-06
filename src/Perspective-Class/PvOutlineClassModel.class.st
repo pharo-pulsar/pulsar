@@ -61,3 +61,9 @@ PvOutlineClassModel >> name [
 
 	^ self entity name
 ]
+
+{ #category : #'accessing - filtering' }
+PvOutlineClassModel >> toggleFilterByProtocol: aProtocol [
+
+	self halt
+]

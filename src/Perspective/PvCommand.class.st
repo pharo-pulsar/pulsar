@@ -1,3 +1,13 @@
+"
+A base command for perspectives. 
+
+
+# Design of commands for perspectives
+
+In general, in Pharo we prefer to use lightway commands: commands define actions which are later implemented in the context of the command, and the command execution simply executes a delegation.
+**HOWEVER**, perspective commands behave differently: We have designed perspectives to allow fast switching of views (See `PvPerspectiveView`), views that can be refering to the same element and because of that they have the same set of actions available.
+In perspective views and editors it would be cumbersome to define once and again same set of actions on each new view and because of that we have decided to change the general recommendation: perspective commands will be heavy weight, including as much logic as possible to solve the action.  
+"
 Class {
 	#name : #PvCommand,
 	#superclass : #CmCommand,
@@ -13,6 +23,16 @@ PvCommand class >> allCommands [
 ]
 
 { #category : #accessing }
+PvCommand class >> allMenuCommands [
+
+	^ (self allSubclasses 
+		reject: [ :each | 
+			each isAbstract
+			or: [ each isVisibleInMenu not ] ])
+		sorted: #defaultPriority ascending
+]
+
+{ #category : #accessing }
 PvCommand class >> allToolbarCommands [
 
 	^ (self allSubclasses 
@@ -22,8 +42,8 @@ PvCommand class >> allToolbarCommands [
 		sorted: #defaultPriority ascending
 ]
 
-{ #category : #'building - toolbars' }
-PvCommand class >> buildToolbar: aGroupOrCollection commands: aCollection on: aContext [
+{ #category : #'private - building' }
+PvCommand class >> buildGroup: aGroupOrCollection commands: aCollection on: aContext [
 	| groups rootGroup |
 	
 	groups := aGroupOrCollection isSymbol 
@@ -41,11 +61,29 @@ PvCommand class >> buildToolbar: aGroupOrCollection commands: aCollection on: aC
 	^ rootGroup
 ]
 
+{ #category : #'building - menus' }
+PvCommand class >> buildMenu: aGroupOrCollection on: aContext [
+
+	^ self 
+		buildGroup: aGroupOrCollection 
+		commands: self allMenuCommands
+		on: aContext
+]
+
+{ #category : #'building - menus' }
+PvCommand class >> buildMenuOn: aContext [
+
+	^ self 
+		buildGroup: #default
+		commands: self allMenuCommands
+		on: aContext
+]
+
 { #category : #'building - toolbars' }
 PvCommand class >> buildToolbar: aGroupOrCollection on: aContext [
 
 	^ self 
-		buildToolbar: aGroupOrCollection 
+		buildGroup: aGroupOrCollection 
 		commands: self allToolbarCommands
 		on: aContext
 ]
@@ -54,7 +92,7 @@ PvCommand class >> buildToolbar: aGroupOrCollection on: aContext [
 PvCommand class >> buildToolbarOn: aContext [
 
 	^ self 
-		buildToolbar: #default
+		buildGroup: #default
 		commands: self allToolbarCommands
 		on: aContext
 ]
@@ -87,7 +125,7 @@ PvCommand class >> defaultShortcut [
 ]
 
 { #category : #default }
-PvCommand class >> defaultToolbarGroup [
+PvCommand class >> groups [
 
 	^ #default
 ]
@@ -96,6 +134,12 @@ PvCommand class >> defaultToolbarGroup [
 PvCommand class >> isAbstract [
 
 	^ self = PvCommand
+]
+
+{ #category : #testing }
+PvCommand class >> isVisibleInMenu [
+
+	^ true
 ]
 
 { #category : #testing }
@@ -111,7 +155,7 @@ PvCommand class >> toolbarCommandsGroup: aGroup [
 		select: [ :each | 
 			each isAbstract not 
 			and: [ each isVisibleInToolbar
-			and: [ each defaultToolbarGroup = aGroup ] ] ])
+			and: [ each groups = aGroup ] ] ])
 		sorted: #defaultPriority ascending	
 ]
 
@@ -138,6 +182,13 @@ PvCommand >> asSpecCommand [
 PvCommand >> iconComposite [
 
 	^ self class defaultIconComposite
+]
+
+{ #category : #accessing }
+PvCommand >> model [
+	"All editors have a model"
+
+	^ self context model
 ]
 
 { #category : #accessing }

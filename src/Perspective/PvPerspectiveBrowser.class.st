@@ -304,6 +304,12 @@ PvPerspectiveBrowser >> subscribeToAnnouncements [
 		to: self
 ]
 
+{ #category : #accessing }
+PvPerspectiveBrowser >> systemNavigation [
+
+	^ PvSystemNavigation newPerspective: self
+]
+
 { #category : #initialization }
 PvPerspectiveBrowser >> title [
 		

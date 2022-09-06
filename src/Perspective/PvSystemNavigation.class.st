@@ -24,7 +24,12 @@ PvSystemNavigation >> application [
 { #category : #opening }
 PvSystemNavigation >> browse: anObject [
 
-	self perspective activateClass: anObject class instanceSide	
+	self flag: #TODO. "See if this is enough or better with a double dispatch"
+	anObject isCompiledMethod ifTrue: [
+		self perspective activateMethod: anObject.
+		^ self ].
+		
+	self perspective activateClass: anObject class instanceSide
 ]
 
 { #category : #enumerating }

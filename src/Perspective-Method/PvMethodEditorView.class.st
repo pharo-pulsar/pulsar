@@ -3,7 +3,8 @@ Class {
 	#superclass : #PvEditorView,
 	#instVars : [
 		'toolbarPresenter',
-		'labelPresenter'
+		'labelPresenter',
+		'actionButtonPresenter'
 	],
 	#category : #'Perspective-Method-View'
 }
@@ -21,6 +22,8 @@ PvMethodEditorView >> defaultLayout [
 		add: (SpBoxLayout newLeftToRight
 				add: (SpBoxLayout newLeftToRight
 					borderWidth: 3;
+					spacing: 3;
+					add: actionButtonPresenter expand: false;
 					add: labelPresenter;
 					yourself);
 				addLast: toolbarPresenter expand: false;
@@ -28,14 +31,6 @@ PvMethodEditorView >> defaultLayout [
 			expand: false;
 		add: editorPresenter;
 		yourself
-]
-
-{ #category : #'actions commands' }
-PvMethodEditorView >> doBrowseVersions [
-
-	(VersionBrowser
-		 newApplication: self application
-		 model: self model entity asRingDefinition) open
 ]
 
 { #category : #'private - actions' }
@@ -63,6 +58,11 @@ PvMethodEditorView >> initializePresenters [
 
 	super initializePresenters.
 	self initializeToolbar.
+	actionButtonPresenter := self newButton
+		addStyle: 'small';
+		addStyle: 'flat';
+		enabled: false;
+		yourself.
 	labelPresenter := self newLabel
 
 ]
@@ -104,9 +104,18 @@ PvMethodEditorView >> toolbarActions [
 PvMethodEditorView >> updatePresenter [
 
 	super updatePresenter.
-	labelPresenter label: self model methodClassName.
+	self updateToolbar.
 	self updatingWhile: [
 		editorPresenter
 			beForMethod: self model entity;
 			text: self model sourceCode ]
+]
+
+{ #category : #initialization }
+PvMethodEditorView >> updateToolbar [
+		
+	self model isTestMethod 
+		ifTrue: [  ].
+	labelPresenter label: self model methodClassName.
+	
 ]

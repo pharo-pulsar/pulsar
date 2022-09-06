@@ -1,7 +1,10 @@
+"
+Open the vestions of the method contained in `context model`
+"
 Class {
 	#name : #PvMethodVersionsCommand,
 	#superclass : #PvMethodEditorCommand,
-	#category : #'Perspective-Method'
+	#category : #'Perspective-Method-Commands'
 }
 
 { #category : #accessing }
@@ -23,9 +26,9 @@ PvMethodVersionsCommand class >> defaultName [
 ]
 
 { #category : #default }
-PvMethodVersionsCommand class >> defaultToolbarGroup [
+PvMethodVersionsCommand class >> groups [
 
-	^ #methodAction
+	^ #(action method)
 ]
 
 { #category : #testing }
@@ -48,6 +51,9 @@ PvMethodVersionsCommand class >> showInToolbar [
 
 { #category : #executing }
 PvMethodVersionsCommand >> execute [
-	
-	context doBrowseVersions
+
+	(self application tools versionBrowser
+		newApplication: self application
+		model: self model entity asRingDefinition) 
+		open
 ]

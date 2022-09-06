@@ -32,9 +32,9 @@ PvNewClassCommand class >> defaultPriority [
 ]
 
 { #category : #default }
-PvNewClassCommand class >> defaultToolbarGroup [
+PvNewClassCommand class >> groups [
 
-	^ #actions
+	^ #(actions)
 ]
 
 { #category : #testing }
@@ -45,6 +45,18 @@ PvNewClassCommand class >> isVisibleInToolbar [
 
 { #category : #executing }
 PvNewClassCommand >> execute [
+	"context doNewClass"
 	
-	context doNewClass
+	| items parentModel |
+
+	items := context selectedEntitiesInPath.
+	items ifEmpty: [ self error: 'TODO' ].
+
+	parentModel := items reversed detect: [ :each | each isPackageOrTag ].
+		
+	context activateWith: (PvNewClassModel
+		newEnvironment: self model environmentModel
+		entity: (PvNewClassTemplate new
+			parentModel: parentModel;
+			yourself))
 ]

@@ -32,9 +32,9 @@ PvNewTraitCommand class >> defaultPriority [
 ]
 
 { #category : #default }
-PvNewTraitCommand class >> defaultToolbarGroup [
+PvNewTraitCommand class >> groups [
 
-	^ #actions
+	^ #(actions)
 ]
 
 { #category : #testing }

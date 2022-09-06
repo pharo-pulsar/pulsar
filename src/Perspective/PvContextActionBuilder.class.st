@@ -50,15 +50,23 @@ PvContextActionBuilder >> buildToolbar [
 			buildToolbar: self mainGroups 
 			on: self owner)).
 			
-	self actionGroups ifNotEmpty: [ 
+	self actionGroups ifNotEmpty: [
 		presenter layout 
+			addLast: (presenter newButton
+				addStyle: 'small';
+				addStyle: 'flat';
+				icon: ((PvCompositeIcon newName: 'view-more-symbolic') buildOn: self owner application);
+				action: [ ];
+				yourself)
+			expand: false
+		"presenter layout 
 			addLast: (presenter newToolbar
 				addStyle: 'pvPerspectiveToolbar';
 				displayMode: self owner application toolbarDisplayMode;
 				fillWith: (self fromCommandClass 
 					buildToolbar: self actionGroups 
 					on: self owner))
-			expand: false ].
+			expand: false" ].
 
 	^ presenter
 ]

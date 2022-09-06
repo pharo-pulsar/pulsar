@@ -126,6 +126,12 @@ PvMethodModel >> isOutlineClassEntity [
 	^ true
 ]
 
+{ #category : #testing }
+PvMethodModel >> isTestMethod [
+	
+	^ self entity isTestMethod
+]
+
 { #category : #accessing }
 PvMethodModel >> methodCategory [
 
