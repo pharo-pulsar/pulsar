@@ -21,7 +21,7 @@ PvSystemNavigation >> application [
 	^ self perspective application
 ]
 
-{ #category : #opening }
+{ #category : #'as yet unclassified' }
 PvSystemNavigation >> browse: anObject [
 
 	self flag: #TODO. "See if this is enough or better with a double dispatch"
@@ -32,7 +32,7 @@ PvSystemNavigation >> browse: anObject [
 	self perspective activateClass: anObject class instanceSide
 ]
 
-{ #category : #enumerating }
+{ #category : #'as yet unclassified' }
 PvSystemNavigation >> browseMessageList: messageList 
 	name: labelString 
 	autoSelect: autoSelectString 
@@ -50,6 +50,21 @@ PvSystemNavigation >> browseMessageList: messageList
 		title: labelString;
 		autoSelect: autoSelectString;
 		refreshingBlock: aBlock)
+]
+
+{ #category : #'as yet unclassified' }
+PvSystemNavigation >> browseVersionsOf: aMethod [ 
+
+	(self application tools versionBrowser
+		newApplication: self application
+		model: aMethod asRingDefinition) 
+		open
+]
+
+{ #category : #'as yet unclassified' }
+PvSystemNavigation >> inspect: anObject [
+
+	self application tools inspector inspect: anObject
 ]
 
 { #category : #accessing }

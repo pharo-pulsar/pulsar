@@ -51,9 +51,5 @@ PvMethodVersionsCommand class >> showInToolbar [
 
 { #category : #executing }
 PvMethodVersionsCommand >> execute [
-
-	(self application tools versionBrowser
-		newApplication: self application
-		model: self model entity asRingDefinition) 
-		open
+	context systemNavigation browseVersionsOf: self model entity
 ]
