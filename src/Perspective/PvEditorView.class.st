@@ -10,9 +10,10 @@ Class {
 	#instVars : [
 		'#dirty => ObservableSlot',
 		'#updating',
-		'#editorPresenter'
+		'#editorPresenter',
+		'#headerPresenter'
 	],
-	#category : #'Perspective-View'
+	#category : #'Perspective-View-Editor'
 }
 
 { #category : #accessing }
@@ -48,6 +49,7 @@ PvEditorView >> defaultKeyboardFocus [
 PvEditorView >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
+		add: headerPresenter expand: false; 
 		add: editorPresenter;
 		yourself
 ]
@@ -69,6 +71,12 @@ PvEditorView >> doReset [
 PvEditorView >> doSubmit: aString [
 
 	self subclassResponsibility
+]
+
+{ #category : #private }
+PvEditorView >> editorHeaderClass [
+
+	^ PvEditorHeaderPresenter
 ]
 
 { #category : #private }
@@ -100,8 +108,15 @@ PvEditorView >> initializeEditor [
 ]
 
 { #category : #initialization }
+PvEditorView >> initializeEditorHeader [
+	
+	headerPresenter := self instantiate: self editorHeaderClass on: self model
+]
+
+{ #category : #initialization }
 PvEditorView >> initializePresenters [
 
+	self initializeEditorHeader.
 	self initializeEditor
 ]
 
@@ -166,6 +181,14 @@ PvEditorView >> markDirty [
 	self isUpdating ifTrue: [ ^ self ].
 	self isDirty ifTrue: [ ^ self ].
 	self dirty: true
+]
+
+{ #category : #'accessing - model' }
+PvEditorView >> model: aModel [
+
+	model := aModel.
+	headerPresenter model: aModel.
+	self updatePresenter
 ]
 
 { #category : #accessing }

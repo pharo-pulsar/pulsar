@@ -20,6 +20,12 @@ PvNewClassTemplate >> name [
 ]
 
 { #category : #accessing }
+PvNewClassTemplate >> package [
+	
+	^ self parentModel package
+]
+
+{ #category : #accessing }
 PvNewClassTemplate >> parentModel [
 
 	^ parentModel

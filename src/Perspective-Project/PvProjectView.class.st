@@ -29,22 +29,6 @@ PvProjectView >> connectPresenters [
 ]
 
 { #category : #actions }
-PvProjectView >> doNewClass [
-	| items parentModel |
-
-	items := projectTreePresenter selection selectedItemsInPath.
-	items ifEmpty: [ self error: 'TODO' ].
-
-	parentModel := items reversed detect: [ :each | each isPackageOrTag ].
-		
-	self activateWith: (PvNewClassModel
-		newEnvironment: self model environmentModel
-		entity: (PvNewClassTemplate new
-			parentModel: parentModel;
-			yourself))
-]
-
-{ #category : #actions }
 PvProjectView >> doOpenProject [
 	
 	self halt
@@ -89,6 +73,13 @@ PvProjectView >> selectClass: aClass [
 		entity: aClass.
 		
 	projectTreePresenter selectItem: classModel
+]
+
+{ #category : #accessing }
+PvProjectView >> selectedEntitiesInPath [
+
+	^ projectTreePresenter selection selectedItemsInPath
+
 ]
 
 { #category : #spotter }
@@ -149,9 +140,11 @@ PvProjectView >> spotterSystemImplementorsFor: aStep [
 { #category : #initialization }
 PvProjectView >> toolbar [
 
-	^ self 
-		newPerspectiveViewToolbar: #project 
-		actions: #actions
+	^ self buildPerspectiveToolbarWith: [ :builder |
+		builder 
+			from: PvProjectCommand;
+			mainGroup: #project;
+			actionGroups: #action ]
 ]
 
 { #category : #initialization }

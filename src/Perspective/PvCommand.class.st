@@ -53,8 +53,8 @@ PvCommand class >> buildGroup: aGroupOrCollection commands: aCollection on: aCon
 	rootGroup := CmCommandGroup new asSpecGroup.
 	rootGroup beRoot.
 	groups do: [ :eachGroup | | group |
-		group := (CmCommandGroup named: eachGroup) asSpecGroup.
-		(self toolbarCommandsGroup: eachGroup) 
+		group := self commandGroupForGroup: eachGroup.
+		(self commandsInGroup: eachGroup) 
 			do: [ :each | group register: (each forSpecContext: aContext) ].
 		rootGroup register: group ].
 	
@@ -95,6 +95,32 @@ PvCommand class >> buildToolbarOn: aContext [
 		buildGroup: #default
 		commands: self allToolbarCommands
 		on: aContext
+]
+
+{ #category : #'default - groups' }
+PvCommand class >> commandGroupAction [
+	<commandGroup: #action>
+	
+	^ (CmCommandGroup named: 'Actions') asSpecGroup
+		beDisplayedAsGroup;
+		yourself
+]
+
+{ #category : #'private - building' }
+PvCommand class >> commandGroupForGroup: aSymbol [
+
+	^ (Pragma allNamed: #commandGroup: from: self class to: PvCommand)
+		detect: [ :each | (each argumentAt: 1) = aSymbol ]
+		ifFound: [ :aPragma | self perform: aPragma methodSelector  ]
+		ifNone: [ (CmCommandGroup named: aSymbol asString capitalized) asSpecGroup ]
+]
+
+{ #category : #'private - building' }
+PvCommand class >> commandsInGroup: aGroup [
+
+	^ (self allCommands
+		select: [ :each | each groups includes: aGroup ])
+		sorted: #defaultPriority ascending	
 ]
 
 { #category : #default }
@@ -146,17 +172,6 @@ PvCommand class >> isVisibleInMenu [
 PvCommand class >> isVisibleInToolbar [
 
 	^ false
-]
-
-{ #category : #accessing }
-PvCommand class >> toolbarCommandsGroup: aGroup [
-
-	^ (self allSubclasses 
-		select: [ :each | 
-			each isAbstract not 
-			and: [ each isVisibleInToolbar
-			and: [ each groups = aGroup ] ] ])
-		sorted: #defaultPriority ascending	
 ]
 
 { #category : #accessing }

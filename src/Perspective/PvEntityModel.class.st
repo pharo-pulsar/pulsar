@@ -31,11 +31,6 @@ PvEntityModel >> = other [
 		and: [ self entity = other entity ]
 ]
 
-{ #category : #visiting }
-PvEntityModel >> accept: aVisitor [
-
-]
-
 { #category : #accessing }
 PvEntityModel >> children [
 	

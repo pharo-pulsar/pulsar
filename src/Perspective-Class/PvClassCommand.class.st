@@ -6,3 +6,9 @@ Class {
 	#superclass : #PvCommand,
 	#category : #'Perspective-Class-Command'
 }
+
+{ #category : #testing }
+PvClassCommand class >> isVisibleInMenu [
+
+	^ true
+]

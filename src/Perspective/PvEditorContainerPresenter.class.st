@@ -47,11 +47,16 @@ PvEditorContainerPresenter >> entitySelected: anEntity [
 	self halt
 ]
 
+{ #category : #'events - handling' }
+PvEditorContainerPresenter >> handleAnnouncement: anAnnouncement [
+
+	anAnnouncement handleOn: self
+]
+
 { #category : #initialization }
 PvEditorContainerPresenter >> initialize [
 
 	super initialize.
-	self subscribeToAnnouncements.
 	self announcer 
 		when: LnTabLayoutActivated 
 		send: #tabLayoutActivated

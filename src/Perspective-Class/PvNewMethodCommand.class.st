@@ -43,3 +43,15 @@ PvNewMethodCommand class >> isVisibleInToolbar [
 
 	^ true
 ]
+
+{ #category : #executing }
+PvNewMethodCommand >> execute [
+	| parentModel |
+
+	parentModel := context model.
+	context activateWith: (PvMethodModel
+		newEnvironment: self model environmentModel
+		entity: (PvNewMethodTemplate new
+			parentModel: parentModel;
+			yourself))	
+]

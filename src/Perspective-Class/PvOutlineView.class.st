@@ -21,6 +21,13 @@ PvOutlineView class >> defaultTitle [
 	^ 'Outline'
 ]
 
+{ #category : #'private - events' }
+PvOutlineView >> classChanged: aModel [
+
+	aModel isOutlineClassEntity ifFalse: [ ^ self ].
+	self model: aModel asOutlineClassModel
+]
+
 { #category : #initialization }
 PvOutlineView >> connectPresenters [
 
@@ -90,8 +97,8 @@ PvOutlineView >> initializePresenters [
 		children: [ :aModel | aModel children ];
 		addNavigationShortcuts.
 		
-	outlineTreePresenter contextMenu: [ self toolbarActions asMenuPresenter ].
-	outlineTreePresenter contextKeyBindings: self toolbarActions asKMCategory
+	"outlineTreePresenter contextMenu: [ self toolbarActions asMenuPresenter ].
+	outlineTreePresenter contextKeyBindings: self toolbarActions asKMCategory"
 ]
 
 { #category : #initialization }
@@ -115,14 +122,6 @@ PvOutlineView >> toolbar [
 		builder 
 			from: PvClassCommand;
 			actionGroup: #action ]
-	
-
-]
-
-{ #category : #initialization }
-PvOutlineView >> toolbarActions [
-
-	^ PvClassCommand buildToolbar: #default on: self
 ]
 
 { #category : #initialization }

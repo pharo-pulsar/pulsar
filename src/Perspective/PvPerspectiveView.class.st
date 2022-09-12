@@ -69,6 +69,13 @@ PvPerspectiveView >> handleAnnouncement: ann [
 ]
 
 { #category : #initialization }
+PvPerspectiveView >> initialize [
+
+	super initialize.
+	self subscribeToAnnouncements
+]
+
+{ #category : #initialization }
 PvPerspectiveView >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
@@ -93,6 +100,12 @@ PvPerspectiveView >> isCloseable [
 	^ false
 ]
 
+{ #category : #testing }
+PvPerspectiveView >> isView [
+
+	^ true
+]
+
 { #category : #accessing }
 PvPerspectiveView >> perspective: aPerspective [
 	
@@ -114,6 +127,15 @@ PvPerspectiveView >> spotterTitle [
 ]
 
 { #category : #initialization }
+PvPerspectiveView >> subscribeToAnnouncements [
+
+	self announcer 
+		when: PvAnnouncement 
+		send: #handleAnnouncement: 
+		to: self
+]
+
+{ #category : #initialization }
 PvPerspectiveView >> title [
 
 	^ self model 
@@ -126,10 +148,4 @@ PvPerspectiveView >> titleWith: aString [
 
 	^ String streamContents: [ :stream | 
 		stream << self class defaultTitle << ': ' << aString ]
-]
-
-{ #category : #initialization }
-PvPerspectiveView >> unsubscribeFromAnnouncers [
-	
-	perspective announcer unsubscribe: self
 ]

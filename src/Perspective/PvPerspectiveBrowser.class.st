@@ -146,7 +146,8 @@ PvPerspectiveBrowser >> initialize [
 	super initialize.
 	self initializeLayout.
 	self initializeViews.
-	self connectViews
+	self connectViews.
+	self subscribeToAnnouncements
 ]
 
 { #category : #initialization }
@@ -207,8 +208,7 @@ PvPerspectiveBrowser >> perspectiveLayoutClass [
 { #category : #'events - handling' }
 PvPerspectiveBrowser >> resendToPresenters: ann [
 
-	self presenters 
-		do: [ :each | each announcer announce: ann ]
+	self presenters do: [ :each | each announce: ann ]
 ]
 
 { #category : #actions }

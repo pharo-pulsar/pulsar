@@ -7,6 +7,12 @@ Class {
 	#category : #'Perspective-View-Container'
 }
 
+{ #category : #accessing }
+PvContainerPresenter >> allViews [
+	
+	^ self allPresenters select: [ :each | each isView ]
+]
+
 { #category : #converting }
 PvContainerPresenter >> asEditorContainer [
 
@@ -24,9 +30,17 @@ PvContainerPresenter >> defaultTileLayout [
 ]
 
 { #category : #'events - handling' }
-PvContainerPresenter >> handleAnnouncement: ann [
+PvContainerPresenter >> handleAnnouncement: anAnnouncement [ 
 
-	ann handleOn: self
+	anAnnouncement handleOn: self.
+	self allViews do: [ :aPresenter | aPresenter announce: anAnnouncement ]
+]
+
+{ #category : #initialization }
+PvContainerPresenter >> initialize [
+
+	super initialize.
+	self subscribeToAnnouncements
 ]
 
 { #category : #initialization }

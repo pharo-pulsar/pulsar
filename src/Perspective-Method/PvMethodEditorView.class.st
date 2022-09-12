@@ -1,11 +1,6 @@
 Class {
 	#name : #PvMethodEditorView,
 	#superclass : #PvEditorView,
-	#instVars : [
-		'toolbarPresenter',
-		'labelPresenter',
-		'actionButtonPresenter'
-	],
 	#category : #'Perspective-Method-View'
 }
 
@@ -13,24 +8,6 @@ Class {
 PvMethodEditorView class >> type [
 
 	^ #method
-]
-
-{ #category : #initialization }
-PvMethodEditorView >> defaultLayout [
-
-	^ SpBoxLayout newTopToBottom
-		add: (SpBoxLayout newLeftToRight
-				add: (SpBoxLayout newLeftToRight
-					borderWidth: 3;
-					spacing: 3;
-					add: actionButtonPresenter expand: false;
-					add: labelPresenter;
-					yourself);
-				addLast: toolbarPresenter expand: false;
-				yourself) 
-			expand: false;
-		add: editorPresenter;
-		yourself
 ]
 
 { #category : #'private - actions' }
@@ -49,31 +26,20 @@ PvMethodEditorView >> doSubmit: aString [
 		compile: aString withInternalLineEndings
 		notifying: editorPresenter interactionModel.		
 	self resetDirty.
-	self withWindowDo: [ :aWindow |
-		aWindow presenter announce: (PvMethodChangedAnnouncement for: self model) ]
+	self withPerspectiveDo: [ :aPerspective |
+		aPerspective announce: (PvMethodChangedAnnouncement for: self model) ]
+]
+
+{ #category : #private }
+PvMethodEditorView >> editorHeaderClass [
+
+	^ PvMethodEditorHeaderPresenter
 ]
 
 { #category : #initialization }
 PvMethodEditorView >> initializePresenters [
 
-	super initializePresenters.
-	self initializeToolbar.
-	actionButtonPresenter := self newButton
-		addStyle: 'small';
-		addStyle: 'flat';
-		enabled: false;
-		yourself.
-	labelPresenter := self newLabel
-
-]
-
-{ #category : #initialization }
-PvMethodEditorView >> initializeToolbar [	
-
-	toolbarPresenter := self buildPerspectiveToolbarWith: [ :builder |
-		builder 
-			from: PvEditorCommand;
-			actionGroups: #(action methodAction) ]
+	super initializePresenters
 ]
 
 { #category : #initialization }
@@ -92,6 +58,15 @@ PvMethodEditorView >> title [
 		ifNotNil: [ :aModel | aModel windowTitle ]
 ]
 
+{ #category : #initialization }
+PvMethodEditorView >> toolbar [	
+
+	^ self buildPerspectiveToolbarWith: [ :builder |
+		builder 
+			from: PvEditorCommand;
+			actionGroups: #(action methodAction) ]
+]
+
 { #category : #accessing }
 PvMethodEditorView >> toolbarActions [
 	
@@ -104,18 +79,8 @@ PvMethodEditorView >> toolbarActions [
 PvMethodEditorView >> updatePresenter [
 
 	super updatePresenter.
-	self updateToolbar.
 	self updatingWhile: [
 		editorPresenter
 			beForMethod: self model entity;
 			text: self model sourceCode ]
-]
-
-{ #category : #initialization }
-PvMethodEditorView >> updateToolbar [
-		
-	self model isTestMethod 
-		ifTrue: [  ].
-	labelPresenter label: self model methodClassName.
-	
 ]

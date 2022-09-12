@@ -13,6 +13,12 @@ SpPresenter >> isPerspective [
 ]
 
 { #category : #'*Perspective' }
+SpPresenter >> isView [
+
+	^ false
+]
+
+{ #category : #'*Perspective' }
 SpPresenter >> perspective [
 	"as 'root', but answers the perspective"
 	self isPerspective ifTrue: [ ^ self ].

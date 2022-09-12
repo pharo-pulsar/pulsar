@@ -21,7 +21,7 @@ PvContextActionBuilder class >> on: aPresenter [
 { #category : #accessing }
 PvContextActionBuilder >> actionGroup: aSymbol [
 
-	actionGroups := aSymbol
+	actionGroups := { aSymbol }
 ]
 
 { #category : #accessing }
@@ -36,39 +36,63 @@ PvContextActionBuilder >> actionGroups: anArray [
 	actionGroups := anArray
 ]
 
+{ #category : #private }
+PvContextActionBuilder >> addActionsMenuTo: presenter [
+	| actionsMenuCommandGroup |
+
+	actionsMenuCommandGroup := self buildActionsMenuCommandGroup.
+	presenter layout 
+		addLast: (presenter newMenuButton
+			addStyle: 'small';
+			addStyle: 'flat';
+			icon: ((PvCompositeIcon newName: 'view-more-symbolic') buildOn: self owner application);
+			enabled: actionsMenuCommandGroup allCommands notEmpty;
+			menu: [ actionsMenuCommandGroup asMenuPresenter ];
+			yourself)
+		expand: false
+]
+
+{ #category : #private }
+PvContextActionBuilder >> addToolbarTo: presenter [
+	| toolbarCommandGroup |
+	
+	toolbarCommandGroup := self buildToolbarCommandGroup.
+	toolbarCommandGroup allCommands ifEmpty: [ ^ self ].
+	 
+	presenter layout add: (presenter newToolbar
+		addStyle: 'pvPerspectiveToolbar';
+		displayMode: self owner application toolbarDisplayMode;
+		fillWith: toolbarCommandGroup)
+]
+
+{ #category : #private }
+PvContextActionBuilder >> buildActionsMenuCommandGroup [
+	
+	^ self fromCommandClass 
+		buildMenu: self actionGroups 
+		on: self owner
+]
+
 { #category : #building }
 PvContextActionBuilder >> buildToolbar [
 	| presenter |
 
 	presenter := self owner newPresenter.
 	presenter layout: SpBoxLayout newLeftToRight.	
-	
-	presenter layout add: (presenter newToolbar
-		addStyle: 'pvPerspectiveToolbar';
-		displayMode: self owner application toolbarDisplayMode;
-		fillWith: (self fromCommandClass 
-			buildToolbar: self mainGroups 
-			on: self owner)).
-			
+
+	self addToolbarTo: presenter.
 	self actionGroups ifNotEmpty: [
-		presenter layout 
-			addLast: (presenter newButton
-				addStyle: 'small';
-				addStyle: 'flat';
-				icon: ((PvCompositeIcon newName: 'view-more-symbolic') buildOn: self owner application);
-				action: [ ];
-				yourself)
-			expand: false
-		"presenter layout 
-			addLast: (presenter newToolbar
-				addStyle: 'pvPerspectiveToolbar';
-				displayMode: self owner application toolbarDisplayMode;
-				fillWith: (self fromCommandClass 
-					buildToolbar: self actionGroups 
-					on: self owner))
-			expand: false" ].
+		self addActionsMenuTo: presenter ].
 
 	^ presenter
+]
+
+{ #category : #private }
+PvContextActionBuilder >> buildToolbarCommandGroup [
+	
+	^ self fromCommandClass 
+		buildToolbar: self mainGroups 
+		on: self owner
 ]
 
 { #category : #building }
@@ -93,7 +117,7 @@ PvContextActionBuilder >> fromCommandClass [
 { #category : #accessing }
 PvContextActionBuilder >> mainGroup: aSymbol [
 
-	mainGroups := aSymbol
+	mainGroups := { aSymbol }
 ]
 
 { #category : #accessing }

@@ -34,7 +34,7 @@ PvNewPackageCommand class >> defaultPriority [
 { #category : #default }
 PvNewPackageCommand class >> groups [
 
-	^ #(actions)
+	^ #(action)
 ]
 
 { #category : #testing }

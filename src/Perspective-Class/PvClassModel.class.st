@@ -7,12 +7,6 @@ Class {
 	#category : #'Perspective-Class-Model'
 }
 
-{ #category : #visiting }
-PvClassModel >> accept: aVisitor [
-	
-	^ aVisitor visitClassModel: self
-]
-
 { #category : #converting }
 PvClassModel >> asClassModel [
 
@@ -27,7 +21,7 @@ PvClassModel >> asOutlineClassModel [
 		entity: self entity
 ]
 
-{ #category : #visiting }
+{ #category : #accessing }
 PvClassModel >> beForNewClass [
 
 	isNew := true
@@ -36,7 +30,11 @@ PvClassModel >> beForNewClass [
 { #category : #accessing }
 PvClassModel >> classDefinitionString [
 	
-	^ (PvFluidClassDefinitionPrinter for: self entity) definitionString
+	self flag: #TODO. "I do not like to use an if here... but for now is easier 
+	than pollute the model"
+	^ self entity isClassOrTrait 
+		ifTrue: [ (PvFluidClassDefinitionPrinter for: self entity) definitionString ]
+		ifFalse: [ self entity classDefinitionString ]	
 ]
 
 { #category : #accessing }
@@ -70,13 +68,13 @@ PvClassModel >> compile: aString notifying: requestor [
 		e compilationContext noPattern ifFalse: [ e pass ] ]
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - ui' }
 PvClassModel >> editorClass [
 	
 	^ PvClassEditorView
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - ui' }
 PvClassModel >> iconName [
 	
 	^ self entity systemIconName
@@ -95,7 +93,7 @@ PvClassModel >> inheritsFrom: aClassModel [
 	^ self entity instanceSide inheritsFrom: aClassModel entity instanceSide
 ]
 
-{ #category : #visiting }
+{ #category : #initialization }
 PvClassModel >> initialize [
 
 	super initialize.
@@ -105,13 +103,19 @@ PvClassModel >> initialize [
 { #category : #testing }
 PvClassModel >> isOutlineClassEntity [
 
-	^ true
+	^ self entity isClassOrTrait
 ]
 
 { #category : #accessing }
 PvClassModel >> name [
 
 	^ self entity name asString
+]
+
+{ #category : #accessing }
+PvClassModel >> packageName [
+
+	^ self entity package name
 ]
 
 { #category : #accessing }

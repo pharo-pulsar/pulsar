@@ -55,10 +55,9 @@ PvSystemNavigation >> browseMessageList: messageList
 { #category : #'as yet unclassified' }
 PvSystemNavigation >> browseVersionsOf: aMethod [ 
 
-	(self application tools versionBrowser
+	self perspective addWindow: (self application tools versionBrowser
 		newApplication: self application
-		model: aMethod asRingDefinition) 
-		open
+		model: aMethod asRingDefinition)
 ]
 
 { #category : #'as yet unclassified' }

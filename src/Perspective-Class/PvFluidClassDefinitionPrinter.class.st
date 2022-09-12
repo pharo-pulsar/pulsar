@@ -34,18 +34,16 @@ PvFluidClassDefinitionPrinter >> classDefinitionString [
 				ifFalse: [ self layoutOn: stream ].
 
 			self traitsOn: stream.
-			self class displayEmptySlots 
-				ifTrue: [ 
-					self slotsOn: stream.
-					self classSlotsOn: stream ]
-		  		ifFalse: [
-					forClass slots ifNotEmpty: [ self slotsOn: stream ].
-					forClass classSlots ifNotEmpty: [ self classSlotsOn: stream ]. ].
-		  "forClass classVariables ifNotEmpty: [" self sharedVariablesOn: stream "]".
-		  forClass sharedPools ifNotEmpty: [ self sharedPoolsOn: stream ].
+			(self class displayEmptySlots or: [ forClass classSlots notEmpty ]) 
+				ifTrue: [ self classSlotsOn: stream ].
+		  	(self class displayEmptySlots or: [ forClass sharedVariables notEmpty ]) 
+				ifTrue: [ self sharedVariablesOn: stream ].
+			(self class displayEmptySlots or: [ forClass slots notEmpty ]) 
+				ifTrue: [ self slotsOn: stream ].
+			forClass sharedPools ifNotEmpty: [ self sharedPoolsOn: stream ].
 
-		  self tagOn: stream.
-		  self packageOn: stream ]
+			self tagOn: stream.
+			self packageOn: stream ]
 ]
 
 { #category : #accessing }
@@ -107,13 +105,10 @@ PvFluidClassDefinitionPrinter >> traitDefinitionString [
 			self msgAndClassNameOn: stream.
 			self traitsOn: stream.
 			
-			self class displayEmptySlots 
-				ifTrue: [ 
-					self slotsOn: stream.
-					self classSlotsOn: stream ]
-		  		ifFalse: [
-					forClass slots ifNotEmpty: [ self slotsOn: stream ].
-					forClass classSlots ifNotEmpty: [ self classSlotsOn: stream ]. ].
+			(self class displayEmptySlots or: [ forClass classSlots notEmpty ]) 
+				ifTrue: [ self classSlotsOn: stream ].
+			(self class displayEmptySlots or: [ forClass slots notEmpty ]) 
+				ifTrue: [ self slotsOn: stream ].
 				
 			self tagOn: stream.
 			self packageOn: stream ]
