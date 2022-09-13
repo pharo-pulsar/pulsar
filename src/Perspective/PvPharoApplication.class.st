@@ -18,8 +18,8 @@ PvPharoApplication >> newIconProvider [
 
 	^ (PvLocationWithThemeIconProvider new
 			application: self;
-			addLocation: './new-icons' asFileReference;
-			addLocation: './idea-community-icons' asFileReference;
+			addLocation: (FileLocator imageDirectory / 'new-icons') asFileReference;
+			addLocation: (FileLocator imageDirectory / 'idea-community-icons') asFileReference;
 			yourself),
 	  StPharoDefaultIconProvider new, 
 	  SgaGtkThemeIconProvider new,
