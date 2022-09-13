@@ -6,7 +6,7 @@ Class {
 
 { #category : #'as yet unclassified' }
 PvMethodEditorHeaderPresenter >> updatePresenter [
-'OK' crTrace.
+
 	self model ifNil: [ ^ self ].
 	
 	pathPresenter 
