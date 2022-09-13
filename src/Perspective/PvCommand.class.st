@@ -11,6 +11,9 @@ In perspective views and editors it would be cumbersome to define once and again
 Class {
 	#name : #PvCommand,
 	#superclass : #CmCommand,
+	#instVars : [
+		'specDecorator'
+	],
 	#category : #'Perspective-Command'
 }
 
@@ -210,4 +213,16 @@ PvCommand >> model [
 PvCommand >> shortcut [
 
 	^ self class defaultShortcut
+]
+
+{ #category : #accessing }
+PvCommand >> specDecorator [
+
+	^ specDecorator
+]
+
+{ #category : #accessing }
+PvCommand >> specDecorator: aDecorator [
+
+	specDecorator := aDecorator
 ]

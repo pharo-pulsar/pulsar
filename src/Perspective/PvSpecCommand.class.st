@@ -7,6 +7,13 @@ Class {
 	#category : #'Perspective-Command'
 }
 
+{ #category : #accessing }
+PvSpecCommand >> decoratedCommand: aCommand [
+
+	super decoratedCommand: aCommand.
+	decoratedCommand specDecorator: self
+]
+
 { #category : #testing }
 PvSpecCommand >> hasIcon [
 
