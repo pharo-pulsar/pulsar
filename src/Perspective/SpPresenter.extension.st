@@ -34,7 +34,21 @@ SpPresenter >> systemNavigation [
 ]
 
 { #category : #'*Perspective' }
+SpPresenter >> view [
+	"as 'root', but answers the perspective view"
+	self isView ifTrue: [ ^ self ].
+	self hasOwner ifTrue: [ ^ self owner view ].
+	^ nil
+]
+
+{ #category : #'*Perspective' }
 SpPresenter >> withPerspectiveDo: aBlock [
 
 	self perspective ifNotNil: aBlock
+]
+
+{ #category : #'*Perspective' }
+SpPresenter >> withViewDo: aBlock [
+
+	self view ifNotNil: aBlock
 ]
