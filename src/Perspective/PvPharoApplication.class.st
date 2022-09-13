@@ -30,7 +30,13 @@ PvPharoApplication >> newIconProvider [
 PvPharoApplication >> newSettings [
 
 	self flag: #TODO. "Take this from better settings"
+	
 	^ LnSettings new
+		"this can change by platform (linux, mac or windows)"
+		mod1: Smalltalk os mod1;
+		mod2: Smalltalk os mod2;
+		mod3: Smalltalk os mod3;
+		"I need a better way to do this (extensible, yet comprensible)"
 		defineShortcutGroup: #perspective with: { 
 			"open default tool"
 			KeyboardKey enter 	shift 			-> [ :perspective | perspective showSpotterForWindows ].
