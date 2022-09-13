@@ -74,6 +74,21 @@ PvClassModel >> editorClass [
 	^ PvClassEditorView
 ]
 
+{ #category : #'accessing - navigating' }
+PvClassModel >> hierarchyTopModel [
+	| node prevNode |
+
+	prevNode := self.
+	self entity allSuperclasses do: [ :each |
+		node := PvClassNodeModel
+			newEnvironment: self environmentModel 
+			entity: each.
+		node child: prevNode.
+		prevNode := node ].
+	
+	^ node
+]
+
 { #category : #'accessing - ui' }
 PvClassModel >> iconName [
 	
@@ -122,6 +137,15 @@ PvClassModel >> packageName [
 PvClassModel >> shortName [
 	
 	^ self name contractTo: self class shortSize
+]
+
+{ #category : #'accessing - navigating' }
+PvClassModel >> subclassesModels [
+
+	^ self entity subclasses collect: [ :each | 
+		PvClassModel
+			newEnvironment: self environmentModel 
+			entity: each ]
 ]
 
 { #category : #accessing }

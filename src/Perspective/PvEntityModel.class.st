@@ -62,7 +62,7 @@ PvEntityModel >> entity: anObject [
 	entity := anObject
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - navigating' }
 PvEntityModel >> environmentModel [ 
 	
 	^ environmentModel

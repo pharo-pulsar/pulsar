@@ -12,14 +12,6 @@ Class {
 	#category : #'Perspective-View-Editor'
 }
 
-{ #category : #accessing }
-PvEditorHeaderPresenter >> addSegment: aString action: aBlock [
-
-	pathPresenter 
-		addSegment: aString 
-		action: aBlock
-]
-
 { #category : #layout }
 PvEditorHeaderPresenter >> defaultLayout [
 
@@ -27,7 +19,7 @@ PvEditorHeaderPresenter >> defaultLayout [
 		vAlignCenter;
 		borderWidth: 3;
 		spacing: 3;
-		add: (actionsLayout := SpBoxLayout newLeftToRight) expand: false; 
+		add: actionsLayout expand: false; 
 		add: pathPresenter;
 		addLast: menuButtonPresenter expand: false;
 		yourself
@@ -36,6 +28,7 @@ PvEditorHeaderPresenter >> defaultLayout [
 { #category : #initialization }
 PvEditorHeaderPresenter >> initializePresenters [
 
+	actionsLayout := SpBoxLayout newLeftToRight.
 	pathPresenter := self instantiate: PvEditorPathPresenter.
 	menuButtonPresenter := self newMenuButton
 		addStyle: 'small';

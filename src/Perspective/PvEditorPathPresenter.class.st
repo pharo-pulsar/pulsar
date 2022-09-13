@@ -9,21 +9,7 @@ PvEditorPathPresenter >> addSegment: aPresenter [
 
 	self addSeparator.		
 	self layout 
-		add: (self newLabel 
-			label: aPresenter asPresenter;
-			yourself)
-		expand: false
-]
-
-{ #category : #accessing }
-PvEditorPathPresenter >> addSegment: aString action: aBlock [
-
-	self addSeparator.		
-	self layout 
-		add: (self newLink 
-			label: aString;
-			action: aBlock;
-			yourself)
+		add: aPresenter asPresenter
 		expand: false
 ]
 

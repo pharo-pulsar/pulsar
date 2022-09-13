@@ -12,6 +12,7 @@ PvPharoGtkConfiguration >> configureGeneral: anApplication [
 .link { padding: 0px }
 .cell-link { font-size: smaller; font-weight: normal; color: gray; min-width: 10px }
 .pvEditorScrollBar { min-height: 150px }
+.pvClassHierarchyNavigation { min-width: 450px; min-height: 350px }
 '
 ]
 
