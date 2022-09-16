@@ -74,13 +74,23 @@ PvClassModel >> editorClass [
 	^ PvClassEditorView
 ]
 
+{ #category : #accessing }
+PvClassModel >> fullName [
+
+	^ self name
+]
+
 { #category : #'accessing - navigating' }
 PvClassModel >> hierarchyTopModel [
 	| node prevNode |
 
-	prevNode := self.
+	prevNode := PvClassHierarchyNodeModel 
+		newEnvironment: self environmentModel 
+		entity: self entity.
+	prevNode childrenNodeProvider: [ :anEntity | anEntity subclasses ].
+
 	self entity allSuperclasses do: [ :each |
-		node := PvClassNodeModel
+		node := PvClassHierarchyNodeModel
 			newEnvironment: self environmentModel 
 			entity: each.
 		node child: prevNode.
@@ -115,6 +125,12 @@ PvClassModel >> initialize [
 	isNew := false
 ]
 
+{ #category : #'accessing - navigating' }
+PvClassModel >> isLargeHierarchy [
+
+	^ { Object. ProtoObject } includes: self entity
+]
+
 { #category : #testing }
 PvClassModel >> isOutlineClassEntity [
 
@@ -137,15 +153,6 @@ PvClassModel >> packageName [
 PvClassModel >> shortName [
 	
 	^ self name contractTo: self class shortSize
-]
-
-{ #category : #'accessing - navigating' }
-PvClassModel >> subclassesModels [
-
-	^ self entity subclasses collect: [ :each | 
-		PvClassModel
-			newEnvironment: self environmentModel 
-			entity: each ]
 ]
 
 { #category : #accessing }

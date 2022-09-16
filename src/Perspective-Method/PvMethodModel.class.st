@@ -94,6 +94,31 @@ PvMethodModel >> fullName [
 			<< self name ]
 ]
 
+{ #category : #'accessing - navigating' }
+PvMethodModel >> hierarchyTopModel [
+	| systemNavigation nodes |
+	
+	systemNavigation := PvSystemNavigation new.
+	self isLargeHierarchy ifFalse: [
+			| environment |
+			environment := SystemDictionary new.
+			self entity origin allSuperclasses 
+				do: [ :each | environment at: each name put: each ].
+			self entity origin withAllSubclasses 
+				do: [ :each | environment at: each name put: each ].
+			systemNavigation environment: environment ].
+	
+	nodes := (systemNavigation allImplementorsOf: self entity selector)
+		collect: [ :each | 
+			PvMethodHierarchyNodeModel 
+				newEnvironment: self environmentModel 
+				entity: each ].
+	
+	nodes do: [ :each | each findParentFrom: nodes ].
+
+	^ nodes detect: [ :each | each parent isNil ]
+]
+
 { #category : #'accessing - decorated' }
 PvMethodModel >> iconName [
 
@@ -112,6 +137,12 @@ PvMethodModel >> includesClassModel [
 PvMethodModel >> isInstanceSide [
 	
 	^ self entity methodClass isInstanceSide
+]
+
+{ #category : #'accessing - navigating' }
+PvMethodModel >> isLargeHierarchy [
+
+	^ { Object. ProtoObject } includes: self entity methodClass
 ]
 
 { #category : #testing }
@@ -178,7 +209,7 @@ PvMethodModel >> spotterTitle [
 { #category : #accessing }
 PvMethodModel >> windowIconName [
 
-	^ 'method' "#scriptManager"
+	^ 'method'
 ]
 
 { #category : #accessing }

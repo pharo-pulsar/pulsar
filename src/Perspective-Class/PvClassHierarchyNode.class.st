@@ -50,7 +50,7 @@ PvClassHierarchyNode >> element: anObject [
 
 { #category : #accessing }
 PvClassHierarchyNode >> findParentFrom: nodes [
-	| parents parentNodes allSuperclasses |
+	| parents parentNodes |
 
 	parent ifNotNil: [ ^ self ].
 	

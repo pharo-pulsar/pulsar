@@ -16,10 +16,16 @@ PvPharoApplication >> boxWindowClass [
 { #category : #'private - factory' }
 PvPharoApplication >> newIconProvider [
 
-	^ (PvLocationWithThemeIconProvider new
+	^ (PvAliasedVSCodeIconProvider new
 			application: self;
-			addLocation: (FileLocator imageDirectory / 'new-icons') asFileReference;
-			addLocation: (FileLocator imageDirectory / 'idea-community-icons') asFileReference;
+			addLocation: (FileLocator imageDirectory / 'vscode-extraicons') asFileReference;
+			addLocation: (FileLocator imageDirectory / 'vscode-icons') asFileReference;
+			addLocation: (FileLocator imageDirectory / 'vscode-codicons') asFileReference;
+			yourself),
+	 (PvLocationWithThemeIconProvider new
+			application: self;
+			addLocation: (FileLocator imageDirectory / 'idea-extraicons') asFileReference;
+			addLocation: (FileLocator imageDirectory / 'idea-icons') asFileReference;
 			yourself),
 	  StPharoDefaultIconProvider new, 
 	  SgaGtkThemeIconProvider new,

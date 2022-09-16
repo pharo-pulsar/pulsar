@@ -50,7 +50,7 @@ StBrowserHierarchyNode >> element: anObject [
 
 { #category : #accessing }
 StBrowserHierarchyNode >> findParentFrom: nodes [
-	| parents parentNodes allSuperclasses |
+	| parents parentNodes |
 
 	parent ifNotNil: [ ^ self ].
 	

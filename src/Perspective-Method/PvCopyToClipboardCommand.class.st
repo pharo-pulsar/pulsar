@@ -1,7 +1,7 @@
 Class {
 	#name : #PvCopyToClipboardCommand,
 	#superclass : #PvEditorCommand,
-	#category : #'Perspective-Method-Commands'
+	#category : #'Perspective-Method-Command'
 }
 
 { #category : #accessing }

@@ -1,16 +1,16 @@
 Class {
-	#name : #PvClassHierarchyPresenter,
+	#name : #PvMethodHierarchyPresenter,
 	#superclass : #SpPresenter,
 	#traits : 'SpTModel',
 	#classTraits : 'SpTModel classTrait',
 	#instVars : [
 		'treePresenter'
 	],
-	#category : #'Perspective-Class-View'
+	#category : #'Perspective-Method-View'
 }
 
 { #category : #layout }
-PvClassHierarchyPresenter >> defaultLayout [
+PvMethodHierarchyPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
 		add: treePresenter;
@@ -18,13 +18,13 @@ PvClassHierarchyPresenter >> defaultLayout [
 ]
 
 { #category : #transmission }
-PvClassHierarchyPresenter >> defaultOutputPort [
+PvMethodHierarchyPresenter >> defaultOutputPort [
 
 	^ self outputActivationPort
 ]
 
 { #category : #initialization }
-PvClassHierarchyPresenter >> initializePresenters [
+PvMethodHierarchyPresenter >> initializePresenters [
 
 	treePresenter := self newTree.
 	treePresenter
@@ -34,11 +34,11 @@ PvClassHierarchyPresenter >> initializePresenters [
 		addNavigationShortcuts.
 		
 	self addStyle: 'pvNavigation'.
-	self addStyle: 'pvClassHierarchyNavigation'.
+	self addStyle: 'pvMethodHierarchyNavigation'
 ]
 
 { #category : #transmission }
-PvClassHierarchyPresenter >> outputActivationPort [
+PvMethodHierarchyPresenter >> outputActivationPort [
 
 	^ (SpActivationPort newPresenter: self)
 		delegateTo: [ treePresenter ];
@@ -46,12 +46,12 @@ PvClassHierarchyPresenter >> outputActivationPort [
 ]
 
 { #category : #initialization }
-PvClassHierarchyPresenter >> updatePresenter [
+PvMethodHierarchyPresenter >> updatePresenter [
 
 	treePresenter 
 		roots: { self model hierarchyTopModel };
 		selectItem: self model.
-
+		
 	"Exclude huge hierarchies from the expandAll to avoid huge and unnecesary 
 	 hierarchy (with a long, long time to be prepared)"
 	self model isLargeHierarchy

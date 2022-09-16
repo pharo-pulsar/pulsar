@@ -27,7 +27,7 @@ PvClassHierarchyNavigationCommand class >> defaultName [
 { #category : #initialization }
 PvClassHierarchyNavigationCommand class >> defaultShortcut [
 
-	^ $h control
+	^ $h ctrl
 ]
 
 { #category : #default }

@@ -28,6 +28,15 @@ PvClassEditorView >> editorHeaderClass [
 ]
 
 { #category : #initialization }
+PvClassEditorView >> initializeEditor [
+
+	super initializeEditor.
+	editorPresenter 
+		contextKeyBindings: headerPresenter actionsCommandGroup asKMCategory
+		
+]
+
+{ #category : #initialization }
 PvClassEditorView >> initializeWindow: aWindowPresenter [
 	
 	super initializeWindow: aWindowPresenter.

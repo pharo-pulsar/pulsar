@@ -39,7 +39,10 @@ PvMethodEditorView >> editorHeaderClass [
 { #category : #initialization }
 PvMethodEditorView >> initializePresenters [
 
-	super initializePresenters
+	super initializePresenters.
+	editorPresenter 
+		contextKeyBindings: headerPresenter actionsCommandGroup asKMCategory
+	
 ]
 
 { #category : #initialization }

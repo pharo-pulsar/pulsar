@@ -4,7 +4,7 @@ Open the vestions of the method contained in `context model`
 Class {
 	#name : #PvMethodVersionsCommand,
 	#superclass : #PvMethodEditorCommand,
-	#category : #'Perspective-Method-Commands'
+	#category : #'Perspective-Method-Command'
 }
 
 { #category : #accessing }
