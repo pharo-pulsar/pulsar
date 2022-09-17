@@ -9,15 +9,15 @@ PvOutlinePerspectiveLayout >> createLayoutOn: aPresenter [
 	
 	^ SpPanedLayout newLeftToRight 
 		positionOfSlider: 25 percent;
-		first: (aPresenter newContainer: #overview) useTabLayout;
-		second: (SpPanedLayout newTopToBottom
-			positionOfSlider: 60 percent;
-			first: (SpPanedLayout newLeftToRight
+		add: (aPresenter newContainer: #overview) useTabLayout;
+		add: (SpPanedLayout newTopToBottom
+			positionOfSlider: 55 percent;
+			add: (SpPanedLayout newLeftToRight
 				positionOfSlider: 65 percent;  
-				first: (aPresenter newEditorContainer: #edit) useTabLayout; 
-				second: (aPresenter newContainer: #outline) useTabLayout;
+				add: (aPresenter newEditorContainer: #edit) useTabLayout; 
+				add: (aPresenter newContainer: #outline) useTabLayout;
 				yourself);
-			second: (aPresenter newContainer: #tools) useTabLayout;
+			add: (aPresenter newContainer: #tools) useTabLayout;
 			yourself);
 		yourself
 ]

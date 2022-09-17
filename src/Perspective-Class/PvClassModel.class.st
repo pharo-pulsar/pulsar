@@ -100,6 +100,17 @@ PvClassModel >> hierarchyTopModel [
 ]
 
 { #category : #'accessing - ui' }
+PvClassModel >> iconComposite [
+
+	^ PvCompositeIcon new 
+		name: self iconName;
+		in: [ :this | 
+			self entity isAbstract 
+			ifTrue: [ this addAbstract ] ];
+		yourself
+]
+
+{ #category : #'accessing - ui' }
 PvClassModel >> iconName [
 	
 	^ self entity systemIconName
@@ -161,4 +172,15 @@ PvClassModel >> windowCommentIconName [
 	^ self entity hasComment
 		ifTrue: [ #comments ]
 		ifFalse: [ #uncommentedClass ]
+]
+
+{ #category : #'accessing - ui' }
+PvClassModel >> windowIconComposite [
+
+	^ PvCompositeIcon new 
+		name: self iconName;
+		in: [ :this | 
+			self entity isAbstract 
+			ifTrue: [ this addAbstract ] ];
+		yourself
 ]

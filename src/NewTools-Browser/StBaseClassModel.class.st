@@ -53,6 +53,14 @@ StBaseClassModel >> hash [
 		bitXor: self modelClass hash
 ]
 
+{ #category : #'accessing - ui' }
+StBaseClassModel >> iconComposite [
+
+	^ PvCompositeIcon new 
+		name: self iconName;
+		yourself
+]
+
 { #category : #accessing }
 StBaseClassModel >> iconName [
 	

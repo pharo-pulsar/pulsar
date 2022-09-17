@@ -34,6 +34,7 @@ PvAliasedVSCodeIconProvider >> initialize [
 		'groupByMethod'. 			'extensions'.			"browser (extensions)"
 		'library'. 					'library'.				"browser (system deps)"
 		'class'. 						'symbol-class'.			"type"
+		'classAbstract'. 			'symbol-class'.			"type"
 		'method'. 					'symbol-method'.		"type"
 		'openProject'. 				'folder-opened'.		"browser (open project)"
 		"#overlayClass.
@@ -56,8 +57,8 @@ PvAliasedVSCodeIconProvider >> initialize [
 		'trait'.						'symbol-trait'.			"type"
 		'workspace'.					'window'.					"playground"
 		'announcement'.				'symbol-announcement'. "type"
-		'arrowDown'.					'arrow-down'.			"browser-> overrides"
-		'arrowUp'.					'arrow-up'.				"browser-> overriding"
+		'arrowDown'.					'arrow-small-down'.	"browser-> overrides"
+		'arrowUp'.					'arrow-small-up'.		"browser-> overriding"
 		'flagIcon'.					'bookmark'.				"browser (to show there are flags)"
 		'smallWindow'.				'symbol-window'.		"type (presenter...)" 
 		'morph'.						'symbol-morph'.			"type"
@@ -73,6 +74,10 @@ PvAliasedVSCodeIconProvider >> initialize [
 		'glamorousRefresh'. 		'refresh'. 				"inspector"
 		'smallSystemBrowser'. 	'browser'. 				"inspector"
 		'referencesIcon'.			'type-hierarchy'.		"message browser"
+		'smallDoIt'. 				'run'.						"code"
+		'smallDebug'. 				'bug'.						"code"
+		'smallPrintIt'. 			'blank'.					"code"
+		'smallProfile'. 			'blank'.					"code"
 	 }
 	
 ]

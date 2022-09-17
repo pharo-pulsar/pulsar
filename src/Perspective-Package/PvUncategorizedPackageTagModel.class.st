@@ -34,7 +34,7 @@ PvUncategorizedPackageTagModel >> classes [
 { #category : #accessing }
 PvUncategorizedPackageTagModel >> iconName [
 
-	^ 'unknownJdk'
+	^ 'question'
 ]
 
 { #category : #accessing }

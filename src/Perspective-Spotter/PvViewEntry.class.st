@@ -21,3 +21,16 @@ PvViewEntry >> icon [
 	
 	^ content headerBar image
 ]
+
+{ #category : #accessing }
+PvViewEntry >> iconName [
+	
+	"I do not use this since the icon is already included in the view"
+	^ nil 
+]
+
+{ #category : #accessing }
+PvViewEntry >> iconOn: anIconProvider [
+
+	^ self icon
+]

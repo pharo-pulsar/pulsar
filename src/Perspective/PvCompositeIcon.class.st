@@ -2,8 +2,8 @@ Class {
 	#name : #PvCompositeIcon,
 	#superclass : #Object,
 	#instVars : [
-		'overlays',
-		'name'
+		'name',
+		'decorations'
 	],
 	#category : #'Perspective-Icon'
 }
@@ -16,45 +16,52 @@ PvCompositeIcon class >> newName: aName [
 		yourself
 ]
 
-{ #category : #'accessing - overlays' }
+{ #category : #'accessing - decorations' }
+PvCompositeIcon >> addAbstract [
+
+	decorations := decorations copyWith: PvGrayIconDecoration new
+]
+
+{ #category : #'accessing - decorations' }
 PvCompositeIcon >> addClass [
 
 	self topLeft: 'overlayClass'
 ]
 
-{ #category : #'accessing - overlays' }
+{ #category : #accessing }
+PvCompositeIcon >> addDecoration: aDecorations [
+
+	decorations := decorations copyWith: aDecorations
+]
+
+{ #category : #'accessing - decorations' }
 PvCompositeIcon >> addDirty [
 
 	self bottomRight: #overlayDirty
 ]
 
-{ #category : #'accessing - overlays' }
+{ #category : #'accessing - decorations' }
 PvCompositeIcon >> addNew [
 
 	self bottomRight: 'new'
 ]
 
-{ #category : #private }
-PvCompositeIcon >> addOverlayTo: icon position: position icon: otherIcon [
-
-	position = #topLeft 		ifTrue: [ ^ icon mergeWith: otherIcon ].
-	position = #topRight 		ifTrue: [ ^ icon mergeTopRightWith: otherIcon ].	
-	position = #bottomLeft 	ifTrue: [ ^ icon mergeBottomLeftWith: otherIcon ].
-	position = #bottomRight 	ifTrue: [ ^ icon mergeBottomRightWith: otherIcon ].	
-	
-	self error: 'Should not arrive here'
-]
-
-{ #category : #accessing }
+{ #category : #'accessing - decorations' }
 PvCompositeIcon >> bottomLeft: aName [
 
-	overlays at: #bottomLeft put: aName
+	self addDecoration: (PvOverlayIconDecoration new 
+		position: #bottomLeft; 
+		overlay: aName;
+		yourself)
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - decorations' }
 PvCompositeIcon >> bottomRight: aName [
 
-	overlays at: #bottomRight put: aName
+	self addDecoration: (PvOverlayIconDecoration new 
+		position: #bottomRight; 
+		overlay: aName;
+		yourself)
 ]
 
 { #category : #building }
@@ -62,11 +69,8 @@ PvCompositeIcon >> buildOn: anApplication [
 	| icon |
 
 	icon := anApplication iconNamed: self name.
-	overlays keysAndValuesDo: [ :position :iconName | 
-		icon := self 
-			addOverlayTo: icon 
-			position: position 
-			icon: (anApplication iconNamed: iconName) ].
+	decorations do: [ :each | 
+		icon :=  each applyTo: icon on: anApplication ].
 		
 	^ icon
 ]
@@ -75,7 +79,7 @@ PvCompositeIcon >> buildOn: anApplication [
 PvCompositeIcon >> initialize [
 
 	super initialize.
-	overlays := OrderedDictionary new: 2
+	decorations := #()
 ]
 
 { #category : #accessing }
@@ -90,14 +94,20 @@ PvCompositeIcon >> name: aName [
 	name := aName
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - decorations' }
 PvCompositeIcon >> topLeft: aName [
 
-	overlays at: #topLeft put: aName
+	self addDecoration: (PvOverlayIconDecoration new 
+		position: #topLeft; 
+		overlay: aName;
+		yourself)
 ]
 
-{ #category : #accessing }
+{ #category : #'accessing - decorations' }
 PvCompositeIcon >> topRight: aName [
 
-	overlays at: #topRight put: aName
+	self addDecoration: (PvOverlayIconDecoration new 
+		position: #topRight; 
+		overlay: aName;
+		yourself)
 ]
