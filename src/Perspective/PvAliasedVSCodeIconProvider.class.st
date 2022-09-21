@@ -70,6 +70,7 @@ PvAliasedVSCodeIconProvider >> initialize [
 		'collection'.				'symbol-namespace'.	"type"
 		'glamorousClose'. 			'close'.   				"inspector"
 		'history'.					'history'. 				"playground"
+		'smallDelete'. 				'trash'.					"playground..."
 		'smallObjects'.				'beaker'.  				"inspector"
 		'glamorousRefresh'. 		'refresh'. 				"inspector"
 		'smallSystemBrowser'. 	'browser'. 				"inspector"
