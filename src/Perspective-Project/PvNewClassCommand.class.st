@@ -34,7 +34,7 @@ PvNewClassCommand class >> defaultPriority [
 { #category : #'default - groups' }
 PvNewClassCommand class >> groups [
 
-	^ #(action)
+	^ #(actionNew)
 ]
 
 { #category : #testing }

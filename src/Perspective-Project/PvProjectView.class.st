@@ -31,7 +31,7 @@ PvProjectView >> connectPresenters [
 { #category : #initialization }
 PvProjectView >> contextMenuActions [
 
-	^ PvProjectCommand buildMenu: #(default action project) on: self
+	^ PvProjectCommand buildMenu: #(default project actionNew action) on: self
 ]
 
 { #category : #actions }

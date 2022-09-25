@@ -8,12 +8,22 @@ Class {
 }
 
 { #category : #'default - groups' }
+PvProjectCommand class >> commandGroupNew [
+	<commandGroup: #actionNew>
+	
+	^ (PvCommandGroup named: 'New') asSpecGroup
+		priority: 20;
+		beDisplayedAsSubMenu;
+		yourself
+]
+
+{ #category : #'default - groups' }
 PvProjectCommand class >> commandGroupProject [
 	<commandGroup: #project>
 	
 	^ (PvCommandGroup named: 'Project') asSpecGroup
 		priority: 10;
-		beDisplayedAsGroup;
+		beDisplayedAsSubMenu;
 		yourself
 ]
 

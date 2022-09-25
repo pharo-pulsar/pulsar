@@ -34,7 +34,7 @@ PvNewTraitCommand class >> defaultPriority [
 { #category : #'default - groups' }
 PvNewTraitCommand class >> groups [
 
-	^ #(action)
+	^ #(actionNew)
 ]
 
 { #category : #testing }

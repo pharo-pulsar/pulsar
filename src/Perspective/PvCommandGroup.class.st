@@ -17,7 +17,9 @@ PvCommandGroup class >> defaultPriority [
 { #category : #converting }
 PvCommandGroup >> asSpecGroup [
 
-	^ self decorateWith: PvSpecCommandGroup
+	^ (self decorateWith: PvSpecCommandGroup)
+		iconName: #blank;
+		yourself
 ]
 
 { #category : #accessing }

@@ -195,8 +195,9 @@ PvCommand >> asSpecCommand [
 	| command |
 	
 	command := self decorateWith: PvSpecCommand.
-	 self iconComposite 
-		ifNotNil: [ :aCompositeIcon | command icon: (aCompositeIcon buildOn: self application) ].
+	 command icon: (self iconComposite 
+		ifNotNil: [ :aCompositeIcon | aCompositeIcon buildOn: self application ]
+		ifNil: [ self application iconNamed: #blank ]).
 	self shortcut 
 		ifNotNil: [ :aKeyCombination | command shortcutKey: aKeyCombination ].
 		
