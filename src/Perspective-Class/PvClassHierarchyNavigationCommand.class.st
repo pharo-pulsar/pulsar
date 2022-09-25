@@ -30,7 +30,7 @@ PvClassHierarchyNavigationCommand class >> defaultShortcut [
 	^ $h ctrl
 ]
 
-{ #category : #default }
+{ #category : #'default - groups' }
 PvClassHierarchyNavigationCommand class >> groups [
 
 	^ #()

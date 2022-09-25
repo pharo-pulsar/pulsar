@@ -23,7 +23,7 @@ PvMethodEditorHeaderPresenter >> activateModelClass [
 { #category : #'as yet unclassified' }
 PvMethodEditorHeaderPresenter >> newActionsCommandGroup [
 
-	^ (CmCommandGroup forSpecNamed: 'Actions')
+	^ (PvCommandGroup forSpecNamed: 'Actions')
 		register: (PvMethodHierarchyNavigationCommand forSpecContext: self);
 		yourself
 ]

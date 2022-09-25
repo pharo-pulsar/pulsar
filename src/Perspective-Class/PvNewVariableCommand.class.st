@@ -31,7 +31,7 @@ PvNewVariableCommand class >> defaultPriority [
 	^ 100
 ]
 
-{ #category : #default }
+{ #category : #'default - groups' }
 PvNewVariableCommand class >> groups [
 
 	^ #(action)

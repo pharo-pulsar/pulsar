@@ -32,7 +32,7 @@ PvNewMethodCommand class >> defaultPriority [
 	^ 10
 ]
 
-{ #category : #default }
+{ #category : #'default - groups' }
 PvNewMethodCommand class >> groups [
 
 	^ #(action)

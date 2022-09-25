@@ -28,10 +28,10 @@ PvNewClassCommand class >> defaultName [
 { #category : #'accessing - defaults' }
 PvNewClassCommand class >> defaultPriority [
 
-	^ 10
+	^ 110
 ]
 
-{ #category : #default }
+{ #category : #'default - groups' }
 PvNewClassCommand class >> groups [
 
 	^ #(action)

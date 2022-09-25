@@ -28,10 +28,10 @@ PvNewPackageCommand class >> defaultName [
 { #category : #'accessing - defaults' }
 PvNewPackageCommand class >> defaultPriority [
 
-	^ 0
+	^ 100
 ]
 
-{ #category : #default }
+{ #category : #'default - groups' }
 PvNewPackageCommand class >> groups [
 
 	^ #(action)

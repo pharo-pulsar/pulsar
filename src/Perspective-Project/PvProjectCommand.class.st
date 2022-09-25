@@ -7,10 +7,14 @@ Class {
 	#category : #'Perspective-Project'
 }
 
-{ #category : #default }
-PvProjectCommand class >> groups [
-
-	^ #(project)
+{ #category : #'default - groups' }
+PvProjectCommand class >> commandGroupProject [
+	<commandGroup: #project>
+	
+	^ (PvCommandGroup named: 'Project') asSpecGroup
+		priority: 10;
+		beDisplayedAsGroup;
+		yourself
 ]
 
 { #category : #testing }

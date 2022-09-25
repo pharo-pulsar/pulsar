@@ -47,19 +47,23 @@ PvCommand class >> allToolbarCommands [
 
 { #category : #'private - building' }
 PvCommand class >> buildGroup: aGroupOrCollection commands: aCollection on: aContext [
-	| groups rootGroup |
-	
-	groups := aGroupOrCollection isSymbol 
+	| groupNames groups rootGroup |
+
+	groupNames := aGroupOrCollection isSymbol 
 		ifTrue: [ { aGroupOrCollection } ] 
 		ifFalse: [ aGroupOrCollection ].
 	
-	rootGroup := CmCommandGroup new asSpecGroup.
+	rootGroup := PvCommandGroup new asSpecGroup.
 	rootGroup beRoot.
-	groups do: [ :eachGroup | | group |
-		group := self commandGroupForGroup: eachGroup.
-		(self commandsInGroup: eachGroup) 
-			do: [ :each | group register: (each forSpecContext: aContext) ].
-		rootGroup register: group ].
+	groups := (groupNames 
+		collect: [ :each | self commandGroupForGroup: each ])
+		sorted: #priority ascending.
+		
+	groups do: [ :eachGroup |
+		(self commandsInGroup: eachGroup) ifNotEmpty: [ :commands |
+			commands do: [ :each | 
+				eachGroup register: (each forSpecContext: aContext) ].
+			rootGroup register: eachGroup ] ].
 	
 	^ rootGroup
 ]
@@ -104,7 +108,8 @@ PvCommand class >> buildToolbarOn: aContext [
 PvCommand class >> commandGroupAction [
 	<commandGroup: #action>
 	
-	^ (CmCommandGroup named: 'Actions') asSpecGroup
+	^ (PvCommandGroup named: 'Actions') asSpecGroup
+		priority: 100;
 		beDisplayedAsGroup;
 		yourself
 ]
@@ -112,18 +117,20 @@ PvCommand class >> commandGroupAction [
 { #category : #'private - building' }
 PvCommand class >> commandGroupForGroup: aSymbol [
 
-	^ (Pragma allNamed: #commandGroup: from: self class to: PvCommand)
+	^ ((Pragma allNamed: #commandGroup: from: self class to: PvCommand)
 		detect: [ :each | (each argumentAt: 1) = aSymbol ]
-		ifFound: [ :aPragma | self perform: aPragma methodSelector  ]
-		ifNone: [ (CmCommandGroup named: aSymbol asString capitalized) asSpecGroup ]
+		ifFound: [ :aPragma | (self perform: aPragma methodSelector)  ]
+		ifNone: [ (PvCommandGroup named: aSymbol asString capitalized) asSpecGroup ])
+		id: aSymbol;
+		yourself
 ]
 
 { #category : #'private - building' }
 PvCommand class >> commandsInGroup: aGroup [
 
 	^ (self allCommands
-		select: [ :each | each groups includes: aGroup ])
-		sorted: #defaultPriority ascending	
+		select: [ :each | each groups includes: aGroup id ])
+		sorted: #defaultPriority ascending
 ]
 
 { #category : #default }
@@ -153,10 +160,10 @@ PvCommand class >> defaultShortcut [
 	^ nil
 ]
 
-{ #category : #default }
+{ #category : #'default - groups' }
 PvCommand class >> groups [
 
-	^ #default
+	^ #(default)
 ]
 
 { #category : #testing }

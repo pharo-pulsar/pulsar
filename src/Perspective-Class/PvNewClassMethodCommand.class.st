@@ -31,7 +31,7 @@ PvNewClassMethodCommand class >> defaultPriority [
 	^ 20
 ]
 
-{ #category : #default }
+{ #category : #'default - groups' }
 PvNewClassMethodCommand class >> groups [
 
 	^ #(action)

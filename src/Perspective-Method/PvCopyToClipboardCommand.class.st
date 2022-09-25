@@ -22,7 +22,7 @@ PvCopyToClipboardCommand class >> defaultName [
 	^ 'Copy'
 ]
 
-{ #category : #default }
+{ #category : #'default - groups' }
 PvCopyToClipboardCommand class >> groups [
 
 	^ #(action)

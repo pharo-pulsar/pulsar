@@ -28,6 +28,12 @@ PvProjectView >> connectPresenters [
 		transmitDo: [ :aSelection | self activateWith: aSelection ]
 ]
 
+{ #category : #initialization }
+PvProjectView >> contextMenuActions [
+
+	^ PvProjectCommand buildMenu: #(default action project) on: self
+]
+
 { #category : #actions }
 PvProjectView >> doOpenProject [
 	
@@ -52,9 +58,10 @@ PvProjectView >> initializePresenters [
 		add: (projectTreePresenter := self newEntityTree);
 		yourself).
 
-	projectTreePresenter addStyle: 'stProjectTree'.
-	projectTreePresenter contextMenu: [ self toolbarActions asMenuPresenter ].
-	projectTreePresenter contextKeyBindings: self toolbarActions asKMCategory
+	projectTreePresenter 
+		addStyle: 'stProjectTree';
+		contextMenu: [ self contextMenuActions asMenuPresenter ];
+		contextKeyBindings: self contextMenuActions asKMCategory
 ]
 
 { #category : #initialization }

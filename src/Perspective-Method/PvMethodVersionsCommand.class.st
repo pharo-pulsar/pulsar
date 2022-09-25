@@ -25,7 +25,7 @@ PvMethodVersionsCommand class >> defaultName [
 	^ 'Versions'
 ]
 
-{ #category : #default }
+{ #category : #'default - groups' }
 PvMethodVersionsCommand class >> groups [
 
 	^ #(action method)

@@ -30,7 +30,7 @@ PvMethodHierarchyNavigationCommand class >> defaultShortcut [
 	^ $h control
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : #'default - groups' }
 PvMethodHierarchyNavigationCommand class >> groups [
 
 	^ #()

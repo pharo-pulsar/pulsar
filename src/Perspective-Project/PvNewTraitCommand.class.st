@@ -28,10 +28,10 @@ PvNewTraitCommand class >> defaultName [
 { #category : #accessing }
 PvNewTraitCommand class >> defaultPriority [
 
-	^ 20
+	^ 120
 ]
 
-{ #category : #default }
+{ #category : #'default - groups' }
 PvNewTraitCommand class >> groups [
 
 	^ #(action)

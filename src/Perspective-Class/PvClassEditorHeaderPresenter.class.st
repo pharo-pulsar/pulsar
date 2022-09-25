@@ -16,7 +16,7 @@ PvClassEditorHeaderPresenter >> actionsCommandGroup [
 { #category : #'as yet unclassified' }
 PvClassEditorHeaderPresenter >> newActionsCommandGroup [
 
-	^ (CmCommandGroup forSpecNamed: 'Actions')
+	^ (PvCommandGroup forSpecNamed: 'Actions')
 		register: (PvClassHierarchyNavigationCommand forSpecContext: self);
 		yourself
 ]

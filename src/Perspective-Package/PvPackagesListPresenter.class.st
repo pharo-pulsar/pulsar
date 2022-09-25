@@ -43,7 +43,7 @@ PvPackagesListPresenter >> initializePresenters [
 PvPackagesListPresenter >> toolbarActions [
 	| group |
 	
-	group := CmCommandGroup forSpec beRoot.
+	group := PvCommandGroup forSpec beRoot.
 	group register: nil.
 ]
 

@@ -24,6 +24,18 @@ PvOpenProjectCommand class >> defaultName [
 	^ 'Open project'
 ]
 
+{ #category : #accessing }
+PvOpenProjectCommand class >> defaultPriority [
+
+	^ 1
+]
+
+{ #category : #'default - groups' }
+PvOpenProjectCommand class >> groups [
+
+	^ #(project)
+]
+
 { #category : #testing }
 PvOpenProjectCommand class >> isVisibleInToolbar [
 
