@@ -1,22 +1,22 @@
 Class {
-	#name : #PvNewPackageCommand,
+	#name : #PvNewPackageTagCommand,
 	#superclass : #PvProjectCommand,
 	#category : #'Perspective-Project'
 }
 
 { #category : #initialization }
-PvNewPackageCommand >> defineAction [
+PvNewPackageTagCommand >> defineAction [
 
-	self priority: 100.
-	self name: 'New package'.
-	self description: 'Add a new package to the environment'.
+	self priority: 101.
+	self name: 'New tag'.
+	self description: 'Add a new tag to this package'.
 	self iconCompositeName: 'new-file'.
 	self menuGroup: #actionNew.
 	self toolbarGroup: #actionNew
 ]
 
 { #category : #executing }
-PvNewPackageCommand >> execute [
+PvNewPackageTagCommand >> execute [
 	
 	context doNewPackage
 ]

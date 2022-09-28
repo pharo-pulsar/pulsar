@@ -4,8 +4,15 @@ Class {
 	#instVars : [
 		'icon'
 	],
-	#category : #'Perspective-Command'
+	#category : #'Perspective-Command-Base'
 }
+
+{ #category : #'presenter building' }
+PvSpecCommand >> buildPresenter [
+
+	self name crTrace.
+	^ super buildPresenter
+]
 
 { #category : #accessing }
 PvSpecCommand >> decoratedCommand: aCommand [

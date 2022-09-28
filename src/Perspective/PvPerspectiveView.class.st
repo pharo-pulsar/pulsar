@@ -5,8 +5,8 @@ Extensions to this class define diferent behaviors for perspectives.
 Class {
 	#name : #PvPerspectiveView,
 	#superclass : #PvPresenter,
-	#traits : 'SpTModel + (SpTActivable - {#activate}) + (SpTSelectable - {#select})',
-	#classTraits : 'SpTModel classTrait + SpTActivable classTrait + SpTSelectable classTrait',
+	#traits : 'SpTModel + (SpTActivable - {#activate}) + (SpTSelectable - {#select}) + PvTActionHolder',
+	#classTraits : 'SpTModel classTrait + SpTActivable classTrait + SpTSelectable classTrait + PvTActionHolder classTrait',
 	#instVars : [
 		'containerName',
 		'perspective'

@@ -19,6 +19,57 @@ PvProjectView class >> defaultTitle [
 	^ 'Project'
 ]
 
+{ #category : #'accessing - actions' }
+PvProjectView class >> defineActionGroupAction: actionGroup [
+	<perspectiveActionGroup: #action>
+	
+	actionGroup 
+		name: 'Action';
+		priority: 30;
+		beDisplayedAsGroup
+]
+
+{ #category : #'accessing - actions' }
+PvProjectView class >> defineActionGroupNew: actionGroup [
+	<perspectiveActionGroup: #actionNew>
+	
+	actionGroup 
+		name: 'New';
+		priority: 20;
+		beDisplayedAsSubMenu
+]
+
+{ #category : #'accessing - actions' }
+PvProjectView class >> defineActionGroupProject: actionGroup [
+	<perspectiveActionGroup: #project>
+	
+	actionGroup 
+		name: 'Project';
+		priority: 10;
+		beDisplayedAsSubMenu
+]
+
+{ #category : #'accessing - actions' }
+PvProjectView class >> defineActionsOn: aBuilder [
+	<perspectiveActions>
+	
+	aBuilder 
+		registerGroup: #project with: { 
+			PvOpenProjectCommand new.
+			PvRefreshProjectCommand new.
+		};
+		registerGroup: #actionNew with: { 
+			PvNewPackageCommand new.
+			PvNewPackageTagCommand new.
+			PvNewClassCommand new.
+			PvNewTraitCommand new
+		};
+		registerGroup: #action with: { 
+			$r mod1 -> PvRenamePackageCommand new.
+			$x mod1 -> PvRemovePackageCommand new.
+		}
+]
+
 { #category : #initialization }
 PvProjectView >> connectPresenters [
 
@@ -29,9 +80,17 @@ PvProjectView >> connectPresenters [
 ]
 
 { #category : #initialization }
-PvProjectView >> contextMenuActions [
+PvProjectView >> contextMenuActionGroups [
 
-	^ PvProjectCommand buildMenu: #(default project actionNew action) on: self
+	^ #(project actionNew action)
+]
+
+{ #category : #layout }
+PvProjectView >> defaultLayout [
+
+	^ self layout: (SpBoxLayout newTopToBottom
+		add: projectTreePresenter;
+		yourself)
 ]
 
 { #category : #actions }
@@ -54,14 +113,11 @@ PvProjectView >> entitySelected: aModel [
 { #category : #initialization }
 PvProjectView >> initializePresenters [
 
-	self layout: (SpBoxLayout newTopToBottom
-		add: (projectTreePresenter := self newEntityTree);
-		yourself).
-
-	projectTreePresenter 
-		addStyle: 'stProjectTree';
+	projectTreePresenter := self newEntityTree
+		addStyle: 'pvProjectTree';
 		contextMenu: [ self contextMenuActions asMenuPresenter ];
-		contextKeyBindings: self contextMenuActions asKMCategory
+		contextKeyBindings: self contextMenuActions asKMCategory;
+		yourself
 ]
 
 { #category : #initialization }
@@ -147,17 +203,12 @@ PvProjectView >> spotterSystemImplementorsFor: aStep [
 { #category : #initialization }
 PvProjectView >> toolbar [
 
-	^ self buildPerspectiveToolbarWith: [ :builder |
+	^ self instantiate: PvHeaderBar
+	"self buildPerspectiveToolbarWith: [ :builder |
 		builder 
 			from: PvProjectCommand;
 			mainGroup: #project;
-			actionGroups: #action ]
-]
-
-{ #category : #initialization }
-PvProjectView >> toolbarActions [
-
-	^ PvProjectCommand buildToolbarOn: self
+			actionGroups: #action ]"
 ]
 
 { #category : #initialization }

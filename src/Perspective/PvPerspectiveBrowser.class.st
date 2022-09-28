@@ -1,8 +1,8 @@
 Class {
 	#name : #PvPerspectiveBrowser,
 	#superclass : #LnContainerPresenter,
-	#traits : 'SpTModel',
-	#classTraits : 'SpTModel classTrait',
+	#traits : 'SpTModel + PvTActionHolder',
+	#classTraits : 'SpTModel classTrait + PvTActionHolder classTrait',
 	#category : #'Perspective-View-Perspective'
 }
 
@@ -10,6 +10,21 @@ Class {
 PvPerspectiveBrowser class >> defaultEnvironment [
 
 	^ PvSystemEnvironment new
+]
+
+{ #category : #'as yet unclassified' }
+PvPerspectiveBrowser class >> defineActionsOn: aBuilder [
+	<perspectiveActions>
+	
+	aBuilder 
+		registerGroup: #perspective with: { 
+			"open default tool"
+			KeyboardKey enter 	shift 			-> PvShowSpotterForWindowsAction new.
+			KeyboardKey enter 	ctrl 			-> PvShowSpotterForEnvironmentAction new.
+			KeyboardKey enter 	alt 			-> PvShowSpotterForCommandsAction new };
+		registerGroup: #window with: {
+			$w mod1 								-> PvCloseCurrentWindowAction new.
+		}
 ]
 
 { #category : #'instance creation' }
@@ -24,6 +39,12 @@ PvPerspectiveBrowser class >> newApplication: anApplication [
 	^ self 
 		newApplication: anApplication
 		model: (PvEnvironmentModel newEntity: self defaultEnvironment)
+]
+
+{ #category : #accessing }
+PvPerspectiveBrowser >> actionGroups [
+
+	^ #(perspective window)
 ]
 
 { #category : #activating }
@@ -135,9 +156,7 @@ PvPerspectiveBrowser >> editorContainer [
 { #category : #'private - settings' }
 PvPerspectiveBrowser >> globalShortcuts [
 
-	^ "super globalShortcuts,"
-	  (self settings shortcutsFor: #perspective),
-	  (self settings shortcutsFor: #window)
+	^ self actions asKMCategory
 ]
 
 { #category : #initialization }
@@ -215,6 +234,8 @@ PvPerspectiveBrowser >> resendToPresenters: ann [
 PvPerspectiveBrowser >> showSpotterForCommands [
 	| spotter |
 	
+	self flag: #TOREMOVE.
+
 	spotter := self 
 		instantiate: PvSpotter 
 		on: (PvSpotterModelForCommands newOrigin: self).
@@ -229,6 +250,8 @@ PvPerspectiveBrowser >> showSpotterForCommands [
 PvPerspectiveBrowser >> showSpotterForEnvironment [
 	| spotter |
 	
+	self flag: #TOREMOVE.
+
 	spotter := self 
 		instantiate: PvSpotter 
 		on: (PvSpotterModelForEnvironment newOrigin: self).
@@ -243,6 +266,8 @@ PvPerspectiveBrowser >> showSpotterForEnvironment [
 PvPerspectiveBrowser >> showSpotterForWindows [
 	| spotter |
 	
+	self flag: #TOREMOVE.
+
 	spotter := self 
 		instantiate: PvSpotter 
 		on: (PvSpotterModelForWindows newOrigin: self).

@@ -4,42 +4,12 @@ Class {
 	#category : #'Perspective-Method-Command'
 }
 
-{ #category : #'accessing - defaults' }
-PvMethodHierarchyNavigationCommand class >> defaultDescription [
+{ #category : #initialization }
+PvMethodHierarchyNavigationCommand >> defineAction [
 
-	^ 'Show method hierarchy'
-]
-
-{ #category : #'accessing - defaults' }
-PvMethodHierarchyNavigationCommand class >> defaultIconComposite [
-
-	^ PvCompositeIcon new 
-		name: #smallHierarchyBrowser;
-		yourself
-]
-
-{ #category : #'accessing - defaults' }
-PvMethodHierarchyNavigationCommand class >> defaultName [
-
-	^ 'Show hierarchy'
-]
-
-{ #category : #'accessing - defaults' }
-PvMethodHierarchyNavigationCommand class >> defaultShortcut [
-
-	^ $h control
-]
-
-{ #category : #'default - groups' }
-PvMethodHierarchyNavigationCommand class >> groups [
-
-	^ #()
-]
-
-{ #category : #'accessing - defaults' }
-PvMethodHierarchyNavigationCommand class >> isVisibleInMenu [
-
-	^ false
+	self name: 'Show hierarchy'.
+	self description: 'Show method hierarchy'.
+	self iconCompositeName: #smallHierarchyBrowser
 ]
 
 { #category : #executing }

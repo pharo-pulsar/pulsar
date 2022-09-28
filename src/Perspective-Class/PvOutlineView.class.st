@@ -21,6 +21,30 @@ PvOutlineView class >> defaultTitle [
 	^ 'Outline'
 ]
 
+{ #category : #'accessing - actions' }
+PvOutlineView class >> defineActionGroupNew: actionGroup [
+	<perspectiveActionGroup: #actionNew>
+
+	actionGroup 
+		priority: 10;
+		name: 'New';
+		beDisplayedAsSubMenu
+]
+
+{ #category : #'accessing - actions' }
+PvOutlineView class >> defineActionsOn: aBuilder [
+	<perspectiveActions>
+	
+	aBuilder 
+		registerGroup: #actionNew with: {
+			PvNewMethodCommand new.
+			PvNewClassMethodCommand new.
+			PvNewVariableCommand new.
+			PvNewClassVariableCommand new. 
+		}
+
+]
+
 { #category : #'private - events' }
 PvOutlineView >> classChanged: aModel [
 
@@ -35,6 +59,20 @@ PvOutlineView >> connectPresenters [
 		transmitDo: [ :aSelection | self selectWith: aSelection ].
 	outlineTreePresenter outputActivationPort
 		transmitDo: [ :aSelection | self activateWith: aSelection ]
+]
+
+{ #category : #initialization }
+PvOutlineView >> contextMenuActionGroups [
+
+	^ #(actionNew)
+]
+
+{ #category : #layout }
+PvOutlineView >> defaultLayout [
+
+	^ SpBoxLayout newTopToBottom
+		add: outlineTreePresenter;
+		yourself
 ]
 
 { #category : #'private - events' }
@@ -70,11 +108,7 @@ PvOutlineView >> filterByProtocol: aProtocol [
 { #category : #initialization }
 PvOutlineView >> initializePresenters [
 
-	self layout: (SpBoxLayout newTopToBottom
-		add: (outlineTreePresenter := self newTreeTable);
-		yourself).
-
-	outlineTreePresenter
+	(outlineTreePresenter := self newTreeTable)
 		hideColumnHeaders;
 		addStyle: 'stTree';
 		addStyle: 'pvOutlineView';
@@ -97,8 +131,8 @@ PvOutlineView >> initializePresenters [
 		children: [ :aModel | aModel children ];
 		addNavigationShortcuts.
 		
-	"outlineTreePresenter contextMenu: [ self toolbarActions asMenuPresenter ].
-	outlineTreePresenter contextKeyBindings: self toolbarActions asKMCategory"
+	outlineTreePresenter contextMenu: [ self contextMenuActions asMenuPresenter ].
+	outlineTreePresenter contextKeyBindings: self contextMenuActions asKMCategory
 ]
 
 { #category : #initialization }
@@ -118,10 +152,11 @@ PvOutlineView >> methodChanged: aModel [
 { #category : #initialization }
 PvOutlineView >> toolbar [
 
-	^ self buildPerspectiveToolbarWith: [ :builder |
+	^ self instantiate: PvHeaderBar
+	"self buildPerspectiveToolbarWith: [ :builder |
 		builder 
 			from: PvClassCommand;
-			actionGroup: #action ]
+			actionGroup: #action ]"
 ]
 
 { #category : #initialization }

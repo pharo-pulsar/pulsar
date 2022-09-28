@@ -4,35 +4,15 @@ Class {
 	#category : #'Perspective-Class-Command'
 }
 
-{ #category : #'accessing - defaults' }
-PvNewClassMethodCommand class >> defaultDescription [
+{ #category : #initialization }
+PvNewClassMethodCommand >> defineAction [
 
-	^ 'Add a method (class side) to current class/trait'
-]
-
-{ #category : #'accessing - defaults' }
-PvNewClassMethodCommand class >> defaultIconComposite [
-
-	^ PvCompositeIcon new 
+	self priority: 20.
+	self name: 'Add class method'.
+	self description:  'Add a method (class side) to current class/trait'.
+	self iconComposite: (PvCompositeIcon new 
 		name: 'add';
 		bottomRight: 'overlayMethod';
-		yourself
-]
-
-{ #category : #'accessing - defaults' }
-PvNewClassMethodCommand class >> defaultName [
-
-	^ 'Add class method'
-]
-
-{ #category : #accessing }
-PvNewClassMethodCommand class >> defaultPriority [
-
-	^ 20
-]
-
-{ #category : #'default - groups' }
-PvNewClassMethodCommand class >> groups [
-
-	^ #(action)
+		yourself).
+	self menuGroup: #action
 ]

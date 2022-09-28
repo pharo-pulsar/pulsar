@@ -3,6 +3,6 @@ A base command for method editors
 "
 Class {
 	#name : #PvMethodEditorCommand,
-	#superclass : #PvEditorCommand,
+	#superclass : #PvEditorAction,
 	#category : #'Perspective-Method-Command'
 }

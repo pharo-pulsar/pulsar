@@ -2,15 +2,22 @@ Class {
 	#name : #PvMethodEditorHeaderPresenter,
 	#superclass : #PvEditorHeaderPresenter,
 	#instVars : [
-		'actionsCommandGroup'
+		'actions'
 	],
 	#category : #'Perspective-Method-View'
 }
 
 { #category : #'as yet unclassified' }
-PvMethodEditorHeaderPresenter >> actionsCommandGroup [
+PvMethodEditorHeaderPresenter >> actions [
 
-	^ actionsCommandGroup ifNil: [ actionsCommandGroup := self newActionsCommandGroup ]
+	^ actions
+]
+
+{ #category : #'as yet unclassified' }
+PvMethodEditorHeaderPresenter >> actions: anActionGroup [
+
+	actions := anActionGroup.
+	self updatePresenter
 ]
 
 { #category : #'as yet unclassified' }
@@ -18,14 +25,6 @@ PvMethodEditorHeaderPresenter >> activateModelClass [
 		
 	self withPerspectiveDo: [ :aPerspective | 
 		aPerspective activateClass: self model methodClass ]
-]
-
-{ #category : #'as yet unclassified' }
-PvMethodEditorHeaderPresenter >> newActionsCommandGroup [
-
-	^ (PvCommandGroup forSpecNamed: 'Actions')
-		register: (PvMethodHierarchyNavigationCommand forSpecContext: self);
-		yourself
 ]
 
 { #category : #'as yet unclassified' }
@@ -37,9 +36,10 @@ PvMethodEditorHeaderPresenter >> updatePresenter [
 		removeAll;
 		add: (self newToolbar
 			beIcons;
-			fillWith: self actionsCommandGroup;
-			yourself);
-		yourself.	
+			in: [ :this | 
+				self actions ifNotNil: [
+					this fillWith: self actions ] ];
+			yourself).	
 	
 	pathPresenter 
 		removeAllSegments;

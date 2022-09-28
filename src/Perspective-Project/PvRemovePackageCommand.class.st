@@ -4,42 +4,15 @@ Class {
 	#category : #'Perspective-Project'
 }
 
-{ #category : #'accessing - defaults' }
-PvRemovePackageCommand class >> defaultDescription [
-
-	^ 'Remove package or tag (and all its contexts)'
-]
-
-{ #category : #'accessing - defaults' }
-PvRemovePackageCommand class >> defaultIconComposite [
-
-	^ PvCompositeIcon new 
-		name: 'trash';
-		yourself
-]
-
-{ #category : #'accessing - defaults' }
-PvRemovePackageCommand class >> defaultName [
-
-	^ 'Remove'
-]
-
-{ #category : #accessing }
-PvRemovePackageCommand class >> defaultPriority [
-
-	^ 210
-]
-
 { #category : #initialization }
-PvRemovePackageCommand class >> defaultShortcut [
+PvRemovePackageCommand >> defineAction [
 
-	^ $x platformMeta
-]
-
-{ #category : #'default - groups' }
-PvRemovePackageCommand class >> groups [
-
-	^ #(action)
+	self priority: 210.
+	self name: 'Remove'.
+	self description: 'Remove package or tag (and all its contexts)'.
+	self iconCompositeName: 'trash'.
+	self menuGroup: #action.
+	self toolbarGroup: nil
 ]
 
 { #category : #executing }

@@ -4,43 +4,15 @@ Class {
 	#category : #'Perspective-Project'
 }
 
-{ #category : #'accessing - defaults' }
-PvNewClassCommand class >> defaultDescription [
+{ #category : #initialization }
+PvNewClassCommand >> defineAction [
 
-	^ 'Add a new class to the environment'
-]
-
-{ #category : #'accessing - defaults' }
-PvNewClassCommand class >> defaultIconComposite [
-
-	^ PvCompositeIcon new 
-		name: 'add';
-		bottomRight: 'overlayClass';
-		yourself
-]
-
-{ #category : #'accessing - defaults' }
-PvNewClassCommand class >> defaultName [
-
-	^ 'New class'
-]
-
-{ #category : #'accessing - defaults' }
-PvNewClassCommand class >> defaultPriority [
-
-	^ 110
-]
-
-{ #category : #'default - groups' }
-PvNewClassCommand class >> groups [
-
-	^ #(actionNew)
-]
-
-{ #category : #testing }
-PvNewClassCommand class >> isVisibleInToolbar [
-
-	^ true
+	self priority: 110.
+	self name: 'New class'.
+	self description: 'Add a new class to the environment'.
+	self iconCompositeName: 'new-file'.
+	self menuGroup: #actionNew.
+	self toolbarGroup: #actionNew
 ]
 
 { #category : #executing }

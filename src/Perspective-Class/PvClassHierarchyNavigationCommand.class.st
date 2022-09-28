@@ -4,42 +4,19 @@ Class {
 	#category : #'Perspective-Class-View'
 }
 
-{ #category : #'accessing - defaults' }
-PvClassHierarchyNavigationCommand class >> defaultDescription [
-
-	^ 'Show class hierarchy'
-]
-
-{ #category : #'accessing - defaults' }
-PvClassHierarchyNavigationCommand class >> defaultIconComposite [
-
-	^ PvCompositeIcon new 
-		name: #smallHierarchyBrowser;
-		yourself
-]
-
-{ #category : #'accessing - defaults' }
-PvClassHierarchyNavigationCommand class >> defaultName [
-
-	^ 'Show hierarchy'
-]
-
 { #category : #initialization }
 PvClassHierarchyNavigationCommand class >> defaultShortcut [
 
-	^ $h ctrl
+	^ $h mod1
 ]
 
-{ #category : #'default - groups' }
-PvClassHierarchyNavigationCommand class >> groups [
+{ #category : #initialization }
+PvClassHierarchyNavigationCommand >> defineAction [
 
-	^ #()
-]
-
-{ #category : #testing }
-PvClassHierarchyNavigationCommand class >> isVisibleInMenu [
-
-	^ false
+	self name: 'Show hierarchy'.
+	self description: 'Show class hierarchy'.
+	self iconCompositeName: #smallHierarchyBrowser.
+	
 ]
 
 { #category : #executing }

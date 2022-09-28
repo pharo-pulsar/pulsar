@@ -5,8 +5,8 @@ Being an editor a key component of a perspective (since editing methods and defi
 Class {
 	#name : #PvEditorView,
 	#superclass : #PvPresenter,
-	#traits : 'SpTModel',
-	#classTraits : 'SpTModel classTrait',
+	#traits : 'SpTModel + PvTActionHolder',
+	#classTraits : 'SpTModel classTrait + PvTActionHolder classTrait',
 	#instVars : [
 		'#dirty => ObservableSlot',
 		'#updating',

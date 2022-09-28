@@ -4,10 +4,25 @@ Class {
 	#category : #'Perspective-Method-View'
 }
 
+{ #category : #'accessing - actions' }
+PvMethodEditorView class >> defineActionsOn: aBuilder [
+	<perspectiveActions>
+
+	aBuilder registerGroup: #navigation with: { 
+		$h mod1 -> PvMethodHierarchyNavigationCommand new
+	} 
+]
+
 { #category : #accessing }
 PvMethodEditorView class >> type [
 
 	^ #method
+]
+
+{ #category : #accessing }
+PvMethodEditorView >> contextMenuActionGroups [
+
+	^ #(navigation)
 ]
 
 { #category : #'private - actions' }
@@ -37,11 +52,18 @@ PvMethodEditorView >> editorHeaderClass [
 ]
 
 { #category : #initialization }
+PvMethodEditorView >> initializeEditorHeader [
+
+	super initializeEditorHeader.
+	headerPresenter actions: (self actions actionsFor: #navigation)
+]
+
+{ #category : #initialization }
 PvMethodEditorView >> initializePresenters [
 
 	super initializePresenters.
 	editorPresenter 
-		contextKeyBindings: headerPresenter actionsCommandGroup asKMCategory
+		contextKeyBindings: self contextMenuActions asKMCategory
 	
 ]
 
@@ -64,18 +86,11 @@ PvMethodEditorView >> title [
 { #category : #initialization }
 PvMethodEditorView >> toolbar [	
 
-	^ self buildPerspectiveToolbarWith: [ :builder |
+	^ self instantiate: PvHeaderBar 
+	"^ self buildPerspectiveToolbarWith: [ :builder |
 		builder 
-			from: PvEditorCommand;
-			actionGroups: #(action methodAction) ]
-]
-
-{ #category : #accessing }
-PvMethodEditorView >> toolbarActions [
-	
-	^ PvEditorCommand 
-		buildToolbar: #(default methodEditor) 
-		on: self
+			from: PvEditorAction;
+			actionGroups: #(action methodAction) ]"
 ]
 
 { #category : #initialization }

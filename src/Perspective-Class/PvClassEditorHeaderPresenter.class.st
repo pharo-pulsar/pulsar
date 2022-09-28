@@ -2,26 +2,25 @@ Class {
 	#name : #PvClassEditorHeaderPresenter,
 	#superclass : #PvEditorHeaderPresenter,
 	#instVars : [
-		'actionsCommandGroup'
+		'actions'
 	],
 	#category : #'Perspective-Class-View'
 }
 
-{ #category : #'as yet unclassified' }
-PvClassEditorHeaderPresenter >> actionsCommandGroup [
-		
-	^ actionsCommandGroup ifNil: [ actionsCommandGroup := self newActionsCommandGroup ]
+{ #category : #accessing }
+PvClassEditorHeaderPresenter >> actions [
+
+	^ actions
 ]
 
-{ #category : #'as yet unclassified' }
-PvClassEditorHeaderPresenter >> newActionsCommandGroup [
+{ #category : #accessing }
+PvClassEditorHeaderPresenter >> actions: anObject [
 
-	^ (PvCommandGroup forSpecNamed: 'Actions')
-		register: (PvClassHierarchyNavigationCommand forSpecContext: self);
-		yourself
+	actions := anObject.
+	self updatePresenter
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : #initialization }
 PvClassEditorHeaderPresenter >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
@@ -30,7 +29,9 @@ PvClassEditorHeaderPresenter >> updatePresenter [
 		removeAll;
 		add: (self newToolbar
 			beIcons;
-			fillWith: self actionsCommandGroup;
+			in: [ :this | 
+				self actions ifNotNil: [ 
+					this fillWith: self actions ] ];
 			yourself);
 		yourself.
 	

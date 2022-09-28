@@ -4,42 +4,15 @@ Class {
 	#category : #'Perspective-Project'
 }
 
-{ #category : #'accessing - defaults' }
-PvRefreshProjectCommand class >> defaultDescription [
+{ #category : #initialization }
+PvRefreshProjectCommand >> defineAction [
 
-	^ 'Refresh this project (reload configuration)'
-]
-
-{ #category : #'accessing - defaults' }
-PvRefreshProjectCommand class >> defaultIconComposite [
-
-	^ PvCompositeIcon new
-		name: 'refresh';
-		yourself
-]
-
-{ #category : #'accessing - defaults' }
-PvRefreshProjectCommand class >> defaultName [
-
-	^ 'Refresh project'
-]
-
-{ #category : #accessing }
-PvRefreshProjectCommand class >> defaultPriority [
-
-	^ 10
-]
-
-{ #category : #'default - groups' }
-PvRefreshProjectCommand class >> groups [
-
-	^ #(project)
-]
-
-{ #category : #testing }
-PvRefreshProjectCommand class >> isVisibleInToolbar [
-
-	^ true
+	self priority: 10.
+	self name: 'Refresh project'.
+	self description: 'Refresh this project (reload configuration)'.
+	self iconCompositeName: 'refresh'.
+	self menuGroup: #project.
+	self toolbarGroup: #project
 ]
 
 { #category : #executing }

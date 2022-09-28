@@ -4,43 +4,15 @@ Class {
 	#category : #'Perspective-Project'
 }
 
-{ #category : #'accessing - defaults' }
-PvNewTraitCommand class >> defaultDescription [
+{ #category : #initialization }
+PvNewTraitCommand >> defineAction [
 
-	^ 'Add a new trait to the environment'
-]
-
-{ #category : #'accessing - defaults' }
-PvNewTraitCommand class >> defaultIconComposite [
-
-	^ PvCompositeIcon new 
-		name: 'add';
-		bottomRight: 'overlayTrait';
-		yourself
-]
-
-{ #category : #'accessing - defaults' }
-PvNewTraitCommand class >> defaultName [
-
-	^ 'New trait'
-]
-
-{ #category : #accessing }
-PvNewTraitCommand class >> defaultPriority [
-
-	^ 120
-]
-
-{ #category : #'default - groups' }
-PvNewTraitCommand class >> groups [
-
-	^ #(actionNew)
-]
-
-{ #category : #testing }
-PvNewTraitCommand class >> isVisibleInToolbar [
-
-	^ true
+	self priority: 120.
+	self name: 'New trait'.
+	self description: 'Add a new trait to the environment'.
+	self iconCompositeName: 'new-file'.
+	self menuGroup: #actionNew.
+	self toolbarGroup: #actionNew
 ]
 
 { #category : #executing }

@@ -4,34 +4,14 @@ Class {
 	#category : #'Perspective-Project'
 }
 
-{ #category : #'accessing - defaults' }
-PvRenamePackageCommand class >> defaultDescription [
+{ #category : #initialization }
+PvRenamePackageCommand >> defineAction [
 
-	^ 'Rename package or tag'
-]
-
-{ #category : #'accessing - defaults' }
-PvRenamePackageCommand class >> defaultIconComposite [
-
-	^ nil
-]
-
-{ #category : #'accessing - defaults' }
-PvRenamePackageCommand class >> defaultName [
-
-	^ 'Rename'
-]
-
-{ #category : #accessing }
-PvRenamePackageCommand class >> defaultPriority [
-
-	^ 200
-]
-
-{ #category : #'default - groups' }
-PvRenamePackageCommand class >> groups [
-
-	^ #(action)
+	self priority: 200.
+	self name: 'Rename'.
+	self description: 'Rename package or tag'.
+	self menuGroup: #action.
+	self toolbarGroup: nil
 ]
 
 { #category : #executing }

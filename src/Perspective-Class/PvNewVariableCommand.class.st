@@ -4,35 +4,15 @@ Class {
 	#category : #'Perspective-Class-Command'
 }
 
-{ #category : #'accessing - defaults' }
-PvNewVariableCommand class >> defaultDescription [
+{ #category : #initialization }
+PvNewVariableCommand >> defineAction [
 
-	^ 'Add a variable to current class/trait'
-]
-
-{ #category : #'accessing - defaults' }
-PvNewVariableCommand class >> defaultIconComposite [
-
-	^ PvCompositeIcon new 
+	self priority: 100.
+	self name: 'Add variable'.
+	self description: 'Add a variable to current class/trait'.
+	self iconComposite: (PvCompositeIcon new 
 		name: 'add';
 		bottomRight: 'overlayVariable';
-		yourself
-]
-
-{ #category : #'accessing - defaults' }
-PvNewVariableCommand class >> defaultName [
-
-	^ 'Add variable'
-]
-
-{ #category : #accessing }
-PvNewVariableCommand class >> defaultPriority [
-
-	^ 100
-]
-
-{ #category : #'default - groups' }
-PvNewVariableCommand class >> groups [
-
-	^ #(action)
+		yourself).
+	self menuGroup: #action
 ]

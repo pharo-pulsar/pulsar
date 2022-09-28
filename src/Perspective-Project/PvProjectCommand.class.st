@@ -3,7 +3,7 @@ A base command for projects
 "
 Class {
 	#name : #PvProjectCommand,
-	#superclass : #PvCommand,
+	#superclass : #PvAction,
 	#category : #'Perspective-Project'
 }
 

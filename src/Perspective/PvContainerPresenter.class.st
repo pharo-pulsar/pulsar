@@ -1,11 +1,26 @@
 Class {
 	#name : #PvContainerPresenter,
 	#superclass : #LnContainerPresenter,
+	#traits : 'PvTActionHolder',
+	#classTraits : 'PvTActionHolder classTrait',
 	#instVars : [
 		'name'
 	],
 	#category : #'Perspective-View-Container'
 }
+
+{ #category : #accessing }
+PvContainerPresenter class >> defineActionsOn: aBuilder [
+	<perspectiveActions>
+	
+	aBuilder 
+		registerGroup: #container with: {
+			KeyboardKey up 		mod3 shift  -> PvFocusUpAction new.
+			KeyboardKey down 	mod3 shift  -> PvFocusDownAction new.
+			KeyboardKey left 	mod3 shift  -> PvFocusLeftAction new.
+			KeyboardKey right 	mod3 shift  -> PvFocusRightAction new.
+		}
+]
 
 { #category : #accessing }
 PvContainerPresenter >> allViews [
@@ -27,6 +42,12 @@ PvContainerPresenter >> asEditorContainer [
 PvContainerPresenter >> defaultTileLayout [
 
 	^ LnTileTabLayout uniqueInstance
+]
+
+{ #category : #'private settings' }
+PvContainerPresenter >> globalShortcuts [
+
+	^ self actions asKMCategory
 ]
 
 { #category : #'events - handling' }

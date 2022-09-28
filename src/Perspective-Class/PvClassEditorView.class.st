@@ -4,10 +4,25 @@ Class {
 	#category : #'Perspective-Class-View'
 }
 
+{ #category : #'accessing - actions' }
+PvClassEditorView class >> defineActionsOn: aBuilder [
+	<perspectiveActions>
+
+	aBuilder registerGroup: #navigation with: { 
+		$h mod1 -> PvClassHierarchyNavigationCommand new
+	} 
+]
+
 { #category : #accessing }
 PvClassEditorView >> content: aString [
 
 	editorPresenter text: aString
+]
+
+{ #category : #accessing }
+PvClassEditorView >> contextMenuActionGroups [
+
+	^ #(navigation)
 ]
 
 { #category : #'private - actions' }
@@ -32,8 +47,14 @@ PvClassEditorView >> initializeEditor [
 
 	super initializeEditor.
 	editorPresenter 
-		contextKeyBindings: headerPresenter actionsCommandGroup asKMCategory
-		
+		contextKeyBindings: self contextMenuActions asKMCategory
+]
+
+{ #category : #initialization }
+PvClassEditorView >> initializeEditorHeader [
+
+	super initializeEditorHeader.
+	headerPresenter actions: (self actions actionsFor: #navigation)
 ]
 
 { #category : #initialization }

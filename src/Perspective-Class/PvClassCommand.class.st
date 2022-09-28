@@ -3,12 +3,6 @@ A base command for class views
 "
 Class {
 	#name : #PvClassCommand,
-	#superclass : #PvCommand,
+	#superclass : #PvAction,
 	#category : #'Perspective-Class-Command'
 }
-
-{ #category : #testing }
-PvClassCommand class >> isVisibleInMenu [
-
-	^ true
-]

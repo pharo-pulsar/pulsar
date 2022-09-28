@@ -4,42 +4,15 @@ Class {
 	#category : #'Perspective-Project'
 }
 
-{ #category : #'accessing - defaults' }
-PvOpenProjectCommand class >> defaultDescription [
+{ #category : #initialization }
+PvOpenProjectCommand >> defineAction [
 
-	^ 'Open a project'
-]
-
-{ #category : #'accessing - defaults' }
-PvOpenProjectCommand class >> defaultIconComposite [
-
-	^ PvCompositeIcon new
-		name: 'openProject';
-		yourself
-]
-
-{ #category : #'accessing - defaults' }
-PvOpenProjectCommand class >> defaultName [
-
-	^ 'Open project'
-]
-
-{ #category : #accessing }
-PvOpenProjectCommand class >> defaultPriority [
-
-	^ 1
-]
-
-{ #category : #'default - groups' }
-PvOpenProjectCommand class >> groups [
-
-	^ #(project)
-]
-
-{ #category : #testing }
-PvOpenProjectCommand class >> isVisibleInToolbar [
-
-	^ true
+	self priority: 1.
+	self name: 'Open project'.
+	self description: 'Open project'.
+	self iconCompositeName: 'openProject'.
+	self menuGroup: #project.
+	self toolbarGroup: #project
 ]
 
 { #category : #executing }
