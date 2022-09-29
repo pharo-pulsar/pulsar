@@ -74,6 +74,27 @@ PvEditorView >> doSubmit: aString [
 ]
 
 { #category : #private }
+PvEditorView >> editorContextMenuActions [
+
+	^ CmCommandGroup forSpec
+		beRoot;
+		register: (editorPresenter rootCommandsGroup name: 'Code');
+		"in: [ :this | self addMenuEditionCommandsTo: this presenter: editorPresenter ];"
+		in: [ :this | self actions groups do: [ :eachGroup | this register: eachGroup ] ];
+		"register: ((CmCommandGroup named: 'Playground') asSpecGroup
+			register: ((CmCommandGroup named: 'Base options') asSpecGroup
+				beDisplayedAsGroup;
+				in: [ :this | self addToolbarCommandsTo: this ];
+				yourself);
+			register: ((CmCommandGroup named: 'Miscelaneous options') asSpecGroup
+				beDisplayedAsGroup;
+				register: (StShowLineNumbersCommand forSpecContext: self);
+				yourself);
+			yourself);"
+		yourself
+]
+
+{ #category : #private }
 PvEditorView >> editorHeaderClass [
 
 	^ PvEditorHeaderPresenter
@@ -102,6 +123,10 @@ PvEditorView >> initializeEditor [
 		addStyle: 'stCode';
 		addStyle: 'pvEditor';
 		addScrollBarStyle: 'pvEditorScrollBar';
+		overridingContextMenu;
+		withEditionContextMenu;
+		contextMenu: [ self editorContextMenuActions asMenuPresenter ];
+		contextKeyBindings: self editorContextMenuActions asKMCategory;
 		whenTextChangedDo: [ :newText :oldText | self textChangedFrom: oldText to: newText ];
 		whenSubmitDo: [ :aString | self doSubmit: aString ];
 		whenResetDo: [ self doReset ]

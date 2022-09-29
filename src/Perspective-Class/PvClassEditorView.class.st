@@ -43,14 +43,6 @@ PvClassEditorView >> editorHeaderClass [
 ]
 
 { #category : #initialization }
-PvClassEditorView >> initializeEditor [
-
-	super initializeEditor.
-	editorPresenter 
-		contextKeyBindings: self contextMenuActions asKMCategory
-]
-
-{ #category : #initialization }
 PvClassEditorView >> initializeEditorHeader [
 
 	super initializeEditorHeader.

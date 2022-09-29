@@ -59,15 +59,6 @@ PvMethodEditorView >> initializeEditorHeader [
 ]
 
 { #category : #initialization }
-PvMethodEditorView >> initializePresenters [
-
-	super initializePresenters.
-	editorPresenter 
-		contextKeyBindings: self contextMenuActions asKMCategory
-	
-]
-
-{ #category : #initialization }
 PvMethodEditorView >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
