@@ -1,23 +1,23 @@
 Class {
-	#name : #PvNewMethodCommand,
+	#name : #PvRemoveMethodCommand,
 	#superclass : #PvClassCommand,
 	#category : #'Perspective-Class-Command'
 }
 
 { #category : #initialization }
-PvNewMethodCommand >> defineAction [
+PvRemoveMethodCommand >> defineAction [
 
 	self priority: 10.
-	self name: 'Add method'.
-	self description: 'Add a method to current class/trait'.
+	self name: 'Remove method'.
+	self description: 'Remove a method from current class/trait'.
 	self iconComposite: (PvCompositeIcon new 
-		name: 'add';
+		name: 'trash';
 		bottomRight: 'overlayMethod';
 		yourself)
 ]
 
 { #category : #executing }
-PvNewMethodCommand >> execute [
+PvRemoveMethodCommand >> execute [
 	| parentModel |
 
 	parentModel := context model.

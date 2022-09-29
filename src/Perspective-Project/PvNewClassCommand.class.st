@@ -10,9 +10,7 @@ PvNewClassCommand >> defineAction [
 	self priority: 110.
 	self name: 'New class'.
 	self description: 'Add a new class to the environment'.
-	self iconCompositeName: 'new-file'.
-	self menuGroup: #actionNew.
-	self toolbarGroup: #actionNew
+	self iconCompositeName: 'new-file'
 ]
 
 { #category : #executing }

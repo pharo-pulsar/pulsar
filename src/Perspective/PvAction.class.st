@@ -5,8 +5,6 @@ Class {
 		'specDecorator',
 		'iconComposite',
 		'shortcut',
-		'toolbarGroup',
-		'menuGroup',
 		'priority'
 	],
 	#category : #'Perspective-Command-Base'
@@ -117,24 +115,6 @@ PvAction >> initialize [
 	self defineAction
 ]
 
-{ #category : #testing }
-PvAction >> isVisibleInMenu [
-
-	^ self menuGroup notNil
-]
-
-{ #category : #accessing }
-PvAction >> menuGroup [
-
-	^ menuGroup
-]
-
-{ #category : #accessing }
-PvAction >> menuGroup: aSymbol [
-
-	menuGroup := aSymbol
-]
-
 { #category : #'accessing - runtime' }
 PvAction >> model [
 	"All editors have a model"
@@ -176,16 +156,4 @@ PvAction >> specDecorator [
 PvAction >> specDecorator: aDecorator [
 
 	specDecorator := aDecorator
-]
-
-{ #category : #accessing }
-PvAction >> toolbarGroup [
-
-	^ toolbarGroup
-]
-
-{ #category : #accessing }
-PvAction >> toolbarGroup: aSymbol [
-
-	toolbarGroup := aSymbol
 ]

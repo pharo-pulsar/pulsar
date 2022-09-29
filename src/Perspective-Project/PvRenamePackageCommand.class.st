@@ -9,9 +9,7 @@ PvRenamePackageCommand >> defineAction [
 
 	self priority: 200.
 	self name: 'Rename'.
-	self description: 'Rename package or tag'.
-	self menuGroup: #action.
-	self toolbarGroup: nil
+	self description: 'Rename package or tag'
 ]
 
 { #category : #executing }

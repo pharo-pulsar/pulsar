@@ -86,11 +86,9 @@ PvMethodEditorView >> title [
 { #category : #initialization }
 PvMethodEditorView >> toolbar [	
 
-	^ self instantiate: PvHeaderBar 
-	"^ self buildPerspectiveToolbarWith: [ :builder |
-		builder 
-			from: PvEditorAction;
-			actionGroups: #(action methodAction) ]"
+	^ (self instantiate: PvHeaderBarPresenter)
+		toolbarActions: (self actions actionsForAll: #(action methodAction));
+		yourself
 ]
 
 { #category : #initialization }

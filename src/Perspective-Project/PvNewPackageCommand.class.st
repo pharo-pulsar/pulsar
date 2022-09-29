@@ -10,9 +10,7 @@ PvNewPackageCommand >> defineAction [
 	self priority: 100.
 	self name: 'New package'.
 	self description: 'Add a new package to the environment'.
-	self iconCompositeName: 'new-file'.
-	self menuGroup: #actionNew.
-	self toolbarGroup: #actionNew
+	self iconCompositeName: 'new-file'
 ]
 
 { #category : #executing }

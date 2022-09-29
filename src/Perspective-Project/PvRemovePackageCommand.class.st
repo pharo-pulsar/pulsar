@@ -10,9 +10,7 @@ PvRemovePackageCommand >> defineAction [
 	self priority: 210.
 	self name: 'Remove'.
 	self description: 'Remove package or tag (and all its contexts)'.
-	self iconCompositeName: 'trash'.
-	self menuGroup: #action.
-	self toolbarGroup: nil
+	self iconCompositeName: 'trash'
 ]
 
 { #category : #executing }

@@ -44,8 +44,8 @@ PvExploreBrowser >> connectViews [
 { #category : #initialization }
 PvExploreBrowser >> initializeViews [
 
-	self addWindow: (projectView := PvProjectView new) atContainerNamed: #overview.
-	self addWindow: (outlineView := PvOutlineView new) atContainerNamed: #overview
+	projectView := self addWindowOfClass: PvProjectView atContainerNamed: #overview.
+	outlineView := self addWindowOfClass: PvOutlineView atContainerNamed: #overview
 ]
 
 { #category : #actions }

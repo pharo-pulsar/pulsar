@@ -77,6 +77,17 @@ PvPerspectiveBrowser >> addWindow: aPresenter [
 
 { #category : #'accessing - windows' }
 PvPerspectiveBrowser >> addWindow: aPresenter atContainerNamed: aName [
+	"Adds a window (a view) to current perspective layout, in the container indicated. 
+	 WARNING: `aPresenter` needs to be correctly instantiated, which means it is *owned* 
+	 by current perspective. This is usually obtained by initialize them sending 
+	 `instantiate:`, `instantiate:on:` methods or with instance creating method `owner:`.
+	 e.g. all this is valid: 
+	 ```
+		aPresenter := self instantiate: APresenterClass.
+		aPresenter := self instantiate: APresenterClass on: aModel.
+		aPresenter := APresenterClass owner: self.
+	 ```
+	 IMPORTANT: when possible, prefer to use `#addWindowClass:atContainerNamed:`"
 
 	self 
 		containerNamed: aName
@@ -86,7 +97,9 @@ PvPerspectiveBrowser >> addWindow: aPresenter atContainerNamed: aName [
 				application: self application;
 				open ].
 	
-	aPresenter perspective: self
+	aPresenter perspective: self.
+	
+	^ aPresenter
 ]
 
 { #category : #'private - windows' }
@@ -109,6 +122,15 @@ PvPerspectiveBrowser >> addWindow: aPresenter ifContainerAbsent: aBlock [
 		addWindow: aPresenter 
 		atContainerNamed: aPresenter containerName
 		ifAbsent: aBlock
+]
+
+{ #category : #'accessing - windows' }
+PvPerspectiveBrowser >> addWindowOfClass: aClass atContainerNamed: aName [
+	"See `#addWindow:atContainerNamed:`"
+
+	^ self 
+		addWindow: (self instantiate: aClass) 
+		atContainerNamed: aName
 ]
 
 { #category : #actions }

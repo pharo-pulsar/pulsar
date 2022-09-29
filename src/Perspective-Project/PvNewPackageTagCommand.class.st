@@ -10,9 +10,7 @@ PvNewPackageTagCommand >> defineAction [
 	self priority: 101.
 	self name: 'New tag'.
 	self description: 'Add a new tag to this package'.
-	self iconCompositeName: 'new-file'.
-	self menuGroup: #actionNew.
-	self toolbarGroup: #actionNew
+	self iconCompositeName: 'new-file'
 ]
 
 { #category : #executing }

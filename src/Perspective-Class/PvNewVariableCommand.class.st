@@ -13,6 +13,5 @@ PvNewVariableCommand >> defineAction [
 	self iconComposite: (PvCompositeIcon new 
 		name: 'add';
 		bottomRight: 'overlayVariable';
-		yourself).
-	self menuGroup: #action
+		yourself)
 ]

@@ -10,9 +10,7 @@ PvNewTraitCommand >> defineAction [
 	self priority: 120.
 	self name: 'New trait'.
 	self description: 'Add a new trait to the environment'.
-	self iconCompositeName: 'new-file'.
-	self menuGroup: #actionNew.
-	self toolbarGroup: #actionNew
+	self iconCompositeName: 'new-file'
 ]
 
 { #category : #executing }

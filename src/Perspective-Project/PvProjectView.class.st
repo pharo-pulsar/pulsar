@@ -203,12 +203,9 @@ PvProjectView >> spotterSystemImplementorsFor: aStep [
 { #category : #initialization }
 PvProjectView >> toolbar [
 
-	^ self instantiate: PvHeaderBar
-	"self buildPerspectiveToolbarWith: [ :builder |
-		builder 
-			from: PvProjectCommand;
-			mainGroup: #project;
-			actionGroups: #action ]"
+	^ (self instantiate: PvHeaderBarPresenter)
+		toolbarActions: (self actions actionsForAll: #(project));
+		yourself
 ]
 
 { #category : #initialization }

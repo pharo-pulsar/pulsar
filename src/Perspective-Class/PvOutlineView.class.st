@@ -38,11 +38,8 @@ PvOutlineView class >> defineActionsOn: aBuilder [
 	aBuilder 
 		registerGroup: #actionNew with: {
 			PvNewMethodCommand new.
-			PvNewClassMethodCommand new.
 			PvNewVariableCommand new.
-			PvNewClassVariableCommand new. 
 		}
-
 ]
 
 { #category : #'private - events' }
@@ -152,11 +149,9 @@ PvOutlineView >> methodChanged: aModel [
 { #category : #initialization }
 PvOutlineView >> toolbar [
 
-	^ self instantiate: PvHeaderBar
-	"self buildPerspectiveToolbarWith: [ :builder |
-		builder 
-			from: PvClassCommand;
-			actionGroup: #action ]"
+	^ (self instantiate: PvHeaderBarPresenter)
+		toolbarActions: (self actions actionsForAll: #(actionNew));
+		yourself
 ]
 
 { #category : #initialization }

@@ -21,9 +21,9 @@ PvOutlineBrowser >> connectViews [
 { #category : #initialization }
 PvOutlineBrowser >> initializeViews [
 
-	self addWindow: (projectView := PvProjectView new) atContainerNamed: #overview.
-	self addWindow: (outlineView := PvOutlineView new) atContainerNamed: #outline.
-	self addWindow: (StPlayground newApplication: self application) atContainerNamed: #tools
+	projectView := self addWindowOfClass: PvProjectView atContainerNamed: #overview.
+	outlineView := self addWindowOfClass: PvOutlineView atContainerNamed: #outline.
+	self addWindowOfClass: StPlayground atContainerNamed: #tools
 ]
 
 { #category : #initialization }

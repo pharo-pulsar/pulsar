@@ -10,9 +10,7 @@ PvOpenProjectCommand >> defineAction [
 	self priority: 1.
 	self name: 'Open project'.
 	self description: 'Open project'.
-	self iconCompositeName: 'openProject'.
-	self menuGroup: #project.
-	self toolbarGroup: #project
+	self iconCompositeName: 'openProject'
 ]
 
 { #category : #executing }
