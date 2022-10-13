@@ -14,6 +14,8 @@ PvPharoGtkConfiguration >> configureGeneral: anApplication [
 .pvEditorScrollBar { min-height: 150px }
 .pvNavigation { min-width: 450px; min-height: 350px; padding: 5px }
 /* .pvNavigation treeview.view { background-color: transparent } */
+button.pvProtocol { font-weight: normal }
+.pvProtocolChooser { min-width: 200px; min-height: 280px }
 '
 ]
 

@@ -11,10 +11,35 @@ Class {
 		'#dirty => ObservableSlot',
 		'#updating',
 		'#editorPresenter',
-		'#headerPresenter'
+		'#headerPresenter',
+		'#footerPresenter'
+	],
+	#classVars : [
+		'#ShowLineNumbers'
 	],
 	#category : #'Perspective-View-Editor'
 }
+
+{ #category : #'accessing - actions' }
+PvEditorView class >> defineActionsExtraOn: actionGroup [
+	<perspectiveActions>
+
+	actionGroup registerGroup: #extra with: {
+		PvToggleLineNumbersAction new.
+	} 
+]
+
+{ #category : #testing }
+PvEditorView class >> isShowingLineNumbers [
+
+	^ ShowLineNumbers ifNil: [ ShowLineNumbers := true ]
+]
+
+{ #category : #accessing }
+PvEditorView class >> showLineNumbers: aBoolean [
+
+	ShowLineNumbers := aBoolean
+]
 
 { #category : #accessing }
 PvEditorView class >> type [
@@ -51,6 +76,7 @@ PvEditorView >> defaultLayout [
 	^ SpBoxLayout newTopToBottom
 		add: headerPresenter expand: false; 
 		add: editorPresenter;
+		add: footerPresenter expand: false;
 		yourself
 ]
 
@@ -80,7 +106,7 @@ PvEditorView >> editorContextMenuActions [
 		beRoot;
 		register: (editorPresenter rootCommandsGroup name: 'Code');
 		"in: [ :this | self addMenuEditionCommandsTo: this presenter: editorPresenter ];"
-		in: [ :this | self actions groups do: [ :eachGroup | this register: eachGroup ] ];
+		in: [ :this | self actions entries do: [ :each | this register: each ] ];
 		"register: ((CmCommandGroup named: 'Playground') asSpecGroup
 			register: ((CmCommandGroup named: 'Base options') asSpecGroup
 				beDisplayedAsGroup;
@@ -92,6 +118,12 @@ PvEditorView >> editorContextMenuActions [
 				yourself);
 			yourself);"
 		yourself
+]
+
+{ #category : #private }
+PvEditorView >> editorFooterClass [
+
+	^ PvEditorFooterPresenter
 ]
 
 { #category : #private }
@@ -129,20 +161,34 @@ PvEditorView >> initializeEditor [
 		contextKeyBindings: self editorContextMenuActions asKMCategory;
 		whenTextChangedDo: [ :newText :oldText | self textChangedFrom: oldText to: newText ];
 		whenSubmitDo: [ :aString | self doSubmit: aString ];
-		whenResetDo: [ self doReset ]
+		whenResetDo: [ self doReset ];
+		lineNumbers: self isShowingLineNumbers
 ]
 
 { #category : #initialization }
 PvEditorView >> initializeEditorHeader [
 	
-	headerPresenter := self instantiate: self editorHeaderClass on: self model
+	headerPresenter := self 
+		instantiate: self editorHeaderClass 
+		on: self model
+]
+
+{ #category : #initialization }
+PvEditorView >> initializeFooter [
+
+	footerPresenter := self 
+		instantiate: self editorFooterClass 
+		on: self model
 ]
 
 { #category : #initialization }
 PvEditorView >> initializePresenters [
 
 	self initializeEditorHeader.
-	self initializeEditor
+	self initializeEditor.
+	self initializeFooter.
+	
+	self addStyle: 'pvEditor'
 ]
 
 { #category : #initialization }
@@ -192,6 +238,12 @@ PvEditorView >> isEditor [
 PvEditorView >> isSameAs: anObject [
 
 	^ self species = anObject species
+]
+
+{ #category : #testing }
+PvEditorView >> isShowingLineNumbers [
+
+	^ self class isShowingLineNumbers
 ]
 
 { #category : #'private - testing' }
@@ -248,6 +300,14 @@ PvEditorView >> resetDirty [
 ]
 
 { #category : #accessing }
+PvEditorView >> showLineNumbers: aBoolean [
+
+	self class showLineNumbers: aBoolean.
+	editorPresenter lineNumbers: aBoolean.
+	self updateFooter
+]
+
+{ #category : #accessing }
 PvEditorView >> spotterTitle [
 
 	^ self model spotterTitle
@@ -294,6 +354,12 @@ PvEditorView >> typeByChar: aString [
 ]
 
 { #category : #initialization }
+PvEditorView >> updateFooter [
+
+	footerPresenter actions: (self actions actionsForAll: #(extra))
+]
+
+{ #category : #initialization }
 PvEditorView >> updateHeader [
 
 	self withTileWindowDo: [ :w |
@@ -304,7 +370,8 @@ PvEditorView >> updateHeader [
 { #category : #initialization }
 PvEditorView >> updatePresenter [
 
-	self updateHeader
+	self updateHeader.
+	self updateFooter
 ]
 
 { #category : #private }

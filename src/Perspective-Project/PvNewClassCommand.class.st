@@ -1,7 +1,7 @@
 Class {
 	#name : #PvNewClassCommand,
 	#superclass : #PvProjectCommand,
-	#category : #'Perspective-Project'
+	#category : #'Perspective-Project-Command'
 }
 
 { #category : #initialization }

@@ -85,6 +85,11 @@ PvAliasedVSCodeIconProvider >> initialize [
 
 { #category : #utilities }
 PvAliasedVSCodeIconProvider >> loadIcon: fileReference [
+	| icon |
 
-	^ (super loadIcon: fileReference) scaledIntoFormOfSize: 16
+	icon := super loadIcon: fileReference.
+	"Overlays are smaller, but we do not want bigger icons"
+	^ icon width > 16
+		ifTrue: [ icon scaledIntoFormOfSize: 16 ]
+		ifFalse: [ icon ]
 ]

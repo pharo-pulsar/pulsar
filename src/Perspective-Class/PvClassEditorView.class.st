@@ -43,13 +43,6 @@ PvClassEditorView >> editorHeaderClass [
 ]
 
 { #category : #initialization }
-PvClassEditorView >> initializeEditorHeader [
-
-	super initializeEditorHeader.
-	headerPresenter actions: (self actions actionsFor: #navigation)
-]
-
-{ #category : #initialization }
 PvClassEditorView >> initializeWindow: aWindowPresenter [
 	
 	super initializeWindow: aWindowPresenter.
@@ -68,7 +61,13 @@ PvClassEditorView >> model: aModel [
 PvClassEditorView >> title [
 
 	^ self model ifNotNil: [ :aModel | aModel windowTitle ]
-	
+]
+
+{ #category : #initialization }
+PvClassEditorView >> updateHeader [
+
+	super updateHeader.
+	headerPresenter actions: (self actions actionsFor: #navigation)	
 ]
 
 { #category : #initialization }

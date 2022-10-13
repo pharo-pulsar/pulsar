@@ -18,6 +18,14 @@ PvProjectModel class >> newEntity: anObject environment: anEnvironmentModel [
 ]
 
 { #category : #accessing }
+PvProjectModel >> baselineClassModel [
+
+	^ PvClassModel 
+		newEnvironment: self environmentModel 
+		entity: self entity
+]
+
+{ #category : #accessing }
 PvProjectModel >> children [
 
 	^ Array streamContents: [ :stream |
@@ -61,6 +69,22 @@ PvProjectModel >> dependencesEnvironment [
 			do: [ :eachPackage | 
 				eachPackage definedClasses do: [ :each | dict at: each name put: each ] ] ].
 	^ dict
+]
+
+{ #category : #accessing }
+PvProjectModel >> dependencyModels [
+	| version |
+
+	version := self entity project version.
+	^ version packages, 
+		version groups, 
+		version projects
+]
+
+{ #category : #accessing }
+PvProjectModel >> editorClass [
+
+	^ PvProjectEditorView
 ]
 
 { #category : #accessing }

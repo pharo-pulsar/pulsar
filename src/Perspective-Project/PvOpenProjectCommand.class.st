@@ -1,8 +1,16 @@
 Class {
 	#name : #PvOpenProjectCommand,
 	#superclass : #PvProjectCommand,
-	#category : #'Perspective-Project'
+	#category : #'Perspective-Project-Command'
 }
+
+{ #category : #private }
+PvOpenProjectCommand >> allBaselines [
+		
+	^ BaselineOf allSubclasses sorted: #name ascending
+	
+		
+]
 
 { #category : #initialization }
 PvOpenProjectCommand >> defineAction [
@@ -15,6 +23,17 @@ PvOpenProjectCommand >> defineAction [
 
 { #category : #executing }
 PvOpenProjectCommand >> execute [
+	| result |
 	
-	context doOpenProject
+	result := self application newSelect
+		title: 'Open project';
+		label: 'Select project';
+		items: self allBaselines;
+		display: [ :aClass | aClass name allButFirst: "'BaselineOf' size "10 ];
+		displayIcon: [ :aClass | self application iconNamed: 'project' ];
+		openModalWithParent: self context window.
+		
+	result ifNil: [ ^ self ].
+	context activateProject: result
+		
 ]

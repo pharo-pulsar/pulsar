@@ -4,7 +4,7 @@ A base command for projects
 Class {
 	#name : #PvProjectCommand,
 	#superclass : #PvAction,
-	#category : #'Perspective-Project'
+	#category : #'Perspective-Project-Command'
 }
 
 { #category : #'default - groups' }

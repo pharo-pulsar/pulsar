@@ -1,7 +1,7 @@
 Class {
 	#name : #PvNewPackageCommand,
 	#superclass : #PvProjectCommand,
-	#category : #'Perspective-Project'
+	#category : #'Perspective-Project-Command'
 }
 
 { #category : #initialization }

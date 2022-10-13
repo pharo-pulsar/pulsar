@@ -55,8 +55,9 @@ PvProjectView class >> defineActionsOn: aBuilder [
 	
 	aBuilder 
 		registerGroup: #project with: { 
-			PvOpenProjectCommand new.
-			PvRefreshProjectCommand new.
+			$n	mod1 	->	PvNewProjectCommand new.
+			$o mod1  -> PvOpenProjectCommand new.
+							PvRefreshProjectCommand new.
 		};
 		registerGroup: #actionNew with: { 
 			PvNewPackageCommand new.
@@ -68,6 +69,15 @@ PvProjectView class >> defineActionsOn: aBuilder [
 			$r mod1 -> PvRenamePackageCommand new.
 			$x mod1 -> PvRemovePackageCommand new.
 		}
+]
+
+{ #category : #'as yet unclassified' }
+PvProjectView >> activateProject: aBaselineClass [
+
+	self model: (PvProjectModel 
+		newEnvironment: self perspective model
+		entity: aBaselineClass).
+	projectTreePresenter takeKeyboardFocus
 ]
 
 { #category : #initialization }
@@ -91,13 +101,6 @@ PvProjectView >> defaultLayout [
 	^ self layout: (SpBoxLayout newTopToBottom
 		add: projectTreePresenter;
 		yourself)
-]
-
-{ #category : #actions }
-PvProjectView >> doOpenProject [
-	
-	self halt
-		
 ]
 
 { #category : #'private - events' }

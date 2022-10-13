@@ -32,7 +32,7 @@ PvAction >> asPvAction [
 PvAction >> asSpecCommand [ 
 	| command |
 	
-	command := self decorateWith: PvSpecCommand.
+	command := self decorateWith: self specCommandClass.
 	command icon: (self iconComposite 
 		ifNotNil: [ :aCompositeIcon | aCompositeIcon buildOn: self application ]
 		ifNil: [ self application iconNamed: #blank ]).
@@ -144,6 +144,12 @@ PvAction >> shortcut [
 PvAction >> shortcut: aShortcut [
 
 	shortcut := aShortcut
+]
+
+{ #category : #private }
+PvAction >> specCommandClass [
+
+	^ PvSpecCommand
 ]
 
 { #category : #'accessing - runtime' }

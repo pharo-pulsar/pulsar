@@ -37,7 +37,7 @@ PvCompositeIcon >> addDecoration: aDecorations [
 { #category : #'accessing - decorations' }
 PvCompositeIcon >> addDirty [
 
-	self bottomRight: #overlayDirty
+	self bottomRight: 'overlayDirty'
 ]
 
 { #category : #'accessing - decorations' }

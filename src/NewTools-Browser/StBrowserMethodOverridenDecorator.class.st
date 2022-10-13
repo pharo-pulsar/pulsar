@@ -7,7 +7,7 @@ Class {
 { #category : #testing }
 StBrowserMethodOverridenDecorator class >> appliesTo: aMethod [
 	
-	^ aMethod isOverridden
+	^ aMethod isOverridden and: [ aMethod isOverriding not ]
 
 ]
 

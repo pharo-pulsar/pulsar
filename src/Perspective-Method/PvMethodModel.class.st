@@ -2,7 +2,8 @@ Class {
 	#name : #PvMethodModel,
 	#superclass : #PvEntityModel,
 	#instVars : [
-		'decorators'
+		'decorators',
+		'protocol'
 	],
 	#category : #'Perspective-Method-Model'
 }
@@ -34,7 +35,7 @@ PvMethodModel >> asOutlineClassModel [
 { #category : #private }
 PvMethodModel >> collectDecorators [
 
-	^ StBrowserMethodDecorator allApplingTo: self entity
+	^ PvMethodDecorator allApplingTo: self entity
 ]
 
 { #category : #'accessing - decorated' }
@@ -54,7 +55,7 @@ PvMethodModel >> compile: aString notifying: requestor [
 	[
 		selector := self entity methodClass 
 			compile: aString
-			classified: self methodCategory
+			classified: self protocol
 			notifying: requestor.
 		self entity: self entity methodClass >> selector ]
 	on: OCSemanticWarning 
@@ -116,7 +117,12 @@ PvMethodModel >> hierarchyTopModel [
 	
 	nodes do: [ :each | each findParentFrom: nodes ].
 
-	^ nodes detect: [ :each | each parent isNil ]
+	^ nodes 
+		detect: [ :each | each parent isNil ]
+		ifNone: [ 
+			PvMethodHierarchyNodeModel 
+				newEnvironment: self environmentModel 
+				entity: self entity ]
 ]
 
 { #category : #'accessing - decorated' }
@@ -158,12 +164,6 @@ PvMethodModel >> isTestMethod [
 ]
 
 { #category : #accessing }
-PvMethodModel >> methodCategory [
-
-	^ self entity category
-]
-
-{ #category : #accessing }
 PvMethodModel >> methodClass [
 
 	^ self entity methodClass instanceSide
@@ -184,7 +184,13 @@ PvMethodModel >> name [
 { #category : #accessing }
 PvMethodModel >> protocol [
 
-	^ self entity protocol
+	^ protocol ifNil: [ protocol := self entity protocol ]
+]
+
+{ #category : #accessing }
+PvMethodModel >> protocol: aString [
+
+	protocol := aString
 ]
 
 { #category : #accessing }

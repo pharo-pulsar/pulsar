@@ -21,7 +21,7 @@ PvEditorHeaderPresenter >> defaultLayout [
 		spacing: 3;
 		add: actionsLayout expand: false; 
 		add: pathPresenter;
-		addLast: menuButtonPresenter expand: false;
+		"addLast: menuButtonPresenter expand: false;"
 		yourself
 ]
 
@@ -30,12 +30,12 @@ PvEditorHeaderPresenter >> initializePresenters [
 
 	actionsLayout := SpBoxLayout newLeftToRight.
 	pathPresenter := self instantiate: PvEditorPathPresenter.
-	menuButtonPresenter := self newMenuButton
+	"menuButtonPresenter := self newMenuButton
 		addStyle: 'small';
 		addStyle: 'flat';
 		icon: ((PvCompositeIcon newName: 'view-more-symbolic') buildOn: self application);
 		menu: [ self menu ];
-		yourself
+		yourself"
 ]
 
 { #category : #private }

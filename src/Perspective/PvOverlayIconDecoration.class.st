@@ -11,7 +11,7 @@ Class {
 { #category : #operations }
 PvOverlayIconDecoration >> applyTo: icon on: anApplication [
 	| overlayIcon |
-
+	
 	overlayIcon :=  anApplication iconNamed: self overlay.
 	position = #topLeft 		ifTrue: [ ^ icon mergeWith: overlayIcon ].
 	position = #topRight 		ifTrue: [ ^ icon mergeTopRightWith: overlayIcon ].	

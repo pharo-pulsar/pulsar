@@ -2,7 +2,8 @@ Class {
 	#name : #PvNewMethodTemplate,
 	#superclass : #Object,
 	#instVars : [
-		'parentModel'
+		'parentModel',
+		'protocol'
 	],
 	#category : #'Perspective-Method-Model'
 }
@@ -41,6 +42,18 @@ PvNewMethodTemplate >> parentModel [
 PvNewMethodTemplate >> parentModel: anObject [
 
 	parentModel := anObject
+]
+
+{ #category : #accessing }
+PvNewMethodTemplate >> protocol [
+	
+	^ protocol ifNil: [ protocol := Protocol  unclassified ]
+]
+
+{ #category : #accessing }
+PvNewMethodTemplate >> protocol: aProtocolString [
+
+	protocol := aProtocolString
 ]
 
 { #category : #accessing }

@@ -19,6 +19,15 @@ PvMethodEditorView class >> type [
 	^ #method
 ]
 
+{ #category : #initialization }
+PvMethodEditorView >> connectPresenters [
+	
+	footerPresenter announcer 
+		when: PvMethodEditorProtocolChanged 
+		send: #updateProtocol:
+		to: self
+]
+
 { #category : #accessing }
 PvMethodEditorView >> contextMenuActionGroups [
 
@@ -46,16 +55,22 @@ PvMethodEditorView >> doSubmit: aString [
 ]
 
 { #category : #private }
+PvMethodEditorView >> editorFooterClass [
+
+	^ PvMethodEditorFooterPresenter
+]
+
+{ #category : #private }
 PvMethodEditorView >> editorHeaderClass [
 
 	^ PvMethodEditorHeaderPresenter
 ]
 
 { #category : #initialization }
-PvMethodEditorView >> initializeEditorHeader [
+PvMethodEditorView >> initializePresenters [
 
-	super initializeEditorHeader.
-	headerPresenter actions: (self actions actionsFor: #navigation)
+	super initializePresenters.
+	self addStyle: 'pvMethodEditor'
 ]
 
 { #category : #initialization }
@@ -83,6 +98,13 @@ PvMethodEditorView >> toolbar [
 ]
 
 { #category : #initialization }
+PvMethodEditorView >> updateHeader [
+
+	super updateHeader.
+	headerPresenter actions: (self actions actionsFor: #navigation)
+]
+
+{ #category : #initialization }
 PvMethodEditorView >> updatePresenter [
 
 	super updatePresenter.
@@ -90,4 +112,12 @@ PvMethodEditorView >> updatePresenter [
 		editorPresenter
 			beForMethod: self model entity;
 			text: self model sourceCode ]
+]
+
+{ #category : #private }
+PvMethodEditorView >> updateProtocol: ann [ 
+
+	self model protocol: ann newProtocol.
+	self updateFooter.
+	self markDirty
 ]

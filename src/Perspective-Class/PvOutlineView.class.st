@@ -22,6 +22,16 @@ PvOutlineView class >> defaultTitle [
 ]
 
 { #category : #'accessing - actions' }
+PvOutlineView class >> defineActionGroupAction: actionGroup [
+	<perspectiveActionGroup: #action>
+
+	actionGroup 
+		priority: 20;
+		name: 'Actions';
+		beDisplayedAsGroup
+]
+
+{ #category : #'accessing - actions' }
 PvOutlineView class >> defineActionGroupNew: actionGroup [
 	<perspectiveActionGroup: #actionNew>
 
@@ -37,8 +47,11 @@ PvOutlineView class >> defineActionsOn: aBuilder [
 	
 	aBuilder 
 		registerGroup: #actionNew with: {
-			PvNewMethodCommand new.
+			$n mod1 -> PvNewMethodCommand new.
 			PvNewVariableCommand new.
+		};
+		registerGroup: #action with: {
+			$x mod1 -> PvRemoveMethodCommand new.
 		}
 ]
 
@@ -61,7 +74,7 @@ PvOutlineView >> connectPresenters [
 { #category : #initialization }
 PvOutlineView >> contextMenuActionGroups [
 
-	^ #(actionNew)
+	^ #(actionNew action)
 ]
 
 { #category : #layout }
