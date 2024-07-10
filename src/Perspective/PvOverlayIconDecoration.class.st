@@ -12,11 +12,15 @@ Class {
 PvOverlayIconDecoration >> applyTo: icon on: anApplication [
 	| overlayIcon |
 	
+	icon isForm ifFalse: [ ^ icon ].
+	
 	overlayIcon :=  anApplication iconNamed: self overlay.
+	overlayIcon isForm ifFalse: [ ^ overlayIcon ].
+	
 	position = #topLeft 		ifTrue: [ ^ icon mergeWith: overlayIcon ].
 	position = #topRight 		ifTrue: [ ^ icon mergeTopRightWith: overlayIcon ].	
 	position = #bottomLeft 	ifTrue: [ ^ icon mergeBottomLeftWith: overlayIcon ].
-	position = #bottomRight 	ifTrue: [ ^ icon mergeBottomRightWith: overlayIcon ].	
+	position = #bottomRight 	ifTrue: [ ^ icon mergeBottomRightWith: overlayIcon ].
 	
 	self error: 'Should not arrive here'
 ]
