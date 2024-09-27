@@ -1,24 +1,26 @@
 Trait {
-	#name : #PvTActionHolder,
+	#name : 'PvTActionHolder',
 	#instVars : [
 		'actions'
 	],
-	#category : #'Perspective-View'
+	#category : 'Perspective-View',
+	#package : 'Perspective',
+	#tag : 'View'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvTActionHolder >> actions [
 
 	^ actions ifNil: [ actions := PvActionCollector collectFor: self ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvTActionHolder >> contextMenuActionGroups [
 		
 	^ #()
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvTActionHolder >> contextMenuActions [
 
 	^ (self actions actionsForAll: self contextMenuActionGroups)

@@ -1,10 +1,12 @@
 Class {
-	#name : #PvOutlineClassModel,
-	#superclass : #PvClassModel,
-	#category : #'Perspective-Class-Model'
+	#name : 'PvOutlineClassModel',
+	#superclass : 'PvClassModel',
+	#category : 'Perspective-Class-Model',
+	#package : 'Perspective-Class',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvOutlineClassModel >> children [
 
 	^ { PvEntityTreeNode newName: 'Shared Variables' children: self collectClassSharedVariables },
@@ -14,7 +16,7 @@ PvOutlineClassModel >> children [
 	  self collectMethods
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvOutlineClassModel >> collectClassMethods [
 	
 	^ (self entity classSide methods 
@@ -22,20 +24,20 @@ PvOutlineClassModel >> collectClassMethods [
 		sorted: #name ascending
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvOutlineClassModel >> collectClassSharedVariables [
 	
 	^ #()
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvOutlineClassModel >> collectClassVariables [
 		
 	^ self entity classSide slots 
 		collect: [ :each | PvSlotModel newEnvironment: self environmentModel entity: each ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvOutlineClassModel >> collectMethods [
 	
 	^ (self entity instanceSide methods 
@@ -43,26 +45,26 @@ PvOutlineClassModel >> collectMethods [
 		sorted: #name ascending
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvOutlineClassModel >> collectVariables [
 	
 	^ self entity instanceSide slots 
 		collect: [ :each | PvSlotModel newEnvironment: self entity: each ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvOutlineClassModel >> iconName [
 
 	^ self entity systemIconName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvOutlineClassModel >> name [
 
 	^ self entity name
 ]
 
-{ #category : #'accessing - filtering' }
+{ #category : 'accessing - filtering' }
 PvOutlineClassModel >> toggleFilterByProtocol: aProtocol [
 
 	self halt

@@ -3,8 +3,8 @@ A base for all editors.
 Being an editor a key component of a perspective (since editing methods and definitions is the base of them), this component defines common behavior for all extensions of it.
 "
 Class {
-	#name : #PvEditorView,
-	#superclass : #PvPresenter,
+	#name : 'PvEditorView',
+	#superclass : 'PvPresenter',
 	#traits : 'SpTModel + PvTActionHolder',
 	#classTraits : 'SpTModel classTrait + PvTActionHolder classTrait',
 	#instVars : [
@@ -17,10 +17,12 @@ Class {
 	#classVars : [
 		'#ShowLineNumbers'
 	],
-	#category : #'Perspective-View-Editor'
+	#category : 'Perspective-View-Editor',
+	#package : 'Perspective',
+	#tag : 'View-Editor'
 }
 
-{ #category : #'accessing - actions' }
+{ #category : 'accessing - actions' }
 PvEditorView class >> defineActionsExtraOn: actionGroup [
 	<perspectiveActions>
 
@@ -29,25 +31,25 @@ PvEditorView class >> defineActionsExtraOn: actionGroup [
 	} 
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvEditorView class >> isShowingLineNumbers [
 
 	^ ShowLineNumbers ifNil: [ ShowLineNumbers := true ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEditorView class >> showLineNumbers: aBoolean [
 
 	ShowLineNumbers := aBoolean
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEditorView class >> type [
 
 	^ self subclassResponsibility
 ]
 
-{ #category : #'private - building' }
+{ #category : 'private - building' }
 PvEditorView >> buildAdapterWithSpecLayout: aSpecLayout [
 	"This is needed because the process of building (and setting initial state) of a 
 	 text/code presenter fires the event #whenTextChangedDo: and this will mark the editor 
@@ -57,20 +59,20 @@ PvEditorView >> buildAdapterWithSpecLayout: aSpecLayout [
 		super buildAdapterWithSpecLayout: aSpecLayout ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEditorView >> content: aString [ 
 	
 	self updatingWhile: [ 
 		editorPresenter text: aString ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEditorView >> defaultKeyboardFocus [
 
 	^ editorPresenter
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 PvEditorView >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
@@ -80,26 +82,26 @@ PvEditorView >> defaultLayout [
 		yourself
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvEditorView >> dirty: aBoolean [
 
 	dirty := aBoolean
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 PvEditorView >> doReset [
 	
 	self updatePresenter.
 	self resetDirty
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 PvEditorView >> doSubmit: aString [
 
 	self subclassResponsibility
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvEditorView >> editorContextMenuActions [
 
 	^ CmCommandGroup forSpec
@@ -120,19 +122,19 @@ PvEditorView >> editorContextMenuActions [
 		yourself
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvEditorView >> editorFooterClass [
 
 	^ PvEditorFooterPresenter
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvEditorView >> editorHeaderClass [
 
 	^ PvEditorHeaderPresenter
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvEditorView >> editorIcon [
 	| icon |
 	
@@ -141,14 +143,14 @@ PvEditorView >> editorIcon [
 	^ icon buildOn: self application
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvEditorView >> initialize [
 
 	super initialize.
 	self whenDirtyChangedDo: [ self updateHeader ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvEditorView >> initializeEditor [
 	
 	(editorPresenter := self newCode)
@@ -157,15 +159,14 @@ PvEditorView >> initializeEditor [
 		addScrollBarStyle: 'pvEditorScrollBar';
 		overridingContextMenu;
 		withEditionContextMenu;
-		contextMenu: [ self editorContextMenuActions asMenuPresenter ];
-		contextKeyBindings: self editorContextMenuActions asKMCategory;
+		actions: self editorContextMenuActions;
 		whenTextChangedDo: [ :newText :oldText | self textChangedFrom: oldText to: newText ];
 		whenSubmitDo: [ :aString | self doSubmit: aString ];
 		whenResetDo: [ self doReset ];
 		lineNumbers: self isShowingLineNumbers
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvEditorView >> initializeEditorHeader [
 	
 	headerPresenter := self 
@@ -173,7 +174,7 @@ PvEditorView >> initializeEditorHeader [
 		on: self model
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvEditorView >> initializeFooter [
 
 	footerPresenter := self 
@@ -181,7 +182,7 @@ PvEditorView >> initializeFooter [
 		on: self model
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvEditorView >> initializePresenters [
 
 	self initializeEditorHeader.
@@ -191,68 +192,68 @@ PvEditorView >> initializePresenters [
 	self addStyle: 'pvEditor'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvEditorView >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter title: self title	
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvEditorView >> isClassDefinitionEditor [
 
 	^ false
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvEditorView >> isClassEditor [
 
 	^ false
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvEditorView >> isCloseable [
 	
 	^ true
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvEditorView >> isCommentEditor [
 
 	^ false
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvEditorView >> isDirty [
 
 	^ dirty ifNil: [ dirty := false ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvEditorView >> isEditor [
 
 	^ true
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvEditorView >> isSameAs: anObject [
 
 	^ self species = anObject species
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvEditorView >> isShowingLineNumbers [
 
 	^ self class isShowingLineNumbers
 ]
 
-{ #category : #'private - testing' }
+{ #category : 'private - testing' }
 PvEditorView >> isUpdating [
 
 	^ updating ifNil: [ updating := false ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEditorView >> markDirty [
 
 	self isUpdating ifTrue: [ ^ self ].
@@ -260,7 +261,7 @@ PvEditorView >> markDirty [
 	self dirty: true
 ]
 
-{ #category : #'accessing - model' }
+{ #category : 'accessing - model' }
 PvEditorView >> model: aModel [
 
 	model := aModel.
@@ -268,7 +269,7 @@ PvEditorView >> model: aModel [
 	self updatePresenter
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEditorView >> pageTitle [
 	
 	^ self isDirty 
@@ -276,7 +277,7 @@ PvEditorView >> pageTitle [
 		ifFalse: [ self model pageTitle ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEditorView >> replaceWith: aSimilarEditor [
 
 	self updatingWhile: [ 
@@ -286,20 +287,20 @@ PvEditorView >> replaceWith: aSimilarEditor [
 	self resetDirty
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 PvEditorView >> reset [
 
 	editorPresenter triggerResetAction
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEditorView >> resetDirty [
 
 	self isDirty ifFalse: [ ^ self ].
 	self dirty: false
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEditorView >> showLineNumbers: aBoolean [
 
 	self class showLineNumbers: aBoolean.
@@ -307,45 +308,45 @@ PvEditorView >> showLineNumbers: aBoolean [
 	self updateFooter
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEditorView >> spotterTitle [
 
 	^ self model spotterTitle
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 PvEditorView >> submit [
 
 	editorPresenter triggerSubmitAction
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEditorView >> tabLabel [
 
 	^ self model shortName
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvEditorView >> textChangedFrom: oldText to: newText [
 
 	oldText = newText ifTrue: [ ^ self ].
 	self markDirty
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvEditorView >> title [
 
 	self subclassResponsibility
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEditorView >> type [
 
 	^ self class type
 ]
 
-{ #category : #emulating }
+{ #category : 'emulating' }
 PvEditorView >> typeByChar: aString [
 	"for test purposes"
 	
@@ -353,13 +354,13 @@ PvEditorView >> typeByChar: aString [
 	
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvEditorView >> updateFooter [
 
 	footerPresenter actions: (self actions actionsForAll: #(extra))
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvEditorView >> updateHeader [
 
 	self withTileWindowDo: [ :w |
@@ -367,14 +368,14 @@ PvEditorView >> updateHeader [
 		w windowIcon: self editorIcon ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvEditorView >> updatePresenter [
 
 	self updateHeader.
 	self updateFooter
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvEditorView >> updatingWhile: aBlock [ 
 	| oldUpdating |
 
@@ -384,13 +385,13 @@ PvEditorView >> updatingWhile: aBlock [
 		updating := oldUpdating ]
 ]
 
-{ #category : #events }
+{ #category : 'events' }
 PvEditorView >> whenDirtyChangedDo: aBlock [
 
 	self property: #dirty whenChangedDo: aBlock
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEditorView >> windowTitle [
 	
 	^ self isDirty 

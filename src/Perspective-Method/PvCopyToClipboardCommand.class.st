@@ -1,52 +1,54 @@
 Class {
-	#name : #PvCopyToClipboardCommand,
-	#superclass : #PvEditorAction,
-	#category : #'Perspective-Method-Command'
+	#name : 'PvCopyToClipboardCommand',
+	#superclass : 'PvEditorAction',
+	#category : 'Perspective-Method-Command',
+	#package : 'Perspective-Method',
+	#tag : 'Command'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvCopyToClipboardCommand class >> defaultDescription [
 
 	^ 'Copy this method to clipboard.'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvCopyToClipboardCommand class >> defaultIconName [
 
 	^ #smallCopy
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 PvCopyToClipboardCommand class >> defaultName [
 
 	^ 'Copy'
 ]
 
-{ #category : #'default - groups' }
+{ #category : 'default - groups' }
 PvCopyToClipboardCommand class >> groups [
 
 	^ #(action)
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvCopyToClipboardCommand class >> isVisibleInToolbar [
 
 	^ true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvCopyToClipboardCommand class >> priority [
 
 	^ 10
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvCopyToClipboardCommand class >> showInToolbar [
 
 	^ true
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 PvCopyToClipboardCommand >> execute [
 	
 	context doCopyToClipboard

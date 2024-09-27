@@ -1,14 +1,16 @@
 Class {
-	#name : #PvCompositeIcon,
-	#superclass : #Object,
+	#name : 'PvCompositeIcon',
+	#superclass : 'Object',
 	#instVars : [
 		'name',
 		'decorations'
 	],
-	#category : #'Perspective-Icon'
+	#category : 'Perspective-Icon',
+	#package : 'Perspective',
+	#tag : 'Icon'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PvCompositeIcon class >> newName: aName [
 
 	^ self new 
@@ -16,37 +18,37 @@ PvCompositeIcon class >> newName: aName [
 		yourself
 ]
 
-{ #category : #'accessing - decorations' }
+{ #category : 'accessing - decorations' }
 PvCompositeIcon >> addAbstract [
 
 	decorations := decorations copyWith: PvGrayIconDecoration new
 ]
 
-{ #category : #'accessing - decorations' }
+{ #category : 'accessing - decorations' }
 PvCompositeIcon >> addClass [
 
 	self topLeft: 'overlayClass'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvCompositeIcon >> addDecoration: aDecorations [
 
 	decorations := decorations copyWith: aDecorations
 ]
 
-{ #category : #'accessing - decorations' }
+{ #category : 'accessing - decorations' }
 PvCompositeIcon >> addDirty [
 
 	self bottomRight: 'overlayDirty'
 ]
 
-{ #category : #'accessing - decorations' }
+{ #category : 'accessing - decorations' }
 PvCompositeIcon >> addNew [
 
 	self bottomRight: 'new'
 ]
 
-{ #category : #'accessing - decorations' }
+{ #category : 'accessing - decorations' }
 PvCompositeIcon >> bottomLeft: aName [
 
 	self addDecoration: (PvOverlayIconDecoration new 
@@ -55,7 +57,7 @@ PvCompositeIcon >> bottomLeft: aName [
 		yourself)
 ]
 
-{ #category : #'accessing - decorations' }
+{ #category : 'accessing - decorations' }
 PvCompositeIcon >> bottomRight: aName [
 
 	self addDecoration: (PvOverlayIconDecoration new 
@@ -64,37 +66,67 @@ PvCompositeIcon >> bottomRight: aName [
 		yourself)
 ]
 
-{ #category : #building }
+{ #category : 'building' }
 PvCompositeIcon >> buildOn: anApplication [
 	| icon |
+
+	icon := anApplication iconCache iconAt: self ifAbsent: [ nil ].
+	icon ifNotNil: [ ^ icon ].
 
 	icon := anApplication iconNamed: self name.
 	decorations do: [ :each | 
 		icon :=  each applyTo: icon on: anApplication ].
+
+	anApplication iconCache iconAt: self put: icon.	
 		
 	^ icon
 ]
 
-{ #category : #initialization }
+{ #category : 'accessing' }
+PvCompositeIcon >> decorations [
+
+	^ decorations
+]
+
+{ #category : 'accessing' }
+PvCompositeIcon >> fullName [
+
+	self hasDecorations ifFalse: [ ^ self name ].
+	
+	^ String streamContents: [ :stream |
+		stream << self name.
+		stream << '_'.
+		self decorations 
+			do: [ :each | stream << each name ]
+			separatedBy: [ stream << '_' ] ]
+]
+
+{ #category : 'testing' }
+PvCompositeIcon >> hasDecorations [
+
+	^ decorations isNotEmpty
+]
+
+{ #category : 'initialization' }
 PvCompositeIcon >> initialize [
 
 	super initialize.
 	decorations := #()
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvCompositeIcon >> name [
 
 	^ name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvCompositeIcon >> name: aName [
 
 	name := aName
 ]
 
-{ #category : #'accessing - decorations' }
+{ #category : 'accessing - decorations' }
 PvCompositeIcon >> topLeft: aName [
 
 	self addDecoration: (PvOverlayIconDecoration new 
@@ -103,7 +135,7 @@ PvCompositeIcon >> topLeft: aName [
 		yourself)
 ]
 
-{ #category : #'accessing - decorations' }
+{ #category : 'accessing - decorations' }
 PvCompositeIcon >> topRight: aName [
 
 	self addDecoration: (PvOverlayIconDecoration new 

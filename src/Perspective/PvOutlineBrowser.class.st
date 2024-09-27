@@ -1,10 +1,12 @@
 Class {
-	#name : #PvOutlineBrowser,
-	#superclass : #PvExploreBrowser,
-	#category : #'Perspective-View-Perspective'
+	#name : 'PvOutlineBrowser',
+	#superclass : 'PvExploreBrowser',
+	#category : 'Perspective-View-Perspective',
+	#package : 'Perspective',
+	#tag : 'View-Perspective'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvOutlineBrowser >> connectViews [
 
 	"plug all tools -> this has to be refactored"
@@ -18,7 +20,7 @@ PvOutlineBrowser >> connectViews [
 		transmitTo: projectView inputSelectedPort
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvOutlineBrowser >> initializeViews [
 
 	projectView := self addWindowOfClass: PvProjectView atContainerNamed: #overview.
@@ -26,7 +28,7 @@ PvOutlineBrowser >> initializeViews [
 	self addWindowOfClass: StPlayground atContainerNamed: #tools
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvOutlineBrowser >> perspectiveLayoutClass [
 
 	^ PvOutlinePerspectiveLayout

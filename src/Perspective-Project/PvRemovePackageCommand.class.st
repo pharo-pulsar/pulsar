@@ -1,10 +1,12 @@
 Class {
-	#name : #PvRemovePackageCommand,
-	#superclass : #PvProjectCommand,
-	#category : #'Perspective-Project-Command'
+	#name : 'PvRemovePackageCommand',
+	#superclass : 'PvProjectCommand',
+	#category : 'Perspective-Project-Command',
+	#package : 'Perspective-Project',
+	#tag : 'Command'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvRemovePackageCommand >> defineAction [
 
 	self priority: 210.
@@ -13,7 +15,7 @@ PvRemovePackageCommand >> defineAction [
 	self iconCompositeName: 'trash'
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 PvRemovePackageCommand >> execute [
 	
 	self halt

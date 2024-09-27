@@ -1,25 +1,27 @@
 Class {
-	#name : #PvProjectView,
-	#superclass : #PvPerspectiveView,
+	#name : 'PvProjectView',
+	#superclass : 'PvPerspectiveView',
 	#instVars : [
 		'projectTreePresenter'
 	],
-	#category : #'Perspective-Project-View'
+	#category : 'Perspective-Project-View',
+	#package : 'Perspective-Project',
+	#tag : 'View'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvProjectView class >> defaultContainerName [
 
 	^ #overview
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvProjectView class >> defaultTitle [
 
 	^ 'Project'
 ]
 
-{ #category : #'accessing - actions' }
+{ #category : 'accessing - actions' }
 PvProjectView class >> defineActionGroupAction: actionGroup [
 	<perspectiveActionGroup: #action>
 	
@@ -29,7 +31,7 @@ PvProjectView class >> defineActionGroupAction: actionGroup [
 		beDisplayedAsGroup
 ]
 
-{ #category : #'accessing - actions' }
+{ #category : 'accessing - actions' }
 PvProjectView class >> defineActionGroupNew: actionGroup [
 	<perspectiveActionGroup: #actionNew>
 	
@@ -39,7 +41,7 @@ PvProjectView class >> defineActionGroupNew: actionGroup [
 		beDisplayedAsSubMenu
 ]
 
-{ #category : #'accessing - actions' }
+{ #category : 'accessing - actions' }
 PvProjectView class >> defineActionGroupProject: actionGroup [
 	<perspectiveActionGroup: #project>
 	
@@ -49,7 +51,7 @@ PvProjectView class >> defineActionGroupProject: actionGroup [
 		beDisplayedAsSubMenu
 ]
 
-{ #category : #'accessing - actions' }
+{ #category : 'accessing - actions' }
 PvProjectView class >> defineActionsOn: aBuilder [
 	<perspectiveActions>
 	
@@ -71,7 +73,7 @@ PvProjectView class >> defineActionsOn: aBuilder [
 		}
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 PvProjectView >> activateProject: aBaselineClass [
 
 	self model: (PvProjectModel 
@@ -80,7 +82,7 @@ PvProjectView >> activateProject: aBaselineClass [
 	projectTreePresenter takeKeyboardFocus
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvProjectView >> connectPresenters [
 
 	projectTreePresenter outputSelectionPort
@@ -89,13 +91,13 @@ PvProjectView >> connectPresenters [
 		transmitDo: [ :aSelection | self activateWith: aSelection ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvProjectView >> contextMenuActionGroups [
 
 	^ #(project actionNew action)
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 PvProjectView >> defaultLayout [
 
 	^ self layout: (SpBoxLayout newTopToBottom
@@ -103,7 +105,7 @@ PvProjectView >> defaultLayout [
 		yourself)
 ]
 
-{ #category : #'private - events' }
+{ #category : 'private - events' }
 PvProjectView >> entitySelected: aModel [
 	| classModel |
 
@@ -113,24 +115,25 @@ PvProjectView >> entitySelected: aModel [
 	projectTreePresenter selectItem: classModel
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvProjectView >> initializePresenters [
+
+	self addStyle: 'pvProjectView'.
 
 	projectTreePresenter := self newEntityTree
 		addStyle: 'pvProjectTree';
-		contextMenu: [ self contextMenuActions asMenuPresenter ];
-		contextKeyBindings: self contextMenuActions asKMCategory;
+		actions: self contextMenuActions;
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvProjectView >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter toolbar: self toolbar
 ]
 
-{ #category : #selecting }
+{ #category : 'selecting' }
 PvProjectView >> selectClass: aClass [
 	| classModel |
 
@@ -141,14 +144,14 @@ PvProjectView >> selectClass: aClass [
 	projectTreePresenter selectItem: classModel
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvProjectView >> selectedEntitiesInPath [
 
 	^ projectTreePresenter selection selectedItemsInPath
 
 ]
 
-{ #category : #spotter }
+{ #category : 'spotter' }
 PvProjectView >> spotterDependencesClassesFor: aStep [
 	<spotterOrder: 100 context: #environment>
 
@@ -157,7 +160,7 @@ PvProjectView >> spotterDependencesClassesFor: aStep [
 		yourself)
 ]
 
-{ #category : #spotter }
+{ #category : 'spotter' }
 PvProjectView >> spotterDependencesImplementorsFor: aStep [
 	<spotterOrder: 110 context: #environment>
 
@@ -166,7 +169,7 @@ PvProjectView >> spotterDependencesImplementorsFor: aStep [
 		yourself)
 ]
 
-{ #category : #spotter }
+{ #category : 'spotter' }
 PvProjectView >> spotterProjectClassesFor: aStep [
 	<spotterOrder: 10 context: #environment>
 
@@ -176,7 +179,7 @@ PvProjectView >> spotterProjectClassesFor: aStep [
 		yourself)
 ]
 
-{ #category : #spotter }
+{ #category : 'spotter' }
 PvProjectView >> spotterProjectImplementorsFor: aStep [
 	"<spotterOrder: 20 context: #environment>"
 
@@ -185,7 +188,7 @@ PvProjectView >> spotterProjectImplementorsFor: aStep [
 		yourself)
 ]
 
-{ #category : #spotter }
+{ #category : 'spotter' }
 PvProjectView >> spotterSystemClassesFor: aStep [
 	<spotterOrder: 200 context: #environment>
 
@@ -194,7 +197,7 @@ PvProjectView >> spotterSystemClassesFor: aStep [
 		yourself)
 ]
 
-{ #category : #spotter }
+{ #category : 'spotter' }
 PvProjectView >> spotterSystemImplementorsFor: aStep [
 	<spotterOrder: 210 context: #environment>
 
@@ -203,7 +206,7 @@ PvProjectView >> spotterSystemImplementorsFor: aStep [
 		yourself)
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvProjectView >> toolbar [
 
 	^ (self instantiate: PvHeaderBarPresenter)
@@ -211,7 +214,7 @@ PvProjectView >> toolbar [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvProjectView >> updatePresenter [
 
 	self model ifNil: [ ^ self ].

@@ -1,10 +1,12 @@
 Class {
-	#name : #PvPackageModel,
-	#superclass : #PvEntityModel,
-	#category : #'Perspective-Package-Model'
+	#name : 'PvPackageModel',
+	#superclass : 'PvEntityModel',
+	#category : 'Perspective-Package-Model',
+	#package : 'Perspective-Package',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PvPackageModel class >> newPackage: aPackage [
 
 	^ self new 
@@ -12,10 +14,10 @@ PvPackageModel class >> newPackage: aPackage [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvPackageModel >> children [
 
-	^ (((self entity classTags 
+	^ (((self entity tags
 		reject: [ :each | each name = self name ]) 
 		collect: [ :each | PvPackageTagModel newEnvironment: self environmentModel entity: each ]
 		as: OrderedCollection)
@@ -29,7 +31,7 @@ PvPackageModel >> children [
 		yourself
 ]
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 PvPackageModel >> classDefinitionString [
 	
 	^ PvFluidClassDefinitionPrinter new 
@@ -37,7 +39,7 @@ PvPackageModel >> classDefinitionString [
 		tag: nil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvPackageModel >> classes [
 
 	^ self entity definedClasses
@@ -45,21 +47,21 @@ PvPackageModel >> classes [
 		as: OrderedCollection
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvPackageModel >> iconName [
 
 	^ #package
 	
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvPackageModel >> isPackage [
 
 	^ true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvPackageModel >> name [
 
-	^ self entity packageName
+	^ self entity name
 ]

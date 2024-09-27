@@ -1,17 +1,19 @@
 Class {
-	#name : #PvFocusDownAction,
-	#superclass : #PvAction,
-	#category : #'Perspective-Command-Actions'
+	#name : 'PvFocusDownAction',
+	#superclass : 'PvAction',
+	#category : 'Perspective-Command-Actions',
+	#package : 'Perspective',
+	#tag : 'Command-Actions'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvFocusDownAction >> defineAction [
 
 	self name: 'Focus Down'.
 	self description: 'Focus first window down to current focused window'
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 PvFocusDownAction >> execute [
 	
 	self context focusDown

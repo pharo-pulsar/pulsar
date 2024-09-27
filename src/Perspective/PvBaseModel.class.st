@@ -1,13 +1,15 @@
 Class {
-	#name : #PvBaseModel,
-	#superclass : #Object,
+	#name : 'PvBaseModel',
+	#superclass : 'Object',
 	#instVars : [
 		'entity'
 	],
-	#category : #'Perspective-Model'
+	#category : 'Perspective-Model',
+	#package : 'Perspective',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PvBaseModel class >> on: anObject [
 
 	^ self basicNew 
@@ -16,66 +18,66 @@ PvBaseModel class >> on: anObject [
 		yourself
 ]
 
-{ #category : #visiting }
+{ #category : 'visiting' }
 PvBaseModel >> accept: aVisitor [
 	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvBaseModel >> children [
 	
 	^ #()
 ]
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 PvBaseModel >> colorName [
 	
 	^ nil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvBaseModel >> entity [
 
 	^ entity
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvBaseModel >> entity: anObject [
 
 	entity := anObject
 ]
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 PvBaseModel >> iconName [
 
 	^ nil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvBaseModel >> name [
 
 	^ self subclassResponsibility
 ]
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 PvBaseModel >> pageTitle [
 
 	^ self shortName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvBaseModel >> shortName [
 
 	^ self name
 ]
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 PvBaseModel >> windowIconName [
 
 	^ self iconName
 ]
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 PvBaseModel >> windowTitle [
 
 	^ self name

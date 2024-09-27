@@ -1,34 +1,36 @@
 Class {
-	#name : #PvAction,
-	#superclass : #CmCommand,
+	#name : 'PvAction',
+	#superclass : 'CmCommand',
 	#instVars : [
 		'specDecorator',
 		'iconComposite',
 		'shortcut',
 		'priority'
 	],
-	#category : #'Perspective-Command-Base'
+	#category : 'Perspective-Command-Base',
+	#package : 'Perspective',
+	#tag : 'Command-Base'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvAction class >> defaultPriority [
 
 	^ 100
 ]
 
-{ #category : #'accessing - runtime' }
+{ #category : 'accessing - runtime' }
 PvAction >> application [
 
 	^ context application
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 PvAction >> asPvAction [
 
 	^ self
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 PvAction >> asSpecCommand [ 
 	| command |
 	
@@ -42,7 +44,7 @@ PvAction >> asSpecCommand [
 	^ command
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 PvAction >> asSpecWithContext: aContext [
 
 	^ self 
@@ -50,7 +52,7 @@ PvAction >> asSpecWithContext: aContext [
 		asSpecCommand
 ]
 
-{ #category : #evaluating }
+{ #category : 'evaluating' }
 PvAction >> cull: aTarget [
 	"This is for compatibility with KMKeymap. Target is a SpPresenter"
 	| oldContext |
@@ -62,45 +64,45 @@ PvAction >> cull: aTarget [
 		context := oldContext ]
 ]
 
-{ #category : #evaluating }
+{ #category : 'evaluating' }
 PvAction >> cull: aTarget cull: aCaller [
 	"This is for compatibility with KMKeymap. Target is a SpPresenter"
 
 	^ self cull: aTarget
 ]
 
-{ #category : #evaluating }
+{ #category : 'evaluating' }
 PvAction >> cull: aTarget cull: aCaller cull: aShortcut [
 	"This is for compatibility with KMKeymap. Target is a SpPresenter"
 
 	^ self cull: aTarget
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvAction >> defineAction [
 
 	self subclassResponsibility
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvAction >> hasShortcut [
 	
 	^ self shortcut notNil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvAction >> iconComposite [
 
 	^ iconComposite
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvAction >> iconComposite: anIconComposite [
 
 	iconComposite := anIconComposite
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvAction >> iconCompositeName: aName [
 
 	self iconComposite: (PvCompositeIcon new 
@@ -108,57 +110,57 @@ PvAction >> iconCompositeName: aName [
 		yourself)
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvAction >> initialize [
 
 	super initialize.
 	self defineAction
 ]
 
-{ #category : #'accessing - runtime' }
+{ #category : 'accessing - runtime' }
 PvAction >> model [
 	"All editors have a model"
 
 	^ self context model
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvAction >> priority [
 
 	^ priority ifNil: [ self class defaultPriority ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvAction >> priority: aNumber [
 
 	priority := aNumber
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvAction >> shortcut [
 
 	^ shortcut
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvAction >> shortcut: aShortcut [
 
 	shortcut := aShortcut
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvAction >> specCommandClass [
 
 	^ PvSpecCommand
 ]
 
-{ #category : #'accessing - runtime' }
+{ #category : 'accessing - runtime' }
 PvAction >> specDecorator [
 
 	^ specDecorator
 ]
 
-{ #category : #'accessing - runtime' }
+{ #category : 'accessing - runtime' }
 PvAction >> specDecorator: aDecorator [
 
 	specDecorator := aDecorator

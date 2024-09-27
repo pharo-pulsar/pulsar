@@ -1,20 +1,22 @@
 Class {
-	#name : #PvActionGroup,
-	#superclass : #CmCommandGroup,
+	#name : 'PvActionGroup',
+	#superclass : 'CmCommandGroup',
 	#instVars : [
 		'priority',
 		'id'
 	],
-	#category : #'Perspective-Command-Base'
+	#category : 'Perspective-Command-Base',
+	#package : 'Perspective',
+	#tag : 'Command-Base'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvActionGroup class >> defaultPriority [
 
 	^ 100
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PvActionGroup class >> newId: aName [
 
 	^ self new 
@@ -23,7 +25,7 @@ PvActionGroup class >> newId: aName [
 		yourself
 ]
 
-{ #category : #copying }
+{ #category : 'copying' }
 PvActionGroup >> , otherGroup [
 
 	^ PvActionGroup new 
@@ -32,13 +34,13 @@ PvActionGroup >> , otherGroup [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvActionGroup >> actions [
 
 	^ self entries
 ]
 
-{ #category : #registering }
+{ #category : 'registering' }
 PvActionGroup >> actionsFor: groupId [
 
 	^ self groups 
@@ -46,7 +48,7 @@ PvActionGroup >> actionsFor: groupId [
 		ifNone: [ self class new ]
 ]
 
-{ #category : #registering }
+{ #category : 'registering' }
 PvActionGroup >> actionsForAll: aCollectionOfNames [
 
 	^ aCollectionOfNames
@@ -58,7 +60,7 @@ PvActionGroup >> actionsForAll: aCollectionOfNames [
 			all ]
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 PvActionGroup >> asSpecGroup [
 
 	^ (self decorateWith: PvSpecCommandGroup)
@@ -66,7 +68,7 @@ PvActionGroup >> asSpecGroup [
 		yourself
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 PvActionGroup >> asSpecWithContext: aContext [
 	| group specGroup |
 
@@ -77,7 +79,7 @@ PvActionGroup >> asSpecWithContext: aContext [
 	^ specGroup
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvActionGroup >> configureSpecGroup: group from: aContext [
 	| class |
 	
@@ -87,13 +89,13 @@ PvActionGroup >> configureSpecGroup: group from: aContext [
 		ifFound: [ :aPragma | (class perform: aPragma methodSelector with: group) ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvActionGroup >> entries: aCollection [
 
 	entries := aCollection
 ]
 
-{ #category : #registering }
+{ #category : 'registering' }
 PvActionGroup >> findOrRegisterGroupWithId: groupId [
 	
 	^ self groups 
@@ -105,43 +107,43 @@ PvActionGroup >> findOrRegisterGroupWithId: groupId [
 			newGroup ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvActionGroup >> hasEntries [
 	
 	^ self entries notEmpty
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvActionGroup >> id [
 
 	^ id
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvActionGroup >> id: anObject [
 
 	id := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvActionGroup >> priority [
 
 	^ priority ifNil: [ self class defaultPriority ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvActionGroup >> priority: anObject [
 
 	priority := anObject
 ]
 
-{ #category : #registering }
+{ #category : 'registering' }
 PvActionGroup >> registerAllActions: aCollection [ 
 	
 	aCollection do: [ :each | self register: each ]
 ]
 
-{ #category : #registering }
+{ #category : 'registering' }
 PvActionGroup >> registerGroup: groupId with: aCollectionOfActions [
 	| group |
 	

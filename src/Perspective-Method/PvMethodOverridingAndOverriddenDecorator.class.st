@@ -1,16 +1,18 @@
 Class {
-	#name : #PvMethodOverridingAndOverriddenDecorator,
-	#superclass : #PvMethodDecorator,
-	#category : #'Perspective-Method-Model'
+	#name : 'PvMethodOverridingAndOverriddenDecorator',
+	#superclass : 'PvMethodDecorator',
+	#category : 'Perspective-Method-Model',
+	#package : 'Perspective-Method',
+	#tag : 'Model'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvMethodOverridingAndOverriddenDecorator class >> appliesTo: aMethod [
 	
 	^ aMethod isOverriding and: [ aMethod isOverridden ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodOverridingAndOverriddenDecorator >> iconName [
 
 	^ 'arrow-small-up-down'

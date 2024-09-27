@@ -1,15 +1,17 @@
 Class {
-	#name : #PvMethodHierarchyPresenter,
-	#superclass : #SpPresenter,
+	#name : 'PvMethodHierarchyPresenter',
+	#superclass : 'SpPresenter',
 	#traits : 'SpTModel',
 	#classTraits : 'SpTModel classTrait',
 	#instVars : [
 		'treePresenter'
 	],
-	#category : #'Perspective-Method-View'
+	#category : 'Perspective-Method-View',
+	#package : 'Perspective-Method',
+	#tag : 'View'
 }
 
-{ #category : #layout }
+{ #category : 'layout' }
 PvMethodHierarchyPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
@@ -17,13 +19,13 @@ PvMethodHierarchyPresenter >> defaultLayout [
 		yourself
 ]
 
-{ #category : #transmission }
+{ #category : 'transmission' }
 PvMethodHierarchyPresenter >> defaultOutputPort [
 
 	^ self outputActivationPort
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvMethodHierarchyPresenter >> initializePresenters [
 
 	treePresenter := self newTree.
@@ -37,7 +39,7 @@ PvMethodHierarchyPresenter >> initializePresenters [
 	self addStyle: 'pvMethodHierarchyNavigation'
 ]
 
-{ #category : #transmission }
+{ #category : 'transmission' }
 PvMethodHierarchyPresenter >> outputActivationPort [
 
 	^ (SpActivationPort newPresenter: self)
@@ -45,7 +47,7 @@ PvMethodHierarchyPresenter >> outputActivationPort [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvMethodHierarchyPresenter >> updatePresenter [
 
 	treePresenter 

@@ -1,25 +1,27 @@
 Class {
-	#name : #PvVSCodeIconProvider,
-	#superclass : #SpLocationIconProvider,
+	#name : 'PvVSCodeIconProvider',
+	#superclass : 'SpLocationIconProvider',
 	#instVars : [
 		'application'
 	],
-	#category : #'Perspective-Icon'
+	#category : 'Perspective-Icon',
+	#package : 'Perspective',
+	#tag : 'Icon'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvVSCodeIconProvider >> application [
 
 	^ application
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvVSCodeIconProvider >> application: anObject [
 
 	application := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvVSCodeIconProvider >> iconNamed: aName ifAbsent: aBlock [
 
 	aName isSymbol ifTrue: [ ^ aBlock value ].
@@ -28,13 +30,13 @@ PvVSCodeIconProvider >> iconNamed: aName ifAbsent: aBlock [
 	^super iconNamed: aName ifAbsent: [ nil ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvVSCodeIconProvider >> isDarkTheme [
 
 	^ self application configuration isDarkTheme
 ]
 
-{ #category : #utilities }
+{ #category : 'utilities' }
 PvVSCodeIconProvider >> loadIconNamed: aSymbol [
 	| themeDir |
 	

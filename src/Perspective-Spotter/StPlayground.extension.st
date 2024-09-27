@@ -1,6 +1,6 @@
-Extension { #name : #StPlayground }
+Extension { #name : 'StPlayground' }
 
-{ #category : #'*Perspective-Spotter' }
+{ #category : '*Perspective-Spotter' }
 StPlayground >> spotterTitle [
 
 	^ self windowTitle

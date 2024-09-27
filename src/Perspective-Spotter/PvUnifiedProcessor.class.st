@@ -1,28 +1,30 @@
 Class {
-	#name : #PvUnifiedProcessor,
-	#superclass : #StSpotterProcessor,
+	#name : 'PvUnifiedProcessor',
+	#superclass : 'StSpotterProcessor',
 	#instVars : [
 		'categories',
 		'sourceFactory',
 		'label',
 		'showForEmptyQuery'
 	],
-	#category : #'Perspective-Spotter-Model-Processor'
+	#category : 'Perspective-Spotter-Model-Processor',
+	#package : 'Perspective-Spotter',
+	#tag : 'Model-Processor'
 }
 
-{ #category : #'default-settings' }
+{ #category : 'default-settings' }
 PvUnifiedProcessor class >> defaultEnabled [
 
 	^ false
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PvUnifiedProcessor class >> newEnvironment: anEnvironment [
 
 	^ self newSourceFactory: (PvEnvironmentSourceFactory newEnvironment: anEnvironment)
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PvUnifiedProcessor class >> newSourceFactory: aSourceFactory [
 
 	^ self basicNew 
@@ -31,31 +33,31 @@ PvUnifiedProcessor class >> newSourceFactory: aSourceFactory [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvUnifiedProcessor class >> order [
 	
 	^ 100
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 PvUnifiedProcessor class >> settingsDescription [
 
 	^ 'I am the main processor: I show classes, packages and implementors'
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 PvUnifiedProcessor class >> settingsTitle [
 
 	^ 'Classes, Implementors & Packages'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvUnifiedProcessor class >> title [
 
 	^ 'Results'
 ]
 
-{ #category : #sources }
+{ #category : 'sources' }
 PvUnifiedProcessor >> calculateLowercaseSourcesOn: anStream [
 	| implementorsBeginsWith implementorsSubstring wordsAwareImplementors |
 
@@ -77,7 +79,7 @@ PvUnifiedProcessor >> calculateLowercaseSourcesOn: anStream [
 	anStream nextPut: wordsAwareImplementors
 ]
 
-{ #category : #sources }
+{ #category : 'sources' }
 PvUnifiedProcessor >> calculateUppercaseSourcesOn: anStream [
 	| classesBeginsWith classesIncludesString packagesBeginsWith packagesIncludesString wordsAwareClassesSource wordsAwarePackageSource classAndSelectorImplementors |
 	
@@ -136,7 +138,7 @@ PvUnifiedProcessor >> calculateUppercaseSourcesOn: anStream [
 			anStream nextPut: wordsAwarePackageSource ]
 ]
 
-{ #category : #sources }
+{ #category : 'sources' }
 PvUnifiedProcessor >> categoriesIncludes: aCategory [
 
 	^ categories isNil 
@@ -145,13 +147,13 @@ PvUnifiedProcessor >> categoriesIncludes: aCategory [
 		or: [ categories anySatisfy: [ :each | aCategory asLowercase beginsWith: each asLowercase ] ] ] ]
 ]
 
-{ #category : #'spotter-api' }
+{ #category : 'spotter-api' }
 PvUnifiedProcessor >> classesTag [
 
 	^ #Classes
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 PvUnifiedProcessor >> configureFilter [
 
 	(categories ~= self query categoriesSelected)
@@ -164,7 +166,7 @@ PvUnifiedProcessor >> configureFilter [
 	filter clearDuplicates
 ]
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 PvUnifiedProcessor >> headerCategoryFor: aLink on: aSpotterPresenter [
 
 	^ aLink value 
@@ -172,96 +174,95 @@ PvUnifiedProcessor >> headerCategoryFor: aLink on: aSpotterPresenter [
 		on: aSpotterPresenter
 ]
 
-{ #category : #'spotter-api' }
+{ #category : 'spotter-api' }
 PvUnifiedProcessor >> implementorsTag [
 
 	^ #Implementors
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvUnifiedProcessor >> initialize [
 
 	super initialize.
 	self wantsToDisplayOnEmptyQuery: false
 ]
 
-{ #category : #'key-bindings' }
+{ #category : 'key-bindings' }
 PvUnifiedProcessor >> installKeymappingsOn: aPresenter onExecution: aBlock [
 
-	aPresenter
-		bindKeyCombination: $b meta
-		toAction: [
-			self query toggleFilter: self classesTag.
-			aBlock cull: self ].
-
-	aPresenter
-		bindKeyCombination: $m meta
-		toAction: [ 
-			self query toggleFilter: self implementorsTag.
-			aBlock cull: self ].
-		
-	aPresenter
-		bindKeyCombination: $p meta
-		toAction: [ 
-			self query toggleFilter: self packagesTag.
-			aBlock cull: self ]	
+	aPresenter 
+		addShortcutWith: [ :action | action 
+			shortcutKey: $b actionModifier;
+			action: [ 
+				self query toggleFilter: self classesTag.
+				aBlock cull: self ] ];
+		addShortcutWith: [ :action | action 
+			shortcutKey: $m actionModifier;
+			action: [ 
+				self query toggleFilter: self implementorsTag.
+				aBlock cull: self ] ];
+		addShortcutWith: [ :action | action 
+			shortcutKey: $p actionModifier;
+			action: [ 
+				self query toggleFilter: self packagesTag.
+				aBlock cull: self ] ]
 ]
 
-{ #category : #'spotter-api' }
+{ #category : 'spotter-api' }
 PvUnifiedProcessor >> isRelevantForQuery: aString [ 
 	
 	^ true
 ]
 
-{ #category : #'key-bindings' }
+{ #category : 'key-bindings' }
 PvUnifiedProcessor >> keyBindingForClasses [
 
 	^ $b meta
 ]
 
-{ #category : #'key-bindings' }
+{ #category : 'key-bindings' }
 PvUnifiedProcessor >> keyBindingForImplementors [
 
 	^ $m meta
 ]
 
-{ #category : #'key-bindings' }
+{ #category : 'key-bindings' }
 PvUnifiedProcessor >> keyBindingForPackages [
 
 	^ $p meta
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvUnifiedProcessor >> label [
 
 	^ label
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvUnifiedProcessor >> label: aString [
 
 	label := aString
 ]
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 PvUnifiedProcessor >> labelForClasses [
 
 	^ '#Classes in {1}' format: { self label }
 ]
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 PvUnifiedProcessor >> labelForImplementors [
 
 	^ '#Implementors in {1}' format: { self label }
 ]
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 PvUnifiedProcessor >> labelForPackages [
 
 	^ '#Packages in {1}' format: { self label }
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 PvUnifiedProcessor >> newSource [
 	| uppercaseIterators lowercaseIterators caseSelectorIterator root |
 	
@@ -282,37 +283,37 @@ PvUnifiedProcessor >> newSource [
 	^ root
 ]
 
-{ #category : #filtering }
+{ #category : 'filtering' }
 PvUnifiedProcessor >> newTextFilteringSource [
 	"It should not arrive here"
 	^ nil
 ]
 
-{ #category : #'spotter-api' }
+{ #category : 'spotter-api' }
 PvUnifiedProcessor >> packagesTag [
 
 	^ #Packages
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvUnifiedProcessor >> showForEmptyQuery [
 
 	^ showForEmptyQuery
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvUnifiedProcessor >> sourceFactory [
 	
 	^ sourceFactory
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvUnifiedProcessor >> sourceFactory: aSourceFactory [
 	
 	sourceFactory := aSourceFactory
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvUnifiedProcessor >> wantsToDisplayOnEmptyQuery: aBoolean [
 	
 	showForEmptyQuery := aBoolean

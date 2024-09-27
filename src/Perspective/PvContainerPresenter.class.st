@@ -1,15 +1,17 @@
 Class {
-	#name : #PvContainerPresenter,
-	#superclass : #LnContainerPresenter,
+	#name : 'PvContainerPresenter',
+	#superclass : 'LnContainerPresenter',
 	#traits : 'PvTActionHolder',
 	#classTraits : 'PvTActionHolder classTrait',
 	#instVars : [
 		'name'
 	],
-	#category : #'Perspective-View-Container'
+	#category : 'Perspective-View-Container',
+	#package : 'Perspective',
+	#tag : 'View-Container'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvContainerPresenter class >> defineActionsOn: aBuilder [
 	<perspectiveActions>
 	
@@ -22,13 +24,13 @@ PvContainerPresenter class >> defineActionsOn: aBuilder [
 		}
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvContainerPresenter >> allViews [
 	
 	^ self allPresenters select: [ :each | each isView ]
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 PvContainerPresenter >> asEditorContainer [
 
 	^ PvEditorContainerPresenter new 
@@ -38,58 +40,59 @@ PvContainerPresenter >> asEditorContainer [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvContainerPresenter >> defaultTileLayout [
 
 	^ LnTileTabLayout uniqueInstance
 ]
 
-{ #category : #'private settings' }
-PvContainerPresenter >> globalShortcuts [
+{ #category : 'private settings' }
+PvContainerPresenter >> globalActions [
 
-	^ self actions asKMCategory
+	^ self actions
 ]
 
-{ #category : #'events - handling' }
+{ #category : 'events - handling' }
 PvContainerPresenter >> handleAnnouncement: anAnnouncement [ 
 
 	anAnnouncement handleOn: self.
 	self allViews do: [ :aPresenter | aPresenter announce: anAnnouncement ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvContainerPresenter >> initialize [
 
 	super initialize.
 	self subscribeToAnnouncements
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvContainerPresenter >> initializePresenters [
 
 	super initializePresenters.
-	self addGlobalShortcutsTo: self
+	self addStyle: 'pvContainer'.
+	self addGlobalActionsTo: self
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvContainerPresenter >> maybeRemoveContainer [
 
 	self flag: #TODO. "Do not remove containers for the moment"
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvContainerPresenter >> name [
 
 	^ name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvContainerPresenter >> name: anObject [
 
 	name := anObject
 ]
 
-{ #category : #spotter }
+{ #category : 'spotter' }
 PvContainerPresenter >> spotterProcessorsFor: aSpotterStep context: context [
 	
 	"normal processing"
@@ -99,7 +102,7 @@ PvContainerPresenter >> spotterProcessorsFor: aSpotterStep context: context [
 		each spotterProcessorsFor: aSpotterStep context: context ]
 ]
 
-{ #category : #spotter }
+{ #category : 'spotter' }
 PvContainerPresenter >> stSpotterProcessorsFor: aSpotterStep [
 	
 	"normal processing"
@@ -109,7 +112,7 @@ PvContainerPresenter >> stSpotterProcessorsFor: aSpotterStep [
 		each stSpotterProcessorsFor: aSpotterStep ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvContainerPresenter >> subscribeToAnnouncements [
 
 	self announcer 

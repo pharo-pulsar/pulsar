@@ -1,17 +1,25 @@
 Class {
-	#name : #PvIconDecoration,
-	#superclass : #Object,
-	#category : #'Perspective-Icon'
+	#name : 'PvIconDecoration',
+	#superclass : 'Object',
+	#category : 'Perspective-Icon',
+	#package : 'Perspective',
+	#tag : 'Icon'
 }
 
-{ #category : #operations }
+{ #category : 'operations' }
 PvIconDecoration >> applyTo: anIcon [
 
 	^ anIcon
 ]
 
-{ #category : #operations }
+{ #category : 'operations' }
 PvIconDecoration >> applyTo: anIcon on: anApplication [
 
 	^ self applyTo: anIcon
+]
+
+{ #category : 'accessing' }
+PvIconDecoration >> name [
+
+	^ self subclassResponsibility
 ]

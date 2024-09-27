@@ -1,34 +1,36 @@
 Class {
-	#name : #PvSystemEnvironment,
-	#superclass : #PvEnvironment,
-	#category : #'Perspective-Model'
+	#name : 'PvSystemEnvironment',
+	#superclass : 'PvEnvironment',
+	#category : 'Perspective-Model',
+	#package : 'Perspective',
+	#tag : 'Model'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvSystemEnvironment >> hasPackageNamed: aString [
 
-	^ self organizer includesPackageNamed: aString
+	^ self organizer hasPackage:  aString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvSystemEnvironment >> name [
 
 	^ 'System'
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvSystemEnvironment >> organizer [
 
-	^  RPackageOrganizer default
+	^  PackageOrganizer default
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvSystemEnvironment >> packageNamed: aString [
 
 	^ self organizer packageNamed: aString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvSystemEnvironment >> packages [
 	
 	^ self organizer packages

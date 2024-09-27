@@ -1,32 +1,34 @@
 Class {
-	#name : #PvMethodEditorProtocolChanged,
-	#superclass : #Announcement,
+	#name : 'PvMethodEditorProtocolChanged',
+	#superclass : 'Announcement',
 	#instVars : [
 		'newProtocol',
 		'oldProtocol'
 	],
-	#category : #'Perspective-Method-View'
+	#category : 'Perspective-Method-View',
+	#package : 'Perspective-Method',
+	#tag : 'View'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodEditorProtocolChanged >> newProtocol [
 
 	^ newProtocol
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodEditorProtocolChanged >> newProtocol: anObject [
 
 	newProtocol := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodEditorProtocolChanged >> oldProtocol [
 
 	^ oldProtocol
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodEditorProtocolChanged >> oldProtocol: anObject [
 
 	oldProtocol := anObject

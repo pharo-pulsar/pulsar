@@ -1,17 +1,19 @@
 Class {
-	#name : #PvShowSpotterForWindowsAction,
-	#superclass : #PvAction,
-	#category : #'Perspective-Command-Actions'
+	#name : 'PvShowSpotterForWindowsAction',
+	#superclass : 'PvAction',
+	#category : 'Perspective-Command-Actions',
+	#package : 'Perspective',
+	#tag : 'Command-Actions'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvShowSpotterForWindowsAction >> defineAction [
 
 	self name: 'Spotter for Windows'.
 	self description: 'Open spotter for perspective windows'
 ]
 
-{ #category : #execution }
+{ #category : 'execution' }
 PvShowSpotterForWindowsAction >> execute [
 	| spotter |
 	

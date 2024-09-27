@@ -1,10 +1,12 @@
 Class {
-	#name : #PvEditorPathPresenter,
-	#superclass : #SpPresenter,
-	#category : #'Perspective-View-Editor'
+	#name : 'PvEditorPathPresenter',
+	#superclass : 'SpPresenter',
+	#category : 'Perspective-View-Editor',
+	#package : 'Perspective',
+	#tag : 'View-Editor'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEditorPathPresenter >> addSegment: aPresenter [
 
 	self addSeparator.		
@@ -13,7 +15,7 @@ PvEditorPathPresenter >> addSegment: aPresenter [
 		expand: false
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEditorPathPresenter >> addSeparator [
 		
 	self layout isEmpty ifTrue: [ ^ self ]. 
@@ -24,7 +26,7 @@ PvEditorPathPresenter >> addSeparator [
 		expand: false
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 PvEditorPathPresenter >> defaultLayout [
 
 	^ SpBoxLayout newLeftToRight
@@ -33,7 +35,7 @@ PvEditorPathPresenter >> defaultLayout [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEditorPathPresenter >> removeAllSegments [
 
 	self layout removeAll

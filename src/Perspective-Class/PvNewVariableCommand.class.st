@@ -1,10 +1,12 @@
 Class {
-	#name : #PvNewVariableCommand,
-	#superclass : #PvClassCommand,
-	#category : #'Perspective-Class-Command'
+	#name : 'PvNewVariableCommand',
+	#superclass : 'PvClassCommand',
+	#category : 'Perspective-Class-Command',
+	#package : 'Perspective-Class',
+	#tag : 'Command'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvNewVariableCommand >> defineAction [
 
 	self priority: 100.

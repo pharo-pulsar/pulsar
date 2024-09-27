@@ -1,6 +1,6 @@
-Extension { #name : #Association }
+Extension { #name : 'Association' }
 
-{ #category : #'*Perspective' }
+{ #category : '*Perspective' }
 Association >> asPvAction [
 	"this is to handle constructions style 
 	 shortcut -> action"

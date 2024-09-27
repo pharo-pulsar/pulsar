@@ -1,6 +1,6 @@
-Extension { #name : #OCUndeclaredVariableWarning }
+Extension { #name : 'OCUndeclaredVariableWarning' }
 
-{ #category : #'*Perspective' }
+{ #category : '*Perspective' }
 OCUndeclaredVariableWarning >> accept: aVisitor [
 
 	^ aVisitor visitUndeclaredVariableWarning: self

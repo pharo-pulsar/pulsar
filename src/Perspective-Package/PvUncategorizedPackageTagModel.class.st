@@ -1,29 +1,31 @@
 Class {
-	#name : #PvUncategorizedPackageTagModel,
-	#superclass : #PvVirtualPackageTagModel,
-	#category : #'Perspective-Package-Model'
+	#name : 'PvUncategorizedPackageTagModel',
+	#superclass : 'PvVirtualPackageTagModel',
+	#category : 'Perspective-Package-Model',
+	#package : 'Perspective-Package',
+	#tag : 'Model'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvUncategorizedPackageTagModel class >> canBeUsedFor: aPackage [
 
 	^ (aPackage includesClassTagNamed: aPackage name)"
 		and: [ (aPackage classesForClassTag: aPackage name) notEmpty ]"
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvUncategorizedPackageTagModel class >> order [
 
 	^ 0
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvUncategorizedPackageTagModel >> children [
 
 	^ self classes
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvUncategorizedPackageTagModel >> classes [
 
 	^ ((self entity classesForClassTag: self entity name) 
@@ -31,13 +33,13 @@ PvUncategorizedPackageTagModel >> classes [
 		sorted: #name ascending
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvUncategorizedPackageTagModel >> iconName [
 
 	^ 'question'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvUncategorizedPackageTagModel >> name [
 
 	^ 'Uncategorized'

@@ -1,15 +1,17 @@
 Trait {
-	#name : #PvTScripting,
-	#category : #'Perspective-View'
+	#name : 'PvTScripting',
+	#category : 'Perspective-View',
+	#package : 'Perspective',
+	#tag : 'View'
 }
 
-{ #category : #building }
+{ #category : 'building' }
 PvTScripting >> buildPerspectiveToolbarWith: aBlock [
 
 	^ (PvContextActionBuilder on: self) buildToolbarWith: aBlock
 ]
 
-{ #category : #scripting }
+{ #category : 'scripting' }
 PvTScripting >> newCode [
 
 	^ super newCode
@@ -17,7 +19,7 @@ PvTScripting >> newCode [
 		yourself
 ]
 
-{ #category : #scripting }
+{ #category : 'scripting' }
 PvTScripting >> newEntityTree [
 
 	^ self newTree
@@ -31,7 +33,7 @@ PvTScripting >> newEntityTree [
 		yourself
 ]
 
-{ #category : #scripting }
+{ #category : 'scripting' }
 PvTScripting >> newPerspectiveViewToolbar: aGroup [
 
 	^ self 
@@ -39,7 +41,7 @@ PvTScripting >> newPerspectiveViewToolbar: aGroup [
 		actions: nil
 ]
 
-{ #category : #scripting }
+{ #category : 'scripting' }
 PvTScripting >> newPerspectiveViewToolbar: groups actions: actionGroups [
 
 	^ self buildPerspectiveToolbarWith: [ :builder |

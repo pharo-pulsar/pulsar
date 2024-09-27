@@ -1,13 +1,15 @@
 Class {
-	#name : #PvSystemNavigation,
-	#superclass : #SystemNavigation,
+	#name : 'PvSystemNavigation',
+	#superclass : 'SystemNavigation',
 	#instVars : [
 		'perspective'
 	],
-	#category : #'Perspective-View-Perspective'
+	#category : 'Perspective-View-Perspective',
+	#package : 'Perspective',
+	#tag : 'View-Perspective'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PvSystemNavigation class >> newPerspective: aPerspective [
 
 	^ self new 
@@ -15,13 +17,13 @@ PvSystemNavigation class >> newPerspective: aPerspective [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvSystemNavigation >> application [
 
 	^ self perspective application
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 PvSystemNavigation >> browse: anObject [
 
 	self flag: #TODO. "See if this is enough or better with a double dispatch"
@@ -32,7 +34,7 @@ PvSystemNavigation >> browse: anObject [
 	self perspective activateClass: anObject class instanceSide
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 PvSystemNavigation >> browseMessageList: messageList 
 	name: labelString 
 	autoSelect: autoSelectString 
@@ -48,11 +50,11 @@ PvSystemNavigation >> browseMessageList: messageList
 	self perspective addWindow: (self application tools messageList new
 		messages: methods; 
 		title: labelString;
-		autoSelect: autoSelectString;
+		"autoSelect: autoSelectString;"
 		refreshingBlock: aBlock)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 PvSystemNavigation >> browseVersionsOf: aMethod [ 
 
 	self perspective addWindow: (self application tools versionBrowser
@@ -60,19 +62,19 @@ PvSystemNavigation >> browseVersionsOf: aMethod [
 		model: aMethod asRingDefinition)
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 PvSystemNavigation >> inspect: anObject [
 
 	self application tools inspector inspect: anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvSystemNavigation >> perspective [
 
 	^ perspective
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvSystemNavigation >> perspective: anObject [
 
 	perspective := anObject

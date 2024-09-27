@@ -1,32 +1,34 @@
 Class {
-	#name : #PvSpecCommand,
-	#superclass : #SpCommand,
+	#name : 'PvSpecCommand',
+	#superclass : 'SpCommand',
 	#instVars : [
 		'icon'
 	],
-	#category : #'Perspective-Command-Base'
+	#category : 'Perspective-Command-Base',
+	#package : 'Perspective',
+	#tag : 'Command-Base'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvSpecCommand >> decoratedCommand: aCommand [
 
 	super decoratedCommand: aCommand.
 	decoratedCommand specDecorator: self
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvSpecCommand >> hasIcon [
 
 	^ icon notNil or: [ super hasIcon ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvSpecCommand >> icon [
 
 	^ icon ifNil: [ super icon ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvSpecCommand >> icon: anIcon [
 
 	icon := anIcon

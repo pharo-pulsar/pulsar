@@ -1,19 +1,24 @@
 Class {
-	#name : #PvOutlinePerspectiveLayout,
-	#superclass : #PvTilePerspectiveLayout,
-	#category : #'Perspective-View-Perspective'
+	#name : 'PvOutlinePerspectiveLayout',
+	#superclass : 'PvTilePerspectiveLayout',
+	#category : 'Perspective-View-Perspective',
+	#package : 'Perspective',
+	#tag : 'View-Perspective'
 }
 
-{ #category : #factory }
+{ #category : 'factory' }
 PvOutlinePerspectiveLayout >> createLayoutOn: aPresenter [
+	| extent |
 	
-	^ SpPanedLayout newLeftToRight 
-		positionOfSlider: 25 percent;
+	extent := aPresenter initialExtent.
+	"assuming starting window is"
+	^ SpPanedLayout newHorizontal 
+		positionOfSlider: (extent x * 0.25) asInteger;
 		add: (aPresenter newContainer: #overview) useTabLayout;
-		add: (SpPanedLayout newTopToBottom
-			positionOfSlider: 55 percent;
-			add: (SpPanedLayout newLeftToRight
-				positionOfSlider: 65 percent;  
+		add: (SpPanedLayout newVertical
+			positionOfSlider: (extent y * 0.6) asInteger;
+			add: (SpPanedLayout newHorizontal
+				positionOfSlider: extent x * 0.5;
 				add: (aPresenter newEditorContainer: #edit) useTabLayout; 
 				add: (aPresenter newContainer: #outline) useTabLayout;
 				yourself);

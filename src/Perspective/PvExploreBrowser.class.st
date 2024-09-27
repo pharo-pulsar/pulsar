@@ -1,16 +1,18 @@
 Class {
-	#name : #PvExploreBrowser,
-	#superclass : #PvPerspectiveBrowser,
+	#name : 'PvExploreBrowser',
+	#superclass : 'PvPerspectiveBrowser',
 	#traits : 'SpTModel',
 	#classTraits : 'SpTModel classTrait',
 	#instVars : [
 		'projectView',
 		'outlineView'
 	],
-	#category : #'Perspective-View-Perspective'
+	#category : 'Perspective-View-Perspective',
+	#package : 'Perspective',
+	#tag : 'View-Perspective'
 }
 
-{ #category : #activating }
+{ #category : 'activating' }
 PvExploreBrowser >> activateClass: aClass [
 
 	self editorContainer entityActivated: (PvClassModel 
@@ -18,7 +20,7 @@ PvExploreBrowser >> activateClass: aClass [
 		entity: aClass)
 ]
 
-{ #category : #activating }
+{ #category : 'activating' }
 PvExploreBrowser >> activateMethod: aMethod [
 
 	self editorContainer entityActivated: (PvMethodModel 
@@ -26,7 +28,7 @@ PvExploreBrowser >> activateMethod: aMethod [
 		entity: aMethod)
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvExploreBrowser >> connectViews [
 
 	self flag: #TODO. "Refactor"
@@ -41,14 +43,14 @@ PvExploreBrowser >> connectViews [
 		transmitTo: projectView inputSelectedPort
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvExploreBrowser >> initializeViews [
 
 	projectView := self addWindowOfClass: PvProjectView atContainerNamed: #overview.
 	outlineView := self addWindowOfClass: PvOutlineView atContainerNamed: #overview
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 PvExploreBrowser >> openProject: aBaselineClass [
 
 	projectView model: (PvProjectModel 
@@ -56,7 +58,7 @@ PvExploreBrowser >> openProject: aBaselineClass [
 		environment: self model)
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvExploreBrowser >> perspectiveLayoutClass [
 
 	^ PvExplorePerspectiveLayout

@@ -1,74 +1,76 @@
 Class {
-	#name : #PvNewMethodTemplate,
-	#superclass : #Object,
+	#name : 'PvNewMethodTemplate',
+	#superclass : 'Object',
 	#instVars : [
 		'parentModel',
 		'protocol'
 	],
-	#category : #'Perspective-Method-Model'
+	#category : 'Perspective-Method-Model',
+	#package : 'Perspective-Method',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvNewMethodTemplate >> category [
 
 	^ #'as yet unclassified'
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvNewMethodTemplate >> isDoIt [
 	
 	^ false
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvNewMethodTemplate >> isTestMethod [
 
 	^ false
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvNewMethodTemplate >> methodClass [
 
 	^ self parentModel entity
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvNewMethodTemplate >> parentModel [
 
 	^ parentModel
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvNewMethodTemplate >> parentModel: anObject [
 
 	parentModel := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvNewMethodTemplate >> protocol [
 	
 	^ protocol ifNil: [ protocol := Protocol  unclassified ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvNewMethodTemplate >> protocol: aProtocolString [
 
 	protocol := aProtocolString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvNewMethodTemplate >> selector [
 
 	^ #'new method'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvNewMethodTemplate >> sourceCode [
 
 	^ self sourceCodeTemplate
 ]
 
-{ #category : #compiling }
+{ #category : 'compiling' }
 PvNewMethodTemplate >> sourceCodeTemplate [
 
 	^ self methodClass sourceCodeTemplate

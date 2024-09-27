@@ -1,10 +1,12 @@
 Class {
-	#name : #PvClassEntry,
-	#superclass : #StClassEntry,
-	#category : #'Perspective-Spotter-Model-Entry'
+	#name : 'PvClassEntry',
+	#superclass : 'StClassEntry',
+	#category : 'Perspective-Spotter-Model-Entry',
+	#package : 'Perspective-Spotter',
+	#tag : 'Model-Entry'
 }
 
-{ #category : #evaluating }
+{ #category : 'evaluating' }
 PvClassEntry >> evaluateFor: aSpotter [
 
 	aSpotter perspective activateClass: self content

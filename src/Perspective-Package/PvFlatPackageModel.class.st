@@ -1,10 +1,12 @@
 Class {
-	#name : #PvFlatPackageModel,
-	#superclass : #PvPackageModel,
-	#category : #'Perspective-Package-Model'
+	#name : 'PvFlatPackageModel',
+	#superclass : 'PvPackageModel',
+	#category : 'Perspective-Package-Model',
+	#package : 'Perspective-Package',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvFlatPackageModel >> children [
 
 	^ self classes", 

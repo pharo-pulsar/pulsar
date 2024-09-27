@@ -1,13 +1,15 @@
 Class {
-	#name : #PvProjectModel,
-	#superclass : #PvEntityModel,
+	#name : 'PvProjectModel',
+	#superclass : 'PvEntityModel',
 	#instVars : [
 		'baselineClass'
 	],
-	#category : #'Perspective-Project-Model'
+	#category : 'Perspective-Project-Model',
+	#package : 'Perspective-Project',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PvProjectModel class >> newEntity: anObject environment: anEnvironmentModel [
 
 	^ self basicNew 
@@ -17,7 +19,7 @@ PvProjectModel class >> newEntity: anObject environment: anEnvironmentModel [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvProjectModel >> baselineClassModel [
 
 	^ PvClassModel 
@@ -25,7 +27,7 @@ PvProjectModel >> baselineClassModel [
 		entity: self entity
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvProjectModel >> children [
 
 	^ Array streamContents: [ :stream |
@@ -41,13 +43,13 @@ PvProjectModel >> children [
 		stream nextPut: self environmentModel ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvProjectModel >> collectPackageModels [
 
 	^ self collectPackageModelsOn: self entity
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvProjectModel >> collectPackageModelsOn: aBaselineClass [
 	| specs | 
 	
@@ -59,19 +61,21 @@ PvProjectModel >> collectPackageModelsOn: aBaselineClass [
 		sorted: #name ascending
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvProjectModel >> dependencesEnvironment [
 	| dict |
 
 	dict := SystemDictionary new.
+	self flag: #TODO. "This is kind of horrible, but well..."
 	self entity new project version projects do: [ :eachProject |  
-		(self packagesOn: eachProject projectClass) 
-			do: [ :eachPackage | 
-				eachPackage definedClasses do: [ :each | dict at: each name put: each ] ] ].
+		eachProject className ifNotNil: [ :aName |
+			(self packagesOn: (self class environment classNamed: aName)) 
+				do: [ :eachPackage | 
+					eachPackage definedClasses do: [ :each | dict at: each name put: each ] ] ] ].
 	^ dict
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvProjectModel >> dependencyModels [
 	| version |
 
@@ -81,26 +85,26 @@ PvProjectModel >> dependencyModels [
 		version projects
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvProjectModel >> editorClass [
 
 	^ PvProjectEditorView
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvProjectModel >> iconName [
 
 	^ 'project'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvProjectModel >> name [
 
 	self entity ifNil: [ ^ 'None' ].
 	^ self entity name allButFirst: 10 "BaselineOf"
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvProjectModel >> packagesOn: aBaselineClass [
 	| specs | 
 	
@@ -112,7 +116,7 @@ PvProjectModel >> packagesOn: aBaselineClass [
 		sorted: #name ascending
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvProjectModel >> projectEnvironment [
 	| dict |
 
@@ -123,7 +127,7 @@ PvProjectModel >> projectEnvironment [
 	^ dict
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvProjectModel >> systemEnvironment [
 
 	^ self class environment

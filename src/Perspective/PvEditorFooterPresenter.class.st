@@ -1,29 +1,31 @@
 Class {
-	#name : #PvEditorFooterPresenter,
-	#superclass : #SpPresenter,
+	#name : 'PvEditorFooterPresenter',
+	#superclass : 'SpPresenter',
 	#traits : 'SpTModel',
 	#classTraits : 'SpTModel classTrait',
 	#instVars : [
 		'toolbarPresenter',
 		'actions'
 	],
-	#category : #'Perspective-View-Editor'
+	#category : 'Perspective-View-Editor',
+	#package : 'Perspective',
+	#tag : 'View-Editor'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEditorFooterPresenter >> actions [
 
 	^ actions
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEditorFooterPresenter >> actions: anActionGroup [
 
 	actions := anActionGroup.
 	self updatePresenter
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 PvEditorFooterPresenter >> defaultLayout [
 
 	^ SpBoxLayout newLeftToRight
@@ -32,7 +34,7 @@ PvEditorFooterPresenter >> defaultLayout [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvEditorFooterPresenter >> initializePresenters [
 
 	toolbarPresenter := self newToolbar
@@ -41,7 +43,7 @@ PvEditorFooterPresenter >> initializePresenters [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvEditorFooterPresenter >> updatePresenter [
 
 	toolbarPresenter removeAllItems.

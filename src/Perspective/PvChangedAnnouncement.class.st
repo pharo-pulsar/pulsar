@@ -1,10 +1,12 @@
 Class {
-	#name : #PvChangedAnnouncement,
-	#superclass : #PvAnnouncement,
-	#category : #'Perspective-Announcement'
+	#name : 'PvChangedAnnouncement',
+	#superclass : 'PvAnnouncement',
+	#category : 'Perspective-Announcement',
+	#package : 'Perspective',
+	#tag : 'Announcement'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvChangedAnnouncement >> performSelector [
 
 	^ #entityChanged:

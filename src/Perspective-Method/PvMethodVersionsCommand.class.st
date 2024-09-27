@@ -2,54 +2,56 @@
 Open the vestions of the method contained in `context model`
 "
 Class {
-	#name : #PvMethodVersionsCommand,
-	#superclass : #PvMethodEditorCommand,
-	#category : #'Perspective-Method-Command'
+	#name : 'PvMethodVersionsCommand',
+	#superclass : 'PvMethodEditorCommand',
+	#category : 'Perspective-Method-Command',
+	#package : 'Perspective-Method',
+	#tag : 'Command'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodVersionsCommand class >> defaultDescription [
 
 	^ 'Show versions from this method.'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodVersionsCommand class >> defaultIconName [
 
 	^ #history
 ]
 
-{ #category : #'accessing - defaults' }
+{ #category : 'accessing - defaults' }
 PvMethodVersionsCommand class >> defaultName [
 
 	^ 'Versions'
 ]
 
-{ #category : #'default - groups' }
+{ #category : 'default - groups' }
 PvMethodVersionsCommand class >> groups [
 
 	^ #(action method)
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvMethodVersionsCommand class >> isVisibleInToolbar [
 
 	^ true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodVersionsCommand class >> priority [
 
 	^ 100
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvMethodVersionsCommand class >> showInToolbar [
 
 	^ true
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 PvMethodVersionsCommand >> execute [
 	context systemNavigation browseVersionsOf: self model entity
 ]

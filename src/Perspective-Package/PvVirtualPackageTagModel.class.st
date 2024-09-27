@@ -1,41 +1,43 @@
 Class {
-	#name : #PvVirtualPackageTagModel,
-	#superclass : #PvEntityModel,
-	#category : #'Perspective-Package-Model'
+	#name : 'PvVirtualPackageTagModel',
+	#superclass : 'PvEntityModel',
+	#category : 'Perspective-Package-Model',
+	#package : 'Perspective-Package',
+	#tag : 'Model'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvVirtualPackageTagModel class >> canBeUsedFor: aPackage [
 
 	^ true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvVirtualPackageTagModel class >> order [
 
 	^ 100
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PvVirtualPackageTagModel class >> virtualModelsFor: aPackage [
 
 	^ self allSubclasses select: [ :each | each canBeUsedFor: aPackage ]
 
 ]
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 PvVirtualPackageTagModel >> colorName [
 
 	^ #cyan
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvVirtualPackageTagModel >> isRoot [
 
 	^ false
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvVirtualPackageTagModel >> order [
 
 	^ self class order

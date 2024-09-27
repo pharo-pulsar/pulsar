@@ -1,22 +1,24 @@
 Class {
-	#name : #PvExtensionsPackageTagModel,
-	#superclass : #PvVirtualPackageTagModel,
-	#category : #'Perspective-Package-Model'
+	#name : 'PvExtensionsPackageTagModel',
+	#superclass : 'PvVirtualPackageTagModel',
+	#category : 'Perspective-Package-Model',
+	#package : 'Perspective-Package',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvExtensionsPackageTagModel class >> order [
 
 	^ 1000
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvExtensionsPackageTagModel >> children [
 
 	^ self classes
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvExtensionsPackageTagModel >> classes [
 
 	^ self entity extendedClasses 
@@ -24,15 +26,16 @@ PvExtensionsPackageTagModel >> classes [
 			PvExtendedClassModel 
 				newEnvironment: self environmentModel 
 				entity: each ]
+		as: OrderedCollection
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvExtensionsPackageTagModel >> iconName [
 
 	^ 'groupByMethod'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvExtensionsPackageTagModel >> name [
 
 	^ 'Extensions'

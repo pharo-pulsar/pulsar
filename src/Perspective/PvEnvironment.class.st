@@ -1,16 +1,18 @@
 Class {
-	#name : #PvEnvironment,
-	#superclass : #Object,
-	#category : #'Perspective-Model'
+	#name : 'PvEnvironment',
+	#superclass : 'Object',
+	#category : 'Perspective-Model',
+	#package : 'Perspective',
+	#tag : 'Model'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvEnvironment >> hasPackageNamed: aString [ 
 	
 	self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEnvironment >> name [
 
 	^ self subclassResponsibility

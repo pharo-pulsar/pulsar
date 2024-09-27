@@ -1,19 +1,21 @@
 Class {
-	#name : #PvClassModel,
-	#superclass : #PvEntityModel,
+	#name : 'PvClassModel',
+	#superclass : 'PvEntityModel',
 	#instVars : [
 		'isNew'
 	],
-	#category : #'Perspective-Class-Model'
+	#category : 'Perspective-Class-Model',
+	#package : 'Perspective-Class',
+	#tag : 'Model'
 }
 
-{ #category : #converting }
+{ #category : 'converting' }
 PvClassModel >> asClassModel [
 
 	^ self
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 PvClassModel >> asOutlineClassModel [
 
 	^ PvOutlineClassModel 
@@ -21,13 +23,13 @@ PvClassModel >> asOutlineClassModel [
 		entity: self entity
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassModel >> beForNewClass [
 
 	isNew := true
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassModel >> classDefinitionString [
 	
 	self flag: #TODO. "I do not like to use an if here... but for now is easier 
@@ -37,19 +39,19 @@ PvClassModel >> classDefinitionString [
 		ifFalse: [ self entity classDefinitionString ]	
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassModel >> classDepth [
 	
 	^ self entity classDepth
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassModel >> comment [
 
 	^ self entity comment
 ]
 
-{ #category : #compiling }
+{ #category : 'compiling' }
 PvClassModel >> compile: aString notifying: requestor [
 	| resultClass |
 
@@ -68,19 +70,19 @@ PvClassModel >> compile: aString notifying: requestor [
 		e compilationContext noPattern ifFalse: [ e pass ] ]
 ]
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 PvClassModel >> editorClass [
 	
 	^ PvClassEditorView
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassModel >> fullName [
 
 	^ self name
 ]
 
-{ #category : #'accessing - navigating' }
+{ #category : 'accessing - navigating' }
 PvClassModel >> hierarchyTopModel [
 	| node prevNode |
 
@@ -99,7 +101,7 @@ PvClassModel >> hierarchyTopModel [
 	^ node
 ]
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 PvClassModel >> iconComposite [
 
 	^ PvCompositeIcon new 
@@ -110,63 +112,63 @@ PvClassModel >> iconComposite [
 		yourself
 ]
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 PvClassModel >> iconName [
 	
 	^ self entity systemIconName
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvClassModel >> includesClassModel [
 
 	^ true
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvClassModel >> inheritsFrom: aClassModel [ 
 	
 	aClassModel ifNil: [ ^ false ].
 	^ self entity instanceSide inheritsFrom: aClassModel entity instanceSide
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvClassModel >> initialize [
 
 	super initialize.
 	isNew := false
 ]
 
-{ #category : #'accessing - navigating' }
+{ #category : 'accessing - navigating' }
 PvClassModel >> isLargeHierarchy [
 
 	^ { Object. ProtoObject } includes: self entity
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvClassModel >> isOutlineClassEntity [
 
 	^ self entity isClassOrTrait
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassModel >> name [
 
 	^ self entity name asString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassModel >> packageName [
 
 	^ self entity package name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassModel >> shortName [
 	
 	^ self name contractTo: self class shortSize
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassModel >> windowCommentIconName [
 
 	^ self entity hasComment
@@ -174,7 +176,7 @@ PvClassModel >> windowCommentIconName [
 		ifFalse: [ #uncommentedClass ]
 ]
 
-{ #category : #'accessing - ui' }
+{ #category : 'accessing - ui' }
 PvClassModel >> windowIconComposite [
 
 	^ PvCompositeIcon new 

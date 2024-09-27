@@ -1,28 +1,29 @@
 Class {
-	#name : #PvClassHierarchyBuilder,
-	#superclass : #Object,
-	#category : #'Perspective-Class'
+	#name : 'PvClassHierarchyBuilder',
+	#superclass : 'Object',
+	#category : 'Perspective-Class',
+	#package : 'Perspective-Class'
 }
 
-{ #category : #building }
+{ #category : 'building' }
 PvClassHierarchyBuilder class >> buildFrom: aCollection [
 
 	^ self new buildFrom: aCollection
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvClassHierarchyBuilder class >> buildFromNodes: aCollection [
 
 	^ self new buildFromNodes: aCollection
 ]
 
-{ #category : #building }
+{ #category : 'building' }
 PvClassHierarchyBuilder >> buildFrom: aCollection [
 
 	^ self buildFromNodes: (aCollection collect: [ :each | StBrowserHierarchyNode for: each ])
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvClassHierarchyBuilder >> buildFromNodes: nodes [
 
 	nodes do: [ :each | each findParentFrom: nodes ].

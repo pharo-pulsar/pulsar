@@ -1,19 +1,21 @@
 Class {
-	#name : #PvAnnouncement,
-	#superclass : #Announcement,
+	#name : 'PvAnnouncement',
+	#superclass : 'Announcement',
 	#instVars : [
 		'model'
 	],
-	#category : #'Perspective-Announcement'
+	#category : 'Perspective-Announcement',
+	#package : 'Perspective',
+	#tag : 'Announcement'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PvAnnouncement class >> for: aModel [
 
 	^ self new model: aModel
 ]
 
-{ #category : #visiting }
+{ #category : 'visiting' }
 PvAnnouncement >> handleOn: aView [
 
 	"A bit of reflection to bypass views not implementing the visitor (Because they do not want it)"
@@ -24,19 +26,19 @@ PvAnnouncement >> handleOn: aView [
 		with: self model
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvAnnouncement >> model [
 
 	^ model
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvAnnouncement >> model: anObject [
 
 	model := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvAnnouncement >> performSelector [
 
 	^ self subclassResponsibility

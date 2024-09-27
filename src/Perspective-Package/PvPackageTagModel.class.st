@@ -1,10 +1,12 @@
 Class {
-	#name : #PvPackageTagModel,
-	#superclass : #PvEntityModel,
-	#category : #'Perspective-Package-Model'
+	#name : 'PvPackageTagModel',
+	#superclass : 'PvEntityModel',
+	#category : 'Perspective-Package-Model',
+	#package : 'Perspective-Package',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PvPackageTagModel class >> newPackageTag: aPackageTag [
 
 	^ self new 
@@ -12,19 +14,19 @@ PvPackageTagModel class >> newPackageTag: aPackageTag [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvPackageTagModel class >> order [
 
 	^ 100
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvPackageTagModel >> children [
 
 	^ self classes
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvPackageTagModel >> classDefinitionString [
 	
 	^ PvFluidClassDefinitionPrinter new 
@@ -34,7 +36,7 @@ PvPackageTagModel >> classDefinitionString [
 			ifFalse: [ self name ])
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvPackageTagModel >> classes [
 
 	^ (self entity classes
@@ -43,37 +45,37 @@ PvPackageTagModel >> classes [
 		sorted: #name ascending
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvPackageTagModel >> iconName [
 
 	^ 'tag'
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvPackageTagModel >> isPackageTag [
 
 	^ true
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvPackageTagModel >> isRoot [
 
 	^ self entity isRoot
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvPackageTagModel >> name [
 
 	^ self entity name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvPackageTagModel >> order [
 
 	^ self class order
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvPackageTagModel >> package [
 
 	^ self entity package

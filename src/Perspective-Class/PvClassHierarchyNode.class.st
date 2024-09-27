@@ -1,15 +1,16 @@
 Class {
-	#name : #PvClassHierarchyNode,
-	#superclass : #Object,
+	#name : 'PvClassHierarchyNode',
+	#superclass : 'Object',
 	#instVars : [
 		'element',
 		'children',
 		'parent'
 	],
-	#category : #'Perspective-Class'
+	#category : 'Perspective-Class',
+	#package : 'Perspective-Class'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PvClassHierarchyNode class >> for: anObject [
 
 	^ self new 
@@ -17,7 +18,7 @@ PvClassHierarchyNode class >> for: anObject [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassHierarchyNode >> addChildNode: aNode [
 
 	children ifNil: [ children := OrderedCollection new: 2 ].
@@ -25,30 +26,30 @@ PvClassHierarchyNode >> addChildNode: aNode [
 	children add: aNode
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassHierarchyNode >> allChildren [
 	self shouldBeImplemented.
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassHierarchyNode >> children [
 
 	^ children ifNil: [ #() ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassHierarchyNode >> element [
 
 	^ element
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassHierarchyNode >> element: anObject [
 
 	element := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassHierarchyNode >> findParentFrom: nodes [
 	| parents parentNodes |
 
@@ -67,64 +68,64 @@ PvClassHierarchyNode >> findParentFrom: nodes [
 	parentNodes last addChildNode: self
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvClassHierarchyNode >> hasChildren [
 
 	^ children isEmptyOrNil not
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvClassHierarchyNode >> hasParent [
 
 	^ parent notNil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassHierarchyNode >> iconName [
 	
 	^ self element iconName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassHierarchyNode >> name [
 	
 	^ self element name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassHierarchyNode >> parent [
 
 	^ parent
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassHierarchyNode >> parent: aNode [
 
 	parent := aNode
 ]
 
-{ #category : #printing }
+{ #category : 'printing' }
 PvClassHierarchyNode >> printOn: stream [
 
 	super printOn: stream.
 	stream << '(' << self name << ')'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassHierarchyNode >> withAllChildren [
 
 	children ifNil: [ ^ { self } ].
 	^ { self }, (children flatCollect: [ :each | each withAllChildren ])
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassHierarchyNode >> withAllParents [
 
 	self parent ifNil: [ ^ { self } ].
 	^ self parent withAllParents, { self }
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassHierarchyNode >> withChildren [
 
 	^ self children copyWithFirst: self

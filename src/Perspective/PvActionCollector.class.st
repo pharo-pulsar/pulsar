@@ -1,19 +1,21 @@
 Class {
-	#name : #PvActionCollector,
-	#superclass : #Object,
+	#name : 'PvActionCollector',
+	#superclass : 'Object',
 	#instVars : [
 		'model'
 	],
-	#category : #'Perspective-Command-Base'
+	#category : 'Perspective-Command-Base',
+	#package : 'Perspective',
+	#tag : 'Command-Base'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PvActionCollector class >> collectFor: anObject [
 	
 	^ (self on: anObject) collect
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PvActionCollector class >> on: anObject [
 
 	^ self new 
@@ -21,7 +23,7 @@ PvActionCollector class >> on: anObject [
 		yourself
 ]
 
-{ #category : #building }
+{ #category : 'building' }
 PvActionCollector >> collect [
 	| container |
 	
@@ -32,19 +34,19 @@ PvActionCollector >> collect [
 	^ container asSpecWithContext: self model
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvActionCollector >> model [
 
 	^ model
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvActionCollector >> model: anObject [
 
 	model := anObject
 ]
 
-{ #category : #building }
+{ #category : 'building' }
 PvActionCollector >> register: aClass in: container [
 
 	(Pragma allNamed: #perspectiveActions from: aClass class to: PvPresenter) 

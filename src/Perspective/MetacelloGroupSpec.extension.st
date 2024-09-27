@@ -1,6 +1,6 @@
-Extension { #name : #MetacelloGroupSpec }
+Extension { #name : 'MetacelloGroupSpec' }
 
-{ #category : #'*Perspective' }
+{ #category : '*Perspective' }
 MetacelloGroupSpec >> iconName [
 
 	^ 'group'

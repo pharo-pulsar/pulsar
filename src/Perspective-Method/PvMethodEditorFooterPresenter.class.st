@@ -1,13 +1,15 @@
 Class {
-	#name : #PvMethodEditorFooterPresenter,
-	#superclass : #PvEditorFooterPresenter,
+	#name : 'PvMethodEditorFooterPresenter',
+	#superclass : 'PvEditorFooterPresenter',
 	#instVars : [
 		'protocolButtonPresenter'
 	],
-	#category : #'Perspective-Method-View'
+	#category : 'Perspective-Method-View',
+	#package : 'Perspective-Method',
+	#tag : 'View'
 }
 
-{ #category : #layout }
+{ #category : 'layout' }
 PvMethodEditorFooterPresenter >> defaultLayout [
 
 	^ super defaultLayout
@@ -15,7 +17,7 @@ PvMethodEditorFooterPresenter >> defaultLayout [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvMethodEditorFooterPresenter >> initializePresenters [
 
 	super initializePresenters.
@@ -27,7 +29,7 @@ PvMethodEditorFooterPresenter >> initializePresenters [
 		yourself
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 PvMethodEditorFooterPresenter >> popupProtocol [
 	| chooser popover |
 
@@ -44,10 +46,10 @@ PvMethodEditorFooterPresenter >> popupProtocol [
 		popup
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvMethodEditorFooterPresenter >> updatePresenter [
 
 	super updatePresenter.
 	self model ifNil: [ ^ self ].
-	protocolButtonPresenter label: self model protocol
+	protocolButtonPresenter label: self model protocolName 
 ]

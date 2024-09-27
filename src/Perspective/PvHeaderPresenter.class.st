@@ -1,39 +1,41 @@
 Class {
-	#name : #PvHeaderPresenter,
-	#superclass : #SpPresenter,
+	#name : 'PvHeaderPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'titleLabel',
 		'image',
 		'contentPresenter'
 	],
-	#category : #'Perspective-View-Window'
+	#category : 'Perspective-View-Window',
+	#package : 'Perspective',
+	#tag : 'View-Window'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvHeaderPresenter >> content: aPresenter [
 
 	contentPresenter := aPresenter
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 PvHeaderPresenter >> delete [
 
 	contentPresenter delete
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvHeaderPresenter >> image [
 
 	^ image image
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvHeaderPresenter >> image: anImage [
 
 	image image: anImage
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvHeaderPresenter >> initializePresenters [
 
 	layout := SpBoxLayout newHorizontal
@@ -45,19 +47,19 @@ PvHeaderPresenter >> initializePresenters [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvHeaderPresenter >> label [
 
 	^ titleLabel label
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvHeaderPresenter >> label: aString [
 
 	titleLabel label: aString
 ]
 
-{ #category : #updating }
+{ #category : 'updating' }
 PvHeaderPresenter >> updateFrom: aWindowPresenter [
 
 	self image: aWindowPresenter windowIcon.

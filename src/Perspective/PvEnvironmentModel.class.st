@@ -1,10 +1,12 @@
 Class {
-	#name : #PvEnvironmentModel,
-	#superclass : #PvEntityModel,
-	#category : #'Perspective-Model'
+	#name : 'PvEnvironmentModel',
+	#superclass : 'PvEntityModel',
+	#category : 'Perspective-Model',
+	#package : 'Perspective',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PvEnvironmentModel class >> newEntity: anEnvironment [
 
 	"I am a model for an environment, so I do not belong (at least for now) to 
@@ -12,7 +14,7 @@ PvEnvironmentModel class >> newEntity: anEnvironment [
 	^ self newEnvironment: nil entity: anEnvironment
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEnvironmentModel >> children [
 
 	^ (self entity packages 
@@ -20,25 +22,25 @@ PvEnvironmentModel >> children [
 		sorted: #name ascending
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvEnvironmentModel >> hasPackageNamed: aString [ 
 	
 	^ self entity hasPackageNamed: aString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEnvironmentModel >> iconName [
 
 	^ 'library'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEnvironmentModel >> name [
 
 	^ self entity name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEnvironmentModel >> packageModelNamed: aString [ 
 	
 	^ PvPackageModel 
@@ -46,7 +48,7 @@ PvEnvironmentModel >> packageModelNamed: aString [
 		entity: (self packageNamed: aString)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEnvironmentModel >> packageNamed: aString [ 
 	
 	^ self entity packageNamed: aString

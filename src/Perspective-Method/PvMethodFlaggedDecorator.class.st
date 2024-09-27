@@ -1,16 +1,18 @@
 Class {
-	#name : #PvMethodFlaggedDecorator,
-	#superclass : #PvMethodDecorator,
-	#category : #'Perspective-Method-Model'
+	#name : 'PvMethodFlaggedDecorator',
+	#superclass : 'PvMethodDecorator',
+	#category : 'Perspective-Method-Model',
+	#package : 'Perspective-Method',
+	#tag : 'Model'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvMethodFlaggedDecorator class >> appliesTo: aMethod [
 
-	^ aMethod sendsAnySelectorOf: #(flag:)
+	^ aMethod hasFlag
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodFlaggedDecorator >> iconName [
 
 	^ #flagIcon

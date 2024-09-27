@@ -1,10 +1,12 @@
 Class {
-	#name : #PvNewPackageTagCommand,
-	#superclass : #PvProjectCommand,
-	#category : #'Perspective-Project-Command'
+	#name : 'PvNewPackageTagCommand',
+	#superclass : 'PvProjectCommand',
+	#category : 'Perspective-Project-Command',
+	#package : 'Perspective-Project',
+	#tag : 'Command'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvNewPackageTagCommand >> defineAction [
 
 	self priority: 101.
@@ -13,7 +15,7 @@ PvNewPackageTagCommand >> defineAction [
 	self iconCompositeName: 'new-file'
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 PvNewPackageTagCommand >> execute [
 	
 	context doNewPackage

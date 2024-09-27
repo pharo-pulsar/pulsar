@@ -1,16 +1,18 @@
 Class {
-	#name : #PvSpotterModel,
-	#superclass : #StSpotterModel,
-	#category : #'Perspective-Spotter-Model'
+	#name : 'PvSpotterModel',
+	#superclass : 'StSpotterModel',
+	#category : 'Perspective-Spotter-Model',
+	#package : 'Perspective-Spotter',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvSpotterModel >> context [
 
 	^ self subclassResponsibility
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvSpotterModel >> label [
 
 	^ self subclassResponsibility

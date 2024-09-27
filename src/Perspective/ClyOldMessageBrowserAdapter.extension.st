@@ -1,6 +1,6 @@
-Extension { #name : #ClyOldMessageBrowserAdapter }
+Extension { #name : 'ClyOldMessageBrowserAdapter' }
 
-{ #category : #'*Perspective' }
+{ #category : '*Perspective' }
 ClyOldMessageBrowserAdapter >> containerName [
 	
 	^ #tools

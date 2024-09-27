@@ -1,10 +1,12 @@
 Class {
-	#name : #PvClassEditorView,
-	#superclass : #PvEditorView,
-	#category : #'Perspective-Class-View'
+	#name : 'PvClassEditorView',
+	#superclass : 'PvEditorView',
+	#category : 'Perspective-Class-View',
+	#package : 'Perspective-Class',
+	#tag : 'View'
 }
 
-{ #category : #'accessing - actions' }
+{ #category : 'accessing - actions' }
 PvClassEditorView class >> defineActionsOn: aBuilder [
 	<perspectiveActions>
 
@@ -13,19 +15,19 @@ PvClassEditorView class >> defineActionsOn: aBuilder [
 	} 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassEditorView >> content: aString [
 
 	editorPresenter text: aString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassEditorView >> contextMenuActionGroups [
 
 	^ #(navigation)
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 PvClassEditorView >> doSubmit: aString [
 
 	self model 
@@ -36,13 +38,13 @@ PvClassEditorView >> doSubmit: aString [
 		aPerspective announce: (PvClassChangedAnnouncement for: self model) ]	
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 PvClassEditorView >> editorHeaderClass [
 
 	^ PvClassEditorHeaderPresenter
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvClassEditorView >> initializeWindow: aWindowPresenter [
 	
 	super initializeWindow: aWindowPresenter.
@@ -50,27 +52,27 @@ PvClassEditorView >> initializeWindow: aWindowPresenter [
 		aWindowPresenter windowIcon: (aModel windowIconComposite buildOn: self application) ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvClassEditorView >> model: aModel [
 
 	super model: aModel.
 	headerPresenter model: aModel
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvClassEditorView >> title [
 
 	^ self model ifNotNil: [ :aModel | aModel windowTitle ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvClassEditorView >> updateHeader [
 
 	super updateHeader.
 	headerPresenter actions: (self actions actionsFor: #navigation)	
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvClassEditorView >> updatePresenter [
 
 	super updatePresenter.

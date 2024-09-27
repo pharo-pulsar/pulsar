@@ -1,33 +1,35 @@
 Class {
-	#name : #PvMethodEditorHeaderPresenter,
-	#superclass : #PvEditorHeaderPresenter,
+	#name : 'PvMethodEditorHeaderPresenter',
+	#superclass : 'PvEditorHeaderPresenter',
 	#instVars : [
 		'actions'
 	],
-	#category : #'Perspective-Method-View'
+	#category : 'Perspective-Method-View',
+	#package : 'Perspective-Method',
+	#tag : 'View'
 }
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 PvMethodEditorHeaderPresenter >> actions [
 
 	^ actions
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 PvMethodEditorHeaderPresenter >> actions: anActionGroup [
 
 	actions := anActionGroup.
 	self updatePresenter
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 PvMethodEditorHeaderPresenter >> activateModelClass [
 		
 	self withPerspectiveDo: [ :aPerspective | 
 		aPerspective activateClass: self model methodClass ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 PvMethodEditorHeaderPresenter >> updatePresenter [
 
 	self model ifNil: [ ^ self ].

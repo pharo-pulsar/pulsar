@@ -1,22 +1,24 @@
 Class {
-	#name : #PvTilePerspectiveLayout,
-	#superclass : #LnTileLayout,
-	#category : #'Perspective-View-Perspective'
+	#name : 'PvTilePerspectiveLayout',
+	#superclass : 'LnTileLayout',
+	#category : 'Perspective-View-Perspective',
+	#package : 'Perspective',
+	#tag : 'View-Perspective'
 }
 
-{ #category : #factory }
+{ #category : 'factory' }
 PvTilePerspectiveLayout >> createLayout [
 
 	self error: 'Should not arrive here'
 ]
 
-{ #category : #factory }
+{ #category : 'factory' }
 PvTilePerspectiveLayout >> createLayoutOn: aPresenter [
 
 	self subclassResponsibility
 ]
 
-{ #category : #'accessing - focus' }
+{ #category : 'accessing - focus' }
 PvTilePerspectiveLayout >> focusDown: aContainer [
 
 	self 
@@ -24,7 +26,7 @@ PvTilePerspectiveLayout >> focusDown: aContainer [
 		ifLast: [ aContainer owner focusDown ]
 ]
 
-{ #category : #'accessing - focus' }
+{ #category : 'accessing - focus' }
 PvTilePerspectiveLayout >> focusLeft: aContainer [
 
 	self 
@@ -32,7 +34,7 @@ PvTilePerspectiveLayout >> focusLeft: aContainer [
 		ifFirst: [ aContainer owner focusLeft ]
 ]
 
-{ #category : #'accessing - focus' }
+{ #category : 'accessing - focus' }
 PvTilePerspectiveLayout >> focusRight: aContainer [
 
 	self 
@@ -40,7 +42,7 @@ PvTilePerspectiveLayout >> focusRight: aContainer [
 		ifLast: [ aContainer owner focusRight ]
 ]
 
-{ #category : #'accessing - focus' }
+{ #category : 'accessing - focus' }
 PvTilePerspectiveLayout >> focusUp: aContainer [
 
 	self 
@@ -48,13 +50,13 @@ PvTilePerspectiveLayout >> focusUp: aContainer [
 		ifFirst: [ aContainer owner focusUp ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvTilePerspectiveLayout >> layoutActivatedClass [
 
 	^ PvPerspectiveLayoutActivated
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvTilePerspectiveLayout >> setContentLayoutTo: aPresenter [
 	
 	aPresenter contentLayout: (self createLayoutOn: aPresenter)

@@ -1,10 +1,12 @@
 Class {
-	#name : #PvShowSpotterForCommandsAction,
-	#superclass : #PvAction,
-	#category : #'Perspective-Command-Actions'
+	#name : 'PvShowSpotterForCommandsAction',
+	#superclass : 'PvAction',
+	#category : 'Perspective-Command-Actions',
+	#package : 'Perspective',
+	#tag : 'Command-Actions'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvShowSpotterForCommandsAction >> defineAction [
 
 	self name: 'Spotter for Commands'.

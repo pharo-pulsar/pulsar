@@ -1,26 +1,28 @@
 Class {
-	#name : #PvClassHierarchyNodeModel,
-	#superclass : #PvClassModel,
+	#name : 'PvClassHierarchyNodeModel',
+	#superclass : 'PvClassModel',
 	#instVars : [
 		'children',
 		'childrenNodeProvider'
 	],
-	#category : #'Perspective-Class-Model'
+	#category : 'Perspective-Class-Model',
+	#package : 'Perspective-Class',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassHierarchyNodeModel >> child [
 
 	^ self children first
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassHierarchyNodeModel >> child: anObject [
 
 	self children: { anObject }
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassHierarchyNodeModel >> children [
 
 	childrenNodeProvider ifNotNil: [ 
@@ -34,19 +36,25 @@ PvClassHierarchyNodeModel >> children [
 	^ children ifNil: [ #() ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassHierarchyNodeModel >> children: aCollection [
 
 	children := aCollection
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassHierarchyNodeModel >> childrenNodeProvider: aBlock [
 
 	childrenNodeProvider := aBlock
 ]
 
-{ #category : #private }
+{ #category : 'flattening' }
+PvClassHierarchyNodeModel >> flatten [
+	
+	^ { self }, (self children flatCollect: [ :each | each flatten ])
+]
+
+{ #category : 'private' }
 PvClassHierarchyNodeModel >> species [
 
 	^ PvClassModel

@@ -1,35 +1,37 @@
 Class {
-	#name : #PvViewEntry,
-	#superclass : #StEntry,
-	#category : #'Perspective-Spotter-Model-Entry'
+	#name : 'PvViewEntry',
+	#superclass : 'StEntry',
+	#category : 'Perspective-Spotter-Model-Entry',
+	#package : 'Perspective-Spotter',
+	#tag : 'Model-Entry'
 }
 
-{ #category : #converting }
+{ #category : 'converting' }
 PvViewEntry >> asString [ 
 
 	^ content presenter spotterTitle
 ]
 
-{ #category : #evaluating }
+{ #category : 'evaluating' }
 PvViewEntry >> doEvaluate [ 
 
 	content takeKeyboardFocus
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvViewEntry >> icon [
 	
 	^ content headerBar image
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvViewEntry >> iconName [
 	
 	"I do not use this since the icon is already included in the view"
 	^ nil 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvViewEntry >> iconOn: anIconProvider [
 
 	^ self icon

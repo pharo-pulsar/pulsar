@@ -2,12 +2,14 @@
 A base command for projects
 "
 Class {
-	#name : #PvProjectCommand,
-	#superclass : #PvAction,
-	#category : #'Perspective-Project-Command'
+	#name : 'PvProjectCommand',
+	#superclass : 'PvAction',
+	#category : 'Perspective-Project-Command',
+	#package : 'Perspective-Project',
+	#tag : 'Command'
 }
 
-{ #category : #'default - groups' }
+{ #category : 'default - groups' }
 PvProjectCommand class >> commandGroupNew [
 	<commandGroup: #actionNew>
 	
@@ -17,7 +19,7 @@ PvProjectCommand class >> commandGroupNew [
 		yourself
 ]
 
-{ #category : #'default - groups' }
+{ #category : 'default - groups' }
 PvProjectCommand class >> commandGroupProject [
 	<commandGroup: #project>
 	
@@ -27,7 +29,7 @@ PvProjectCommand class >> commandGroupProject [
 		yourself
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvProjectCommand class >> isAbstract [
 
 	^ super isAbstract or: [ self = PvProjectCommand ]

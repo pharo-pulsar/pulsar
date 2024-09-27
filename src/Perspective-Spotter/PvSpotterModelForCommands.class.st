@@ -1,16 +1,18 @@
 Class {
-	#name : #PvSpotterModelForCommands,
-	#superclass : #PvSpotterModel,
-	#category : #'Perspective-Spotter-Model'
+	#name : 'PvSpotterModelForCommands',
+	#superclass : 'PvSpotterModel',
+	#category : 'Perspective-Spotter-Model',
+	#package : 'Perspective-Spotter',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvSpotterModelForCommands >> context [
 
 	^ #commands
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvSpotterModelForCommands >> label [
 
 	^ 'Commands'

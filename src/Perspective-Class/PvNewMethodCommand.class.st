@@ -1,10 +1,12 @@
 Class {
-	#name : #PvNewMethodCommand,
-	#superclass : #PvClassCommand,
-	#category : #'Perspective-Class-Command'
+	#name : 'PvNewMethodCommand',
+	#superclass : 'PvClassCommand',
+	#category : 'Perspective-Class-Command',
+	#package : 'Perspective-Class',
+	#tag : 'Command'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvNewMethodCommand >> defineAction [
 
 	self priority: 10.
@@ -16,7 +18,7 @@ PvNewMethodCommand >> defineAction [
 		yourself)
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 PvNewMethodCommand >> execute [
 	| parentModel |
 

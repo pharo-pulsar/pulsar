@@ -1,10 +1,12 @@
 Class {
-	#name : #PvRefreshProjectCommand,
-	#superclass : #PvProjectCommand,
-	#category : #'Perspective-Project-Command'
+	#name : 'PvRefreshProjectCommand',
+	#superclass : 'PvProjectCommand',
+	#category : 'Perspective-Project-Command',
+	#package : 'Perspective-Project',
+	#tag : 'Command'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvRefreshProjectCommand >> defineAction [
 
 	self priority: 10.
@@ -13,7 +15,7 @@ PvRefreshProjectCommand >> defineAction [
 	self iconCompositeName: 'refresh'
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 PvRefreshProjectCommand >> execute [
 	
 	context refreshProject

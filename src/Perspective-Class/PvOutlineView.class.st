@@ -1,27 +1,29 @@
 Class {
-	#name : #PvOutlineView,
-	#superclass : #PvPerspectiveView,
+	#name : 'PvOutlineView',
+	#superclass : 'PvPerspectiveView',
 	#instVars : [
 		'classTreePresenter',
 		'outlineTreePresenter',
 		'toolbar'
 	],
-	#category : #'Perspective-Class-View'
+	#category : 'Perspective-Class-View',
+	#package : 'Perspective-Class',
+	#tag : 'View'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvOutlineView class >> defaultContainerName [
 
 	^ #overview
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvOutlineView class >> defaultTitle [
 
 	^ 'Outline'
 ]
 
-{ #category : #'accessing - actions' }
+{ #category : 'accessing - actions' }
 PvOutlineView class >> defineActionGroupAction: actionGroup [
 	<perspectiveActionGroup: #action>
 
@@ -31,7 +33,7 @@ PvOutlineView class >> defineActionGroupAction: actionGroup [
 		beDisplayedAsGroup
 ]
 
-{ #category : #'accessing - actions' }
+{ #category : 'accessing - actions' }
 PvOutlineView class >> defineActionGroupNew: actionGroup [
 	<perspectiveActionGroup: #actionNew>
 
@@ -41,7 +43,7 @@ PvOutlineView class >> defineActionGroupNew: actionGroup [
 		beDisplayedAsSubMenu
 ]
 
-{ #category : #'accessing - actions' }
+{ #category : 'accessing - actions' }
 PvOutlineView class >> defineActionsOn: aBuilder [
 	<perspectiveActions>
 	
@@ -55,14 +57,14 @@ PvOutlineView class >> defineActionsOn: aBuilder [
 		}
 ]
 
-{ #category : #'private - events' }
+{ #category : 'private - events' }
 PvOutlineView >> classChanged: aModel [
 
 	aModel isOutlineClassEntity ifFalse: [ ^ self ].
 	self model: aModel asOutlineClassModel
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvOutlineView >> connectPresenters [
 
 	outlineTreePresenter outputSelectionPort
@@ -71,13 +73,13 @@ PvOutlineView >> connectPresenters [
 		transmitDo: [ :aSelection | self activateWith: aSelection ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvOutlineView >> contextMenuActionGroups [
 
 	^ #(actionNew action)
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 PvOutlineView >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
@@ -85,15 +87,21 @@ PvOutlineView >> defaultLayout [
 		yourself
 ]
 
-{ #category : #'private - events' }
+{ #category : 'private - events' }
 PvOutlineView >> entityActivated: aModel [
+	| outlineModel |
 
 	aModel isOutlineClassEntity ifFalse: [ ^ self ].
-	self model: aModel asOutlineClassModel.
+	
+	outlineModel := aModel asOutlineClassModel.
+	"do not update if already there"
+	outlineModel = self model ifTrue: [ ^ self ].
+	
+	self model: outlineModel.
 	self updatePresenter
 ]
 
-{ #category : #'private - events' }
+{ #category : 'private - events' }
 PvOutlineView >> entitySelected: aModel [
 	| classModel |
 
@@ -105,61 +113,72 @@ PvOutlineView >> entitySelected: aModel [
 	classModel := aModel asOutlineClassModel.
 	self model = classModel
 		ifFalse: [ self model: classModel ].
-	outlineTreePresenter selectItem: aModel
+
+	"if this is the same entity, do not try to select (since it does not has sense anyway)"
+	self model entity = aModel entity 
+		ifTrue: [ outlineTreePresenter unselectAll ]
+		ifFalse: [ outlineTreePresenter selectItem: aModel ]
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 PvOutlineView >> filterByProtocol: aProtocol [
 
 	self model toggleFilterByProtocol: aProtocol.
 	self updatePresenter
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvOutlineView >> initializePresenters [
 
-	(outlineTreePresenter := self newTreeTable)
-		hideColumnHeaders;
+	(outlineTreePresenter := self newTreeColumnView)
 		addStyle: 'stTree';
 		addStyle: 'pvOutlineView';
-		addColumn: (SpCompositeTableColumn new
-			addColumn: ( SpImageTableColumn  new 
-				evaluated: [ :aModel | aModel iconComposite buildOn: self application ];
-				beNotExpandable;
-				yourself);
-			addColumn: ( SpStringTableColumn new 
-				evaluated: [ :aModel | aModel name ];
-				displayColor: [ :aModel | self colorNamed: aModel colorName ];
-				yourself);
-			yourself);
-		addColumn: (SpLinkTableColumn new 
-			evaluated: [ :aModel | aModel protocol ifNil: [ '' ] ];
-			displayAlignment: [ :aModel | SpColumnAlignment right ];
-			action: [ :aModel | self filterByProtocol: aModel protocol ];
-			beNotExpandable;
-			yourself);
-		children: [ :aModel | aModel children ];
-		addNavigationShortcuts.
-		
-	outlineTreePresenter contextMenu: [ self contextMenuActions asMenuPresenter ].
-	outlineTreePresenter contextKeyBindings: self contextMenuActions asKMCategory
+		addColumn: (SpColumnViewColumn 
+			newTitle: 'Element' 
+			setup: [ :aPresenter | 
+				| p |
+				(p := aPresenter newPresenter) 
+					layout: (SpBoxLayout newHorizontal
+						add: p newImage expand: false;
+						add: p newLabel;
+						yourself);
+					yourself ] 
+			bind: [ :aPresenter :aModel | | c | 
+				c := aPresenter layout children.
+				c first image: (aModel iconComposite buildOn: self application).
+				c second label: aModel name ]);
+		addColumn: ((SpColumnViewColumn 
+			newTitle: 'Protocol' 
+			setup: [ :aPresenter | 
+				aPresenter newLink
+					action: [ :aModel | self filterByProtocol: aModel protocol ];
+					yourself ] 
+			bind: [ :aPresenter :aModel | 
+				aModel protocol 
+					ifNotNil: [ :aProtocol | aPresenter label: aProtocol name; show ]
+					ifNil: [ aPresenter hide ] ])
+			beNotExpandable);
+		children: [ :aModel |
+			aModel children ];
+		addNavigationShortcuts;
+		actions: self contextMenuActions
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvOutlineView >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter toolbar: self toolbar
 ]
 
-{ #category : #'private - events' }
+{ #category : 'private - events' }
 PvOutlineView >> methodChanged: aModel [
 
 	outlineTreePresenter roots: { self model }.
 	outlineTreePresenter selectItem: aModel
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvOutlineView >> toolbar [
 
 	^ (self instantiate: PvHeaderBarPresenter)
@@ -167,15 +186,14 @@ PvOutlineView >> toolbar [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvOutlineView >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
-	outlineTreePresenter 
-		roots: { self model };
-		expandRoots.
 	
-	"self withTileWindowDo: [ :w | 
+	TimeProfiler spyOn: [ outlineTreePresenter items: self model children ].
+	
+	self withTileWindowDo: [ :w | 
 		w title: self title.
-		w windowIcon: (self model windowIconComposite buildOn: self application) ]"
+		w windowIcon: (self model windowIconComposite buildOn: self application) ]
 ]

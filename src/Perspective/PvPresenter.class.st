@@ -2,32 +2,23 @@
 A base for all perspective presenters.
 "
 Class {
-	#name : #PvPresenter,
-	#superclass : #SgaPresenter,
+	#name : 'PvPresenter',
+	#superclass : 'SgaPresenter',
 	#traits : 'PvTScripting',
 	#classTraits : 'PvTScripting classTrait',
-	#category : #'Perspective-View'
+	#category : 'Perspective-View',
+	#package : 'Perspective',
+	#tag : 'View'
 }
 
-{ #category : #initialization }
-PvPresenter >> addGlobalShortcutsTo: aWindowPresenter [
+{ #category : 'initialization' }
+PvPresenter >> addGlobalActionsTo: aWindowPresenter [
 	
-	self globalShortcuts ifNotNil: [ :shortcutCategory |
-		self 
-			addShortcutCategory: shortcutCategory
-			to: aWindowPresenter ]
+	self globalActions 
+		ifNotNil: [ :aGroup | aWindowPresenter actions: aGroup ]
 ]
 
-{ #category : #initialization }
-PvPresenter >> addShortcutCategory: aCategory to: aPresenter [
-
-	aCategory allEntries keymaps do: [ :each | 
-		aPresenter 
-			bindKeyCombination: each shortcut
-			toAction: each action ]
-]
-
-{ #category : #private }
+{ #category : 'private' }
 PvPresenter >> buildIcon: aBlock [
 	| compositeIcon |
 	
@@ -36,39 +27,37 @@ PvPresenter >> buildIcon: aBlock [
 	^ compositeIcon buildOn: self application
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvPresenter >> colorNamed: aString [
 
-	self flag: #TODO. "Hardcoded. This has to be part of StPharoApplication"
-	aString ifNil: [ ^ Smalltalk ui theme textColor ].
-	^ Color named: aString
+	^ self application colorNamed: aString
 ]
 
-{ #category : #initialization }
-PvPresenter >> globalShortcuts [
+{ #category : 'initialization' }
+PvPresenter >> globalActions [
 
 	^ nil
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvPresenter >> isCloseable [
 
 	self subclassResponsibility
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvPresenter >> isEditor [
 
 	^ false
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvPresenter >> settings [
 
 	^ self application settings
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvPresenter >> spotterTitle [
 
 	self subclassResponsibility

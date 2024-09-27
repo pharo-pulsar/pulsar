@@ -1,26 +1,28 @@
 Class {
-	#name : #PvClassEditorHeaderPresenter,
-	#superclass : #PvEditorHeaderPresenter,
+	#name : 'PvClassEditorHeaderPresenter',
+	#superclass : 'PvEditorHeaderPresenter',
 	#instVars : [
 		'actions'
 	],
-	#category : #'Perspective-Class-View'
+	#category : 'Perspective-Class-View',
+	#package : 'Perspective-Class',
+	#tag : 'View'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassEditorHeaderPresenter >> actions [
 
 	^ actions
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassEditorHeaderPresenter >> actions: anObject [
 
 	actions := anObject.
 	self updatePresenter
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvClassEditorHeaderPresenter >> updatePresenter [
 
 	self model ifNil: [ ^ self ].

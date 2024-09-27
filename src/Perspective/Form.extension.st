@@ -1,6 +1,6 @@
-Extension { #name : #Form }
+Extension { #name : 'Form' }
 
-{ #category : #'*Perspective' }
+{ #category : '*Perspective' }
 Form >> mergeBottomLeftWith: aForm [
 
 	^ self 
@@ -8,7 +8,7 @@ Form >> mergeBottomLeftWith: aForm [
 		at: 0 @ (self extent y - aForm extent y)
 ]
 
-{ #category : #'*Perspective' }
+{ #category : '*Perspective' }
 Form >> mergeTopLeftWith: aForm [
 
 	^ self 
@@ -16,7 +16,7 @@ Form >> mergeTopLeftWith: aForm [
 		at: 0 @ 0
 ]
 
-{ #category : #'*Perspective' }
+{ #category : '*Perspective' }
 Form >> mergeTopRightWith: aForm [
 	
 	^ self 

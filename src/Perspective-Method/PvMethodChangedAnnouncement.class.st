@@ -1,10 +1,12 @@
 Class {
-	#name : #PvMethodChangedAnnouncement,
-	#superclass : #PvChangedAnnouncement,
-	#category : #'Perspective-Method-Model'
+	#name : 'PvMethodChangedAnnouncement',
+	#superclass : 'PvChangedAnnouncement',
+	#category : 'Perspective-Method-Model',
+	#package : 'Perspective-Method',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodChangedAnnouncement >> performSelector [
 
 	^ #methodChanged:

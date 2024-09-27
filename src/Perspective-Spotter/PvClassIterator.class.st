@@ -1,13 +1,15 @@
 Class {
-	#name : #PvClassIterator,
-	#superclass : #StGenericGenerator,
+	#name : 'PvClassIterator',
+	#superclass : 'StGenericGenerator',
 	#instVars : [
 		'environment'
 	],
-	#category : #'Perspective-Spotter-Model-Processor'
+	#category : 'Perspective-Spotter-Model-Processor',
+	#package : 'Perspective-Spotter',
+	#tag : 'Model-Processor'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PvClassIterator class >> newEnvironment: anEnvironment [
 
 	^ self basicNew
@@ -16,25 +18,25 @@ PvClassIterator class >> newEnvironment: anEnvironment [
 		yourself
 ]
 
-{ #category : #enumerating }
+{ #category : 'enumerating' }
 PvClassIterator >> elementsDo: aValuable [
 
 	self systemNavigation allBehaviorsDo: aValuable
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassIterator >> environment [
 		
 	^ environment
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassIterator >> environment: anEnvironment [
 
 	environment := anEnvironment
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassIterator >> systemNavigation [
 
 	^ SystemNavigation new

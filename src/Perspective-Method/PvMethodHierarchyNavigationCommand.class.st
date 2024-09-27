@@ -1,10 +1,12 @@
 Class {
-	#name : #PvMethodHierarchyNavigationCommand,
-	#superclass : #PvMethodEditorCommand,
-	#category : #'Perspective-Method-Command'
+	#name : 'PvMethodHierarchyNavigationCommand',
+	#superclass : 'PvMethodEditorCommand',
+	#category : 'Perspective-Method-Command',
+	#package : 'Perspective-Method',
+	#tag : 'Command'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvMethodHierarchyNavigationCommand >> defineAction [
 
 	self name: 'Show hierarchy'.
@@ -12,7 +14,7 @@ PvMethodHierarchyNavigationCommand >> defineAction [
 	self iconCompositeName: #smallHierarchyBrowser
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 PvMethodHierarchyNavigationCommand >> execute [
 	| popover navigation |
 	

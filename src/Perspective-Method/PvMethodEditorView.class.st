@@ -1,10 +1,12 @@
 Class {
-	#name : #PvMethodEditorView,
-	#superclass : #PvEditorView,
-	#category : #'Perspective-Method-View'
+	#name : 'PvMethodEditorView',
+	#superclass : 'PvEditorView',
+	#category : 'Perspective-Method-View',
+	#package : 'Perspective-Method',
+	#tag : 'View'
 }
 
-{ #category : #'accessing - actions' }
+{ #category : 'accessing - actions' }
 PvMethodEditorView class >> defineActionsOn: aBuilder [
 	<perspectiveActions>
 
@@ -13,13 +15,13 @@ PvMethodEditorView class >> defineActionsOn: aBuilder [
 	} 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodEditorView class >> type [
 
 	^ #method
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvMethodEditorView >> connectPresenters [
 	
 	footerPresenter announcer 
@@ -28,20 +30,20 @@ PvMethodEditorView >> connectPresenters [
 		to: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodEditorView >> contextMenuActionGroups [
 
 	^ #(navigation)
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 PvMethodEditorView >> doCopyToClipboard [
 	
 	Clipboard clipboardText: editorPresenter text.
 	self application inform: ('Copied method {1}' format: { self model shortName })
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 PvMethodEditorView >> doSubmit: aString [
 	| oldName |
 
@@ -54,26 +56,26 @@ PvMethodEditorView >> doSubmit: aString [
 		aPerspective announce: (PvMethodChangedAnnouncement for: self model) ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvMethodEditorView >> editorFooterClass [
 
 	^ PvMethodEditorFooterPresenter
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvMethodEditorView >> editorHeaderClass [
 
 	^ PvMethodEditorHeaderPresenter
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvMethodEditorView >> initializePresenters [
 
 	super initializePresenters.
 	self addStyle: 'pvMethodEditor'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvMethodEditorView >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
@@ -82,14 +84,14 @@ PvMethodEditorView >> initializeWindow: aWindowPresenter [
 		windowIcon: (self model windowIconComposite buildOn: self application)
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvMethodEditorView >> title [
 
 	^ self model 
 		ifNotNil: [ :aModel | aModel windowTitle ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvMethodEditorView >> toolbar [	
 
 	^ (self instantiate: PvHeaderBarPresenter)
@@ -97,14 +99,14 @@ PvMethodEditorView >> toolbar [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvMethodEditorView >> updateHeader [
 
 	super updateHeader.
 	headerPresenter actions: (self actions actionsFor: #navigation)
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvMethodEditorView >> updatePresenter [
 
 	super updatePresenter.
@@ -114,7 +116,7 @@ PvMethodEditorView >> updatePresenter [
 			text: self model sourceCode ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvMethodEditorView >> updateProtocol: ann [ 
 
 	self model protocol: ann newProtocol.

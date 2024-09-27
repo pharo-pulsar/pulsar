@@ -1,38 +1,55 @@
 Class {
-	#name : #PvPharoApplication,
-	#superclass : #LnPharoApplication,
+	#name : 'PvPharoApplication',
+	#superclass : 'LnPharoApplication',
 	#instVars : [
 		'name'
 	],
-	#category : #'Perspective-Application'
+	#category : 'Perspective-Application',
+	#package : 'Perspective',
+	#tag : 'Application'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvPharoApplication >> boxWindowClass [
 
 	^ PvBoxWindowPresenter
 ]
 
-{ #category : #'private - factory' }
+{ #category : 'accessing' }
+PvPharoApplication >> colorNamed: aString [
+
+	aString ifNil: [ ^ Smalltalk ui theme textColor ].
+	^ Color named: aString
+]
+
+{ #category : 'accessing' }
+PvPharoApplication >> iconCache [
+
+	^ self 
+		propertyAt: #iconCache 
+		ifAbsentPut: [ PvCompositeIconCache new ]
+]
+
+{ #category : 'private - factory' }
 PvPharoApplication >> newIconProvider [
 
 	^ (PvAliasedVSCodeIconProvider new
 			application: self;
-			addLocation: (FileLocator imageDirectory / 'vscode-extraicons') asFileReference;
-			addLocation: (FileLocator imageDirectory / 'vscode-icons') asFileReference;
-			addLocation: (FileLocator imageDirectory / 'vscode-codicons') asFileReference;
+			addLocation: (FileLocator imageDirectory / 'perspective' / 'vscode-extraicons') asFileReference;
+			addLocation: (FileLocator imageDirectory / 'perspective' / 'vscode-icons') asFileReference;
+			addLocation: (FileLocator imageDirectory / 'perspective' / 'vscode-codicons') asFileReference;
 			yourself),
 	 (PvLocationWithThemeIconProvider new
 			application: self;
-			addLocation: (FileLocator imageDirectory / 'idea-extraicons') asFileReference;
-			addLocation: (FileLocator imageDirectory / 'idea-icons') asFileReference;
+			addLocation: (FileLocator imageDirectory / 'perspective' / 'idea-extraicons') asFileReference;
+			addLocation: (FileLocator imageDirectory / 'perspective' / 'idea-icons') asFileReference;
 			yourself),
 	  StPharoDefaultIconProvider new, 
 	  SgaGtkThemeIconProvider new,
 	  PvDefaultIconProvider new
 ]
 
-{ #category : #'private - factory' }
+{ #category : 'private - factory' }
 PvPharoApplication >> newSettings [
 
 	^ PvActionSettings new
@@ -43,33 +60,43 @@ PvPharoApplication >> newSettings [
 		yourself
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'private - factory' }
 PvPharoApplication >> newSystemTools [
 
 	^ super newSystemTools
-		register: MessageBrowser as: #messageList;
+		register: StMessageBrowser as: #messageList;
 		yourself
 ]
 
-{ #category : #running }
+{ #category : 'running' }
 PvPharoApplication >> start [
 
 	"nothing for the moment"
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvPharoApplication >> tabWindowClass [
 
 	^ PvTabWindowPresenter
 ]
 
-{ #category : #settings }
+{ #category : 'settings' }
 PvPharoApplication >> toolbarDisplayMode [
 
 	^ SpToolbarDisplayMode modeIcon
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
+PvPharoApplication >> useGtkDark [
+
+	self 
+		useBackend: #Gtk 
+		with: (PvPharoGtkConfiguration new
+			theme: LnDarkTheme new;
+			yourself)
+]
+
+{ #category : 'initialization' }
 PvPharoApplication >> useGtkLight [
 
 	self 

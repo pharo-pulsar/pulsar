@@ -1,14 +1,16 @@
 Class {
-	#name : #PvHeaderBarPresenter,
-	#superclass : #SpPresenter,
+	#name : 'PvHeaderBarPresenter',
+	#superclass : 'SpPresenter',
 	#instVars : [
 		'toolbarPresenter',
 		'toolbarActions'
 	],
-	#category : #'Perspective-View'
+	#category : 'Perspective-View',
+	#package : 'Perspective',
+	#tag : 'View'
 }
 
-{ #category : #layout }
+{ #category : 'layout' }
 PvHeaderBarPresenter >> defaultLayout [
 
 	^ SpBoxLayout newLeftToRight
@@ -17,7 +19,7 @@ PvHeaderBarPresenter >> defaultLayout [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvHeaderBarPresenter >> initializePresenters [
 
 	toolbarPresenter := self newToolbar
@@ -28,20 +30,20 @@ PvHeaderBarPresenter >> initializePresenters [
 	self addStyle: 'pvHeaderBar'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvHeaderBarPresenter >> toolbarActions [
 
 	^ toolbarActions
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvHeaderBarPresenter >> toolbarActions: anActionGroup [
 
 	toolbarActions := anActionGroup.
 	self updatePresenter
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvHeaderBarPresenter >> updatePresenter [
 
 	toolbarPresenter removeAllItems.

@@ -1,10 +1,12 @@
 Class {
-	#name : #PvNewTraitCommand,
-	#superclass : #PvProjectCommand,
-	#category : #'Perspective-Project-Command'
+	#name : 'PvNewTraitCommand',
+	#superclass : 'PvProjectCommand',
+	#category : 'Perspective-Project-Command',
+	#package : 'Perspective-Project',
+	#tag : 'Command'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvNewTraitCommand >> defineAction [
 
 	self priority: 120.
@@ -13,7 +15,7 @@ PvNewTraitCommand >> defineAction [
 	self iconCompositeName: 'new-file'
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 PvNewTraitCommand >> execute [
 	
 	context doNewTrait

@@ -1,17 +1,19 @@
 Class {
-	#name : #PvShowSpotterForEnvironmentAction,
-	#superclass : #PvAction,
-	#category : #'Perspective-Command-Actions'
+	#name : 'PvShowSpotterForEnvironmentAction',
+	#superclass : 'PvAction',
+	#category : 'Perspective-Command-Actions',
+	#package : 'Perspective',
+	#tag : 'Command-Actions'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvShowSpotterForEnvironmentAction >> defineAction [
 
 	self name: 'Spotter for Environment'.
 	self description: 'Open spotter for the active environment in this perspective'
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 PvShowSpotterForEnvironmentAction >> execute [
 	| spotter |
 	

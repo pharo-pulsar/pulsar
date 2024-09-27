@@ -1,17 +1,19 @@
 Class {
-	#name : #PvFocusLeftAction,
-	#superclass : #PvAction,
-	#category : #'Perspective-Command-Actions'
+	#name : 'PvFocusLeftAction',
+	#superclass : 'PvAction',
+	#category : 'Perspective-Command-Actions',
+	#package : 'Perspective',
+	#tag : 'Command-Actions'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvFocusLeftAction >> defineAction [
 
 	self name: 'Focus Left'.
 	self description: 'Focus first window left to current focused window'
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 PvFocusLeftAction >> execute [
 	
 	self context focusLeft

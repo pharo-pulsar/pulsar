@@ -2,32 +2,34 @@
 A container specialised on keeping editors.
 "
 Class {
-	#name : #PvEditorContainerPresenter,
-	#superclass : #PvContainerPresenter,
+	#name : 'PvEditorContainerPresenter',
+	#superclass : 'PvContainerPresenter',
 	#traits : 'SpTSelectable - {#select}',
 	#classTraits : 'SpTSelectable classTrait',
-	#category : #'Perspective-View-Container'
+	#category : 'Perspective-View-Container',
+	#package : 'Perspective',
+	#tag : 'View-Container'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEditorContainerPresenter class >> defaultContainerName [
 
 	^ #edit
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEditorContainerPresenter class >> defaultTitle [
 
 	^ 'View'
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 PvEditorContainerPresenter >> asEditorContainer [
 
 	^ self
 ]
 
-{ #category : #'private - events' }
+{ #category : 'private - events' }
 PvEditorContainerPresenter >> entityActivated: aModel [
 	| editor editorWindow |
 
@@ -41,19 +43,19 @@ PvEditorContainerPresenter >> entityActivated: aModel [
 	editor takeKeyboardFocus
 ]
 
-{ #category : #'private - events' }
+{ #category : 'private - events' }
 PvEditorContainerPresenter >> entitySelected: anEntity [
 
 	self halt
 ]
 
-{ #category : #'events - handling' }
+{ #category : 'events - handling' }
 PvEditorContainerPresenter >> handleAnnouncement: anAnnouncement [
 
 	anAnnouncement handleOn: self
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvEditorContainerPresenter >> initialize [
 
 	super initialize.
@@ -63,28 +65,29 @@ PvEditorContainerPresenter >> initialize [
 		to: self
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvEditorContainerPresenter >> initializePresenters [
 
 	super initializePresenters.
+	self addStyle: 'pvEditorContainer'.
 	"self 
 		bindKeyCombination: $w control 
 		toAction: [ self halt ]"
 ]
 
-{ #category : #transmission }
+{ #category : 'transmission' }
 PvEditorContainerPresenter >> inputActivatedPort [
 
 	^ PvEntityActivatedPort newPresenter: self
 ]
 
-{ #category : #transmission }
+{ #category : 'transmission' }
 PvEditorContainerPresenter >> inputSelectedPort [
 
 	^ PvEntitySelectedPort newPresenter: self
 ]
 
-{ #category : #'private - actions' }
+{ #category : 'private - actions' }
 PvEditorContainerPresenter >> selectWith: anObject [
 
 	anObject ifNil: [ ^ self ].
@@ -92,7 +95,7 @@ PvEditorContainerPresenter >> selectWith: anObject [
 	self selectionAction cull: (SpActivatedSelection newValue: anObject)
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvEditorContainerPresenter >> tabLayoutActivated [
 
 	self layout announcer
@@ -101,7 +104,7 @@ PvEditorContainerPresenter >> tabLayoutActivated [
 		to: self
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvEditorContainerPresenter >> tabSelected: ann [
 
 	"aSelection ifNil: [ ^ self ]."

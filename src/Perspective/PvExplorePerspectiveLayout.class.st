@@ -1,10 +1,12 @@
 Class {
-	#name : #PvExplorePerspectiveLayout,
-	#superclass : #PvTilePerspectiveLayout,
-	#category : #'Perspective-View-Perspective'
+	#name : 'PvExplorePerspectiveLayout',
+	#superclass : 'PvTilePerspectiveLayout',
+	#category : 'Perspective-View-Perspective',
+	#package : 'Perspective',
+	#tag : 'View-Perspective'
 }
 
-{ #category : #factory }
+{ #category : 'factory' }
 PvExplorePerspectiveLayout >> createLayoutOn: aPresenter [
 	
 	^ SpPanedLayout newLeftToRight 

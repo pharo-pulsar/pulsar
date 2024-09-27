@@ -1,6 +1,6 @@
-Extension { #name : #CmVisitor }
+Extension { #name : 'CmVisitor' }
 
-{ #category : #'*Perspective' }
+{ #category : '*Perspective' }
 CmVisitor >> visitToggleCommand: aCommand [
 
 	^ self visitCommand: aCommand

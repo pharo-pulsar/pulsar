@@ -1,23 +1,25 @@
 Class {
-	#name : #PvBoxWindowPresenter,
-	#superclass : #LnBoxWindowPresenter,
-	#category : #'Perspective-View-Window'
+	#name : 'PvBoxWindowPresenter',
+	#superclass : 'LnBoxWindowPresenter',
+	#category : 'Perspective-View-Window',
+	#package : 'Perspective',
+	#tag : 'View-Window'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 PvBoxWindowPresenter >> headerClass [
 
 	^ PvBoxHeaderPresenter
 	
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvBoxWindowPresenter >> isCloseable [
 
 	^ self presenter isCloseable
 ]
 
-{ #category : #spotter }
+{ #category : 'spotter' }
 PvBoxWindowPresenter >> spotterProcessorsFor: aSpotterStep context: context [
 	
 	self presenter 
@@ -25,7 +27,7 @@ PvBoxWindowPresenter >> spotterProcessorsFor: aSpotterStep context: context [
 		context: context
 ]
 
-{ #category : #spotter }
+{ #category : 'spotter' }
 PvBoxWindowPresenter >> stSpotterProcessorsFor: aSpotterStep [
 	
 	self presenter stSpotterProcessorsFor: aSpotterStep

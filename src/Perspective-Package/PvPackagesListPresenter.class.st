@@ -1,25 +1,27 @@
 Class {
-	#name : #PvPackagesListPresenter,
-	#superclass : #PvPerspectiveView,
+	#name : 'PvPackagesListPresenter',
+	#superclass : 'PvPerspectiveView',
 	#instVars : [
 		'packagesTreePresenter'
 	],
-	#category : #'Perspective-Package-View'
+	#category : 'Perspective-Package-View',
+	#package : 'Perspective-Package',
+	#tag : 'View'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvPackagesListPresenter class >> defaultContainerName [
 
 	^ #overview
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvPackagesListPresenter class >> defaultTitle [
 
 	^ 'Packages'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvPackagesListPresenter >> connectPresenters [
 
 	packagesTreePresenter outputSelectionPort
@@ -29,7 +31,7 @@ PvPackagesListPresenter >> connectPresenters [
 	
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvPackagesListPresenter >> initializePresenters [
 
 	self layout: (SpBoxLayout newTopToBottom
@@ -39,7 +41,7 @@ PvPackagesListPresenter >> initializePresenters [
 	packagesTreePresenter addStyle: 'stPackagesTree'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvPackagesListPresenter >> toolbarActions [
 	| group |
 	
@@ -47,7 +49,7 @@ PvPackagesListPresenter >> toolbarActions [
 	group register: nil.
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvPackagesListPresenter >> updatePresenter [
 
 	packagesTreePresenter roots: self model flatPackages

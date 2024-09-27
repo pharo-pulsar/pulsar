@@ -1,16 +1,18 @@
 Class {
-	#name : #PvSpotterModelForEnvironment,
-	#superclass : #PvSpotterModel,
-	#category : #'Perspective-Spotter-Model'
+	#name : 'PvSpotterModelForEnvironment',
+	#superclass : 'PvSpotterModel',
+	#category : 'Perspective-Spotter-Model',
+	#package : 'Perspective-Spotter',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvSpotterModelForEnvironment >> context [
 
 	^ #environment
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvSpotterModelForEnvironment >> label [
 
 	^ 'Environment'

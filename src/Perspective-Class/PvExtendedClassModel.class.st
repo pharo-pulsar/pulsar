@@ -1,8 +1,9 @@
 Class {
-	#name : #PvExtendedClassModel,
-	#superclass : #PvClassModel,
+	#name : 'PvExtendedClassModel',
+	#superclass : 'PvClassModel',
 	#instVars : [
 		'package'
 	],
-	#category : #'Perspective-Class'
+	#category : 'Perspective-Class',
+	#package : 'Perspective-Class'
 }

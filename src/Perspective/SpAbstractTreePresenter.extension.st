@@ -1,11 +1,13 @@
-Extension { #name : #SpAbstractTreePresenter }
+Extension { #name : 'SpAbstractTreePresenter' }
 
-{ #category : #'*Perspective' }
+{ #category : '*Perspective' }
 SpAbstractTreePresenter >> addNavigationShortcuts [
 
-	self
-		bindKeyCombination: KeyboardKey space asKeyCombination | KeyboardKey right asKeyCombination
-			toAction: [ self expandPath: self selection selectedPath ];
-		bindKeyCombination: KeyboardKey left asKeyCombination
-			toAction: [ self collapsePath: self selection selectedPath ]
+	self ensureInternalActions
+		addShortcutWith: [ :action | action 
+			shortcutKey: KeyboardKey space asKeyCombination | KeyboardKey right asKeyCombination;
+			action: [ self expandPath: self selection selectedPath ] ];
+		addShortcutWith: [ :action | action 
+			shortcutKey: KeyboardKey left asKeyCombination;
+			action: [ self collapsePath: self selection selectedPath ] ]
 ]

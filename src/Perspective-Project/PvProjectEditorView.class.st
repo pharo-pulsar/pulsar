@@ -1,15 +1,17 @@
 Class {
-	#name : #PvProjectEditorView,
-	#superclass : #PvEditorView,
+	#name : 'PvProjectEditorView',
+	#superclass : 'PvEditorView',
 	#instVars : [
 		'projectNamePresenter',
 		'detailLabelPresenter',
 		'dependenceListPresenter'
 	],
-	#category : #'Perspective-Project-View'
+	#category : 'Perspective-Project-View',
+	#package : 'Perspective-Project',
+	#tag : 'View'
 }
 
-{ #category : #layout }
+{ #category : 'layout' }
 PvProjectEditorView >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom 
@@ -22,7 +24,7 @@ PvProjectEditorView >> defaultLayout [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvProjectEditorView >> initializePresenters [
 
 	super initializePresenters.
@@ -37,7 +39,7 @@ PvProjectEditorView >> initializePresenters [
 	self addStyle: 'pvProjectEditor'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvProjectEditorView >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
@@ -46,7 +48,7 @@ PvProjectEditorView >> initializeWindow: aWindowPresenter [
 		windowIcon: (self model windowIconComposite buildOn: self application)
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 PvProjectEditorView >> newDefinitionLayout [
 		
 	^ SpBoxLayout newLeftToRight
@@ -60,13 +62,13 @@ PvProjectEditorView >> newDefinitionLayout [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvProjectEditorView >> title [
 
 	^ self model ifNotNil: [ :aModel | aModel windowTitle ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvProjectEditorView >> updatePresenter [
 
 	dependenceListPresenter items: self model dependencyModels

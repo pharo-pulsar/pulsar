@@ -1,37 +1,39 @@
 Class {
-	#name : #PvNewClassTemplate,
-	#superclass : #Object,
+	#name : 'PvNewClassTemplate',
+	#superclass : 'Object',
 	#instVars : [
 		'parentModel'
 	],
-	#category : #'Perspective-Class-Model'
+	#category : 'Perspective-Class-Model',
+	#package : 'Perspective-Class',
+	#tag : 'Model'
 }
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 PvNewClassTemplate >> classDefinitionString [
 
 	^ self parentModel classDefinitionString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvNewClassTemplate >> name [
 	
 	^ 'New class'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvNewClassTemplate >> package [
 	
 	^ self parentModel package
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvNewClassTemplate >> parentModel [
 
 	^ parentModel
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvNewClassTemplate >> parentModel: aPackageOrTag [
 
 	parentModel := aPackageOrTag

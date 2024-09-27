@@ -1,10 +1,12 @@
 Class {
-	#name : #PvOpenProjectCommand,
-	#superclass : #PvProjectCommand,
-	#category : #'Perspective-Project-Command'
+	#name : 'PvOpenProjectCommand',
+	#superclass : 'PvProjectCommand',
+	#category : 'Perspective-Project-Command',
+	#package : 'Perspective-Project',
+	#tag : 'Command'
 }
 
-{ #category : #private }
+{ #category : 'private' }
 PvOpenProjectCommand >> allBaselines [
 		
 	^ BaselineOf allSubclasses sorted: #name ascending
@@ -12,7 +14,7 @@ PvOpenProjectCommand >> allBaselines [
 		
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvOpenProjectCommand >> defineAction [
 
 	self priority: 1.
@@ -21,7 +23,7 @@ PvOpenProjectCommand >> defineAction [
 	self iconCompositeName: 'openProject'
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 PvOpenProjectCommand >> execute [
 	| result |
 	

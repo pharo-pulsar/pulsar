@@ -1,14 +1,16 @@
 Class {
-	#name : #PvMethodModel,
-	#superclass : #PvEntityModel,
+	#name : 'PvMethodModel',
+	#superclass : 'PvEntityModel',
 	#instVars : [
 		'decorators',
 		'protocol'
 	],
-	#category : #'Perspective-Method-Model'
+	#category : 'Perspective-Method-Model',
+	#package : 'Perspective-Method',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PvMethodModel class >> newMethod: aMethod [ 
 
 	^ self new 
@@ -16,7 +18,7 @@ PvMethodModel class >> newMethod: aMethod [
 		yourself
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 PvMethodModel >> asClassModel [
 	
 	^ PvClassModel 
@@ -24,7 +26,7 @@ PvMethodModel >> asClassModel [
 		entity: self methodClass
 ]
 
-{ #category : #converting }
+{ #category : 'converting' }
 PvMethodModel >> asOutlineClassModel [
 	
 	^ PvOutlineClassModel 
@@ -32,13 +34,13 @@ PvMethodModel >> asOutlineClassModel [
 		entity: self methodClass
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvMethodModel >> collectDecorators [
 
-	^ PvMethodDecorator allApplingTo: self entity
+	^ PvMethodDecorator allApplyingTo: self entity
 ]
 
-{ #category : #'accessing - decorated' }
+{ #category : 'accessing - decorated' }
 PvMethodModel >> colorName [
 
 	^ self 
@@ -46,7 +48,7 @@ PvMethodModel >> colorName [
 		ifNone: [ nil ]
 ]
 
-{ #category : #compiling }
+{ #category : 'compiling' }
 PvMethodModel >> compile: aString notifying: requestor [
 	| selector |
 
@@ -63,7 +65,7 @@ PvMethodModel >> compile: aString notifying: requestor [
 		w resume: (w accept: PvMethodCompilationVisitor new) ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvMethodModel >> decorated: aBlockOrSymbol ifNone: noneBlock [
 
 	self decorators ifEmpty: [ ^ noneBlock value ].
@@ -73,19 +75,19 @@ PvMethodModel >> decorated: aBlockOrSymbol ifNone: noneBlock [
 		ifNone: noneBlock
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodModel >> decorators [
 
 	^ decorators ifNil: [ decorators := self collectDecorators ]
 ]
 
-{ #category : #'accessing - editor' }
+{ #category : 'accessing - editor' }
 PvMethodModel >> editorClass [
 
 	^ PvMethodEditorView
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodModel >> fullName [
 
 	^ String streamContents: [ :stream | 
@@ -95,7 +97,7 @@ PvMethodModel >> fullName [
 			<< self name ]
 ]
 
-{ #category : #'accessing - navigating' }
+{ #category : 'accessing - navigating' }
 PvMethodModel >> hierarchyTopModel [
 	| systemNavigation nodes |
 	
@@ -125,7 +127,7 @@ PvMethodModel >> hierarchyTopModel [
 				entity: self entity ]
 ]
 
-{ #category : #'accessing - decorated' }
+{ #category : 'accessing - decorated' }
 PvMethodModel >> iconName [
 
 	^ self 
@@ -133,92 +135,100 @@ PvMethodModel >> iconName [
 		ifNone: [ #blank ]
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvMethodModel >> includesClassModel [
 
 	^ true
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvMethodModel >> isInstanceSide [
 	
 	^ self entity methodClass isInstanceSide
 ]
 
-{ #category : #'accessing - navigating' }
+{ #category : 'accessing - navigating' }
 PvMethodModel >> isLargeHierarchy [
 
 	^ { Object. ProtoObject } includes: self entity methodClass
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvMethodModel >> isOutlineClassEntity [
 
 	^ true
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvMethodModel >> isTestMethod [
 	
 	^ self entity isTestMethod
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodModel >> methodClass [
 
 	^ self entity methodClass instanceSide
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodModel >> methodClassName [
 
 	^ self entity methodClass name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodModel >> name [
 
 	^ self entity selector
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodModel >> protocol [
 
 	^ protocol ifNil: [ protocol := self entity protocol ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodModel >> protocol: aString [
 
 	protocol := aString
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
+PvMethodModel >> protocolName [
+	
+	^ self protocol 
+		ifNotNil: [ :aProtocol | aProtocol name ]
+		ifNil: [ 'no protocol' ]
+]
+
+{ #category : 'accessing' }
 PvMethodModel >> shortName [
 
 	^ self name contractTo: self class shortSize
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodModel >> sourceCode [
 	
 	^ self entity sourceCode
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodModel >> spotterTitle [
 
 	^ String streamContents: [ :stream |
 		stream << self windowTitle << ' (' << self methodClass name << ')' ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodModel >> windowIconName [
 
 	^ 'method'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodModel >> windowTitle [
 
 	^ self shortName

@@ -1,1 +1,1 @@
-Package { #name : #'Perspective-Spotter' }
+Package { #name : 'Perspective-Spotter' }

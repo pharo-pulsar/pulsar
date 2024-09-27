@@ -1,38 +1,40 @@
 Class {
-	#name : #PvSpotter,
-	#superclass : #LnSpotter,
+	#name : 'PvSpotter',
+	#superclass : 'LnSpotter',
 	#instVars : [
 		'perspective'
 	],
-	#category : #'Perspective-Spotter-View'
+	#category : 'Perspective-Spotter-View',
+	#package : 'Perspective-Spotter',
+	#tag : 'View'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvSpotter class >> isShowingTips [
 
 	^ false
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvSpotter >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter title: ('Spotter for {1}' format: { self model label })
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvSpotter >> perspective [
 	
 	^ perspective
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvSpotter >> perspective: aPerspective [
 	
 	perspective := aPerspective
 ]
 
-{ #category : #processing }
+{ #category : 'processing' }
 PvSpotter >> startNewProcess [
 
 	self keepLastSelectedEntry.

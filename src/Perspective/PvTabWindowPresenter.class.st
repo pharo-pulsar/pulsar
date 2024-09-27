@@ -1,28 +1,30 @@
 Class {
-	#name : #PvTabWindowPresenter,
-	#superclass : #LnTabWindowPresenter,
-	#category : #'Perspective-View-Window'
+	#name : 'PvTabWindowPresenter',
+	#superclass : 'LnTabWindowPresenter',
+	#category : 'Perspective-View-Window',
+	#package : 'Perspective',
+	#tag : 'View-Window'
 }
 
-{ #category : #'opening-closing' }
+{ #category : 'opening-closing' }
 PvTabWindowPresenter >> close [
 
 	self delete
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvTabWindowPresenter >> headerClass [
 
 	^ PvTabHeaderPresenter
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvTabWindowPresenter >> isCloseable [
 	
 	^ presenter isCloseable
 ]
 
-{ #category : #spotter }
+{ #category : 'spotter' }
 PvTabWindowPresenter >> spotterProcessorsFor: aSpotterStep context: context [
 	
 	self presenter 
@@ -30,13 +32,13 @@ PvTabWindowPresenter >> spotterProcessorsFor: aSpotterStep context: context [
 		context: context
 ]
 
-{ #category : #spotter }
+{ #category : 'spotter' }
 PvTabWindowPresenter >> stSpotterProcessorsFor: aSpotterStep [
 	
 	self presenter stSpotterProcessorsFor: aSpotterStep
 ]
 
-{ #category : #protocol }
+{ #category : 'protocol' }
 PvTabWindowPresenter >> takeKeyboardFocus [
 
 	self owner layout select: self.

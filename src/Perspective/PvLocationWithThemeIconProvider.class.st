@@ -1,25 +1,27 @@
 Class {
-	#name : #PvLocationWithThemeIconProvider,
-	#superclass : #SpLocationIconProvider,
+	#name : 'PvLocationWithThemeIconProvider',
+	#superclass : 'SpLocationIconProvider',
 	#instVars : [
 		'application'
 	],
-	#category : #'Perspective-Icon'
+	#category : 'Perspective-Icon',
+	#package : 'Perspective',
+	#tag : 'Icon'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvLocationWithThemeIconProvider >> application [
 
 	^ application
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvLocationWithThemeIconProvider >> application: anObject [
 
 	application := anObject
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvLocationWithThemeIconProvider >> iconNamed: aName ifAbsent: aBlock [
 	| icon |
 
@@ -36,7 +38,7 @@ PvLocationWithThemeIconProvider >> iconNamed: aName ifAbsent: aBlock [
 	
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvLocationWithThemeIconProvider >> isDarkTheme [
 
 	^ self application configuration isDarkTheme

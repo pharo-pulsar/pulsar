@@ -2,17 +2,19 @@
 A generic node to be used to add nodes to a tree.
 "
 Class {
-	#name : #PvEntityTreeNode,
-	#superclass : #PvEntityModel,
+	#name : 'PvEntityTreeNode',
+	#superclass : 'PvEntityModel',
 	#instVars : [
 		'name',
 		'children',
 		'iconName'
 	],
-	#category : #'Perspective-Model'
+	#category : 'Perspective-Model',
+	#package : 'Perspective',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PvEntityTreeNode class >> newName: aName children: aCollection [
 
 	^ self new 
@@ -21,7 +23,7 @@ PvEntityTreeNode class >> newName: aName children: aCollection [
 		yourself
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PvEntityTreeNode class >> newName: aName iconName: anIconName children: aCollection [
 
 	^ self new 
@@ -31,37 +33,37 @@ PvEntityTreeNode class >> newName: aName iconName: anIconName children: aCollect
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEntityTreeNode >> children [
 
 	^ children
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEntityTreeNode >> children: aCollection [
 
 	children := aCollection
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEntityTreeNode >> iconName [
 
 	^ iconName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEntityTreeNode >> iconName: aName [
 
 	iconName := aName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEntityTreeNode >> name [
 
 	^ name
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEntityTreeNode >> name: aString [
 
 	name := aString

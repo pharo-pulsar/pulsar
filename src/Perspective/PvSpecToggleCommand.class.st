@@ -1,28 +1,30 @@
 Class {
-	#name : #PvSpecToggleCommand,
-	#superclass : #PvSpecCommand,
-	#category : #'Perspective-Command-Base'
+	#name : 'PvSpecToggleCommand',
+	#superclass : 'PvSpecCommand',
+	#category : 'Perspective-Command-Base',
+	#package : 'Perspective',
+	#tag : 'Command-Base'
 }
 
-{ #category : #visiting }
+{ #category : 'visiting' }
 PvSpecToggleCommand >> acceptVisitor: aVisitor [
 
 	^ aVisitor visitToggleCommand: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvSpecToggleCommand >> state [
 	
 	^ self decoratedCommand state
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvSpecToggleCommand >> state: aBoolean [
 	
 	self decoratedCommand state: aBoolean
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvSpecToggleCommand >> toggleState [
 	
 	self decoratedCommand toggleState

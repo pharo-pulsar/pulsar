@@ -1,10 +1,12 @@
 Class {
-	#name : #PvNewProjectCommand,
-	#superclass : #PvProjectCommand,
-	#category : #'Perspective-Project-Command'
+	#name : 'PvNewProjectCommand',
+	#superclass : 'PvProjectCommand',
+	#category : 'Perspective-Project-Command',
+	#package : 'Perspective-Project',
+	#tag : 'Command'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvNewProjectCommand >> defineAction [
 
 	self priority: 0.
@@ -13,7 +15,7 @@ PvNewProjectCommand >> defineAction [
 	self iconCompositeName: 'new-folder'
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 PvNewProjectCommand >> execute [
 	
 	

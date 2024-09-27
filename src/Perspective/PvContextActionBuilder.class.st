@@ -1,16 +1,18 @@
 Class {
-	#name : #PvContextActionBuilder,
-	#superclass : #Object,
+	#name : 'PvContextActionBuilder',
+	#superclass : 'Object',
 	#instVars : [
 		'fromCommandClass',
 		'actionGroups',
 		'mainGroups',
 		'owner'
 	],
-	#category : #'Perspective-View'
+	#category : 'Perspective-View',
+	#package : 'Perspective',
+	#tag : 'View'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PvContextActionBuilder class >> on: aPresenter [
 
 	^ self new 
@@ -18,25 +20,25 @@ PvContextActionBuilder class >> on: aPresenter [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvContextActionBuilder >> actionGroup: aSymbol [
 
 	actionGroups := { aSymbol }
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvContextActionBuilder >> actionGroups [
 
 	^ actionGroups ifNil: [ #() ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvContextActionBuilder >> actionGroups: anArray [
 
 	actionGroups := anArray
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvContextActionBuilder >> addActionsMenuTo: presenter [
 	| actionsMenuCommandGroup |
 
@@ -52,7 +54,7 @@ PvContextActionBuilder >> addActionsMenuTo: presenter [
 		expand: false
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvContextActionBuilder >> addToolbarTo: presenter [
 	| toolbarCommandGroup |
 	
@@ -65,7 +67,7 @@ PvContextActionBuilder >> addToolbarTo: presenter [
 		fillWith: toolbarCommandGroup)
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvContextActionBuilder >> buildActionsMenuCommandGroup [
 	
 	^ self fromCommandClass 
@@ -73,7 +75,7 @@ PvContextActionBuilder >> buildActionsMenuCommandGroup [
 		on: self owner
 ]
 
-{ #category : #building }
+{ #category : 'building' }
 PvContextActionBuilder >> buildToolbar [
 	| presenter |
 
@@ -87,7 +89,7 @@ PvContextActionBuilder >> buildToolbar [
 	^ presenter
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvContextActionBuilder >> buildToolbarCommandGroup [
 	
 	^ self fromCommandClass 
@@ -95,50 +97,50 @@ PvContextActionBuilder >> buildToolbarCommandGroup [
 		on: self owner
 ]
 
-{ #category : #building }
+{ #category : 'building' }
 PvContextActionBuilder >> buildToolbarWith: aBlock [
 
 	aBlock value: self.
 	^ self buildToolbar
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvContextActionBuilder >> from: aCommandClass [
 
 	fromCommandClass := aCommandClass
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvContextActionBuilder >> fromCommandClass [
 
 	^ fromCommandClass ifNil: [ PvAction ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvContextActionBuilder >> mainGroup: aSymbol [
 
 	mainGroups := { aSymbol }
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvContextActionBuilder >> mainGroups [
 
 	^ mainGroups ifNil: [ #(default) ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvContextActionBuilder >> mainGroups: anArray [
 
 	mainGroups := anArray
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvContextActionBuilder >> owner [
 
 	^ owner
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvContextActionBuilder >> owner: aPresenter [
 
 	owner := aPresenter

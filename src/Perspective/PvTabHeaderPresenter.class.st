@@ -1,13 +1,15 @@
 Class {
-	#name : #PvTabHeaderPresenter,
-	#superclass : #PvHeaderPresenter,
+	#name : 'PvTabHeaderPresenter',
+	#superclass : 'PvHeaderPresenter',
 	#instVars : [
 		'closeButton'
 	],
-	#category : #'Perspective-View-Window'
+	#category : 'Perspective-View-Window',
+	#package : 'Perspective',
+	#tag : 'View-Window'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvTabHeaderPresenter >> initializePresenters [
 
 	super initializePresenters.
@@ -23,7 +25,7 @@ PvTabHeaderPresenter >> initializePresenters [
 		action: [ self delete ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvTabHeaderPresenter >> labelPresenter [
 
 	^ titleLabel

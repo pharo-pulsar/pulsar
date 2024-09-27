@@ -1,6 +1,6 @@
 Class {
-	#name : #PvEditorHeaderPresenter,
-	#superclass : #SpPresenter,
+	#name : 'PvEditorHeaderPresenter',
+	#superclass : 'SpPresenter',
 	#traits : 'SpTModel',
 	#classTraits : 'SpTModel classTrait',
 	#instVars : [
@@ -9,10 +9,12 @@ Class {
 		'menuButtonPresenter',
 		'menuCommandGroup'
 	],
-	#category : #'Perspective-View-Editor'
+	#category : 'Perspective-View-Editor',
+	#package : 'Perspective',
+	#tag : 'View-Editor'
 }
 
-{ #category : #layout }
+{ #category : 'layout' }
 PvEditorHeaderPresenter >> defaultLayout [
 
 	^ SpBoxLayout newLeftToRight 
@@ -25,7 +27,7 @@ PvEditorHeaderPresenter >> defaultLayout [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvEditorHeaderPresenter >> initializePresenters [
 
 	actionsLayout := SpBoxLayout newLeftToRight.
@@ -38,20 +40,20 @@ PvEditorHeaderPresenter >> initializePresenters [
 		yourself"
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvEditorHeaderPresenter >> menu [
 
 	^ self menuCommandGroup 
 		ifNotNil: [ self menuCommandGroup asMenuPresenter ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEditorHeaderPresenter >> menuCommandGroup [
 
 	^ menuCommandGroup
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEditorHeaderPresenter >> menuCommandGroup: aCommandGroup [
 
 	menuCommandGroup := aCommandGroup

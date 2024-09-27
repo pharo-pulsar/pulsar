@@ -1,14 +1,16 @@
 Class {
-	#name : #PvOverlayIconDecoration,
-	#superclass : #PvIconDecoration,
+	#name : 'PvOverlayIconDecoration',
+	#superclass : 'PvIconDecoration',
 	#instVars : [
 		'position',
 		'overlay'
 	],
-	#category : #'Perspective-Icon'
+	#category : 'Perspective-Icon',
+	#package : 'Perspective',
+	#tag : 'Icon'
 }
 
-{ #category : #operations }
+{ #category : 'operations' }
 PvOverlayIconDecoration >> applyTo: icon on: anApplication [
 	| overlayIcon |
 	
@@ -25,25 +27,31 @@ PvOverlayIconDecoration >> applyTo: icon on: anApplication [
 	self error: 'Should not arrive here'
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
+PvOverlayIconDecoration >> name [
+
+	^ self position asString, '_', self overlay
+]
+
+{ #category : 'accessing' }
 PvOverlayIconDecoration >> overlay [
 
 	^ overlay
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvOverlayIconDecoration >> overlay: aName [
 
 	overlay := aName
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvOverlayIconDecoration >> position [
 
 	^ position
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvOverlayIconDecoration >> position: anObject [
 
 	position := anObject

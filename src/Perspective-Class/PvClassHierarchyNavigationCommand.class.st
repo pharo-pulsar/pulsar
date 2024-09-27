@@ -1,16 +1,18 @@
 Class {
-	#name : #PvClassHierarchyNavigationCommand,
-	#superclass : #PvClassCommand,
-	#category : #'Perspective-Class-View'
+	#name : 'PvClassHierarchyNavigationCommand',
+	#superclass : 'PvClassCommand',
+	#category : 'Perspective-Class-View',
+	#package : 'Perspective-Class',
+	#tag : 'View'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvClassHierarchyNavigationCommand class >> defaultShortcut [
 
 	^ $h mod1
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvClassHierarchyNavigationCommand >> defineAction [
 
 	self name: 'Show hierarchy'.
@@ -19,7 +21,7 @@ PvClassHierarchyNavigationCommand >> defineAction [
 	
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 PvClassHierarchyNavigationCommand >> execute [
 	| popover navigation |
 	

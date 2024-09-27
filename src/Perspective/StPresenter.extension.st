@@ -1,18 +1,18 @@
-Extension { #name : #StPresenter }
+Extension { #name : 'StPresenter' }
 
-{ #category : #'*Perspective' }
+{ #category : '*Perspective' }
 StPresenter >> containerName [
 
 	^ #tools
 ]
 
-{ #category : #'*Perspective' }
+{ #category : '*Perspective' }
 StPresenter >> isCloseable [
 
 	^ true
 ]
 
-{ #category : #'*Perspective' }
+{ #category : '*Perspective' }
 StPresenter >> perspective: aPresenter [
 
 ]

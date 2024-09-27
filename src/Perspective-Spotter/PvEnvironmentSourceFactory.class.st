@@ -1,21 +1,23 @@
 Class {
-	#name : #PvEnvironmentSourceFactory,
-	#superclass : #StSourceFactory,
+	#name : 'PvEnvironmentSourceFactory',
+	#superclass : 'StSourceFactory',
 	#instVars : [
 		'classIterator',
 		'environment',
 		'implementorIterator'
 	],
-	#category : #'Perspective-Spotter-Model-Processor'
+	#category : 'Perspective-Spotter-Model-Processor',
+	#package : 'Perspective-Spotter',
+	#tag : 'Model-Processor'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvEnvironmentSourceFactory class >> isAvailable [
 
 	^ false
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PvEnvironmentSourceFactory class >> newEnvironment: anEnvironment [
 
 	^ self new 
@@ -23,20 +25,20 @@ PvEnvironmentSourceFactory class >> newEnvironment: anEnvironment [
 		yourself
 ]
 
-{ #category : #'detecting implementations' }
+{ #category : 'detecting implementations' }
 PvEnvironmentSourceFactory class >> priority [ 
 	
 	^ 10 
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEnvironmentSourceFactory >> classIterator [
 
 	^ classIterator ifNil: [ 
 			classIterator := PvClassIterator newEnvironment: self environment ]
 ]
 
-{ #category : #'sources - classes' }
+{ #category : 'sources - classes' }
 PvEnvironmentSourceFactory >> classesBeginsWithSource [
 
 	^ ((self classIterator 
@@ -45,7 +47,7 @@ PvEnvironmentSourceFactory >> classesBeginsWithSource [
 		asBeginsWithFilter
 ]
 
-{ #category : #'sources - classes' }
+{ #category : 'sources - classes' }
 PvEnvironmentSourceFactory >> classesSubstringSource [
 
 	^ ((self classIterator 
@@ -54,13 +56,13 @@ PvEnvironmentSourceFactory >> classesSubstringSource [
 		asSubstringFilter
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEnvironmentSourceFactory >> environment [
 
 	^ environment
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEnvironmentSourceFactory >> environment: anEnvironment [
 
 	environment := anEnvironment.
@@ -68,20 +70,20 @@ PvEnvironmentSourceFactory >> environment: anEnvironment [
 	implementorIterator := nil
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvEnvironmentSourceFactory >> implementorIterator [
 
 	^ implementorIterator ifNil:[ 
 		implementorIterator := PvImplementorIterator newEnvironment: self environment ]
 ]
 
-{ #category : #'sources - implementors' }
+{ #category : 'sources - implementors' }
 PvEnvironmentSourceFactory >> implementorsBeginsWithSource [
 
 	^ (self implementorIterator collect: [ :each | PvMethodEntry on: each ]) asBeginsWithFilter
 ]
 
-{ #category : #'sources - implementors' }
+{ #category : 'sources - implementors' }
 PvEnvironmentSourceFactory >> implementorsSubstringSource [
 
 	^ (self implementorIterator collect: [ :each | PvMethodEntry on: each ]) asSubstringFilter

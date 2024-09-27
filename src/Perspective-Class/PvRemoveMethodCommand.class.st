@@ -1,10 +1,12 @@
 Class {
-	#name : #PvRemoveMethodCommand,
-	#superclass : #PvClassCommand,
-	#category : #'Perspective-Class-Command'
+	#name : 'PvRemoveMethodCommand',
+	#superclass : 'PvClassCommand',
+	#category : 'Perspective-Class-Command',
+	#package : 'Perspective-Class',
+	#tag : 'Command'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvRemoveMethodCommand >> defineAction [
 
 	self priority: 10.
@@ -16,7 +18,7 @@ PvRemoveMethodCommand >> defineAction [
 		yourself)
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 PvRemoveMethodCommand >> execute [
 	| parentModel |
 

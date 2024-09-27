@@ -1,39 +1,41 @@
 Class {
-	#name : #PvPerspectiveBrowser,
-	#superclass : #LnContainerPresenter,
+	#name : 'PvPerspectiveBrowser',
+	#superclass : 'LnContainerPresenter',
 	#traits : 'SpTModel + PvTActionHolder',
 	#classTraits : 'SpTModel classTrait + PvTActionHolder classTrait',
-	#category : #'Perspective-View-Perspective'
+	#category : 'Perspective-View-Perspective',
+	#package : 'Perspective',
+	#tag : 'View-Perspective'
 }
 
-{ #category : #default }
+{ #category : 'default' }
 PvPerspectiveBrowser class >> defaultEnvironment [
 
 	^ PvSystemEnvironment new
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 PvPerspectiveBrowser class >> defineActionsOn: aBuilder [
 	<perspectiveActions>
 	
 	aBuilder 
 		registerGroup: #perspective with: { 
 			"open default tool"
-			KeyboardKey enter 	shift 			-> PvShowSpotterForWindowsAction new.
-			KeyboardKey enter 	ctrl 			-> PvShowSpotterForEnvironmentAction new.
-			KeyboardKey enter 	alt 			-> PvShowSpotterForCommandsAction new };
+			$f mod1 -> PvShowSpotterForEnvironmentAction new.
+			$f mod1 shift -> PvShowSpotterForWindowsAction new.
+			$f mod1 mod3 -> PvShowSpotterForCommandsAction new };
 		registerGroup: #window with: {
-			$w mod1 								-> PvCloseCurrentWindowAction new.
+			$w mod1 							-> PvCloseCurrentWindowAction new.
 		}
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PvPerspectiveBrowser class >> new [
 
 	^ self on: (PvEnvironmentModel newEntity: self defaultEnvironment)
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PvPerspectiveBrowser class >> newApplication: anApplication [
 
 	^ self 
@@ -41,33 +43,33 @@ PvPerspectiveBrowser class >> newApplication: anApplication [
 		model: (PvEnvironmentModel newEntity: self defaultEnvironment)
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvPerspectiveBrowser >> actionGroups [
 
 	^ #(perspective window)
 ]
 
-{ #category : #activating }
+{ #category : 'activating' }
 PvPerspectiveBrowser >> activateClass: aClass [
 	"different perspectives can have different meanings to activate a class :)"
 	
 	self subclassResponsibility
 ]
 
-{ #category : #activating }
+{ #category : 'activating' }
 PvPerspectiveBrowser >> activateMethod: aMethod [
 	"different perspectives can have different meanings to activate a class :)"
 	
 	self subclassResponsibility
 ]
 
-{ #category : #'private - windows' }
+{ #category : 'private - windows' }
 PvPerspectiveBrowser >> addPresenter: aPresenter toContainer: aContainer [
 	
 	aContainer addWindow: aPresenter
 ]
 
-{ #category : #'accessing - windows' }
+{ #category : 'accessing - windows' }
 PvPerspectiveBrowser >> addWindow: aPresenter [
 
 	^ self 
@@ -75,7 +77,7 @@ PvPerspectiveBrowser >> addWindow: aPresenter [
 		atContainerNamed: aPresenter containerName
 ]
 
-{ #category : #'accessing - windows' }
+{ #category : 'accessing - windows' }
 PvPerspectiveBrowser >> addWindow: aPresenter atContainerNamed: aName [
 	"Adds a window (a view) to current perspective layout, in the container indicated. 
 	 WARNING: `aPresenter` needs to be correctly instantiated, which means it is *owned* 
@@ -102,7 +104,7 @@ PvPerspectiveBrowser >> addWindow: aPresenter atContainerNamed: aName [
 	^ aPresenter
 ]
 
-{ #category : #'private - windows' }
+{ #category : 'private - windows' }
 PvPerspectiveBrowser >> addWindow: aPresenter atContainerNamed: aName ifAbsent: absentBlock [
 
 	aName ifNil: [ 
@@ -115,7 +117,7 @@ PvPerspectiveBrowser >> addWindow: aPresenter atContainerNamed: aName ifAbsent: 
 		ifAbsent: absentBlock
 ]
 
-{ #category : #'private - windows' }
+{ #category : 'private - windows' }
 PvPerspectiveBrowser >> addWindow: aPresenter ifContainerAbsent: aBlock [
 
 	^ self 
@@ -124,7 +126,7 @@ PvPerspectiveBrowser >> addWindow: aPresenter ifContainerAbsent: aBlock [
 		ifAbsent: aBlock
 ]
 
-{ #category : #'accessing - windows' }
+{ #category : 'accessing - windows' }
 PvPerspectiveBrowser >> addWindowOfClass: aClass atContainerNamed: aName [
 	"See `#addWindow:atContainerNamed:`"
 
@@ -133,7 +135,7 @@ PvPerspectiveBrowser >> addWindowOfClass: aClass atContainerNamed: aName [
 		atContainerNamed: aName
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 PvPerspectiveBrowser >> close [
 	| presenter |
 	
@@ -144,12 +146,12 @@ PvPerspectiveBrowser >> close [
 	self withWindowDo: [ :window | window close ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvPerspectiveBrowser >> connectViews [
 	"override this to connect the views of the perspective"
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvPerspectiveBrowser >> containerNamed: aName ifPresent: presentBlock ifAbsent: absentBlock [
 
 	^ self layout allPresenters
@@ -158,7 +160,7 @@ PvPerspectiveBrowser >> containerNamed: aName ifPresent: presentBlock ifAbsent: 
 		ifNone: absentBlock
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvPerspectiveBrowser >> contentPresenters [
 
 	^ (self presenters
@@ -166,7 +168,7 @@ PvPerspectiveBrowser >> contentPresenters [
 		flatCollect: [ :each | each contentPresenters ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvPerspectiveBrowser >> editorContainer [
 
 	^ self 
@@ -175,13 +177,19 @@ PvPerspectiveBrowser >> editorContainer [
 		ifAbsent: [ nil ]
 ]
 
-{ #category : #'private - settings' }
-PvPerspectiveBrowser >> globalShortcuts [
+{ #category : 'private - settings' }
+PvPerspectiveBrowser >> globalActions [
 
-	^ self actions asKMCategory
+	^ self actions
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
+PvPerspectiveBrowser >> initialExtent [
+		
+	^ 1200@800
+]
+
+{ #category : 'initialization' }
 PvPerspectiveBrowser >> initialize [
 
 	super initialize.
@@ -191,40 +199,40 @@ PvPerspectiveBrowser >> initialize [
 	self subscribeToAnnouncements
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvPerspectiveBrowser >> initializeLayout [
 	
 	self usePerspectiveLayout: self perspectiveLayoutClass
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvPerspectiveBrowser >> initializeViews [	
 	"override this to initialize the views for the perspective"
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvPerspectiveBrowser >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
 		title: self title;
-		initialExtent: 1560@860.
-	self addGlobalShortcutsTo: aWindowPresenter		
+		initialExtent: self initialExtent.
+	self addGlobalActionsTo: aWindowPresenter		
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvPerspectiveBrowser >> isFloatingWindow [
 
 	^ true
 ]
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvPerspectiveBrowser >> isPerspective [
 
 	^ true
 ]
 
-{ #category : #factory }
+{ #category : 'factory' }
 PvPerspectiveBrowser >> newContainer: aName [
 
 	^ (self instantiate: PvContainerPresenter)
@@ -232,7 +240,7 @@ PvPerspectiveBrowser >> newContainer: aName [
 		yourself
 ]
 
-{ #category : #factory }
+{ #category : 'factory' }
 PvPerspectiveBrowser >> newEditorContainer: aName [
 
 	^ (self instantiate: PvEditorContainerPresenter)
@@ -240,19 +248,19 @@ PvPerspectiveBrowser >> newEditorContainer: aName [
 		yourself
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvPerspectiveBrowser >> perspectiveLayoutClass [
 
 	^ self subclassResponsibility
 ]
 
-{ #category : #'events - handling' }
+{ #category : 'events - handling' }
 PvPerspectiveBrowser >> resendToPresenters: ann [
 
 	self presenters do: [ :each | each announce: ann ]
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 PvPerspectiveBrowser >> showSpotterForCommands [
 	| spotter |
 	
@@ -268,7 +276,7 @@ PvPerspectiveBrowser >> showSpotterForCommands [
 		open
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 PvPerspectiveBrowser >> showSpotterForEnvironment [
 	| spotter |
 	
@@ -284,7 +292,7 @@ PvPerspectiveBrowser >> showSpotterForEnvironment [
 		open
 ]
 
-{ #category : #actions }
+{ #category : 'actions' }
 PvPerspectiveBrowser >> showSpotterForWindows [
 	| spotter |
 	
@@ -300,7 +308,7 @@ PvPerspectiveBrowser >> showSpotterForWindows [
 		open
 ]
 
-{ #category : #spotter }
+{ #category : 'spotter' }
 PvPerspectiveBrowser >> spotterEditorsFor: aStep [
 	<spotterOrder: 20 context: #windows>
 
@@ -315,7 +323,7 @@ PvPerspectiveBrowser >> spotterEditorsFor: aStep [
 		filter: StFilterSubstring
 ]
 
-{ #category : #spotter }
+{ #category : 'spotter' }
 PvPerspectiveBrowser >> spotterViewsFor: aStep [
 	<spotterOrder: 10 context: #windows>
 
@@ -330,7 +338,7 @@ PvPerspectiveBrowser >> spotterViewsFor: aStep [
 		filter: StFilterSubstring
 ]
 
-{ #category : #spotter }
+{ #category : 'spotter' }
 PvPerspectiveBrowser >> stSpotterProcessorsFor: aStep [
 	"Entry point for all spotter from perspectives, I will not use the regular way to 
 	 collect processors but a special mechanism with a context, to pre-filter processors"
@@ -342,7 +350,7 @@ PvPerspectiveBrowser >> stSpotterProcessorsFor: aStep [
 		each spotterProcessorsFor: aStep context: aStep model context ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvPerspectiveBrowser >> subscribeToAnnouncements [
 
 	self announcer
@@ -351,20 +359,20 @@ PvPerspectiveBrowser >> subscribeToAnnouncements [
 		to: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvPerspectiveBrowser >> systemNavigation [
 
 	^ PvSystemNavigation newPerspective: self
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvPerspectiveBrowser >> title [
 		
 	self flag: #TODO.
 	^ 'Browser'
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvPerspectiveBrowser >> usePerspectiveLayout: aLayoutClass [
 
 	tileLayout := aLayoutClass activateOn: self

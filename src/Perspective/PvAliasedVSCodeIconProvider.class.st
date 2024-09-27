@@ -1,12 +1,14 @@
 Class {
-	#name : #PvAliasedVSCodeIconProvider,
-	#superclass : #PvVSCodeIconProvider,
+	#name : 'PvAliasedVSCodeIconProvider',
+	#superclass : 'PvVSCodeIconProvider',
 	#traits : 'SgaTAliasIconTable',
 	#classTraits : 'SgaTAliasIconTable classTrait',
-	#category : #'Perspective-Icon'
+	#category : 'Perspective-Icon',
+	#package : 'Perspective',
+	#tag : 'Icon'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvAliasedVSCodeIconProvider >> aliasFor: aName [
 
 	^ self aliases
@@ -14,7 +16,7 @@ PvAliasedVSCodeIconProvider >> aliasFor: aName [
 		ifAbsent: [ aName ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvAliasedVSCodeIconProvider >> iconNamed: aName ifAbsent: aBlock [
 
 	^ super 
@@ -24,7 +26,7 @@ PvAliasedVSCodeIconProvider >> iconNamed: aName ifAbsent: aBlock [
 			aBlock value ]
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvAliasedVSCodeIconProvider >> initialize [
 
 	super initialize.
@@ -83,7 +85,7 @@ PvAliasedVSCodeIconProvider >> initialize [
 	
 ]
 
-{ #category : #utilities }
+{ #category : 'utilities' }
 PvAliasedVSCodeIconProvider >> loadIcon: fileReference [
 	| icon |
 

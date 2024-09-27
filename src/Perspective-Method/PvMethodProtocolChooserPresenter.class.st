@@ -1,6 +1,6 @@
 Class {
-	#name : #PvMethodProtocolChooserPresenter,
-	#superclass : #SpPresenter,
+	#name : 'PvMethodProtocolChooserPresenter',
+	#superclass : 'SpPresenter',
 	#traits : 'SpTModel',
 	#classTraits : 'SpTModel classTrait',
 	#instVars : [
@@ -8,10 +8,12 @@ Class {
 		'protocolListPresenter',
 		'selectAction'
 	],
-	#category : #'Perspective-Method-View'
+	#category : 'Perspective-Method-View',
+	#package : 'Perspective-Method',
+	#tag : 'View'
 }
 
-{ #category : #layout }
+{ #category : 'layout' }
 PvMethodProtocolChooserPresenter >> defaultLayout [
 
 	^ SpBoxLayout newTopToBottom
@@ -22,7 +24,7 @@ PvMethodProtocolChooserPresenter >> defaultLayout [
 		yourself
 ]
 
-{ #category : #layout }
+{ #category : 'layout' }
 PvMethodProtocolChooserPresenter >> initializePresenters [
 
 	self addStyle: 'pvProtocolChooser'.
@@ -38,13 +40,13 @@ PvMethodProtocolChooserPresenter >> initializePresenters [
 		transmitDo: [ :selection | self updateProtocol: selection ]
 ]
 
-{ #category : #events }
+{ #category : 'events' }
 PvMethodProtocolChooserPresenter >> onSelect: aBlock [
 	
 	selectAction := aBlock
 ]
 
-{ #category : #'private - accessing' }
+{ #category : 'private - accessing' }
 PvMethodProtocolChooserPresenter >> protocols [
 
 	^ ((self systemNavigation allExistingProtocolsFor: true) 
@@ -52,7 +54,7 @@ PvMethodProtocolChooserPresenter >> protocols [
 		sorted: #asLowercase ascending
 ]
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvMethodProtocolChooserPresenter >> updatePresenter [
 
 	protocolListPresenter items: self protocols.
@@ -64,7 +66,7 @@ PvMethodProtocolChooserPresenter >> updatePresenter [
 			selectAll ]
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvMethodProtocolChooserPresenter >> updateProtocol: aString [
 	
 	selectAction ifNil: [ ^ self ].

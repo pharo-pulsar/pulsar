@@ -1,10 +1,12 @@
 Class {
-	#name : #PvRenamePackageCommand,
-	#superclass : #PvProjectCommand,
-	#category : #'Perspective-Project-Command'
+	#name : 'PvRenamePackageCommand',
+	#superclass : 'PvProjectCommand',
+	#category : 'Perspective-Project-Command',
+	#package : 'Perspective-Project',
+	#tag : 'Command'
 }
 
-{ #category : #initialization }
+{ #category : 'initialization' }
 PvRenamePackageCommand >> defineAction [
 
 	self priority: 200.
@@ -12,7 +14,7 @@ PvRenamePackageCommand >> defineAction [
 	self description: 'Rename package or tag'
 ]
 
-{ #category : #executing }
+{ #category : 'executing' }
 PvRenamePackageCommand >> execute [
 	
 	self halt

@@ -1,6 +1,6 @@
-Extension { #name : #MetacelloMCBaselineOfProjectSpec }
+Extension { #name : 'MetacelloMCBaselineOfProjectSpec' }
 
-{ #category : #'*Perspective' }
+{ #category : '*Perspective' }
 MetacelloMCBaselineOfProjectSpec >> iconName [
 
 	^ 'project'

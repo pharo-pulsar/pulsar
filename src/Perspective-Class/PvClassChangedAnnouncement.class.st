@@ -1,10 +1,12 @@
 Class {
-	#name : #PvClassChangedAnnouncement,
-	#superclass : #PvChangedAnnouncement,
-	#category : #'Perspective-Class-Model'
+	#name : 'PvClassChangedAnnouncement',
+	#superclass : 'PvChangedAnnouncement',
+	#category : 'Perspective-Class-Model',
+	#package : 'Perspective-Class',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvClassChangedAnnouncement >> performSelector [
 
 	^ #classChanged:

@@ -1,18 +1,20 @@
 Trait {
-	#name : #PvTSourceFactory,
+	#name : 'PvTSourceFactory',
 	#instVars : [
 		'sourceFactory'
 	],
-	#category : #'Perspective-Spotter-Model-Processor'
+	#category : 'Perspective-Spotter-Model-Processor',
+	#package : 'Perspective-Spotter',
+	#tag : 'Model-Processor'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PvTSourceFactory classSide >> newEnvironment: anEnvironment [
 
 	^ self newSourceFactory: (PvEnvironmentSourceFactory newEnvironment: anEnvironment)
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PvTSourceFactory classSide >> newSourceFactory: aSourceFactory [
 
 	^ self basicNew 
@@ -21,13 +23,13 @@ PvTSourceFactory classSide >> newSourceFactory: aSourceFactory [
 		yourself
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvTSourceFactory >> sourceFactory [
 
 	^ sourceFactory
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvTSourceFactory >> sourceFactory: anObject [
 
 	sourceFactory := anObject

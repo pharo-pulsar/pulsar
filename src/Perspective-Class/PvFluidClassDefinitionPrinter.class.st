@@ -1,10 +1,12 @@
 Class {
-	#name : #PvFluidClassDefinitionPrinter,
-	#superclass : #FluidClassDefinitionPrinter,
-	#category : #'Perspective-Class-Model'
+	#name : 'PvFluidClassDefinitionPrinter',
+	#superclass : 'FluidClassDefinitionPrinter',
+	#category : 'Perspective-Class-Model',
+	#package : 'Perspective-Class',
+	#tag : 'Model'
 }
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PvFluidClassDefinitionPrinter class >> for: aClass [ 
 	"Given the current class definition syntax and the need for the class, 
 	return the correct printer. 
@@ -15,13 +17,13 @@ PvFluidClassDefinitionPrinter class >> for: aClass [
 		yourself
 ]
 
-{ #category : #'instance creation' }
+{ #category : 'instance creation' }
 PvFluidClassDefinitionPrinter class >> new [
 
 	^ self basicNew initialize
 ]
 
-{ #category : #helpers }
+{ #category : 'helpers' }
 PvFluidClassDefinitionPrinter >> classDefinitionString [
 
 	^ String streamContents: [ :stream | 
@@ -46,7 +48,7 @@ PvFluidClassDefinitionPrinter >> classDefinitionString [
 			self packageOn: stream ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvFluidClassDefinitionPrinter >> classDefinitionTemplateInPackage: aPackageName tag: aTagName [
 
 	^ String streamContents: [ :stream |
@@ -61,7 +63,7 @@ PvFluidClassDefinitionPrinter >> classDefinitionTemplateInPackage: aPackageName 
 			<< String tab << 'package: ''' << aPackageName << '''' ]
 ]
 
-{ #category : #'as yet unclassified' }
+{ #category : 'as yet unclassified' }
 PvFluidClassDefinitionPrinter >> classSlotDefinitionsOn: aStream [
 	"If the class has many instance variable print one slot per line, do the same for complex slots."
 	| oneSlotPerLine localSlots |
@@ -87,7 +89,7 @@ PvFluidClassDefinitionPrinter >> classSlotDefinitionsOn: aStream [
 	aStream nextPutAll: '}'
 ]
 
-{ #category : #'elementary operations' }
+{ #category : 'elementary operations' }
 PvFluidClassDefinitionPrinter >> classSlotsOn: aStream [
 	"uses: can the last part of a definition so watch out for terminating ;"
 	
@@ -97,7 +99,7 @@ PvFluidClassDefinitionPrinter >> classSlotsOn: aStream [
 	aStream nextPutAll: ';'.
 ]
 
-{ #category : #'public API' }
+{ #category : 'public API' }
 PvFluidClassDefinitionPrinter >> traitDefinitionString [
 
 	^ String streamContents: [ :stream | 

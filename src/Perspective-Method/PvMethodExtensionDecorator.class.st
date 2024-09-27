@@ -1,16 +1,18 @@
 Class {
-	#name : #PvMethodExtensionDecorator,
-	#superclass : #PvMethodDecorator,
-	#category : #'Perspective-Method-Model'
+	#name : 'PvMethodExtensionDecorator',
+	#superclass : 'PvMethodDecorator',
+	#category : 'Perspective-Method-Model',
+	#package : 'Perspective-Method',
+	#tag : 'Model'
 }
 
-{ #category : #testing }
+{ #category : 'testing' }
 PvMethodExtensionDecorator class >> appliesTo: aMethod [
 
 	^ aMethod isExtension
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodExtensionDecorator >> colorName [
 
 	^ #gray

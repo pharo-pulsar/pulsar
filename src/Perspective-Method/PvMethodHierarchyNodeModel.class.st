@@ -1,14 +1,16 @@
 Class {
-	#name : #PvMethodHierarchyNodeModel,
-	#superclass : #PvMethodModel,
+	#name : 'PvMethodHierarchyNodeModel',
+	#superclass : 'PvMethodModel',
 	#instVars : [
 		'parent',
 		'children'
 	],
-	#category : #'Perspective-Method-Model'
+	#category : 'Perspective-Method-Model',
+	#package : 'Perspective-Method',
+	#tag : 'Model'
 }
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodHierarchyNodeModel >> addChildNode: aNode [
 
 	children ifNil: [ children := OrderedCollection new ].
@@ -16,13 +18,13 @@ PvMethodHierarchyNodeModel >> addChildNode: aNode [
 	children add: aNode
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodHierarchyNodeModel >> children [
 
 	^ children ifNil: [ #() ]
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodHierarchyNodeModel >> findParentFrom: nodes [
 	| parents parentNodes |
 
@@ -41,19 +43,19 @@ PvMethodHierarchyNodeModel >> findParentFrom: nodes [
 	parentNodes last addChildNode: self
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodHierarchyNodeModel >> parent [
 
 	^ parent
 ]
 
-{ #category : #accessing }
+{ #category : 'accessing' }
 PvMethodHierarchyNodeModel >> parent: aNode [
 
 	parent := aNode
 ]
 
-{ #category : #private }
+{ #category : 'private' }
 PvMethodHierarchyNodeModel >> species [
 
 	^ PvMethodModel
