@@ -9,10 +9,10 @@ Class {
 { #category : 'accessing' }
 PvOutlineClassModel >> children [
 
-	^ { PvEntityTreeNode newName: 'Shared Variables' children: self collectClassSharedVariables },
-	  { PvEntityTreeNode newName: 'Class Slots' children: self collectClassVariables },
-	  { PvEntityTreeNode newName: 'Slots'children: self collectVariables }, 
-	  { PvEntityTreeNode newName: 'Class Methods' children: self collectClassMethods },  
+	^ { PvTreeNodeModel newName: 'Shared Variables' children: self collectClassSharedVariables },
+	  { PvTreeNodeModel newName: 'Class Slots' children: self collectClassVariables },
+	  { PvTreeNodeModel newName: 'Slots'children: self collectVariables }, 
+	  { PvTreeNodeModel newName: 'Class Methods' children: self collectClassMethods },  
 	  self collectMethods
 ]
 

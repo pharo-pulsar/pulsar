@@ -12,7 +12,7 @@ PvClassEditorView class >> defineActionsOn: aBuilder [
 
 	aBuilder registerGroup: #navigation with: { 
 		$h mod1 -> PvClassHierarchyNavigationCommand new
-	} 
+	}
 ]
 
 { #category : 'accessing' }
@@ -38,7 +38,7 @@ PvClassEditorView >> doSubmit: aString [
 		aPerspective announce: (PvClassChangedAnnouncement for: self model) ]	
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 PvClassEditorView >> editorHeaderClass [
 
 	^ PvClassEditorHeaderPresenter

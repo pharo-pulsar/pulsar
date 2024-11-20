@@ -73,7 +73,7 @@ PvProjectView class >> defineActionsOn: aBuilder [
 		}
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 PvProjectView >> activateProject: aBaselineClass [
 
 	self model: (PvProjectModel 
@@ -219,7 +219,7 @@ PvProjectView >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	projectTreePresenter 
-		roots: { self model };
+		roots: { self model. self model environmentModel };
 		expandRoots.
 	"self withTileWindowDo: [ :w | 
 		w windowIcon: (self model windowIconComposite buildOn: self application).

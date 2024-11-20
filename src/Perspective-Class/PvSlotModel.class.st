@@ -1,6 +1,6 @@
 Class {
 	#name : 'PvSlotModel',
-	#superclass : 'PvEntityModel',
+	#superclass : 'PvBaseModel',
 	#category : 'Perspective-Class-Model',
 	#package : 'Perspective-Class',
 	#tag : 'Model'

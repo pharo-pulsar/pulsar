@@ -31,7 +31,8 @@ PvCompositeIconCache >> iconAt: aComposite put: anIcon [
 	 makes the project 'gtk only' :/"
 	self flag: #TODO. "I am leaking images, I think? (this is just to test it does not crashes, then I need to see how to free for real :P)"
 	gtkImage := anIcon isForm 
-		ifTrue: [ GRunLoop defer: [ 
+		ifTrue: [ 
+			GRunLoop defer: [ 
 				anIcon asGtkImage 
 					objectRef; 
 					yourself ] ]

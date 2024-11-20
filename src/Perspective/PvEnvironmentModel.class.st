@@ -1,6 +1,6 @@
 Class {
 	#name : 'PvEnvironmentModel',
-	#superclass : 'PvEntityModel',
+	#superclass : 'PvBaseModel',
 	#category : 'Perspective-Model',
 	#package : 'Perspective',
 	#tag : 'Model'
@@ -12,6 +12,12 @@ PvEnvironmentModel class >> newEntity: anEnvironment [
 	"I am a model for an environment, so I do not belong (at least for now) to 
 	 an environment myself"
 	^ self newEnvironment: nil entity: anEnvironment
+]
+
+{ #category : 'instance creation' }
+PvEnvironmentModel class >> onSystem [
+
+	^ self newEntity: PvSystemEnvironment new
 ]
 
 { #category : 'accessing' }
@@ -38,6 +44,12 @@ PvEnvironmentModel >> iconName [
 PvEnvironmentModel >> name [
 
 	^ self entity name
+]
+
+{ #category : 'factory' }
+PvEnvironmentModel >> newMultiProjectModel [
+
+	^ PvMultiProjectModel newEnvironment: self
 ]
 
 { #category : 'accessing' }

@@ -50,13 +50,13 @@ PvEditorView class >> type [
 ]
 
 { #category : 'private - building' }
-PvEditorView >> buildAdapterWithSpecLayout: aSpecLayout [
+PvEditorView >> buildAdapterWithLayout: aSpecLayout [
 	"This is needed because the process of building (and setting initial state) of a 
 	 text/code presenter fires the event #whenTextChangedDo: and this will mark the editor 
 	 as dirty when it is not, since this is original state."
 
 	^ self updatingWhile: [ 
-		super buildAdapterWithSpecLayout: aSpecLayout ]
+		super buildAdapterWithLayout: aSpecLayout ]
 ]
 
 { #category : 'accessing' }

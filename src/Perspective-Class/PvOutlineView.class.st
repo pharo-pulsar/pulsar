@@ -191,7 +191,7 @@ PvOutlineView >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	
-	TimeProfiler spyOn: [ outlineTreePresenter items: self model children ].
+	outlineTreePresenter items: self model children.
 	
 	self withTileWindowDo: [ :w | 
 		w title: self title.

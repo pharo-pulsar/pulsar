@@ -1,6 +1,6 @@
 Class {
 	#name : 'PvPackageTagModel',
-	#superclass : 'PvEntityModel',
+	#superclass : 'PvBaseModel',
 	#category : 'Perspective-Package-Model',
 	#package : 'Perspective-Package',
 	#tag : 'Model'

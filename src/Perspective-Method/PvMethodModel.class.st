@@ -1,6 +1,6 @@
 Class {
 	#name : 'PvMethodModel',
-	#superclass : 'PvEntityModel',
+	#superclass : 'PvBaseModel',
 	#instVars : [
 		'decorators',
 		'protocol'
@@ -16,6 +16,12 @@ PvMethodModel class >> newMethod: aMethod [
 	^ self new 
 		method: aMethod;
 		yourself
+]
+
+{ #category : 'visiting' }
+PvMethodModel >> accept: aVisitor [
+
+	^ aVisitor visitMethodModel: self
 ]
 
 { #category : 'converting' }

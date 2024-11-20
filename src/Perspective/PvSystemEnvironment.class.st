@@ -15,7 +15,7 @@ PvSystemEnvironment >> hasPackageNamed: aString [
 { #category : 'accessing' }
 PvSystemEnvironment >> name [
 
-	^ 'System'
+	^ 'System Environment'
 ]
 
 { #category : 'private' }

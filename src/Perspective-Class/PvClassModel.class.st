@@ -1,6 +1,6 @@
 Class {
 	#name : 'PvClassModel',
-	#superclass : 'PvEntityModel',
+	#superclass : 'PvBaseModel',
 	#instVars : [
 		'isNew'
 	],
@@ -8,6 +8,12 @@ Class {
 	#package : 'Perspective-Class',
 	#tag : 'Model'
 }
+
+{ #category : 'visiting' }
+PvClassModel >> accept: aVisitor [
+
+	^ aVisitor visitClassModel: aVisitor
+]
 
 { #category : 'converting' }
 PvClassModel >> asClassModel [

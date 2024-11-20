@@ -1,6 +1,6 @@
 Class {
 	#name : 'PvProjectModel',
-	#superclass : 'PvEntityModel',
+	#superclass : 'PvBaseModel',
 	#instVars : [
 		'baselineClass'
 	],
@@ -36,11 +36,10 @@ PvProjectModel >> children [
 			self class environment 
 				at: each className asSymbol
 				ifPresent: [ :aBaselineClass |
-					stream nextPut: (PvEntityTreeNode
+					stream nextPut: (PvTreeNodeModel
 						newName: each name 
 						iconName: 'project'
-						children: (self collectPackageModelsOn: aBaselineClass)) ] ].
-		stream nextPut: self environmentModel ]
+						children: (self collectPackageModelsOn: aBaselineClass)) ] ] ]
 ]
 
 { #category : 'accessing' }

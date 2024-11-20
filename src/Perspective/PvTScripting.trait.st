@@ -22,7 +22,7 @@ PvTScripting >> newCode [
 { #category : 'scripting' }
 PvTScripting >> newEntityTree [
 
-	^ self newTree
+	^ self newEasyTreeListView
 		addStyle: 'stTree';
 		display: [ :aModel | aModel name ];
 		displayIcon: [ :aModel | aModel iconComposite buildOn: self application ];

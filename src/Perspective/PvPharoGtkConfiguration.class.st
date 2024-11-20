@@ -23,17 +23,18 @@ PvPharoGtkConfiguration >> initialize [
 { #category : 'configuring' }
 PvPharoGtkConfiguration >> style [
 
-	^ '
-listview { 
-	font-size: 0.9em;
+	^ '	
+.stList listview, .stTree listview { 
+	font-size: 0.85em;
 } 
-columnview listview row cell {
+.stTree columnview listview row cell {
 	margin: 0px;
 	padding: 2px;
 }
-columnview listview row cell box { 
+.stTree columnview listview row cell box { 
 	border-spacing: 5px;
 }
+.searchBox { background-color: @popover_bg_color; }
 .link { padding: 0px; }
 .cell-link { font-size: smaller; font-weight: normal; color: gray; min-width: 10px; }
 .pvEditorScrollBar { min-height: 150px; }

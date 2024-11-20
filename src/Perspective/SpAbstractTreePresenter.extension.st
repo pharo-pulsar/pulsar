@@ -5,7 +5,7 @@ SpAbstractTreePresenter >> addNavigationShortcuts [
 
 	self ensureInternalActions
 		addShortcutWith: [ :action | action 
-			shortcutKey: KeyboardKey space asKeyCombination | KeyboardKey right asKeyCombination;
+			shortcutKey: KeyboardKey right asKeyCombination | KeyboardKey space asKeyCombination;
 			action: [ self expandPath: self selection selectedPath ] ];
 		addShortcutWith: [ :action | action 
 			shortcutKey: KeyboardKey left asKeyCombination;

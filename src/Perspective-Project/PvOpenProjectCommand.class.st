@@ -36,6 +36,6 @@ PvOpenProjectCommand >> execute [
 		openModalWithParent: self context window.
 		
 	result ifNil: [ ^ self ].
-	context activateProject: result
+	context addProject: result
 		
 ]
