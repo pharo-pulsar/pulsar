@@ -7,15 +7,15 @@ Class {
 		'instanceSidePresenter',
 		'classSidePresenter'
 	],
-	#category : 'Dock-Browser-ClassOutline',
+	#category : 'Dock-Browser-Outline',
 	#package : 'Dock-Browser',
-	#tag : 'ClassOutline'
+	#tag : 'Outline'
 }
 
 { #category : 'defaults' }
 DockClassOutlineView class >> defaultDockPosition [
 
-	^ DockPosition new
+	^ DockPanelPosition new
 		area: DockArea end;
 		yourself
 ]
@@ -51,6 +51,19 @@ DockClassOutlineView >> eventEditorActivated: anAnnouncement [
 	activatedModel accept: self
 ]
 
+{ #category : 'events' }
+DockClassOutlineView >> eventModelChanged: anAnnouncement [
+	| changedModel  outlineClassModel |
+	
+	changedModel := anAnnouncement value.
+	outlineClassModel := changedModel asOutlineClassModel.
+	self model = outlineClassModel ifFalse: [ ^ self ].
+	"update because it may have change"
+	self updatePresenter.
+	"visit after to be able to post-process"
+	changedModel accept: self
+]
+
 { #category : 'initialization' }
 DockClassOutlineView >> initializePresenters [
 
@@ -74,25 +87,36 @@ DockClassOutlineView >> initializeWindow: aWindowPresenter [
 DockClassOutlineView >> registerToEvents [
 	
 	self announcer 
-		when: DockEditorActivated
-		send: #eventEditorActivated: 
-		to: self
+		when: DockEditorActivated send: #eventEditorActivated: to: self;
+		when: DockModelChanged send: #eventModelChanged: to: self
 ]
 
 { #category : 'initialization' }
 DockClassOutlineView >> updatePresenter [
 
 	classSidePresenter model: self model.
-	instanceSidePresenter model: self model
+	instanceSidePresenter model: self model.
+
+	self withPanelWindowDo: [ :w | 
+		w title: self model name ]
 ]
 
 { #category : 'events' }
 DockClassOutlineView >> visitClassModel: aModel [
+
+	{ 
+		instanceSidePresenter. 
+		classSidePresenter } 
+	do: [ :each | 
+		each visitClassModel: aModel ]
 ]
 
 { #category : 'events' }
 DockClassOutlineView >> visitMethodModel: aModel [
 
-	{ instanceSidePresenter. classSidePresenter } do: [ :each | 
+	{ 
+		instanceSidePresenter. 
+		classSidePresenter } 
+	do: [ :each | 
 		each visitMethodModel: aModel ]
 ]

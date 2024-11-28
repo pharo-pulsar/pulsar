@@ -38,8 +38,7 @@ PvClassHierarchyPresenter >> initializePresenters [
 	treePresenter
 		display: [ :aModel | aModel fullName ];
 		displayIcon: [ :aModel | aModel iconComposite buildOn: self application ];
-		children: [ :aModel | aModel children ];
-		addNavigationShortcuts.
+		children: [ :aModel | aModel children ].
 		
 	self addStyle: 'pvNavigation'.
 	self addStyle: 'pvClassHierarchyNavigation'.

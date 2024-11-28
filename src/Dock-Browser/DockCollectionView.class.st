@@ -7,9 +7,9 @@ Class {
 	#classInstVars : [
 		'aDockBrowser'
 	],
-	#category : 'Dock-Browser-Core',
+	#category : 'Dock-Browser-Base',
 	#package : 'Dock-Browser',
-	#tag : 'Core'
+	#tag : 'Base'
 }
 
 { #category : 'initialization' }

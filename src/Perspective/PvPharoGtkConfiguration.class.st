@@ -25,7 +25,7 @@ PvPharoGtkConfiguration >> style [
 
 	^ '	
 .stList listview, .stTree listview { 
-	font-size: 0.85em;
+	font-size: 0.9em;
 } 
 .stTree columnview listview row cell {
 	margin: 0px;

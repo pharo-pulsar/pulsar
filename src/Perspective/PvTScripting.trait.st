@@ -29,7 +29,6 @@ PvTScripting >> newEntityTree [
 		displayColor: [ :aModel | self colorNamed: aModel colorName ];
 		children: [ :aModel | aModel children ];
 		searchMatching: [ :anEntity :pattern | anEntity matches: pattern ];
-		addNavigationShortcuts;
 		yourself
 ]
 

@@ -4,15 +4,15 @@ Class {
 	#instVars : [
 		'toolbarPresenter'
 	],
-	#category : 'Dock-Browser-Core',
+	#category : 'Dock-Browser-Project',
 	#package : 'Dock-Browser',
-	#tag : 'Core'
+	#tag : 'Project'
 }
 
 { #category : 'defaults' }
 DockProjectView class >> defaultDockPosition [
 
-	^ DockPosition new 
+	^ DockPanelPosition new 
 		area: DockArea start;
 		row: 1;
 		yourself

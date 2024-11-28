@@ -1,7 +1,7 @@
 Class {
 	#name : 'DockModelSelected',
 	#superclass : 'DockAnnouncement',
-	#category : 'Dock-Browser-Core',
+	#category : 'Dock-Browser-Announcement',
 	#package : 'Dock-Browser',
-	#tag : 'Core'
+	#tag : 'Announcement'
 }

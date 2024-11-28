@@ -1,9 +1,9 @@
 Class {
 	#name : 'DockClassEditor',
 	#superclass : 'DockEditor',
-	#category : 'Dock-Browser-Core',
+	#category : 'Dock-Browser-Editor',
 	#package : 'Dock-Browser',
-	#tag : 'Core'
+	#tag : 'Editor'
 }
 
 { #category : 'accessing - actions' }
@@ -22,6 +22,12 @@ DockClassEditor >> initializePresenters [
 	self addStyle: 'dockClassEditor'
 ]
 
+{ #category : 'private' }
+DockClassEditor >> originalContent [
+
+	^ self model classDefinitionString
+]
+
 { #category : 'initialization' }
 DockClassEditor >> updatePresenter [
 
@@ -31,5 +37,5 @@ DockClassEditor >> updatePresenter [
 		editorPresenter text: self model classDefinitionString ].
 	
 	"update window title if needed"
-	self withDockableWindowDo: [ :w | w title: self model name ]
+	self withPanelWindowDo: [ :w | w title: self model name ]
 ]

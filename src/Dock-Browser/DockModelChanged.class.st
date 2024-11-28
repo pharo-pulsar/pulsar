@@ -1,5 +1,5 @@
 Class {
-	#name : 'DockModelActivated',
+	#name : 'DockModelChanged',
 	#superclass : 'DockAnnouncement',
 	#category : 'Dock-Browser-Announcement',
 	#package : 'Dock-Browser',

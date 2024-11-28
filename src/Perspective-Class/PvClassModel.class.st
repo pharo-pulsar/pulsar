@@ -57,7 +57,7 @@ PvClassModel >> comment [
 	^ self entity comment
 ]
 
-{ #category : 'compiling' }
+{ #category : 'updating' }
 PvClassModel >> compile: aString notifying: requestor [
 	| resultClass |
 
@@ -172,6 +172,27 @@ PvClassModel >> packageName [
 PvClassModel >> shortName [
 	
 	^ self name contractTo: self class shortSize
+]
+
+{ #category : 'updating' }
+PvClassModel >> updateWith: aString notifying: anInteractionModel [
+	| fluidDefinition |
+	
+	self flag: #TODO. "This is how calypso is doing it... but shouldn't we use 
+	the parse, etc. mechanism?"
+	[
+		fluidDefinition := (self  environmentModel compilerForClass: self entity)
+			source: aString;
+			requestor: anInteractionModel;
+			failBlock: [ ^ false ];
+			logged: true;
+			evaluate ]
+	on: Error do: [ :e | 
+		self halt.
+		^ false ].
+	
+	self entity: fluidDefinition fluidInstall.
+	^ true
 ]
 
 { #category : 'accessing' }

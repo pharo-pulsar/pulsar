@@ -6,15 +6,15 @@ Class {
 	#instVars : [
 		'notificationCenter'
 	],
-	#category : 'Dock-Browser-Core',
+	#category : 'Dock-Browser-Base',
 	#package : 'Dock-Browser',
-	#tag : 'Core'
+	#tag : 'Base'
 }
 
 { #category : 'defaults' }
 DockBaseView class >> defaultDockPosition [
 
-	^ DockPosition new 
+	^ DockPanelPosition new 
 		area: DockArea center;
 		yourself
 ]
@@ -51,7 +51,6 @@ DockBaseView >> newEntityTree [
 		displayColor: [ :aModel | self colorNamed: aModel colorName ];
 		children: [ :aModel | aModel children ];
 		searchMatching: [ :anEntity :pattern | anEntity matches: pattern ];
-		addNavigationShortcuts;
 		yourself
 ]
 

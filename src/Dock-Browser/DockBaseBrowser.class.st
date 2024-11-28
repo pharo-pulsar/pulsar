@@ -3,16 +3,17 @@ Class {
 	#superclass : 'DockDockWindowPresenter',
 	#traits : 'SpTModel',
 	#classTraits : 'SpTModel classTrait',
-	#category : 'Dock-Browser-Core',
+	#category : 'Dock-Browser-Base',
 	#package : 'Dock-Browser',
-	#tag : 'Core'
+	#tag : 'Base'
 }
 
 { #category : 'private' }
 DockBaseBrowser >> addWindow: aWindow [
 
 	aWindow presenter registerToDock: self.
-	super addWindow: aWindow
+	super addWindow: aWindow.
+	aWindow raise
 ]
 
 { #category : 'events' }

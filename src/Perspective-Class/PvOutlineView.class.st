@@ -160,7 +160,6 @@ PvOutlineView >> initializePresenters [
 			beNotExpandable);
 		children: [ :aModel |
 			aModel children ];
-		addNavigationShortcuts;
 		actions: self contextMenuActions
 ]
 

@@ -18,7 +18,8 @@ BaselineOfPerspective >> baseline: spec [
 		spec package: 'Perspective-Project' with: [ spec requires: 'Perspective' ].
 		spec package: 'Perspective-Package' with: [ spec requires: 'Perspective' ].
 		spec package: 'Perspective-Class' with: [ spec requires: 'Perspective' ].
-		spec package: 'Perspective-Method' with: [ spec requires: 'Perspective' ] ]
+		spec package: 'Perspective-Method' with: [ spec requires: 'Perspective' ] ].
+		spec package: 'Dock-Browser' with: [ spec requires: 'Perspective' ]
 ]
 
 { #category : 'external projects' }

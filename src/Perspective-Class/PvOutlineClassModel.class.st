@@ -16,7 +16,7 @@ PvOutlineClassModel >> children [
 	  self collectMethods
 ]
 
-{ #category : 'private' }
+{ #category : 'accessing - collecting' }
 PvOutlineClassModel >> collectClassMethods [
 	
 	^ (self entity classSide methods 
@@ -24,20 +24,43 @@ PvOutlineClassModel >> collectClassMethods [
 		sorted: #name ascending
 ]
 
-{ #category : 'private' }
-PvOutlineClassModel >> collectClassSharedVariables [
-	
-	^ #()
+{ #category : 'accessing - collecting' }
+PvOutlineClassModel >> collectClassMethodsForProtocol: aProtocol [
+
+	^ aProtocol selectors collect: [ :each |
+		PvMethodModel 
+			newEnvironment: self environmentModel 
+			entity: (self entity classSide methodDict at: each) ]
 ]
 
-{ #category : 'private' }
+{ #category : 'accessing - collecting' }
+PvOutlineClassModel >> collectClassProtocols [
+	
+	^ ((self entity classSide protocols 
+		collect: [ :each | PvProtocolModel newEnvironment: self environmentModel entity: each ])
+		sorted: #name ascending)
+		copyWithFirst: (DockAllMethodsVirtualProtocol newEntity: self entity classSide)
+]
+
+{ #category : 'accessing - collecting' }
+PvOutlineClassModel >> collectClassSharedVariables [
+	
+	^ self entity classSide classPool keys
+		collect: [ :each | 
+			PvSharedVariblelModel
+				newEnvironment: self environmentModel 
+				entity: self entity classSide
+				name: each ]
+]
+
+{ #category : 'accessing - collecting' }
 PvOutlineClassModel >> collectClassVariables [
 		
 	^ self entity classSide slots 
 		collect: [ :each | PvSlotModel newEnvironment: self environmentModel entity: each ]
 ]
 
-{ #category : 'private' }
+{ #category : 'accessing - collecting' }
 PvOutlineClassModel >> collectMethods [
 	
 	^ (self entity instanceSide methods 
@@ -45,7 +68,25 @@ PvOutlineClassModel >> collectMethods [
 		sorted: #name ascending
 ]
 
-{ #category : 'private' }
+{ #category : 'accessing - collecting' }
+PvOutlineClassModel >> collectMethodsForProtocol: aProtocol [
+
+	^ aProtocol selectors collect: [ :each | 
+		PvMethodModel 
+			newEnvironment: self environmentModel 
+			entity: (self entity instanceSide methodDict at: each) ]
+]
+
+{ #category : 'accessing - collecting' }
+PvOutlineClassModel >> collectProtocols [
+	
+	^ ((self entity instanceSide protocols 
+		collect: [ :each | PvProtocolModel newEnvironment: self environmentModel entity: each ])
+		sorted: #name ascending)
+		copyWithFirst: (DockAllMethodsVirtualProtocol newEntity: self entity instanceSide)
+]
+
+{ #category : 'accessing - collecting' }
 PvOutlineClassModel >> collectVariables [
 	
 	^ self entity instanceSide slots 

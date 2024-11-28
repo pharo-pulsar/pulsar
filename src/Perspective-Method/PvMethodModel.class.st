@@ -228,6 +228,27 @@ PvMethodModel >> spotterTitle [
 		stream << self windowTitle << ' (' << self methodClass name << ')' ]
 ]
 
+{ #category : 'updating' }
+PvMethodModel >> updateWith: aString notifying: anInteractionModel [
+ 	| newMethod newSelector selectedClass |
+	
+ 	selectedClass := self entity methodClass.
+
+	 newSelector := selectedClass
+		compile: aString
+ 		notifying: anInteractionModel.
+
+ 	newSelector ifNil: [ ^ false ].
+ 	newMethod := selectedClass >> newSelector.
+
+ 	MethodClassifier classify: newMethod.
+
+	"update entity"
+	entity := newMethod.
+
+ 	^ true
+]
+
 { #category : 'accessing' }
 PvMethodModel >> windowIconName [
 

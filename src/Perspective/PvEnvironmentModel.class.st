@@ -28,6 +28,12 @@ PvEnvironmentModel >> children [
 		sorted: #name ascending
 ]
 
+{ #category : 'accessing' }
+PvEnvironmentModel >> compilerForClass: aClass [
+
+	^ aClass compilerClass new
+]
+
 { #category : 'testing' }
 PvEnvironmentModel >> hasPackageNamed: aString [ 
 	

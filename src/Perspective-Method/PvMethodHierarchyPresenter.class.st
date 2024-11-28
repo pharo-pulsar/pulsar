@@ -32,9 +32,8 @@ PvMethodHierarchyPresenter >> initializePresenters [
 	treePresenter
 		display: [ :aModel | aModel fullName ];
 		displayIcon: [ :aModel | aModel iconComposite buildOn: self application ];
-		children: [ :aModel | aModel ifNotNil: [ aModel children ] ];
-		addNavigationShortcuts.
-		
+		children: [ :aModel | aModel ifNotNil: [ aModel children ] ].
+
 	self addStyle: 'pvNavigation'.
 	self addStyle: 'pvMethodHierarchyNavigation'
 ]

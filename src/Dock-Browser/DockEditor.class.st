@@ -5,9 +5,9 @@ Class {
 		'updating',
 		'editorPresenter'
 	],
-	#category : 'Dock-Browser-Core',
+	#category : 'Dock-Browser-Editor',
 	#package : 'Dock-Browser',
-	#tag : 'Core'
+	#tag : 'Editor'
 }
 
 { #category : 'initialization' }
@@ -33,6 +33,18 @@ DockEditor >> doReset [
 
 { #category : 'private - actions' }
 DockEditor >> doSubmit: aString [
+	"process the save of the edited content.
+	 updates the model (which in time will trigger changes in the system). 
+	 We need to inform the UI something has changed to allow him to react"
+	| result |
+	
+	result := self model 
+		updateWith: aString
+		notifying: editorPresenter interactionModel.
+	result ifTrue: [
+		self unmarkDirty.
+		self notificationCenter announce: (DockModelChanged newValue: self model) ].
+	^ result
 ]
 
 { #category : 'private - actions' }
@@ -64,6 +76,17 @@ DockEditor >> initialize [
 ]
 
 { #category : 'initialization' }
+DockEditor >> initializePanelWindow: aWindowPresenter [
+
+	super initializePanelWindow: aWindowPresenter.
+	aWindowPresenter 
+		whenFocusReceivedDo: [ self triggerEditorActivated ];
+		whenSaveDo: [ :ann | ann success: self saveContent ];
+		whenDiscardDo: [ :ann | 
+			"I don't know what to do with this... nothing feels right." ]
+]
+
+{ #category : 'initialization' }
 DockEditor >> initializePresenters [
 
 	(editorPresenter := self newCode)
@@ -80,9 +103,14 @@ DockEditor >> initializePresenters [
 DockEditor >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
-	aWindowPresenter title: self model name.
-	aWindowPresenter whenPresentedDo: [
-		self triggerEditorActivated ]
+	aWindowPresenter title: self model name
+]
+
+{ #category : 'testing' }
+DockEditor >> isDirty [
+
+	self withPanelWindowDo: [ :aWindow | ^ aWindow isModified ].
+	^ false
 ]
 
 { #category : 'private - updating' }
@@ -94,7 +122,23 @@ DockEditor >> isUpdating [
 { #category : 'private - updating' }
 DockEditor >> markDirty [
 
-	self withDockableWindowDo: [ :w | w modified: true ]
+	self withPanelWindowDo: [ :w | w modified: true ]
+]
+
+{ #category : 'private' }
+DockEditor >> originalContent [
+	"used to compare when deciding if an editor is dirty or not"
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'private - actions' }
+DockEditor >> saveContent [
+	"save contents and answer a boolean if it is saved (usually after the user attempting 
+	 to close the editor with modifications inside), since this is used to validate the 
+	 close, it needs to return a boolean indicating it can be done or not."
+	
+	^ self doSubmit: editorPresenter text
 ]
 
 { #category : 'private - updating' }
@@ -102,6 +146,9 @@ DockEditor >> textChangedFrom: oldText to: newText [
 
 	self isUpdating ifTrue: [ ^ self ].
 	oldText = newText ifTrue: [ ^ self ].
+	(self isDirty 
+		and: [ newText = self originalContent ])
+		ifTrue: [ ^ self unmarkDirty ].
 	
 	self markDirty
 ]
@@ -110,6 +157,12 @@ DockEditor >> textChangedFrom: oldText to: newText [
 DockEditor >> triggerEditorActivated [
 
 	self notificationCenter announce: (DockEditorActivated newValue: self)
+]
+
+{ #category : 'private - updating' }
+DockEditor >> unmarkDirty [
+
+	self withPanelWindowDo: [ :w | w modified: false ]
 ]
 
 { #category : 'private - updating' }

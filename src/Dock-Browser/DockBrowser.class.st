@@ -7,9 +7,9 @@ Class {
 	#classVars : [
 		'LastWindowSize'
 	],
-	#category : 'Dock-Browser-Core',
+	#category : 'Dock-Browser-Base',
 	#package : 'Dock-Browser',
-	#tag : 'Core'
+	#tag : 'Base'
 }
 
 { #category : 'events' }
@@ -17,6 +17,14 @@ DockBrowser >> eventModelActivated: anAnnouncement [
 	
 	
 	self maybeDockView: anAnnouncement value
+]
+
+{ #category : 'as yet unclassified' }
+DockBrowser >> findEditorContaining: aViewModel [
+
+	^ 	self presenters 
+		detect: [ :each | each presenter  model = aViewModel ]
+		ifNone: [ nil ]
 ]
 
 { #category : 'initialization' }
@@ -65,10 +73,14 @@ DockBrowser >> maybeDockView: aViewModel [
 			if it can have multiple views: open it.
 			if it is single view: select it
 	 otherwise ignore it"
-	
 	| editorPresenter |
 	
 	aViewModel hasDockEditor ifFalse: [ ^ self ].
+	
+	(self findEditorContaining: aViewModel) ifNotNil: [ :panelPresenter | 
+		panelPresenter 
+			raise; 
+			takeKeyboardFocus ].
 
 	editorPresenter := self 
 		instantiate: aViewModel dockEditorClass

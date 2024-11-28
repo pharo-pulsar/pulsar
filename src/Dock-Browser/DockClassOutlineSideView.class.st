@@ -5,16 +5,20 @@ Class {
 	#classTraits : 'SpTModel classTrait',
 	#instVars : [
 		'listPresenter',
-		'variablesListPresenter'
+		'variablesListPresenter',
+		'selectorToolbarPresenter',
+		'protocolChooserPresenter'
 	],
-	#category : 'Dock-Browser-ClassOutline',
+	#category : 'Dock-Browser-Outline',
 	#package : 'Dock-Browser',
-	#tag : 'ClassOutline'
+	#tag : 'Outline'
 }
 
 { #category : 'initialization' }
 DockClassOutlineSideView >> connectPresenters [
 
+	protocolChooserPresenter 
+		transmitTo: listPresenter transform: [ :aSelection | self methodsFor: aSelection selectedItem ].
 	listPresenter outputActivationPort 
 		transmitDo: [ :anEntity | self owner triggerActivateEntity: anEntity ]
 ]
@@ -25,7 +29,13 @@ DockClassOutlineSideView >> defaultLayout [
 	^ SpPanedLayout newVertical
 		positionOfSlider: 200;
 		add: variablesListPresenter;
-		add: listPresenter;
+		add: (SpBoxLayout newVertical 
+			add: (SpBoxLayout newHorizontal
+					add: protocolChooserPresenter;
+					yourself) 
+				expand: false;
+			add: listPresenter;
+			yourself);
 		yourself
 ]
 
@@ -37,10 +47,34 @@ DockClassOutlineSideView >> initializePresenters [
 		display: #name;
 		yourself.
 		
+	selectorToolbarPresenter := self newPresenter
+		layout: SpBoxLayout newHorizontal;
+		yourself.
+		
+	protocolChooserPresenter := self newDropDown
+		addStyle: 'stDropList';
+		display: #name;
+		yourself.
+		
 	listPresenter := self newEasyListView 
 		addStyle: 'stList';
 		display: #name;
-		yourself.	
+		searchMatching: [ :aModel :aString | 
+			aModel name asLowercase beginsWith: aString asLowercase ];
+		yourself
+]
+
+{ #category : 'private' }
+DockClassOutlineSideView >> methodsFor: aProtocol [
+
+	self subclassResponsibility
+]
+
+{ #category : 'visiting' }
+DockClassOutlineSideView >> visitClassModel: aModel [
+
+	listPresenter unselectAll.
+	variablesListPresenter unselectAll
 ]
 
 { #category : 'visiting' }

@@ -4,9 +4,9 @@ Class {
 	#instVars : [
 		'value'
 	],
-	#category : 'Dock-Browser-Core',
+	#category : 'Dock-Browser-Announcement',
 	#package : 'Dock-Browser',
-	#tag : 'Core'
+	#tag : 'Announcement'
 }
 
 { #category : 'instance creation' }

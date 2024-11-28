@@ -1,10 +1,17 @@
 Class {
 	#name : 'DockClassOutlineInstanceSideView',
 	#superclass : 'DockClassOutlineSideView',
-	#category : 'Dock-Browser-ClassOutline',
+	#category : 'Dock-Browser-Outline',
 	#package : 'Dock-Browser',
-	#tag : 'ClassOutline'
+	#tag : 'Outline'
 }
+
+{ #category : 'private' }
+DockClassOutlineInstanceSideView >> methodsFor: aProtocol [
+
+	aProtocol ifNil: [ ^ #() ].
+	^ self model collectMethodsForProtocol: aProtocol
+]
 
 { #category : 'initialization' }
 DockClassOutlineInstanceSideView >> updatePresenter [
@@ -12,6 +19,7 @@ DockClassOutlineInstanceSideView >> updatePresenter [
 	self model ifNil: [ ^ self ].
 	
 	variablesListPresenter items: self model collectVariables.
+	protocolChooserPresenter items: self model collectProtocols.
 	listPresenter items: self model collectMethods
 ]
 
