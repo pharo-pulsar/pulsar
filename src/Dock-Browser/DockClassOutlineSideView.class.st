@@ -39,6 +39,12 @@ DockClassOutlineSideView >> defaultLayout [
 		yourself
 ]
 
+{ #category : 'testing' }
+DockClassOutlineSideView >> includesModel: aModel [
+
+	^ listPresenter items includes: aModel
+]
+
 { #category : 'initialization' }
 DockClassOutlineSideView >> initializePresenters [
 

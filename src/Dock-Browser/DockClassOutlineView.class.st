@@ -5,7 +5,8 @@ Class {
 		'toolbarPresenter',
 		'structureTreePresenter',
 		'instanceSidePresenter',
-		'classSidePresenter'
+		'classSidePresenter',
+		'tabLayout'
 	],
 	#category : 'Dock-Browser-Outline',
 	#package : 'Dock-Browser',
@@ -31,7 +32,7 @@ DockClassOutlineView >> defaultLayout [
 
 	^ SpBoxLayout newVertical
 		add: toolbarPresenter expand: false;
-		add: (SpTabLayout new 
+		add: ((tabLayout := SpTabLayout new)
 			add: instanceSidePresenter label: 'Instance';
 			add: classSidePresenter label: 'Class';
 			yourself);
@@ -117,6 +118,8 @@ DockClassOutlineView >> visitMethodModel: aModel [
 	{ 
 		instanceSidePresenter. 
 		classSidePresenter } 
-	do: [ :each | 
+	do: [ :each |
+		(each includesModel: aModel) 
+			ifTrue: [ tabLayout select: each ].
 		each visitMethodModel: aModel ]
 ]
