@@ -4,9 +4,9 @@ Class {
 	#instVars : [
 		'name'
 	],
-	#category : 'Dock-Browser-Base',
+	#category : 'Dock-Browser-Application',
 	#package : 'Dock-Browser',
-	#tag : 'Base'
+	#tag : 'Application'
 }
 
 { #category : 'accessing' }
@@ -33,7 +33,7 @@ DockApplication >> isShowingLineNumbers [
 { #category : 'initialization' }
 DockApplication >> newConfiguration [
 
-	^ PvPharoGtkConfiguration new
+	^ DockGtkConfiguration new
 		applicationId: 'org.pharo.Dock';
 		applicationClass: PanelApplication;
 		yourself
