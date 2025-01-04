@@ -18,5 +18,5 @@ PvRemovePackageCommand >> defineAction [
 { #category : 'executing' }
 PvRemovePackageCommand >> execute [
 	
-	self halt
+	self context doRemoveSelectedEntity
 ]

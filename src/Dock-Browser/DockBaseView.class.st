@@ -6,9 +6,9 @@ Class {
 	#instVars : [
 		'notificationCenter'
 	],
-	#category : 'Dock-Browser-Base',
+	#category : 'Dock-Browser-View-Base',
 	#package : 'Dock-Browser',
-	#tag : 'Base'
+	#tag : 'View-Base'
 }
 
 { #category : 'defaults' }
@@ -77,12 +77,12 @@ DockBaseView >> registerToEvents [
 DockBaseView >> triggerActivateEntity: anEntity [
 
 	anEntity ifNil: [ ^ self ].
-	self notificationCenter announce: (DockModelActivated newValue: anEntity)
+	self notificationCenter announce: (DockModelActivated newValue: anEntity realModel)
 ]
 
 { #category : 'private - announcing' }
 DockBaseView >> triggerSelectEntity: anEntity [
 
 	anEntity ifNil: [ ^ self ].
-	self notificationCenter announce: (DockModelSelected newValue: anEntity)
+	self notificationCenter announce: (DockModelSelected newValue: anEntity realModel)
 ]

@@ -1,5 +1,5 @@
 Class {
-	#name : 'PvSharedVariblelModel',
+	#name : 'PvSharedVaribleModel',
 	#superclass : 'PvBaseModel',
 	#instVars : [
 		'name'
@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : 'instance creation' }
-PvSharedVariblelModel class >> newEnvironment: anEnvironmentModel entity: anObject name: aName [
+PvSharedVaribleModel class >> newEnvironment: anEnvironmentModel entity: anObject name: aName [
 
 	^ self basicNew 
 		environmentModel: anEnvironmentModel;
@@ -21,19 +21,19 @@ PvSharedVariblelModel class >> newEnvironment: anEnvironmentModel entity: anObje
 ]
 
 { #category : 'accessing' }
-PvSharedVariblelModel >> iconName [
+PvSharedVaribleModel >> iconName [
 
 	^ nil
 ]
 
 { #category : 'accessing' }
-PvSharedVariblelModel >> name [
+PvSharedVaribleModel >> name [
 
 	^ name
 ]
 
 { #category : 'accessing' }
-PvSharedVariblelModel >> name: aName [
+PvSharedVaribleModel >> name: aName [
 
 	name := aName
 ]

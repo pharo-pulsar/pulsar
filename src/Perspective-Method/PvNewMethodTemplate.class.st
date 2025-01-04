@@ -2,18 +2,60 @@ Class {
 	#name : 'PvNewMethodTemplate',
 	#superclass : 'Object',
 	#instVars : [
+		'environmentModel',
 		'parentModel',
-		'protocol'
+		'protocol',
+		'isClassSide'
 	],
 	#category : 'Perspective-Method-Model',
 	#package : 'Perspective-Method',
 	#tag : 'Model'
 }
 
+{ #category : 'instance creation' }
+PvNewMethodTemplate class >> newEnvironmentModel: anEnvironmentModel parent: aClassModel [
+
+	^ self new 
+		environmentModel: anEnvironmentModel; 
+		parentModel: aClassModel;
+		yourself
+]
+
+{ #category : 'accessing' }
+PvNewMethodTemplate >> beForClassSide [
+
+	isClassSide := true
+]
+
 { #category : 'accessing' }
 PvNewMethodTemplate >> category [
 
 	^ #'as yet unclassified'
+]
+
+{ #category : 'accessing' }
+PvNewMethodTemplate >> environmentModel [
+	
+	^ environmentModel
+]
+
+{ #category : 'accessing' }
+PvNewMethodTemplate >> environmentModel: anEnvironmentModel [
+	
+	environmentModel := anEnvironmentModel
+]
+
+{ #category : 'initialization' }
+PvNewMethodTemplate >> initialize [
+
+	super initialize.
+	isClassSide := false
+]
+
+{ #category : 'testing' }
+PvNewMethodTemplate >> isClassSide [
+
+	^ isClassSide
 ]
 
 { #category : 'testing' }
@@ -30,8 +72,10 @@ PvNewMethodTemplate >> isTestMethod [
 
 { #category : 'accessing' }
 PvNewMethodTemplate >> methodClass [
-
-	^ self parentModel entity
+	
+	^ self isClassSide 
+		ifTrue: [ self parentModel classSide ]
+		ifFalse: [ self parentModel instanceSide ]
 ]
 
 { #category : 'accessing' }
@@ -49,7 +93,7 @@ PvNewMethodTemplate >> parentModel: anObject [
 { #category : 'accessing' }
 PvNewMethodTemplate >> protocol [
 	
-	^ protocol ifNil: [ protocol := Protocol  unclassified ]
+	^ protocol ifNil: [ protocol := Protocol new ]
 ]
 
 { #category : 'accessing' }

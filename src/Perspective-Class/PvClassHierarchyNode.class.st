@@ -81,9 +81,33 @@ PvClassHierarchyNode >> hasParent [
 ]
 
 { #category : 'accessing' }
+PvClassHierarchyNode >> iconComposite [
+
+	^ self element iconComposite
+]
+
+{ #category : 'accessing' }
 PvClassHierarchyNode >> iconName [
 	
 	^ self element iconName
+]
+
+{ #category : 'testing' }
+PvClassHierarchyNode >> isPackageOrTag [
+	
+	^ self element isPackageOrTag
+]
+
+{ #category : 'testing' }
+PvClassHierarchyNode >> isProject [
+	
+	^ self element isProject
+]
+
+{ #category : 'testing' }
+PvClassHierarchyNode >> matches: aString [
+	
+	^ self element matches: aString
 ]
 
 { #category : 'accessing' }

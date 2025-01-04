@@ -25,18 +25,18 @@ PvClassHierarchyNavigationCommand >> defineAction [
 PvClassHierarchyNavigationCommand >> execute [
 	| popover navigation |
 	
-	navigation := self context 
-		instantiate: PvClassHierarchyPresenter 
-		on: self model.
-	navigation outputActivationPort 
-		transmitDo: [ :aModel | 
-			self context withPerspectiveDo: [ :aPerspective | 
-				aPerspective activateClass: aModel entity ].
-			popover dismiss ].
+	popover := self context newPopover.
 	
-	(popover := self context newPopover)
+	navigation := (self context 
+		instantiate: PvClassHierarchyPresenter on: self model)
+		transmitDo: [ :aModel |
+			self context triggerActivateEntity: aModel.
+			popover dismiss ];
+		yourself.
+	
+	popover
 		presenter: navigation;
 		relativeTo: self specDecorator presenter;
 		bePositionBottom;
-		popup
+		popupModal
 ]

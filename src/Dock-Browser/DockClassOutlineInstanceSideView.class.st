@@ -1,26 +1,36 @@
 Class {
 	#name : 'DockClassOutlineInstanceSideView',
 	#superclass : 'DockClassOutlineSideView',
-	#category : 'Dock-Browser-Outline',
+	#category : 'Dock-Browser-View-Outline',
 	#package : 'Dock-Browser',
-	#tag : 'Outline'
+	#tag : 'View-Outline'
 }
 
 { #category : 'private' }
-DockClassOutlineInstanceSideView >> methodsFor: aProtocol [
+DockClassOutlineInstanceSideView >> collectProtocols [
 
-	aProtocol ifNil: [ ^ #() ].
-	^ self model collectMethodsForProtocol: aProtocol
+	^ self model collectProtocols
 ]
 
-{ #category : 'initialization' }
-DockClassOutlineInstanceSideView >> updatePresenter [
+{ #category : 'private' }
+DockClassOutlineInstanceSideView >> collectVariables [
 
-	self model ifNil: [ ^ self ].
-	
-	variablesListPresenter items: self model collectVariables.
-	protocolChooserPresenter items: self model collectProtocols.
-	listPresenter items: self model collectMethods
+	^ self model collectVariables
+]
+
+{ #category : 'private' }
+DockClassOutlineInstanceSideView >> methodsForProtocol: aProtocolModel [
+
+	aProtocolModel ifNil: [ ^ #() ].
+	^ self model collectMethodsForProtocol: aProtocolModel
+]
+
+{ #category : 'private' }
+DockClassOutlineInstanceSideView >> newMethodModelForNewMethod [
+
+	^ PvMethodModel
+		newEnvironment: self model environmentModel 
+		beNewMethodWithParent: self model
 ]
 
 { #category : 'visiting' }

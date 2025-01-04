@@ -29,6 +29,20 @@ DockAllMethodsVirtualProtocol >> entity: aClass [
 	entity := aClass
 ]
 
+{ #category : 'accessing - ui' }
+DockAllMethodsVirtualProtocol >> iconComposite [
+	
+	^ PvCompositeIcon new 
+		name: self iconName;
+		yourself
+]
+
+{ #category : 'accessing' }
+DockAllMethodsVirtualProtocol >> iconName [
+
+	^ #protocolVirtual
+]
+
 { #category : 'accessing' }
 DockAllMethodsVirtualProtocol >> methodSelectors [
 
@@ -38,7 +52,13 @@ DockAllMethodsVirtualProtocol >> methodSelectors [
 { #category : 'accessing' }
 DockAllMethodsVirtualProtocol >> name [
 
-	^ ''
+	^ '(All)'
+]
+
+{ #category : 'accessing' }
+DockAllMethodsVirtualProtocol >> numberOfMethods [
+	
+	^ self selectors size
 ]
 
 { #category : 'accessing' }

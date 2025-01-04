@@ -96,6 +96,12 @@ PvProjectModel >> iconName [
 	^ 'project'
 ]
 
+{ #category : 'testing' }
+PvProjectModel >> isProject [
+
+	^ true
+]
+
 { #category : 'accessing' }
 PvProjectModel >> name [
 

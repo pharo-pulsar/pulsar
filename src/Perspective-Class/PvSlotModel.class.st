@@ -12,6 +12,12 @@ PvSlotModel >> iconName [
 	^ 'variable'
 ]
 
+{ #category : 'testing' }
+PvSlotModel >> isIncludedIn: aMethodModel [
+
+	^ aMethodModel entity variableNodes anySatisfy: [ :each | each name = self name ]
+]
+
 { #category : 'accessing' }
 PvSlotModel >> name [
 

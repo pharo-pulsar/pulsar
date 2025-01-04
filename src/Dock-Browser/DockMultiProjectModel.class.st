@@ -1,22 +1,22 @@
 Class {
-	#name : 'PvMultiProjectModel',
+	#name : 'DockMultiProjectModel',
 	#superclass : 'PvBaseModel',
 	#instVars : [
 		'projectModels'
 	],
-	#category : 'Dock-Browser-Base',
+	#category : 'Dock-Browser-Model',
 	#package : 'Dock-Browser',
-	#tag : 'Base'
+	#tag : 'Model'
 }
 
 { #category : 'instance creation' }
-PvMultiProjectModel class >> newEnvironment: anEnvironmentModel [
+DockMultiProjectModel class >> newEnvironment: anEnvironmentModel [
 
 	^ self newEnvironment: anEnvironmentModel entity: nil
 ]
 
 { #category : 'actions' }
-PvMultiProjectModel >> addProject: aBaselineClass [
+DockMultiProjectModel >> addProject: aBaselineClass [
 
 	projectModels := projectModels copyWith: (PvProjectModel 
 		newEntity: aBaselineClass 
@@ -24,20 +24,20 @@ PvMultiProjectModel >> addProject: aBaselineClass [
 ]
 
 { #category : 'accessing' }
-PvMultiProjectModel >> children [
+DockMultiProjectModel >> children [
 
 	^ projectModels
 ]
 
 { #category : 'initialization' }
-PvMultiProjectModel >> initialize [
+DockMultiProjectModel >> initialize [
 
 	super initialize.
 	projectModels := #()
 ]
 
 { #category : 'accessing' }
-PvMultiProjectModel >> name [
+DockMultiProjectModel >> name [
 
 	^ 'Projects'
 ]

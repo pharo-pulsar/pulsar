@@ -15,6 +15,24 @@ PvNewClassTemplate >> classDefinitionString [
 	^ self parentModel classDefinitionString
 ]
 
+{ #category : 'class - compatibility' }
+PvNewClassTemplate >> classSide [
+
+	^ self class
+]
+
+{ #category : 'accessing' }
+PvNewClassTemplate >> compilerClass [
+	
+	^ Smalltalk compilerClass
+]
+
+{ #category : 'class - compatibility' }
+PvNewClassTemplate >> instanceSide [
+
+	^ self class
+]
+
 { #category : 'accessing' }
 PvNewClassTemplate >> name [
 	

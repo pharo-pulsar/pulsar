@@ -3,9 +3,9 @@ Class {
 	#superclass : 'DockDockWindowPresenter',
 	#traits : 'SpTModel',
 	#classTraits : 'SpTModel classTrait',
-	#category : 'Dock-Browser-Base',
+	#category : 'Dock-Browser-View-Browser',
 	#package : 'Dock-Browser',
-	#tag : 'Base'
+	#tag : 'View-Browser'
 }
 
 { #category : 'private' }
@@ -49,4 +49,10 @@ DockBaseBrowser >> resendAnnouncement: anAnnouncement [
 
 	self presentersDo: [ :aWindowPresenter |
 		aWindowPresenter presenter announce: anAnnouncement ]
+]
+
+{ #category : 'accessing' }
+DockBaseBrowser >> systemNavigation [
+
+	^ DockSystemNavigation newWindow: self
 ]

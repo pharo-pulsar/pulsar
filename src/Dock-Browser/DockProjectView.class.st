@@ -4,9 +4,9 @@ Class {
 	#instVars : [
 		'toolbarPresenter'
 	],
-	#category : 'Dock-Browser-Project',
+	#category : 'Dock-Browser-View-Project',
 	#package : 'Dock-Browser',
-	#tag : 'Project'
+	#tag : 'View-Project'
 }
 
 { #category : 'defaults' }
@@ -61,7 +61,7 @@ DockProjectView class >> defineActionsOn: aBuilder [
 		registerGroup: #actionNew with: { 
 			PvNewPackageCommand new.
 			PvNewPackageTagCommand new.
-			PvNewClassCommand new.
+			DockNewClassCommand new.
 			PvNewTraitCommand new
 		};
 		registerGroup: #action with: { 
@@ -76,6 +76,28 @@ DockProjectView >> addProject: aBaselineClass [
 	self model addProject: aBaselineClass.
 	self updatePresenter.
 	listPresenter selectPath: { self model children size }
+]
+
+{ #category : 'private' }
+DockProjectView >> closestEntityInPathMatching: aBlock [
+
+	^ self selectedEntitiesInPath
+		ifNotEmpty: [ :entities | entities reversed detect: aBlock ] 
+		ifEmpty: [ nil ]
+]
+
+{ #category : 'private' }
+DockProjectView >> closestPathInPathMatching: aBlock [
+	| selectedEntities  |
+
+	selectedEntities := self selectedEntitiesInPath.
+	selectedEntities ifNil: [ ^ nil ].
+	
+	selectedEntities withIndexDo: [ :each : index | 
+		(aBlock value: each)
+			ifTrue: [ ^ selectedEntities copyFrom: 1 to: index ] ].
+
+	^ nil
 ]
 
 { #category : 'api - focus' }
@@ -93,21 +115,107 @@ DockProjectView >> defaultLayout [
 		yourself
 ]
 
+{ #category : 'private - actions' }
+DockProjectView >> doNewPackage [
+	| packageName project package |
+	
+	packageName := self application newRequest 
+		title: 'New package';
+		label: 'Package name';
+		openModalWithParent: self window.
+	packageName ifNil: [ ^ self ].
+	
+	project := self closestEntityInPathMatching: [ :each | each isProject ].
+	project ifNil: [ ^ self ].
+	
+	package := project addPackageNamed: packageName.
+	self updatePresenter.
+	listPresenter 
+		selectPathByItems: { project. package }
+		scrollToSelection: true
+]
+
+{ #category : 'private - actions' }
+DockProjectView >> doNewPackageTag [
+	| packageName parents project package packageTag |
+	
+	packageName := self application newRequest 
+		title: 'New tag';
+		label: 'Tag name';
+		openModalWithParent: self window.
+	packageName ifNil: [ ^ self ].
+	
+	parents := self closestPathInPathMatching: [ :each | each isPackage ].
+	parents ifNil: [ ^ self ].
+	
+	project := parents first.
+	package := parents second.
+	
+	packageTag := package addPackageTagNamed: packageName.
+	self updatePresenter.
+	listPresenter 
+		selectPathByItems: { project. package. packageTag }
+		scrollToSelection: true
+]
+
+{ #category : 'private - actions' }
+DockProjectView >> doRemoveSelectedEntity [
+	"this can be anything on the tree: 
+		- project (should I remove from image or just from dock?)
+		- package (should I remove from image or just from project?)
+		- tag (this one is easy)" 
+
+	self halt
+]
+
+{ #category : 'private - actions' }
+DockProjectView >> doRequestNewClass [
+	| parent |
+
+	parent := self closestEntityInPathMatching: [ :each | each isPackageOrTag ].
+	parent ifNil: [ ^ self ].
+	
+	self triggerActivateEntity: (PvClassModel
+		newEnvironment: self model environmentModel 
+		beNewClassWithParent: parent)
+]
+
 { #category : 'initialization' }
 DockProjectView >> initializePresenters [
 
-	toolbarPresenter := self newDockToolbar 
-		fillWith: (self actions actionsFor: #project);
-		yourself.
+	toolbarPresenter := self instantiate: DockToolbarPresenter.
+	toolbarPresenter actions: (self actions actionsFor: #project).	
+	toolbarPresenter addPresenter: (self newMenuButton 
+		addStyle: 'flat';
+		icon: (self iconNamed: 'menu');
+		actions: (self actions actionsFor: #actionNew);
+		yourself).
 
 	listPresenter := self newEntityTree.
-	listPresenter addStyle: 'dockProjectTree'
+	listPresenter addStyle: 'dockProjectTree'.
+	
+	listPresenter addShortcutWith: [ :act | act 
+		shortcutKey: Character arrowRight alt;
+		action: [ self maybeOpenFlyView ] ]
 ]
 
 { #category : 'initialization' }
 DockProjectView >> initializeWindow: aWindowPresenter [
 
-	aWindowPresenter title: 'Project'	
+	aWindowPresenter title: 'Project'
+]
+
+{ #category : 'private - actions' }
+DockProjectView >> maybeOpenFlyView [
+
+	self halt
+]
+
+{ #category : 'private' }
+DockProjectView >> selectedEntitiesInPath [
+
+	^ listPresenter selection selectedItemsInPath
+
 ]
 
 { #category : 'private' }

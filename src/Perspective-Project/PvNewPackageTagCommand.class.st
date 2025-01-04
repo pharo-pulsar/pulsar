@@ -18,5 +18,5 @@ PvNewPackageTagCommand >> defineAction [
 { #category : 'executing' }
 PvNewPackageTagCommand >> execute [
 	
-	context doNewPackage
+	context doNewPackageTag
 ]

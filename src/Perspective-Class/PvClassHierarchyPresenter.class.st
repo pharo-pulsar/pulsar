@@ -41,7 +41,7 @@ PvClassHierarchyPresenter >> initializePresenters [
 		children: [ :aModel | aModel children ].
 		
 	self addStyle: 'pvNavigation'.
-	self addStyle: 'pvClassHierarchyNavigation'.
+	self addStyle: 'pvClassHierarchyNavigation'
 ]
 
 { #category : 'transmission' }

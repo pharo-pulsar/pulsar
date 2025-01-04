@@ -1,27 +1,27 @@
 Class {
-	#name : 'PvPharoGtkConfiguration',
+	#name : 'DockGtkConfiguration',
 	#superclass : 'LnPharoGtkConfiguration',
-	#category : 'Perspective-Application',
-	#package : 'Perspective',
+	#category : 'Dock-Browser-Application',
+	#package : 'Dock-Browser',
 	#tag : 'Application'
 }
 
 { #category : 'configuring' }
-PvPharoGtkConfiguration >> configureGeneral: anApplication [
+DockGtkConfiguration >> configureGeneral: anApplication [
 
 	super configureGeneral: anApplication.
 	self addCSSProviderFromString: self style
 ]
 
 { #category : 'initialization' }
-PvPharoGtkConfiguration >> initialize [
+DockGtkConfiguration >> initialize [
 
 	super initialize.
 	self theme: LnDarkTheme new
 ]
 
-{ #category : 'configuring' }
-PvPharoGtkConfiguration >> style [
+{ #category : 'accessing' }
+DockGtkConfiguration >> style [
 
 	^ '	
 .stList listview, .stTree listview { 
@@ -40,7 +40,7 @@ PvPharoGtkConfiguration >> style [
 .pvEditorScrollBar { min-height: 150px; }
 .pvNavigation { min-width: 450px; min-height: 350px; padding: 5px; }
 button.pvProtocol { font-weight: normal; }
-.pvProtocolChooser { min-width: 200px; min-height: 280px; }
+.pvProtocolChooser { min-width: 250px; min-height: 280px; }
 .stCode { font-size: 0.95em; }
 '
 ]

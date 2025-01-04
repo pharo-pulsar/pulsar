@@ -20,7 +20,7 @@ PvClassHierarchyBuilder class >> buildFromNodes: aCollection [
 { #category : 'building' }
 PvClassHierarchyBuilder >> buildFrom: aCollection [
 
-	^ self buildFromNodes: (aCollection collect: [ :each | StBrowserHierarchyNode for: each ])
+	^ self buildFromNodes: (aCollection collect: [ :each | PvClassHierarchyNode for: each ])
 ]
 
 { #category : 'private' }

@@ -4,12 +4,9 @@ Class {
 	#instVars : [
 		'listPresenter'
 	],
-	#classInstVars : [
-		'aDockBrowser'
-	],
-	#category : 'Dock-Browser-Base',
+	#category : 'Dock-Browser-View-Base',
 	#package : 'Dock-Browser',
-	#tag : 'Base'
+	#tag : 'View-Base'
 }
 
 { #category : 'initialization' }

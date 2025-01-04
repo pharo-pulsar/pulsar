@@ -30,59 +30,67 @@ PvAliasedVSCodeIconProvider >> iconNamed: aName ifAbsent: aBlock [
 PvAliasedVSCodeIconProvider >> initialize [
 
 	super initialize.
-	self addAliasesFromPairs: { 				
-		'add'.							'add'.					
+	self addAliasesFromPairs: {
+		'add'.						'add'.					
 		"#addFolder"
 		'groupByMethod'. 			'extensions'.			"browser (extensions)"
-		'library'. 					'library'.				"browser (system deps)"
-		'class'. 						'symbol-class'.			"type"
-		'classAbstract'. 			'symbol-class'.			"type"
-		'method'. 					'symbol-method'.		"type"
-		'openProject'. 				'folder-opened'.		"browser (open project)"
+		'library'.					'library'.				"browser (system deps)"
+		'class'.						'symbol-class'.			"type"
+		'classAbstract'.				'symbol-class'.			"type"
+		'method'. 					'symbol-method'.			"type"
+		'openProject'. 				'folder-opened'.			"browser (open project)"
 		"#overlayClass.
 		#overlayMethod.
 		#overlayTrait.
 		#overlayVariable."
 		'project'. 					'project'.				"browser (project/baseline)"
-		'tag'.							'tag'.						"browser (packageTag)"
+		'tag'.						'tag'.					"browser (packageTag)"
 		"#unknownJdk."
-		'view-more-symbolic'. 	'more'.
+		'view-more-symbolic'. 		'more'.
 		"blank"
 		"classAbstract"
-		'glamorousGo'.				'run'.						"playground (go)"
-		'glamorousMore'.			'file-submodule'.		"playground (pages)"
+		'glamorousGo'.				'run'.					"playground (go)"
+		'glamorousMore'.				'file-submodule'.		"playground (pages)"
 		'glamorousSaveToUrl'.		'cloud-upload'.			"playground (upload to the web)"
 		'glamorousTable'. 			'table'.					"playground (bindings)"
 		'package'.					'package'.				"browser-> package"
 		'smallForward'.				'arrow-right'.
-		'smallHierarchyBrowser'.	'type-hierarchy'.		"browser -> navigation hierarchy"
+		'smallHierarchyBrowser'.		'type-hierarchy'.		"browser -> navigation hierarchy"
 		'trait'.						'symbol-trait'.			"type"
-		'workspace'.					'window'.					"playground"
-		'announcement'.				'symbol-announcement'. "type"
-		'arrowDown'.					'arrow-small-down'.	"browser-> overrides"
+		'workspace'.					'lightbulb'. 			"'beaker'."	"playground"
+		'transcript'. 		 		'terminal'.
+		'announcement'.				'symbol-announcement'. 	"type"
+		'arrowDown'.					'arrow-small-down'.		"browser-> overrides"
 		'arrowUp'.					'arrow-small-up'.		"browser-> overriding"
 		'flagIcon'.					'bookmark'.				"browser (to show there are flags)"
-		'smallWindow'.				'symbol-window'.		"type (presenter...)" 
+		'smallWindow'.				'symbol-window'.			"type (presenter...)" 
 		'morph'.						'symbol-morph'.			"type"
 		'exception'.					'symbol-event'.			"type"
 		'variable'.					'symbol-variable'.		"type"
-		'smallInspectIt'.			'eye'.						"inspector..."
-		'string'.						'symbol-string'.		"type"
+		'smallInspectIt'.			'eye'.					"inspector..."
+		'string'.					'symbol-string'.			"type"
 		'magnitude'.					'symbol-numeric'.		"type"
-		'collection'.				'symbol-namespace'.	"type"
+		'collection'.				'symbol-namespace'.		"type"
 		'glamorousClose'. 			'close'.   				"inspector"
 		'history'.					'history'. 				"playground"
 		'smallDelete'. 				'trash'.					"playground..."
 		'smallObjects'.				'beaker'.  				"inspector"
-		'glamorousRefresh'. 		'refresh'. 				"inspector"
-		'smallSystemBrowser'. 	'browser'. 				"inspector"
+		'glamorousRefresh'. 			'refresh'. 				"inspector"
+		'smallSystemBrowser'. 		'browser'. 				"inspector"
 		'referencesIcon'.			'type-hierarchy'.		"message browser"
-		'smallDoIt'. 				'run'.						"code"
-		'smallDebug'. 				'bug'.						"code"
-		'smallPrintIt'. 			'blank'.					"code"
-		'smallProfile'. 			'blank'.					"code"
+		'smallDoIt'. 				'run'.					"code"
+		'smallDebug'. 				'bug'.					"code"
+		'smallPrintIt'. 				'blank'.					"code"
+		'smallProfile'. 				'blank'.					"code"
+		'menu'. 		   	            'kebab-vertical'.    "menu button"
+		"protocols"
+		'protocolPrivate'. 	   		'lock-small'. "blocked"
+		'protocolProtected'.     	'lock-small'. "blocked"
+		'protocolExtension'.     	'package'. "symbol-variable"
+		'protocolAll'.       	 	'pulse'.
+		'protocolVirtual'.       	'pulse'. "radio-tower"
+		'protocolVirtualWarning'. 	'warning'.
 	 }
-	
 ]
 
 { #category : 'utilities' }

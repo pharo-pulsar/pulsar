@@ -11,3 +11,9 @@ PvBaseModel >> hasDockEditor [
 
 	^ self dockEditorClass isNotNil
 ]
+
+{ #category : '*Dock-Browser' }
+PvBaseModel >> realModel [
+
+	^ self
+]

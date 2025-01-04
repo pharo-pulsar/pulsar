@@ -27,10 +27,11 @@ PvOutlineClassModel >> collectClassMethods [
 { #category : 'accessing - collecting' }
 PvOutlineClassModel >> collectClassMethodsForProtocol: aProtocol [
 
-	^ aProtocol selectors collect: [ :each |
-		PvMethodModel 
-			newEnvironment: self environmentModel 
-			entity: (self entity classSide methodDict at: each) ]
+	^ aProtocol selectors sorted 
+		collect: [ :each |
+			PvMethodModel 
+				newEnvironment: self environmentModel 
+				entity: (self entity classSide methodDict at: each) ]
 ]
 
 { #category : 'accessing - collecting' }
@@ -47,7 +48,7 @@ PvOutlineClassModel >> collectClassSharedVariables [
 	
 	^ self entity classSide classPool keys
 		collect: [ :each | 
-			PvSharedVariblelModel
+			PvSharedVaribleModel
 				newEnvironment: self environmentModel 
 				entity: self entity classSide
 				name: each ]
@@ -56,8 +57,9 @@ PvOutlineClassModel >> collectClassSharedVariables [
 { #category : 'accessing - collecting' }
 PvOutlineClassModel >> collectClassVariables [
 		
-	^ self entity classSide slots 
-		collect: [ :each | PvSlotModel newEnvironment: self environmentModel entity: each ]
+	^ (self entity classSide slots 
+		collect: [ :each | PvSlotModel newEnvironment: self environmentModel entity: each ])
+		copyWithFirst: (DockNoneVirtualSlot newEntity: self entity classSide)
 ]
 
 { #category : 'accessing - collecting' }
@@ -71,10 +73,11 @@ PvOutlineClassModel >> collectMethods [
 { #category : 'accessing - collecting' }
 PvOutlineClassModel >> collectMethodsForProtocol: aProtocol [
 
-	^ aProtocol selectors collect: [ :each | 
-		PvMethodModel 
-			newEnvironment: self environmentModel 
-			entity: (self entity instanceSide methodDict at: each) ]
+	^ aProtocol selectors sorted
+		collect: [ :each | 
+			PvMethodModel 
+				newEnvironment: self environmentModel 
+				entity: (self entity instanceSide methodDict at: each) ]
 ]
 
 { #category : 'accessing - collecting' }
@@ -89,8 +92,9 @@ PvOutlineClassModel >> collectProtocols [
 { #category : 'accessing - collecting' }
 PvOutlineClassModel >> collectVariables [
 	
-	^ self entity instanceSide slots 
-		collect: [ :each | PvSlotModel newEnvironment: self entity: each ]
+	^ (self entity instanceSide slots
+		collect: [ :each | PvSlotModel newEnvironment: self entity: each ])
+		copyWithFirst: (DockNoneVirtualSlot newEntity: self entity instanceSide)
 ]
 
 { #category : 'accessing' }

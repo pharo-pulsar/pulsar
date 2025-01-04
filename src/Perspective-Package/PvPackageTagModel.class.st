@@ -23,7 +23,7 @@ PvPackageTagModel class >> order [
 { #category : 'accessing' }
 PvPackageTagModel >> children [
 
-	^ self classes
+	^ PvClassHierarchyBuilder buildFrom: self classes
 ]
 
 { #category : 'accessing' }

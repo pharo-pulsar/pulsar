@@ -49,6 +49,6 @@ PvActionCollector >> model: anObject [
 { #category : 'building' }
 PvActionCollector >> register: aClass in: container [
 
-	(Pragma allNamed: #perspectiveActions from: aClass class to: PvPresenter) 
+	(Pragma allNamed: #perspectiveActions from: aClass class to: SpPresenter) 
 		do: [ :eachPragma | aClass perform: eachPragma methodSelector with: container ]
 ]

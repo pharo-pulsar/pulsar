@@ -6,11 +6,13 @@ Class {
 		'structureTreePresenter',
 		'instanceSidePresenter',
 		'classSidePresenter',
-		'tabLayout'
+		'tabLayout',
+		'currentActiveSidePresenter',
+		'traitSidePresenter'
 	],
-	#category : 'Dock-Browser-Outline',
+	#category : 'Dock-Browser-View-Outline',
 	#package : 'Dock-Browser',
-	#tag : 'Outline'
+	#tag : 'View-Outline'
 }
 
 { #category : 'defaults' }
@@ -27,6 +29,13 @@ DockClassOutlineView >> connectPresenters [
 	
 ]
 
+{ #category : 'api - focus' }
+DockClassOutlineView >> defaultKeyboardFocus [
+
+	^ currentActiveSidePresenter
+		ifNil: [ super defaultKeyboardFocus ]
+]
+
 { #category : 'layout' }
 DockClassOutlineView >> defaultLayout [
 
@@ -35,6 +44,8 @@ DockClassOutlineView >> defaultLayout [
 		add: ((tabLayout := SpTabLayout new)
 			add: instanceSidePresenter label: 'Instance';
 			add: classSidePresenter label: 'Class';
+			add: traitSidePresenter label: 'Traits';
+			whenTabSelectedDo: [ :ann | self tabActivated: ann presenter ];
 			yourself);
 		yourself
 ]
@@ -75,7 +86,8 @@ DockClassOutlineView >> initializePresenters [
 		yourself"
 		
 	instanceSidePresenter := self instantiate: DockClassOutlineInstanceSideView.
-	classSidePresenter := self instantiate: DockClassOutlineClassSideView
+	classSidePresenter := self instantiate: DockClassOutlineClassSideView.
+	traitSidePresenter := self instantiate: DockClassOutlineTraitSideView
 ]
 
 { #category : 'initialization' }
@@ -90,6 +102,12 @@ DockClassOutlineView >> registerToEvents [
 	self announcer 
 		when: DockEditorActivated send: #eventEditorActivated: to: self;
 		when: DockModelChanged send: #eventModelChanged: to: self
+]
+
+{ #category : 'private' }
+DockClassOutlineView >> tabActivated: aPresenter [
+
+	currentActiveSidePresenter := aPresenter
 ]
 
 { #category : 'initialization' }

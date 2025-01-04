@@ -34,6 +34,13 @@ PvEnvironmentModel >> compilerForClass: aClass [
 	^ aClass compilerClass new
 ]
 
+{ #category : 'accessing - navigating' }
+PvEnvironmentModel >> environmentModel [
+	"in this case, I am my own environment model"
+
+	^ self
+]
+
 { #category : 'testing' }
 PvEnvironmentModel >> hasPackageNamed: aString [ 
 	
@@ -55,7 +62,7 @@ PvEnvironmentModel >> name [
 { #category : 'factory' }
 PvEnvironmentModel >> newMultiProjectModel [
 
-	^ PvMultiProjectModel newEnvironment: self
+	^ DockMultiProjectModel newEnvironment: self
 ]
 
 { #category : 'accessing' }

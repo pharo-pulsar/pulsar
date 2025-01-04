@@ -146,6 +146,12 @@ PvBaseModel >> isPackageTag [
 ]
 
 { #category : 'testing' }
+PvBaseModel >> isProject [
+
+	^ false
+]
+
+{ #category : 'testing' }
 PvBaseModel >> matches: aPattern [
 
 	^ self name asLowercase beginsWith: aPattern asLowercase

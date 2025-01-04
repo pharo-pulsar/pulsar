@@ -3,11 +3,12 @@ Class {
 	#superclass : 'DockBaseView',
 	#instVars : [
 		'updating',
+		'toolbarPresenter',
 		'editorPresenter'
 	],
-	#category : 'Dock-Browser-Editor',
+	#category : 'Dock-Browser-View-Editor',
 	#package : 'Dock-Browser',
-	#tag : 'Editor'
+	#tag : 'View-Editor'
 }
 
 { #category : 'initialization' }
@@ -19,10 +20,17 @@ DockEditor >> connectPresenters [
 		whenResetDo: [ self doReset ]
 ]
 
+{ #category : 'api - focus' }
+DockEditor >> defaultKeyboardFocus [
+
+	^ editorPresenter
+]
+
 { #category : 'layout' }
 DockEditor >> defaultLayout [
 
 	^ SpBoxLayout newVertical
+		add: toolbarPresenter expand: false;
 		add: editorPresenter;
 		yourself
 ]
@@ -47,6 +55,13 @@ DockEditor >> doSubmit: aString [
 	^ result
 ]
 
+{ #category : 'initialization' }
+DockEditor >> editorActions [
+		
+	^ self actions actionsFor: #navigation
+
+]
+
 { #category : 'private - actions' }
 DockEditor >> editorContextMenuActions [
 
@@ -66,6 +81,12 @@ DockEditor >> editorContextMenuActions [
 				yourself);
 			yourself);"
 		yourself
+]
+
+{ #category : 'private' }
+DockEditor >> editorPresenter [
+
+	^ editorPresenter
 ]
 
 { #category : 'initialization' }
@@ -89,6 +110,9 @@ DockEditor >> initializePanelWindow: aWindowPresenter [
 { #category : 'initialization' }
 DockEditor >> initializePresenters [
 
+	toolbarPresenter := self instantiate: DockToolbarPresenter.
+	toolbarPresenter actions: self editorActions.
+
 	(editorPresenter := self newCode)
 		addStyle: 'stCode';
 		addStyle: 'dockEditor';
@@ -96,7 +120,8 @@ DockEditor >> initializePresenters [
 		overridingContextMenu;
 		withEditionContextMenu;
 		actions: self editorContextMenuActions;
-		lineNumbers: self application isShowingLineNumbers
+		lineNumbers: self application isShowingLineNumbers;
+		systemNavigation: self systemNavigation
 ]
 
 { #category : 'initialization' }
@@ -111,6 +136,12 @@ DockEditor >> isDirty [
 
 	self withPanelWindowDo: [ :aWindow | ^ aWindow isModified ].
 	^ false
+]
+
+{ #category : 'testing' }
+DockEditor >> isEditor [
+	
+	^ true
 ]
 
 { #category : 'private - updating' }
@@ -139,6 +170,14 @@ DockEditor >> saveContent [
 	 close, it needs to return a boolean indicating it can be done or not."
 	
 	^ self doSubmit: editorPresenter text
+]
+
+{ #category : 'accessing' }
+DockEditor >> systemNavigation [ 
+
+	self withWindowDo: [ :window | ^ window systemNavigation ].
+	
+	^ super systemNavigation
 ]
 
 { #category : 'private - updating' }

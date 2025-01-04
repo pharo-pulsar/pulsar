@@ -163,6 +163,7 @@ PvEditorView >> initializeEditor [
 		whenTextChangedDo: [ :newText :oldText | self textChangedFrom: oldText to: newText ];
 		whenSubmitDo: [ :aString | self doSubmit: aString ];
 		whenResetDo: [ self doReset ];
+		systemNavigation: self application systemNavigation;
 		lineNumbers: self isShowingLineNumbers
 ]
 

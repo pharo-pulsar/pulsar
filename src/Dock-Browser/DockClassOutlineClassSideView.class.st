@@ -2,27 +2,52 @@ Class {
 	#name : 'DockClassOutlineClassSideView',
 	#superclass : 'DockClassOutlineSideView',
 	#instVars : [
+		'sharedVariablesToolbarPresenter',
 		'sharedVariablesPresenter'
 	],
-	#category : 'Dock-Browser-Outline',
+	#category : 'Dock-Browser-View-Outline',
 	#package : 'Dock-Browser',
-	#tag : 'Outline'
+	#tag : 'View-Outline'
 }
+
+{ #category : 'private' }
+DockClassOutlineClassSideView >> collectProtocols [
+
+	^ self model collectClassProtocols
+]
+
+{ #category : 'private' }
+DockClassOutlineClassSideView >> collectSharedVariables [
+
+	^  self model collectClassSharedVariables
+]
+
+{ #category : 'private' }
+DockClassOutlineClassSideView >> collectVariables [
+
+	^ self model collectClassVariables
+]
 
 { #category : 'layout' }
 DockClassOutlineClassSideView >> defaultLayout [
 
 	^ SpPanedLayout newVertical
-		positionOfSlider: 200;
+		positionOfSlider: 360;
 		add: (SpPanedLayout newVertical 
-			add: variablesListPresenter;
-			add: sharedVariablesPresenter;
+			positionOfSlider: 180;
+			add: (SpPanedLayout newVertical 
+				add: (SpBoxLayout newVertical
+					add: variablesToolbarPresenter expand: false;
+					add: variablesListPresenter;
+					yourself);
+				add: (SpBoxLayout newVertical
+					add: sharedVariablesToolbarPresenter expand: false;
+					add: sharedVariablesPresenter;
+					yourself);
+				yourself);			
 			yourself);
-		add: (SpBoxLayout newVertical 
-			add: (SpBoxLayout newHorizontal
-					add: protocolChooserPresenter;
-					yourself) 
-				expand: false;
+		add: (SpBoxLayout newVertical
+			add: listToolbarPresenter expand: false;
 			add: listPresenter;
 			yourself);
 		yourself
@@ -32,6 +57,10 @@ DockClassOutlineClassSideView >> defaultLayout [
 DockClassOutlineClassSideView >> initializePresenters [
 
 	super initializePresenters.
+	
+	sharedVariablesToolbarPresenter := self instantiate: DockToolbarPresenter.
+	sharedVariablesToolbarPresenter actions: self sharedVariablesToolbarActions.
+	
 	sharedVariablesPresenter := self newEasyListView
 		addStyle: 'stList';
 		display: #name;
@@ -39,21 +68,39 @@ DockClassOutlineClassSideView >> initializePresenters [
 ]
 
 { #category : 'private' }
-DockClassOutlineClassSideView >> methodsFor: aProtocol [
+DockClassOutlineClassSideView >> methodsForProtocol: aProtocolModel [
 
-	aProtocol ifNil: [ ^ #() ].
-	^ self model collectClassMethodsForProtocol: aProtocol
+	aProtocolModel ifNil: [ ^ #() ].
+	^ self model collectClassMethodsForProtocol: aProtocolModel
+]
+
+{ #category : 'private' }
+DockClassOutlineClassSideView >> newMethodModelForNewMethod [
+
+	^ PvMethodModel
+		newEnvironment: self model environmentModel 
+		beNewClassMethodWithParent: self model
+]
+
+{ #category : 'initialization' }
+DockClassOutlineClassSideView >> sharedVariablesToolbarActions [
+
+	^ SpActionGroup new
+		addActionWith: [ :action | action 
+			name: 'Add';
+			description: 'Add a new shared variable';
+			iconName: #add;
+			action: [ self doAddSharedVariable ] ]	
 ]
 
 { #category : 'initialization' }
 DockClassOutlineClassSideView >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
-
-	variablesListPresenter items: self model collectClassVariables.
-	sharedVariablesPresenter items: self model collectClassSharedVariables.
-	protocolChooserPresenter items: self model collectClassProtocols.
-	listPresenter items: self model collectClassMethods
+	
+	self updatingWhile: [ 
+		super updatePresenter.
+		sharedVariablesPresenter items: self collectSharedVariables ]
 ]
 
 { #category : 'visiting' }

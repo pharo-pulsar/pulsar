@@ -7,10 +7,31 @@ Class {
 	#classVars : [
 		'LastWindowSize'
 	],
-	#category : 'Dock-Browser-Base',
+	#category : 'Dock-Browser-View-Browser',
 	#package : 'Dock-Browser',
-	#tag : 'Base'
+	#tag : 'View-Browser'
 }
+
+{ #category : 'initialization' }
+DockBrowser >> addViewClass: aClass [
+
+	^ self addViewClass: aClass on: nil
+]
+
+{ #category : 'initialization' }
+DockBrowser >> addViewClass: aClass on: aModel [
+	| view |
+
+	view := self instantiate: aClass on: aModel.
+	self addPresenter: view at: view dockPosition.
+	^ view
+]
+
+{ #category : 'api - focus' }
+DockBrowser >> defaultKeyboardFocus [
+
+	^ projectView
+]
 
 { #category : 'events' }
 DockBrowser >> eventModelActivated: anAnnouncement [
@@ -19,12 +40,18 @@ DockBrowser >> eventModelActivated: anAnnouncement [
 	self maybeDockView: anAnnouncement value
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private' }
 DockBrowser >> findEditorContaining: aViewModel [
 
-	^ 	self presenters 
-		detect: [ :each | each presenter  model = aViewModel ]
+	^ self presenters 
+		detect: [ :each | each presenter model = aViewModel ]
 		ifNone: [ nil ]
+]
+
+{ #category : 'api' }
+DockBrowser >> initialExtent [
+
+	^ LastWindowSize ifNil: [ super initialExtent ]
 ]
 
 { #category : 'initialization' }
@@ -46,26 +73,20 @@ DockBrowser >> initializeWindow: aWindowPresenter [
 { #category : 'initialization' }
 DockBrowser >> initializeWorkspace [
 
-	self startWidth: self initialExtent x * 30 percent.
-	self endWidth: self initialExtent x * 30 percent.
+	self startWidth: 280"self initialExtent x * 25 percent".
+	self endWidth: 280"self initialExtent x * 25 percent".
+	self bottomHeight: 140"self initialExtent y * 20 percent".
 	
 	"I need a better control on these one"
-	projectView := self 
-		instantiate: DockProjectView 
-		on: self model newMultiProjectModel.
-	self addPresenter: projectView at: projectView dockPosition.
+	projectView := self addViewClass: DockProjectView on: self model newMultiProjectModel.
 
 	"here, the list of components that are part of the 'sides' but we access 
 	 just while interacting."	
-	{ DockClassOutlineView } do: [ :eachClass |
-		| view |
-		view := self instantiate: eachClass.
-		self 
-			addPresenter: view 
-			at: view dockPosition ]
+	{ DockClassOutlineView. DockPlayground. DockTranscript } do: [ :eachClass |
+		self addViewClass: eachClass ]
 ]
 
-{ #category : 'actions' }
+{ #category : 'private' }
 DockBrowser >> maybeDockView: aViewModel [
 	"if the entity has an editor associated:
 	 	if the entity is not already there, open it.
@@ -76,11 +97,12 @@ DockBrowser >> maybeDockView: aViewModel [
 	| editorPresenter |
 	
 	aViewModel hasDockEditor ifFalse: [ ^ self ].
-	
+
 	(self findEditorContaining: aViewModel) ifNotNil: [ :panelPresenter | 
 		panelPresenter 
 			raise; 
-			takeKeyboardFocus ].
+			takeKeyboardFocus.
+		^ self ].
 
 	editorPresenter := self 
 		instantiate: aViewModel dockEditorClass
@@ -94,4 +116,34 @@ DockBrowser >> maybeDockView: aViewModel [
 DockBrowser >> openProject: aBaselineClass [ 
 
 	projectView addProject: aBaselineClass
+]
+
+{ #category : 'private' }
+DockBrowser >> presenterWithClass: aClass [
+	"used for testing"
+
+	^ self presenters 
+		detect: [ :each | each presenter class = aClass ]
+		ifNone: [ nil ]
+]
+
+{ #category : 'private' }
+DockBrowser >> presenterWithTitle: aString [
+
+	^ self presenters 
+		detect: [ :each | each title = aString ]
+		ifNone: [ nil ]
+]
+
+{ #category : 'private' }
+DockBrowser >> projectView [
+
+	^ projectView
+]
+
+{ #category : 'private' }
+DockBrowser >> windowClosed [
+
+	self presenters do: [ :each | each windowClosed ].	
+	super windowClosed
 ]

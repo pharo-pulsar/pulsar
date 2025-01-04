@@ -1,15 +1,59 @@
 Class {
 	#name : 'DockMethodEditor',
 	#superclass : 'DockEditor',
-	#category : 'Dock-Browser-Editor',
+	#instVars : [
+		'protocolPresenter'
+	],
+	#category : 'Dock-Browser-View-Editor',
 	#package : 'Dock-Browser',
-	#tag : 'Editor'
+	#tag : 'View-Editor'
 }
+
+{ #category : 'accessing - actions' }
+DockMethodEditor class >> defineActionGroupNavigation: actionGroup [
+	<perspectiveActionGroup: #navigation>
+	
+	actionGroup 
+		priority: 100;
+		beDisplayedAsGroup
+]
+
+{ #category : 'accessing - actions' }
+DockMethodEditor class >> defineActionGroupStructuring: actionGroup [
+	<perspectiveActionGroup: #structuring>
+	
+	actionGroup
+		priority: -10;
+		beDisplayedAsGroup
+]
+
+{ #category : 'accessing - actions' }
+DockMethodEditor class >> defineActionsOn: aBuilder [
+	<perspectiveActions>
+
+	aBuilder 
+		registerGroup: #structuring with: {  
+			$p mod1 shift -> DockCategoriseMethodCommand new
+		};
+		registerGroup: #navigation with: { 
+			$h mod1 -> PvMethodHierarchyNavigationCommand new
+		}
+]
+
+{ #category : 'as yet unclassified' }
+DockMethodEditor >> doRequestChangeProtocol [
+
+	protocolPresenter popupProtocol
+]
 
 { #category : 'initialization' }
 DockMethodEditor >> initializePresenters [
 
 	super initializePresenters.
+	
+	protocolPresenter := self instantiate: DockProtocolButtonPresenter.
+	toolbarPresenter addPresenter: protocolPresenter.
+	
 	self addStyle: 'dockMethodEditor'
 ]
 
@@ -25,6 +69,7 @@ DockMethodEditor >> updatePresenter [
 	self model ifNil: [ ^ self ].
 	
 	self updatingWhile: [  
+		protocolPresenter model: self model.
 		editorPresenter 
 			beForMethod: self model entity;
 			text: self model sourceCode ].

@@ -11,6 +11,27 @@ Class {
 }
 
 { #category : 'instance creation' }
+PvMethodModel class >> newEnvironment: anEnvironmentModel beNewClassMethodWithParent: aClassModel [
+
+	^ self new 
+		entity: (PvNewMethodTemplate 
+			newEnvironmentModel: anEnvironmentModel 
+			parent: aClassModel)
+			beForClassSide;
+		yourself
+]
+
+{ #category : 'instance creation' }
+PvMethodModel class >> newEnvironment: anEnvironmentModel beNewMethodWithParent: aClassModel [
+
+	^ self new 
+		entity: (PvNewMethodTemplate 
+			newEnvironmentModel: anEnvironmentModel 
+			parent: aClassModel);
+		yourself
+]
+
+{ #category : 'instance creation' }
 PvMethodModel class >> newMethod: aMethod [ 
 
 	^ self new 
@@ -38,6 +59,13 @@ PvMethodModel >> asOutlineClassModel [
 	^ PvOutlineClassModel 
 		newEnvironment: self environmentModel 
 		entity: self methodClass
+]
+
+{ #category : 'updating' }
+PvMethodModel >> classifyMethodAs: aString [ 
+	
+	self entity protocol: aString.
+	protocol := nil
 ]
 
 { #category : 'private' }
@@ -202,6 +230,14 @@ PvMethodModel >> protocol: aString [
 ]
 
 { #category : 'accessing' }
+PvMethodModel >> protocolModel [
+	
+	^ PvProtocolModel 
+		newEnvironment: self environmentModel 
+		entity: self entity protocol
+]
+
+{ #category : 'accessing' }
 PvMethodModel >> protocolName [
 	
 	^ self protocol 
@@ -234,12 +270,17 @@ PvMethodModel >> updateWith: aString notifying: anInteractionModel [
 	
  	selectedClass := self entity methodClass.
 
-	 newSelector := selectedClass
-		compile: aString
- 		notifying: anInteractionModel.
-
- 	newSelector ifNil: [ ^ false ].
- 	newMethod := selectedClass >> newSelector.
+	[
+		newMethod := selectedClass compiler 
+			source: aString;
+			requestor: anInteractionModel;
+			permitUndeclared: true;
+			install ]
+	on: OCUndeclaredVariableWarning 
+	do: [ :w | w resume ].	
+	
+ 	newMethod ifNil: [ ^ false ].
+ 	newSelector := newMethod selector.
 
  	MethodClassifier classify: newMethod.
 

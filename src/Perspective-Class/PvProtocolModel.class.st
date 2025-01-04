@@ -15,15 +15,55 @@ PvProtocolModel class >> all [
 ]
 
 { #category : 'accessing' }
+PvProtocolModel >> basicName [
+
+	^ self entity name
+]
+
+{ #category : 'accessing - ui' }
 PvProtocolModel >> iconName [
 
+	self isExtension ifTrue: [ ^ #protocolExtension ].
+	self isPrivate ifTrue: [ ^ #protocolPrivate ].
+	self isProtected ifTrue: [ ^ #protocolProtected ].
+
 	^ nil
+]
+
+{ #category : 'testing' }
+PvProtocolModel >> isExtension [
+
+	^ self basicName first = $*
+]
+
+{ #category : 'testing' }
+PvProtocolModel >> isPrivate [
+	
+	^ self basicName asLowercase beginsWith: 'private'
+]
+
+{ #category : 'testing' }
+PvProtocolModel >> isProtected [
+	| lowercaseName |
+	
+	lowercaseName := self basicName asLowercase.
+	^ #('initial' 'class initial' 'releaz' 'releas' 'finali')
+		anySatisfy: [ :each | lowercaseName beginsWith: each ]
 ]
 
 { #category : 'accessing' }
 PvProtocolModel >> name [
 
-	^ self entity name
+	self isExtension 
+		ifTrue: [ ^ self basicName allButFirst ].
+	
+	^ self basicName
+]
+
+{ #category : 'accessing' }
+PvProtocolModel >> numberOfMethods [
+
+	^ self selectors size
 ]
 
 { #category : 'accessing' }

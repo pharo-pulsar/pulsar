@@ -9,6 +9,17 @@ Class {
 	#tag : 'Model'
 }
 
+{ #category : 'instance creation' }
+PvClassModel class >> newEnvironment: anEnvirontmentModel beNewClassWithParent: aParentModel [
+
+	^ (self 
+		newEnvironment: anEnvirontmentModel 
+		entity: (PvNewClassTemplate new 
+			parentModel: aParentModel;
+			yourself))
+		beForNewClass
+]
+
 { #category : 'visiting' }
 PvClassModel >> accept: aVisitor [
 
@@ -49,6 +60,12 @@ PvClassModel >> classDefinitionString [
 PvClassModel >> classDepth [
 	
 	^ self entity classDepth
+]
+
+{ #category : 'accessing - parallel hierarchy' }
+PvClassModel >> classSide [
+
+	^ self entity classSide
 ]
 
 { #category : 'accessing' }
@@ -144,10 +161,22 @@ PvClassModel >> initialize [
 	isNew := false
 ]
 
+{ #category : 'accessing - parallel hierarchy' }
+PvClassModel >> instanceSide [
+
+	^ self entity instanceSide
+]
+
 { #category : 'accessing - navigating' }
 PvClassModel >> isLargeHierarchy [
 
 	^ { Object. ProtoObject } includes: self entity
+]
+
+{ #category : 'testing' }
+PvClassModel >> isNew [
+
+	^ isNew
 ]
 
 { #category : 'testing' }
@@ -181,7 +210,7 @@ PvClassModel >> updateWith: aString notifying: anInteractionModel [
 	self flag: #TODO. "This is how calypso is doing it... but shouldn't we use 
 	the parse, etc. mechanism?"
 	[
-		fluidDefinition := (self  environmentModel compilerForClass: self entity)
+		fluidDefinition := (self environmentModel compilerForClass: self entity)
 			source: aString;
 			requestor: anInteractionModel;
 			failBlock: [ ^ false ];
