@@ -175,7 +175,7 @@ DockProjectView >> doRequestNewClass [
 	parent := self closestEntityInPathMatching: [ :each | each isPackageOrTag ].
 	parent ifNil: [ ^ self ].
 	
-	self triggerActivateEntity: (PvClassModel
+	self notifyActivateEntity: (PvClassModel
 		newEnvironment: self model environmentModel 
 		beNewClassWithParent: parent)
 ]

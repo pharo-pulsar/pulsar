@@ -40,7 +40,7 @@ DockMethodEditor class >> defineActionsOn: aBuilder [
 		}
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private - actions' }
 DockMethodEditor >> doRequestChangeProtocol [
 
 	protocolPresenter popupProtocol

@@ -23,7 +23,7 @@ PvMethodHierarchyNavigationCommand >> execute [
 	navigation := (self context 
 		instantiate: PvMethodHierarchyPresenter on: self model)
 		transmitDo: [ :aModel | 
-			self context triggerActivateEntity: aModel.
+			self context notifyActivateEntity: aModel.
 			popover dismiss ];
 		yourself.
 	

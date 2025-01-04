@@ -13,9 +13,9 @@ Class {
 DockCollectionView >> connectPresenters [
 
 	listPresenter outputSelectionPort 
-		transmitDo: [ :anEntity | self triggerSelectEntity: anEntity ].
+		transmitDo: [ :anEntity | self notifySelectEntity: anEntity ].
 	listPresenter outputActivationPort 
-		transmitDo: [ :anEntity | self triggerActivateEntity: anEntity ]
+		transmitDo: [ :anEntity | self notifyActivateEntity: anEntity ]
 ]
 
 { #category : 'private' }

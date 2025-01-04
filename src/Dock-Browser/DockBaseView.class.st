@@ -60,6 +60,20 @@ DockBaseView >> notificationCenter [
 	^ notificationCenter
 ]
 
+{ #category : 'private - announcing' }
+DockBaseView >> notifyActivateEntity: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+	self notificationCenter announce: (DockModelActivated newValue: anEntity realModel)
+]
+
+{ #category : 'private - announcing' }
+DockBaseView >> notifySelectEntity: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+	self notificationCenter announce: (DockModelSelected newValue: anEntity realModel)
+]
+
 { #category : 'initialization' }
 DockBaseView >> registerToDock: aDockBrowser [
 
@@ -71,18 +85,4 @@ DockBaseView >> registerToDock: aDockBrowser [
 { #category : 'initialization' }
 DockBaseView >> registerToEvents [
 	"override this to subscribe to notifications"
-]
-
-{ #category : 'private - announcing' }
-DockBaseView >> triggerActivateEntity: anEntity [
-
-	anEntity ifNil: [ ^ self ].
-	self notificationCenter announce: (DockModelActivated newValue: anEntity realModel)
-]
-
-{ #category : 'private - announcing' }
-DockBaseView >> triggerSelectEntity: anEntity [
-
-	anEntity ifNil: [ ^ self ].
-	self notificationCenter announce: (DockModelSelected newValue: anEntity realModel)
 ]

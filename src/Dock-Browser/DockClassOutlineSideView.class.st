@@ -56,7 +56,7 @@ DockClassOutlineSideView >> connectPresenters [
 	protocolListPresenter 
 		transmitDo: [ :anEntity | self filterMethodsByProtocol: anEntity ].
 	listPresenter outputActivationPort 
-		transmitDo: [ :anEntity | self owner triggerActivateEntity: anEntity ]
+		transmitDo: [ :anEntity | self owner notifyActivateEntity: anEntity ]
 ]
 
 { #category : 'api - focus' }
@@ -104,7 +104,7 @@ DockClassOutlineSideView >> doAddVariable [
 DockClassOutlineSideView >> doRequestNewMethod [
 
 	self flag: #TODO. "I am using owner, which introcuces perhaps an undesirable coupling..."
-	self owner triggerActivateEntity: self newMethodModelForNewMethod
+	self owner notifyActivateEntity: self newMethodModelForNewMethod
 ]
 
 { #category : 'private' }
