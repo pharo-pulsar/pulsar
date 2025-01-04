@@ -40,6 +40,15 @@ DockMethodEditor class >> defineActionsOn: aBuilder [
 		}
 ]
 
+{ #category : 'initialization' }
+DockMethodEditor >> connectPresenters [
+
+	super connectPresenters.
+	protocolPresenter whenProtocolChangedDo: [ :aProtocolModel |
+		self notifyEntityChanged: self model ].
+
+]
+
 { #category : 'private - actions' }
 DockMethodEditor >> doRequestChangeProtocol [
 
@@ -67,13 +76,12 @@ DockMethodEditor >> originalContent [
 DockMethodEditor >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
-	
+
+	super updatePresenter.
+		
 	self updatingWhile: [  
 		protocolPresenter model: self model.
 		editorPresenter 
 			beForMethod: self model entity;
-			text: self model sourceCode ].
-	
-	"update window title if needed"
-	self withPanelWindowDo: [ :w | w title: self model name ]
+			text: self model sourceCode ]
 ]

@@ -228,12 +228,20 @@ DockClassOutlineSideView >> updatePresenter [
 			selectFirst.
 		activeVariable := variablesListPresenter selectedItem.
 		
-		protocolListPresenter 
-			items: self collectProtocols;
-			selectFirst.
+		self updateProtocols.
 		activeProtocol := protocolListPresenter selectedItem ].
 	
 	self updateMethods
+]
+
+{ #category : 'initialization' }
+DockClassOutlineSideView >> updateProtocols [
+	
+	protocolListPresenter 
+		items: self collectProtocols;
+		"this is because I know the first is 'all', but I may need to 
+		 do a better job on this..."
+		selectFirst
 ]
 
 { #category : 'private - updating' }
@@ -269,10 +277,8 @@ DockClassOutlineSideView >> visitMethodModel: aModel [
 	| protocolModel |
 
 	protocolModel := aModel protocolModel.
-	(protocolListPresenter items includes: protocolModel) ifFalse: [  
-		"this is because I know the first is 'all', but I may need to 
-		 do a better job on this..."
-		protocolListPresenter selectFirst ].
+	(protocolListPresenter items includes: protocolModel) 
+		ifFalse: [ self updateProtocols ].
 	
 	listPresenter 
 		selectItem: aModel

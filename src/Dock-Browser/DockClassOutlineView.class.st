@@ -23,12 +23,6 @@ DockClassOutlineView class >> defaultDockPosition [
 		yourself
 ]
 
-{ #category : 'initialization' }
-DockClassOutlineView >> connectPresenters [
-
-	
-]
-
 { #category : 'api - focus' }
 DockClassOutlineView >> defaultKeyboardFocus [
 
@@ -66,7 +60,7 @@ DockClassOutlineView >> eventEditorActivated: anAnnouncement [
 { #category : 'events' }
 DockClassOutlineView >> eventModelChanged: anAnnouncement [
 	| changedModel  outlineClassModel |
-	
+
 	changedModel := anAnnouncement value.
 	outlineClassModel := changedModel asOutlineClassModel.
 	self model = outlineClassModel ifFalse: [ ^ self ].

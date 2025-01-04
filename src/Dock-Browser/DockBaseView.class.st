@@ -68,6 +68,13 @@ DockBaseView >> notifyActivateEntity: anEntity [
 ]
 
 { #category : 'private - announcing' }
+DockBaseView >> notifyEntityChanged: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+	self notificationCenter announce: (DockModelChanged newValue: anEntity realModel)
+]
+
+{ #category : 'private - announcing' }
 DockBaseView >> notifySelectEntity: anEntity [
 
 	anEntity ifNil: [ ^ self ].

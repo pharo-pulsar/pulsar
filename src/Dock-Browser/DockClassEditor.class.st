@@ -47,11 +47,10 @@ DockClassEditor >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	
+	super updatePresenter.
+	
 	self updatingWhile: [  
 		editorPresenter text: self model classDefinitionString ].
-	
-	"update window title if needed"
-	self withPanelWindowDo: [ :w | w title: self model name ].
 	
 	self flag: #REVIEW. "select template tab by defdault (as comment should be introduced later)?"
 	self flag: #TODO. "I need a better way than to wait until it is built. I maybe need to implement #withAdapterPerformOrDefer: in the tab layout"

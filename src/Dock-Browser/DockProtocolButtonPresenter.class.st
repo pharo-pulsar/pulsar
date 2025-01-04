@@ -4,12 +4,20 @@ Class {
 	#traits : 'SpTModel',
 	#classTraits : 'SpTModel classTrait',
 	#instVars : [
-		'protocolPresenter'
+		'protocolPresenter',
+		'protocolChangedAction'
 	],
 	#category : 'Dock-Browser-View-Editor',
 	#package : 'Dock-Browser',
 	#tag : 'View-Editor'
 }
+
+{ #category : 'private' }
+DockProtocolButtonPresenter >> annnounceProtocolChanged [
+
+	protocolChangedAction ifNil: [ ^ self ].
+	protocolChangedAction cull: protocolPresenter label
+]
 
 { #category : 'layout' }
 DockProtocolButtonPresenter >> defaultLayout [
@@ -42,6 +50,7 @@ DockProtocolButtonPresenter >> popupProtocol [
 			popover dismiss.
 			self model classifyMethodAs: aString.
 			self updatePresenter.
+			self annnounceProtocolChanged.
 			self owner takeKeyboardFocus ];
 		onAbort: [ 
 			popover dismiss.
@@ -61,4 +70,10 @@ DockProtocolButtonPresenter >> updatePresenter [
 	protocolPresenter label: (self model 
 		ifNotNil: [ :aModel | aModel protocolName ]
 		ifNil: [ '(None)' ])
+]
+
+{ #category : 'events' }
+DockProtocolButtonPresenter >> whenProtocolChangedDo: aBlock [
+
+	protocolChangedAction := aBlock
 ]

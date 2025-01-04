@@ -89,6 +89,13 @@ DockEditor >> editorPresenter [
 	^ editorPresenter
 ]
 
+{ #category : 'events' }
+DockEditor >> eventModelChanged: ann [
+	
+	ann value = self model ifFalse: [ ^ self ].
+	self updateTitle
+]
+
 { #category : 'initialization' }
 DockEditor >> initialize [
 
@@ -163,6 +170,14 @@ DockEditor >> originalContent [
 	^ self subclassResponsibility
 ]
 
+{ #category : 'initialization' }
+DockEditor >> registerToEvents [
+
+	super registerToEvents.
+	self announcer 
+		when: DockModelChanged send: #eventModelChanged: to: self
+]
+
 { #category : 'private - actions' }
 DockEditor >> saveContent [
 	"save contents and answer a boolean if it is saved (usually after the user attempting 
@@ -202,6 +217,18 @@ DockEditor >> triggerEditorActivated [
 DockEditor >> unmarkDirty [
 
 	self withPanelWindowDo: [ :w | w modified: false ]
+]
+
+{ #category : 'initialization' }
+DockEditor >> updatePresenter [
+
+	self withPanelWindowDo: [ :w | w title: self model name ]
+]
+
+{ #category : 'initialization' }
+DockEditor >> updateTitle [
+
+	self withPanelWindowDo: [ :w | w title: self model name ]
 ]
 
 { #category : 'private - updating' }
