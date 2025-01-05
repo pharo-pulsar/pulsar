@@ -277,15 +277,19 @@ PvMethodModel >> updateWith: aString notifying: anInteractionModel [
 			permitUndeclared: true;
 			install ]
 	on: OCUndeclaredVariableWarning 
-	do: [ :w | w resume ].	
+	do: [ :w | w resume ].
 	
  	newMethod ifNil: [ ^ false ].
  	newSelector := newMethod selector.
 
- 	MethodClassifier classify: newMethod.
+	"do not try to classify if already classified"
+	newMethod protocol isUnclassifiedProtocol 
+ 		ifTrue: [ MethodClassifier classify: newMethod ].
 
 	"update entity"
 	entity := newMethod.
+	"update protocol"
+	protocol := entity protocol.
 
  	^ true
 ]
