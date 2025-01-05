@@ -204,7 +204,7 @@ DockClassOutlineSideView >> protocolToolbarActions [
 			action: [ self doAddProtocol ] ]
 ]
 
-{ #category : 'private - updating' }
+{ #category : 'initialization' }
 DockClassOutlineSideView >> updateMethods [
 	| items |
 
