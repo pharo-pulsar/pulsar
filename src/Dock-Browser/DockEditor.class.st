@@ -37,6 +37,8 @@ DockEditor >> defaultLayout [
 
 { #category : 'private - actions' }
 DockEditor >> doReset [
+
+	self halt. "TODO"
 ]
 
 { #category : 'private - actions' }
