@@ -16,6 +16,12 @@ DockBaseBrowser >> addWindow: aWindow [
 	aWindow raise
 ]
 
+{ #category : 'accessing' }
+DockBaseBrowser >> announcer [
+
+	^ announcer ifNil: [ announcer := DockTaskAnnouncer new ]
+]
+
 { #category : 'events' }
 DockBaseBrowser >> eventModelActivated: anAnnouncement [
 	
@@ -31,17 +37,11 @@ DockBaseBrowser >> initialize [
 { #category : 'initialization' }
 DockBaseBrowser >> registerToEvents [
 
-	"broadcast"
-	self announcer when: DockAnnouncement send: #resendAnnouncement: to: self.
-	"now process here"
 	self announcer 
-		when: DockModelActivated 
-		send: #eventModelActivated:
-		to: self.
-	"self announcer 
-		when: DockModelSelectedAnnouncement 
-		send: #eventModelSelected:
-		to: self"
+		"first broadcast"
+		when: DockAnnouncement send: #resendAnnouncement: to: self;
+		"now process here"
+		when: DockModelActivated send: #eventModelActivated: to: self
 ]
 
 { #category : 'announcing' }

@@ -55,6 +55,15 @@ DockMethodEditor >> doRequestChangeProtocol [
 	protocolPresenter popupProtocol
 ]
 
+{ #category : 'events' }
+DockMethodEditor >> eventModelChanged: ann [
+	
+	ann value = self model ifFalse: [ ^ self ].
+	
+	self updateTitle.
+	self updateProtocol
+]
+
 { #category : 'initialization' }
 DockMethodEditor >> initializePresenters [
 
@@ -80,8 +89,14 @@ DockMethodEditor >> updatePresenter [
 	super updatePresenter.
 		
 	self updatingWhile: [  
-		protocolPresenter model: self model.
+		self updateProtocol.
 		editorPresenter 
 			beForMethod: self model entity;
 			text: self model sourceCode ]
+]
+
+{ #category : 'initialization' }
+DockMethodEditor >> updateProtocol [
+
+	protocolPresenter model: self model
 ]

@@ -52,6 +52,7 @@ DockEditor >> doSubmit: aString [
 	result ifTrue: [
 		self unmarkDirty.
 		self notificationCenter announce: (DockModelChanged newValue: self model) ].
+
 	^ result
 ]
 
