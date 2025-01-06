@@ -108,6 +108,12 @@ DockClassOutlineView >> updatePresenter [
 	classSidePresenter model: self model.
 	instanceSidePresenter model: self model.
 
+	self updateTitle
+]
+
+{ #category : 'initialization' }
+DockClassOutlineView >> updateTitle [
+
 	self withPanelWindowDo: [ :w | 
 		w title: self model name ]
 ]
