@@ -64,9 +64,7 @@ DockClassOutlineView >> eventModelChanged: anAnnouncement [
 	changedModel := anAnnouncement value.
 	outlineClassModel := changedModel asOutlineClassModel.
 	self model = outlineClassModel ifFalse: [ ^ self ].
-	"update because it may have change"
 	self updatePresenter.
-	"visit after to be able to post-process"
 	changedModel accept: self
 ]
 

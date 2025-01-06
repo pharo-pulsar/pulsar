@@ -236,7 +236,7 @@ DockClassOutlineSideView >> updatePresenter [
 
 { #category : 'initialization' }
 DockClassOutlineSideView >> updateProtocols [
-	
+
 	protocolListPresenter 
 		items: self collectProtocols;
 		"this is because I know the first is 'all', but I may need to 
@@ -276,10 +276,13 @@ DockClassOutlineSideView >> visitMethodModel: aModel [
 	| protocolModel |
 
 	protocolModel := aModel protocolModel.
-	(protocolListPresenter items includes: protocolModel) 
+	"update protocols in case I have a new one or my current editing 
+	 method is not included in the method list."
+	((protocolListPresenter items includes: protocolModel)
+		and: [ listPresenter items includes: aModel ])
 		ifFalse: [ self updateProtocols ].
 	
-	listPresenter 
+	listPresenter
 		selectItem: aModel
 		scrollToSelection: true
 ]
