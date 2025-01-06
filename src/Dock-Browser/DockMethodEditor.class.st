@@ -40,6 +40,12 @@ DockMethodEditor class >> defineActionsOn: aBuilder [
 		}
 ]
 
+{ #category : 'as yet unclassified' }
+DockMethodEditor >> announceActivateClass [
+	
+	self notifyActivateEntity: self model asClassModel
+]
+
 { #category : 'initialization' }
 DockMethodEditor >> connectPresenters [
 
@@ -79,6 +85,15 @@ DockMethodEditor >> initializePresenters [
 DockMethodEditor >> originalContent [
 
 	^ self model sourceCode
+]
+
+{ #category : 'initialization' }
+DockMethodEditor >> updateBreadcrumbs [
+
+	toolbarPresenter updateBreadcrumbWith: [ :aBreadcrumb |
+		aBreadcrumb 
+			addLinkSegment: self model methodClassName action: [ self announceActivateClass ];
+			addSegment: self model name ]
 ]
 
 { #category : 'initialization' }

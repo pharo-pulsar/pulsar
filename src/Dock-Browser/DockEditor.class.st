@@ -120,7 +120,7 @@ DockEditor >> initializePanelWindow: aWindowPresenter [
 { #category : 'initialization' }
 DockEditor >> initializePresenters [
 
-	toolbarPresenter := self instantiate: DockToolbarPresenter.
+	toolbarPresenter := self instantiate: DockEditorToolbarPresenter.
 	toolbarPresenter actions: self editorActions.
 
 	(editorPresenter := self newCode)
@@ -223,15 +223,22 @@ DockEditor >> unmarkDirty [
 ]
 
 { #category : 'initialization' }
+DockEditor >> updateBreadcrumbs [
+
+	"override this to update the breadcrumb header"
+]
+
+{ #category : 'initialization' }
 DockEditor >> updatePresenter [
 
-	self withPanelWindowDo: [ :w | w title: self model name ]
+	self updateTitle
 ]
 
 { #category : 'initialization' }
 DockEditor >> updateTitle [
 
-	self withPanelWindowDo: [ :w | w title: self model name ]
+	self withPanelWindowDo: [ :w | w title: self model name ].
+	self updateBreadcrumbs
 ]
 
 { #category : 'private - updating' }

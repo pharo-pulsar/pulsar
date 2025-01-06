@@ -43,6 +43,13 @@ DockClassEditor >> originalContent [
 ]
 
 { #category : 'initialization' }
+DockClassEditor >> updateBreadcrumbs [
+
+	toolbarPresenter updateBreadcrumbWith: [ :aBreadcrumb | 
+		aBreadcrumb addSegment: self model name ]
+]
+
+{ #category : 'initialization' }
 DockClassEditor >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
