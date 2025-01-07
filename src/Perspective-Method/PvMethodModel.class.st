@@ -245,6 +245,12 @@ PvMethodModel >> protocolName [
 		ifNil: [ 'no protocol' ]
 ]
 
+{ #category : 'updating' }
+PvMethodModel >> removeMethod [
+
+	self entity removeFromSystem
+]
+
 { #category : 'accessing' }
 PvMethodModel >> shortName [
 

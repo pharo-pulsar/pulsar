@@ -20,6 +20,26 @@ Class {
 	#tag : 'View-Outline'
 }
 
+{ #category : 'as yet unclassified' }
+DockClassOutlineSideView class >> defineActionGroupCritical: actionGroup [
+	<perspectiveActionGroup: #criticalActions>
+	
+	actionGroup 
+		name: 'DANGER';
+		priority: 1000;
+		beDisplayedAsGroup
+]
+
+{ #category : 'accessing - actions' }
+DockClassOutlineSideView class >> defineActionGroupNew: actionGroup [
+	<perspectiveActionGroup: #methodActions>
+	
+	actionGroup 
+		name: 'Method';
+		priority: 10;
+		beDisplayedAsGroup
+]
+
 { #category : 'accessing - actions' }
 DockClassOutlineSideView class >> defineActionsOn: aBuilder [
 	<perspectiveActions>
@@ -27,6 +47,9 @@ DockClassOutlineSideView class >> defineActionsOn: aBuilder [
 	aBuilder 
 		registerGroup: #methodActions with: { 
 			DockNewMethodCommand new.
+		};
+		registerGroup: #criticalActions with: {
+			$x mod1 shift -> DockRemoveMethodCommand new.
 		}
 ]
 
@@ -101,6 +124,27 @@ DockClassOutlineSideView >> doAddVariable [
 ]
 
 { #category : 'private - actions' }
+DockClassOutlineSideView >> doForceRemoveMethod [
+	"Fordcefully remove a method (without passing through the refactor remove implementation
+	 that will check all usages, etc.)"
+	| okToRemove selectedMethodModel |
+	
+	selectedMethodModel := listPresenter selectedItem. 
+	selectedMethodModel ifNil: [ ^ self ].
+	
+	okToRemove := self application newConfirm
+		title: 'Remove method';
+		label: ('Do you want to remove method {1}?' format: { selectedMethodModel name });
+		acceptLabel: 'Remove';
+		openModalWithParent: self window.
+	okToRemove ifFalse: [ ^ self ].
+	
+	selectedMethodModel removeMethod.
+	self owner notifyEntityRemoved: selectedMethodModel.
+	self updatePresenter
+]
+
+{ #category : 'private - actions' }
 DockClassOutlineSideView >> doRequestNewMethod [
 
 	self flag: #TODO. "I am using owner, which introcuces perhaps an undesirable coupling..."
@@ -164,6 +208,7 @@ DockClassOutlineSideView >> initializePresenters [
 		display: [ :aModel | aModel name ];
 		searchMatching: [ :aModel :aString | 
 			aModel name asLowercase beginsWith: aString asLowercase ];
+		actions: self actions;
 		yourself
 ]
 

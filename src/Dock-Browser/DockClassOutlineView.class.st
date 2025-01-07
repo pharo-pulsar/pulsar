@@ -50,6 +50,7 @@ DockClassOutlineView >> eventEditorActivated: anAnnouncement [
 
 	activatedModel := anAnnouncement value model.
 	outlineModel := activatedModel asOutlineClassModel.
+	
 	self model = outlineModel 
 		ifFalse: [ self model: outlineModel ].
 		
@@ -107,7 +108,6 @@ DockClassOutlineView >> updatePresenter [
 
 	classSidePresenter model: self model.
 	instanceSidePresenter model: self model.
-
 	self updateTitle
 ]
 

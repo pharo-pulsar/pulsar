@@ -75,6 +75,13 @@ DockBaseView >> notifyEntityChanged: anEntity [
 ]
 
 { #category : 'private - announcing' }
+DockBaseView >> notifyEntityRemoved: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+	self notificationCenter announce: (DockModelRemoved newValue: anEntity realModel)
+]
+
+{ #category : 'private - announcing' }
 DockBaseView >> notifySelectEntity: anEntity [
 
 	anEntity ifNil: [ ^ self ].
