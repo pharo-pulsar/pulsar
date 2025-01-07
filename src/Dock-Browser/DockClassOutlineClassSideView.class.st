@@ -98,9 +98,10 @@ DockClassOutlineClassSideView >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	
-	self updatingWhile: [ 
-		super updatePresenter.
-		sharedVariablesPresenter items: self collectSharedVariables ]
+	self application defer: [
+		self updatingWhile: [ 
+			super updatePresenter.
+			sharedVariablesPresenter items: self collectSharedVariables ] ]
 ]
 
 { #category : 'visiting' }

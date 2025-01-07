@@ -221,17 +221,18 @@ DockClassOutlineSideView >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	
-	"prevent update methods until is its time"
-	self updatingWhile: [ 	
-		variablesListPresenter 
-			items: self collectVariables;
-			selectFirst.
-		activeVariable := variablesListPresenter selectedItem.
-		
-		self updateProtocols.
-		activeProtocol := protocolListPresenter selectedItem ].
-	
-	self updateMethods
+	"I defer to make the update happen at one in UI thread (it looks smoother)"
+	self application defer: [
+		"prevent update methods until is its time"
+		self updatingWhile: [ 	
+			variablesListPresenter 
+				items: self collectVariables;
+				selectFirst.
+			activeVariable := variablesListPresenter selectedItem.
+			self updateProtocols.
+			activeProtocol := protocolListPresenter selectedItem ].
+		"update methods happens outside the updating flag... :P"
+		self updateMethods ]
 ]
 
 { #category : 'initialization' }
