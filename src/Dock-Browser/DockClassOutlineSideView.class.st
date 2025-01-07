@@ -139,9 +139,10 @@ DockClassOutlineSideView >> initializePresenters [
 
 	variablesToolbarPresenter := self instantiate: DockToolbarPresenter.
 	variablesToolbarPresenter actions: self variablesToolbarActions.
-	
+
 	variablesListPresenter := self newEasyListView
 		addStyle: 'stList';
+		addStyle: 'dockVariablesList';
 		display: [ :aModel | aModel name ];
 		yourself.
 
@@ -150,6 +151,7 @@ DockClassOutlineSideView >> initializePresenters [
 
 	protocolListPresenter := self newEasyListView
 		addStyle: 'stList';
+		addStyle: 'dockProtocolList';
 		rowPresenterClass: DockProtocolRow;
 		yourself.
 
@@ -158,6 +160,7 @@ DockClassOutlineSideView >> initializePresenters [
 
 	listPresenter := self newEasyListView 
 		addStyle: 'stList';
+		addStyle: 'dockMethodList';
 		display: [ :aModel | aModel name ];
 		searchMatching: [ :aModel :aString | 
 			aModel name asLowercase beginsWith: aString asLowercase ];

@@ -63,6 +63,7 @@ DockClassOutlineClassSideView >> initializePresenters [
 	
 	sharedVariablesPresenter := self newEasyListView
 		addStyle: 'stList';
+		addStyle: 'dockSharedVariablesList';
 		display: #name;
 		yourself
 ]
