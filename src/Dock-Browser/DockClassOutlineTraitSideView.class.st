@@ -34,6 +34,7 @@ DockClassOutlineTraitSideView >> initializePresenters [
 	super initializePresenters.
 	traitsListPresenter := self newEasyListView
 		addStyle: 'stList';
+		addStyle: 'dockTraitsList';
 		display: #name;
 		yourself
 ]
