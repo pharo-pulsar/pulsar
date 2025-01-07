@@ -42,11 +42,7 @@ DockGtkConfiguration >> style [
 button.pvProtocol { font-weight: normal; }
 .pvProtocolChooser { min-width: 250px; min-height: 280px; }
 .stCode { font-size: 0.95em; }
-.dockEditorBreadcrumb { 
-	font-size: 0.9em;
-}
-.dockEditorBreadcrumb label.separator {
-	padding: 0px 5px 0px 5px;
-}
+.dockEditorBreadcrumb { font-size: 0.9em; }
+.dockEditorBreadcrumb label.separator { padding: 0px 5px 0px 5px; }
 '
 ]
