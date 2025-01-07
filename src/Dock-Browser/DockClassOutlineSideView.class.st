@@ -272,7 +272,8 @@ DockClassOutlineSideView >> variablesToolbarActions [
 { #category : 'visiting' }
 DockClassOutlineSideView >> visitClassModel: aModel [
 
-	self 
+	listPresenter unselectAll.
+	variablesListPresenter unselectAll
 ]
 
 { #category : 'visiting' }
