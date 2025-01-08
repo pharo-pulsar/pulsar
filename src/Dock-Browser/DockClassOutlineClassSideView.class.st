@@ -34,7 +34,7 @@ DockClassOutlineClassSideView >> defaultLayout [
 	^ SpPanedLayout newVertical
 		positionOfSlider: 360;
 		add: (SpPanedLayout newVertical 
-			positionOfSlider: 180;
+			positionOfSlider: 200;
 			add: (SpPanedLayout newVertical 
 				add: (SpBoxLayout newVertical
 					add: variablesToolbarPresenter expand: false;
@@ -44,7 +44,11 @@ DockClassOutlineClassSideView >> defaultLayout [
 					add: sharedVariablesToolbarPresenter expand: false;
 					add: sharedVariablesPresenter;
 					yourself);
-				yourself);			
+				yourself);
+			add: (SpBoxLayout newVertical
+				add: protocolToolbarPresenter expand: false;
+				add: protocolListPresenter;
+				yourself);
 			yourself);
 		add: (SpBoxLayout newVertical
 			add: listToolbarPresenter expand: false;
