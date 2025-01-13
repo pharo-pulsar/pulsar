@@ -61,7 +61,12 @@ DockClassOutlineClassSideView >> defaultLayout [
 DockClassOutlineClassSideView >> initializePresenters [
 
 	super initializePresenters.
-	
+	self initializeSharedVariables
+]
+
+{ #category : 'initialization' }
+DockClassOutlineClassSideView >> initializeSharedVariables [
+
 	sharedVariablesToolbarPresenter := self instantiate: DockToolbarPresenter.
 	sharedVariablesToolbarPresenter actions: self sharedVariablesToolbarActions.
 	

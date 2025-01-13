@@ -9,12 +9,12 @@ Class {
 { #category : 'initialization' }
 DockRemoveMethodCommand >> defineAction [
 
-	self name: 'Force remove method'.
-	self description: 'Remove this method (without cheching for usages)'
+	self name: 'Remove variable'.
+	self description: 'Remove this variable'
 ]
 
 { #category : 'executing' }
 DockRemoveMethodCommand >> execute [
 
-	context doForceRemoveMethod
+	context doRemoveVariable
 ]

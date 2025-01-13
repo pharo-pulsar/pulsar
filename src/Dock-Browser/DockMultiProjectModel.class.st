@@ -41,3 +41,9 @@ DockMultiProjectModel >> name [
 
 	^ 'Projects'
 ]
+
+{ #category : 'actions' }
+DockMultiProjectModel >> removeProjectModel: aModel [
+
+	projectModels := projectModels copyWithout: aModel
+]

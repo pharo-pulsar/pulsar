@@ -61,7 +61,40 @@ DockClassOutlineSideView class >> defineActionGroupProtocolCritical: actionGroup
 ]
 
 { #category : 'accessing - actions' }
-DockClassOutlineSideView class >> defineActionsOn: aBuilder [
+DockClassOutlineSideView class >> defineActionGroupVariable: actionGroup [
+	<perspectiveActionGroup: #variable>
+	
+	actionGroup 
+		name: 'Method';
+		priority: 10;
+		beDisplayedAsGroup
+]
+
+{ #category : 'accessing - actions' }
+DockClassOutlineSideView class >> defineActionGroupVariableCritical: actionGroup [
+	<perspectiveActionGroup: #variableCritical>
+	
+	actionGroup 
+		name: 'DANGER';
+		priority: 1000;
+		beDisplayedAsGroup
+]
+
+{ #category : 'accessing - actions' }
+DockClassOutlineSideView class >> defineMethodActionsOn: aBuilder [
+	<perspectiveActions>
+	
+	aBuilder 
+		registerGroup: #method with: { 
+			DockNewMethodCommand new.
+		};
+		registerGroup: #methodCritical with: {
+			$x mod1 shift -> DockRemoveMethodCommand new.
+		}
+]
+
+{ #category : 'accessing - actions' }
+DockClassOutlineSideView class >> defineProtocolActionsOn: aBuilder [
 	<perspectiveActions>
 	
 	aBuilder 
@@ -70,12 +103,19 @@ DockClassOutlineSideView class >> defineActionsOn: aBuilder [
 		};
 		registerGroup: #protocolCritical with: {
 			$x mod1 -> DockRemoveProtocolCommand new.
+		}
+]
+
+{ #category : 'accessing - actions' }
+DockClassOutlineSideView class >> defineVariableActionsOn: aBuilder [
+	<perspectiveActions>
+	
+	aBuilder 
+		registerGroup: #variable with: { 
+			DockNewVariableCommand new.
 		};
-		registerGroup: #method with: { 
-			DockNewMethodCommand new.
-		};
-		registerGroup: #methodCritical with: {
-			$x mod1 shift -> DockRemoveMethodCommand new.
+		registerGroup: #variableCritical with: {
+			$x mod1 -> DockRemoveVariableCommand new.
 		}
 ]
 
@@ -154,8 +194,19 @@ DockClassOutlineSideView >> doAddProtocol [
 
 { #category : 'private - actions' }
 DockClassOutlineSideView >> doAddVariable [
-
-	self halt
+	| variableName |
+	
+	variableName := self application newRequest
+		title: 'New variable';
+		label: 'Variable name';
+		openModalWithParent: self window.
+	variableName  ifNil: [ ^ self ].
+	
+	self model asClassModel addVariableNamed: variableName.
+	self updateVariables.
+	variablesListPresenter selectItem: (variablesListPresenter items 
+		detect: [ :each | each name = variableName ])
+	
 ]
 
 { #category : 'private - actions' }
@@ -179,7 +230,7 @@ DockClassOutlineSideView >> doForceRemoveMethod [
 	self updatePresenter
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private - actions' }
 DockClassOutlineSideView >> doRemoveSelectedProtocol [
 	| protocolModel okToRemove |
 
@@ -231,28 +282,7 @@ DockClassOutlineSideView >> initialize [
 ]
 
 { #category : 'initialization' }
-DockClassOutlineSideView >> initializePresenters [
-
-	variablesToolbarPresenter := self instantiate: DockToolbarPresenter.
-	variablesToolbarPresenter actions: self variablesToolbarActions.
-
-	variablesListPresenter := self newEasyListView
-		addStyle: 'stList';
-		addStyle: 'dockVariablesList';
-		display: [ :aModel | aModel name ];
-				yourself.
-
-	protocolToolbarPresenter := self instantiate: DockToolbarPresenter.
-	protocolToolbarPresenter actions: (self actions actionsFor: #protocol).
-
-	protocolListPresenter := self newEasyListView
-		addStyle: 'stList';
-		addStyle: 'dockProtocolList';
-		rowPresenterClass: DockProtocolRow;
-		searchMatching: [ :aModel :aString | 
-			aModel name asLowercase beginsWith: aString asLowercase ];
-		actions: (self actions actionsForAll: #(protocol protocolCritical));
-		yourself.
+DockClassOutlineSideView >> initializeMethods [
 
 	listToolbarPresenter := self instantiate: DockToolbarPresenter.
 	listToolbarPresenter actions:  (self actions actionsFor: #method).
@@ -264,6 +294,46 @@ DockClassOutlineSideView >> initializePresenters [
 		searchMatching: [ :aModel :aString | 
 			aModel name asLowercase beginsWith: aString asLowercase ];
 		actions: (self actions actionsForAll: #(method methodCritical));
+		yourself	
+]
+
+{ #category : 'initialization' }
+DockClassOutlineSideView >> initializePresenters [
+
+	self initializeVariables.
+	self initializeProtocols.
+	self initializeMethods
+]
+
+{ #category : 'initialization' }
+DockClassOutlineSideView >> initializeProtocols [
+
+	protocolToolbarPresenter := self instantiate: DockToolbarPresenter.
+	protocolToolbarPresenter actions: (self actions actionsFor: #protocol).
+
+	protocolListPresenter := self newEasyListView
+		addStyle: 'stList';
+		addStyle: 'dockProtocolList';
+		rowPresenterClass: DockProtocolRow;
+		searchMatching: [ :aModel :aString | 
+			aModel name asLowercase beginsWith: aString asLowercase ];
+		actions: (self actions actionsForAll: #(protocol protocolCritical));
+		yourself
+]
+
+{ #category : 'initialization' }
+DockClassOutlineSideView >> initializeVariables [
+
+	variablesToolbarPresenter := self instantiate: DockToolbarPresenter.
+	variablesToolbarPresenter actions: (self actions actionsFor: #variable).
+
+	variablesListPresenter := self newEasyListView
+		addStyle: 'stList';
+		addStyle: 'dockVariablesList';
+		display: [ :aModel | aModel name ];
+		searchMatching: [ :aModel :aString | 
+			aModel name asLowercase beginsWith: aString asLowercase ];
+		actions: (self actions actionsForAll: #(variable variableCritical));
 		yourself
 ]
 
@@ -301,11 +371,10 @@ DockClassOutlineSideView >> updateMethods [
 	| items |
 
 	updating ifTrue: [ ^ self ].
-
 	items := self methodsForProtocol: activeProtocol.	
 	activeVariable ifNotNil: [ 
 		items := items select: [ :each | each isUsingVariable: activeVariable ] ].
-	listPresenter items: items.
+	listPresenter items: items
 ]
 
 { #category : 'initialization' }
@@ -316,11 +385,8 @@ DockClassOutlineSideView >> updatePresenter [
 	"I defer to make the update happen at one in UI thread (it looks smoother)"
 	self application defer: [
 		"prevent update methods until is its time"
-		self updatingWhile: [ 	
-			variablesListPresenter 
-				items: self collectVariables;
-				selectFirst.
-			activeVariable := variablesListPresenter selectedItem.
+		self updatingWhile: [
+			self updateVariables.
 			self updateProtocols.
 			activeProtocol := protocolListPresenter selectedItem ].
 		"update methods happens outside the updating flag... :P"
@@ -335,6 +401,15 @@ DockClassOutlineSideView >> updateProtocols [
 		ifNil: [ protocolListPresenter selectFirst ]
 ]
 
+{ #category : 'initialization' }
+DockClassOutlineSideView >> updateVariables [
+
+	variablesListPresenter updateItemsKeepingSelection: self collectVariables.
+	variablesListPresenter selectedItem 
+		ifNil: [ variablesListPresenter selectFirst ].
+	activeVariable := variablesListPresenter selectedItem
+]
+
 { #category : 'private - updating' }
 DockClassOutlineSideView >> updatingWhile: aBlock [ 
 	| oldUpdating |
@@ -343,17 +418,6 @@ DockClassOutlineSideView >> updatingWhile: aBlock [
 	updating := true.
 	^ aBlock ensure: [ 
 		updating := oldUpdating ]
-]
-
-{ #category : 'initialization' }
-DockClassOutlineSideView >> variablesToolbarActions [
-
-	^ SpActionGroup new
-		addActionWith: [ :action | action 
-			name: 'Add';
-			description: 'Add a new variable';
-			iconName: #add;
-			action: [ self doAddVariable ] ]
 ]
 
 { #category : 'visiting' }
@@ -372,6 +436,7 @@ DockClassOutlineSideView >> visitMethodModel: aModel [
 	 method is not included in the method list."
 	((protocolListPresenter items includes: protocolModel)
 		and: [ listPresenter items includes: aModel ])
+		"ifTrue: [ self updateMethods ]"
 		ifFalse: [ self updateProtocols ].
 	
 	listPresenter

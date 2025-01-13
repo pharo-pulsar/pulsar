@@ -43,6 +43,12 @@ PvClassModel >> addProtocolNamed: aName [
 	self entity addProtocol: (Protocol named: aName)
 ]
 
+{ #category : 'updating' }
+PvClassModel >> addVariableNamed: aName [
+
+	self entity addSlot: (InstanceVariableSlot named: aName asSymbol)
+]
+
 { #category : 'converting' }
 PvClassModel >> asClassModel [
 
