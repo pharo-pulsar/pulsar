@@ -3,10 +3,20 @@ Class {
 	#superclass : 'DockDockWindowPresenter',
 	#traits : 'SpTModel',
 	#classTraits : 'SpTModel classTrait',
+	#instVars : [
+		'actions'
+	],
 	#category : 'Dock-Browser-View-Browser',
 	#package : 'Dock-Browser',
 	#tag : 'View-Browser'
 }
+
+{ #category : 'private' }
+DockBaseBrowser >> addGlobalActionsTo: aWindowPresenter [
+
+	self globalActions 
+		ifNotNil: [ :aGroup | aWindowPresenter actions: aGroup ]
+]
 
 { #category : 'private' }
 DockBaseBrowser >> addWindow: aWindow [
@@ -27,11 +37,24 @@ DockBaseBrowser >> eventModelActivated: anAnnouncement [
 	
 ]
 
+{ #category : 'private - settings' }
+DockBaseBrowser >> globalActions [
+
+	^ PvActionCollector collectFor: self
+]
+
 { #category : 'initialization' }
 DockBaseBrowser >> initialize [
 
 	super initialize.
 	self registerToEvents
+]
+
+{ #category : 'initialization' }
+DockBaseBrowser >> initializeWindow: aWindowPresenter [
+
+	super initializeWindow: aWindowPresenter.
+	self addGlobalActionsTo: self
 ]
 
 { #category : 'initialization' }
