@@ -180,6 +180,19 @@ DockProjectView >> doRequestNewClass [
 		beNewClassWithParent: parent)
 ]
 
+{ #category : 'private - actions' }
+DockProjectView >> doRequestNewTrait [
+
+	| parent |
+
+	parent := self closestEntityInPathMatching: [ :each | each isPackageOrTag ].
+	parent ifNil: [ ^ self ].
+	
+	self notifyActivateEntity: (PvClassModel
+		newEnvironment: self model environmentModel 
+		beNewTraitWithParent: parent)	
+]
+
 { #category : 'initialization' }
 DockProjectView >> initializePresenters [
 
@@ -188,7 +201,7 @@ DockProjectView >> initializePresenters [
 	toolbarPresenter addPresenter: (self newMenuButton 
 		addStyle: 'flat';
 		icon: (self iconNamed: 'menu');
-		actions: (self actions actionsFor: #actionNew);
+		actions: (self actions actionsFor: #new);
 		yourself).
 
 	listPresenter := self newEntityTree.
