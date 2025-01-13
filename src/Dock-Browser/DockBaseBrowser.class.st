@@ -26,12 +26,6 @@ DockBaseBrowser >> addWindow: aWindow [
 	aWindow raise
 ]
 
-{ #category : 'accessing' }
-DockBaseBrowser >> announcer [
-
-	^ announcer ifNil: [ announcer := DockTaskAnnouncer new ]
-]
-
 { #category : 'events' }
 DockBaseBrowser >> eventModelActivated: anAnnouncement [
 	
@@ -50,11 +44,23 @@ DockBaseBrowser >> initialize [
 	self registerToEvents
 ]
 
+{ #category : 'private - initialization' }
+DockBaseBrowser >> initializePrivateAnnouncer [
+
+  announcer := DockTaskAnnouncer new
+]
+
 { #category : 'initialization' }
 DockBaseBrowser >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	self addGlobalActionsTo: self
+]
+
+{ #category : 'private' }
+DockBaseBrowser >> notificationCenter [
+	"using my own announcer as notification center"
+	^ self announcer
 ]
 
 { #category : 'initialization' }

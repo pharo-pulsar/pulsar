@@ -81,8 +81,11 @@ PvAliasedVSCodeIconProvider >> initialize [
 		'smallDoIt'. 				'run'.					"code"
 		'smallDebug'. 				'bug'.					"code"
 		'smallPrintIt'. 				'blank'.					"code"
-		'smallProfile'. 				'blank'.					"code"
-		'menu'. 		   	            'kebab-vertical'.    "menu button"
+		'smallProfile'. 				'watch'.					"code"
+		'menu'. 		   	       		'more'.    "menu button"
+		'pause'. 					'debug-pause'.
+		'priority'.					'flame'.
+		'autoUpdate'.				'radio-tower'.
 		"protocols"
 		'protocolPrivate'. 	   		'lock-small'. "blocked"
 		'protocolProtected'.     	'lock-small'. "blocked"

@@ -11,3 +11,9 @@ PvMethodEntry >> evaluateFor: aSpotter [
 
 	aSpotter perspective activateMethod: self content
 ]
+
+{ #category : 'accessing' }
+PvMethodEntry >> iconName [
+
+	^ #method
+]

@@ -18,5 +18,5 @@ PvNewTraitCommand >> defineAction [
 { #category : 'executing' }
 PvNewTraitCommand >> execute [
 	
-	context doNewTrait
+	context doRequestNewTrait
 ]

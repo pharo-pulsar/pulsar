@@ -20,10 +20,27 @@ PvClassModel class >> newEnvironment: anEnvirontmentModel beNewClassWithParent: 
 		beForNewClass
 ]
 
+{ #category : 'instance creation' }
+PvClassModel class >> newEnvironment: anEnvirontmentModel beNewTraitWithParent: aParentModel [
+
+	^ (self 
+		newEnvironment: anEnvirontmentModel 
+		entity: (PvNewTraitTemplate new 
+			parentModel: aParentModel;
+			yourself))
+		beForNewClass
+]
+
 { #category : 'visiting' }
 PvClassModel >> accept: aVisitor [
 
 	^ aVisitor visitClassModel: aVisitor
+]
+
+{ #category : 'updating' }
+PvClassModel >> addProtocolNamed: aName [
+
+	self entity addProtocol: (Protocol named: aName)
 ]
 
 { #category : 'converting' }

@@ -16,7 +16,7 @@ PvShowSpotterForEnvironmentAction >> defineAction [
 { #category : 'executing' }
 PvShowSpotterForEnvironmentAction >> execute [
 	| spotter |
-	
+
 	spotter := self context
 		instantiate: PvSpotter 
 		on: (PvSpotterModelForEnvironment newOrigin: self context).

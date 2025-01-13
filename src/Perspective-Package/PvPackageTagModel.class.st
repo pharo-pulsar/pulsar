@@ -80,3 +80,13 @@ PvPackageTagModel >> package [
 
 	^ self entity package
 ]
+
+{ #category : 'accessing' }
+PvPackageTagModel >> traitDefinitionString [
+	
+	^ PvFluidClassDefinitionPrinter new 
+		traitDefinitionTemplateInPackage: self package name
+		tag: (self entity isRoot 
+			ifTrue: [ nil ]
+			ifFalse: [ self name ])
+]

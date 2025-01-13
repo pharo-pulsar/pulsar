@@ -74,7 +74,8 @@ PvOutlineClassModel >> collectMethods [
 PvOutlineClassModel >> collectMethodsForProtocol: aProtocol [
 
 	^ aProtocol selectors sorted
-		collect: [ :each | 
+		select: [ :each | (self entity instanceSide methodDict includesKey: each) ] 
+		thenCollect: [ :each | 
 			PvMethodModel 
 				newEnvironment: self environmentModel 
 				entity: (self entity instanceSide methodDict at: each) ]

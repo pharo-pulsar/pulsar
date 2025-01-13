@@ -115,3 +115,16 @@ PvFluidClassDefinitionPrinter >> traitDefinitionString [
 			self tagOn: stream.
 			self packageOn: stream ]
 ]
+
+{ #category : 'accessing' }
+PvFluidClassDefinitionPrinter >> traitDefinitionTemplateInPackage: aPackageName tag: aTagName [
+
+	^ String streamContents: [ :stream |
+		stream
+			<< 'Trait << #MyTrait' << String cr
+			<< String tab << 'traits: {};' << String cr 
+			<< String tab << 'slots: {};' << String cr
+			<< String tab << 'classSlots: {};' << String cr
+			<< String tab << 'tag: ''' << (aTagName ifNil: [ '' ]) << ''';' << String cr
+			<< String tab << 'package: ''' << aPackageName << '''' ]
+]

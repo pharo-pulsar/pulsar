@@ -125,7 +125,7 @@ PvProjectModel >> packagesOn: aBaselineClass [
 PvProjectModel >> projectEnvironment [
 	| dict |
 
-	dict := SystemDictionary new.
+	dict := SystemEnvironment new.
 	(self packagesOn: self entity) 
 		do: [ :eachPackage | 
 			eachPackage definedClasses do: [ :each | dict at: each name put: each ] ].

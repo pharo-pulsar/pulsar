@@ -65,3 +65,11 @@ PvPackageModel >> name [
 
 	^ self entity name
 ]
+
+{ #category : 'helpers' }
+PvPackageModel >> traitDefinitionString [
+	
+	^ PvFluidClassDefinitionPrinter new 
+		traitDefinitionTemplateInPackage: self name
+		tag: nil
+]
