@@ -289,8 +289,10 @@ PvMethodModel >> updateWith: aString notifying: anInteractionModel [
  	newSelector := newMethod selector.
 
 	"do not try to classify if already classified"
-	newMethod protocol isUnclassifiedProtocol 
- 		ifTrue: [ MethodClassifier classify: newMethod ].
+	newMethod protocol isUnclassifiedProtocol ifTrue: [
+		protocol 
+			ifNotNil: [ newMethod protocol: protocol ]
+			ifNil: [ MethodClassifier classify: newMethod ] ].
 
 	"update entity"
 	entity := newMethod.
