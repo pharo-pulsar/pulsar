@@ -23,7 +23,7 @@ DockGtkConfiguration >> initialize [
 { #category : 'accessing' }
 DockGtkConfiguration >> style [
 
-	^ '	
+	^ '
 .stList listview, .stTree listview { 
 	font-size: 0.9em;
 } 
@@ -33,6 +33,13 @@ DockGtkConfiguration >> style [
 }
 .stTree columnview listview row cell box { 
 	border-spacing: 5px;
+}
+.stRow {
+	margin: 3px;
+	border-spacing: 3px;	
+}
+.tinyFont {
+	font-size: 0.7em;
 }
 .searchBox { background-color: @popover_bg_color; }
 .link { padding: 0px; }
@@ -44,5 +51,6 @@ button.pvProtocol { font-weight: normal; }
 .stCode { font-size: 0.95em; }
 .dockEditorBreadcrumb { font-size: 0.9em; }
 .dockEditorBreadcrumb label.separator { padding: 0px 5px 0px 5px; }
+.dockSpotter { margin: 10px; border-spacing: 10px }
 '
 ]
