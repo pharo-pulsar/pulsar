@@ -6,7 +6,8 @@ Class {
 	#instVars : [
 		'searchPresenter',
 		'resultListPresenter',
-		'runner'
+		'runner',
+		'emptyPresenter'
 	],
 	#category : 'Dock-Browser-Tool-Spotter',
 	#package : 'Dock-Browser',
@@ -39,9 +40,11 @@ DockSpotter >> connectPresenters [
 { #category : 'layout' }
 DockSpotter >> defaultLayout [
 
-	^ SpBoxLayout newVertical
-		add: searchPresenter expand: false;
-		add: resultListPresenter;
+	^ SpOverlayLayout new 
+		child: (SpBoxLayout newVertical
+			add: searchPresenter expand: false;
+			add: resultListPresenter);
+		addOverlay: emptyPresenter withConstraints: [ :c | c vAlignCenter; hAlignCenter ];
 		yourself
 ]
 
@@ -69,8 +72,16 @@ DockSpotter >> initializeDialogWindow: aDialogWindowPresenter [
 DockSpotter >> initializePresenters [
 
 	self addStyle: 'dockSpotter'.
-	searchPresenter := self newSearchInput.
 	
+	emptyPresenter := self newLabel 
+		addStyle: 'dim';
+		label: 'No results yet...';
+		yourself.
+	
+	searchPresenter := self newSearchInput
+		placeholder: 'Search for classes, methods...';
+		yourself.
+	 
 	resultListPresenter := self newEasyListView
 		rowPresenterClass: DockSpotterRow;
 		yourself
@@ -91,6 +102,8 @@ DockSpotter >> udpdateResultListWith: aCollection [
 	
 	"use defer to ensure UI loop"
 	self application defer: [
+	
+		emptyPresenter visible: aCollection isEmpty.
 		resultListPresenter updateItemsKeepingSelection: aCollection.
 		(resultListPresenter selectedItem isNil 
 			and: [ aCollection isNotEmpty ])
