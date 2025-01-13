@@ -138,11 +138,11 @@ PvMethodModel >> hierarchyTopModel [
 	systemNavigation := PvSystemNavigation new.
 	self isLargeHierarchy ifFalse: [
 			| environment |
-			environment := SystemDictionary new.
+			environment := SystemEnvironment new.
 			self entity origin allSuperclasses 
-				do: [ :each | environment at: each name put: each ].
+				do: [ :each | environment at: each instanceSide name put: each ].
 			self entity origin withAllSubclasses 
-				do: [ :each | environment at: each name put: each ].
+				do: [ :each | environment at: each instanceSide name put: each ].
 			systemNavigation environment: environment ].
 	
 	nodes := (systemNavigation allImplementorsOf: self entity selector)
