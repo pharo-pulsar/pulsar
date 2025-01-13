@@ -40,7 +40,7 @@ DockMethodEditor class >> defineActionsOn: aBuilder [
 		}
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private' }
 DockMethodEditor >> announceActivateClass [
 	
 	self notifyActivateEntity: self model asClassModel
@@ -68,6 +68,14 @@ DockMethodEditor >> eventModelChanged: ann [
 	
 	self updateTitle.
 	self updateProtocol
+]
+
+{ #category : 'events' }
+DockMethodEditor >> eventModelRemoved: anAnnouncememnt [ 
+
+	anAnnouncememnt value = self model ifFalse: [ ^ self ].
+
+	self withPanelWindowDo: [ :aWindow | aWindow close ]
 ]
 
 { #category : 'initialization' }

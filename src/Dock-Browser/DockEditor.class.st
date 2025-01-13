@@ -99,6 +99,12 @@ DockEditor >> eventModelChanged: ann [
 	self updateTitle
 ]
 
+{ #category : 'events' }
+DockEditor >> eventModelRemoved: anAnnouncement [
+
+	self subclassResponsibility
+]
+
 { #category : 'initialization' }
 DockEditor >> initialize [
 
@@ -178,7 +184,8 @@ DockEditor >> registerToEvents [
 
 	super registerToEvents.
 	self announcer 
-		when: DockModelChanged send: #eventModelChanged: to: self
+		when: DockModelChanged send: #eventModelChanged: to: self;
+		when: DockModelRemoved send: #eventModelRemoved: to: self
 ]
 
 { #category : 'private - actions' }

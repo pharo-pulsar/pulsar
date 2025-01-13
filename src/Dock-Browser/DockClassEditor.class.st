@@ -27,6 +27,12 @@ DockClassEditor >> defaultLayout [
 		yourself
 ]
 
+{ #category : 'events' }
+DockClassEditor >> eventModelRemoved: anAnnouncememnt [ 
+
+	self flag: #TODO
+]
+
 { #category : 'initialization' }
 DockClassEditor >> initializePresenters [
 
