@@ -1,11 +1,8 @@
 Class {
 	#name : 'DockBaseView',
 	#superclass : 'SpPresenter',
-	#traits : 'SpTModel + PvTActionHolder',
-	#classTraits : 'SpTModel classTrait + PvTActionHolder classTrait',
-	#instVars : [
-		'notificationCenter'
-	],
+	#traits : 'SpTModel + PvTActionHolder + DockTNotificationCenter',
+	#classTraits : 'SpTModel classTrait + PvTActionHolder classTrait + DockTNotificationCenter classTrait',
 	#category : 'Dock-Browser-View-Base',
 	#package : 'Dock-Browser',
 	#tag : 'View-Base'
@@ -54,45 +51,11 @@ DockBaseView >> newEntityTree [
 		yourself
 ]
 
-{ #category : 'private' }
-DockBaseView >> notificationCenter [
-
-	^ notificationCenter
-]
-
-{ #category : 'private - announcing' }
-DockBaseView >> notifyActivateEntity: anEntity [
-
-	anEntity ifNil: [ ^ self ].
-	self notificationCenter announce: (DockModelActivated newValue: anEntity realModel)
-]
-
-{ #category : 'private - announcing' }
-DockBaseView >> notifyEntityChanged: anEntity [
-
-	anEntity ifNil: [ ^ self ].
-	self notificationCenter announce: (DockModelChanged newValue: anEntity realModel)
-]
-
-{ #category : 'private - announcing' }
-DockBaseView >> notifyEntityRemoved: anEntity [
-
-	anEntity ifNil: [ ^ self ].
-	self notificationCenter announce: (DockModelRemoved newValue: anEntity realModel)
-]
-
-{ #category : 'private - announcing' }
-DockBaseView >> notifySelectEntity: anEntity [
-
-	anEntity ifNil: [ ^ self ].
-	self notificationCenter announce: (DockModelSelected newValue: anEntity realModel)
-]
-
 { #category : 'initialization' }
 DockBaseView >> registerToDock: aDockBrowser [
 
 	"take the announcer of the dock to broadcast what happens"
-	notificationCenter := aDockBrowser announcer.
+	self notificationCenter: aDockBrowser announcer.
 	self registerToEvents
 ]
 
