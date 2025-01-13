@@ -20,19 +20,9 @@ Class {
 	#tag : 'View-Outline'
 }
 
-{ #category : 'as yet unclassified' }
-DockClassOutlineSideView class >> defineActionGroupCritical: actionGroup [
-	<perspectiveActionGroup: #criticalActions>
-	
-	actionGroup 
-		name: 'DANGER';
-		priority: 1000;
-		beDisplayedAsGroup
-]
-
 { #category : 'accessing - actions' }
-DockClassOutlineSideView class >> defineActionGroupNew: actionGroup [
-	<perspectiveActionGroup: #methodActions>
+DockClassOutlineSideView class >> defineActionGroupMethod: actionGroup [
+	<perspectiveActionGroup: #method>
 	
 	actionGroup 
 		name: 'Method';
@@ -41,14 +31,50 @@ DockClassOutlineSideView class >> defineActionGroupNew: actionGroup [
 ]
 
 { #category : 'accessing - actions' }
+DockClassOutlineSideView class >> defineActionGroupMethodCritical: actionGroup [
+	<perspectiveActionGroup: #methodCritical>
+	
+	actionGroup 
+		name: 'DANGER';
+		priority: 1000;
+		beDisplayedAsGroup
+]
+
+{ #category : 'accessing - actions' }
+DockClassOutlineSideView class >> defineActionGroupProtocol: actionGroup [
+	<perspectiveActionGroup: #protocol>
+	
+	actionGroup 
+		name: 'Protocol';
+		priority: 10;
+		beDisplayedAsGroup
+]
+
+{ #category : 'accessing - actions' }
+DockClassOutlineSideView class >> defineActionGroupProtocolCritical: actionGroup [
+	<perspectiveActionGroup: #protocolCritical>
+	
+	actionGroup 
+		name: 'DANGER';
+		priority: 1000;
+		beDisplayedAsGroup
+]
+
+{ #category : 'accessing - actions' }
 DockClassOutlineSideView class >> defineActionsOn: aBuilder [
 	<perspectiveActions>
 	
 	aBuilder 
-		registerGroup: #methodActions with: { 
+		registerGroup: #protocol with: { 
+			DockNewProtocolCommand new.
+		};
+		registerGroup: #protocolCritical with: {
+			$x mod1 -> DockRemoveProtocolCommand new.
+		};
+		registerGroup: #method with: { 
 			DockNewMethodCommand new.
 		};
-		registerGroup: #criticalActions with: {
+		registerGroup: #methodCritical with: {
 			$x mod1 shift -> DockRemoveMethodCommand new.
 		}
 ]
@@ -113,8 +139,17 @@ DockClassOutlineSideView >> defaultLayout [
 
 { #category : 'private - actions' }
 DockClassOutlineSideView >> doAddProtocol [
+	| protocolName |	
 
-	self halt
+	protocolName := self application newRequest 
+		title: 'New protocol';
+		label: 'Protocol name';
+		openModalWithParent: self window.
+	protocolName ifNil: [ ^ self ].
+	
+	self model asClassModel addProtocolNamed: protocolName.
+	self updateProtocols.
+	protocolListPresenter selectItem: (protocolListPresenter items detect: [ :each | each name = protocolName ])
 ]
 
 { #category : 'private - actions' }
@@ -142,6 +177,23 @@ DockClassOutlineSideView >> doForceRemoveMethod [
 	selectedMethodModel removeMethod.
 	self owner notifyEntityRemoved: selectedMethodModel.
 	self updatePresenter
+]
+
+{ #category : 'as yet unclassified' }
+DockClassOutlineSideView >> doRemoveSelectedProtocol [
+	| protocolModel okToRemove |
+
+	protocolModel := protocolListPresenter selectedItem.
+	protocolModel ifNil: [ ^ self ].
+	
+	okToRemove := self application newConfirm 
+		title: 'Remove protocol';
+		label: ('Do you really want to remove protocol "{1}" and all its methods?' format: { protocolModel name });
+		acceptLabel: 'Remove';
+		openModalWithParent: self window.
+	okToRemove ifFalse: [ ^ self ].
+	
+	self halt
 ]
 
 { #category : 'private - actions' }
@@ -188,19 +240,22 @@ DockClassOutlineSideView >> initializePresenters [
 		addStyle: 'stList';
 		addStyle: 'dockVariablesList';
 		display: [ :aModel | aModel name ];
-		yourself.
+				yourself.
 
 	protocolToolbarPresenter := self instantiate: DockToolbarPresenter.
-	protocolToolbarPresenter actions: self protocolToolbarActions.
+	protocolToolbarPresenter actions: (self actions actionsFor: #protocol).
 
 	protocolListPresenter := self newEasyListView
 		addStyle: 'stList';
 		addStyle: 'dockProtocolList';
 		rowPresenterClass: DockProtocolRow;
+		searchMatching: [ :aModel :aString | 
+			aModel name asLowercase beginsWith: aString asLowercase ];
+		actions: (self actions actionsForAll: #(protocol protocolCritical));
 		yourself.
 
 	listToolbarPresenter := self instantiate: DockToolbarPresenter.
-	listToolbarPresenter actions:  (self actions actionsFor: #methodActions).
+	listToolbarPresenter actions:  (self actions actionsFor: #method).
 
 	listPresenter := self newEasyListView 
 		addStyle: 'stList';
@@ -208,7 +263,7 @@ DockClassOutlineSideView >> initializePresenters [
 		display: [ :aModel | aModel name ];
 		searchMatching: [ :aModel :aString | 
 			aModel name asLowercase beginsWith: aString asLowercase ];
-		actions: self actions;
+		actions: (self actions actionsForAll: #(method methodCritical));
 		yourself
 ]
 
@@ -239,17 +294,6 @@ DockClassOutlineSideView >> methodsForVariable: aVariableModel [
 DockClassOutlineSideView >> newMethodModelForNewMethod [
 
 	self subclassResponsibility
-]
-
-{ #category : 'initialization' }
-DockClassOutlineSideView >> protocolToolbarActions [
-
-	^ SpActionGroup new
-		addActionWith: [ :action | action 
-			name: 'Add';
-			description: 'Add a new protocol';
-			iconName: #add;
-			action: [ self doAddProtocol ] ]
 ]
 
 { #category : 'initialization' }
@@ -286,11 +330,9 @@ DockClassOutlineSideView >> updatePresenter [
 { #category : 'initialization' }
 DockClassOutlineSideView >> updateProtocols [
 
-	protocolListPresenter 
-		items: self collectProtocols;
-		"this is because I know the first is 'all', but I may need to 
-		 do a better job on this..."
-		selectFirst
+	protocolListPresenter updateItemsKeepingSelection: self collectProtocols.
+	protocolListPresenter selectedItem 
+		ifNil: [ protocolListPresenter selectFirst ]
 ]
 
 { #category : 'private - updating' }
