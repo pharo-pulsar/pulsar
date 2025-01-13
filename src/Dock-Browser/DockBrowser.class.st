@@ -12,6 +12,17 @@ Class {
 	#tag : 'View-Browser'
 }
 
+{ #category : 'accessing - actions' }
+DockBrowser class >> defineActionsOn: aBuilder [
+	<perspectiveActions>
+
+	aBuilder registerGroup: #perspective with: { 
+		"open default tool"
+		Character cr shift -> DockShowSpotterForEnvironmentCommand new.
+		Character cr shift mod1 -> DockShowSpotterForWindowsCommand new.
+		"Character mod1 mod3 -> PvShowSpotterForCommandsAction new" }
+]
+
 { #category : 'initialization' }
 DockBrowser >> addViewClass: aClass [
 
@@ -63,7 +74,7 @@ DockBrowser >> initialize [
 
 { #category : 'initialization' }
 DockBrowser >> initializeWindow: aWindowPresenter [
-
+	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
 		initialExtent: (LastWindowSize ifNil: [ 900@600 ]);
 		title: 'Pharo Dock';
