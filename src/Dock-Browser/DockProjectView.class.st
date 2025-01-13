@@ -30,7 +30,7 @@ DockProjectView class >> defineActionGroupAction: actionGroup [
 
 { #category : 'accessing - actions' }
 DockProjectView class >> defineActionGroupNew: actionGroup [
-	<perspectiveActionGroup: #actionNew>
+	<perspectiveActionGroup: #new>
 	
 	actionGroup 
 		name: 'New';
@@ -54,11 +54,11 @@ DockProjectView class >> defineActionsOn: aBuilder [
 	
 	aBuilder 
 		registerGroup: #project with: { 
-			$n	mod1 	->	PvNewProjectCommand new.
-			$o mod1  -> PvOpenProjectCommand new.
+			$n mod1		->	PvNewProjectCommand new.
+			$o mod1		-> 	PvOpenProjectCommand new.
 							PvRefreshProjectCommand new.
 		};
-		registerGroup: #actionNew with: { 
+		registerGroup: #new with: { 
 			PvNewPackageCommand new.
 			PvNewPackageTagCommand new.
 			DockNewClassCommand new.
