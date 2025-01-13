@@ -9,6 +9,18 @@ Class {
 	#tag : 'Application'
 }
 
+{ #category : 'activation' }
+DockApplication class >> applicationName [
+
+	^ 'dock'
+]
+
+{ #category : 'accessing' }
+DockApplication class >> defaultBackendName [
+
+	^ #Gtk
+]
+
 { #category : 'accessing' }
 DockApplication >> colorNamed: aString [
 
