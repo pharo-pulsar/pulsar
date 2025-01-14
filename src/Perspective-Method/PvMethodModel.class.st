@@ -131,6 +131,12 @@ PvMethodModel >> fullName [
 			<< self name ]
 ]
 
+{ #category : 'testing' }
+PvMethodModel >> hasDefinedProtocol [
+
+	^ protocol isNotNil and: [ protocol isUnclassifiedProtocol not ] 
+]
+
 { #category : 'accessing - navigating' }
 PvMethodModel >> hierarchyTopModel [
 	| systemNavigation nodes |
@@ -290,9 +296,9 @@ PvMethodModel >> updateWith: aString notifying: anInteractionModel [
 
 	"do not try to classify if already classified"
 	newMethod protocol isUnclassifiedProtocol ifTrue: [
-		protocol 
-			ifNotNil: [ newMethod protocol: protocol ]
-			ifNil: [ MethodClassifier classify: newMethod ] ].
+		self hasDefinedProtocol
+			ifTrue: [ newMethod protocol: protocol ]
+			ifFalse: [ MethodClassifier classify: newMethod ] ].
 
 	"update entity"
 	entity := newMethod.
