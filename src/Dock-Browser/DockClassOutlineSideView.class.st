@@ -194,19 +194,20 @@ DockClassOutlineSideView >> doAddProtocol [
 
 { #category : 'private - actions' }
 DockClassOutlineSideView >> doAddVariable [
-	| variableName |
+	| variableDefinition dialog result |
 	
-	variableName := self application newRequest
-		title: 'New variable';
-		label: 'Variable name';
-		openModalWithParent: self window.
-	variableName  ifNil: [ ^ self ].
+	variableDefinition := DockNewSlotModel new.
+	dialog := self instantiate: DockNewSlotPresenter on: variableDefinition.
+	result := dialog openModalWithParent: self window.
+	result isOk ifFalse: [ ^ self ].
 	
-	self model asClassModel addVariableNamed: variableName.
+	self model asClassModel 
+		addVariableNamed: variableDefinition name 
+		type: variableDefinition slotType.
 	self updateVariables.
 	variablesListPresenter selectItem: (variablesListPresenter items 
-		detect: [ :each | each name = variableName ])
-	
+		detect: [ :each | each name = variableDefinition name ]).
+	self owner notifyEntityChanged: self model asClassModel
 ]
 
 { #category : 'private - actions' }
