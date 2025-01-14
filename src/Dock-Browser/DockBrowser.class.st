@@ -74,9 +74,10 @@ DockBrowser >> initialize [
 
 { #category : 'initialization' }
 DockBrowser >> initializeWindow: aWindowPresenter [
+
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
-		initialExtent: (LastWindowSize ifNil: [ 900@600 ]);
+		initialExtent: (LastWindowSize ifNil: [ 1000@800 ]);
 		title: 'Pharo Dock';
 		whenResizingDo: [ :ann | LastWindowSize := ann newSize ]
 ]
@@ -86,7 +87,7 @@ DockBrowser >> initializeWorkspace [
 
 	self startWidth: 280"self initialExtent x * 25 percent".
 	self endWidth: 280"self initialExtent x * 25 percent".
-	self bottomHeight: 140"self initialExtent y * 20 percent".
+	self bottomHeight: 180"self initialExtent y * 20 percent".
 	
 	"I need a better control on these one"
 	projectView := self addViewClass: DockProjectView on: self model newMultiProjectModel.
