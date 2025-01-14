@@ -31,8 +31,8 @@ DockClassEditor >> defaultLayout [
 DockClassEditor >> eventModelChanged: ann [
 	
 	ann value = self model ifFalse: [ ^ self ].
-	
-	self flag: #TOOD. "Maybe mark as conflict?"
+
+	self flag: #TODO. "Maybe mark as conflict?"
 	self isDirty ifTrue: [ ^ self ].
 
 	self updateEditor
