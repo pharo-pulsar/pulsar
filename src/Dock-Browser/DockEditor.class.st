@@ -13,12 +13,9 @@ Class {
 
 { #category : 'initialization' }
 DockEditor >> connectPresenters [
-	self flag: #REVIEW. "I am not trusting the parameter of submit because I have 
-	noticed that time to time content is lost. I am not sure calling test will improve
-	situation, but we will see..."
 	editorPresenter
 		whenTextChangedDo: [ :newText :oldText | self textChangedFrom: oldText to: newText ];
-		whenSubmitDo: [ :aString | self doSubmit: editorPresenter text ];
+		whenSubmitDo: [ :aString | self doSubmit: aString ];
 		whenResetDo: [ self doReset ]
 ]
 
