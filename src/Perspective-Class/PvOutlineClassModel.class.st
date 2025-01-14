@@ -110,6 +110,12 @@ PvOutlineClassModel >> name [
 	^ self entity name
 ]
 
+{ #category : 'private' }
+PvOutlineClassModel >> species [
+
+	^ PvClassModel
+]
+
 { #category : 'accessing - filtering' }
 PvOutlineClassModel >> toggleFilterByProtocol: aProtocol [
 
