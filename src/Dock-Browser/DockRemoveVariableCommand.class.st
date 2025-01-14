@@ -9,8 +9,8 @@ Class {
 { #category : 'initialization' }
 DockRemoveVariableCommand >> defineAction [
 
-	self name: 'Remove variable'.
-	self description: 'Remove this variable'
+	self name: 'Remove slot'.
+	self description: 'Remove this slot'
 ]
 
 { #category : 'executing' }

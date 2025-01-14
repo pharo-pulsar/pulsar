@@ -28,6 +28,17 @@ DockClassEditor >> defaultLayout [
 ]
 
 { #category : 'events' }
+DockClassEditor >> eventModelChanged: ann [
+	
+	ann value = self model ifFalse: [ ^ self ].
+	
+	self flag: #TOOD. "Maybe mark as conflict?"
+	self isDirty ifTrue: [ ^ self ].
+
+	self updateEditor
+]
+
+{ #category : 'events' }
 DockClassEditor >> eventModelRemoved: anAnnouncememnt [ 
 
 	self flag: #TODO
@@ -56,14 +67,20 @@ DockClassEditor >> updateBreadcrumbs [
 ]
 
 { #category : 'initialization' }
+DockClassEditor >> updateEditor [
+	
+	self updatingWhile: [  
+		editorPresenter text: self model classDefinitionString ]
+]
+
+{ #category : 'initialization' }
 DockClassEditor >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	
 	super updatePresenter.
 	
-	self updatingWhile: [  
-		editorPresenter text: self model classDefinitionString ].
+	self updateEditor.
 	
 	self flag: #REVIEW. "select template tab by defdault (as comment should be introduced later)?"
 	self flag: #TODO. "I need a better way than to wait until it is built. I maybe need to implement #withAdapterPerformOrDefer: in the tab layout"

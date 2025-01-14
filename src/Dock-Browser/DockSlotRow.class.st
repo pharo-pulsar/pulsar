@@ -1,10 +1,10 @@
 Class {
-	#name : 'DockProtocolRow',
+	#name : 'DockSlotRow',
 	#superclass : 'SpEasyAbstractRowPresenter',
 	#instVars : [
 		'namePresenter',
-		'countPresenter',
-		'iconPresenter'
+		'iconPresenter',
+		'slotPresenter'
 	],
 	#category : 'Dock-Browser-View-Outline',
 	#package : 'Dock-Browser',
@@ -12,35 +12,30 @@ Class {
 }
 
 { #category : 'layout' }
-DockProtocolRow >> defaultLayout [
+DockSlotRow >> defaultLayout [
 
 	^ SpBoxLayout newHorizontal
 		spacing: 3;
-		add: iconPresenter expand: false;
 		add: namePresenter;
-		add: countPresenter expand: false;
+		add: slotPresenter expand: false;
 		yourself
 ]
 
 { #category : 'initialization' }
-DockProtocolRow >> initializePresenters [
+DockSlotRow >> initializePresenters [
 
-	iconPresenter := self newImage.
 	namePresenter := self newLabel.
-	countPresenter := self newLabel
+	slotPresenter := self newLabel
 		addStyle: 'dim';
 		addStyle: 'tinyFont';
 		yourself
 ]
 
 { #category : 'initialization' }
-DockProtocolRow >> updatePresenter [
+DockSlotRow >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	
-	iconPresenter image: (self model iconComposite buildOn: self application).
 	namePresenter label: self model name.
-	countPresenter label: (self model numberOfMethods 
-		ifNotNil: [ :aNumber | aNumber asString ]
-		ifNil: [ '' ]).
+	slotPresenter label: self model slotName.
 ]

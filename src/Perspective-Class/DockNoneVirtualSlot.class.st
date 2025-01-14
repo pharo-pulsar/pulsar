@@ -40,3 +40,9 @@ DockNoneVirtualSlot >> name [
 
 	^ '(None)'
 ]
+
+{ #category : 'accessing' }
+DockNoneVirtualSlot >> slotName [
+	
+	^ ''
+]

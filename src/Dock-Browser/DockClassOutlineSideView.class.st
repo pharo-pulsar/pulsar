@@ -330,7 +330,7 @@ DockClassOutlineSideView >> initializeVariables [
 	variablesListPresenter := self newEasyListView
 		addStyle: 'stList';
 		addStyle: 'dockVariablesList';
-		display: [ :aModel | aModel name ];
+		rowPresenterClass: DockSlotRow;
 		searchMatching: [ :aModel :aString | 
 			aModel name asLowercase beginsWith: aString asLowercase ];
 		actions: (self actions actionsForAll: #(variable variableCritical));

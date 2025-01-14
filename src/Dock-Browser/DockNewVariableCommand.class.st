@@ -9,8 +9,8 @@ Class {
 { #category : 'initialization' }
 DockNewVariableCommand >> defineAction [
 
-	self name: 'New variable'.
-	self description: 'Add a new variable to this class'.
+	self name: 'New slot'.
+	self description: 'Add a new slot to this class'.
 	self iconCompositeName: 'add'
 ]
 

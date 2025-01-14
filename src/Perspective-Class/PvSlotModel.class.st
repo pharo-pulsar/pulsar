@@ -23,3 +23,10 @@ PvSlotModel >> name [
 
 	^ self entity name
 ]
+
+{ #category : 'accessing' }
+PvSlotModel >> slotName [
+
+	self entity class = InstanceVariableSlot ifTrue: [ ^ '' ].
+	^ self entity className
+]
