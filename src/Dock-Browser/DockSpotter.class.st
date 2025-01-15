@@ -50,7 +50,9 @@ DockSpotter >> defaultLayout [
 
 { #category : 'private - actions' }
 DockSpotter >> doSearch: aString [
-
+	"clean all possible pending tasks"
+	runner purge.
+	"now schedule the last one"
 	runner schedule: [ 
 		self udpdateResultListWith: (self model candidatesFor: aString) ]
 ]
@@ -102,7 +104,6 @@ DockSpotter >> udpdateResultListWith: aCollection [
 	
 	"use defer to ensure UI loop"
 	self application defer: [
-	
 		emptyPresenter visible: aCollection isEmpty.
 		resultListPresenter updateItemsKeepingSelection: aCollection.
 		(resultListPresenter selectedItem isNil 
