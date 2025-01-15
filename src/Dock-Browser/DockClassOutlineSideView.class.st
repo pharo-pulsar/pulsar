@@ -178,28 +178,45 @@ DockClassOutlineSideView >> defaultLayout [
 ]
 
 { #category : 'private - actions' }
-DockClassOutlineSideView >> doAddProtocol [
-	| protocolName |	
-
-	protocolName := self application newRequest 
-		title: 'New protocol';
-		label: 'Protocol name';
-		openModalWithParent: self window.
-	protocolName ifNil: [ ^ self ].
+DockClassOutlineSideView >> doAddProtocolCommand: aCommand [
+	| dialog sem protocolName |	
+	dialog := self instantiate: DockRequestPresenter.
+	dialog label: 'Protocol Name'.
+	dialog acceptLabel: 'Add'.
 	
+	sem := Semaphore new.
+	self newPopover
+		presenter: dialog;
+		relativeTo: aCommand presenter;
+		whenClosedDo: [ sem signal ];
+		popupModal.
+	sem wait.
+
+	dialog isOk ifFalse: [ ^ self ].
+	
+	protocolName := dialog text.
 	self model asClassModel addProtocolNamed: protocolName.
 	self updateProtocols.
 	protocolListPresenter selectItem: (protocolListPresenter items detect: [ :each | each name = protocolName ])
 ]
 
 { #category : 'private - actions' }
-DockClassOutlineSideView >> doAddVariable [
-	| variableDefinition dialog result |
+DockClassOutlineSideView >> doAddVariableCommand: aCommand [
+	| variableDefinition dialog result sem |
 	
 	variableDefinition := DockNewSlotModel new.
 	dialog := self instantiate: DockNewSlotPresenter on: variableDefinition.
-	result := dialog openModalWithParent: self window.
-	result isOk ifFalse: [ ^ self ].
+	
+	self flag: #TODO. "Should I abstract the 'modal' popup?"
+	sem := Semaphore new.
+	self newPopover
+		presenter: dialog;
+		relativeTo: aCommand presenter;
+		whenClosedDo: [ sem signal ];
+		popupModal.
+	sem wait.
+	
+	dialog isOk ifFalse: [ ^ self ].
 	
 	self model asClassModel 
 		addVariableNamed: variableDefinition name 

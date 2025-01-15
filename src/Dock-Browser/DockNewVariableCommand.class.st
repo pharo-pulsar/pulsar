@@ -17,5 +17,5 @@ DockNewVariableCommand >> defineAction [
 { #category : 'executing' }
 DockNewVariableCommand >> execute [
 
-	context doAddVariable
+	context doAddVariableCommand: self
 ]

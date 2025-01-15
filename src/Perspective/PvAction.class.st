@@ -125,6 +125,12 @@ PvAction >> model [
 ]
 
 { #category : 'accessing' }
+PvAction >> presenter [
+
+	^ self specDecorator presenter
+]
+
+{ #category : 'accessing' }
 PvAction >> priority [
 
 	^ priority ifNil: [ self class defaultPriority ]

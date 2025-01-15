@@ -61,15 +61,7 @@ DockSystemNavigation >> browseMessageList: messageList
 			title: labelString 
 			methods: methods).
 	popover notificationCenter: self notificationCenter.
-	self codePresenter insertPopoverAfterCurrentSelection: popover.
-	
-	"self application tools messageList new
-		messages: methods; 
-		title: labelString;
-		""autoSelect: autoSelectString;""
-		refreshingBlock: aBlock"
-	
-	"self code  "
+	self codePresenter insertPopoverAfterCurrentSelection: popover
 ]
 
 { #category : 'accessing' }

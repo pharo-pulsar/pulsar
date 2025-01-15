@@ -5,7 +5,10 @@ Class {
 	#classTraits : 'SpTModel classTrait',
 	#instVars : [
 		'namePresenter',
-		'slotPresenter'
+		'slotPresenter',
+		'cancelButton',
+		'acceptButton',
+		'isOk'
 	],
 	#category : 'Dock-Browser-View-Outline',
 	#package : 'Dock-Browser',
@@ -21,7 +24,19 @@ DockNewSlotPresenter >> defaultLayout [
 		add: namePresenter;
 		add: 'Slot Type';
 		add: slotPresenter;
+		add: (SpBoxLayout newHorizontal
+			beHomogeneous;
+			add: cancelButton;
+			add: acceptButton;
+			yourself); 
 		yourself
+]
+
+{ #category : 'initialization' }
+DockNewSlotPresenter >> initialize [
+
+	super initialize. 
+	isOk := false
 ]
 
 { #category : 'initialization' }
@@ -40,10 +55,23 @@ DockNewSlotPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 
 { #category : 'initialization' }
 DockNewSlotPresenter >> initializePresenters [
+
 	self addStyle: 'dockDialog'.
 
 	namePresenter := self newTextInput.
-	slotPresenter := self newDropDown
+	slotPresenter := self newDropDown.
+	
+	cancelButton := self newButton
+		label: 'Cancel';
+		action: [ self withPopoverDo: #dismiss ].
+		
+	acceptButton := self newButton
+		label: 'Add';
+		addStyle: 'suggested-action';
+		action: [ 
+			self saveThen: [ 
+				isOk := true.
+				self withPopoverDo: #dismiss ] ]
 ]
 
 { #category : 'initialization' }
@@ -54,13 +82,19 @@ DockNewSlotPresenter >> initializeWindow: aWindowPresenter [
 		initialExtent: 400@250
 ]
 
-{ #category : 'initialization' }
+{ #category : 'testing' }
+DockNewSlotPresenter >> isOk [
+
+	^ isOk
+]
+
+{ #category : 'private' }
 DockNewSlotPresenter >> saveThen: aBlock [
 
 	self model 
 		name: namePresenter text;
 		slotType: slotPresenter selectedItem.
-		
+
 	aBlock value
 ]
 

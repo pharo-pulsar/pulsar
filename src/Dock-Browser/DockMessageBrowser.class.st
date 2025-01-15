@@ -5,7 +5,8 @@ Class {
 	#classTraits : 'SpTModel classTrait + DockTNotificationCenter classTrait',
 	#instVars : [
 		'messageListPresenter',
-		'editorPresenter'
+		'editorPresenter',
+		'headerPresenter'
 	],
 	#category : 'Dock-Browser-Tool-Messages',
 	#package : 'Dock-Browser',
@@ -27,12 +28,21 @@ DockMessageBrowser >> connectPresenters [
 		transmitDo: [ :aMehodModel | self acceptMethod: aMehodModel ]
 ]
 
+{ #category : 'api - focus' }
+DockMessageBrowser >> defaultKeyboardFocus [
+
+	^ messageListPresenter
+]
+
 { #category : 'layout' }
 DockMessageBrowser >> defaultLayout [
 
-	^ SpPanedLayout newVertical
-		add: messageListPresenter;
-		add: editorPresenter;
+	^ SpBoxLayout newVertical
+		add: headerPresenter expand: false;
+		add: (SpPanedLayout newVertical
+			add: messageListPresenter;
+			add: editorPresenter;
+			yourself);
 		yourself
 ]
 
@@ -44,8 +54,10 @@ DockMessageBrowser >> initializePopover: aPopoverPresenter [
 
 { #category : 'initialization' }
 DockMessageBrowser >> initializePresenters [
+
 	self addStyle: 'dockFlyingBrowser'.
 	self addStyle: 'dockMessageFlyingBrowser'.
+	headerPresenter := self instantiate: DockEditorToolbarPresenter.
 
 	messageListPresenter := self newEasyListView
 		display: #fullName;
@@ -53,10 +65,19 @@ DockMessageBrowser >> initializePresenters [
 	editorPresenter := self instantiate: DockMethodEditor
 ]
 
+{ #category : 'private' }
+DockMessageBrowser >> notificationCenter: anAnnouncer [
+
+	notificationCenter := anAnnouncer.
+	editorPresenter notificationCenter: anAnnouncer
+]
+
 { #category : 'initialization' }
 DockMessageBrowser >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	
+	headerPresenter updateBreadcrumbWith: [ :aBreadcrumb | 
+		aBreadcrumb addSegment: self model title ].
 	messageListPresenter items: self model methodModels
 ]

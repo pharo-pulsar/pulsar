@@ -17,5 +17,5 @@ DockNewProtocolCommand >> defineAction [
 { #category : 'executing' }
 DockNewProtocolCommand >> execute [
 
-	context doAddProtocol
+	context doAddProtocolCommand: self
 ]
