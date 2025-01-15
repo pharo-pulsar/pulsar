@@ -15,6 +15,12 @@ PvPackageModel class >> newPackage: aPackage [
 ]
 
 { #category : 'accessing' }
+PvPackageModel >> addPackageTagNamed: aString [
+
+	self entity ensureTag: aString
+]
+
+{ #category : 'accessing' }
 PvPackageModel >> children [
 
 	^ (((self entity tags
