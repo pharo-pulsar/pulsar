@@ -19,11 +19,14 @@ DockClassEditor class >> defineActionsOn: aBuilder [
 ]
 
 { #category : 'layout' }
-DockClassEditor >> defaultLayout [ 
+DockClassEditor >> defaultLayout [
 
-	^ SpPanedLayout newVertical
-		add: commentPresenter;
-		add: super defaultLayout;
+	^ SpBoxLayout newVertical
+		add: toolbarPresenter expand: false;
+		add: (SpPanedLayout newVertical
+			add: commentPresenter;
+			add: editorPresenter;
+			yourself);
 		yourself
 ]
 
@@ -32,10 +35,14 @@ DockClassEditor >> eventModelChanged: ann [
 	
 	ann value = self model ifFalse: [ ^ self ].
 
-	self flag: #TODO. "Maybe mark as conflict?"
-	self isDirty ifTrue: [ ^ self ].
-
-	self updateEditor
+	self isDirty 
+		ifTrue: [
+			self flag: #TODO. "Maybe mark dirty as a conflict?"
+			"updating should prevent to modify the edited content"
+			self updatingWhile: [
+				self updatePresenter ] ]
+		ifFalse: [
+			self updatePresenter ]
 ]
 
 { #category : 'events' }
@@ -48,8 +55,8 @@ DockClassEditor >> eventModelRemoved: anAnnouncememnt [
 DockClassEditor >> initializePresenters [
 
 	super initializePresenters.
+	
 	self addStyle: 'dockClassEditor'.
-
 	commentPresenter := self newLabel
 ]
 
