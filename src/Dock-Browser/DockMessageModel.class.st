@@ -35,6 +35,12 @@ DockMessageModel >> environmentModel: anEnvironmentModel [
 ]
 
 { #category : 'accessing' }
+DockMessageModel >> methodCount [
+
+	^ self methods size
+]
+
+{ #category : 'accessing' }
 DockMessageModel >> methodModels [
 
 	^ methodModels ifNil: [ 

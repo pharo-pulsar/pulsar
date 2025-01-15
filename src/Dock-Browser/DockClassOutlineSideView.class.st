@@ -179,7 +179,8 @@ DockClassOutlineSideView >> defaultLayout [
 
 { #category : 'private - actions' }
 DockClassOutlineSideView >> doAddProtocolCommand: aCommand [
-	| dialog sem protocolName |	
+	| dialog sem protocolName |
+
 	dialog := self instantiate: DockRequestPresenter.
 	dialog label: 'Protocol Name'.
 	dialog acceptLabel: 'Add'.

@@ -6,7 +6,8 @@ Class {
 	#instVars : [
 		'messageListPresenter',
 		'editorPresenter',
-		'headerPresenter'
+		'headerPresenter',
+		'countPresenter'
 	],
 	#category : 'Dock-Browser-Tool-Messages',
 	#package : 'Dock-Browser',
@@ -57,7 +58,13 @@ DockMessageBrowser >> initializePresenters [
 
 	self addStyle: 'dockFlyingBrowser'.
 	self addStyle: 'dockMessageFlyingBrowser'.
+	
 	headerPresenter := self instantiate: DockEditorToolbarPresenter.
+	countPresenter := self newLabel
+		addStyle: 'dim';
+		addStyle: 'tinyFont';
+		yourself.
+	headerPresenter addPresenter: countPresenter.
 
 	messageListPresenter := self newEasyListView
 		display: #fullName;
@@ -79,5 +86,6 @@ DockMessageBrowser >> updatePresenter [
 	
 	headerPresenter updateBreadcrumbWith: [ :aBreadcrumb | 
 		aBreadcrumb addSegment: self model title ].
-	messageListPresenter items: self model methodModels
+	messageListPresenter items: self model methodModels.
+	countPresenter label: self model methodCount asString
 ]
