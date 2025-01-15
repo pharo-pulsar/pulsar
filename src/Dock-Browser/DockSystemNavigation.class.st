@@ -2,7 +2,9 @@ Class {
 	#name : 'DockSystemNavigation',
 	#superclass : 'SystemNavigation',
 	#instVars : [
-		'window'
+		'window',
+		'codePresenter',
+		'environmentModel'
 	],
 	#category : 'Dock-Browser-View-Base',
 	#package : 'Dock-Browser',
@@ -36,6 +38,64 @@ DockSystemNavigation >> browse: anObject [
 	self window announce: (DockModelActivated newValue: (modelClass 
 			newEnvironment: self window model environmentModel 
 			entity: anObject))
+]
+
+{ #category : 'accessing' }
+DockSystemNavigation >> browseMessageList: messageList 
+	name: labelString 
+	autoSelect: autoSelectString 
+	refreshingBlock: aBlock [
+	"Create and schedule a MessageSet browser on the message list."
+	| methods popover |
+	
+	"Do not show trait methods"
+	methods := messageList reject: [ :each| each isFromTrait ].
+	
+	methods ifEmpty: [
+		^ self window inform: 'There are no ', String cr, labelString ].
+	
+	popover := self window 
+		instantiate: DockMessageBrowser 
+		on: (DockMessageModel 
+			newEnvironment: self environmentModel
+			title: labelString 
+			methods: methods).
+	popover notificationCenter: self notificationCenter.
+	self codePresenter insertPopoverAfterCurrentSelection: popover.
+	
+	"self application tools messageList new
+		messages: methods; 
+		title: labelString;
+		""autoSelect: autoSelectString;""
+		refreshingBlock: aBlock"
+	
+	"self code  "
+]
+
+{ #category : 'accessing' }
+DockSystemNavigation >> codePresenter [
+
+	^ codePresenter
+]
+
+{ #category : 'accessing' }
+DockSystemNavigation >> codePresenter: aCodePresenter [
+	"this is the presenter that will be triggering the usage of some navigations... like message 
+	 browser, etc."
+	
+	codePresenter := aCodePresenter
+]
+
+{ #category : 'accessing' }
+DockSystemNavigation >> environmentModel [
+
+	^ self window model environmentModel
+]
+
+{ #category : 'accessing' }
+DockSystemNavigation >> notificationCenter [
+
+	^ self window notificationCenter
 ]
 
 { #category : 'accessing' }

@@ -51,6 +51,7 @@ button.pvProtocol { font-weight: normal; }
 .stCode { font-size: 0.95em; }
 .dockEditorBreadcrumb { font-size: 0.9em; }
 .dockEditorBreadcrumb label.separator { padding: 0px 5px 0px 5px; }
-.dockSpotter, .dockDialog { margin: 10px; border-spacing: 10px }
+.dockSpotter, .dockDialog, .dockFlyingBrowser { margin: 5px; border-spacing: 5px; }
+.dockMessageFlyingBrowser { min-width: 620px; min-height: 420px; }
 '
 ]

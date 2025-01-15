@@ -13,6 +13,7 @@ Class {
 
 { #category : 'initialization' }
 DockEditor >> connectPresenters [
+
 	editorPresenter
 		whenTextChangedDo: [ :newText :oldText | self textChangedFrom: oldText to: newText ];
 		whenSubmitDo: [ :aString | self doSubmit: aString ];
@@ -136,7 +137,9 @@ DockEditor >> initializePresenters [
 		withEditionContextMenu;
 		actions: self editorContextMenuActions;
 		lineNumbers: self application isShowingLineNumbers;
-		systemNavigation: self systemNavigation
+		systemNavigation: (self systemNavigation
+			codePresenter: editorPresenter ;
+			yourself)
 ]
 
 { #category : 'initialization' }
@@ -238,14 +241,16 @@ DockEditor >> updateBreadcrumbs [
 { #category : 'initialization' }
 DockEditor >> updatePresenter [
 
-	self updateTitle
+	self firstWindowLike ifNotNil: [ :aWindow | 
+		(DockEditorUpdateVisitor on: self) visit: aWindow ].
+	self updateBreadcrumbs
+	
 ]
 
 { #category : 'initialization' }
 DockEditor >> updateTitle [
 
-	self withPanelWindowDo: [ :w | w title: self model name ].
-	self updateBreadcrumbs
+	self withPanelWindowDo: [ :w | w title: self model name ]
 ]
 
 { #category : 'private - updating' }
