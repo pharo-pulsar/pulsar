@@ -23,6 +23,12 @@ DockClassOutlineView class >> defaultDockPosition [
 		yourself
 ]
 
+{ #category : 'private' }
+DockClassOutlineView >> classSidePresenter [
+
+	^ classSidePresenter
+]
+
 { #category : 'api - focus' }
 DockClassOutlineView >> defaultKeyboardFocus [
 
@@ -64,7 +70,10 @@ DockClassOutlineView >> eventModelChanged: anAnnouncement [
 
 	changedModel := anAnnouncement value.
 	outlineClassModel := changedModel asOutlineClassModel.
-	self model = outlineClassModel ifFalse: [ ^ self ].
+	(self model = outlineClassModel) ifFalse: [ 
+		anAnnouncement oldEntity isNew 
+			ifTrue: [ self model: outlineClassModel ].
+		^ self ].
 	self updatePresenter.
 	changedModel accept: self
 ]
@@ -87,6 +96,12 @@ DockClassOutlineView >> initializePresenters [
 DockClassOutlineView >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter title: 'Outline'
+]
+
+{ #category : 'private' }
+DockClassOutlineView >> instanceSidePresenter [
+
+	^ instanceSidePresenter
 ]
 
 { #category : 'initialization' }

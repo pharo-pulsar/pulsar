@@ -71,3 +71,15 @@ DockBaseViewTest >> tearDown [
 	self ensureCloseBrowser.
 	super tearDown
 ]
+
+{ #category : 'private' }
+DockBaseViewTest >> waitForUI [
+
+	self waitForUI: 2
+]
+
+{ #category : 'private' }
+DockBaseViewTest >> waitForUI: aNumber [
+
+	(100 * aNumber) milliSeconds wait
+]

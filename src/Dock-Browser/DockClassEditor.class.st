@@ -34,7 +34,6 @@ DockClassEditor >> defaultLayout [
 DockClassEditor >> eventModelChanged: ann [
 	
 	ann value = self model ifFalse: [ ^ self ].
-
 	self isDirty 
 		ifTrue: [
 			self flag: #TODO. "Maybe mark dirty as a conflict?"
@@ -86,7 +85,6 @@ DockClassEditor >> updatePresenter [
 	self model ifNil: [ ^ self ].
 	
 	super updatePresenter.
-	
 	self updateEditor.
 	
 	self flag: #REVIEW. "select template tab by defdault (as comment should be introduced later)?"

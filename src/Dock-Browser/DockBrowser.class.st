@@ -2,7 +2,8 @@ Class {
 	#name : 'DockBrowser',
 	#superclass : 'DockBaseBrowser',
 	#instVars : [
-		'projectView'
+		'projectView',
+		'outlineView'
 	],
 	#classVars : [
 		'LastWindowSize'
@@ -95,10 +96,11 @@ DockBrowser >> initializeWorkspace [
 	
 	"I need a better control on these one"
 	projectView := self addViewClass: DockProjectView on: self model newMultiProjectModel.
+	outlineView := self addViewClass: DockClassOutlineView.
 
 	"here, the list of components that are part of the 'sides' but we access 
 	 just while interacting."	
-	{ DockClassOutlineView. DockPlayground. DockTranscript } do: [ :eachClass |
+	{ DockPlayground. DockTranscript } do: [ :eachClass |
 		self addViewClass: eachClass ]
 ]
 
@@ -129,9 +131,23 @@ DockBrowser >> maybeDockView: aViewModel [
 ]
 
 { #category : 'actions' }
+DockBrowser >> openClass: aClass [ 
+
+	self projectView notifyActivateEntity: (PvClassModel 
+		newEnvironment: self model environmentModel
+		entity: aClass)
+]
+
+{ #category : 'actions' }
 DockBrowser >> openProject: aBaselineClass [ 
 
 	projectView addProject: aBaselineClass
+]
+
+{ #category : 'private' }
+DockBrowser >> outlineView [
+
+	^ outlineView
 ]
 
 { #category : 'private' }

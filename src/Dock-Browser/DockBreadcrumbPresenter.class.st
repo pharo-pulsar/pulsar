@@ -29,6 +29,12 @@ DockBreadcrumbPresenter >> initializePresenters [
 	self addStyle: 'dockEditorBreadcrumb'
 ]
 
+{ #category : 'accessing' }
+DockBreadcrumbPresenter >> segments [
+
+	^ self layout children
+]
+
 { #category : 'updating' }
 DockBreadcrumbPresenter >> updateBreadcrumbWith: aBlock [ 
 

@@ -66,7 +66,7 @@ DockMethodEditor >> eventModelChanged: ann [
 	
 	ann value = self model ifFalse: [ ^ self ].
 	
-	self updateTitle.
+	super eventModelChanged: ann.
 	self updateProtocol
 ]
 

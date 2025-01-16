@@ -35,6 +35,15 @@ DockTNotificationCenter >> notifyEntityChanged: anEntity [
 ]
 
 { #category : 'private - announcing' }
+DockTNotificationCenter >> notifyEntityChanged: anEntity oldEntity: oldEntity [
+
+	anEntity ifNil: [ ^ self ].
+	self notificationCenter announce: (DockModelChanged 
+		newValue: anEntity realModel
+		old: oldEntity realModel)
+]
+
+{ #category : 'private - announcing' }
 DockTNotificationCenter >> notifyEntityRemoved: anEntity [
 
 	anEntity ifNil: [ ^ self ].

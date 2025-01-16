@@ -244,6 +244,9 @@ PvClassModel >> updateWith: aString notifying: anInteractionModel [
 		^ false ].
 	
 	self entity: fluidDefinition fluidInstall.
+	"no matter what we had before, this is no longer new"
+	isNew := false.
+
 	^ true
 ]
 

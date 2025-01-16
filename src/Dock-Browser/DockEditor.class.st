@@ -46,14 +46,17 @@ DockEditor >> doSubmit: aString [
 	"process the save of the edited content.
 	 updates the model (which in time will trigger changes in the system). 
 	 We need to inform the UI something has changed to allow him to react"
-	| result |
+	| result oldModel |
 	
+	oldModel := self model copy.
 	result := self model 
 		updateWith: aString
 		notifying: editorPresenter interactionModel.
 	result ifTrue: [
 		self unmarkDirty.
-		self notificationCenter announce: (DockModelChanged newValue: self model) ].
+		self notificationCenter announce: (DockModelChanged 
+			newValue: self model
+			oldEntity: oldModel) ].
 
 	^ result
 ]
@@ -96,7 +99,9 @@ DockEditor >> editorPresenter [
 DockEditor >> eventModelChanged: ann [
 	
 	ann value = self model ifFalse: [ ^ self ].
-	self updateTitle
+	
+	self updateTitle.
+	self updateBreadcrumbs
 ]
 
 { #category : 'events' }
@@ -220,6 +225,12 @@ DockEditor >> textChangedFrom: oldText to: newText [
 	self markDirty
 ]
 
+{ #category : 'private' }
+DockEditor >> toolbarPresenter [
+
+	^ toolbarPresenter
+]
+
 { #category : 'private - announcing' }
 DockEditor >> triggerEditorActivated [
 
@@ -240,17 +251,18 @@ DockEditor >> updateBreadcrumbs [
 
 { #category : 'initialization' }
 DockEditor >> updatePresenter [
-
-	self firstWindowLike ifNotNil: [ :aWindow | 
-		(DockEditorUpdateVisitor on: self) visit: aWindow ].
-	self updateBreadcrumbs
 	
+	self firstWindowLike ifNotNil: [ :aWindow |
+		(DockEditorUpdateVisitor on: self) visit: aWindow ].
+		
+	self updateBreadcrumbs
 ]
 
 { #category : 'initialization' }
 DockEditor >> updateTitle [
 
-	self withPanelWindowDo: [ :w | w title: self model name ]
+	self withPanelWindowDo: [ :w | 
+		w title: self model name ]
 ]
 
 { #category : 'private - updating' }

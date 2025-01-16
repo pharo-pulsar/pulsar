@@ -41,6 +41,13 @@ DockEditorToolbarPresenter >> actionsLastLayout [
 		yourself
 ]
 
+{ #category : 'private' }
+DockEditorToolbarPresenter >> breadcrumbs [
+	"used mainly for test"
+
+	^ titlePresenter
+]
+
 { #category : 'initialization' }
 DockEditorToolbarPresenter >> initializePresenters [
 
