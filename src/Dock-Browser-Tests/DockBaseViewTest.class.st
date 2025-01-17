@@ -16,6 +16,14 @@ DockBaseViewTest class >> isAbstract [
 	^ self = DockBaseViewTest
 ]
 
+{ #category : 'private' }
+DockBaseViewTest >> addClass [
+
+	^ Object << self mockClassName
+		package: 'Dock-Browser-Tests';
+		install
+]
+
 { #category : 'accessing' }
 DockBaseViewTest >> application [
 
@@ -34,6 +42,35 @@ DockBaseViewTest >> ensureCloseBrowser [
 	browser ifNotNil: [ 
 		browser close.
 		browser := nil ]
+]
+
+{ #category : 'private' }
+DockBaseViewTest >> ensureRemoveClass: aClassName [ 
+
+	(self class environment classNamed: aClassName)
+		ifNotNil: [ :aClass | aClass removeFromSystemUnlogged ].
+
+]
+
+{ #category : 'private' }
+DockBaseViewTest >> indexOfElement: aBlock in: aCollection [
+		
+	aCollection withIndexDo: [ :each :index | 
+		(aBlock value: each) ifTrue: [ ^ index ] ].
+	
+	self error: 'Should not arrive here.'
+]
+
+{ #category : 'private' }
+DockBaseViewTest >> mockClass [
+
+	^ self class environment classNamed: self mockClassName
+]
+
+{ #category : 'private' }
+DockBaseViewTest >> mockClassName [
+
+	^ #DockTestClassToRemove
 ]
 
 { #category : 'private' }
@@ -59,10 +96,43 @@ DockBaseViewTest >> openBrowserOnProject [
 	^ browser
 ]
 
+{ #category : 'private' }
+DockBaseViewTest >> pathByName: aPath in: aCollection [ 
+	| segmentName index |
+
+	aPath ifEmpty: [ ^ #() ].
+
+	segmentName := aPath first.	
+	index := self indexOfElement: [ :each | each name = segmentName ] in: aCollection.
+	^ { index }, 
+		(self pathByName: aPath allButFirst in: (aCollection at: index) children)
+]
+
 { #category : 'accessing' }
 DockBaseViewTest >> presenter [
 
 	^ presenter ifNil: [ presenter := self application new: self classToTest ]
+]
+
+{ #category : 'private' }
+DockBaseViewTest >> selectClass [
+	
+	^ self selectPathByName: #(
+		'Perspective' 
+		'Dock-Browser-Tests' 
+		'Uncategorized' 
+		'DockTestClassToRemove')
+]
+
+{ #category : 'private' }
+DockBaseViewTest >> selectPathByName: aPath [
+	| listPresenter |
+	
+	listPresenter := browser projectView listPresenter.
+	
+	listPresenter selectPath: (self 
+		pathByName: aPath 
+		in: listPresenter roots)
 ]
 
 { #category : 'running' }

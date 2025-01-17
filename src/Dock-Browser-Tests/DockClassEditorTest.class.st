@@ -12,14 +12,6 @@ DockClassEditorTest >> classToTest [
 ]
 
 { #category : 'running' }
-DockClassEditorTest >> ensureRemoveClass: aClassName [ 
-
-	(self class environment classNamed: aClassName)
-		ifNotNil: [ :aClass | aClass removeFromSystemUnlogged ].
-
-]
-
-{ #category : 'running' }
 DockClassEditorTest >> tearDown [
 
 	self ensureRemoveClass: #DockTestClassToRemove.		

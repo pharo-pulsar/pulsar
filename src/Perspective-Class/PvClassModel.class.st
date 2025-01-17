@@ -221,6 +221,12 @@ PvClassModel >> packageName [
 ]
 
 { #category : 'accessing' }
+PvClassModel >> packageTagName [
+
+	^ self entity packageTag name
+]
+
+{ #category : 'accessing' }
 PvClassModel >> shortName [
 	
 	^ self name contractTo: self class shortSize

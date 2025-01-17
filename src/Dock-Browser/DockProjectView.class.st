@@ -193,6 +193,19 @@ DockProjectView >> doRequestNewTrait [
 		beNewTraitWithParent: parent)	
 ]
 
+{ #category : 'events' }
+DockProjectView >> eventEditorActivated: anAnnouncement [
+	| classModel path |
+	
+	classModel := anAnnouncement value model asClassModel.
+	listPresenter selectedItem realModel = classModel ifTrue: [ ^ self ].
+ 
+	path := self model findPathForClassModel: classModel. 
+	path ifNil: [ ^ self ].
+	
+	listPresenter selectPath: path
+]
+
 { #category : 'initialization' }
 DockProjectView >> initializePresenters [
 
@@ -222,6 +235,14 @@ DockProjectView >> initializeWindow: aWindowPresenter [
 DockProjectView >> maybeOpenFlyView [
 
 	self halt
+]
+
+{ #category : 'initialization' }
+DockProjectView >> registerToEvents [
+
+	super registerToEvents.
+	self announcer 
+		when: DockEditorActivated send: #eventEditorActivated: to: self	
 ]
 
 { #category : 'private' }

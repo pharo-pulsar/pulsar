@@ -11,6 +11,13 @@ DockProjectViewTest >> classToTest [
 	^ DockProjectView
 ]
 
+{ #category : 'running' }
+DockProjectViewTest >> tearDown [
+
+	self ensureRemoveClass: self mockClassName.
+	super tearDown
+]
+
 { #category : 'tests' }
 DockProjectViewTest >> testActions [
 
@@ -27,6 +34,22 @@ DockProjectViewTest >> testActions [
 			PvNewTraitCommand. 
 			PvRenamePackageCommand. 
 			PvRemovePackageCommand }
+]
+
+{ #category : 'tests' }
+DockProjectViewTest >> testActivatedClassEditorInProjectIsSelected [
+	"tests when activating a class in an editor, and the class is inside an opened 
+	 project, the class is selected"
+
+	self addClass.
+	self openBrowserOnProject.
+	browser openClass: self mockClass.
+	self waitForUI.
+	
+	self assert: browser projectView listPresenter selectedItem isNotNil.
+	self 
+		assert: browser projectView listPresenter selectedItem name
+		equals: self mockClassName
 ]
 
 { #category : 'tests' }
@@ -54,5 +77,6 @@ DockProjectViewTest >> testDoRequestNewClass [
 	browser projectView listPresenter selectPath: #(1 1).
 	"request"
 	browser projectView doRequestNewClass.
+	self waitForUI.
 	self assert: (browser presenterWithTitle: title) isNotNil
 ]
