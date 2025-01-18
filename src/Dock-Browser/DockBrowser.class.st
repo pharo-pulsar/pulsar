@@ -60,7 +60,7 @@ DockBrowser >> findEditorContaining: aViewModel [
 		ifNone: [ nil ]
 ]
 
-{ #category : 'api' }
+{ #category : 'initialization' }
 DockBrowser >> initialExtent [
 
 	^ LastWindowSize ifNil: [ super initialExtent ]
