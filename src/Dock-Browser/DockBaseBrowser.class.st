@@ -26,6 +26,12 @@ DockBaseBrowser >> addWindow: aWindow [
 	aWindow raise
 ]
 
+{ #category : 'accessing' }
+DockBaseBrowser >> editors [
+
+	^ self presenters select: [ :each | each dockArea = DockArea center ]
+]
+
 { #category : 'events' }
 DockBaseBrowser >> eventModelActivated: anAnnouncement [
 	
@@ -75,7 +81,7 @@ DockBaseBrowser >> registerToEvents [
 
 { #category : 'announcing' }
 DockBaseBrowser >> resendAnnouncement: anAnnouncement [
-
+	
 	self presentersDo: [ :aWindowPresenter |
 		aWindowPresenter presenter announce: anAnnouncement ]
 ]

@@ -55,12 +55,8 @@ DockBrowser >> eventModelActivated: anAnnouncement [
 { #category : 'private' }
 DockBrowser >> findEditorContaining: aViewModel [
 
-	^ self presenters 
-		detect: [ :each | 
-			self flag: #TODO. "I do not like this, but so far I need to filter out the only 
-			view capable of have a class model and NOT be an editor"
-			(each dockArea = DockArea center)
-			and: [ each presenter model = aViewModel ] ]
+	^ self editors 
+		detect: [ :each | each presenter model = aViewModel ]
 		ifNone: [ nil ]
 ]
 
