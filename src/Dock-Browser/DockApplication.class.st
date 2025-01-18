@@ -2,7 +2,8 @@ Class {
 	#name : 'DockApplication',
 	#superclass : 'StPharoApplication',
 	#instVars : [
-		'name'
+		'name',
+		'scheduler'
 	],
 	#category : 'Dock-Browser-Application',
 	#package : 'Dock-Browser',
@@ -87,6 +88,21 @@ DockApplication >> newSystemTools [
 	^ Smalltalk tools deepCopy
 		register: StMessageBrowser as: #messageList;
 		yourself
+]
+
+{ #category : 'accessing - scheduling' }
+DockApplication >> schedule: aBlock [
+
+	self scheduler schedule: aBlock
+]
+
+{ #category : 'accessing - scheduling' }
+DockApplication >> scheduler [
+
+	^ scheduler ifNil: [ 
+		scheduler := TKTWorkerPool new
+			poolMaxSize: 5;
+			start ]
 ]
 
 { #category : 'running' }
