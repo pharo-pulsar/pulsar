@@ -80,6 +80,18 @@ DockBaseBrowser >> resendAnnouncement: anAnnouncement [
 		aWindowPresenter presenter announce: anAnnouncement ]
 ]
 
+{ #category : 'private - schedulling' }
+DockBaseBrowser >> schedule: aBlock [
+
+	^ self scheduler schedule: aBlock
+]
+
+{ #category : 'private - schedulling' }
+DockBaseBrowser >> scheduler [
+
+	^ self application scheduler
+]
+
 { #category : 'accessing' }
 DockBaseBrowser >> systemNavigation [
 
