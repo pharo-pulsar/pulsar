@@ -35,6 +35,24 @@ DockMultiProjectModel >> children [
 	^ projectModels
 ]
 
+{ #category : 'accessing' }
+DockMultiProjectModel >> findPathForClassModel: aClassModel [
+	| path |
+	
+	"{ self. aClassModel } inspect."
+	self children withIndexDo: [ :each :index |
+		path := self 
+			pathTo: { aClassModel packageName. aClassModel packageTagName }
+			in: each children.
+		path ifNotEmpty: [
+			^ { index }, 
+			  (path collect: #value), 
+			  (self 
+					findRecursivelyPathForClassModel: aClassModel 
+					inNode: path last key) ] ].
+	^ nil
+]
+
 { #category : 'private' }
 DockMultiProjectModel >> findRecursivelyPathForClassModel: aClassModel inNode: aNode [
 	"finds a subpath for a class model starting in a node. This is like this 
