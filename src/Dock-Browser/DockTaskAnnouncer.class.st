@@ -1,9 +1,8 @@
 Class {
 	#name : 'DockTaskAnnouncer',
 	#superclass : 'Announcer',
-	#instVars : [
-		'runner'
-	],
+	#traits : 'DockTScheduling',
+	#classTraits : 'DockTScheduling classTrait',
 	#category : 'Dock-Browser-View-Browser',
 	#package : 'Dock-Browser',
 	#tag : 'View-Browser'
@@ -20,15 +19,7 @@ DockTaskAnnouncer >> announce: anAnnouncement [
 	(self isSynchronic: anAnnouncement)
 		ifTrue: [ ^ super announce: anAnnouncement ].
 
-	runner schedule: [ super announce: anAnnouncement ]
-]
-
-{ #category : 'initialization' }
-DockTaskAnnouncer >> initialize [
-
-	super initialize.
-	runner := TKTWorker new start
-		
+	self schedule: [ super announce: anAnnouncement ]
 ]
 
 { #category : 'testing' }

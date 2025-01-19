@@ -1,9 +1,11 @@
 Class {
 	#name : 'DockApplication',
 	#superclass : 'StPharoApplication',
+	#traits : 'DockTScheduling',
+	#classTraits : 'DockTScheduling classTrait',
 	#instVars : [
 		'name',
-		'scheduler'
+		'standalone'
 	],
 	#category : 'Dock-Browser-Application',
 	#package : 'Dock-Browser',
@@ -43,6 +45,12 @@ DockApplication >> isShowingLineNumbers [
 	^ true
 ]
 
+{ #category : 'testing' }
+DockApplication >> isStandalone [
+
+	^ standalone == true
+]
+
 { #category : 'initialization' }
 DockApplication >> newConfiguration [
 
@@ -71,6 +79,14 @@ DockApplication >> newIconProvider [
 	  PvDefaultIconProvider new
 ]
 
+{ #category : 'accessing - scheduling' }
+DockApplication >> newScheduler [ 
+
+	^ TKTWorkerPool new
+		poolMaxSize: 5;
+		start
+]
+
 { #category : 'private - factory' }
 DockApplication >> newSettings [
 
@@ -90,19 +106,13 @@ DockApplication >> newSystemTools [
 		yourself
 ]
 
-{ #category : 'accessing - scheduling' }
-DockApplication >> schedule: aBlock [
-
-	self scheduler schedule: aBlock
-]
-
-{ #category : 'accessing - scheduling' }
-DockApplication >> scheduler [
-
-	^ scheduler ifNil: [ 
-		scheduler := TKTWorkerPool new
-			poolMaxSize: 5;
-			start ]
+{ #category : 'initialization' }
+DockApplication >> prepareAsStandaloneApplication [
+	
+	standalone := true.
+	"1hr... maybe too much?"
+	Smalltalk vm isRunningInWorkerThread 
+		ifTrue: [ ProcessorScheduler idleTime: 3600000000 ]
 ]
 
 { #category : 'running' }
@@ -132,5 +142,7 @@ DockApplication >> useGtkLight [
 
 	self 
 		useBackend: #Gtk 
-		with: self newConfiguration
+		with: (self newConfiguration
+			theme: LnLightTheme new;
+			yourself)
 ]

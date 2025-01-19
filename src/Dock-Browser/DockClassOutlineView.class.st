@@ -1,6 +1,8 @@
 Class {
 	#name : 'DockClassOutlineView',
 	#superclass : 'DockBaseView',
+	#traits : 'DockTScheduling',
+	#classTraits : 'DockTScheduling classTrait',
 	#instVars : [
 		'toolbarPresenter',
 		'structureTreePresenter',
@@ -52,16 +54,17 @@ DockClassOutlineView >> defaultLayout [
 
 { #category : 'events' }
 DockClassOutlineView >> eventEditorActivated: anAnnouncement [
-	| activatedModel outlineModel |
-
-	activatedModel := anAnnouncement value model.
-	outlineModel := activatedModel asOutlineClassModel.
 	
-	self model = outlineModel 
-		ifFalse: [ self model: outlineModel ].
-		
-	"visit after to be able to post-process"
-	activatedModel accept: self
+	"this may be slow, so I schedule it, to not break process..."
+	self schedule: [ 
+		| activatedModel outlineModel |
+
+		activatedModel := anAnnouncement value model.
+		outlineModel := activatedModel asOutlineClassModel.
+		self model = outlineModel ifFalse: [
+			self model: outlineModel ].
+		"visit after to be able to post-process"
+		activatedModel accept: self ]
 ]
 
 { #category : 'events' }
