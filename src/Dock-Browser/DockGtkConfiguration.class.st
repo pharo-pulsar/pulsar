@@ -9,6 +9,10 @@ Class {
 { #category : 'configuring' }
 DockGtkConfiguration >> configureGeneral: anApplication [
 
+	self theme isDarkTheme 
+		ifTrue: [ GRunLoop defer: [ AdwStyleManager default ensureDark ] ]
+		ifFalse: [ GRunLoop defer: [ AdwStyleManager default ensureLight ] ].
+
 	super configureGeneral: anApplication.
 	self addCSSProviderFromString: self style
 ]
