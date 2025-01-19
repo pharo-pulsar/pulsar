@@ -1,6 +1,6 @@
 Class {
 	#name : 'DockCategoriseMethodCommand',
-	#superclass : 'PvMethodEditorCommand',
+	#superclass : 'DockEditorCommand',
 	#category : 'Dock-Browser-View-Editor',
 	#package : 'Dock-Browser',
 	#tag : 'View-Editor'
