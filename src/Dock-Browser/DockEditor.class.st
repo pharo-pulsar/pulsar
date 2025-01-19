@@ -151,7 +151,9 @@ DockEditor >> initializePresenters [
 DockEditor >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
-	aWindowPresenter title: self model name
+	aWindowPresenter 
+		title: self model name;
+		whenClosedDo: [ self notifyEditorClosed  ]
 ]
 
 { #category : 'testing' }
@@ -177,6 +179,12 @@ DockEditor >> isUpdating [
 DockEditor >> markDirty [
 
 	self withPanelWindowDo: [ :w | w modified: true ]
+]
+
+{ #category : 'initialization' }
+DockEditor >> notifyEditorClosed [
+
+	self notificationCenter announce: (DockEditorClosed newValue: self model)
 ]
 
 { #category : 'private' }
