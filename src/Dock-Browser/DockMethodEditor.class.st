@@ -51,8 +51,7 @@ DockMethodEditor >> connectPresenters [
 
 	super connectPresenters.
 	protocolPresenter whenProtocolChangedDo: [ :aProtocolModel |
-		self notifyEntityChanged: self model ].
-
+		self notifyEntityChanged: self model ]
 ]
 
 { #category : 'private - actions' }
