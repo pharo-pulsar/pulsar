@@ -96,8 +96,8 @@ DockBrowser >> initializeWorkspace [
 
 	"here, the list of components that are part of the 'sides' but we access 
 	 just while interacting."	
-	{ DockPlayground. DockTranscript } do: [ :eachClass |
-		self addViewClass: eachClass ]
+	{ DockStackView. DockPlayground. DockTranscript } 
+		do: [ :eachClass | self addViewClass: eachClass ]
 ]
 
 { #category : 'private' }
