@@ -45,6 +45,12 @@ PvNewMethodTemplate >> environmentModel: anEnvironmentModel [
 	environmentModel := anEnvironmentModel
 ]
 
+{ #category : 'testing' }
+PvNewMethodTemplate >> hasFlag [
+	
+	^ false
+]
+
 { #category : 'initialization' }
 PvNewMethodTemplate >> initialize [
 
@@ -60,6 +66,24 @@ PvNewMethodTemplate >> isClassSide [
 
 { #category : 'testing' }
 PvNewMethodTemplate >> isDoIt [
+	
+	^ false
+]
+
+{ #category : 'testing' }
+PvNewMethodTemplate >> isExtension [
+	
+	^ false
+]
+
+{ #category : 'testing' }
+PvNewMethodTemplate >> isOverridden [
+
+	^ false
+]
+
+{ #category : 'testing' }
+PvNewMethodTemplate >> isOverriding [
 	
 	^ false
 ]
