@@ -19,6 +19,12 @@ PvProjectModel class >> newEntity: anObject environment: anEnvironmentModel [
 		yourself
 ]
 
+{ #category : 'visiting' }
+PvProjectModel >> accept: aVisitor [
+
+	^ aVisitor visitProjectModel: aVisitor
+]
+
 { #category : 'accessing' }
 PvProjectModel >> baselineClassModel [
 
