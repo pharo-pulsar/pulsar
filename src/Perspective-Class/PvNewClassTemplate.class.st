@@ -33,6 +33,12 @@ PvNewClassTemplate >> instanceSide [
 	^ self class
 ]
 
+{ #category : 'testing' }
+PvNewClassTemplate >> isAbstract [
+	
+	^ false
+]
+
 { #category : 'accessing' }
 PvNewClassTemplate >> name [
 	
@@ -43,6 +49,24 @@ PvNewClassTemplate >> name [
 PvNewClassTemplate >> package [
 	
 	^ self parentModel package
+]
+
+{ #category : 'accessing' }
+PvNewClassTemplate >> packageName [
+	
+	^ self package name
+]
+
+{ #category : 'accessing' }
+PvNewClassTemplate >> packageTag [
+	
+	^ self parentModel entity
+]
+
+{ #category : 'accessing' }
+PvNewClassTemplate >> packageTagName [
+	
+	^ self packageTag name
 ]
 
 { #category : 'accessing' }
