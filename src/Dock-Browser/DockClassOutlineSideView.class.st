@@ -179,20 +179,15 @@ DockClassOutlineSideView >> defaultLayout [
 
 { #category : 'private - actions' }
 DockClassOutlineSideView >> doAddProtocolCommand: aCommand [
-	| dialog sem protocolName |
+	| dialog protocolName |
 
 	dialog := self instantiate: DockRequestPresenter.
 	dialog label: 'Protocol Name'.
 	dialog acceptLabel: 'Add'.
 	
-	sem := Semaphore new.
-	self newPopover
-		presenter: dialog;
+	dialog asPopover
 		relativeTo: aCommand presenter;
-		whenClosedDo: [ sem signal ];
-		popupModal.
-	sem wait.
-
+		popupModalAndWait.
 	dialog isOk ifFalse: [ ^ self ].
 	
 	protocolName := dialog text.
@@ -203,20 +198,14 @@ DockClassOutlineSideView >> doAddProtocolCommand: aCommand [
 
 { #category : 'private - actions' }
 DockClassOutlineSideView >> doAddVariableCommand: aCommand [
-	| variableDefinition dialog result sem |
+	| variableDefinition dialog result |
 	
 	variableDefinition := DockNewSlotModel new.
 	dialog := self instantiate: DockNewSlotPresenter on: variableDefinition.
 	
-	self flag: #TODO. "Should I abstract the 'modal' popup?"
-	sem := Semaphore new.
-	self newPopover
-		presenter: dialog;
+	dialog asPopover
 		relativeTo: aCommand presenter;
-		whenClosedDo: [ sem signal ];
-		popupModal.
-	sem wait.
-	
+		popupModalAndWait.
 	dialog isOk ifFalse: [ ^ self ].
 	
 	self model asClassModel 
