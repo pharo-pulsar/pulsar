@@ -15,6 +15,12 @@ DockMultiProjectModel class >> newEnvironment: anEnvironmentModel [
 	^ self newEnvironment: anEnvironmentModel entity: nil
 ]
 
+{ #category : 'visiting' }
+DockMultiProjectModel >> accept: aVisitor [
+
+	^ aVisitor visitProjectModel: aVisitor
+]
+
 { #category : 'actions' }
 DockMultiProjectModel >> addProject: aBaselineClass [
 

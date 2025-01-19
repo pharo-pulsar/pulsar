@@ -165,7 +165,8 @@ DockProjectView >> doRemoveSelectedEntity [
 		- package (should I remove from image or just from project?)
 		- tag (this one is easy)" 
 
-	self halt
+	listPresenter selectedItem ifNotNil: [ :aModel |
+		(DockProjectRemoveModel on: self) visit: aModel realModel ] 
 ]
 
 { #category : 'private - actions' }
@@ -243,6 +244,13 @@ DockProjectView >> registerToEvents [
 	super registerToEvents.
 	self announcer 
 		when: DockEditorActivated send: #eventEditorActivated: to: self	
+]
+
+{ #category : 'private - actions' }
+DockProjectView >> removeProjectModel: aProjectModel [
+
+	self model removeProjectModel: aProjectModel.
+	self updatePresenter
 ]
 
 { #category : 'private' }
