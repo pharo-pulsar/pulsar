@@ -85,6 +85,17 @@ DockSystemNavigation >> environmentModel [
 ]
 
 { #category : 'accessing' }
+DockSystemNavigation >> inspect: anObject [
+	| inspector |
+	
+	inspector := self window 
+		instantiate: DockRawInspectionPresenter
+		on: (StInspectorModel on: anObject).
+	"inspector notificationCenter: self notificationCenter."
+	self codePresenter insertPopoverAfterCurrentSelection: inspector
+]
+
+{ #category : 'accessing' }
 DockSystemNavigation >> notificationCenter [
 
 	^ self window notificationCenter

@@ -57,5 +57,7 @@ button.pvProtocol { font-weight: normal; }
 .dockEditorBreadcrumb label.separator { padding: 0px 5px 0px 5px; }
 .dockSpotter, .dockDialog, .dockFlyingBrowser { margin: 5px; border-spacing: 5px; }
 .dockMessageFlyingBrowser { min-width: 620px; min-height: 420px; }
+.dockInspectorFlyingBrowser { min-width: 420px; min-height: 420px; }
+.dockPopoverControlToolbar { margin: 0px; padding: 0px; }
 '
 ]

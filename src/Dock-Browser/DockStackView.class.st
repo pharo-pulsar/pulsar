@@ -56,7 +56,9 @@ DockStackView >> eventEditorClosed: anAnnouncement [
 DockStackView >> eventModelChanged: anAnnouncement [
 	
 	"if name changed, I will need to show the change"
-	anAnnouncement value fullName = anAnnouncement oldEntity fullName ifTrue: [ ^ self ].
+	(anAnnouncement oldEntity isNil 
+		or: [ anAnnouncement value fullName = anAnnouncement oldEntity fullName ]) 
+		ifTrue: [ ^ self ].
 	
 	self updatePresenter
 ]

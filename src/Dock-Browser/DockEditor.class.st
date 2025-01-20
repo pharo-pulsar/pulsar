@@ -260,7 +260,7 @@ DockEditor >> updateBreadcrumbs [
 { #category : 'initialization' }
 DockEditor >> updatePresenter [
 	
-	self firstWindowLike ifNotNil: [ :aWindow |
+	self nearWindowLike ifNotNil: [ :aWindow |
 		(DockEditorUpdateVisitor on: self) visit: aWindow ].
 		
 	self updateBreadcrumbs

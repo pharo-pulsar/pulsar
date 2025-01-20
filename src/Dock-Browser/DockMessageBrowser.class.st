@@ -22,6 +22,12 @@ DockMessageBrowser >> acceptMethod: aMehodModel [
 ]
 
 { #category : 'initialization' }
+DockMessageBrowser >> addPopoverControls [
+
+	headerPresenter addPresenter: (self instantiate: DockPopoverControlBoxPresenter)
+]
+
+{ #category : 'initialization' }
 DockMessageBrowser >> connectPresenters [
 
 	messageListPresenter transmitTo: editorPresenter.
@@ -50,7 +56,13 @@ DockMessageBrowser >> defaultLayout [
 { #category : 'initialization' }
 DockMessageBrowser >> initializePopover: aPopoverPresenter [
 
-	aPopoverPresenter bePositionBottom
+	aPopoverPresenter bePositionBottom.
+	
+	self addPopoverControls.
+	
+	aPopoverPresenter addShortcutWith: [ :action | action 
+		shortcutKey: Character arrowDown ctrl;
+		action: [ 'DOWN' crTrace ] ].
 ]
 
 { #category : 'initialization' }
