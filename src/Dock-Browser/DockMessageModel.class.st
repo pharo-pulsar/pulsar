@@ -1,6 +1,8 @@
 Class {
 	#name : 'DockMessageModel',
 	#superclass : 'Object',
+	#traits : 'DockTEditor',
+	#classTraits : 'DockTEditor classTrait',
 	#instVars : [
 		'title',
 		'methods',
@@ -23,6 +25,12 @@ DockMessageModel class >> newEnvironment: anEnvironmentModel title: aString meth
 ]
 
 { #category : 'accessing' }
+DockMessageModel >> dockEditorClass [
+
+	^ DockMessageBrowser
+]
+
+{ #category : 'accessing' }
 DockMessageModel >> environmentModel [
 
 	^ environmentModel
@@ -32,6 +40,26 @@ DockMessageModel >> environmentModel [
 DockMessageModel >> environmentModel: anEnvironmentModel [
 
 	environmentModel := anEnvironmentModel
+]
+
+{ #category : 'accessing' }
+DockMessageModel >> fullName [
+
+	^ self title
+]
+
+{ #category : 'accessing - ui' }
+DockMessageModel >> iconComposite [
+
+	^ PvCompositeIcon new 
+		name: self iconName;
+		yourself
+]
+
+{ #category : 'accessing - ui' }
+DockMessageModel >> iconName [
+
+	^ #blank
 ]
 
 { #category : 'accessing' }
@@ -60,6 +88,12 @@ DockMessageModel >> methods [
 DockMessageModel >> methods: aCollection [
 
 	methods := aCollection
+]
+
+{ #category : 'accessing' }
+DockMessageModel >> realModel [
+
+	^ self
 ]
 
 { #category : 'accessing' }

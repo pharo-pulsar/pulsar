@@ -56,3 +56,9 @@ DockTNotificationCenter >> notifySelectEntity: anEntity [
 	anEntity ifNil: [ ^ self ].
 	self notificationCenter announce: (DockModelSelected newValue: anEntity realModel)
 ]
+
+{ #category : 'initialization' }
+DockTNotificationCenter >> registerToDock: aDockBrowser [
+
+	self notificationCenter: aDockBrowser notificationCenter 
+]

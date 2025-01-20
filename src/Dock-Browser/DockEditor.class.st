@@ -122,7 +122,7 @@ DockEditor >> initializePanelWindow: aWindowPresenter [
 
 	super initializePanelWindow: aWindowPresenter.
 	aWindowPresenter 
-		whenFocusReceivedDo: [ self triggerEditorActivated ];
+		whenFocusReceivedDo: [ self notifyEditorActivated ];
 		whenSaveDo: [ :ann | ann success: self saveContent ];
 		whenDiscardDo: [ :ann | 
 			"I don't know what to do with this... nothing feels right." ]
@@ -181,6 +181,12 @@ DockEditor >> markDirty [
 	self withPanelWindowDo: [ :w | w modified: true ]
 ]
 
+{ #category : 'private - announcing' }
+DockEditor >> notifyEditorActivated [
+
+	self notificationCenter announce: (DockEditorActivated newValue: self)
+]
+
 { #category : 'initialization' }
 DockEditor >> notifyEditorClosed [
 
@@ -237,12 +243,6 @@ DockEditor >> textChangedFrom: oldText to: newText [
 DockEditor >> toolbarPresenter [
 
 	^ toolbarPresenter
-]
-
-{ #category : 'private - announcing' }
-DockEditor >> triggerEditorActivated [
-
-	self notificationCenter announce: (DockEditorActivated newValue: self)
 ]
 
 { #category : 'private - updating' }

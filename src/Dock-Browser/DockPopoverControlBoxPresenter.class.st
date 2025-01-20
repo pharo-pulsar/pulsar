@@ -2,12 +2,20 @@ Class {
 	#name : 'DockPopoverControlBoxPresenter',
 	#superclass : 'SpPresenter',
 	#instVars : [
-		'toolbarPresenter'
+		'toolbarPresenter',
+		'dockAction'
 	],
 	#category : 'Dock-Browser-View-Base',
 	#package : 'Dock-Browser',
 	#tag : 'View-Base'
 }
+
+{ #category : 'private' }
+DockPopoverControlBoxPresenter >> announceDock [ 
+
+	dockAction ifNil: [ ^ self ].
+	dockAction value
+]
 
 { #category : 'layout' }
 DockPopoverControlBoxPresenter >> defaultLayout [
@@ -30,7 +38,7 @@ DockPopoverControlBoxPresenter >> initializePresenters [
 				name: 'Dock';
 				iconName: 'arrow-down';
 				description: 'Dock this popover.';
-				action: [ ] ];
+				action: [ self announceDock ] ];
 			addActionWith: [ :action | action 
 				name: 'Close';
 				iconName: 'close';
@@ -38,4 +46,10 @@ DockPopoverControlBoxPresenter >> initializePresenters [
 				action: [ self withPopoverDo: #dismiss ] ];
 			yourself);
 		yourself	
+]
+
+{ #category : 'events' }
+DockPopoverControlBoxPresenter >> onDock: aBlock [
+
+	dockAction := aBlock
 ]

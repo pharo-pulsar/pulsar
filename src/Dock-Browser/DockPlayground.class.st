@@ -34,8 +34,11 @@ DockPlayground >> defaultLayout [
 { #category : 'initialization' }
 DockPlayground >> initializePresenters [
 
-	codePresenter := self newCode 
-		beForScripting;
+	(codePresenter := self newCode)
+		interactionModel: StPlaygroundInteractionModel new; 
+		systemNavigation: (self systemNavigation
+			codePresenter: codePresenter;
+			yourself)		
 		yourself
 ]
 
@@ -45,4 +48,12 @@ DockPlayground >> initializeWindow: aWindowPresenter [
 	aWindowPresenter 
 		title: self class defaultTitle;
 		windowIcon: (self iconNamed: 'workspace')
+]
+
+{ #category : 'accessing' }
+DockPlayground >> systemNavigation [ 
+
+	self withWindowDo: [ :aWindow | 
+		^ aWindow systemNavigation ].
+	^ super systemNavigation
 ]

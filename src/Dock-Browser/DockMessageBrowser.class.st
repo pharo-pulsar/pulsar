@@ -1,8 +1,8 @@
 Class {
 	#name : 'DockMessageBrowser',
 	#superclass : 'SpPresenter',
-	#traits : 'SpTModel + DockTNotificationCenter',
-	#classTraits : 'SpTModel classTrait + DockTNotificationCenter classTrait',
+	#traits : 'SpTModel + DockTNotificationCenter + DockTPanelWindow',
+	#classTraits : 'SpTModel classTrait + DockTNotificationCenter classTrait + DockTPanelWindow classTrait',
 	#instVars : [
 		'messageListPresenter',
 		'editorPresenter',
@@ -14,6 +14,14 @@ Class {
 	#tag : 'Tool-Messages'
 }
 
+{ #category : 'defaults' }
+DockMessageBrowser class >> defaultDockPosition [
+
+	^ DockPanelPosition new 
+		area: DockArea center;
+		yourself
+]
+
 { #category : 'initialization' }
 DockMessageBrowser >> acceptMethod: aMehodModel [
 
@@ -23,8 +31,13 @@ DockMessageBrowser >> acceptMethod: aMehodModel [
 
 { #category : 'initialization' }
 DockMessageBrowser >> addPopoverControls [
+	| controlsPresenter |
 
-	headerPresenter addPresenter: (self instantiate: DockPopoverControlBoxPresenter)
+	controlsPresenter := self instantiate: DockPopoverControlBoxPresenter.
+	controlsPresenter onDock: [ 
+		self notifyActivateEntity: self model.
+		self withPopoverDo: #dismiss ].
+	headerPresenter addPresenter: controlsPresenter
 ]
 
 { #category : 'initialization' }
@@ -51,6 +64,12 @@ DockMessageBrowser >> defaultLayout [
 			add: editorPresenter;
 			yourself);
 		yourself
+]
+
+{ #category : 'accessing' }
+DockMessageBrowser >> dockPosition [
+
+	^ dockPosition ifNil: [ dockPosition := self class defaultDockPosition ]
 ]
 
 { #category : 'initialization' }

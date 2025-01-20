@@ -84,6 +84,7 @@ DockStackView >> registerToEvents [
 
 	self announcer 
 		when: DockEditorActivated send: #eventEditorActivated: to: self;
+		when: DockToolEditorActivated send: #eventEditorActivated: to: self;
 		when: DockEditorClosed send: #eventEditorClosed: to: self;
 		when: DockModelChanged send: #eventModelChanged: to: self
 ]

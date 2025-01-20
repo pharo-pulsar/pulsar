@@ -36,8 +36,8 @@ DockSystemNavigation >> browse: anObject [
 		ifFalse: [ PvClassModel ].
 
 	self window announce: (DockModelActivated newValue: (modelClass 
-			newEnvironment: self window model environmentModel 
-			entity: anObject))
+		newEnvironment: self window model environmentModel 
+		entity: anObject))
 ]
 
 { #category : 'accessing' }
@@ -90,8 +90,8 @@ DockSystemNavigation >> inspect: anObject [
 	
 	inspector := self window 
 		instantiate: DockRawInspectionPresenter
-		on: (StInspectorModel on: anObject).
-	"inspector notificationCenter: self notificationCenter."
+		on: (DockInspectorModel on: anObject).
+	inspector notificationCenter: self notificationCenter.
 	self codePresenter insertPopoverAfterCurrentSelection: inspector
 ]
 

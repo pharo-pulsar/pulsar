@@ -1,6 +1,8 @@
 Class {
 	#name : 'DockRawInspectionPresenter',
 	#superclass : 'StRawInspectionPresenter',
+	#traits : 'DockTNotificationCenter + DockTPanelWindow',
+	#classTraits : 'DockTNotificationCenter classTrait + DockTPanelWindow classTrait',
 	#instVars : [
 		'headerPresenter'
 	],
@@ -9,10 +11,23 @@ Class {
 	#tag : 'Tool-Inspector'
 }
 
+{ #category : 'defaults' }
+DockRawInspectionPresenter class >> defaultDockPosition [
+
+	^ DockPanelPosition new 
+		area: DockArea center;
+		yourself
+]
+
 { #category : 'initialization' }
 DockRawInspectionPresenter >> addPopoverControls [
-	
-	headerPresenter addPresenter: (self instantiate: DockPopoverControlBoxPresenter)
+	| controlsPresenter |
+
+	controlsPresenter := self instantiate: DockPopoverControlBoxPresenter.
+	controlsPresenter onDock: [ 
+		self notifyActivateEntity: self model.
+		self withPopoverDo: #dismiss ].
+	headerPresenter addPresenter: controlsPresenter
 ]
 
 { #category : 'api - focus' }
@@ -28,6 +43,12 @@ DockRawInspectionPresenter >> defaultLayout [
 		add: headerPresenter expand: false;
 		add: super defaultLayout;
 		yourself
+]
+
+{ #category : 'accessing' }
+DockRawInspectionPresenter >> dockPosition [
+
+	^ dockPosition ifNil: [ dockPosition := self class defaultDockPosition ]
 ]
 
 { #category : 'initialization' }
