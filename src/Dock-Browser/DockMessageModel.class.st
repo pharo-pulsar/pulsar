@@ -1,8 +1,8 @@
 Class {
 	#name : 'DockMessageModel',
 	#superclass : 'Object',
-	#traits : 'DockTEditor',
-	#classTraits : 'DockTEditor classTrait',
+	#traits : 'DockTEditable',
+	#classTraits : 'DockTEditable classTrait',
 	#instVars : [
 		'title',
 		'methods',
@@ -59,7 +59,7 @@ DockMessageModel >> iconComposite [
 { #category : 'accessing - ui' }
 DockMessageModel >> iconName [
 
-	^ #blank
+	^ #messageBrowser
 ]
 
 { #category : 'accessing' }

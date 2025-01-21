@@ -23,10 +23,15 @@ DockMultiProjectModel >> accept: aVisitor [
 
 { #category : 'actions' }
 DockMultiProjectModel >> addProject: aBaselineClass [
+	| newProjectModel |
 
-	projectModels := projectModels copyWith: (PvProjectModel 
+	newProjectModel := (PvProjectModel 
 		newEntity: aBaselineClass 
-		environment: self environmentModel)
+		environment: self environmentModel).
+	
+	(projectModels includes: newProjectModel) ifTrue: [ ^ self ].
+	
+	projectModels := projectModels copyWith: newProjectModel
 ]
 
 { #category : 'accessing' }

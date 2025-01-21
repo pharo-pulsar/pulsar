@@ -1,8 +1,8 @@
 Class {
 	#name : 'DockInspectorModel',
 	#superclass : 'StInspectorModel',
-	#traits : 'DockTEditor',
-	#classTraits : 'DockTEditor classTrait',
+	#traits : 'DockTEditable',
+	#classTraits : 'DockTEditable classTrait',
 	#category : 'Dock-Browser-Tool-Inspector',
 	#package : 'Dock-Browser',
 	#tag : 'Tool-Inspector'

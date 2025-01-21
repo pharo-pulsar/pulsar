@@ -68,6 +68,7 @@ PvAliasedVSCodeIconProvider >> initialize [
 		'exception'.					'symbol-event'.			"type"
 		'variable'.					'symbol-variable'.		"type"
 		'smallInspectIt'.			'eye'.					"inspector..."
+		'inspector'. 				'eye'. 
 		'string'.					'symbol-string'.			"type"
 		'magnitude'.					'symbol-numeric'.		"type"
 		'collection'.				'symbol-namespace'.		"type"
@@ -77,6 +78,7 @@ PvAliasedVSCodeIconProvider >> initialize [
 		'smallObjects'.				'beaker'.  				"inspector"
 		'glamorousRefresh'. 			'refresh'. 				"inspector"
 		'smallSystemBrowser'. 		'browser'. 				"inspector"
+		'messageBrowser'. 			'browser'. 
 		'referencesIcon'.			'type-hierarchy'.		"message browser"
 		'smallDoIt'. 				'run'.					"code"
 		'smallDebug'. 				'bug'.					"code"

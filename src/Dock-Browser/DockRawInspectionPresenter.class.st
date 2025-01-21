@@ -55,7 +55,10 @@ DockRawInspectionPresenter >> dockPosition [
 DockRawInspectionPresenter >> initializePopover: aPopoverPresenter [
 
 	aPopoverPresenter bePositionBottom.
-	self addPopoverControls
+	self addPopoverControls.
+	aPopoverPresenter addShortcutWith: [ :action | action 
+		shortcutKey: Character arrowDown ctrl;
+		action: [ self notifyActivateEntity: self model ] ]	
 ]
 
 { #category : 'initialization' }

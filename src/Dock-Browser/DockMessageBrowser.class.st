@@ -76,12 +76,12 @@ DockMessageBrowser >> dockPosition [
 DockMessageBrowser >> initializePopover: aPopoverPresenter [
 
 	aPopoverPresenter bePositionBottom.
-	
 	self addPopoverControls.
-	
 	aPopoverPresenter addShortcutWith: [ :action | action 
 		shortcutKey: Character arrowDown ctrl;
-		action: [ 'DOWN' crTrace ] ].
+		action: [ 
+			self notifyActivateEntity: self model.
+			self withPopoverDo: #dismiss ] ]
 ]
 
 { #category : 'initialization' }

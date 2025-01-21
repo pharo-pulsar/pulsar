@@ -79,7 +79,7 @@ DockApplication >> newIconProvider [
 	  PvDefaultIconProvider new
 ]
 
-{ #category : 'accessing - scheduling' }
+{ #category : 'private - scheduling' }
 DockApplication >> newScheduler [ 
 
 	^ TKTWorkerPool new

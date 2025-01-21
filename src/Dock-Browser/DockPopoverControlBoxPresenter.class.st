@@ -37,12 +37,12 @@ DockPopoverControlBoxPresenter >> initializePresenters [
 			addActionWith: [ :action | action 
 				name: 'Dock';
 				iconName: 'arrow-down';
-				description: 'Dock this popover.';
+				description: 'Dock popover.';
 				action: [ self announceDock ] ];
 			addActionWith: [ :action | action 
 				name: 'Close';
 				iconName: 'close';
-				description: 'Close this popover.';
+				description: 'Close popover.';
 				action: [ self withPopoverDo: #dismiss ] ];
 			yourself);
 		yourself	

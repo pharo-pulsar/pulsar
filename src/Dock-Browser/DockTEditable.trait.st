@@ -1,18 +1,18 @@
 Trait {
-	#name : 'DockTEditor',
+	#name : 'DockTEditable',
 	#category : 'Dock-Browser-View-Base',
 	#package : 'Dock-Browser',
 	#tag : 'View-Base'
 }
 
 { #category : 'accessing' }
-DockTEditor >> dockEditorClass [
+DockTEditable >> dockEditorClass [
 
 	^ self required
 ]
 
 { #category : 'testing' }
-DockTEditor >> hasDockEditor [
+DockTEditable >> hasDockEditor [
 
 	^ self dockEditorClass isNotNil
 ]
