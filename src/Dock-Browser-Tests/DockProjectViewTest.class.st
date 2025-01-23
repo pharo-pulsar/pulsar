@@ -65,6 +65,26 @@ DockProjectViewTest >> testAddProject [
 ]
 
 { #category : 'tests' }
+DockProjectViewTest >> testDoRemoveSelectedEntityWhenProjectModel [
+	"tests a new editor for a new class is added when we request it"
+
+	self openBrowserOnProject.
+	"go to project"
+	browser projectView listPresenter selectPath: #(1).
+	self waitForUI.
+
+	self assert: browser projectView model children size equals: 1.
+	self assert: browser projectView listPresenter selectedItem class equals: PvProjectModel.
+
+	"request"	
+	browser projectView doRemoveSelectedEntity.
+	self waitForUI.	
+	
+	self assert: browser projectView model children size equals: 0.
+	self assert: browser projectView listPresenter roots size equals: 1 "system environemnt"
+]
+
+{ #category : 'tests' }
 DockProjectViewTest >> testDoRequestNewClass [
 	"tests a new editor for a new class is added when we request it"
 	| title |

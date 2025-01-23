@@ -22,7 +22,7 @@ PvProjectModel class >> newEntity: anObject environment: anEnvironmentModel [
 { #category : 'visiting' }
 PvProjectModel >> accept: aVisitor [
 
-	^ aVisitor visitProjectModel: aVisitor
+	^ aVisitor visitProjectModel: self
 ]
 
 { #category : 'accessing' }
