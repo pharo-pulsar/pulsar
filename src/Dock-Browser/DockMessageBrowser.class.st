@@ -1,8 +1,8 @@
 Class {
 	#name : 'DockMessageBrowser',
 	#superclass : 'SpPresenter',
-	#traits : 'SpTModel + DockTNotificationCenter + DockTPanelWindow',
-	#classTraits : 'SpTModel classTrait + DockTNotificationCenter classTrait + DockTPanelWindow classTrait',
+	#traits : 'SpTModel + DockTNotificationCenter + DockTPanelWindow + DockTSnapshot',
+	#classTraits : 'SpTModel classTrait + DockTNotificationCenter classTrait + DockTPanelWindow classTrait + DockTSnapshot classTrait',
 	#instVars : [
 		'messageListPresenter',
 		'editorPresenter',
@@ -17,8 +17,8 @@ Class {
 { #category : 'defaults' }
 DockMessageBrowser class >> defaultDockPosition [
 
-	^ DockPanelPosition new 
-		area: DockArea center;
+	^ SpPanelPosition new 
+		area: SpPanelArea center;
 		yourself
 ]
 

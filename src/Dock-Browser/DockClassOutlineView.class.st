@@ -1,8 +1,8 @@
 Class {
 	#name : 'DockClassOutlineView',
 	#superclass : 'DockBaseView',
-	#traits : 'DockTScheduling',
-	#classTraits : 'DockTScheduling classTrait',
+	#traits : 'DockTScheduling + DockTSnapshot',
+	#classTraits : 'DockTScheduling classTrait + DockTSnapshot classTrait',
 	#instVars : [
 		'toolbarPresenter',
 		'structureTreePresenter',
@@ -20,8 +20,8 @@ Class {
 { #category : 'defaults' }
 DockClassOutlineView class >> defaultDockPosition [
 
-	^ DockPanelPosition new
-		area: DockArea end;
+	^ SpPanelPosition new
+		area: SpPanelArea end;
 		yourself
 ]
 

@@ -3,7 +3,7 @@ Extension { #name : 'PvPresenter' }
 { #category : '*Dock-Browser' }
 PvPresenter >> dockPosition [
 
-	^ DockArea center
+	^ SpPanelArea center
 ]
 
 { #category : '*Dock-Browser' }

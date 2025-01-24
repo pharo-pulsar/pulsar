@@ -12,8 +12,8 @@ Class {
 { #category : 'defaults' }
 DockProjectView class >> defaultDockPosition [
 
-	^ DockPanelPosition new 
-		area: DockArea start;
+	^ SpPanelPosition new 
+		area: SpPanelArea start;
 		row: 1;
 		yourself
 ]

@@ -1,8 +1,8 @@
 Class {
 	#name : 'DockRawInspectionPresenter',
 	#superclass : 'StRawInspectionPresenter',
-	#traits : 'DockTNotificationCenter + DockTPanelWindow',
-	#classTraits : 'DockTNotificationCenter classTrait + DockTPanelWindow classTrait',
+	#traits : 'DockTNotificationCenter + DockTPanelWindow + DockTSnapshot',
+	#classTraits : 'DockTNotificationCenter classTrait + DockTPanelWindow classTrait + DockTSnapshot classTrait',
 	#instVars : [
 		'headerPresenter'
 	],
@@ -14,8 +14,8 @@ Class {
 { #category : 'defaults' }
 DockRawInspectionPresenter class >> defaultDockPosition [
 
-	^ DockPanelPosition new 
-		area: DockArea center;
+	^ SpPanelPosition new 
+		area: SpPanelArea center;
 		yourself
 ]
 

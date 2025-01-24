@@ -1,6 +1,8 @@
 Class {
 	#name : 'DockTranscript',
 	#superclass : 'DockBaseView',
+	#traits : 'DockTSnapshot',
+	#classTraits : 'DockTSnapshot classTrait',
 	#instVars : [
 		'terminalPresenter',
 		'service'

@@ -1,6 +1,8 @@
 Class {
 	#name : 'DockPlayground',
 	#superclass : 'DockBaseView',
+	#traits : 'DockTSnapshot',
+	#classTraits : 'DockTSnapshot classTrait',
 	#instVars : [
 		'codePresenter'
 	],
@@ -12,8 +14,8 @@ Class {
 { #category : 'defaults' }
 DockPlayground class >> defaultDockPosition [
 
-	^ DockPanelPosition new 
-		area: DockArea bottom;
+	^ SpPanelPosition new 
+		area: SpPanelArea bottom;
 		yourself
 ]
 

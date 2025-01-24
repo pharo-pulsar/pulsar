@@ -3,7 +3,7 @@ Extension { #name : 'SpPresenter' }
 { #category : '*Dock-Browser' }
 SpPresenter >> dockPosition [
 
-	^ DockArea bottom
+	^ SpPanelArea bottom
 ]
 
 { #category : '*Dock-Browser' }

@@ -1,8 +1,8 @@
 Class {
 	#name : 'DockBaseBrowser',
-	#superclass : 'DockDockWindowPresenter',
-	#traits : 'SpTModel',
-	#classTraits : 'SpTModel classTrait',
+	#superclass : 'SpPanelWindowPresenter',
+	#traits : 'SpTModel + DockTSnapshot',
+	#classTraits : 'SpTModel classTrait + DockTSnapshot classTrait',
 	#instVars : [
 		'actions'
 	],
@@ -29,7 +29,7 @@ DockBaseBrowser >> addWindow: aWindow [
 { #category : 'accessing' }
 DockBaseBrowser >> editors [
 
-	^ self presenters select: [ :each | each dockArea = DockArea center ]
+	^ self presenters select: [ :each | each dockArea = SpPanelArea center ]
 ]
 
 { #category : 'events' }

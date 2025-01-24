@@ -1,8 +1,8 @@
 Class {
 	#name : 'DockBaseView',
 	#superclass : 'SpPresenter',
-	#traits : 'SpTModel + PvTActionHolder + DockTNotificationCenter',
-	#classTraits : 'SpTModel classTrait + PvTActionHolder classTrait + DockTNotificationCenter classTrait',
+	#traits : 'SpTModel + PvTActionHolder + DockTNotificationCenter + DockTSnapshot',
+	#classTraits : 'SpTModel classTrait + PvTActionHolder classTrait + DockTNotificationCenter classTrait + DockTSnapshot classTrait',
 	#category : 'Dock-Browser-View-Base',
 	#package : 'Dock-Browser',
 	#tag : 'View-Base'
@@ -11,8 +11,8 @@ Class {
 { #category : 'defaults' }
 DockBaseView class >> defaultDockPosition [
 
-	^ DockPanelPosition new 
-		area: DockArea center;
+	^ SpPanelPosition new 
+		area: SpPanelArea center;
 		yourself
 ]
 
