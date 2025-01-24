@@ -39,6 +39,21 @@ DockApplication >> iconCache [
 		ifAbsentPut: [ PvCompositeIconCache new ]
 ]
 
+{ #category : 'initialization' }
+DockApplication >> initialize [
+
+	super initialize
+]
+
+{ #category : 'initialization' }
+DockApplication >> initializeConfiguration [
+
+	super initializeConfiguration.
+	self 
+		useBackend: #Gtk 
+		with: self newConfiguration
+]
+
 { #category : 'settings' }
 DockApplication >> isShowingLineNumbers [
 
@@ -115,6 +130,15 @@ DockApplication >> prepareAsStandaloneApplication [
 		ifTrue: [ ProcessorScheduler idleTime: 3600000000 ]
 ]
 
+{ #category : 'accessing' }
+DockApplication >> snapshot [
+	| newSnapshot |
+	
+	newSnapshot := DockSnapshot new.
+	self windows do: [ :each | each recordSnapshotTo: newSnapshot ].
+	^ newSnapshot
+]
+
 { #category : 'running' }
 DockApplication >> start [
 
@@ -132,9 +156,7 @@ DockApplication >> useGtkDark [
 
 	self 
 		useBackend: #Gtk 
-		with: (self newConfiguration
-			theme: LnDarkTheme new;
-			yourself)
+		with: self newConfiguration forceDark
 ]
 
 { #category : 'initialization' }
@@ -142,7 +164,5 @@ DockApplication >> useGtkLight [
 
 	self 
 		useBackend: #Gtk 
-		with: (self newConfiguration
-			theme: LnLightTheme new;
-			yourself)
+		with: self newConfiguration forceLight
 ]

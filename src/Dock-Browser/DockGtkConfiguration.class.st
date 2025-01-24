@@ -9,19 +9,39 @@ Class {
 { #category : 'configuring' }
 DockGtkConfiguration >> configureGeneral: anApplication [
 
-	self theme isDarkTheme 
-		ifTrue: [ GRunLoop defer: [ AdwStyleManager default ensureDark ] ]
-		ifFalse: [ GRunLoop defer: [ AdwStyleManager default ensureLight ] ].
-
 	super configureGeneral: anApplication.
 	self addCSSProviderFromString: self style
+]
+
+{ #category : 'accessing' }
+DockGtkConfiguration >> forceDark [
+
+	self reset.
+	GRunLoop defer: [ AdwStyleManager default ensureDark ].
+	self theme: LnLightTheme new
+]
+
+{ #category : 'accessing' }
+DockGtkConfiguration >> forceLight [
+
+		GRunLoop defer: [ AdwStyleManager default ensureLight ].
+	self theme: LnLightTheme new
 ]
 
 { #category : 'initialization' }
 DockGtkConfiguration >> initialize [
 
-	super initialize.
-	self theme: LnDarkTheme new
+	self theme: (self isDarkTheme
+		ifTrue: [ LnDarkTheme new ]
+		ifFalse: [ LnLightTheme new ]).
+		
+	super initialize
+]
+
+{ #category : 'testing' }
+DockGtkConfiguration >> isDarkTheme [
+	
+	^ GRunLoop defer: [ AdwStyleManager default isDark ]
 ]
 
 { #category : 'accessing' }
