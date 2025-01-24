@@ -2,7 +2,8 @@ Class {
 	#name : 'DockEditorToolbarPresenter',
 	#superclass : 'DockToolbarPresenter',
 	#instVars : [
-		'titlePresenter'
+		'titlePresenter',
+		'contentActionPresenter'
 	],
 	#category : 'Dock-Browser-View-Editor',
 	#package : 'Dock-Browser',
@@ -13,15 +14,12 @@ Class {
 DockEditorToolbarPresenter >> actionsFirstLayout [
 
 	^ SpBoxLayout newHorizontal
-		add: (SpBoxLayout newHorizontal
-				hAlignStart;
-				add: actionToolbarPresenter;
-				yourself)
-			expand: false;
+		add: actionToolbarPresenter expand: false;
 		add: titlePresenter;
 		add: (presenterContainer := SpBoxLayout newHorizontal
 			hAlignEnd;
 			yourself);
+		add: contentActionPresenter expand: false;
 		yourself
 ]
 
@@ -29,15 +27,12 @@ DockEditorToolbarPresenter >> actionsFirstLayout [
 DockEditorToolbarPresenter >> actionsLastLayout [
 
 	^ SpBoxLayout newHorizontal
+		add: contentActionPresenter expand: false;
 		add: (presenterContainer := SpBoxLayout newHorizontal
 			hAlignStart;
 			yourself);
 		add: titlePresenter;
-		add: (SpBoxLayout newHorizontal
-				hAlignEnd;
-				add: actionToolbarPresenter;
-				yourself)
-			expand: false;
+		add: actionToolbarPresenter expand: false;
 		yourself
 ]
 
@@ -48,12 +43,23 @@ DockEditorToolbarPresenter >> breadcrumbs [
 	^ titlePresenter
 ]
 
+{ #category : 'accessing' }
+DockEditorToolbarPresenter >> contentActions: anActionGroup [
+
+	contentActionPresenter fillWith: anActionGroup
+]
+
 { #category : 'initialization' }
 DockEditorToolbarPresenter >> initializePresenters [
 
 	super initializePresenters.
 	
-	titlePresenter := self instantiate: DockBreadcrumbPresenter
+	titlePresenter := self instantiate: DockBreadcrumbPresenter.
+	contentActionPresenter := self newToolbar
+		addStyle: 'stToolbar';
+		addStyle: 'dockToolbar';
+		displayMode: self application toolbarDisplayMode;
+		yourself	
 ]
 
 { #category : 'accessing' }

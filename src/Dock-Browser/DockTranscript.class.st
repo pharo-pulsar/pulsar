@@ -15,8 +15,8 @@ Class {
 { #category : 'defaults' }
 DockTranscript class >> defaultDockPosition [
 
-	^ DockPanelPosition new 
-		area: DockArea bottom;
+	^ SpPanelPosition new 
+		area: SpPanelArea bottom;
 		yourself
 ]
 

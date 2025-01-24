@@ -258,12 +258,23 @@ DockEditor >> updateBreadcrumbs [
 ]
 
 { #category : 'initialization' }
+DockEditor >> updateContentActions [
+
+	self model actionDecorators ifNotEmpty: [ :aCollection |  
+		toolbarPresenter contentActions: (SpActionGroup new 
+			addAll: (aCollection collect: [ :each | 
+				each context: self; asSpecCommand ]);
+			yourself) ]
+]
+
+{ #category : 'initialization' }
 DockEditor >> updatePresenter [
 	
 	self nearWindowLike ifNotNil: [ :aWindow |
 		(DockEditorUpdateVisitor on: self) visit: aWindow ].
 		
-	self updateBreadcrumbs
+	self updateBreadcrumbs.
+	self updateContentActions
 ]
 
 { #category : 'initialization' }

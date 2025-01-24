@@ -61,9 +61,10 @@ DockMethodEditor >> doRequestChangeProtocol [
 ]
 
 { #category : 'private - actions' }
-DockMethodEditor >> doRunTest [
-
-	self halt
+DockMethodEditor >> doRunTestCommand: aCommand [
+	| result |
+	
+	result := self model runTest
 ]
 
 { #category : 'events' }

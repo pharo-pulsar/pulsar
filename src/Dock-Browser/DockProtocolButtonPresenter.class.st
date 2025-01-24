@@ -5,7 +5,8 @@ Class {
 	#classTraits : 'SpTModel classTrait',
 	#instVars : [
 		'protocolPresenter',
-		'protocolChangedAction'
+		'protocolChangedAction',
+		'chooserPresenter'
 	],
 	#category : 'Dock-Browser-View-Editor',
 	#package : 'Dock-Browser',
@@ -22,17 +23,22 @@ DockProtocolButtonPresenter >> annnounceProtocolChanged [
 { #category : 'layout' }
 DockProtocolButtonPresenter >> defaultLayout [
 
-	^ SpBoxLayout newVertical
+	^ SpBoxLayout newHorizontal
 		add: protocolPresenter;
+		add: chooserPresenter expand: false;
 		yourself
 ]
 
 { #category : 'initialization' }
 DockProtocolButtonPresenter >> initializePresenters [
+	self addStyle: 'pvMethodProtocol'.
 
-	protocolPresenter := self newButton
+	protocolPresenter := self newLabel
 		addStyle: 'flat';
-		addStyle: 'pvProtocol';
+		yourself.
+		
+	chooserPresenter := self newButton
+		addStyle: 'flat';
 		icon: (self iconNamed: 'tag');
 		action: [ self popupProtocol ];
 		yourself
