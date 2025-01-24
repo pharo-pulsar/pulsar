@@ -78,7 +78,7 @@ DockMessageBrowser >> initializePopover: aPopoverPresenter [
 	aPopoverPresenter bePositionBottom.
 	self addPopoverControls.
 	aPopoverPresenter addShortcutWith: [ :action | action 
-		shortcutKey: Character arrowDown ctrl;
+		shortcutKey: Character arrowDown mod3;
 		action: [ 
 			self notifyActivateEntity: self model.
 			self withPopoverDo: #dismiss ] ]

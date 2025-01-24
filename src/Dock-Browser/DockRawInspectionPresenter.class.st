@@ -57,7 +57,7 @@ DockRawInspectionPresenter >> initializePopover: aPopoverPresenter [
 	aPopoverPresenter bePositionBottom.
 	self addPopoverControls.
 	aPopoverPresenter addShortcutWith: [ :action | action 
-		shortcutKey: Character arrowDown ctrl;
+		shortcutKey: KeyboardKey down mod3;
 		action: [ self notifyActivateEntity: self model ] ]	
 ]
 
