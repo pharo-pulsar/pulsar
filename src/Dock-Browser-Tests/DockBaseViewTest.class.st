@@ -27,7 +27,7 @@ DockBaseViewTest >> addClass [
 { #category : 'accessing' }
 DockBaseViewTest >> application [
 
-	^ application ifNil: [ application := DockApplication new useGtkLight ]
+	^ application ifNil: [ application := DockApplication new ]
 ]
 
 { #category : 'accessing' }
