@@ -3,7 +3,8 @@ Class {
 	#superclass : 'PvBaseModel',
 	#instVars : [
 		'decorators',
-		'protocol'
+		'protocol',
+		'actionDecorators'
 	],
 	#category : 'Perspective-Method-Model',
 	#package : 'Perspective-Method',
@@ -45,6 +46,13 @@ PvMethodModel >> accept: aVisitor [
 	^ aVisitor visitMethodModel: self
 ]
 
+{ #category : 'accessing' }
+PvMethodModel >> actionDecorators [
+	"answer the actions associated with this method. E.g. versions, test"
+	
+	^ actionDecorators ifNil: [ actionDecorators := self collectActionDecorators ]
+]
+
 { #category : 'converting' }
 PvMethodModel >> asClassModel [
 	
@@ -66,6 +74,12 @@ PvMethodModel >> classifyMethodAs: aString [
 	
 	self entity protocol: aString.
 	protocol := nil
+]
+
+{ #category : 'private' }
+PvMethodModel >> collectActionDecorators [
+
+	^ PvMethodActionDecorator allApplyingTo: self entity
 ]
 
 { #category : 'private' }
@@ -107,6 +121,14 @@ PvMethodModel >> decorated: aBlockOrSymbol ifNone: noneBlock [
 		detect: [ :each | (aBlockOrSymbol value: each) notNil ]
 		ifFound: [ :each | aBlockOrSymbol value: each ]
 		ifNone: noneBlock
+]
+
+{ #category : 'accessing - decorated' }
+PvMethodModel >> decoratedIconName [
+
+	^ self 
+		decorated: [ :each | each iconName ] 
+		ifNone: [ #blank ]
 ]
 
 { #category : 'accessing' }
@@ -167,12 +189,10 @@ PvMethodModel >> hierarchyTopModel [
 				entity: self entity ]
 ]
 
-{ #category : 'accessing - decorated' }
+{ #category : 'accessing' }
 PvMethodModel >> iconName [
 
-	^ self 
-		decorated: [ :each | each iconName ] 
-		ifNone: [ #blank ]
+	^ #method
 ]
 
 { #category : 'testing' }
@@ -255,6 +275,18 @@ PvMethodModel >> protocolName [
 PvMethodModel >> removeMethod [
 
 	self entity removeFromSystem
+]
+
+{ #category : 'updating' }
+PvMethodModel >> runTest [
+	| result |
+
+	result := self methodClass debug: self entity selector.
+	self entity
+		propertyAt: #lastTestExecutionResult 
+		put: result.
+
+	^ result
 ]
 
 { #category : 'accessing' }

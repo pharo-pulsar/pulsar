@@ -37,6 +37,12 @@ PvClassModel >> accept: aVisitor [
 	^ aVisitor visitClassModel: aVisitor
 ]
 
+{ #category : 'accessing' }
+PvClassModel >> actionDecorators [
+
+	^ #()
+]
+
 { #category : 'updating' }
 PvClassModel >> addProtocolNamed: aName [
 
