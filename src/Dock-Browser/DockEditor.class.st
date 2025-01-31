@@ -44,6 +44,14 @@ DockEditor >> doReset [
 ]
 
 { #category : 'private - actions' }
+DockEditor >> doRunTestCommand: anAction [
+	| result |
+	
+	result := self model runTest.
+	anAction presenter model: result
+]
+
+{ #category : 'private - actions' }
 DockEditor >> doSubmit: aString [
 	"process the save of the edited content.
 	 updates the model (which in time will trigger changes in the system). 
@@ -265,7 +273,9 @@ DockEditor >> updateContentActions [
 	self model actionDecorators ifNotEmpty: [ :aCollection |  
 		toolbarPresenter contentActions: (SpActionGroup new 
 			addAll: (aCollection collect: [ :each | 
-				each context: self; asSpecCommand ]);
+				each 
+					context: self; 
+					asSpecCommand ]);
 			yourself) ]
 ]
 

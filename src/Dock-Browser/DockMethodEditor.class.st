@@ -60,13 +60,6 @@ DockMethodEditor >> doRequestChangeProtocol [
 	protocolPresenter popupProtocol
 ]
 
-{ #category : 'private - actions' }
-DockMethodEditor >> doRunTestCommand: aCommand [
-	| result |
-	
-	result := self model runTest
-]
-
 { #category : 'events' }
 DockMethodEditor >> eventModelChanged: ann [
 	
