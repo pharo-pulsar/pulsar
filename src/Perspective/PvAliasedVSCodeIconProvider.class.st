@@ -75,6 +75,7 @@ PvAliasedVSCodeIconProvider >> initialize [
 		'glamorousClose'. 			'close'.   				"inspector"
 		'history'.					'history'. 				"playground"
 		'smallDelete'. 				'trash'.					"playground..."
+		'delete'	.					'trash'.
 		'smallObjects'.				'beaker'.  				"inspector"
 		'glamorousRefresh'. 			'refresh'. 				"inspector"
 		'smallSystemBrowser'. 		'browser'. 				"inspector"
@@ -84,7 +85,7 @@ PvAliasedVSCodeIconProvider >> initialize [
 		'smallDebug'. 				'bug'.					"code"
 		'smallPrintIt'. 				'blank'.					"code"
 		'smallProfile'. 				'watch'.					"code"
-		'menu'. 		   	       		'more'.    "menu button"
+		'menu'. 		   	       		'more'.    				"menu button"
 		'pause'. 					'debug-pause'.
 		'priority'.					'flame'.
 		'autoUpdate'.				'radio-tower'.
