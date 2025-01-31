@@ -15,7 +15,7 @@ PvMethodModelTest >> testActionDecoratorsIncludeTestIfTestMethod [
 		entity: self class >> #testActionDecoratorsIncludeTestIfTestMethod.
 		
 	self assert: (model actionDecorators 
-		anySatisfy: [ :each | each class = PvMethodActionRunTestDecorator ])
+		anySatisfy: [ :each | each class = DockMethodActionRunTestDecorator ])
 ]
 
 { #category : 'tests' }
