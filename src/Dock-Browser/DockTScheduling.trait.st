@@ -11,7 +11,9 @@ Trait {
 { #category : 'private - scheduling' }
 DockTScheduling >> newScheduler [
 
-	^ TKTWorker new start
+	^ DockWorker new 
+		inTool: self class;
+		start
 ]
 
 { #category : 'private - scheduling' }
