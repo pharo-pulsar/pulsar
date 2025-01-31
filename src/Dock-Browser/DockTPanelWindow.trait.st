@@ -8,10 +8,18 @@ Trait {
 	#tag : 'View-Base'
 }
 
+{ #category : 'defaults' }
+DockTPanelWindow classSide >> defaultDockPosition [
+
+	^ SpPanelPosition new 
+		area: SpPanelArea center;
+		yourself
+]
+
 { #category : 'accessing' }
 DockTPanelWindow >> dockPosition [
 
-	^ dockPosition
+	^ dockPosition ifNil: [ dockPosition := self class defaultDockPosition ]
 ]
 
 { #category : 'accessing' }
