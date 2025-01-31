@@ -1,6 +1,9 @@
 Class {
 	#name : 'PvMethodActionDecorator',
 	#superclass : 'PvAction',
+	#instVars : [
+		'presenterClass'
+	],
 	#category : 'Perspective-Method-Model',
 	#package : 'Perspective-Method',
 	#tag : 'Model'
@@ -21,16 +24,24 @@ PvMethodActionDecorator class >> appliesTo: aMethod [
 	^ self subclassResponsibility
 ]
 
-{ #category : 'initialization' }
-PvMethodActionDecorator >> defineAction [
+{ #category : 'converting' }
+PvMethodActionDecorator >> asSpecCommand [
 
-	self name: 'Run Test'.
-	self description: 'Execute test of current method/class'.
-	self iconCompositeName: 'play'
+	^ super asSpecCommand
+		in: [ :this | 
+			self presenterClass ifNotNil: [ :aClass |
+				this buildPresenterBlock: [ aClass on: self ] ] ];
+		yourself
 ]
 
-{ #category : 'executing' }
-PvMethodActionDecorator >> execute [
+{ #category : 'accessing' }
+PvMethodActionDecorator >> presenterClass [
 
-	self context doRunTestCommand: self
+	^ presenterClass
+]
+
+{ #category : 'accessing' }
+PvMethodActionDecorator >> presenterClass: aPresenterClass [
+
+	presenterClass := aPresenterClass
 ]
