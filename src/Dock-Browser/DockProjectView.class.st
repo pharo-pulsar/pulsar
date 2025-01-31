@@ -241,6 +241,12 @@ DockProjectView >> maybeOpenFlyView [
 	self halt
 ]
 
+{ #category : 'accessing' }
+DockProjectView >> openedProjects [
+
+	^ self model children
+]
+
 { #category : 'initialization' }
 DockProjectView >> registerToEvents [
 
@@ -253,7 +259,8 @@ DockProjectView >> registerToEvents [
 DockProjectView >> removeProjectModel: aProjectModel [
 
 	self model removeProjectModel: aProjectModel.
-	self updatePresenter
+	self updatePresenter.
+	self withWindowDo: [ :aWindow | aWindow updateTitle ]
 ]
 
 { #category : 'private' }
