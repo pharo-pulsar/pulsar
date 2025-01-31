@@ -24,6 +24,7 @@ DockProtocolButtonPresenter >> annnounceProtocolChanged [
 DockProtocolButtonPresenter >> defaultLayout [
 
 	^ SpBoxLayout newHorizontal
+		vAlignCenter;
 		add: protocolPresenter;
 		add: chooserPresenter expand: false;
 		yourself
