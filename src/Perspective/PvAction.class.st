@@ -5,7 +5,8 @@ Class {
 		'specDecorator',
 		'iconComposite',
 		'shortcut',
-		'priority'
+		'priority',
+		'actionBlock'
 	],
 	#category : 'Perspective-Command-Base',
 	#package : 'Perspective',
@@ -16,6 +17,18 @@ Class {
 PvAction class >> defaultPriority [
 
 	^ 100
+]
+
+{ #category : 'accessing' }
+PvAction >> action [
+
+	^ actionBlock
+]
+
+{ #category : 'accessing' }
+PvAction >> action: aBlock [
+
+	actionBlock := aBlock
 ]
 
 { #category : 'accessing - runtime' }
@@ -80,8 +93,14 @@ PvAction >> cull: aTarget cull: aCaller cull: aShortcut [
 
 { #category : 'initialization' }
 PvAction >> defineAction [
+	"override this to define an action"
+]
 
-	self subclassResponsibility
+{ #category : 'executing' }
+PvAction >> execute [
+	
+	actionBlock ifNil: [ ^ self ].
+	actionBlock cull: self context
 ]
 
 { #category : 'testing' }
