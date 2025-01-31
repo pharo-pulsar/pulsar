@@ -73,11 +73,13 @@ DockGtkConfiguration >> style [
 button.pvProtocol { font-weight: normal; }
 .pvProtocolChooser { min-width: 250px; min-height: 280px; }
 .stCode { font-size: 0.95em; }
+.dockToolbar { margin: 0px; padding: 0px; }
 .dockEditorBreadcrumb { font-size: 0.9em; }
 .dockEditorBreadcrumb label.separator { padding: 0px 5px 0px 5px; }
 .dockSpotter, .dockDialog, .dockFlyingBrowser { margin: 5px; border-spacing: 5px; }
-.dockMessageFlyingBrowser { min-width: 620px; min-height: 420px; }
-.dockInspectorFlyingBrowser { min-width: 420px; min-height: 420px; }
+.dockSpotter entry.search { margin: 5px 5px 0px 5px; }
+.dockMessageFlyingBrowser { min-width: 680px; min-height: 520px; }
+.dockInspectorFlyingBrowser { min-width: 680px; min-height: 520px; }
 .dockPopoverControlToolbar { margin: 0px; padding: 0px 0px 0px 10px; }
 '
 ]
