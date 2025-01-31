@@ -19,7 +19,7 @@ DockShowSpotterForEnvironmentCommand >> execute [
 
 	spotter := self context
 		instantiate: DockSpotter 
-		on: (PvSpotterModelForEnvironment 
+		on: (DockSpotterModel 
 			newEnvironment: self context model environmentModel 
 			origin: self context).
 	
