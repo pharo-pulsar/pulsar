@@ -89,7 +89,7 @@ DockSystemNavigation >> inspect: anObject [
 	| inspector |
 	
 	inspector := self window 
-		instantiate: DockRawInspectionPresenter
+		instantiate: DockInspector
 		on: (DockInspectorModel on: anObject).
 	inspector notificationCenter: self notificationCenter.
 	self codePresenter insertPopoverAfterCurrentSelection: inspector
