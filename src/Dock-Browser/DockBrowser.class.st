@@ -189,3 +189,9 @@ DockBrowser >> windowClosed [
 	self presenters do: [ :each | each windowClosed ].	
 	super windowClosed
 ]
+
+{ #category : 'initialization' }
+DockBrowser >> windowWillClose [
+
+	^ self editors noneSatisfy: [ :each | each presenter isDirty ]
+]
