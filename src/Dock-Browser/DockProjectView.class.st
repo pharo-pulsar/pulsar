@@ -202,7 +202,8 @@ DockProjectView >> eventEditorActivated: anAnnouncement [
 	| classModel path |
 	
 	classModel := anAnnouncement value model asClassModel.
-	listPresenter selectedItem realModel = classModel ifTrue: [ ^ self ].
+	(listPresenter selectedItem isNotNil and: [ listPresenter selectedItem realModel = classModel ]) 
+		ifTrue: [ ^ self ].
  
 	path := self model findPathForClassModel: classModel. 
 	path ifNil: [ ^ self ].
@@ -212,6 +213,7 @@ DockProjectView >> eventEditorActivated: anAnnouncement [
 
 { #category : 'initialization' }
 DockProjectView >> initializePresenters [
+	self addStyle: 'dockProjectView'.
 
 	toolbarPresenter := self instantiate: DockToolbarPresenter.
 	toolbarPresenter actions: (self actions actionsFor: #project).	
