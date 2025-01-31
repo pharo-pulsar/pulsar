@@ -174,7 +174,7 @@ DockBrowser >> projectView [
 { #category : 'initialization' }
 DockBrowser >> updateTitle [
 
-	self title: (projectView openProjects
+	self title: (projectView openedProjects
 		ifNotEmpty: [ :projectModels | 
 			'Pharo({1}): {2}' format: { 
 				FileLocator image base.
