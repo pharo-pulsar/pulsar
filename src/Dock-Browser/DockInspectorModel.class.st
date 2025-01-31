@@ -11,7 +11,7 @@ Class {
 { #category : 'accessing' }
 DockInspectorModel >> dockEditorClass [
 
-	^ DockRawInspectionPresenter
+	^ DockInspector
 ]
 
 { #category : 'accessing' }
