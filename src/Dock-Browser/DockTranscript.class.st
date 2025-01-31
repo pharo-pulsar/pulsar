@@ -5,7 +5,8 @@ Class {
 	#classTraits : 'DockTSnapshot classTrait',
 	#instVars : [
 		'terminalPresenter',
-		'service'
+		'service',
+		'runner'
 	],
 	#category : 'Dock-Browser-Tool-Transcript',
 	#package : 'Dock-Browser',
@@ -26,12 +27,31 @@ DockTranscript class >> defaultTitle [
 	^ 'Transcript'
 ]
 
+{ #category : 'accessing - actions' }
+DockTranscript class >> defineActionsOn: aBuilder [
+	<perspectiveActions>
+
+	aBuilder registerGroup: #transcript with: { 
+		PvAction new 
+			name: 'Clear';
+			description: 'Clear transcript';
+			action: [ :aContext | aContext doClearTranscript ];
+			yourself.
+	}
+]
+
 { #category : 'layout' }
 DockTranscript >> defaultLayout [
 
 	^ SpBoxLayout newVertical
 		add: terminalPresenter;
 		yourself
+]
+
+{ #category : 'as yet unclassified' }
+DockTranscript >> doClearTranscript [
+	
+	terminalPresenter clear
 ]
 
 { #category : 'private' }
@@ -46,6 +66,15 @@ DockTranscript >> ensureTranscriptService [
 ]
 
 { #category : 'initialization' }
+DockTranscript >> initialize [
+
+	super initialize. 
+	runner := DockWorker new 
+		inTool: self class;
+		start
+]
+
+{ #category : 'initialization' }
 DockTranscript >> initializePresenters [
 
 	self addStyle: 'stTranscript'.
@@ -54,6 +83,7 @@ DockTranscript >> initializePresenters [
 		addStyle: 'stTerminal';
 		withEditionContextMenu;
 		withHyperlinks;
+		actions: (self actions actionsFor: #transcript);
 		yourself
 ]
 
@@ -84,6 +114,5 @@ DockTranscript >> unsubscribe [
 DockTranscript >> update: aSymbol [
 
 	aSymbol = #appendEntry ifTrue: [ 
-		terminalPresenter feed: Transcript contents withUnixLineEndings ]
-	
+		runner schedule: [ terminalPresenter feed: Transcript contents withUnixLineEndings ] ]
 ]
