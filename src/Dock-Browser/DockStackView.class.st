@@ -18,6 +18,47 @@ DockStackView class >> defaultDockPosition [
 		yourself
 ]
 
+{ #category : 'as yet unclassified' }
+DockStackView class >> defineActionGroupGeneral: actionGroup [
+	<perspectiveActionGroup: #editorStackGeneral>
+	
+	actionGroup
+		priority: 1000;
+		beDisplayedAsGroup
+]
+
+{ #category : 'as yet unclassified' }
+DockStackView class >> defineActionGroupStack: actionGroup [
+	<perspectiveActionGroup: #editorStack>
+	
+	actionGroup
+		priority: 10;
+		beDisplayedAsGroup
+]
+
+{ #category : 'accessing - actions' }
+DockStackView class >> defineActionsOn: aBuilder [
+	<perspectiveActions>
+
+	aBuilder 
+		registerGroup: #editorStack with: { 
+			$x mod1 -> (PvAction new 
+				name: 'Close selected editors';
+				description: 'Close selected editors';
+				action: [ :aContext | aContext doCloseSelectedEditors ];
+				yourself).
+		};
+		registerGroup: #editorStackGeneral with: {
+			PvAction new 
+				name: 'Close All';
+				description: 'Close all editors';
+				iconCompositeName: 'delete';
+				action: [ :aContext | aContext doCloseEditors ];
+				yourself.
+		}
+	
+]
+
 { #category : 'layout' }
 DockStackView >> defaultLayout [
 
@@ -35,11 +76,13 @@ DockStackView >> eventEditorActivated: anAnnouncement [
 		detect: [ :each | each = anAnnouncement value model ]
 		ifNone: [ nil ].
 		
-	currentItem ifNotNil: [ 
+	currentItem ifNotNil: [
+		listPresenter selectedItem ifNotNil: [ listPresenter unselectAll ].
 		listPresenter selectItem: currentItem. 
 		^ self].
 
 	self updatePresenter.
+	listPresenter selectedItem ifNotNil: [ listPresenter unselectAll ].
 	listPresenter selectItem: anAnnouncement value model
 ]
 
@@ -66,10 +109,16 @@ DockStackView >> eventModelChanged: anAnnouncement [
 { #category : 'initialization' }
 DockStackView >> initializePresenters [
 
+	self addStyle: 'dockStack'.
+
 	toolbarPresenter := self instantiate: DockToolbarPresenter.
+	toolbarPresenter actions: (self actions actionsFor: #editorStackGeneral).
+	
 	listPresenter := self newEasyListView
 		addStyle: 'stList';
+		beMultipleSelection;
 		rowPresenterClass: DockStackRow;
+		actions: (self actions actionsForAll: #(editorStack editorStackGeneral));
 		yourself
 ]
 
@@ -77,6 +126,13 @@ DockStackView >> initializePresenters [
 DockStackView >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter title: 'Editor Stack'
+]
+
+{ #category : 'private - announcing' }
+DockStackView >> notifySelectEntity: aCollection [
+
+	aCollection ifEmpty: [ ^ self ].
+	super notifySelectEntity: aCollection first
 ]
 
 { #category : 'initialization' }
