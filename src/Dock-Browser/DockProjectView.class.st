@@ -75,7 +75,10 @@ DockProjectView >> addProject: aBaselineClass [
 	
 	self model addProject: aBaselineClass.
 	self updatePresenter.
-	listPresenter selectPath: { self model children size }
+	listPresenter 
+		selectPath: { self model children size };
+		takeKeyboardFocus.
+	self withWindowDo: [ :aWindow | aWindow updateTitle ]
 ]
 
 { #category : 'private' }

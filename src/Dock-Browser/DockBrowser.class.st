@@ -79,8 +79,10 @@ DockBrowser >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
 		initialExtent: (LastWindowSize ifNil: [ 1000@800 ]);
-		title: 'Pharo Dock';
-		whenResizingDo: [ :ann | LastWindowSize := ann newSize ]
+		whenResizingDo: [ :ann | LastWindowSize := ann newSize ];
+		whenWillCloseDo: [ :ann | 
+			self windowWillClose 
+				ifFalse: [ ann denyClose ] ]
 ]
 
 { #category : 'initialization' }
@@ -167,6 +169,18 @@ DockBrowser >> presenterWithTitle: aString [
 DockBrowser >> projectView [
 
 	^ projectView
+]
+
+{ #category : 'initialization' }
+DockBrowser >> updateTitle [
+
+	self title: (projectView openProjects
+		ifNotEmpty: [ :projectModels | 
+			'Pharo({1}): {2}' format: { 
+				FileLocator image base.
+				(projectModels collect: #name) asCommaString } ]
+		ifEmpty: [ 
+			'Pharo({1})' format: { FileLocator image base } ])
 ]
 
 { #category : 'private' }
