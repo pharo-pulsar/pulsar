@@ -52,6 +52,12 @@ DockBrowser >> eventModelActivated: anAnnouncement [
 	self maybeDockView: anAnnouncement value
 ]
 
+{ #category : 'events' }
+DockBrowser >> eventModelDeactivated: anAnnouncement [
+	
+	self maybeUndockView: anAnnouncement value
+]
+
 { #category : 'private' }
 DockBrowser >> findEditorContaining: aViewModel [
 
@@ -126,6 +132,15 @@ DockBrowser >> maybeDockView: aViewModel [
 	self 
 		addPresenter: editorPresenter 
 		at: editorPresenter dockPosition
+]
+
+{ #category : 'private' }
+DockBrowser >> maybeUndockView: aViewModel [
+	| editorPresenter |
+
+	aViewModel hasDockEditor ifFalse: [ ^ self ].
+	(self findEditorContaining: aViewModel) 
+		ifNotNil: [ :panelPresenter | panelPresenter close ]
 ]
 
 { #category : 'actions' }

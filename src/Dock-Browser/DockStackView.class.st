@@ -59,6 +59,13 @@ DockStackView class >> defineActionsOn: aBuilder [
 	
 ]
 
+{ #category : 'private - actions' }
+DockStackView >> closeEditor: aModel [
+
+	aModel ifNil: [ ^ self ].
+	self notificationCenter announce: (DockModelDeactivated newValue: aModel realModel)
+]
+
 { #category : 'layout' }
 DockStackView >> defaultLayout [
 
@@ -66,6 +73,19 @@ DockStackView >> defaultLayout [
 		add: toolbarPresenter expand: false;
 		add: listPresenter;
 		yourself
+]
+
+{ #category : 'as yet unclassified' }
+DockStackView >> doCloseEditors [
+	
+	listPresenter items do: [ :each | self closeEditor: each ]
+]
+
+{ #category : 'private - actions' }
+DockStackView >> doCloseSelectedEditors [
+	
+	listPresenter selectedItems do: [ :each | 
+		self closeEditor: each ]
 ]
 
 { #category : 'events' }

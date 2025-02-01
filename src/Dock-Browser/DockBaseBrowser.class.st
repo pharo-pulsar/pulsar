@@ -76,7 +76,8 @@ DockBaseBrowser >> registerToEvents [
 		"first broadcast"
 		when: DockAnnouncement send: #resendAnnouncement: to: self;
 		"now process here"
-		when: DockModelActivated send: #eventModelActivated: to: self
+		when: DockModelActivated send: #eventModelActivated: to: self;
+		when: DockModelDeactivated send: #eventModelDeactivated: to: self
 ]
 
 { #category : 'announcing' }
