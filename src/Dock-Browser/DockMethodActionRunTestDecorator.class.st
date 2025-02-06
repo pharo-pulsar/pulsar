@@ -12,12 +12,27 @@ DockMethodActionRunTestDecorator class >> appliesTo: aMethod [
 	^ aMethod isTestMethod
 ]
 
+{ #category : 'instance creation' }
+DockMethodActionRunTestDecorator class >> on: aModel [
+
+	^  self new 
+		model: aModel;
+		yourself
+]
+
+{ #category : 'accessing' }
+DockMethodActionRunTestDecorator >> contextModel [
+
+	^ context model
+]
+
 { #category : 'initialization' }
 DockMethodActionRunTestDecorator >> defineAction [
 
 	self name: 'Run Test'.
 	self description: 'Execute test of current method/class'.
-	self iconCompositeName: 'play'
+	self iconCompositeName: 'play'.
+	self presenterClass: DockMethodActionRunTestPresenter
 ]
 
 { #category : 'executing' }

@@ -45,10 +45,10 @@ DockEditor >> doReset [
 
 { #category : 'private - actions' }
 DockEditor >> doRunTestCommand: anAction [
-	| result |
 	
-	result := self model runTest.
-	anAction presenter model: result
+	self model runTest.
+	anAction presenter updatePresenter
+
 ]
 
 { #category : 'private - actions' }

@@ -79,13 +79,13 @@ PvMethodModel >> classifyMethodAs: aString [
 { #category : 'private' }
 PvMethodModel >> collectActionDecorators [
 
-	^ PvMethodActionDecorator allApplyingTo: self entity
+	^ PvMethodActionDecorator allApplyingTo: self
 ]
 
 { #category : 'private' }
 PvMethodModel >> collectDecorators [
 
-	^ PvMethodDecorator allApplyingTo: self entity
+	^ PvMethodDecorator allApplyingTo: self
 ]
 
 { #category : 'accessing - decorated' }
@@ -124,11 +124,27 @@ PvMethodModel >> decorated: aBlockOrSymbol ifNone: noneBlock [
 ]
 
 { #category : 'accessing - decorated' }
+PvMethodModel >> decoratedIconComposite [
+
+	^ PvCompositeIcon new 
+		name: self decoratedIconName;
+		yourself
+]
+
+{ #category : 'accessing - decorated' }
 PvMethodModel >> decoratedIconName [
 
 	^ self 
 		decorated: [ :each | each iconName ] 
 		ifNone: [ #blank ]
+]
+
+{ #category : 'private' }
+PvMethodModel >> decorationAs: aDecorationClass [
+
+	^ self decorators
+		detect: [ :each | each class = aDecorationClass ]
+		ifNone: [ ^ nil ]
 ]
 
 { #category : 'accessing' }
@@ -223,6 +239,13 @@ PvMethodModel >> isOutlineClassEntity [
 PvMethodModel >> isTestMethod [
 	
 	^ self entity isTestMethod
+]
+
+{ #category : 'updating' }
+PvMethodModel >> lastTestExecutionResult [
+	^ self entity
+		propertyAt: #lastTestExecutionResult 
+		ifAbsent: [ nil ]
 ]
 
 { #category : 'accessing' }
