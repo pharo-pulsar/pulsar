@@ -85,7 +85,7 @@ PvAliasedVSCodeIconProvider >> initialize [
 		'smallDebug'. 				'bug'.					"code"
 		'smallPrintIt'. 				'blank'.					"code"
 		'smallProfile'. 				'watch'.					"code"
-		'menu'. 		   	       		'more'.    				"menu button"
+		'menu'. 		   	       		'menu'.    				"menu button"
 		'pause'. 					'debug-pause'.
 		'priority'.					'flame'.
 		'autoUpdate'.				'radio-tower'.
@@ -96,6 +96,11 @@ PvAliasedVSCodeIconProvider >> initialize [
 		'protocolAll'.       	 	'pulse'.
 		'protocolVirtual'.       	'pulse'. "radio-tower"
 		'protocolVirtualWarning'. 	'warning'.
+		"testing"
+		'run-test'. 					'play'.
+		'run-test-passed'. 			'play-green'.
+		'run-test-failure'. 			'play-yellow'.
+		'run-test-error'. 			'play-red'.
 	 }
 ]
 
