@@ -2,6 +2,7 @@ Class {
 	#name : 'PvMethodActionDecorator',
 	#superclass : 'PvAction',
 	#instVars : [
+		'model',
 		'presenterClass'
 	],
 	#category : 'Perspective-Method-Model',
@@ -10,11 +11,11 @@ Class {
 }
 
 { #category : 'accessing' }
-PvMethodActionDecorator class >> allApplyingTo: aMethod [
+PvMethodActionDecorator class >> allApplyingTo: aModel [
 	
 	"avoid a copy since I know I will not modify it"
 	^ self basicSubclasses
-		select: [ :each | each appliesTo: aMethod ]
+		select: [ :each | each appliesTo: aModel entity ]
 		thenCollect: [ :each | each new ]
 ]
 
@@ -30,8 +31,23 @@ PvMethodActionDecorator >> asSpecCommand [
 	^ super asSpecCommand
 		in: [ :this | 
 			self presenterClass ifNotNil: [ :aClass |
-				this buildPresenterBlock: [ aClass on: self ] ] ];
+				this buildPresenterBlock: [ :aCommand | 
+						self context 
+							instantiate: aClass 
+							on: aCommand ] ] ];
 		yourself
+]
+
+{ #category : 'accessing' }
+PvMethodActionDecorator >> model [
+
+	^ model
+]
+
+{ #category : 'accessing' }
+PvMethodActionDecorator >> model: aModel [
+
+	model := aModel
 ]
 
 { #category : 'accessing' }
