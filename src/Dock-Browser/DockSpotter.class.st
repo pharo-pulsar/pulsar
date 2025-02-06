@@ -52,7 +52,7 @@ DockSpotter >> defaultLayout [
 			child: (SpTabLayout new 
 				add: resultListPresenter label: 'Environment';
 				add: editorListPresenter label: 'Editors';
-				add: toolListPresenter label: 'Tools';
+				add: toolListPresenter label: 'Commands';
 				whenTabSelectedDo: [ :ann | self tabActivated: ann presenter ];
 				yourself);
 			addOverlay: emptyPresenter withConstraints: [ :c | c vAlignCenter; hAlignCenter ];
