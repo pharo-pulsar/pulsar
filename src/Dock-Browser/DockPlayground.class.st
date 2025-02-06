@@ -25,6 +25,18 @@ DockPlayground class >> defaultTitle [
 	^ 'Playground'
 ]
 
+{ #category : 'accessing' }
+DockPlayground >> contents [
+
+	^ codePresenter text
+]
+
+{ #category : 'accessing' }
+DockPlayground >> contents: aString [
+
+	codePresenter text: aString
+]
+
 { #category : 'layout' }
 DockPlayground >> defaultLayout [
 
@@ -34,13 +46,22 @@ DockPlayground >> defaultLayout [
 ]
 
 { #category : 'initialization' }
+DockPlayground >> ensureCodeBindings [
+
+	(codePresenter interactionModel bindings 
+		anySatisfy: [ :each | each key = #thisBrowser ])
+		ifTrue: [ ^ self ].
+		
+	codePresenter interactionModel 
+		addBinding: (WorkspaceVariable key: #thisBrowser value: self window)
+]
+
+{ #category : 'initialization' }
 DockPlayground >> initializePresenters [
 
 	(codePresenter := self newCode)
-		interactionModel: StPlaygroundInteractionModel new; 
-		systemNavigation: (self systemNavigation
-			codePresenter: codePresenter;
-			yourself)		
+		interactionModel: self newInteractionModel; 
+		systemNavigation: self newSystemNavigation;		
 		yourself
 ]
 
@@ -52,10 +73,37 @@ DockPlayground >> initializeWindow: aWindowPresenter [
 		windowIcon: (self iconNamed: 'workspace')
 ]
 
+{ #category : 'private' }
+DockPlayground >> newInteractionModel [
+
+	^ StPlaygroundInteractionModel new
+]
+
+{ #category : 'private' }
+DockPlayground >> newSystemNavigation [
+
+	^ self systemNavigation
+		codePresenter: codePresenter;
+		yourself
+]
+
+{ #category : 'accessing - snapshot' }
+DockPlayground >> snapshot [
+
+	^ DockPlaygroundSnapshotRecord on: self
+]
+
 { #category : 'accessing' }
 DockPlayground >> systemNavigation [ 
 
 	self withWindowDo: [ :aWindow | 
 		^ aWindow systemNavigation ].
 	^ super systemNavigation
+]
+
+{ #category : 'initialization' }
+DockPlayground >> updatePresenter [ 
+
+	super updatePresenter. 
+	self ensureCodeBindings
 ]
