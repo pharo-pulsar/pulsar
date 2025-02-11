@@ -72,12 +72,17 @@ DockProjectView class >> defineActionsOn: aBuilder [
 
 { #category : 'actions' }
 DockProjectView >> addProject: aBaselineClass [
+	| path |
 	
 	self model addProject: aBaselineClass.
-	self updatePresenter.
-	listPresenter 
-		selectPath: { self model children size };
+	self updateListPresenterExpanding: nil.
+	
+	path := { self model children size }.
+	listPresenter
+		selectPath: path;
+		expandPath: path;
 		takeKeyboardFocus.
+
 	self withWindowDo: [ :aWindow | aWindow updateTitle ]
 ]
 
@@ -279,13 +284,19 @@ DockProjectView >> toolbarPresenter [
 ]
 
 { #category : 'initialization' }
+DockProjectView >> updateListPresenterExpanding: aPath [
+
+	listPresenter roots: (self model children copyWith: self model environmentModel).
+	aPath ifNotNil: [
+		listPresenter expandPath: aPath ]
+]
+
+{ #category : 'initialization' }
 DockProjectView >> updatePresenter [
 
 	self model ifNil: [ 
 		listPresenter roots: #().
 		^ self ].
 	
-	listPresenter 
-		roots: (self model children copyWith: self model environmentModel);
-		expandPath: #(1)
+	self updateListPresenterExpanding: #(1)
 ]
