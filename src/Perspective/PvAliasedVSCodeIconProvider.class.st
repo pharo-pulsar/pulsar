@@ -85,7 +85,7 @@ PvAliasedVSCodeIconProvider >> initialize [
 		'smallDebug'. 				'bug'.					"code"
 		'smallPrintIt'. 				'blank'.					"code"
 		'smallProfile'. 				'watch'.					"code"
-		'menu'. 		   	       		'menu'.    				"menu button"
+		'menu'. 		   	       		'more'. "menu"    		"menu button"
 		'pause'. 					'debug-pause'.
 		'priority'.					'flame'.
 		'autoUpdate'.				'radio-tower'.
