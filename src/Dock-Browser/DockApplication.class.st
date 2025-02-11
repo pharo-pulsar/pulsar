@@ -18,10 +18,41 @@ DockApplication class >> applicationName [
 	^ 'dock'
 ]
 
+{ #category : 'private' }
+DockApplication class >> cleanUp [
+	<script>
+
+	"yes, there are better ways to do this, for for now..."
+	DockWorker allInstances do: #stop.
+	Transcript dependents copy
+		collect: [ :each | each isKindOf: DockTranscript ]
+		thenDo: [ :each | Transcript removeDependent: each ]
+]
+
 { #category : 'accessing' }
 DockApplication class >> defaultBackendName [
 
 	^ #Gtk
+]
+
+{ #category : 'class initialization' }
+DockApplication class >> initialize [
+	
+	SessionManager default registerGuiClassNamed: self name
+]
+
+{ #category : 'system startup' }
+DockApplication class >> shutDown: quitting [
+
+	quitting ifFalse: [ ^ self ].
+	self cleanUp
+]
+
+{ #category : 'system startup' }
+DockApplication class >> startUp: resuming [
+
+	resuming ifFalse: [ ^ self ].
+	self cleanUp
 ]
 
 { #category : 'accessing' }
