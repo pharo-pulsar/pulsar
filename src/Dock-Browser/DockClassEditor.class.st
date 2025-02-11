@@ -14,7 +14,7 @@ DockClassEditor class >> defineActionsOn: aBuilder [
 	<perspectiveActions>
 
 	aBuilder registerGroup: #navigation with: { 
-		$h mod1 -> PvClassHierarchyNavigationCommand new
+		$h mod1 -> DockHierarchyNavigationCommand new
 	}
 ]
 

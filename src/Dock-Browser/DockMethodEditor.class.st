@@ -36,7 +36,7 @@ DockMethodEditor class >> defineActionsOn: aBuilder [
 			$p mod1 shift -> DockCategoriseMethodCommand new
 		};
 		registerGroup: #navigation with: { 
-			$h mod1 -> PvMethodHierarchyNavigationCommand new
+			$h mod1 -> DockHierarchyNavigationCommand new
 		}
 ]
 
