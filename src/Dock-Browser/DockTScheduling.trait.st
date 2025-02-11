@@ -27,3 +27,10 @@ DockTScheduling >> scheduler [
 
 	^ scheduler ifNil: [ scheduler := self newScheduler ]
 ]
+
+{ #category : 'private - scheduling' }
+DockTScheduling >> stopScheduler [
+
+	scheduler ifNil: [ ^ self ].
+	scheduler stop
+]

@@ -48,7 +48,7 @@ DockTranscript >> defaultLayout [
 		yourself
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private - actions' }
 DockTranscript >> doClearTranscript [
 	
 	terminalPresenter clear
@@ -68,10 +68,7 @@ DockTranscript >> ensureTranscriptService [
 { #category : 'initialization' }
 DockTranscript >> initialize [
 
-	super initialize. 
-	runner := DockWorker new 
-		inTool: self class;
-		start
+	super initialize
 ]
 
 { #category : 'initialization' }
@@ -100,19 +97,24 @@ DockTranscript >> initializeWindow: aWindowPresenter [
 { #category : 'private' }
 DockTranscript >> subscribe [
 		
-	Transcript addDependent: self
+	Transcript addDependent: self.
+	runner := DockWorker new 
+		inTool: self class;
+		start	
 
 ]
 
 { #category : 'private' }
 DockTranscript >> unsubscribe [
 	
-	Transcript removeDependent: self
+	runner stop.
+	Transcript removeDependent: self.
 ]
 
 { #category : 'updating' }
 DockTranscript >> update: aSymbol [
 
 	aSymbol = #appendEntry ifTrue: [ 
-		runner schedule: [ terminalPresenter feed: Transcript contents withUnixLineEndings ] ]
+		runner schedule: [ 
+			terminalPresenter feed: Transcript contents withUnixLineEndings ] ]
 ]

@@ -88,7 +88,8 @@ DockBrowser >> initializeWindow: aWindowPresenter [
 		whenResizingDo: [ :ann | LastWindowSize := ann newSize ];
 		whenWillCloseDo: [ :ann | 
 			self windowWillClose 
-				ifFalse: [ ann denyClose ] ]
+				ifFalse: [ ann denyClose ] ];
+		whenClosedDo: [ self windowClosed ]
 ]
 
 { #category : 'initialization' }
@@ -198,15 +199,21 @@ DockBrowser >> updateTitle [
 			'Pharo({1})' format: { FileLocator image base } ])
 ]
 
-{ #category : 'private' }
+{ #category : 'event handling' }
 DockBrowser >> windowClosed [
 
-	self presenters do: [ :each | each windowClosed ].	
+	self presenters do: [ :each | 
+		each windowClosed ].
 	super windowClosed
 ]
 
-{ #category : 'initialization' }
+{ #category : 'event handling' }
 DockBrowser >> windowWillClose [
+	| ann |
 
-	^ self editors noneSatisfy: [ :each | each presenter isDirty ]
+	ann := SpWindowWillClose new.
+	^  self editors reversed allSatisfy: [ :each | 
+			ann window: each.
+			each announce: ann.
+			ann canClose ]
 ]

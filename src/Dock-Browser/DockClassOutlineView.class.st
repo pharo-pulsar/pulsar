@@ -98,7 +98,9 @@ DockClassOutlineView >> initializePresenters [
 { #category : 'initialization' }
 DockClassOutlineView >> initializeWindow: aWindowPresenter [
 
-	aWindowPresenter title: 'Outline'
+	aWindowPresenter 
+		title: 'Outline';
+		whenClosedDo: [ self stopScheduler ]
 ]
 
 { #category : 'private' }
