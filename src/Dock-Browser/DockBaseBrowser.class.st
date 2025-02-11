@@ -104,3 +104,10 @@ DockBaseBrowser >> systemNavigation [
 
 	^ DockSystemNavigation newWindow: self
 ]
+
+{ #category : 'private' }
+DockBaseBrowser >> windowClosed [
+
+	super windowClosed.
+	announcer stopScheduler
+]
