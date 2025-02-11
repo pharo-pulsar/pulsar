@@ -80,6 +80,7 @@ button.pvProtocol { font-weight: normal; }
 .dockSpotter entry.search { margin: 5px 5px 0px 5px; }
 .dockMessageFlyingBrowser { min-width: 680px; min-height: 520px; }
 .dockInspectorFlyingBrowser { min-width: 680px; min-height: 520px; }
+.dockHierarchyFlyingBrowser { min-width: 450px; min-height: 350px; }
 .dockPopoverControlToolbar { margin: 0px; padding: 0px 0px 0px 10px; }
 '
 ]
