@@ -24,6 +24,12 @@ DockBrowser class >> defineActionsOn: aBuilder [
 		"Character mod1 mod3 -> PvShowSpotterForCommandsAction new" }
 ]
 
+{ #category : 'actions' }
+DockBrowser >> addPresenterClass: aClass [
+
+	^ self addViewClass: aClass
+]
+
 { #category : 'initialization' }
 DockBrowser >> addViewClass: aClass [
 
