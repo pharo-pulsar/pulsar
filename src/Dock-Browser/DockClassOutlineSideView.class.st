@@ -10,10 +10,10 @@ Class {
 		'variablesListPresenter',
 		'protocolToolbarPresenter',
 		'protocolListPresenter',
-		'activeVariable',
-		'activeProtocol',
 		'updating',
-		'actions'
+		'actions',
+		'activeProtocols',
+		'activeVariables'
 	],
 	#category : 'Dock-Browser-View-Outline',
 	#package : 'Dock-Browser',
@@ -141,9 +141,9 @@ DockClassOutlineSideView >> collectVariables [
 DockClassOutlineSideView >> connectPresenters [
 
 	variablesListPresenter 
-		transmitDo: [ :anEntity | self filterMethodsByVariable: anEntity ].
+		transmitDo: [ :aCollection | self filterMethodsByVariable: aCollection ].
 	protocolListPresenter 
-		transmitDo: [ :anEntity | self filterMethodsByProtocol: anEntity ].
+		transmitDo: [ :aCollection | self filterMethodsByProtocol: aCollection ].
 	listPresenter outputActivationPort 
 		transmitDo: [ :anEntity | self owner notifyActivateEntity: anEntity ]
 ]
@@ -263,16 +263,16 @@ DockClassOutlineSideView >> doRequestNewMethod [
 ]
 
 { #category : 'private' }
-DockClassOutlineSideView >> filterMethodsByProtocol: aProtocolModel [
+DockClassOutlineSideView >> filterMethodsByProtocol: aCollection [
 
-	activeProtocol := aProtocolModel.
+	activeProtocols := aCollection.
 	self updateMethods
 ]
 
 { #category : 'private' }
 DockClassOutlineSideView >> filterMethodsByVariable: aVariableModel [
 
-	activeVariable := aVariableModel.
+	activeVariables := aVariableModel.
 	self updateMethods
 ]
 
@@ -322,6 +322,7 @@ DockClassOutlineSideView >> initializeProtocols [
 	protocolListPresenter := self newEasyListView
 		addStyle: 'stList';
 		addStyle: 'dockProtocolList';
+		beMultipleSelection;
 		rowPresenterClass: DockProtocolRow;
 		searchMatching: [ :aModel :aString | 
 			aModel name asLowercase beginsWith: aString asLowercase ];
@@ -338,6 +339,7 @@ DockClassOutlineSideView >> initializeVariables [
 	variablesListPresenter := self newEasyListView
 		addStyle: 'stList';
 		addStyle: 'dockVariablesList';
+		beMultipleSelection;
 		rowPresenterClass: DockSlotRow;
 		searchMatching: [ :aModel :aString | 
 			aModel name asLowercase beginsWith: aString asLowercase ];
@@ -379,9 +381,11 @@ DockClassOutlineSideView >> updateMethods [
 	| items |
 
 	updating ifTrue: [ ^ self ].
-	items := self methodsForProtocol: activeProtocol.	
-	activeVariable ifNotNil: [ 
-		items := items select: [ :each | each isUsingVariable: activeVariable ] ].
+	items := activeProtocols 
+		flatCollect: [ :each | self methodsForProtocol: each ]
+		as: OrderedCollection.	
+	activeVariables ifNotEmpty: [
+		items := items select: [ :each | each isUsingAnyVariable: activeVariables ] ].
 	listPresenter items: items
 ]
 
@@ -396,7 +400,7 @@ DockClassOutlineSideView >> updatePresenter [
 		self updatingWhile: [
 			self updateVariables.
 			self updateProtocols.
-			activeProtocol := protocolListPresenter selectedItem ].
+			activeProtocols := protocolListPresenter selectedItems ].
 		"update methods happens outside the updating flag... :P"
 		self updateMethods ]
 ]
@@ -413,9 +417,9 @@ DockClassOutlineSideView >> updateProtocols [
 DockClassOutlineSideView >> updateVariables [
 
 	variablesListPresenter updateItemsKeepingSelection: self collectVariables.
-	variablesListPresenter selectedItem 
-		ifNil: [ variablesListPresenter selectFirst ].
-	activeVariable := variablesListPresenter selectedItem
+	variablesListPresenter selectedItems 
+		ifEmpty: [ variablesListPresenter selectFirst ].
+	activeVariables := variablesListPresenter selectedItems
 ]
 
 { #category : 'private - updating' }
