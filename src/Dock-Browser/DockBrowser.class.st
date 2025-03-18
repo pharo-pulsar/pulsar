@@ -24,25 +24,24 @@ DockBrowser class >> defineActionsOn: aBuilder [
 		"Character mod1 mod3 -> PvShowSpotterForCommandsAction new" }
 ]
 
-{ #category : 'actions' }
+{ #category : 'initialization' }
 DockBrowser >> addPresenterClass: aClass [
+	| view |
 
-	^ self addViewClass: aClass
+	view := self instantiate: aClass.
+	self addPresenter: view at: view dockPosition.
+	
+	^ view
 ]
 
 { #category : 'initialization' }
-DockBrowser >> addViewClass: aClass [
-
-	^ self addViewClass: aClass on: nil
-]
-
-{ #category : 'initialization' }
-DockBrowser >> addViewClass: aClass on: aModel [
+DockBrowser >> addPresenterClass: aClass on: aModel [
 	| view |
 
 	view := self instantiate: aClass on: aModel.
 	self addPresenter: view at: view dockPosition.
-	^ view
+	
+^ view
 ]
 
 { #category : 'api - focus' }
@@ -106,13 +105,13 @@ DockBrowser >> initializeWorkspace [
 	self bottomHeight: 180"self initialExtent y * 20 percent".
 	
 	"I need a better control on these one"
-	projectView := self addViewClass: DockProjectView on: self model newMultiProjectModel.
-	outlineView := self addViewClass: DockClassOutlineView.
+	projectView := self addPresenterClass: DockProjectView on: self model newMultiProjectModel.
+	outlineView := self addPresenterClass: DockClassOutlineView.
 
 	"here, the list of components that are part of the 'sides' but we access 
 	 just while interacting."	
 	{ DockStackView. DockPlayground. DockTranscript } 
-		do: [ :eachClass | self addViewClass: eachClass ]
+		do: [ :eachClass | self addPresenterClass: eachClass ]
 ]
 
 { #category : 'private' }
