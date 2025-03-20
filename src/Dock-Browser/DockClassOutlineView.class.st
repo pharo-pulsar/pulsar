@@ -54,17 +54,19 @@ DockClassOutlineView >> defaultLayout [
 
 { #category : 'events' }
 DockClassOutlineView >> eventEditorActivated: anAnnouncement [
-	
+
 	"this may be slow, so I schedule it, to not break process..."
 	self schedule: [ 
-		| activatedModel outlineModel |
-
-		activatedModel := anAnnouncement value model.
-		outlineModel := activatedModel asOutlineClassModel.
-		self model = outlineModel ifFalse: [
-			self model: outlineModel ].
-		"visit after to be able to post-process"
-		activatedModel accept: self ]
+		"editor can be closed in the meantime (concurrency problems... :P).
+		 value holds an editor, so its window is a PanelWindow"
+		anAnnouncement value window isOpen ifTrue: [
+			| activatedModel outlineModel |
+			activatedModel := anAnnouncement value model.
+			outlineModel := activatedModel asOutlineClassModel.
+			self model = outlineModel ifFalse: [
+				self model: outlineModel ].
+			"visit after to be able to post-process"
+			activatedModel accept: self ] ]
 ]
 
 { #category : 'events' }
@@ -158,4 +160,10 @@ DockClassOutlineView >> visitMethodModel: aModel [
 		(each includesModel: aModel) 
 			ifTrue: [ tabLayout select: each ].
 		each visitMethodModel: aModel ]
+]
+
+{ #category : 'events' }
+DockClassOutlineView >> visitProjectModel: aModel [
+
+	self visitClassModel: aModel asClassModel
 ]

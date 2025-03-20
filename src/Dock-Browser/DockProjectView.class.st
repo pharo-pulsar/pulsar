@@ -2,7 +2,8 @@ Class {
 	#name : 'DockProjectView',
 	#superclass : 'DockCollectionView',
 	#instVars : [
-		'toolbarPresenter'
+		'toolbarPresenter',
+		'mutex'
 	],
 	#category : 'Dock-Browser-View-Project',
 	#package : 'Dock-Browser',
@@ -49,6 +50,16 @@ DockProjectView class >> defineActionGroupProject: actionGroup [
 ]
 
 { #category : 'accessing - actions' }
+DockProjectView class >> defineActionGroupRefactors: actionGroup [
+	<perspectiveActionGroup: #refactors>
+	
+	actionGroup 
+		name: 'Refactors';
+		priority: 900;
+		beDisplayedAsSubMenu
+]
+
+{ #category : 'accessing - actions' }
 DockProjectView class >> defineActionsOn: aBuilder [
 	<perspectiveActions>
 	
@@ -67,6 +78,12 @@ DockProjectView class >> defineActionsOn: aBuilder [
 		registerGroup: #action with: { 
 			$r mod1 -> PvRenamePackageCommand new.
 			$x mod1 -> PvRemovePackageCommand new.
+		};
+		registerGroup: #refactors with: {
+			PvAction new 
+				name: 'Duplicate class'; 
+				"actionEnabled: [ :aContext | aContext selectedItem isClassModel ];"
+				action: [ :aContext | aContext doDuplicateSelectedClass ]
 		}
 ]
 
@@ -124,6 +141,25 @@ DockProjectView >> defaultLayout [
 ]
 
 { #category : 'private - actions' }
+DockProjectView >> doDuplicateSelectedClass [	
+	| dialog duplicateName |
+
+	dialog := self instantiate: DockRequestPresenter.
+	dialog label: 'New class name'.
+	dialog acceptLabel: 'Duplicate'.
+	
+	dialog asPopover
+		"relativeTo: aCommand presenter;"
+		popupModalAndWait.
+	dialog isOk ifFalse: [ ^ self ].
+	
+	duplicateName := dialog text.
+	
+	listPresenter selectedItem realModel duplicateAs: duplicateName.
+	
+]
+
+{ #category : 'private - actions' }
 DockProjectView >> doNewPackage [
 	| packageName project package |
 	
@@ -164,6 +200,21 @@ DockProjectView >> doNewPackageTag [
 	listPresenter 
 		selectPathByItems: { project. package. packageTag }
 		scrollToSelection: true
+]
+
+{ #category : 'private - actions' }
+DockProjectView >> doNewProject [
+	| projectName project package |
+	
+	projectName := self application newRequest 
+		title: 'New project';
+		label: 'Project name';
+		openModalWithParent: self window.
+	projectName ifNil: [ ^ self ].
+	
+	project := self model newProjectNamed: projectName.
+	self addProject: project.
+	self notifyActivateEntity: (self listPresenter roots detect: [ :each | each entity = project ])
 ]
 
 { #category : 'private - actions' }
@@ -213,7 +264,15 @@ DockProjectView >> eventEditorActivated: anAnnouncement [
 	path := self model findPathForClassModel: classModel. 
 	path ifNil: [ ^ self ].
 	
-	listPresenter selectPath: path
+	mutex critical: [
+		listPresenter selectPath: path ]
+]
+
+{ #category : 'initialization' }
+DockProjectView >> initialize [
+
+	mutex := Mutex new.
+	super initialize
 ]
 
 { #category : 'initialization' }
@@ -277,6 +336,12 @@ DockProjectView >> selectedEntitiesInPath [
 
 ]
 
+{ #category : 'accessing - snapshot' }
+DockProjectView >> snapshot [
+
+	^ DockProjectSnapshot on: self
+]
+
 { #category : 'private' }
 DockProjectView >> toolbarPresenter [
 
@@ -285,10 +350,10 @@ DockProjectView >> toolbarPresenter [
 
 { #category : 'initialization' }
 DockProjectView >> updateListPresenterExpanding: aPath [
-
-	listPresenter roots: (self model children copyWith: self model environmentModel).
+	mutex critical: [
+		listPresenter roots: (self model children copyWith: self model environmentModel).
 	aPath ifNotNil: [
-		listPresenter expandPath: aPath ]
+		listPresenter expandPath: aPath ] ]
 ]
 
 { #category : 'initialization' }

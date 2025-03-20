@@ -74,8 +74,13 @@ DockMessageBrowser >> dockPosition [
 
 { #category : 'initialization' }
 DockMessageBrowser >> initializePopover: aPopoverPresenter [
-
-	aPopoverPresenter bePositionBottom.
+	| nearWindow |
+	"first appearemnce at left, stacking popovers at right"
+	nearWindow := aPopoverPresenter owner ifNotNil: #nearWindowLike.
+	(nearWindow isNotNil and: [ nearWindow isPopover ]) 
+		ifTrue: [ aPopoverPresenter bePositionRight ]
+		ifFalse: [ aPopoverPresenter bePositionBottom ].
+	
 	self addPopoverControls.
 	aPopoverPresenter addShortcutWith: [ :action | action 
 		shortcutKey: Character arrowDown mod3;

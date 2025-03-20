@@ -86,6 +86,27 @@ DockMultiProjectModel >> name [
 	^ 'Projects'
 ]
 
+{ #category : 'actions' }
+DockMultiProjectModel >> newProjectNamed: aName [
+	| baselineName baselineClass |
+	self flag: #TODO. "I am missing validations, handling of errors, etc" 
+
+	baselineName := ('BaselineOf', aName) asSymbol.
+	baselineClass := BaselineOf << baselineName
+		package: baselineName;
+		install.
+
+	baselineClass 
+		compile: 'baseline: spec
+	<baseline>
+
+	spec for: #common do: [
+	]'
+		classified: 'baselines'.
+		
+	^ baselineClass
+]
+
 { #category : 'private' }
 DockMultiProjectModel >> pathTo: aPath in: aCollection [
 	| segment |

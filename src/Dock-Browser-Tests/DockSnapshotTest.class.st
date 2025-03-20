@@ -13,7 +13,7 @@ DockSnapshotTest >> testSnapshotJustOpened [
 	snapshot := browser snapshot.
 	self assert: snapshot isNotNil.
 	"project, stack, transcript, playground and outline"
-	self assert: snapshot panels size equals: 5
+	self assert: snapshot snapshots size equals: 5
 	
 ]
 
@@ -25,12 +25,13 @@ DockSnapshotTest >> testSnapshotPlaygroundKeepsText [
 
 	playground := browser presenterWithClass: DockPlayground.
 	playground presenter contents: '42 factorial'.
+	playground presenter codePresenter cursorPositionIndex: 3.
 
 	snapshot := browser snapshot.
 	self assert: snapshot isNotNil.
 
-	panelSnapshot := snapshot panelWithClass: DockPlaygroundSnapshotRecord.
+	panelSnapshot := snapshot snapshotWithClass: DockPlaygroundSnapshot.
 	self assert: panelSnapshot isNotNil.
-	self assert: panelSnapshot contents equals: '42 factorial'	
-
+	self assert: panelSnapshot contents equals: '42 factorial'.
+	self assert: panelSnapshot cursorPositionIndex equals: 3.	
 ]

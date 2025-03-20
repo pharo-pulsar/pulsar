@@ -6,6 +6,7 @@ Class {
 		'outlineView'
 	],
 	#classVars : [
+		'LastSnapshot',
 		'LastWindowSize'
 	],
 	#category : 'Dock-Browser-View-Browser',
@@ -24,7 +25,25 @@ DockBrowser class >> defineActionsOn: aBuilder [
 		"Character mod1 mod3 -> PvShowSpotterForCommandsAction new" }
 ]
 
-{ #category : 'initialization' }
+{ #category : 'private - testing' }
+DockBrowser class >> hasSnapshot [
+
+	^ LastSnapshot isNotNil
+]
+
+{ #category : 'private - accessing' }
+DockBrowser class >> lastSnapshot [
+
+	^ LastSnapshot
+]
+
+{ #category : 'private - accessing' }
+DockBrowser class >> lastSnapshot: aSnapshot [
+
+	LastSnapshot := aSnapshot
+]
+
+{ #category : 'accessing' }
 DockBrowser >> addPresenterClass: aClass [
 	| view |
 
@@ -34,14 +53,24 @@ DockBrowser >> addPresenterClass: aClass [
 	^ view
 ]
 
-{ #category : 'initialization' }
-DockBrowser >> addPresenterClass: aClass on: aModel [
+{ #category : 'accessing' }
+DockBrowser >> addPresenterClass: aClass model: aModel [
 	| view |
 
 	view := self instantiate: aClass on: aModel.
 	self addPresenter: view at: view dockPosition.
 	
 ^ view
+]
+
+{ #category : 'accessing' }
+DockBrowser >> addPresenterClass: aClass position: aDockPosition [
+	| view |
+
+	view := self instantiate: aClass.
+	self addPresenter: view at: aDockPosition.
+	
+	^ view
 ]
 
 { #category : 'api - focus' }
@@ -100,12 +129,27 @@ DockBrowser >> initializeWindow: aWindowPresenter [
 { #category : 'initialization' }
 DockBrowser >> initializeWorkspace [
 
+	"defaults"
 	self startWidth: 280"self initialExtent x * 25 percent".
 	self endWidth: 280"self initialExtent x * 25 percent".
 	self bottomHeight: 180"self initialExtent y * 20 percent".
-	
+
+	self class hasSnapshot 
+		ifTrue: [ self restoreLastSnapshot ]
+		ifFalse: [ self loadDefaultWorkspace ]
+]
+
+{ #category : 'private' }
+DockBrowser >> keepLastSnapshot [
+
+	LastSnapshot := self snapshot
+]
+
+{ #category : 'initialization' }
+DockBrowser >> loadDefaultWorkspace [
+
 	"I need a better control on these one"
-	projectView := self addPresenterClass: DockProjectView on: self model newMultiProjectModel.
+	projectView := self addPresenterClass: DockProjectView model: self model newMultiProjectModel.
 	outlineView := self addPresenterClass: DockClassOutlineView.
 
 	"here, the list of components that are part of the 'sides' but we access 
@@ -193,6 +237,28 @@ DockBrowser >> projectView [
 ]
 
 { #category : 'initialization' }
+DockBrowser >> restoreLastSnapshot [
+		
+	LastSnapshot restoreTo: self.
+	
+	projectView := self presenters
+		detect: [ :each | each presenter class = DockProjectView ]
+		ifFound: [ :each | each presenter ]
+		ifNone: [ self addPresenterClass: DockProjectView model: self model newMultiProjectModel ].
+		
+	outlineView := self presenters
+		detect: [ :each | each presenter class = DockClassOutlineView ]
+		ifFound: [ :each | each presenter ]
+		ifNone: [ self addPresenterClass: DockClassOutlineView ]
+]
+
+{ #category : 'accessing - snapshot' }
+DockBrowser >> snapshot [
+
+	^ DockBrowserSnapshot on: self
+]
+
+{ #category : 'initialization' }
 DockBrowser >> updateTitle [
 
 	self title: (projectView openedProjects
@@ -207,18 +273,20 @@ DockBrowser >> updateTitle [
 { #category : 'event handling' }
 DockBrowser >> windowClosed [
 
-	self presenters do: [ :each | 
-		each windowClosed ].
+	self presenters 
+		do: [ :each | each windowClosed ].
 	super windowClosed
 ]
 
 { #category : 'event handling' }
 DockBrowser >> windowWillClose [
-	| ann |
+	| ann okToClose |
 
 	ann := SpWindowWillClose new.
-	^  self editors reversed allSatisfy: [ :each | 
+	okToClose := self editors reversed allSatisfy: [ :each | 
 			ann window: each.
 			each announce: ann.
-			ann canClose ]
+			ann canClose ].
+	okToClose ifTrue: [ self keepLastSnapshot ].
+	^ okToClose 
 ]

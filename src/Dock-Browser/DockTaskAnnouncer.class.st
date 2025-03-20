@@ -11,11 +11,12 @@ Class {
 { #category : 'private' }
 DockTaskAnnouncer class >> synchronicAnnouncements [
 
-	^ { SpWindowWillClose }
+	^ { SpWindowWillClose. DockModelDeactivated }
 ]
 
 { #category : 'announce' }
 DockTaskAnnouncer >> announce: anAnnouncement [
+
 	(self isSynchronic: anAnnouncement)
 		ifTrue: [ ^ super announce: anAnnouncement ].
 

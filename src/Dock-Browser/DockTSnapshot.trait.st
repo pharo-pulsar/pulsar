@@ -6,12 +6,7 @@ Trait {
 }
 
 { #category : 'accessing - snapshot' }
-DockTSnapshot >> restoreFromSnapshot: aSnapshotRecord [
-
-]
-
-{ #category : 'accessing - snapshot' }
 DockTSnapshot >> snapshot [
 
-	^ nil
+	^ DockPanelSnapshot on: self
 ]

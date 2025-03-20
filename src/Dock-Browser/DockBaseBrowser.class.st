@@ -4,7 +4,8 @@ Class {
 	#traits : 'SpTModel + DockTSnapshot',
 	#classTraits : 'SpTModel classTrait + DockTSnapshot classTrait',
 	#instVars : [
-		'actions'
+		'actions',
+		'mutex'
 	],
 	#category : 'Dock-Browser-View-Browser',
 	#package : 'Dock-Browser',
@@ -21,15 +22,17 @@ DockBaseBrowser >> addGlobalActionsTo: aWindowPresenter [
 { #category : 'private' }
 DockBaseBrowser >> addWindow: aWindow [
 
-	aWindow presenter registerToDock: self.
-	super addWindow: aWindow.
-	aWindow raise
+	self mutex critical: [ 
+		aWindow presenter registerToDock: self.
+		super addWindow: aWindow.
+		aWindow raise ]
 ]
 
 { #category : 'accessing' }
 DockBaseBrowser >> editors [
 
-	^ self presenters select: [ :each | each dockArea = SpPanelArea center ]
+	^ self mutex critical: [ 
+		super presenters select: [ :each | each dockArea = SpPanelArea center ] ]
 ]
 
 { #category : 'events' }
@@ -41,6 +44,12 @@ DockBaseBrowser >> eventModelActivated: anAnnouncement [
 DockBaseBrowser >> globalActions [
 
 	^ PvActionCollector collectFor: self
+]
+
+{ #category : 'simple dialog helpers' }
+DockBaseBrowser >> inform: aString [
+
+	aString crTrace
 ]
 
 { #category : 'initialization' }
@@ -64,9 +73,21 @@ DockBaseBrowser >> initializeWindow: aWindowPresenter [
 ]
 
 { #category : 'private' }
+DockBaseBrowser >> mutex [
+
+	^  mutex ifNil: [ mutex := Mutex new ]
+]
+
+{ #category : 'private' }
 DockBaseBrowser >> notificationCenter [
 	"using my own announcer as notification center"
 	^ self announcer
+]
+
+{ #category : 'accessing' }
+DockBaseBrowser >> presenters [
+ 
+	^  self mutex critical: [ super presenters ]
 ]
 
 { #category : 'initialization' }
@@ -97,6 +118,12 @@ DockBaseBrowser >> schedule: aBlock [
 DockBaseBrowser >> scheduler [
 
 	^ self application scheduler
+]
+
+{ #category : 'accessing - snapshot' }
+DockBaseBrowser >> snapshot [
+
+	^ DockBrowserSnapshot on: self
 ]
 
 { #category : 'accessing' }

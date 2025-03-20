@@ -75,6 +75,12 @@ DockHierarchyPresenter >> initializePresenters [
 ]
 
 { #category : 'initialization' }
+DockHierarchyPresenter >> itemToSelect [
+
+	^ self model parentModel
+]
+
+{ #category : 'initialization' }
 DockHierarchyPresenter >> updatePresenter [
 
 	super updatePresenter.

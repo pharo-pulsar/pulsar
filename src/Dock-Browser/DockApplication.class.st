@@ -165,7 +165,7 @@ DockApplication >> prepareAsStandaloneApplication [
 DockApplication >> snapshot [
 	| newSnapshot |
 	
-	newSnapshot := DockSnapshot new.
+	newSnapshot := DockApplicationSnapshot new.
 	self windows do: [ :each | each recordSnapshotTo: newSnapshot ].
 	^ newSnapshot
 ]

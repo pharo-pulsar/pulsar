@@ -18,5 +18,5 @@ PvNewProjectCommand >> defineAction [
 { #category : 'executing' }
 PvNewProjectCommand >> execute [
 	
-	
+	context doNewProject
 ]

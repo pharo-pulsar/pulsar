@@ -31,7 +31,8 @@ PvAliasedVSCodeIconProvider >> initialize [
 
 	super initialize.
 	self addAliasesFromPairs: {
-		'add'.						'add'.					
+		'add'.						'add'.	
+		'closeAll'.					'close-all'.
 		"#addFolder"
 		'groupByMethod'. 			'extensions'.			"browser (extensions)"
 		'library'.					'library'.				"browser (system deps)"
@@ -101,6 +102,7 @@ PvAliasedVSCodeIconProvider >> initialize [
 		'run-test-passed'. 			'play-green'.
 		'run-test-failure'. 			'play-yellow'.
 		'run-test-error'. 			'play-red'.
+		'editorStack'.				'multiple-windows'
 	 }
 ]
 

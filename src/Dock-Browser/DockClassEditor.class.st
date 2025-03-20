@@ -9,15 +9,6 @@ Class {
 	#tag : 'View-Editor'
 }
 
-{ #category : 'accessing - actions' }
-DockClassEditor class >> defineActionsOn: aBuilder [
-	<perspectiveActions>
-
-	aBuilder registerGroup: #navigation with: { 
-		$h mod1 -> DockHierarchyNavigationCommand new
-	}
-]
-
 { #category : 'layout' }
 DockClassEditor >> defaultLayout [
 
@@ -28,6 +19,18 @@ DockClassEditor >> defaultLayout [
 			add: editorPresenter;
 			yourself);
 		yourself
+]
+
+{ #category : 'private - actions' }
+DockClassEditor >> doResetComment [
+
+	self updateComment
+]
+
+{ #category : 'private - actions' }
+DockClassEditor >> doSaveComment [
+
+	self model saveComment: commentPresenter text
 ]
 
 { #category : 'events' }
@@ -56,7 +59,11 @@ DockClassEditor >> initializePresenters [
 	super initializePresenters.
 	
 	self addStyle: 'dockClassEditor'.
-	commentPresenter := self newLabel
+	commentPresenter := self newCode
+		withoutSyntaxHighlight;
+		whenSubmitDo: [ self doSaveComment ];
+		whenResetDo: [ self doResetComment ];
+		yourself
 ]
 
 { #category : 'private' }
@@ -73,6 +80,12 @@ DockClassEditor >> updateBreadcrumbs [
 ]
 
 { #category : 'initialization' }
+DockClassEditor >> updateComment [
+	
+	commentPresenter text: (self model comment ifEmpty: [ 'No comment' ])
+]
+
+{ #category : 'initialization' }
 DockClassEditor >> updateEditor [
 	
 	self updatingWhile: [  
@@ -85,6 +98,7 @@ DockClassEditor >> updatePresenter [
 	self model ifNil: [ ^ self ].
 	
 	super updatePresenter.
+	self updateComment.
 	self updateEditor.
 	
 	self flag: #REVIEW. "select template tab by defdault (as comment should be introduced later)?"

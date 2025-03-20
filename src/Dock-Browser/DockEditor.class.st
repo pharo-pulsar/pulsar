@@ -11,6 +11,51 @@ Class {
 	#tag : 'View-Editor'
 }
 
+{ #category : 'accessing - actions' }
+DockEditor class >> defineNavigationActionGroup: actionGroup [
+	<perspectiveActionGroup: #navigation>
+	
+	actionGroup 
+		priority: 100;
+		beDisplayedAsSubMenu
+]
+
+{ #category : 'accessing - actions' }
+DockEditor class >> defineNavigationActionsOn: aBuilder [
+	<perspectiveActions>
+
+	aBuilder registerGroup: #navigation with: { 
+		$h mod1 -> DockHierarchyNavigationCommand new
+	}
+]
+
+{ #category : 'accessing - actions' }
+DockEditor class >> defineWindowActionGroupOn: actionGroup [ 
+	<perspectiveActionGroup: #extraWindow>
+
+	actionGroup
+		priority: 1010;
+		name: 'Window';
+		beDisplayedAsSubMenu
+]
+
+{ #category : 'accessing - actions' }
+DockEditor class >> defineWindowActionsOn: aBuilder [
+	<perspectiveActions>
+
+	aBuilder registerGroup: #extraWindow with: { 
+		PvAction new
+			name: 'Maximize';
+			description: 'Maximize current window';
+			action: [ :aContext | aContext withPanelWindowDo: #maximize ].		
+		PvAction new
+			name: 'Detach as Window';
+			shortcut: Character arrowUp alt shift;
+			description: 'Detach this window from the Dock (open a new window)';
+			action: [ :aContext |  ].			
+	}
+]
+
 { #category : 'initialization' }
 DockEditor >> connectPresenters [
 
@@ -74,28 +119,15 @@ DockEditor >> doSubmit: aString [
 { #category : 'initialization' }
 DockEditor >> editorActions [
 		
-	^ self actions actionsFor: #navigation
-
+	^ self actions actionsForAll: #(navigation extraWindow)
 ]
 
 { #category : 'private - actions' }
 DockEditor >> editorContextMenuActions [
 
-	^ CmCommandGroup forSpec
-		beRoot;
-		register: (editorPresenter rootCommandsGroup name: 'Code');
-		"in: [ :this | self addMenuEditionCommandsTo: this presenter: editorPresenter ];"
-		in: [ :this | self actions entries do: [ :each | this register: each ] ];
-		"register: ((CmCommandGroup named: 'Playground') asSpecGroup
-			register: ((CmCommandGroup named: 'Base options') asSpecGroup
-				beDisplayedAsGroup;
-				in: [ :this | self addToolbarCommandsTo: this ];
-				yourself);
-			register: ((CmCommandGroup named: 'Miscelaneous options') asSpecGroup
-				beDisplayedAsGroup;
-				register: (StShowLineNumbersCommand forSpecContext: self);
-				yourself);
-			yourself);"
+	^ SpActionGroup new 
+		add: (editorPresenter rootCommandsGroup name: 'Code');
+		add: self editorActions beDisplayedAsGroup;
 		yourself
 ]
 
@@ -103,6 +135,12 @@ DockEditor >> editorContextMenuActions [
 DockEditor >> editorPresenter [
 
 	^ editorPresenter
+]
+
+{ #category : 'initialization' }
+DockEditor >> editorToolbarActions [
+		
+	^ self actions actionsFor: #navigation
 ]
 
 { #category : 'events' }
@@ -131,18 +169,19 @@ DockEditor >> initialize [
 DockEditor >> initializePanelWindow: aWindowPresenter [
 
 	super initializePanelWindow: aWindowPresenter.
-	aWindowPresenter 
+	aWindowPresenter
+		actions: self windowActions;
 		whenFocusReceivedDo: [ self notifyEditorActivated ];
 		whenSaveDo: [ :ann | ann success: self saveContent ];
 		whenDiscardDo: [ :ann | 
-			"I don't know what to do with this... nothing feels right." ]
+			"I don't know what to do with this... nothing feels right." ].
 ]
 
 { #category : 'initialization' }
 DockEditor >> initializePresenters [
 
 	toolbarPresenter := self instantiate: DockEditorToolbarPresenter.
-	toolbarPresenter actions: self editorActions.
+	toolbarPresenter actions: self editorToolbarActions.
 
 	(editorPresenter := self newCode)
 		addStyle: 'stCode';
@@ -163,7 +202,7 @@ DockEditor >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
 		title: self model name;
-		whenClosedDo: [ self notifyEditorClosed  ]
+		whenClosedDo: [ self notifyEditorClosed ]
 ]
 
 { #category : 'testing' }
@@ -226,6 +265,12 @@ DockEditor >> saveContent [
 	 close, it needs to return a boolean indicating it can be done or not."
 	
 	^ self doSubmit: editorPresenter text
+]
+
+{ #category : 'accessing - snapshot' }
+DockEditor >> snapshot [
+
+	^ DockEditorSnapshot on: self
 ]
 
 { #category : 'accessing' }
@@ -304,4 +349,10 @@ DockEditor >> updatingWhile: aBlock [
 	updating := true.
 	^ aBlock ensure: [ 
 		updating := oldUpdating ]
+]
+
+{ #category : 'initialization' }
+DockEditor >> windowActions [
+		
+	^ self actions actionsFor: #extraWindow
 ]

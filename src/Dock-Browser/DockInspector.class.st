@@ -54,7 +54,7 @@ DockInspector >> defaultLayout [
 { #category : 'initialization' }
 DockInspector >> initializePopover: aPopoverPresenter [
 
-	aPopoverPresenter bePositionBottom.
+	aPopoverPresenter bePositionRight.
 	self addPopoverControls.
 	aPopoverPresenter addShortcutWith: [ :action | action 
 		shortcutKey: KeyboardKey down mod3;

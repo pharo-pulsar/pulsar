@@ -2,7 +2,8 @@ Class {
 	#name : 'DockStackView',
 	#superclass : 'DockCollectionView',
 	#instVars : [
-		'toolbarPresenter'
+		'toolbarPresenter',
+		'mutex'
 	],
 	#category : 'Dock-Browser-View-Stack',
 	#package : 'Dock-Browser',
@@ -52,7 +53,7 @@ DockStackView class >> defineActionsOn: aBuilder [
 			PvAction new 
 				name: 'Close All';
 				description: 'Close all editors';
-				iconCompositeName: 'delete';
+				iconCompositeName: 'closeAll';
 				action: [ :aContext | aContext doCloseEditors ];
 				yourself.
 		}
@@ -66,6 +67,12 @@ DockStackView >> closeEditor: aModel [
 	self notificationCenter announce: (DockModelDeactivated newValue: aModel realModel)
 ]
 
+{ #category : 'private - actions' }
+DockStackView >> closeEditors: aCollection [
+
+	aCollection do: [ :each | self closeEditor: each ]
+]
+
 { #category : 'layout' }
 DockStackView >> defaultLayout [
 
@@ -75,35 +82,49 @@ DockStackView >> defaultLayout [
 		yourself
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private - actions' }
 DockStackView >> doCloseEditors [
-	
-	listPresenter items do: [ :each | self closeEditor: each ]
+	 
+	self closeEditors: listPresenter items copy
 ]
 
 { #category : 'private - actions' }
 DockStackView >> doCloseSelectedEditors [
 	
-	listPresenter selectedItems do: [ :each | 
-		self closeEditor: each ]
+	self closeEditors: listPresenter selectedItems copy
 ]
 
 { #category : 'events' }
 DockStackView >> eventEditorActivated: anAnnouncement [
-	| currentItem |
+	| currentItem activatedEditor |
+
+	activatedEditor := anAnnouncement value. 
 	
+	"if is closed (it may happen when closing many editors that I receive an activation
+	 that will immediately be closed), then I need just to update in order to refresh 
+	 the list and return. "
+	activatedEditor withPanelWindowDo: [ :w | 
+		w isClosed ifTrue: [
+			self updatePresenter.
+			^ self ] ].
+
+	"get the item in list (just to know if we have it in the list"
 	currentItem := listPresenter items
-		detect: [ :each | each = anAnnouncement value model ]
+		detect: [ :each | each = activatedEditor model ]
 		ifNone: [ nil ].
 		
+	"if it is already there, I just need to select it"
 	currentItem ifNotNil: [
-		listPresenter selectedItem ifNotNil: [ listPresenter unselectAll ].
-		listPresenter selectItem: currentItem. 
-		^ self].
-
+		self mutex critical: [
+			listPresenter selectedItem ifNotNil: [ listPresenter unselectAll ].
+			listPresenter selectItem: currentItem ]. 
+		^ self ].
+	"not there, I need to refresh the list and selec it (unselectAll because 
+	 this is a multi selection list."
 	self updatePresenter.
-	listPresenter selectedItem ifNotNil: [ listPresenter unselectAll ].
-	listPresenter selectItem: anAnnouncement value model
+	self mutex critical: [
+		listPresenter selectedItem ifNotNil: [ listPresenter unselectAll ].
+		listPresenter selectItem: anAnnouncement value model ]
 ]
 
 { #category : 'events' }
@@ -145,7 +166,15 @@ DockStackView >> initializePresenters [
 { #category : 'initialization' }
 DockStackView >> initializeWindow: aWindowPresenter [
 
-	aWindowPresenter title: 'Editor Stack'
+	aWindowPresenter 
+		title: 'Editor Stack'";
+		windowIcon: (self iconNamed: 'editorStack')"
+]
+
+{ #category : 'private' }
+DockStackView >> mutex [
+
+	^ mutex ifNil: [ mutex := Mutex new ]
 ]
 
 { #category : 'private - announcing' }
@@ -169,7 +198,11 @@ DockStackView >> registerToEvents [
 DockStackView >> updatePresenter [
 
 	self window ifNil: [ ^ self ].
-
-	listPresenter updateItemsKeepingSelection: (self window editors 
-		collect: [ :each | each presenter model ]) reversed
+	"it may be that the editor is being closed when the update is triggered.
+	 and several events may trigger a new update."
+	self mutex critical: [
+		listPresenter updateItemsKeepingSelection: (self window editors 
+			reject: [ :each | each isClosed ]
+			thenCollect: [ :each | each presenter model ]) 
+			reversed ]
 ]

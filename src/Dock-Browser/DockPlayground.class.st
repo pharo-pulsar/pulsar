@@ -161,7 +161,7 @@ DockPlayground >> newSystemNavigation [
 { #category : 'accessing - snapshot' }
 DockPlayground >> snapshot [
 
-	^ DockPlaygroundSnapshotRecord on: self
+	^ DockPlaygroundSnapshot on: self
 ]
 
 { #category : 'accessing' }

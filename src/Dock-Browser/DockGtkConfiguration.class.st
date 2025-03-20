@@ -78,9 +78,9 @@ button.pvProtocol { font-weight: normal; }
 .dockEditorBreadcrumb label.separator { padding: 0px 5px 0px 5px; }
 .dockSpotter, .dockDialog, .dockFlyingBrowser { margin: 5px; border-spacing: 5px; }
 .dockSpotter entry.search { margin: 5px 5px 0px 5px; }
-.dockMessageFlyingBrowser { min-width: 680px; min-height: 520px; }
-.dockInspectorFlyingBrowser { min-width: 680px; min-height: 520px; }
-.dockHierarchyFlyingBrowser { min-width: 450px; min-height: 350px; }
+.dockMessageFlyingBrowser { min-width: 680px; min-height: 420px }
+.dockInspectorFlyingBrowser { min-width: 680px; min-height: 420px }
+.dockHierarchyFlyingBrowser { min-width: 450px; min-height: 350px }
 .dockPopoverControlToolbar { margin: 0px; padding: 0px 0px 0px 10px; }
 '
 ]

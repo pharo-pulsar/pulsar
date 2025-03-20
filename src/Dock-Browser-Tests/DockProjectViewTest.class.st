@@ -19,24 +19,6 @@ DockProjectViewTest >> tearDown [
 ]
 
 { #category : 'tests' }
-DockProjectViewTest >> testActions [
-
-	self assert: self presenter actions notNil.
-	self 
-		assertCollection: (self presenter actions allCommands collect: [ :each | each decoratedCommand class ])
-		hasSameElements: {
-			PvNewProjectCommand. 
-			PvOpenProjectCommand. 
-			PvRefreshProjectCommand. 
-			PvNewPackageCommand. 
-			PvNewPackageTagCommand. 
-			DockNewClassCommand. 
-			PvNewTraitCommand. 
-			PvRenamePackageCommand. 
-			PvRemovePackageCommand }
-]
-
-{ #category : 'tests' }
 DockProjectViewTest >> testActivatedClassEditorInProjectIsSelected [
 	"tests when activating a class in an editor, and the class is inside an opened 
 	 project, the class is selected"

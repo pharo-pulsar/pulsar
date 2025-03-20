@@ -10,15 +10,6 @@ Class {
 }
 
 { #category : 'accessing - actions' }
-DockMethodEditor class >> defineActionGroupNavigation: actionGroup [
-	<perspectiveActionGroup: #navigation>
-	
-	actionGroup 
-		priority: 100;
-		beDisplayedAsGroup
-]
-
-{ #category : 'accessing - actions' }
 DockMethodEditor class >> defineActionGroupStructuring: actionGroup [
 	<perspectiveActionGroup: #structuring>
 	
@@ -34,9 +25,6 @@ DockMethodEditor class >> defineActionsOn: aBuilder [
 	aBuilder 
 		registerGroup: #structuring with: {  
 			$p mod1 shift -> DockCategoriseMethodCommand new
-		};
-		registerGroup: #navigation with: { 
-			$h mod1 -> DockHierarchyNavigationCommand new
 		}
 ]
 

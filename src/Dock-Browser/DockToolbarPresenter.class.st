@@ -52,6 +52,16 @@ DockToolbarPresenter >> addPresenter: aPresenter [
 	presenterContainer add: aPresenter
 ]
 
+{ #category : 'api' }
+DockToolbarPresenter >> addPresenterMenuButtonWith: anActionGroup [
+
+	^ self addPresenter: (self newMenuButton 
+		addStyle: 'flat';
+		icon: (self iconNamed: 'menu');
+		actions: anActionGroup;
+		yourself)
+]
+
 { #category : 'layout' }
 DockToolbarPresenter >> defaultLayout [
 

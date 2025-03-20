@@ -38,6 +38,12 @@ PvMethodHierarchyPresenter >> initializePresenters [
 	self addStyle: 'pvMethodHierarchyNavigation'
 ]
 
+{ #category : 'initialization' }
+PvMethodHierarchyPresenter >> itemToSelect [
+
+	^ self model
+]
+
 { #category : 'transmission' }
 PvMethodHierarchyPresenter >> outputActivationPort [
 
@@ -51,7 +57,7 @@ PvMethodHierarchyPresenter >> updatePresenter [
 
 	treePresenter 
 		roots: { self model hierarchyTopModel };
-		selectItem: self model.
+		selectItem: self itemToSelect.
 		
 	"Exclude huge hierarchies from the expandAll to avoid huge and unnecesary 
 	 hierarchy (with a long, long time to be prepared)"

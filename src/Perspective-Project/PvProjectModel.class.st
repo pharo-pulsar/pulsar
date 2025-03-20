@@ -25,6 +25,22 @@ PvProjectModel >> accept: aVisitor [
 	^ aVisitor visitProjectModel: self
 ]
 
+{ #category : 'converting' }
+PvProjectModel >> asClassModel [
+
+	^ PvClassModel 
+		newEnvironment: self environmentModel 
+		entity: self entity
+]
+
+{ #category : 'converting' }
+PvProjectModel >> asOutlineClassModel [
+
+	^ PvOutlineClassModel 
+		newEnvironment: self environmentModel 
+		entity: self entity
+]
+
 { #category : 'accessing' }
 PvProjectModel >> baselineClassModel [
 
@@ -91,9 +107,21 @@ PvProjectModel >> dependencyModels [
 ]
 
 { #category : 'accessing' }
+PvProjectModel >> dockEditorClass [
+
+	^ DockProjectEditor
+]
+
+{ #category : 'accessing' }
 PvProjectModel >> editorClass [
 
 	^ PvProjectEditorView
+]
+
+{ #category : 'accessing' }
+PvProjectModel >> fullName [
+	
+	^  self name
 ]
 
 { #category : 'accessing' }

@@ -22,6 +22,12 @@ PvNewClassTemplate >> classSide [
 ]
 
 { #category : 'accessing' }
+PvNewClassTemplate >> comment [
+
+	^ 'Comment me!'
+]
+
+{ #category : 'accessing' }
 PvNewClassTemplate >> compilerClass [
 	
 	^ Smalltalk compilerClass

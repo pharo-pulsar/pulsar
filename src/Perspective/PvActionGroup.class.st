@@ -126,6 +126,13 @@ PvActionGroup >> id: anObject [
 ]
 
 { #category : 'accessing' }
+PvActionGroup >> name: aName [ 
+
+	super name: aName
+	
+]
+
+{ #category : 'accessing' }
 PvActionGroup >> priority [
 
 	^ priority ifNil: [ self class defaultPriority ]
