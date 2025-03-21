@@ -73,6 +73,18 @@ DockBrowser >> addPresenterClass: aClass position: aDockPosition [
 	^ view
 ]
 
+{ #category : 'private' }
+DockBrowser >> composeTitle [
+
+	^ (projectView isNotNil and: [ projectView openedProjects isNotEmpty ])
+		ifTrue: [
+			'Pharo({1}): {2}' format: { 
+				FileLocator image base.
+				(projectView openedProjects collect: #name) asCommaString } ]
+		ifFalse: [ 
+			'Pharo({1})' format: { FileLocator image base } ]
+]
+
 { #category : 'api - focus' }
 DockBrowser >> defaultKeyboardFocus [
 
@@ -186,7 +198,6 @@ DockBrowser >> maybeDockView: aViewModel [
 
 { #category : 'private' }
 DockBrowser >> maybeUndockView: aViewModel [
-	| editorPresenter |
 
 	aViewModel hasDockEditor ifFalse: [ ^ self ].
 	(self findEditorContaining: aViewModel) 
@@ -249,7 +260,9 @@ DockBrowser >> restoreLastSnapshot [
 	outlineView := self presenters
 		detect: [ :each | each presenter class = DockClassOutlineView ]
 		ifFound: [ :each | each presenter ]
-		ifNone: [ self addPresenterClass: DockClassOutlineView ]
+		ifNone: [ self addPresenterClass: DockClassOutlineView ].
+
+	self updateTitle
 ]
 
 { #category : 'accessing - snapshot' }
@@ -261,13 +274,7 @@ DockBrowser >> snapshot [
 { #category : 'initialization' }
 DockBrowser >> updateTitle [
 
-	self title: (projectView openedProjects
-		ifNotEmpty: [ :projectModels | 
-			'Pharo({1}): {2}' format: { 
-				FileLocator image base.
-				(projectModels collect: #name) asCommaString } ]
-		ifEmpty: [ 
-			'Pharo({1})' format: { FileLocator image base } ])
+	self title: self composeTitle
 ]
 
 { #category : 'event handling' }
