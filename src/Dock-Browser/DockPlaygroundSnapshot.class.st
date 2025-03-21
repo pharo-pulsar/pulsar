@@ -26,6 +26,7 @@ DockPlaygroundSnapshot >> model [
 DockPlaygroundSnapshot >> restoreTo: aPresenter [
 
 	super restoreTo: aPresenter.
+	aPresenter model: self model.
 	aPresenter codePresenter cursorPositionIndex: cursorPositionIndex
 ]
 
