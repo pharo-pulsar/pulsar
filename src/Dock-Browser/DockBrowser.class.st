@@ -6,7 +6,6 @@ Class {
 		'outlineView'
 	],
 	#classVars : [
-		'LastSnapshot',
 		'LastWindowSize'
 	],
 	#category : 'Dock-Browser-View-Browser',
@@ -29,18 +28,6 @@ DockBrowser class >> defineActionsOn: aBuilder [
 DockBrowser class >> hasSnapshot [
 
 	^ LastSnapshot isNotNil
-]
-
-{ #category : 'private - accessing' }
-DockBrowser class >> lastSnapshot [
-
-	^ LastSnapshot
-]
-
-{ #category : 'private - accessing' }
-DockBrowser class >> lastSnapshot: aSnapshot [
-
-	LastSnapshot := aSnapshot
 ]
 
 { #category : 'accessing' }
