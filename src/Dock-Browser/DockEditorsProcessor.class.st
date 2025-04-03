@@ -2,7 +2,9 @@ Class {
 	#name : 'DockEditorsProcessor',
 	#superclass : 'StSpotterProcessor',
 	#instVars : [
-		'sourceFactory'
+		'sourceFactory',
+		'context',
+		'browser'
 	],
 	#category : 'Dock-Browser-Tool-Spotter',
 	#package : 'Dock-Browser',
@@ -36,6 +38,12 @@ DockEditorsProcessor class >> title [
 	^ 'Editors'
 ]
 
+{ #category : 'accessing' }
+DockEditorsProcessor >> browser [
+
+	^ browser
+]
+
 { #category : 'spotter-api' }
 DockEditorsProcessor >> isRelevantForQuery: categoryQueryPrefix [
 
@@ -45,9 +53,15 @@ DockEditorsProcessor >> isRelevantForQuery: categoryQueryPrefix [
 { #category : 'filtering' }
 DockEditorsProcessor >> newTextFilteringSource [
 
-	^ ((StGeneratorBlockIterator
-		on: [ :aValuable | self currentWorld worldMenu withAllLeafItemsDo: aValuable ])
-		collect: [ :e | StWorldMenuEntry on: e ]) asSubstringFilter
+	^ (StCollectionIterator on: (self browser editors
+			collect: [ :each | DockPanelEntry on: each ])) 
+		asSubstringFilter
+]
+
+{ #category : 'rendering' }
+DockEditorsProcessor >> prepareFor: aDockSpotterContext [
+
+	browser := aDockSpotterContext browser
 ]
 
 { #category : 'spotter-api' }
