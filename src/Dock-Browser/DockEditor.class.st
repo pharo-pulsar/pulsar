@@ -274,6 +274,12 @@ DockEditor >> snapshot [
 ]
 
 { #category : 'accessing' }
+DockEditor >> spotterTitle [
+
+	       ^ self model name
+]
+
+{ #category : 'accessing' }
 DockEditor >> systemNavigation [ 
 
 	self withWindowDo: [ :window | ^ window systemNavigation ].
