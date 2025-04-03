@@ -10,7 +10,11 @@ Class {
 		'emptyPresenter',
 		'editorListPresenter',
 		'toolListPresenter',
-		'activePresenter'
+		'activePresenter',
+		'tabLayout',
+		'editorsContext',
+		'toolsContext',
+		'environmentContext'
 	],
 	#category : 'Dock-Browser-Tool-Spotter',
 	#package : 'Dock-Browser',
@@ -36,7 +40,16 @@ DockSpotter >> connectPresenters [
 
 	searchPresenter 
 		whenTextChangedDo: [ :aString | self doSearch: aString ];
-		whenSubmitDo: [ :aString | self acceptSelection ].
+		whenSubmitDo: [ :aString | self acceptSelection ];
+		addShortcutWith: [ :action | action 
+			shortcutKey: KeyboardKey down asKeyCombination;
+			action: [ self giveFocusToResultList ] ];
+		addShortcutWith: [ :action | action 
+			shortcutKey: KeyboardKey right asKeyCombination actionModifier;
+			action: [ self giveFocusToNextResultList ] ];
+		addShortcutWith: [ :action | action 
+			shortcutKey: KeyboardKey left asKeyCombination actionModifier;
+			action: [ self giveFocusToPreviousResultList ] ].
 	resultListPresenter whenActivatedDo: [ :aSelection | self acceptSelection ].
 	editorListPresenter whenActivatedDo: [ :aSelection | self acceptSelection ].
 	toolListPresenter whenActivatedDo: [ :aSelection | self acceptSelection ]
@@ -49,14 +62,14 @@ DockSpotter >> defaultLayout [
 		add: searchPresenter expand: false;
 		add: (SpOverlayLayout new 
 			"child: resultListPresenter;"
-			child: (SpTabLayout new 
+			child: ((tabLayout := SpTabLayout new) 
 				add: resultListPresenter label: 'Environment';
 				add: editorListPresenter label: 'Editors';
 				add: toolListPresenter label: 'Commands';
 				whenTabSelectedDo: [ :ann | self tabActivated: ann presenter ];
 				yourself);
 			addOverlay: emptyPresenter withConstraints: [ :c | c vAlignCenter; hAlignCenter ];
-			yourself)	;
+			yourself);
 		yourself
 ]
 
@@ -82,6 +95,52 @@ DockSpotter >> doSearch: aString [
 			self udpdateResultListWith: candidates ] ]
 ]
 
+{ #category : 'private' }
+DockSpotter >> editorsContext [
+
+	^ editorsContext ifNil: [ 
+		editorsContext := DockSpotterSearchContext searchEditors
+			browser: self owner root;
+			yourself ]
+]
+
+{ #category : 'private' }
+DockSpotter >> environmentContext [
+
+	^ environmentContext ifNil: [ 
+		environmentContext := DockSpotterSearchContext searchEnvironment
+			browser: self owner window;
+			yourself ]
+]
+
+{ #category : 'private' }
+DockSpotter >> giveFocusToNextResultList [
+	| nextPresenter |
+
+	nextPresenter := tabLayout children last = activePresenter 
+		ifTrue: [ tabLayout children first ]
+		ifFalse: [ tabLayout children after: activePresenter ].
+		
+	tabLayout select: nextPresenter
+]
+
+{ #category : 'private' }
+DockSpotter >> giveFocusToPreviousResultList [
+	| prevPresenter |
+
+	prevPresenter := tabLayout children first = activePresenter 
+		ifTrue: [ tabLayout children last ]
+		ifFalse: [ tabLayout children before: activePresenter ].
+		
+	tabLayout select: prevPresenter
+]
+
+{ #category : 'private' }
+DockSpotter >> giveFocusToResultList [
+
+	activePresenter takeKeyboardFocus
+]
+
 { #category : 'initialization' }
 DockSpotter >> initialize [
 	
@@ -100,29 +159,21 @@ DockSpotter >> initializeDialogWindow: aDialogWindowPresenter [
 { #category : 'initialization' }
 DockSpotter >> initializePresenters [
 
+	self addStyle: 'stSpotter'.
 	self addStyle: 'dockSpotter'.
-	
+
 	emptyPresenter := self newLabel 
 		addStyle: 'dim';
 		label: 'No results yet...';
 		yourself.
-	
-	searchPresenter := self newSearchInput.
-	 
-	resultListPresenter := self newEasyListView
-		addStyle: 'stList';
-		rowPresenterClass: DockSpotterRow;
+
+	searchPresenter := self newSearchInput
+		addStyle: 'stSpotterSearch';
 		yourself.
 
-	editorListPresenter := self newEasyListView
-		addStyle: 'stList';
-		rowPresenterClass: DockSpotterRow;
-		yourself.
-		
-	toolListPresenter := self newEasyListView
-		addStyle: 'stList';
-		rowPresenterClass: DockSpotterRow;
-		yourself		
+	resultListPresenter := self newResultList.
+	editorListPresenter := self newResultList.
+	toolListPresenter := self newResultList
 ]
 
 { #category : 'initialization' }
@@ -131,17 +182,27 @@ DockSpotter >> initializeWindow: aWindowPresenter [
 	aWindowPresenter 
 		initialExtent: self class defaultExtent;
 		withoutDecorations;
-		whenClosedDo: [
-			self windowClosed ]
+		whenClosedDo: [ self windowClosed ];
+		centered
+]
+
+{ #category : 'initialization' }
+DockSpotter >> newResultList [
+
+	^ self newEasyListView
+		addStyle: 'stList';
+		addStyle: 'stSpotterSearch';
+		rowPresenterClass: DockSpotterRow;
+		yourself
 ]
 
 { #category : 'private' }
 DockSpotter >> selectedContext [
 
-	activePresenter = editorListPresenter ifTrue: [ ^ DockSpotterSearchContext searchEditors ].
-	activePresenter = toolListPresenter ifTrue: [ ^  DockSpotterSearchContext searchTools ].
+	activePresenter = editorListPresenter ifTrue: [ ^ self editorsContext ].
+	activePresenter = toolListPresenter ifTrue: [ ^ self toolsContext ].
 	
-^  DockSpotterSearchContext searchEnvironment
+	^  self environmentContext
 ]
 
 { #category : 'private' }
@@ -149,10 +210,19 @@ DockSpotter >> tabActivated: aPresenter [
 	
 	activePresenter = aPresenter ifTrue: [ ^ self ].
 	
-activePresenter := aPresenter.
+	activePresenter := aPresenter.
 	activePresenter ifNotNil: [
 		self updateSearchPlaceHolder.
 		self doSearch: searchPresenter text ]
+]
+
+{ #category : 'private' }
+DockSpotter >> toolsContext [
+
+	^ toolsContext ifNil: [ 
+		toolsContext := DockSpotterSearchContext searchTools
+			browser: self owner window;
+			yourself ]
 ]
 
 { #category : 'initialization' }

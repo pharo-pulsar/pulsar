@@ -6,12 +6,6 @@ Class {
 	#tag : 'Tool-Spotter'
 }
 
-{ #category : 'visiting' }
-DockSpotterSearchEditorsContext >> accept: aVisitor [
-
-	^ aVisitor visitSearchEditors: self
-]
-
 { #category : 'accessing' }
 DockSpotterSearchEditorsContext >> associatedProcessors [
 

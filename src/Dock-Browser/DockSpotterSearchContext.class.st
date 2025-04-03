@@ -1,44 +1,31 @@
 Class {
 	#name : 'DockSpotterSearchContext',
 	#superclass : 'Object',
-	#classInstVars : [
-		'uniqueInstance'
+	#instVars : [
+		'spotter',
+		'browser'
 	],
 	#category : 'Dock-Browser-Tool-Spotter',
 	#package : 'Dock-Browser',
 	#tag : 'Tool-Spotter'
 }
 
-{ #category : 'instance creation' }
-DockSpotterSearchContext class >> new [
-
-	self error: 'Use #uniqueInstance'
-]
-
 { #category : 'accessing' }
 DockSpotterSearchContext class >> searchEditors [
 
-	^ DockSpotterSearchEditorsContext uniqueInstance
+	^ DockSpotterSearchEditorsContext new
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private' }
 DockSpotterSearchContext class >> searchEnvironment [
 
-	^ DockSpotterSearchEnvironmentContext uniqueInstance
+	^ DockSpotterSearchEnvironmentContext new
 ]
 
 { #category : 'as yet unclassified' }
 DockSpotterSearchContext class >> searchTools [
 
-	^ DockSpotterSearchToolsContext uniqueInstance
-]
-
-{ #category : 'instance creation' }
-DockSpotterSearchContext class >> uniqueInstance [
-
-	self = DockSpotterSearchContext 
-		ifTrue: [ self error: 'I''m an abstract class, use one of my children instead' ].
-	^ uniqueInstance ifNil: [ self basicNew initialize ]
+	^ DockSpotterSearchToolsContext new
 ]
 
 { #category : 'visiting' }
@@ -51,6 +38,18 @@ DockSpotterSearchContext >> accept: aVisitor [
 DockSpotterSearchContext >> associatedProcessors [
 
 	^ self subclassResponsibility
+]
+
+{ #category : 'accessing' }
+DockSpotterSearchContext >> browser [
+
+	^ browser
+]
+
+{ #category : 'accessing' }
+DockSpotterSearchContext >> browser: aDockBrowser [
+
+	browser := aDockBrowser
 ]
 
 { #category : 'accessing' }
