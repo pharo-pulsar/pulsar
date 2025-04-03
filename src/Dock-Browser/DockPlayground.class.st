@@ -132,6 +132,7 @@ DockPlayground >> initializePresenters [
 		yourself.
 
 	(codePresenter := self newCode)
+		addStyle: 'stCode';
 		interactionModel: self newInteractionModel; 
 		systemNavigation: self newSystemNavigation
 ]

@@ -53,12 +53,16 @@ DockInspector >> defaultLayout [
 
 { #category : 'initialization' }
 DockInspector >> initializePopover: aPopoverPresenter [
-
-	aPopoverPresenter bePositionRight.
+	| nearWindow |
+	"first appearemnce at left, stacking popovers at right"
+	nearWindow := aPopoverPresenter owner ifNotNil: #nearWindowLike.
+	(nearWindow isNotNil and: [ nearWindow isPopover ]) 
+		ifTrue: [ aPopoverPresenter bePositionRight ]
+		ifFalse: [ aPopoverPresenter bePositionBottom ].
 	self addPopoverControls.
 	aPopoverPresenter addShortcutWith: [ :action | action 
 		shortcutKey: KeyboardKey down mod3;
-		action: [ self notifyActivateEntity: self model ] ]	
+		action: [ self notifyActivateEntity: self model ] ]
 ]
 
 { #category : 'initialization' }

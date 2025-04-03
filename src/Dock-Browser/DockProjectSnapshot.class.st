@@ -1,9 +1,6 @@
 Class {
 	#name : 'DockProjectSnapshot',
 	#superclass : 'DockPanelSnapshot',
-	#instVars : [
-		'model'
-	],
 	#category : 'Dock-Browser-View-Project',
 	#package : 'Dock-Browser',
 	#tag : 'View-Project'

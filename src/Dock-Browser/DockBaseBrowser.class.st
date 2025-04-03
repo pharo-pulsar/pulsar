@@ -49,7 +49,7 @@ DockBaseBrowser >> globalActions [
 { #category : 'simple dialog helpers' }
 DockBaseBrowser >> inform: aString [
 
-	aString crTrace
+	('INFORM: ', aString) crTrace
 ]
 
 { #category : 'initialization' }

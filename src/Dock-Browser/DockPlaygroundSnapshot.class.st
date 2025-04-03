@@ -2,8 +2,7 @@ Class {
 	#name : 'DockPlaygroundSnapshot',
 	#superclass : 'DockPanelSnapshot',
 	#instVars : [
-		'cursorPositionIndex',
-		'model'
+		'cursorPositionIndex'
 	],
 	#category : 'Dock-Browser-Tool-Playground',
 	#package : 'Dock-Browser',
@@ -26,6 +25,7 @@ DockPlaygroundSnapshot >> model [
 DockPlaygroundSnapshot >> restoreTo: aPresenter [
 
 	super restoreTo: aPresenter.
+	"For some reason I need to re-set the model here (even if it is passed on initialization)"
 	aPresenter model: self model.
 	aPresenter codePresenter cursorPositionIndex: cursorPositionIndex
 ]
@@ -34,6 +34,5 @@ DockPlaygroundSnapshot >> restoreTo: aPresenter [
 DockPlaygroundSnapshot >> snapshot: aPresenter [
 
 	super snapshot: aPresenter.
-	model := aPresenter model.
 	cursorPositionIndex := aPresenter codePresenter cursorPositionIndex
 ]

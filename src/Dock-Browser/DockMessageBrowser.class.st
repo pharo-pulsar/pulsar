@@ -103,6 +103,7 @@ DockMessageBrowser >> initializePresenters [
 	headerPresenter addPresenter: countPresenter.
 
 	messageListPresenter := self newEasyListView
+		addStyle: 'stList';
 		display: #fullName;
 		yourself.
 	editorPresenter := self instantiate: DockMethodEditor
@@ -115,13 +116,20 @@ DockMessageBrowser >> notificationCenter: anAnnouncer [
 	editorPresenter notificationCenter: anAnnouncer
 ]
 
+{ #category : 'accessing - snapshot' }
+DockMessageBrowser >> snapshot [
+
+	^ DockMessageSnapshot on: self
+]
+
 { #category : 'initialization' }
 DockMessageBrowser >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	
-	headerPresenter updateBreadcrumbWith: [ :aBreadcrumb | 
-		aBreadcrumb addSegment: self model title ].
-	messageListPresenter items: self model methodModels.
-	countPresenter label: self model methodCount asString
+	self application defer: [ 
+		headerPresenter updateBreadcrumbWith: [ :aBreadcrumb | 
+			aBreadcrumb addSegment: self model title ].
+		countPresenter label: self model methodCount asString.	
+		messageListPresenter items: self model methodModels ]
 ]

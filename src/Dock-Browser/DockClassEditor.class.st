@@ -60,6 +60,7 @@ DockClassEditor >> initializePresenters [
 	
 	self addStyle: 'dockClassEditor'.
 	commentPresenter := self newCode
+		addStyle: 'stCode';
 		withoutSyntaxHighlight;
 		whenSubmitDo: [ self doSaveComment ];
 		whenResetDo: [ self doResetComment ];

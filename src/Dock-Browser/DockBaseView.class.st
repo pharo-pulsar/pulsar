@@ -63,3 +63,11 @@ DockBaseView >> registerToDock: aDockBrowser [
 DockBaseView >> registerToEvents [
 	"override this to subscribe to notifications"
 ]
+
+{ #category : 'accessing' }
+DockBaseView >> spotterTitle [
+	
+	self withPanelWindowDo: [ :aWindow | ^ aWindow title ].
+	
+	^ 'Unnamed'
+]

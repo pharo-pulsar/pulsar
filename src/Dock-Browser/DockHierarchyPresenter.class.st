@@ -1,8 +1,8 @@
 Class {
 	#name : 'DockHierarchyPresenter',
 	#superclass : 'PvMethodHierarchyPresenter',
-	#traits : 'DockTNotificationCenter + DockTPanelWindow',
-	#classTraits : 'DockTNotificationCenter classTrait + DockTPanelWindow classTrait',
+	#traits : 'DockTNotificationCenter + DockTPanelWindow + DockTSnapshot',
+	#classTraits : 'DockTNotificationCenter classTrait + DockTPanelWindow classTrait + DockTSnapshot classTrait',
 	#instVars : [
 		'headerPresenter'
 	],
@@ -78,6 +78,24 @@ DockHierarchyPresenter >> initializePresenters [
 DockHierarchyPresenter >> itemToSelect [
 
 	^ self model parentModel
+]
+
+{ #category : 'accessing - snapshot' }
+DockHierarchyPresenter >> snapshot [
+
+	^ DockHierarchySnapshot on: self
+]
+
+{ #category : 'accessing' }
+DockHierarchyPresenter >> spotterTitle [
+	
+	^ self model name
+]
+
+{ #category : 'private' }
+DockHierarchyPresenter >> treePresenter [
+
+	^ treePresenter
 ]
 
 { #category : 'initialization' }

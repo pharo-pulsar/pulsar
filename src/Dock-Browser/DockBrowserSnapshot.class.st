@@ -14,6 +14,12 @@ Class {
 }
 
 { #category : 'restoring' }
+DockBrowserSnapshot >> instantiateOn: anApplication [ 
+	
+	^ anApplication new: DockBrowser
+]
+
+{ #category : 'restoring' }
 DockBrowserSnapshot >> restorePanelSnapshot: aSnapshot to: aDockBrowser [
 	| panelPresenter |
 	

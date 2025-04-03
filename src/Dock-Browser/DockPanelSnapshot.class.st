@@ -3,7 +3,8 @@ Class {
 	#superclass : 'DockBaseSnapshot',
 	#instVars : [
 		'dockPosition',
-		'presenterClass'
+		'presenterClass',
+		'model'
 	],
 	#category : 'Dock-Browser-Snapshot',
 	#package : 'Dock-Browser',
@@ -27,7 +28,7 @@ DockPanelSnapshot >> instantiateOn: parentPresenter [
 { #category : 'accessing' }
 DockPanelSnapshot >> model [
 
-	^ nil
+	^ model
 ]
 
 { #category : 'accessing' }
@@ -39,11 +40,14 @@ DockPanelSnapshot >> presenterClass [
 { #category : 'restoring' }
 DockPanelSnapshot >> restoreTo: aPresenter [
 
+	"The model is in fact set on class creation"
+	"aPresenter model: self model"
 ]
 
 { #category : 'initialization' }
 DockPanelSnapshot >> snapshot: aPresenter [
-	
+
 	presenterClass := aPresenter class.
-	dockPosition := aPresenter panelWindow dockPosition
+	dockPosition := aPresenter panelWindow dockPosition.
+	model := aPresenter model
 ]
