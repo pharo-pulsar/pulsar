@@ -52,7 +52,8 @@ DockSystemNavigation >> browseMessageList: messageList
 	methods := messageList reject: [ :each| each isFromTrait ].
 	
 	methods ifEmpty: [
-		^ self window inform: 'There are no ', String cr, labelString ].
+		self window inform: 'There are no ', labelString.
+		^ self ].
 	
 	popover := self window 
 		instantiate: DockMessageBrowser 
