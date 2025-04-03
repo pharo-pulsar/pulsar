@@ -30,6 +30,7 @@ PvMethodHierarchyPresenter >> initializePresenters [
 
 	treePresenter := self newTree.
 	treePresenter
+		addStyle: 'stTree';
 		display: [ :aModel | aModel fullName ];
 		displayIcon: [ :aModel | aModel iconComposite buildOn: self application ];
 		children: [ :aModel | aModel ifNotNil: [ aModel children ] ].
