@@ -7,7 +7,7 @@ Class {
 }
 
 { #category : 'as yet unclassified' }
-DockSpotterModel >> candidatesFor: text inContext: aContext [
+DockSpotterModel >> candidatesFor: text inContext: aDockSpotterContext [
 	"contextSymbol can be #environment, #editors, #tools"
 	| candidateList stream context processor |
 	
@@ -23,8 +23,9 @@ DockSpotterModel >> candidatesFor: text inContext: aContext [
 		search: text;
 		yourself.
 
-	(self processorsForContext: aContext) do: [ :each |
+	(self processorsForContext: aDockSpotterContext) do: [ :each |
 		processor := each newEnvironment: Smalltalk environment.
+		processor prepareFor: aDockSpotterContext.
 		processor filterInContext: context ].
 	
 	^ candidateList candidates asArray
