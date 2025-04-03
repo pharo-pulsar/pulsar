@@ -67,7 +67,7 @@ DockBrowser >> composeTitle [
 		ifTrue: [
 			'Pharo({1}): {2}' format: { 
 				FileLocator image base.
-				(projectView openedProjects collect: #name) asCommaString } ]
+				', ' join: (projectView openedProjects collect: #name) } ]
 		ifFalse: [ 
 			'Pharo({1})' format: { FileLocator image base } ]
 ]
@@ -131,17 +131,7 @@ DockBrowser >> initializeWorkspace [
 	"defaults"
 	self startWidth: 280"self initialExtent x * 25 percent".
 	self endWidth: 280"self initialExtent x * 25 percent".
-	self bottomHeight: 180"self initialExtent y * 20 percent".
-
-	self class hasSnapshot 
-		ifTrue: [ self restoreLastSnapshot ]
-		ifFalse: [ self loadDefaultWorkspace ]
-]
-
-{ #category : 'private' }
-DockBrowser >> keepLastSnapshot [
-
-	LastSnapshot := self snapshot
+	self bottomHeight: 180"self initialExtent y * 20 percent"
 ]
 
 { #category : 'initialization' }
@@ -191,6 +181,14 @@ DockBrowser >> maybeUndockView: aViewModel [
 		ifNotNil: [ :panelPresenter | panelPresenter close ]
 ]
 
+{ #category : 'initialization' }
+DockBrowser >> open [
+
+	self presenters ifEmpty: [ 
+		self loadDefaultWorkspace ].
+	super open
+]
+
 { #category : 'actions' }
 DockBrowser >> openClass: aClass [ 
 
@@ -235,9 +233,11 @@ DockBrowser >> projectView [
 ]
 
 { #category : 'initialization' }
-DockBrowser >> restoreLastSnapshot [
+DockBrowser >> restoreSnapshot: aSnapshot [
+	
+	presenters := #().
 		
-	LastSnapshot restoreTo: self.
+	aSnapshot restoreTo: self.
 	
 	projectView := self presenters
 		detect: [ :each | each presenter class = DockProjectView ]
@@ -274,13 +274,15 @@ DockBrowser >> windowClosed [
 
 { #category : 'event handling' }
 DockBrowser >> windowWillClose [
-	| ann okToClose |
+	| ann canClose |
 
 	ann := SpWindowWillClose new.
-	okToClose := self editors reversed allSatisfy: [ :each | 
-			ann window: each.
-			each announce: ann.
-			ann canClose ].
-	okToClose ifTrue: [ self keepLastSnapshot ].
-	^ okToClose 
+	canClose := self editors reversed allSatisfy: [ :each | 
+		ann window: each.
+		each announce: ann.
+		ann canClose ].
+		
+	self application windowWillClose: self.
+		
+	^ canClose
 ]
