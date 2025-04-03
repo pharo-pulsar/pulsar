@@ -7,6 +7,10 @@ Class {
 		'name',
 		'standalone'
 	],
+	#classInstVars : [
+		'lastSnapshot',
+		'running'
+	],
 	#category : 'Dock-Browser-Application',
 	#package : 'Dock-Browser',
 	#tag : 'Application'
@@ -41,10 +45,52 @@ DockApplication class >> initialize [
 	SessionManager default registerGuiClassNamed: self name
 ]
 
+{ #category : 'accessing' }
+DockApplication class >> lastSnapshot [
+
+	^ lastSnapshot
+]
+
+{ #category : 'accessing' }
+DockApplication class >> lastSnapshot: aSnapshot [
+
+	lastSnapshot := aSnapshot
+]
+
+{ #category : 'private' }
+DockApplication class >> reset [
+	<script>
+
+	running := nil.
+	self resetLastSnapshot
+]
+
+{ #category : 'private' }
+DockApplication class >> resetLastSnapshot [
+	<script>
+
+	lastSnapshot := nil
+]
+
+{ #category : 'accessing' }
+DockApplication class >> running [
+
+	^ running
+]
+
+{ #category : 'accessing' }
+DockApplication class >> running: anApplication [
+
+	running := anApplication
+]
+
 { #category : 'system startup' }
 DockApplication class >> shutDown: quitting [
 
+	self running ifNotNil: [ :anApplication | 
+		anApplication shutDown: quitting ].
 	quitting ifFalse: [ ^ self ].
+	self running: nil.
 	self cleanUp
 ]
 
@@ -161,19 +207,46 @@ DockApplication >> prepareAsStandaloneApplication [
 		ifTrue: [ ProcessorScheduler idleTime: 3600000000 ]
 ]
 
+{ #category : 'running' }
+DockApplication >> run [
+
+	self class running ifNotNil: [ :anApplication | 
+		anApplication shutDown: false ].
+	self start.
+	self class running: self
+]
+
+{ #category : 'system startup' }
+DockApplication >> shutDown: quitting [
+
+	self takeSnapshot
+]
+
 { #category : 'accessing' }
 DockApplication >> snapshot [
-	| newSnapshot |
-	
-	newSnapshot := DockApplicationSnapshot new.
-	self windows do: [ :each | each recordSnapshotTo: newSnapshot ].
-	^ newSnapshot
+
+	^ DockApplicationSnapshot on: self
 ]
 
 { #category : 'running' }
 DockApplication >> start [
+	| snapshot |
 
+	snapshot := self class lastSnapshot.
+	(snapshot isNotNil and: [ snapshot hasRecords ]) ifTrue: [ 
+		snapshot restoreTo: self.
+		^ self ].
+		
 	(self new: DockBrowser) open
+]
+
+{ #category : 'accessing' }
+DockApplication >> takeSnapshot [
+
+	"do not take the snapshot if there is no windows, because like that I can keep 
+	 the last one"
+	self windows size > 0 ifFalse: [ ^ self ].
+	self class lastSnapshot: self snapshot
 ]
 
 { #category : 'settings' }
@@ -196,4 +269,12 @@ DockApplication >> useGtkLight [
 	self 
 		useBackend: #Gtk 
 		with: self newConfiguration forceLight
+]
+
+{ #category : 'accessing' }
+DockApplication >> windowWillClose: aWindow [
+	
+	"I'm keeping a snapshot of last open window :)"
+	self windows size > 1 ifTrue: [ ^ self ].
+	self takeSnapshot
 ]
