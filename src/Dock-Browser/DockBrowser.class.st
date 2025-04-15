@@ -79,6 +79,19 @@ DockBrowser >> defaultKeyboardFocus [
 ]
 
 { #category : 'events' }
+DockBrowser >> eventManyModelDeactivated: anAnnouncement [
+	| editors |
+
+	editors := anAnnouncement value copy.
+	"I suspend announcements for most of them"
+	self announcer suspendAllWhile: [
+		editors allButLast 
+			do: [ :each | self maybeUndockView: each ] ].
+	"except the last one, to ensure system update is triggered"
+	self maybeUndockView: editors last
+]
+
+{ #category : 'events' }
 DockBrowser >> eventModelActivated: anAnnouncement [
 	
 	
@@ -181,7 +194,7 @@ DockBrowser >> maybeUndockView: aViewModel [
 		ifNotNil: [ :panelPresenter | panelPresenter close ]
 ]
 
-{ #category : 'initialization' }
+{ #category : 'showing' }
 DockBrowser >> open [
 
 	self presenters ifEmpty: [ 
@@ -260,8 +273,11 @@ DockBrowser >> snapshot [
 
 { #category : 'initialization' }
 DockBrowser >> updateTitle [
+	| newTitle |
 
-	self title: self composeTitle
+	newTitle := self composeTitle.
+	logger trace: newTitle.
+	self title: newTitle
 ]
 
 { #category : 'event handling' }

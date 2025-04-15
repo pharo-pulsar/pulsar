@@ -69,8 +69,11 @@ DockStackView >> closeEditor: aModel [
 
 { #category : 'private - actions' }
 DockStackView >> closeEditors: aCollection [
-
-	aCollection do: [ :each | self closeEditor: each ]
+	aCollection size = 1 
+		ifTrue: [ self closeEditor: aCollection anyOne ].
+		
+	self notificationCenter 
+		announce: (DockManyModelDeactivated newValue: (aCollection collect: #realModel))
 ]
 
 { #category : 'layout' }

@@ -22,8 +22,8 @@ PvMethodProtocolChooserPresenter >> connectPresenters [
 	protocolNamePresenter whenTextChangedDo: [ :aString | self filterProtocolsWith: aString ].
 	protocolNamePresenter whenSubmitDo: [ :aString | self updateProtocol: aString ].
 
-	protocolListPresenter outputSelectionPort
-		transmitTo: protocolNamePresenter defaultInputPort.
+	"protocolListPresenter outputSelectionPort
+		transmitDo: [ :selection | self updateName: selection ]."
 	protocolListPresenter outputActivationPort
 		transmitDo: [ :selection | self updateProtocol: selection ]
 ]
@@ -46,18 +46,18 @@ PvMethodProtocolChooserPresenter >> filterProtocolsWith: aString [
 
 	updating ifTrue: [ ^ self ].
 	aString ifNil: [ ^ self ].
-
-	searchString := aString trimmed asLowercase.
-	(searchString = Protocol unclassified) ifTrue: [ ^ self ].
-	
-	protocolListPresenter items withIndexDo: [ :each :index | 
-	 	(each asLowercase beginsWith: searchString)
-	 		ifTrue: [
-	 			self updatingWhile: [
-	 				protocolListPresenter 
-	 					selectIndex: index 
-						scrollToSelection: true ].
-	 			^ self ] ]
+	self updatingWhile: [	
+		searchString := aString trimmed asLowercase.
+		(searchString = Protocol unclassified) ifTrue: [ ^ self ].
+		
+		protocolListPresenter items withIndexDo: [ :each :index | 
+		 	(each asLowercase beginsWith: searchString)
+		 		ifTrue: [
+		 			self updatingWhile: [
+		 				protocolListPresenter 
+		 					selectIndex: index 
+							scrollToSelection: true ].
+		 			^ self ] ] ]
 ]
 
 { #category : 'initialization' }
@@ -108,6 +108,14 @@ PvMethodProtocolChooserPresenter >> triggerAbort [
 	abortAction value
 ]
 
+{ #category : 'private' }
+PvMethodProtocolChooserPresenter >> updateName: aString [
+	
+	updating ifTrue: [ ^ self ].
+	self updatingWhile: [
+		protocolNamePresenter text: aString ]
+]
+
 { #category : 'initialization' }
 PvMethodProtocolChooserPresenter >> updatePresenter [
 
@@ -125,8 +133,10 @@ PvMethodProtocolChooserPresenter >> updatePresenter [
 { #category : 'private' }
 PvMethodProtocolChooserPresenter >> updateProtocol: aString [
 	
+	updating ifTrue: [ ^ self ].
 	selectAction ifNil: [ ^ self ].
-	selectAction value: aString
+	self updatingWhile: [
+		selectAction value: aString ]
 ]
 
 { #category : 'private - updating' }

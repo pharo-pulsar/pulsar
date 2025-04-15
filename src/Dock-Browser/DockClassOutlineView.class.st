@@ -62,7 +62,10 @@ DockClassOutlineView >> eventEditorActivated: anAnnouncement [
 		anAnnouncement value window isOpen ifTrue: [
 			| activatedModel outlineModel |
 			activatedModel := anAnnouncement value model.
-			outlineModel := activatedModel asOutlineClassModel.
+			outlineModel := activatedModel asOutlineClassModel.		
+			
+			logger trace: outlineModel.
+			
 			self model = outlineModel ifFalse: [
 				self model: outlineModel ].
 			"visit after to be able to post-process"

@@ -36,8 +36,16 @@ DockBaseBrowser >> editors [
 ]
 
 { #category : 'events' }
+DockBaseBrowser >> eventManyModelDeactivated: anAnnouncement [
+]
+
+{ #category : 'events' }
 DockBaseBrowser >> eventModelActivated: anAnnouncement [
 	
+]
+
+{ #category : 'events' }
+DockBaseBrowser >> eventModelDeactivated: anAnnouncement [
 ]
 
 { #category : 'private - settings' }
@@ -98,7 +106,8 @@ DockBaseBrowser >> registerToEvents [
 		when: DockAnnouncement send: #resendAnnouncement: to: self;
 		"now process here"
 		when: DockModelActivated send: #eventModelActivated: to: self;
-		when: DockModelDeactivated send: #eventModelDeactivated: to: self
+		when: DockModelDeactivated send: #eventModelDeactivated: to: self;
+		when: DockManyModelDeactivated send: #eventManyModelDeactivated: to: self
 ]
 
 { #category : 'announcing' }

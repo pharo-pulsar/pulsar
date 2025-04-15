@@ -33,10 +33,11 @@ DockBrowserSnapshot >> restorePanelSnapshot: aSnapshot to: aDockBrowser [
 { #category : 'restoring' }
 DockBrowserSnapshot >> restoreTo: aDockBrowser [
 
-	startWidth ifNotNil: [ aDockBrowser startWidth: startWidth ].
-	endWidth ifNotNil: [ aDockBrowser endWidth: endWidth ].
-	topHeight ifNotNil: [ aDockBrowser topHeight: topHeight ].
-	bottomHeight ifNotNil: [ aDockBrowser bottomHeight: bottomHeight ].
+	startWidth ifNotNil: [ aDockBrowser startWidth: (startWidth max: 280) ].
+	endWidth ifNotNil: [ aDockBrowser endWidth: (endWidth max: 280) ].
+	"Not used at the moment"
+	"topHeight ifNotNil: [ aDockBrowser topHeight: topHeight ]."
+	bottomHeight ifNotNil: [ aDockBrowser bottomHeight: (bottomHeight max: 180) ].
 
 	self snapshots do: [ :each | 
 		self restorePanelSnapshot: each to: aDockBrowser ]
