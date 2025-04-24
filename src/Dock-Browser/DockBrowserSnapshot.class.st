@@ -40,7 +40,9 @@ DockBrowserSnapshot >> restoreTo: aDockBrowser [
 	bottomHeight ifNotNil: [ aDockBrowser bottomHeight: (bottomHeight max: 180) ].
 
 	self snapshots do: [ :each | 
-		self restorePanelSnapshot: each to: aDockBrowser ]
+		self restorePanelSnapshot: each to: aDockBrowser ].
+		
+	aDockBrowser postRestoreSnapshot: self
 ]
 
 { #category : 'initialization' }

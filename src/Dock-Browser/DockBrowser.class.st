@@ -222,6 +222,22 @@ DockBrowser >> outlineView [
 	^ outlineView
 ]
 
+{ #category : 'initialization' }
+DockBrowser >> postRestoreSnapshot: aSnapshot [
+	
+	projectView := self presenters
+		detect: [ :each | each presenter class = DockProjectView ]
+		ifFound: [ :each | each presenter ]
+		ifNone: [ self addPresenterClass: DockProjectView model: self model newMultiProjectModel ].
+		
+	outlineView := self presenters
+		detect: [ :each | each presenter class = DockClassOutlineView ]
+		ifFound: [ :each | each presenter ]
+		ifNone: [ self addPresenterClass: DockClassOutlineView ].
+
+	self updateTitle
+]
+
 { #category : 'private' }
 DockBrowser >> presenterWithClass: aClass [
 	"used for testing"
@@ -243,26 +259,6 @@ DockBrowser >> presenterWithTitle: aString [
 DockBrowser >> projectView [
 
 	^ projectView
-]
-
-{ #category : 'initialization' }
-DockBrowser >> restoreSnapshot: aSnapshot [
-	
-	presenters := #().
-		
-	aSnapshot restoreTo: self.
-	
-	projectView := self presenters
-		detect: [ :each | each presenter class = DockProjectView ]
-		ifFound: [ :each | each presenter ]
-		ifNone: [ self addPresenterClass: DockProjectView model: self model newMultiProjectModel ].
-		
-	outlineView := self presenters
-		detect: [ :each | each presenter class = DockClassOutlineView ]
-		ifFound: [ :each | each presenter ]
-		ifNone: [ self addPresenterClass: DockClassOutlineView ].
-
-	self updateTitle
 ]
 
 { #category : 'accessing - snapshot' }
