@@ -1,7 +1,8 @@
 Trait {
 	#name : 'DockTPanelWindow',
 	#instVars : [
-		'dockPosition'
+		'dockPosition',
+		'lastTimePresented'
 	],
 	#category : 'Dock-Browser-View-Base',
 	#package : 'Dock-Browser',
@@ -33,6 +34,7 @@ DockTPanelWindow >> initializePanelWindow: aWindowPresenter [
 
 	super initializePanelWindow: aWindowPresenter.
 	aWindowPresenter 
+		whenPresentedDo: [ self recordLastPresented ];
 		whenFocusReceivedDo: [ self notifyEditorActivated ]
 ]
 
@@ -54,4 +56,10 @@ DockTPanelWindow >> notifyEditorActivated [
 { #category : 'initialization' }
 DockTPanelWindow >> notifyEditorClosed [
 	self notificationCenter announce: (DockEditorClosed newValue: self model)
+]
+
+{ #category : 'private' }
+DockTPanelWindow >> recordLastPresented [
+
+	lastTimePresented := DateAndTime now
 ]
