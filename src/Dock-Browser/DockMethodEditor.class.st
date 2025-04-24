@@ -48,6 +48,20 @@ DockMethodEditor >> doRequestChangeProtocol [
 	protocolPresenter popupProtocol
 ]
 
+{ #category : 'as yet unclassified' }
+DockMethodEditor >> doRunSampleInstanceCommand: anAction [
+	| result |
+
+	result := self model runScript.
+	self flag: #TODO. "Open an inspector with the result"
+]
+
+{ #category : 'as yet unclassified' }
+DockMethodEditor >> doRunScriptCommand: anAction [
+
+	self model runScript
+]
+
 { #category : 'events' }
 DockMethodEditor >> eventModelChanged: ann [
 	

@@ -29,8 +29,7 @@ DockMethodActionRunTestPresenter >> defaultLayout [
 { #category : 'executing' }
 DockMethodActionRunTestPresenter >> execute [
 
-	self model execute.
-	self 
+	self model execute
 ]
 
 { #category : 'initialization' }
