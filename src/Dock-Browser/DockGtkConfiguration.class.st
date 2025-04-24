@@ -60,10 +60,10 @@ DockGtkConfiguration >> style [
 .pvNavigation { min-width: 450px; min-height: 350px; padding: 5px; }
 button.pvProtocol { font-weight: normal; }
 .pvProtocolChooser { min-width: 250px; min-height: 280px; }
-.stCode { font-family: monospace; font-size: 0.95em; }
+/* .stCode { font-family: monospace; font-size: 0.95em; } */
 tab .tab-title label { font-size: 0.9em; }
 .dockToolbar { margin: 0px; padding: 0px; }
-.dockEditorBreadcrumb { font-size: 0.9; }
+.dockEditorBreadcrumb { font-size: 9pt; }
 .dockEditorBreadcrumb label.separator { padding: 0px 5px 0px 5px; }
 .dockSpotter, .dockDialog, .dockFlyingBrowser { margin: 5px; border-spacing: 5px; }
 .dockSpotter entry.search { margin: 5px 5px 0px 5px; }
