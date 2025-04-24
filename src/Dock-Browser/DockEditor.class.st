@@ -1,6 +1,8 @@
 Class {
 	#name : 'DockEditor',
 	#superclass : 'DockBaseView',
+	#traits : 'DockTPanelWindow',
+	#classTraits : 'DockTPanelWindow classTrait',
 	#instVars : [
 		'updating',
 		'toolbarPresenter',
@@ -59,10 +61,13 @@ DockEditor class >> defineWindowActionsOn: aBuilder [
 { #category : 'initialization' }
 DockEditor >> connectPresenters [
 
+	"self eventHandler whenFocusReceivedDo: [ :event | 
+		self focusReceived ]."
+
 	editorPresenter
 		whenTextChangedDo: [ :newText :oldText | self textChangedFrom: oldText to: newText ];
 		whenSubmitDo: [ :aString | self doSubmit: aString ];
-		whenResetDo: [ self doReset ]
+		whenResetDo: [ self doReset ].
 ]
 
 { #category : 'api - focus' }
@@ -171,6 +176,7 @@ DockEditor >> initializePanelWindow: aWindowPresenter [
 	super initializePanelWindow: aWindowPresenter.
 	aWindowPresenter
 		actions: self windowActions;
+		whenPresentedDo: [ self recordLastPresented ];
 		whenFocusReceivedDo: [ self notifyEditorActivated ];
 		whenSaveDo: [ :ann | ann success: self saveContent ];
 		whenDiscardDo: [ :ann | 
