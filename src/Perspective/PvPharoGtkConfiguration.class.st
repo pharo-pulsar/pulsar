@@ -41,6 +41,6 @@ PvPharoGtkConfiguration >> style [
 .pvNavigation { min-width: 450px; min-height: 350px; padding: 5px; }
 button.pvProtocol { font-weight: normal; }
 .pvProtocolChooser { min-width: 200px; min-height: 280px; }
-.stCode { font-size: 0.95em; }
+/* .stCode { font-size: 0.95em; } */
 '
 ]
