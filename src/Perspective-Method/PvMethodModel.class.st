@@ -300,6 +300,12 @@ PvMethodModel >> removeMethod [
 	self entity removeFromSystem
 ]
 
+{ #category : 'as yet unclassified' }
+PvMethodModel >> runScript [
+	
+	^ self entity valueWithReceiver: self entity methodClass instanceSide
+]
+
 { #category : 'updating' }
 PvMethodModel >> runTest [
 	| result |
