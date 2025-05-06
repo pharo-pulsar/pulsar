@@ -5,7 +5,6 @@ Class {
 	#classTraits : 'DockTSnapshot classTrait',
 	#instVars : [
 		'terminalPresenter',
-		'service',
 		'runner'
 	],
 	#category : 'Dock-Browser-Tool-Transcript',
@@ -54,17 +53,6 @@ DockTranscript >> doClearTranscript [
 	terminalPresenter clear
 ]
 
-{ #category : 'private' }
-DockTranscript >> ensureTranscriptService [
-		
-	service ifNotNil: [ ^ self ].
-	
-	service := TKTParameterizableService new.
-	service name: 'DockTranscript service'.
-	service stepDelay: 50 milliSeconds.
-	service step: [ Transcript stepGlobal ]
-]
-
 { #category : 'initialization' }
 DockTranscript >> initialize [
 
@@ -97,7 +85,6 @@ DockTranscript >> initializeWindow: aWindowPresenter [
 { #category : 'private' }
 DockTranscript >> subscribe [
 		
-	Transcript addDependent: self.
 	runner := DockWorker new 
 		inTool: self class;
 		start	
@@ -107,8 +94,7 @@ DockTranscript >> subscribe [
 { #category : 'private' }
 DockTranscript >> unsubscribe [
 	
-	runner stop.
-	Transcript removeDependent: self.
+	runner stop
 ]
 
 { #category : 'updating' }

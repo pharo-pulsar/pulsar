@@ -6,7 +6,8 @@ Class {
 	#instVars : [
 		'updating',
 		'toolbarPresenter',
-		'editorPresenter'
+		'editorPresenter',
+		'dirty'
 	],
 	#category : 'Dock-Browser-View-Editor',
 	#package : 'Dock-Browser',
@@ -81,7 +82,9 @@ DockEditor >> defaultLayout [
 
 	^ SpBoxLayout newVertical
 		add: toolbarPresenter expand: false;
-		add: editorPresenter;
+		add: (SpOverlayLayout new 
+			child: editorPresenter;
+			yourself);
 		yourself
 ]
 
@@ -167,6 +170,7 @@ DockEditor >> eventModelRemoved: anAnnouncement [
 DockEditor >> initialize [
 
 	super initialize.
+	dirty := false. 
 	updating := false
 ]
 
@@ -214,8 +218,7 @@ DockEditor >> initializeWindow: aWindowPresenter [
 { #category : 'testing' }
 DockEditor >> isDirty [
 
-	self withPanelWindowDo: [ :aWindow | ^ aWindow isModified ].
-	^ false
+	^ dirty
 ]
 
 { #category : 'testing' }
@@ -232,7 +235,9 @@ DockEditor >> isUpdating [
 
 { #category : 'private - updating' }
 DockEditor >> markDirty [
-
+	
+	dirty ifTrue: [ ^ self ].
+	dirty := true.
 	self withPanelWindowDo: [ :w | w modified: true ]
 ]
 
@@ -315,6 +320,8 @@ DockEditor >> toolbarPresenter [
 { #category : 'private - updating' }
 DockEditor >> unmarkDirty [
 
+	dirty ifFalse: [ ^ self ].
+	dirty := false.
 	self withPanelWindowDo: [ :w | w modified: false ]
 ]
 

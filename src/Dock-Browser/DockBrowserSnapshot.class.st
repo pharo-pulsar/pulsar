@@ -41,8 +41,29 @@ DockBrowserSnapshot >> restoreTo: aDockBrowser [
 
 	self snapshots do: [ :each | 
 		self restorePanelSnapshot: each to: aDockBrowser ].
-		
+
+	self selectLastActiveEditorOn: aDockBrowser.		
+
 	aDockBrowser postRestoreSnapshot: self
+]
+
+{ #category : 'restoring' }
+DockBrowserSnapshot >> selectLastActiveEditorOn: aDockBrowser [
+	| editors  lastPresented |
+	
+	editors := aDockBrowser editors.
+	editors ifEmpty: [ ^ self ].
+
+	lastPresented := (editors 
+		sorted: [ :each | each presenter lastTimePresented ifNil: [ DateAndTime epoch ] ] 
+		descending)
+		first.
+		
+	aDockBrowser whenOpenedDo: [
+		aDockBrowser application schedule: [
+			100 milliSeconds wait.
+			aDockBrowser application defer: [
+				lastPresented raiseAndTakeKeyboardFocus ] ] ]
 ]
 
 { #category : 'initialization' }

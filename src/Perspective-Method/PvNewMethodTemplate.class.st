@@ -115,6 +115,12 @@ PvNewMethodTemplate >> parentModel: anObject [
 ]
 
 { #category : 'accessing' }
+PvNewMethodTemplate >> pragmas [
+
+	^ #()
+]
+
+{ #category : 'accessing' }
 PvNewMethodTemplate >> protocol [
 	
 	^ protocol ifNil: [ protocol := Protocol new ]

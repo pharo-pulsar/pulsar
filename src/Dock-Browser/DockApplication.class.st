@@ -1,8 +1,8 @@
 Class {
 	#name : 'DockApplication',
 	#superclass : 'StPharoApplication',
-	#traits : 'DockTScheduling',
-	#classTraits : 'DockTScheduling classTrait',
+	#traits : 'SgaTApplication + DockTScheduling',
+	#classTraits : 'SgaTApplication classTrait + DockTScheduling classTrait',
 	#instVars : [
 		'name',
 		'standalone'
@@ -25,12 +25,14 @@ DockApplication class >> applicationName [
 { #category : 'private' }
 DockApplication class >> cleanUp [
 	<script>
-
+	
+	DockUIManager reset.
+	OupsDebuggerSelectionStrategy debuggerSelectionStrategy: nil. 
 	"yes, there are better ways to do this, for for now..."
 	DockWorker allInstances do: #stop.
 	Transcript dependents copy
 		collect: [ :each | each isKindOf: DockTranscript ]
-		thenDo: [ :each | Transcript removeDependent: each ]
+		thenDo: [ :each | Transcript removeDependent: each ].
 ]
 
 { #category : 'accessing' }
@@ -202,9 +204,16 @@ DockApplication >> newSystemTools [
 DockApplication >> prepareAsStandaloneApplication [
 	
 	standalone := true.
-	"1hr... maybe too much?"
-	Smalltalk vm isRunningInWorkerThread 
-		ifTrue: [ ProcessorScheduler idleTime: 3600000000 ]
+	self killUnusedProcesses.	
+	self prepareSchedulerAsStandaloneApplication.
+	self prepareErrorHandlerAsStandaloneApplication
+]
+
+{ #category : 'initialization' }
+DockApplication >> prepareErrorHandlerAsStandaloneApplication [
+
+	DockUIManager activateOn: self.
+	OupsDebuggerSelectionStrategy debuggerSelectionStrategy: (DockSingleDebuggerSelector on: self)
 ]
 
 { #category : 'running' }

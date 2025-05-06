@@ -47,6 +47,18 @@ DockTPanelWindow >> initializeWindow: aWindowPresenter [
 		whenClosedDo: [ self notifyEditorClosed  ]
 ]
 
+{ #category : 'accessing' }
+DockTPanelWindow >> lastTimePresented [
+
+	^ lastTimePresented
+]
+
+{ #category : 'private' }
+DockTPanelWindow >> lastTimePresented: aDateAndTime [
+
+	lastTimePresented := aDateAndTime
+]
+
 { #category : 'initialization' }
 DockTPanelWindow >> notifyEditorActivated [
 
@@ -58,8 +70,15 @@ DockTPanelWindow >> notifyEditorClosed [
 	self notificationCenter announce: (DockEditorClosed newValue: self model)
 ]
 
+{ #category : 'accessing' }
+DockTPanelWindow >> raise [
+
+	self withPanelWindowDo: [ :aWindow | 
+		aWindow raiseAndTakeKeyboardFocus ]
+]
+
 { #category : 'private' }
 DockTPanelWindow >> recordLastPresented [
 
-	lastTimePresented := DateAndTime now
+	self lastTimePresented: DateAndTime now
 ]

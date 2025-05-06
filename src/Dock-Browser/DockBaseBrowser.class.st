@@ -57,7 +57,10 @@ DockBaseBrowser >> globalActions [
 { #category : 'simple dialog helpers' }
 DockBaseBrowser >> inform: aString [
 
-	('INFORM: ', aString) crTrace
+	logger trace: aString message: 'inform'.
+	self addToast: (SpPanelToast new 
+		title: aString;
+		yourself)
 ]
 
 { #category : 'initialization' }

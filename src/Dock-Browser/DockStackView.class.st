@@ -69,6 +69,8 @@ DockStackView >> closeEditor: aModel [
 
 { #category : 'private - actions' }
 DockStackView >> closeEditors: aCollection [
+
+	"just one if we selected just one :)"
 	aCollection size = 1 
 		ifTrue: [ self closeEditor: aCollection anyOne ].
 		

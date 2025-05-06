@@ -173,9 +173,7 @@ DockBrowser >> maybeDockView: aViewModel [
 	aViewModel hasDockEditor ifFalse: [ ^ self ].
 
 	(self findEditorContaining: aViewModel) ifNotNil: [ :panelPresenter | 
-		panelPresenter 
-			raise; 
-			takeKeyboardFocus.
+		panelPresenter raiseAndTakeKeyboardFocus.
 		^ self ].
 
 	editorPresenter := self 
