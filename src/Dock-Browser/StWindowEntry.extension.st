@@ -1,7 +1,7 @@
 Extension { #name : 'StWindowEntry' }
 
 { #category : '*Dock-Browser' }
-StWindowEntry >> categoryLabel [
+StWindowEntry >> accept: aSpotter [
 
-	^ 'window'
+	aSpotter visitWindowEntry: self
 ]
