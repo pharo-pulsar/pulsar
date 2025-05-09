@@ -14,20 +14,64 @@ Class {
 }
 
 { #category : 'accessing - actions' }
-DockBrowser class >> defineActionsOn: aBuilder [
+DockBrowser class >> defineImageActionGroup: actionGroup [
+	<perspectiveActionGroup: #image>
+	
+	actionGroup 
+		name: 'Image';
+		priority: 1000;
+		beDisplayedAsGroup
+]
+
+{ #category : 'accessing - actions' }
+DockBrowser class >> defineImageActionsOn: aBuilder [
 	<perspectiveActions>
 
-	aBuilder registerGroup: #perspective with: { 
+	aBuilder registerGroup: #image with: { 
+		"open default tool"
+		$s shift mod1 -> DockImageSaveCommand new.
+		"Character mod1 mod3 -> PvShowSpotterForCommandsAction new" }
+]
+
+{ #category : 'accessing - actions' }
+DockBrowser class >> defineSpotterActionGroup: actionGroup [
+	<perspectiveActionGroup: #spotter>
+	
+	actionGroup 
+		name: 'Spotter';
+		priority: 900;
+		beDisplayedAsGroup
+]
+
+{ #category : 'accessing - actions' }
+DockBrowser class >> defineSpotterActionsOn: aBuilder [
+	<perspectiveActions>
+
+	aBuilder registerGroup: #spotter with: { 
 		"open default tool"
 		Character cr shift -> DockShowSpotterForEnvironmentCommand new.
 		Character cr shift mod1 -> DockShowSpotterForWindowsCommand new.
 		"Character mod1 mod3 -> PvShowSpotterForCommandsAction new" }
 ]
 
-{ #category : 'private - testing' }
-DockBrowser class >> hasSnapshot [
+{ #category : 'accessing - actions' }
+DockBrowser class >> defineToolActionGroup: actionGroup [
+	<perspectiveActionGroup: #tools>
+	
+	actionGroup 
+		name: 'Tools';
+		priority: 10;
+		beDisplayedAsGroup
+]
 
-	^ LastSnapshot isNotNil
+{ #category : 'accessing - actions' }
+DockBrowser class >> defineToolActionsOn: aBuilder [
+	<perspectiveActions>
+
+	aBuilder registerGroup: #tools with: { 
+		DockOpenPlaygroundCommand new.
+		DockOpenBrowserCommand new.
+	}
 ]
 
 { #category : 'private' }
@@ -171,6 +215,12 @@ DockBrowser >> openClass: aClass [
 ]
 
 { #category : 'actions' }
+DockBrowser >> openPlayground [
+
+	self addPresenterClass: DockPlayground
+]
+
+{ #category : 'actions' }
 DockBrowser >> openProject: aBaselineClass [ 
 
 	projectView addProject: aBaselineClass
@@ -208,6 +258,12 @@ DockBrowser >> projectView [
 DockBrowser >> snapshot [
 
 	^ DockBrowserSnapshot on: self
+]
+
+{ #category : 'actions' }
+DockBrowser >> spawnNewBrowser [
+
+	(DockBrowser newApplication: self application) open
 ]
 
 { #category : 'initialization' }
