@@ -76,6 +76,10 @@ PvActionGroup >> asSpecWithContext: aContext [
 	group entries: (self entries collect: [ :each | each asSpecWithContext: aContext ]).
 	specGroup := group asSpecGroup.
 	self configureSpecGroup: specGroup from: aContext.
+	
+	"sort entries by priority and name"
+	specGroup decoratedGroup entries: (specGroup entries sorted: #priority ascending, #name ascending).
+	
 	^ specGroup
 ]
 

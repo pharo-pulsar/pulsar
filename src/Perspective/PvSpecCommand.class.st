@@ -33,3 +33,9 @@ PvSpecCommand >> icon: anIcon [
 
 	icon := anIcon
 ]
+
+{ #category : 'accessing' }
+PvSpecCommand >> priority [
+
+	^ self decoratedCommand priority
+]

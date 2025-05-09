@@ -31,6 +31,7 @@ PvActionCollector >> collect [
 	self 
 		register: self model class
 		in: container.
+	"container entries: (container entries sorted: #priority descending)."
 	^ container asSpecWithContext: self model
 ]
 
