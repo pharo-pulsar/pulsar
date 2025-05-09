@@ -1,8 +1,9 @@
 Class {
 	#name : 'DockDebuggerModel',
-	#superclass : 'Object',
+	#superclass : 'PvBaseModel',
 	#instVars : [
-		'session'
+		'session',
+		'stack'
 	],
 	#category : 'Dock-Browser-Tool-Debugger',
 	#package : 'Dock-Browser',
@@ -18,13 +19,30 @@ DockDebuggerModel class >> on: aSession [
 ]
 
 { #category : 'accessing' }
+DockDebuggerModel >> name [
+
+	^ self session name
+]
+
+{ #category : 'accessing' }
 DockDebuggerModel >> session [
 
-	^ session
+	^ self entity
 ]
 
 { #category : 'accessing' }
 DockDebuggerModel >> session: aDebugSession [
 
-	session := aDebugSession
+	self entity: aDebugSession
+]
+
+{ #category : 'accessing' }
+DockDebuggerModel >> stack [
+
+	^ stack ifNil: [ 
+		stack := self session stack collect: [ :each | 
+			DockContextModel 
+				newEnvironment: self environmentModel 
+				session: self session
+				context: each ] ]
 ]

@@ -211,7 +211,7 @@ DockEditor >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
-		title: self model name;
+		title: (self model ifNotNil: #name);
 		whenClosedDo: [ self notifyEditorClosed ]
 ]
 

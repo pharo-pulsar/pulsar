@@ -106,6 +106,14 @@ DockMethodEditor >> updateBreadcrumbs [
 ]
 
 { #category : 'initialization' }
+DockMethodEditor >> updateEditor [
+
+	editorPresenter 
+		beForMethod: self model entity;
+		text: self model sourceCode
+]
+
+{ #category : 'initialization' }
 DockMethodEditor >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
@@ -114,9 +122,7 @@ DockMethodEditor >> updatePresenter [
 		
 	self updatingWhile: [  
 		self updateProtocol.
-		editorPresenter 
-			beForMethod: self model entity;
-			text: self model sourceCode ]
+		self updateEditor ]
 ]
 
 { #category : 'initialization' }
