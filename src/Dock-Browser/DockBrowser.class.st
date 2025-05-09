@@ -30,36 +30,6 @@ DockBrowser class >> hasSnapshot [
 	^ LastSnapshot isNotNil
 ]
 
-{ #category : 'accessing' }
-DockBrowser >> addPresenterClass: aClass [
-	| view |
-
-	view := self instantiate: aClass.
-	self addPresenter: view at: view dockPosition.
-	
-	^ view
-]
-
-{ #category : 'accessing' }
-DockBrowser >> addPresenterClass: aClass model: aModel [
-	| view |
-
-	view := self instantiate: aClass on: aModel.
-	self addPresenter: view at: view dockPosition.
-	
-^ view
-]
-
-{ #category : 'accessing' }
-DockBrowser >> addPresenterClass: aClass position: aDockPosition [
-	| view |
-
-	view := self instantiate: aClass.
-	self addPresenter: view at: aDockPosition.
-	
-	^ view
-]
-
 { #category : 'private' }
 DockBrowser >> composeTitle [
 
@@ -102,14 +72,6 @@ DockBrowser >> eventModelActivated: anAnnouncement [
 DockBrowser >> eventModelDeactivated: anAnnouncement [
 	
 	self maybeUndockView: anAnnouncement value
-]
-
-{ #category : 'private' }
-DockBrowser >> findEditorContaining: aViewModel [
-
-	^ self editors 
-		detect: [ :each | each presenter model = aViewModel ]
-		ifNone: [ nil ]
 ]
 
 { #category : 'initialization' }
@@ -237,23 +199,6 @@ DockBrowser >> postRestoreSnapshot: aSnapshot [
 ]
 
 { #category : 'private' }
-DockBrowser >> presenterWithClass: aClass [
-	"used for testing"
-
-	^ self presenters 
-		detect: [ :each | each presenter class = aClass ]
-		ifNone: [ nil ]
-]
-
-{ #category : 'private' }
-DockBrowser >> presenterWithTitle: aString [
-
-	^ self presenters 
-		detect: [ :each | each title = aString ]
-		ifNone: [ nil ]
-]
-
-{ #category : 'private' }
 DockBrowser >> projectView [
 
 	^ projectView
@@ -272,14 +217,6 @@ DockBrowser >> updateTitle [
 	newTitle := self composeTitle.
 	logger trace: newTitle.
 	self title: newTitle
-]
-
-{ #category : 'event handling' }
-DockBrowser >> windowClosed [
-
-	self presenters 
-		do: [ :each | each windowClosed ].
-	super windowClosed
 ]
 
 { #category : 'event handling' }

@@ -7,9 +7,9 @@ Class {
 		'actions',
 		'mutex'
 	],
-	#category : 'Dock-Browser-View-Browser',
+	#category : 'Dock-Browser-View-Base',
 	#package : 'Dock-Browser',
-	#tag : 'View-Browser'
+	#tag : 'View-Base'
 }
 
 { #category : 'private' }
@@ -17,6 +17,36 @@ DockBaseBrowser >> addGlobalActionsTo: aWindowPresenter [
 
 	self globalActions 
 		ifNotNil: [ :aGroup | aWindowPresenter actions: aGroup ]
+]
+
+{ #category : 'accessing' }
+DockBaseBrowser >> addPresenterClass: aClass [
+	| view |
+
+	view := self instantiate: aClass.
+	self addPresenter: view at: view dockPosition.
+	
+	^ view
+]
+
+{ #category : 'accessing' }
+DockBaseBrowser >> addPresenterClass: aClass model: aModel [
+	| view |
+
+	view := self instantiate: aClass on: aModel.
+	self addPresenter: view at: view dockPosition.
+	
+	^ view
+]
+
+{ #category : 'accessing' }
+DockBaseBrowser >> addPresenterClass: aClass position: aDockPosition [
+	| view |
+
+	view := self instantiate: aClass.
+	self addPresenter: view at: aDockPosition.
+	
+	^ view
 ]
 
 { #category : 'private' }
@@ -46,6 +76,14 @@ DockBaseBrowser >> eventModelActivated: anAnnouncement [
 
 { #category : 'events' }
 DockBaseBrowser >> eventModelDeactivated: anAnnouncement [
+]
+
+{ #category : 'private' }
+DockBaseBrowser >> findEditorContaining: aViewModel [
+
+	^ self editors 
+		detect: [ :each | each presenter model = aViewModel ]
+		ifNone: [ nil ]
 ]
 
 { #category : 'private - settings' }
@@ -93,6 +131,23 @@ DockBaseBrowser >> mutex [
 DockBaseBrowser >> notificationCenter [
 	"using my own announcer as notification center"
 	^ self announcer
+]
+
+{ #category : 'private' }
+DockBaseBrowser >> presenterWithClass: aClass [
+	"used for testing"
+
+	^ self presenters 
+		detect: [ :each | each presenter class = aClass ]
+		ifNone: [ nil ]
+]
+
+{ #category : 'private' }
+DockBaseBrowser >> presenterWithTitle: aString [
+
+	^ self presenters 
+		detect: [ :each | each title = aString ]
+		ifNone: [ nil ]
 ]
 
 { #category : 'accessing' }
@@ -147,6 +202,9 @@ DockBaseBrowser >> systemNavigation [
 { #category : 'private' }
 DockBaseBrowser >> windowClosed [
 
+	self presenters 
+		do: [ :each | each windowClosed ].
 	super windowClosed.
-	announcer stopScheduler
+	announcer stopScheduler.
+	
 ]
