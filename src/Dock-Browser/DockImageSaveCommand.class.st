@@ -15,7 +15,6 @@ DockImageSaveCommand >> defineAction [
 
 { #category : 'executing' }
 DockImageSaveCommand >> execute [
-
-	[ Smalltalk snapshot: true andQuit: false ] fork.
-	self context inform: 'Image saved'
+	
+	self context saveImage
 ]

@@ -27,10 +27,8 @@ DockBrowser class >> defineImageActionGroup: actionGroup [
 DockBrowser class >> defineImageActionsOn: aBuilder [
 	<perspectiveActions>
 
-	aBuilder registerGroup: #image with: { 
-		"open default tool"
-		$s shift mod1 -> DockImageSaveCommand new.
-		"Character mod1 mod3 -> PvShowSpotterForCommandsAction new" }
+	aBuilder registerGroup: #image with: {
+		$s shift mod1 -> DockImageSaveCommand new  }
 ]
 
 { #category : 'accessing - actions' }
@@ -70,7 +68,9 @@ DockBrowser class >> defineToolActionsOn: aBuilder [
 
 	aBuilder registerGroup: #tools with: { 
 		DockOpenPlaygroundCommand new.
-		DockOpenBrowserCommand new.
+		DockOpenProcessBrowserCommand new.
+		DockOpenGitRepositoriesCommand new.
+		DockOpenRecentChangesCommand new.
 	}
 ]
 
@@ -254,6 +254,13 @@ DockBrowser >> projectView [
 	^ projectView
 ]
 
+{ #category : 'actions' }
+DockBrowser >> saveImage [
+
+	[ Smalltalk snapshot: true andQuit: false ] fork.
+	self inform: 'Image saved'
+]
+
 { #category : 'accessing - snapshot' }
 DockBrowser >> snapshot [
 
@@ -261,9 +268,31 @@ DockBrowser >> snapshot [
 ]
 
 { #category : 'actions' }
+DockBrowser >> spawnGitRepositories [
+
+	IceTipRepositoriesBrowser new 
+		application: self application;
+		open
+]
+
+{ #category : 'actions' }
 DockBrowser >> spawnNewBrowser [
 
 	(DockBrowser newApplication: self application) open
+]
+
+{ #category : 'actions' }
+DockBrowser >> spawnNewProcessBrowser [
+	
+	(StProcessBrowser newApplication: self application) open
+]
+
+{ #category : 'actions' }
+DockBrowser >> spawnRecentChanges [
+
+	(EpUnifiedBrowserPresenter newApplication: self application) 
+		refresh; 
+		open
 ]
 
 { #category : 'initialization' }
