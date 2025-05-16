@@ -9,13 +9,13 @@ Class {
 { #category : 'visiting' }
 DockPanelEntry >> accept: aSpotter [
 
-	aSpotter visitMenuEntry: self
+	aSpotter visitPanelEntry: self
 ]
 
 { #category : 'converting' }
 DockPanelEntry >> asString [
 	
-	^ content presenter spotterTitle
+	^ content presenter model fullName
 ]
 
 { #category : 'as yet unclassified' }
@@ -27,7 +27,7 @@ DockPanelEntry >> categoryLabel [
 { #category : 'evaluating' }
 DockPanelEntry >> doEvaluate [
 
-	[ content presenter notifyEditorActivated ] fork
+	[ content raiseAndTakeKeyboardFocus ] fork
 ]
 
 { #category : 'accessing' }
