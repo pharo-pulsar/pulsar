@@ -2,12 +2,37 @@ Class {
 	#name : 'DockClassEditor',
 	#superclass : 'DockEditor',
 	#instVars : [
-		'commentPresenter'
+		'commentPresenter',
+		'commentOverlayLayout'
 	],
 	#category : 'Dock-Browser-View-Editor',
 	#package : 'Dock-Browser',
 	#tag : 'View-Editor'
 }
+
+{ #category : 'private - updating' }
+DockClassEditor >> commentChangedFrom: oldText to: newText [
+
+	self isUpdating ifTrue: [ ^ self ].
+	
+	oldText = newText ifTrue: [ ^ self ].
+	"(self isDirty 
+		and: [ newText = self originalContent ])
+		ifTrue: [ ^ self unmarkDirty ].
+	
+	self markDirty"
+]
+
+{ #category : 'initialization' }
+DockClassEditor >> connectPresenters [
+
+	super connectPresenters.
+	
+	commentPresenter
+		whenTextChangedDo: [ :newText :oldText | self commentChangedFrom: oldText to: newText ];
+		whenSubmitDo: [ :aString | self doSaveComment: aString ];
+		whenResetDo: [ self doResetComment ]
+]
 
 { #category : 'layout' }
 DockClassEditor >> defaultLayout [
@@ -15,8 +40,12 @@ DockClassEditor >> defaultLayout [
 	^ SpBoxLayout newVertical
 		add: toolbarPresenter expand: false;
 		add: (SpPanedLayout newVertical
-			add: commentPresenter;
-			add: editorPresenter;
+			add: ((commentOverlayLayout := SpOverlayLayout new)
+				child: commentPresenter;
+				yourself);
+			add: ((editorOverlayLayout := SpOverlayLayout new) 
+				child: editorPresenter;
+				yourself);
 			yourself);
 		yourself
 ]
@@ -28,9 +57,9 @@ DockClassEditor >> doResetComment [
 ]
 
 { #category : 'private - actions' }
-DockClassEditor >> doSaveComment [
+DockClassEditor >> doSaveComment: aString [
 
-	self model saveComment: commentPresenter text
+	self model saveComment: aString
 ]
 
 { #category : 'events' }
@@ -62,8 +91,6 @@ DockClassEditor >> initializePresenters [
 	commentPresenter := self newCode
 		addStyle: 'stCode';
 		withoutSyntaxHighlight;
-		whenSubmitDo: [ self doSaveComment ];
-		whenResetDo: [ self doResetComment ];
 		yourself
 ]
 

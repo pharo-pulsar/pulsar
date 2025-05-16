@@ -232,6 +232,12 @@ PvClassModel >> packageTagName [
 	^ self entity packageTag name
 ]
 
+{ #category : 'updating' }
+PvClassModel >> saveComment: aString [
+
+	self entity comment: aString
+]
+
 { #category : 'accessing' }
 PvClassModel >> shortName [
 	
