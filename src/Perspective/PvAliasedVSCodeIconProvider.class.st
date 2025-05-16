@@ -36,8 +36,8 @@ PvAliasedVSCodeIconProvider >> initialize [
 		"#addFolder"
 		'groupByMethod'. 			'extensions'.			"browser (extensions)"
 		'library'.					'library'.				"browser (system deps)"
-		'class'.						'symbol-class'.			"type"
-		'classAbstract'.				'symbol-class'.			"type"
+		'class'.					'symbol-class'.			"type"
+		'classAbstract'.			'symbol-class'.			"type"
 		'method'. 					'symbol-method'.			"type"
 		'openProject'. 				'folder-opened'.			"browser (open project)"
 		"#overlayClass.
@@ -51,45 +51,52 @@ PvAliasedVSCodeIconProvider >> initialize [
 		"blank"
 		"classAbstract"
 		'glamorousGo'.				'run'.					"playground (go)"
-		'glamorousMore'.				'file-submodule'.		"playground (pages)"
+		'glamorousMore'.			'file-submodule'.		"playground (pages)"
 		'glamorousSaveToUrl'.		'cloud-upload'.			"playground (upload to the web)"
 		'glamorousTable'. 			'table'.					"playground (bindings)"
 		'package'.					'package'.				"browser-> package"
 		'smallForward'.				'arrow-right'.
-		'smallHierarchyBrowser'.		'type-hierarchy'.		"browser -> navigation hierarchy"
-		'trait'.						'symbol-trait'.			"type"
-		'workspace'.					'lightbulb'. 			"'beaker'."	"playground"
+		'smallHierarchyBrowser'.	'type-hierarchy'.		"browser -> navigation hierarchy"
+		'trait'.					'symbol-trait'.			"type"
+		'workspace'.				'lightbulb'. 			"'beaker'."	"playground"
 		'transcript'. 		 		'terminal'.
 		'announcement'.				'symbol-announcement'. 	"type"
-		'arrowDown'.					'arrow-small-down'.		"browser-> overrides"
+		'arrowDown'.				'arrow-small-down'.		"browser-> overrides"
 		'arrowUp'.					'arrow-small-up'.		"browser-> overriding"
 		'flagIcon'.					'bookmark'.				"browser (to show there are flags)"
 		'smallWindow'.				'symbol-window'.			"type (presenter...)" 
-		'morph'.						'symbol-morph'.			"type"
-		'exception'.					'symbol-event'.			"type"
+		'morph'.					'symbol-morph'.			"type"
+		'exception'.				'symbol-event'.			"type"
 		'variable'.					'symbol-variable'.		"type"
 		'smallInspectIt'.			'eye'.					"inspector..."
 		'inspector'. 				'eye'. 
 		'string'.					'symbol-string'.			"type"
-		'magnitude'.					'symbol-numeric'.		"type"
+		'magnitude'.				'symbol-numeric'.		"type"
 		'collection'.				'symbol-namespace'.		"type"
 		'glamorousClose'. 			'close'.   				"inspector"
 		'history'.					'history'. 				"playground"
-		'smallDelete'. 				'trash'.					"playground..."
-		'delete'	.					'trash'.
+		'smallDelete'. 				'trash'.				"playground..."
+		'delete'	.				'trash'.
 		'smallObjects'.				'beaker'.  				"inspector"
-		'glamorousRefresh'. 			'refresh'. 				"inspector"
+		'glamorousRefresh'. 		'refresh'. 				"inspector"
 		'smallSystemBrowser'. 		'browser'. 				"inspector"
 		'messageBrowser'. 			'browser'. 
 		'referencesIcon'.			'type-hierarchy'.		"message browser"
 		'smallDoIt'. 				'run'.					"code"
 		'smallDebug'. 				'bug'.					"code"
-		'smallPrintIt'. 				'blank'.					"code"
-		'smallProfile'. 				'watch'.					"code"
-		'menu'. 		   	       		'more'. "menu"    		"menu button"
+		'smallPrintIt'. 			'blank'.				"code"
+		'smallProfile'. 			'watch'.				"code"
+		'menu'. 		   	       	'more'. "menu"    		"menu button"
 		'pause'. 					'debug-pause'.
 		'priority'.					'flame'.
 		'autoUpdate'.				'radio-tower'.
+		'stop'.						'debug-stop'.
+		'pause'.					'debug-pause'.
+		'play'. 					'debug-continue'.
+		'up'. 						'arrow-up'.
+		'down'.						'arrow-down'.
+		'refresh'. 					'refresh'.
+		'autoReload'. 				'broadcast'.
 		"protocols"
 		'protocolPrivate'. 	   		'lock-small'. "blocked"
 		'protocolProtected'.     	'lock-small'. "blocked"
@@ -97,10 +104,21 @@ PvAliasedVSCodeIconProvider >> initialize [
 		'protocolAll'.       	 	'pulse'.
 		'protocolVirtual'.       	'pulse'. "radio-tower"
 		'protocolVirtualWarning'. 	'warning'.
+		"debugger"
+		'debuggerProceed'. 			'debug-continue'.
+		'debuggerStepInto'. 		'debug-step-into'.
+		'debuggerStepOver'. 		'debug-step-over'.
+		'debuggerStepThrough'. 		'debug-step-through'.
+		'debuggerRestart'. 			'debug-restart'.
+		'debuggerReturn'. 			'debug-step-out'.
+		'debuggerRunToSelection'. 	'debug-runtoselection'.
+		"dialogs"
+		'accept'.					'check'.
+		'cancel'.					'close'.
 		"testing"
-		'run-test'. 					'play'.
+		'run-test'. 				'play'.
 		'run-test-passed'. 			'play-green'.
-		'run-test-failure'. 			'play-yellow'.
+		'run-test-failure'. 		'play-yellow'.
 		'run-test-error'. 			'play-red'.
 		'editorStack'.				'multiple-windows'
 	 }
