@@ -102,7 +102,7 @@ DockMessageBrowser >> initializePresenters [
 		yourself.
 	headerPresenter addPresenter: countPresenter.
 
-	messageListPresenter := self newEasyListView
+	messageListPresenter := self newFilteringList
 		addStyle: 'stList';
 		display: #fullName;
 		yourself.
