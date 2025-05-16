@@ -31,6 +31,12 @@ DockContextModel >> context [
 	^ self entity
 ]
 
+{ #category : 'accessing' }
+DockContextModel >> fullName [
+
+	^ name
+]
+
 { #category : 'private' }
 DockContextModel >> inOneLine [
 	"put the context in one line requires some work as e.g. blocks can't be 'just'

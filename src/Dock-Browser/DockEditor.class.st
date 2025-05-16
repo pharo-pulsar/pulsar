@@ -7,7 +7,9 @@ Class {
 		'updating',
 		'toolbarPresenter',
 		'editorPresenter',
-		'dirty'
+		'dirty',
+		'editorOverlayLayout',
+		'dirtyMarkerPresenter'
 	],
 	#category : 'Dock-Browser-View-Editor',
 	#package : 'Dock-Browser',
@@ -59,6 +61,18 @@ DockEditor class >> defineWindowActionsOn: aBuilder [
 	}
 ]
 
+{ #category : 'accessing - overlay' }
+DockEditor >> addOverlay: aPresenter [
+
+	self editorOverlayLayout addOverlay: aPresenter
+]
+
+{ #category : 'accessing - overlay' }
+DockEditor >> addOverlay: aPresenter withConstraints: aBlock [
+
+	self editorOverlayLayout addOverlay: aPresenter withConstraints: aBlock
+]
+
 { #category : 'initialization' }
 DockEditor >> connectPresenters [
 
@@ -82,10 +96,17 @@ DockEditor >> defaultLayout [
 
 	^ SpBoxLayout newVertical
 		add: toolbarPresenter expand: false;
-		add: (SpOverlayLayout new 
+		add: ((editorOverlayLayout := SpOverlayLayout new)
 			child: editorPresenter;
 			yourself);
 		yourself
+]
+
+{ #category : 'private' }
+DockEditor >> dirtyMarkerPresenter [
+
+	^ dirtyMarkerPresenter ifNil: [
+		dirtyMarkerPresenter := self newDirtyMarkerPresenter ] 
 ]
 
 { #category : 'private - actions' }
@@ -139,6 +160,12 @@ DockEditor >> editorContextMenuActions [
 		yourself
 ]
 
+{ #category : 'private - overlay' }
+DockEditor >> editorOverlayLayout [
+
+	^ editorOverlayLayout
+]
+
 { #category : 'private' }
 DockEditor >> editorPresenter [
 
@@ -180,11 +207,11 @@ DockEditor >> initializePanelWindow: aWindowPresenter [
 	super initializePanelWindow: aWindowPresenter.
 	aWindowPresenter
 		actions: self windowActions;
-		whenPresentedDo: [ self recordLastPresented ];
-		whenFocusReceivedDo: [ self notifyEditorActivated ];
+		whenPresentedDo: [ self panelPresented ];
+		whenFocusReceivedDo: [ self panelFocused ];
 		whenSaveDo: [ :ann | ann success: self saveContent ];
 		whenDiscardDo: [ :ann | 
-			"I don't know what to do with this... nothing feels right." ].
+			"I don't know what to do with this... nothing feels right." ]
 ]
 
 { #category : 'initialization' }
@@ -238,7 +265,28 @@ DockEditor >> markDirty [
 	
 	dirty ifTrue: [ ^ self ].
 	dirty := true.
-	self withPanelWindowDo: [ :w | w modified: true ]
+	self withPanelWindowDo: [ :w | w modified: true ].
+	self 
+		addOverlay: self dirtyMarkerPresenter 
+		withConstraints: [ :c | c hAlignEnd; vAlignStart ]
+]
+
+{ #category : 'private' }
+DockEditor >> newDirtyMarkerPresenter [
+
+	^ self newToolbar
+		beIcons;
+		add: (self newToolbarButton
+			icon: (self iconNamed: #accept);
+			action: [ self doSubmit: editorPresenter text ];
+			help: 'Accept changes';
+			yourself);
+		add: (self newToolbarButton
+			icon: (self iconNamed: #cancel);
+			action: [ self doReset ];
+			help: 'Cancel changes';
+			yourself);
+		yourself
 ]
 
 { #category : 'private - announcing' }
@@ -260,6 +308,20 @@ DockEditor >> originalContent [
 	^ self subclassResponsibility
 ]
 
+{ #category : 'private' }
+DockEditor >> panelFocused [
+
+	logger trace.
+	self notifyEditorActivated
+]
+
+{ #category : 'private' }
+DockEditor >> panelPresented [
+
+	logger trace.
+	self recordLastPresented
+]
+
 { #category : 'initialization' }
 DockEditor >> registerToEvents [
 
@@ -267,6 +329,12 @@ DockEditor >> registerToEvents [
 	self announcer 
 		when: DockModelChanged send: #eventModelChanged: to: self;
 		when: DockModelRemoved send: #eventModelRemoved: to: self
+]
+
+{ #category : 'accessing - overlay' }
+DockEditor >> removeOverlay: aPresenter [
+
+	self editorOverlayLayout removeOverlay: aPresenter
 ]
 
 { #category : 'private - actions' }
@@ -322,7 +390,8 @@ DockEditor >> unmarkDirty [
 
 	dirty ifFalse: [ ^ self ].
 	dirty := false.
-	self withPanelWindowDo: [ :w | w modified: false ]
+	self withPanelWindowDo: [ :w | w modified: false ].
+	self removeOverlay: self dirtyMarkerPresenter
 ]
 
 { #category : 'initialization' }

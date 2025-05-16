@@ -6,6 +6,39 @@ Class {
 	#tag : 'Tool-Debugger'
 }
 
+{ #category : 'as yet unclassified' }
+DockContextEditor >> beFixedToDock [
+	"prepare this context editor as 'fixed' to the debugger dock (it will not be modified 
+	 when switching contexts"
+]
+
+{ #category : 'private' }
+DockContextEditor >> grabDebugToolbar [
+	| lastOwner debugToolbarPresenter |
+	
+	logger trace.
+	
+	"window will be the debugger, I can access the toolbar there"
+	debugToolbarPresenter := self withWindowDo: [ :w | w debugToolbarPresenter ].
+	
+	lastOwner := debugToolbarPresenter lastOwner.
+	(lastOwner isNotNil and: [ lastOwner ~= self ]) ifTrue: [ 
+		logger trace: lastOwner.
+		lastOwner removeOverlay: debugToolbarPresenter ].
+	
+	debugToolbarPresenter lastOwner: self.
+	self 
+		addOverlay: debugToolbarPresenter 
+		withConstraints: [ :c | c hAlignCenter; vAlignEnd ]
+]
+
+{ #category : 'private' }
+DockContextEditor >> panelFocused [
+
+	super panelFocused.
+	self grabDebugToolbar
+]
+
 { #category : 'initialization' }
 DockContextEditor >> updateBreadcrumbs [
 

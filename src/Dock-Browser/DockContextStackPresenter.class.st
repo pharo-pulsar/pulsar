@@ -46,6 +46,12 @@ DockContextStackPresenter >> initializeWindow: aWindowPresenter [
 	aWindowPresenter title: 'Stack'
 ]
 
+{ #category : 'accessing' }
+DockContextStackPresenter >> selectedContextModel [
+
+	^ listPresenter selectedItem
+]
+
 { #category : 'initialization' }
 DockContextStackPresenter >> updatePresenter [
 
