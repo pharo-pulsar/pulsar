@@ -271,6 +271,12 @@ DockSpotter >> visitMethodEntry: aClassEntry [
 		entity: aClassEntry content)
 ]
 
+{ #category : 'visiting' }
+DockSpotter >> visitPanelEntry: anEntry [ 
+	
+	anEntry doEvaluate
+]
+
 { #category : 'private' }
 DockSpotter >> windowClosed [
 
