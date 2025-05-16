@@ -156,6 +156,14 @@ DockBaseBrowser >> presenters [
 	^  self mutex critical: [ super presenters ]
 ]
 
+{ #category : 'private' }
+DockBaseBrowser >> presentersWithClass: aClass [
+	"used for testing"
+
+	^ self presenters 
+		select: [ :each | each presenter class = aClass ]
+]
+
 { #category : 'initialization' }
 DockBaseBrowser >> registerToEvents [
 
@@ -205,6 +213,5 @@ DockBaseBrowser >> windowClosed [
 	self presenters 
 		do: [ :each | each windowClosed ].
 	super windowClosed.
-	announcer stopScheduler.
-	
+	announcer stopScheduler
 ]

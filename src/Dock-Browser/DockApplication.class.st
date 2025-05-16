@@ -110,6 +110,16 @@ DockApplication >> colorNamed: aString [
 ]
 
 { #category : 'accessing' }
+DockApplication >> dockBrowser [
+	"for now the application will have just one Dock active (it can have a lot more windows, but more than 
+	 one dock feels very disturbing)"
+	 
+	 ^ self windows 
+	 	detect: [ :each | each class = DockBrowser ]
+	 	ifNone: [ nil ]
+]
+
+{ #category : 'accessing' }
 DockApplication >> iconCache [
 
 	^ self 
