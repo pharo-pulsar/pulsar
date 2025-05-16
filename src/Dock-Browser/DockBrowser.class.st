@@ -162,7 +162,7 @@ DockBrowser >> loadDefaultWorkspace [
 
 	"here, the list of components that are part of the 'sides' but we access 
 	 just while interacting."	
-	{ DockStackView. DockPlayground. DockTranscript } 
+	{ DockStackView. DockPlayground. "DockTranscript" } 
 		do: [ :eachClass | self addPresenterClass: eachClass ]
 ]
 
