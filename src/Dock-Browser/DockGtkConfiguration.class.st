@@ -44,6 +44,12 @@ DockGtkConfiguration >> isDarkTheme [
 	^ GRunLoop defer: [ AdwStyleManager default isDark ]
 ]
 
+{ #category : 'configuring' }
+DockGtkConfiguration >> reloadOnApplication: anApplication [ 
+
+	^ self configure: anApplication
+]
+
 { #category : 'accessing' }
 DockGtkConfiguration >> style [
 

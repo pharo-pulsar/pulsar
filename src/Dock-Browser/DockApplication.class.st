@@ -63,8 +63,7 @@ DockApplication class >> lastSnapshot: aSnapshot [
 DockApplication class >> reset [
 	<script>
 
-	running := nil.
-	self resetLastSnapshot
+	running := nil
 ]
 
 { #category : 'private' }
@@ -214,6 +213,12 @@ DockApplication >> prepareErrorHandlerAsStandaloneApplication [
 
 	DockUIManager activateOn: self.
 	OupsDebuggerSelectionStrategy debuggerSelectionStrategy: (DockSingleDebuggerSelector on: self)
+]
+
+{ #category : 'initialization' }
+DockApplication >> reloadConfiguration [
+
+	^ self configuration reloadOnApplication: self
 ]
 
 { #category : 'running' }
