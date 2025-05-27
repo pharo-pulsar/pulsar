@@ -1,8 +1,8 @@
 Class {
 	#name : 'DockBaseBrowser',
 	#superclass : 'SpPanelWindowPresenter',
-	#traits : 'SpTModel + DockTSnapshot',
-	#classTraits : 'SpTModel classTrait + DockTSnapshot classTrait',
+	#traits : 'SpTModel + DockTSnapshot + DockTGlobalActionContainer',
+	#classTraits : 'SpTModel classTrait + DockTSnapshot classTrait + DockTGlobalActionContainer classTrait',
 	#instVars : [
 		'actions',
 		'mutex'
@@ -84,12 +84,6 @@ DockBaseBrowser >> findEditorContaining: aViewModel [
 	^ self editors 
 		detect: [ :each | each presenter model = aViewModel ]
 		ifNone: [ nil ]
-]
-
-{ #category : 'private - settings' }
-DockBaseBrowser >> globalActions [
-
-	^ PvActionCollector collectFor: self
 ]
 
 { #category : 'simple dialog helpers' }
