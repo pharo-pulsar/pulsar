@@ -29,6 +29,19 @@ DockContextStackPresenter >> dockPosition [
 	^ self class defaultDockPosition
 ]
 
+{ #category : 'private' }
+DockContextStackPresenter >> findFirstRelevantStackIndex [
+	| counter |
+	
+	counter := 1.
+	listPresenter items do: [ :contextModel | 
+		contextModel methodClass == TestAsserter 
+			ifFalse: [ ^ counter ].
+		counter := counter + 1 ].
+	
+	^ 1
+]
+
 { #category : 'initialization' }
 DockContextStackPresenter >> initializePresenters [
 
@@ -46,6 +59,20 @@ DockContextStackPresenter >> initializeWindow: aWindowPresenter [
 	aWindowPresenter title: 'Stack'
 ]
 
+{ #category : 'api - selection' }
+DockContextStackPresenter >> selectFirst [ 
+
+	listPresenter selectFirst
+]
+
+{ #category : 'api - selection' }
+DockContextStackPresenter >> selectFirstRelevantStackIndex [
+	
+listPresenter 
+		selectIndex: self findFirstRelevantStackIndex 
+		scrollToSelection: true
+]
+
 { #category : 'accessing' }
 DockContextStackPresenter >> selectedContextModel [
 
@@ -58,7 +85,6 @@ DockContextStackPresenter >> updatePresenter [
 	self model ifNil: [ ^ self ].
 	
 	self application defer: [
-		listPresenter 
-			items: self model stack;
-			selectFirst ]
+		listPresenter items: self model stack.
+		self selectFirstRelevantStackIndex ]
 ]

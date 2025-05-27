@@ -6,10 +6,21 @@ Class {
 	#tag : 'Tool-Debugger'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 DockContextEditor >> beFixedToDock [
 	"prepare this context editor as 'fixed' to the debugger dock (it will not be modified 
 	 when switching contexts"
+]
+
+{ #category : 'events' }
+DockContextEditor >> eventContextChanged: anAnnouncement [
+	| contextModel |
+	
+	contextModel := anAnnouncement value.
+	logger trace: contextModel.
+	
+	self model = contextModel ifFalse: [ ^ self ].
+	self updatePresenter
 ]
 
 { #category : 'private' }
@@ -29,7 +40,8 @@ DockContextEditor >> grabDebugToolbar [
 	debugToolbarPresenter lastOwner: self.
 	self 
 		addOverlay: debugToolbarPresenter 
-		withConstraints: [ :c | c hAlignCenter; vAlignEnd ]
+		withConstraints: [ :c | c hAlignCenter; vAlignEnd ].
+	debugToolbarPresenter model: self model	
 ]
 
 { #category : 'private' }
@@ -37,6 +49,16 @@ DockContextEditor >> panelFocused [
 
 	super panelFocused.
 	self grabDebugToolbar
+]
+
+{ #category : 'initialization' }
+DockContextEditor >> registerToEvents [
+
+	super registerToEvents.
+	self announcer
+		when: DockDebuggerContextChanged
+		send: #eventContextChanged:
+		to: self
 ]
 
 { #category : 'initialization' }

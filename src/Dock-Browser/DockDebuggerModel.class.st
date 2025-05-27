@@ -25,25 +25,6 @@ DockDebuggerModel >> actionModel [
 	^ actionModel
 ]
 
-{ #category : 'testing' }
-DockDebuggerModel >> canExecuteDebugCommand [
-
-	^ self actionModel isContextSteppable
-]
-
-{ #category : 'testing' }
-DockDebuggerModel >> canExecuteRestartCommand [
-
-	^ (self actionModel isInterruptedContextPostMortem 
-		or: [ self actionModel isInterruptedContextDead ]) not
-]
-
-{ #category : 'testing' }
-DockDebuggerModel >> canExecuteReturnCommand [
-
-	^ self actionModel isInterruptedContextDead not
-]
-
 { #category : 'accessing' }
 DockDebuggerModel >> clearSession [
 
@@ -67,10 +48,10 @@ DockDebuggerModel >> name [
 	^ self session name
 ]
 
-{ #category : 'actions' }
-DockDebuggerModel >> proceedDebugSession [
+{ #category : 'accessing' }
+DockDebuggerModel >> resetStack [
 
-	self actionModel proceedDebugSession
+	stack := nil
 ]
 
 { #category : 'accessing' }
@@ -89,27 +70,10 @@ DockDebuggerModel >> session: aDebugSession [
 DockDebuggerModel >> stack [
 
 	^ stack ifNil: [ 
-		stack := self session stack collect: [ :each | 
-			DockContextModel 
-				newEnvironment: self environmentModel 
-				session: self session
-				context: each ] ]
-]
-
-{ #category : 'actions' }
-DockDebuggerModel >> stepInto: aContextModel [
-
-	self actionModel stepInto: aContextModel entity
-]
-
-{ #category : 'actions' }
-DockDebuggerModel >> stepOver: aContextModel [
-
-	self actionModel stepOver: aContextModel entity
-]
-
-{ #category : 'actions' }
-DockDebuggerModel >> stepThrough: aContextModel [
-
-	self actionModel stepThrough: aContextModel entity
+		stack := (self actionModel filterStack: self session stack) 
+			collect: [ :each | 
+				DockContextModel 
+					newEnvironment: self environmentModel
+					debuggerModel: self
+					context: each ] ]
 ]

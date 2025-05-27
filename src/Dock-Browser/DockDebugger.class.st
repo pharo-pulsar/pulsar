@@ -14,30 +14,6 @@ Class {
 	#tag : 'Tool-Debugger'
 }
 
-{ #category : 'testing' }
-DockDebugger >> canExecuteDebugCommand [
-
-	^ self model 
-		ifNotNil: [ :aModel | aModel canExecuteDebugCommand ]
-		ifNil: [ false ]
-]
-
-{ #category : 'testing' }
-DockDebugger >> canExecuteRestartCommand [
-
-	^ self model 
-		ifNotNil: [ :aModel | aModel canExecuteRestartCommand ]
-		ifNil: [ false ]
-]
-
-{ #category : 'testing' }
-DockDebugger >> canExecuteReturnCommand [
-
-	^ self model 
-		ifNotNil: [ :aModel | aModel canExecuteReturnCommand ]
-		ifNil: [ false ]
-]
-
 { #category : 'instance creation' }
 DockDebugger >> debugSession: aDebugSession [
 
@@ -60,13 +36,26 @@ DockDebugger >> defaultKeyboardFocus [
 ]
 
 { #category : 'events' }
+DockDebugger >> eventContextChanged: anAnnouncement [
+	
+	"resend to inner presenters"
+	self resendAnnouncement: anAnnouncement.
+	
+	"now refresh the stack"	
+	self model resetStack.
+	"and update it"
+	self stackView updatePresenter
+]
+
+{ #category : 'events' }
 DockDebugger >> eventModelActivated: anAnnouncement [
 	
-	"self eventModelSelected: anAnnouncement."
-	contextEditor beFixedToDock.
+	"not doing this for the moment (let's first make the debugger work)"
+	
+	"contextEditor beFixedToDock."
 	"setting contextEditor to nil will ensure a new one is created in next selection (keeping 
 	 current one as 'fixed' one."
-	contextEditor := nil
+	"contextEditor := nil"
 ]
 
 { #category : 'events' }
@@ -99,7 +88,8 @@ DockDebugger >> initializeWindow: aWindowPresenter [
 DockDebugger >> initializeWorkspace [
 
 	self startWidth: 380.
-	debugToolbarPresenter := (self instantiate: DockDebuggerToolbarPresenter)
+	self bottomHeight: 300.
+	debugToolbarPresenter := (self instantiate: DockDebuggerToolbarPresenter on: self model)
 		debugger: self;
 		yourself.
 			
@@ -108,20 +98,16 @@ DockDebugger >> initializeWorkspace [
 	"this will be created dynamically, do not add it here.
 	 contextEditor := self addPresenterClass: DockContextEditor."
 	 
-	self addPresenterClass: DockStackView
+	"self addPresenterClass: DockStackView."
+	self addPresenterClass: DockDebuggerInspector
 ]
 
 { #category : 'accessing - model' }
 DockDebugger >> model: aModel [
 
 	super model: aModel.
-	stackView model: aModel
-]
-
-{ #category : 'actions' }
-DockDebugger >> proceedDebugSession [ 
-
-	self model proceedDebugSession
+	self debugToolbarPresenter model: nil.
+	self stackView model: aModel
 ]
 
 { #category : 'initialization' }
@@ -130,15 +116,8 @@ DockDebugger >> registerToEvents [
 	super registerToEvents.
 	self announcer 
 		"stack view updates on selection"
-		when: DockModelSelected send: #eventModelSelected: to: self
-]
-
-{ #category : 'actions' }
-DockDebugger >> runToSelection [
- 
-	"^ self model 
-		runToSelection: contextEditor selectionInterval
-		inContext: stackView selectedContextModel"
+		when: DockModelSelected send: #eventModelSelected: to: self;
+		when: DockDebuggerContextChanged send: #eventContextChanged: to: self
 ]
 
 { #category : 'accessing' }
@@ -150,22 +129,10 @@ DockDebugger >> session: aDebugSession [
 		entity: aDebugSession)
 ]
 
-{ #category : 'actions' }
-DockDebugger >> stepInto [
+{ #category : 'private - accessing' }
+DockDebugger >> stackView [
 
-	^ self model stepInto: stackView selectedContextModel
-]
-
-{ #category : 'actions' }
-DockDebugger >> stepOver [
-
-	^ self model stepOver: stackView selectedContextModel
-]
-
-{ #category : 'actions' }
-DockDebugger >> stepThrough [
-
-	^ self model stepThrough: stackView selectedContextModel
+	^ stackView
 ]
 
 { #category : 'initialization' }

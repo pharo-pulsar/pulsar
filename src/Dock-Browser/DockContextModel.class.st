@@ -3,7 +3,7 @@ Class {
 	#superclass : 'PvBaseModel',
 	#instVars : [
 		'name',
-		'session'
+		'debuggerModel'
 	],
 	#category : 'Dock-Browser-Tool-Debugger',
 	#package : 'Dock-Browser',
@@ -11,17 +11,49 @@ Class {
 }
 
 { #category : 'instance creation' }
-DockContextModel class >> newEnvironment: anEnvironmentModel session: aDebugSession context: aContext [
+DockContextModel class >> newEnvironment: anEnvironmentModel debuggerModel: aDebuggerModel context: aContext [
 
 	^ (self newEnvironment: anEnvironmentModel entity: aContext)
-		session: aDebugSession;
+		debuggerModel: aDebuggerModel;
 		yourself
+]
+
+{ #category : 'comparing' }
+DockContextModel >> = other [
+
+	self species = other species ifFalse: [ ^ false ].
+	^ self entity = other entity
 ]
 
 { #category : 'accessing' }
 DockContextModel >> actionDecorators [
 
 	^ #()
+]
+
+{ #category : 'private - accessing' }
+DockContextModel >> actionModel [
+
+	^ self debuggerModel actionModel
+]
+
+{ #category : 'debug - testing' }
+DockContextModel >> canExecuteDebugCommand [
+
+	^ self actionModel isContextSteppable
+]
+
+{ #category : 'debug - testing' }
+DockContextModel >> canExecuteRestartCommand [
+
+	^ (self actionModel isInterruptedContextPostMortem 
+		or: [ self actionModel isInterruptedContextDead ]) not
+]
+
+{ #category : 'debug - testing' }
+DockContextModel >> canExecuteReturnCommand [
+
+	^ self actionModel isInterruptedContextDead not
 ]
 
 { #category : 'accessing' }
@@ -31,10 +63,28 @@ DockContextModel >> context [
 	^ self entity
 ]
 
+{ #category : 'private - accessing' }
+DockContextModel >> debuggerModel [
+
+	^ debuggerModel
+]
+
+{ #category : 'initialization' }
+DockContextModel >> debuggerModel: aDebuggerModel [
+
+	debuggerModel := aDebuggerModel
+]
+
 { #category : 'accessing' }
 DockContextModel >> fullName [
 
-	^ name
+	^ self name
+]
+
+{ #category : 'comparing' }
+DockContextModel >> hash [
+
+	^ self species hash bitXor: self entity
 ]
 
 { #category : 'private' }
@@ -61,9 +111,15 @@ DockContextModel >> method [
 ]
 
 { #category : 'accessing' }
+DockContextModel >> methodClass [
+
+	^ self entity methodClass
+]
+
+{ #category : 'accessing' }
 DockContextModel >> methodClassName [
 
-	^ self entity methodClass name
+	^ self methodClass name
 ]
 
 { #category : 'accessing' }
@@ -84,18 +140,42 @@ DockContextModel >> packageName [
 	^ self entity methodClass packageName
 ]
 
+{ #category : 'debug - actions' }
+DockContextModel >> proceedDebugSession [
+
+	self actionModel proceedDebugSession
+]
+
 { #category : 'accessing' }
 DockContextModel >> protocolName [
 
 	^  self realMethod protocolName
 ]
 
-{ #category : 'private' }
+{ #category : 'private - accessing' }
 DockContextModel >> realMethod [
 
 	^ self method isCompiledBlock
 		ifTrue: [ self method method ]
 		ifFalse: [ self method ]
+]
+
+{ #category : 'debug - actions' }
+DockContextModel >> restartCurrentContext [
+
+	self actionModel restartContext: self entity.
+	self flag: #TODO.
+	"self clearUnsavedCodeChanges.
+	self code text: self currentContext sourceCode.
+	self updateCodeFromContext"
+]
+
+{ #category : 'debug - actions' }
+DockContextModel >> returnValueFromExpression: aString [
+
+	self actionModel 
+		returnValueFromExpression: aString
+		fromContext: self entity
 ]
 
 { #category : 'accessing' }
@@ -104,20 +184,49 @@ DockContextModel >> selectedCodeRange [
 	^ self session selectedCodeRangeForContext: self context
 ]
 
-{ #category : 'private' }
+{ #category : 'private - accessing' }
 DockContextModel >> session [
 
-	^ session
-]
-
-{ #category : 'initialization' }
-DockContextModel >> session: aDebugSession [
-
-	session := aDebugSession
+	^ self debuggerModel session
 ]
 
 { #category : 'accessing' }
 DockContextModel >> sourceCode [
 
 	^ self entity sourceCode
+]
+
+{ #category : 'debug - actions' }
+DockContextModel >> stepInto [
+
+	self actionModel stepInto: self entity.
+	self updateEntityFromStack
+]
+
+{ #category : 'debug - actions' }
+DockContextModel >> stepOver [
+
+	self actionModel stepOver: self entity.
+	self updateEntityFromStack
+]
+
+{ #category : 'debug - actions' }
+DockContextModel >> stepThrough [
+
+	self actionModel stepThrough: self entity.
+	self updateEntityFromStack
+]
+
+{ #category : 'private' }
+DockContextModel >> updateEntityFromStack [
+	"I need to update current entity with the stack value when stepping in the 
+	 debug, because active context changes.
+	 this may be better solved by forcing a model update when updating the stack list, 
+	 but for some reason is not working properly at the moment (and this does not hurt, 
+	 except that #= and #hash methods will change, creating potential problems if this
+	 model is in a hashed collection... which time to time is, as the stack view 
+	 *has* one :/)"
+
+	self entity: self session stack first.
+	name := nil
 ]

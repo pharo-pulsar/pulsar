@@ -100,6 +100,12 @@ DockStackView >> doCloseSelectedEditors [
 ]
 
 { #category : 'events' }
+DockStackView >> eventContextChanged: anAnnouncement [
+
+	self updatePresenter
+]
+
+{ #category : 'events' }
 DockStackView >> eventEditorActivated: anAnnouncement [
 	| currentItem activatedEditor |
 
@@ -196,7 +202,8 @@ DockStackView >> registerToEvents [
 		when: DockEditorActivated send: #eventEditorActivated: to: self;
 		when: DockToolEditorActivated send: #eventEditorActivated: to: self;
 		when: DockEditorClosed send: #eventEditorClosed: to: self;
-		when: DockModelChanged send: #eventModelChanged: to: self
+		when: DockModelChanged send: #eventModelChanged: to: self;
+		when: DockDebuggerContextChanged send: #eventContextChanged: to: self
 ]
 
 { #category : 'initialization' }
