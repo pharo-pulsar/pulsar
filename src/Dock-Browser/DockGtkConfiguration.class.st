@@ -76,6 +76,8 @@ tab .tab-title label { font-size: 0.9em; }
 .dockMessageFlyingBrowser { min-width: 680px; min-height: 440px; }
 .dockInspectorFlyingBrowser { min-width: 680px; min-height: 440px; }
 .dockHierarchyFlyingBrowser { min-width: 450px; min-height: 350px; }
+.dockFlyingBrowser notebook tabs tab { padding: 2px; }
+.dockFlyingBrowser notebook tabs tab label { font-size: 0.9em }
 .dockPopoverControlToolbar { margin: 0px; padding: 0px 0px 0px 10px; }
 .dockDebuggerToolbar { background-color: var(--window-bg-color); }
 .dockDebuggerToolbar .stToolbar { padding: 1px; }
