@@ -145,6 +145,12 @@ DockPlayground >> initializeWindow: aWindowPresenter [
 		windowIcon: (self iconNamed: 'workspace')
 ]
 
+{ #category : 'accessing' }
+DockPlayground >> insertPopover: aPresenter [
+
+	codePresenter insertPopoverAfterCurrentSelection: aPresenter
+]
+
 { #category : 'private' }
 DockPlayground >> newInteractionModel [
 

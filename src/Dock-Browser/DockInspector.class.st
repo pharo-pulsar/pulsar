@@ -86,6 +86,12 @@ DockInspector >> initializeWindow: aWindowPresenter [
 		whenClosedDo: [ self notifyEditorClosed  ]
 ]
 
+{ #category : 'accessing' }
+DockInspector >> insertPopover: aPresenter [
+
+	self focusedPresenter insertPopover: aPresenter
+]
+
 { #category : 'private' }
 DockInspector >> inspectedObject [
  	
