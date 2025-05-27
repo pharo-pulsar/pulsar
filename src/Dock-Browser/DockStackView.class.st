@@ -167,10 +167,11 @@ DockStackView >> initializePresenters [
 	toolbarPresenter := self instantiate: DockToolbarPresenter.
 	toolbarPresenter actions: (self actions actionsFor: #editorStackGeneral).
 	
-	listPresenter := self newEasyListView
+	listPresenter := self newFilteringList
 		addStyle: 'stList';
 		beMultipleSelection;
 		rowPresenterClass: DockStackRow;
+		display: [ :aContextModel | aContextModel fullName ];
 		actions: (self actions actionsForAll: #(editorStack editorStackGeneral));
 		yourself
 ]
