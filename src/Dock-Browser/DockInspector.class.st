@@ -81,7 +81,8 @@ DockInspector >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
-		title: self model fullName;
+		title: (self model ifNotNil: [ :aModel | aModel fullName ] ifNil: [ '' ]);
+		windowIcon: (self iconNamed: 'inspector');
 		whenClosedDo: [ self notifyEditorClosed  ]
 ]
 
