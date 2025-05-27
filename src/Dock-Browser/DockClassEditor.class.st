@@ -110,7 +110,8 @@ DockClassEditor >> updateBreadcrumbs [
 { #category : 'initialization' }
 DockClassEditor >> updateComment [
 	
-	commentPresenter text: (self model comment ifEmpty: [ 'No comment' ])
+	self updatingWhile: [
+		commentPresenter text: (self model comment ifEmpty: [ 'No comment' ]) ]
 ]
 
 { #category : 'initialization' }
