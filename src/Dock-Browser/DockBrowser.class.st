@@ -261,12 +261,6 @@ DockBrowser >> saveImage [
 	self inform: 'Image saved'
 ]
 
-{ #category : 'accessing - snapshot' }
-DockBrowser >> snapshot [
-
-	^ DockBrowserSnapshot on: self
-]
-
 { #category : 'actions' }
 DockBrowser >> spawnGitRepositories [
 
