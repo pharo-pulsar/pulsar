@@ -28,8 +28,12 @@ SpPresenter >> perspective [
 
 { #category : '*Perspective' }
 SpPresenter >> systemNavigation [
-
-	self withPerspectiveDo: [ :perspective | ^ perspective systemNavigation ].
+	"check in owner to avoid loops"
+	self owner ifNotNil: [ :anOwner |
+		self flag: #TODO. "I will need to remove perspective, as I am not anymore using it"
+		anOwner withPerspectiveDo: [ :perspective | ^ perspective systemNavigation ].
+		anOwner withNearWindowLikeDo: [ :panelWindow | ^ panelWindow systemNavigation ] ].
+	
 	^ super systemNavigation
 ]
 

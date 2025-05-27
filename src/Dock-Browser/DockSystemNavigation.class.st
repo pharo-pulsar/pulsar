@@ -3,8 +3,8 @@ Class {
 	#superclass : 'SystemNavigation',
 	#instVars : [
 		'window',
-		'codePresenter',
-		'environmentModel'
+		'environmentModel',
+		'responderPresenter'
 	],
 	#category : 'Dock-Browser-View-Base',
 	#package : 'Dock-Browser',
@@ -62,21 +62,7 @@ DockSystemNavigation >> browseMessageList: messageList
 			title: labelString 
 			methods: methods).
 	popover notificationCenter: self notificationCenter.
-	self codePresenter insertPopoverAfterCurrentSelection: popover
-]
-
-{ #category : 'accessing' }
-DockSystemNavigation >> codePresenter [
-
-	^ codePresenter
-]
-
-{ #category : 'accessing' }
-DockSystemNavigation >> codePresenter: aCodePresenter [
-	"this is the presenter that will be triggering the usage of some navigations... like message 
-	 browser, etc."
-	
-	codePresenter := aCodePresenter
+	self responderPresenter insertPopover: popover
 ]
 
 { #category : 'accessing' }
@@ -93,13 +79,28 @@ DockSystemNavigation >> inspect: anObject [
 		instantiate: DockInspector
 		on: (DockInspectorModel on: anObject).
 	inspector notificationCenter: self notificationCenter.
-	self codePresenter insertPopoverAfterCurrentSelection: inspector
+	self responderPresenter insertPopover: inspector
 ]
 
 { #category : 'accessing' }
 DockSystemNavigation >> notificationCenter [
 
 	^ self window notificationCenter
+]
+
+{ #category : 'accessing' }
+DockSystemNavigation >> responderPresenter [
+
+	^ responderPresenter
+]
+
+{ #category : 'accessing' }
+DockSystemNavigation >> responderPresenter: aPresenter [
+	"this is the presenter that will be triggering the usage of some navigations... 
+	 like message browser, etc.
+	 Presenter needs to know the #insertPopover: message."
+	
+	responderPresenter := aPresenter
 ]
 
 { #category : 'accessing' }

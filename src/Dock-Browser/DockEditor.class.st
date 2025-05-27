@@ -229,7 +229,7 @@ DockEditor >> initializePresenters [
 		actions: self editorContextMenuActions;
 		lineNumbers: self application isShowingLineNumbers;
 		systemNavigation: (self systemNavigation
-			codePresenter: editorPresenter ;
+			responderPresenter: editorPresenter;
 			yourself)
 ]
 

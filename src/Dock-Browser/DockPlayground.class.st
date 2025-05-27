@@ -155,7 +155,7 @@ DockPlayground >> newInteractionModel [
 DockPlayground >> newSystemNavigation [
 
 	^ self systemNavigation
-		codePresenter: codePresenter;
+		responderPresenter: codePresenter;
 		yourself
 ]
 
