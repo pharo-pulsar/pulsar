@@ -108,7 +108,6 @@ DockBrowser >> eventManyModelDeactivated: anAnnouncement [
 { #category : 'events' }
 DockBrowser >> eventModelActivated: anAnnouncement [
 	
-	
 	self maybeDockView: anAnnouncement value
 ]
 

@@ -67,6 +67,7 @@ DockTPanelWindow >> notifyEditorActivated [
 
 { #category : 'initialization' }
 DockTPanelWindow >> notifyEditorClosed [
+
 	self notificationCenter announce: (DockEditorClosed newValue: self model)
 ]
 

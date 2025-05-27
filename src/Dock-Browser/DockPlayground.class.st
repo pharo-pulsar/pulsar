@@ -36,7 +36,7 @@ DockPlayground class >> defineActionsOn: aBuilder [
 		registerGroup: #tools with: {  
 			PvAction new
 				name: 'New page';
-				description: 'Creayes a new playground page';
+				description: 'Create a new playground page';
 				action: [ :aContext | aContext doNewPage ].		
 			PvAction new
 				name: 'Load page';

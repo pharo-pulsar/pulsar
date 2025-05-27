@@ -44,8 +44,9 @@ DockStackView class >> defineActionsOn: aBuilder [
 	aBuilder 
 		registerGroup: #editorStack with: { 
 			$x mod1 -> (PvAction new 
-				name: 'Close selected editors';
+				name: 'Close Selected Editors';
 				description: 'Close selected editors';
+				iconCompositeName: 'close';
 				action: [ :aContext | aContext doCloseSelectedEditors ];
 				yourself).
 		};
