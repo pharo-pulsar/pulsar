@@ -7,7 +7,8 @@ Class {
 		'codePresenter',
 		'toolbarPresenter',
 		'page',
-		'actionsPresenter'
+		'actionsPresenter',
+		'moreActionsPresenter'
 	],
 	#category : 'Dock-Browser-Tool-Playground',
 	#package : 'Dock-Browser',
@@ -33,6 +34,13 @@ DockPlayground class >> defineActionsOn: aBuilder [
 	<perspectiveActions>
 
 	aBuilder 
+		registerGroup: #actions with: {
+			PvAction new 
+				name: 'Versions';
+				description: 'Browse versions of current playground page';
+				iconCompositeName: 'versions';
+				action: [ :aContext :aCommand | aContext doBrowseVersionsCommand: aCommand ].
+		};
 		registerGroup: #tools with: {  
 			PvAction new
 				name: 'New page';
@@ -41,7 +49,13 @@ DockPlayground class >> defineActionsOn: aBuilder [
 			PvAction new
 				name: 'Load page';
 				description: 'Load a playground page';
-				action: [ :aContext | aContext doLoadPage ].		
+				action: [ :aContext | aContext doLoadPage ].	
+		}; 
+		registerGroup: #CRITICAL with: {
+			PvAction new
+				name: 'Close';
+				description: 'Close Playground';
+				action: [ :aContext | aContext doClose ]
 		}
 ]
 
@@ -82,9 +96,36 @@ DockPlayground >> contents: aString [
 DockPlayground >> defaultLayout [
 
 	^ SpOverlayLayout new
-		addOverlay: actionsPresenter withConstraints: [ :c | c vAlignStart; hAlignEnd ];
+		addOverlay: (SpBoxLayout newHorizontal
+				add: actionsPresenter;
+				add: moreActionsPresenter;
+				yourself) 
+			withConstraints: [ :c | c vAlignStart; hAlignEnd ];
 		child: codePresenter;
 		yourself
+]
+
+{ #category : 'private - actions' }
+DockPlayground >> doBrowseVersionsCommand: anAction [
+	| popover versionsPresenter |
+
+	popover := self newPopover.
+
+	versionsPresenter := self
+		instantiate: DockPlaygroundVersionsBrowser 
+		on: self model newVersionsModel.
+	versionsPresenter registerToDock: self window.
+
+	popover := self newPopover
+		presenter: versionsPresenter;
+		relativeTo: anAction presenter;
+		bePositionTop;
+		popupModal
+]
+
+{ #category : 'private - actions' }
+DockPlayground >> doClose [
+	self withNearWindowLikeDo: [ :aWindow | aWindow close ] 
 ]
 
 { #category : 'private - actions' }
@@ -125,10 +166,13 @@ DockPlayground >> initializePresenters [
 
 	"toolbarPresenter := self instantiate: DockToolbarPresenter.
 	toolbarPresenter addPresenterMenuButtonWith: (self actions actionsFor: #tools)."
-	actionsPresenter := self newMenuButton
+	actionsPresenter := self newToolbar
+		displayMode: self application toolbarDisplayMode;
+		fillWith: (self actions actionsFor: #actions).
+	moreActionsPresenter := self newMenuButton
 		addStyle: 'flat';
 		icon: (self iconNamed: 'menu');
-		actions: (self actions actionsFor: #tools);
+		actions: (self actions actionsForAll: #(tools CRITICAL));
 		yourself.
 
 	(codePresenter := self newCode)

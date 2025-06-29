@@ -65,11 +65,15 @@ DockStackView class >> defineActionsOn: aBuilder [
 DockStackView >> closeEditor: aModel [
 
 	aModel ifNil: [ ^ self ].
+	
+	logger trace: aModel.
 	self notificationCenter announce: (DockModelDeactivated newValue: aModel realModel)
 ]
 
 { #category : 'private - actions' }
 DockStackView >> closeEditors: aCollection [
+
+	logger trace: aCollection.
 
 	"just one if we selected just one :)"
 	aCollection size = 1 

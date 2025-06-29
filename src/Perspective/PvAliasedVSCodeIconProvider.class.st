@@ -120,7 +120,11 @@ PvAliasedVSCodeIconProvider >> initialize [
 		'run-test-passed'. 			'play-green'.
 		'run-test-failure'. 		'play-yellow'.
 		'run-test-error'. 			'play-red'.
-		'editorStack'.				'multiple-windows'
+		'editorStack'.				'multiple-windows'.
+		"versions"
+		'changeAdd'.				'add'.
+		'changeRemove'.				'remove'.
+		'changeUpdate'.				'remote'. "not good"
 	 }
 ]
 

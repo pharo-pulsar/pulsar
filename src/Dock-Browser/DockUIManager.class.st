@@ -39,6 +39,29 @@ DockUIManager class >> reset [
 	application := nil
 ]
 
+{ #category : 'accessing' }
+DockUIManager >> application [
+
+	^ self class application
+]
+
+{ #category : 'ui requests' }
+DockUIManager >> chooseFrom: optionsArray lines: linesArray title: aString [
+	| result |
+self halt.
+	"this is lame because the code reparator uses a menu :/"
+	result := self application newSelect
+		title: aString;
+		items: optionsArray;
+		display: [ :each | 
+			linesArray 
+				ifNotEmpty: [ linesArray at: (optionsArray indexOf: each) ] 
+				ifEmpty: [ each asString ] ];
+		openModal.
+		
+	^ result ifNotNil: [ optionsArray indexOf: result ]
+]
+
 { #category : 'error handling' }
 DockUIManager >> handleError: anError [
 

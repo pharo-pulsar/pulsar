@@ -66,6 +66,21 @@ DockSystemNavigation >> browseMessageList: messageList
 ]
 
 { #category : 'accessing' }
+DockSystemNavigation >> browseVersionsOf: aMethod [ 
+	| popover |
+
+	self flag: 'I have no idea if this is going to be used'.
+
+	popover := self window 
+		instantiate: DockVersionsBrowser 
+		on: (DockMessageModel 
+			newEnvironment: self environmentModel 
+			entity: aMethod).
+	popover notificationCenter: self notificationCenter.
+	self responderPresenter insertPopover: popover
+]
+
+{ #category : 'accessing' }
 DockSystemNavigation >> environmentModel [
 
 	^ self window model environmentModel

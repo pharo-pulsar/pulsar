@@ -18,12 +18,11 @@ DockTaskAnnouncer class >> synchronicAnnouncements [
 DockTaskAnnouncer >> announce: anAnnouncement [
 	"not the best if you want to record the announcements (see super 
 	 implementation), but well..."
-	self isSuspended ifTrue: [ ^ self ].
-
-	(self isSynchronic: anAnnouncement)
+	(self isSuspended or: [ self isSynchronic: anAnnouncement ])
 		ifTrue: [ ^ super announce: anAnnouncement ].
 
-	self schedule: [ super announce: anAnnouncement ]
+	self schedule: [ 
+		super announce: anAnnouncement ]
 ]
 
 { #category : 'testing' }

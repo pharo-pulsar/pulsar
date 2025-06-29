@@ -22,7 +22,7 @@ PvMethodActionDecorator class >> allApplyingTo: aModel [
 { #category : 'testing' }
 PvMethodActionDecorator class >> appliesTo: aMethod [
 
-	^ self subclassResponsibility
+	^ false
 ]
 
 { #category : 'converting' }

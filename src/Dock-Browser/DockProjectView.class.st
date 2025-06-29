@@ -253,6 +253,50 @@ DockProjectView >> doRequestNewTrait [
 		beNewTraitWithParent: parent)	
 ]
 
+{ #category : 'events - system' }
+DockProjectView >> eventBehaviorAdded: anAnnouncement [
+	| classAdded path |
+	
+	"not working for the moment"	
+	true ifTrue: [ ^ self ].
+	
+	classAdded := anAnnouncement classAdded.
+	logger trace: classAdded.
+	
+	path := self model findPathForPackage: classAdded package.
+	logger trace: path.
+	logger trace: (listPresenter isExpanded: path).
+	
+	"(listPresenter isExpanded: path) ifTrue: [
+		mutex critical: [
+			self application defer: [
+				listPresenter 
+					collapsePath: path; 
+					expandPath: path ] ] ]"
+]
+
+{ #category : 'events - system' }
+DockProjectView >> eventBehaviorRemoved: anAnnouncement [
+	| classRemoved path |
+
+	"not working for the moment"	
+	true ifTrue: [ ^ self ].
+	
+	classRemoved := anAnnouncement classRemoved.
+	logger trace: classRemoved.
+	
+	path := self model findPathForPackage: classRemoved package.
+	logger trace: path.
+	
+	"this is lame, I need to find a way to refresh without recalculate"
+	"(listPresenter isExpanded: path) ifTrue: [
+		mutex critical: [
+			self application defer: [
+				listPresenter 
+					collapsePath: path; 
+					expandPath: path ] ] ]"
+]
+
 { #category : 'events' }
 DockProjectView >> eventEditorActivated: anAnnouncement [
 	| classModel path |
@@ -268,11 +312,18 @@ DockProjectView >> eventEditorActivated: anAnnouncement [
 		listPresenter selectPath: path ]
 ]
 
+{ #category : 'events - system' }
+DockProjectView >> eventPackageAdded: anAnnouncement [
+
+	logger trace: anAnnouncement package
+]
+
 { #category : 'initialization' }
 DockProjectView >> initialize [
 
 	mutex := Mutex new.
-	super initialize
+	super initialize.
+	self registerToSystemEvents
 ]
 
 { #category : 'initialization' }
@@ -321,6 +372,30 @@ DockProjectView >> registerToEvents [
 		when: DockEditorActivated send: #eventEditorActivated: to: self	
 ]
 
+{ #category : 'initialization' }
+DockProjectView >> registerToSystemEvents [
+
+	self announcer
+		when: PackageAdded send: #eventPackageAdded: to: self;"
+		when: PackageRenamed send: #eventPackageRenamed: to: self;
+		when: PackageRemoved send: #eventPackageRemoved: to: self;
+		when: PackageTagAdded send: #eventPackageTagAdded: to: self;
+		when: PackageTagRemoved send: #eventPackageTagRemoved: to: self;
+		when: PackageTagRenamed send: #eventPackageTagRenamed: to: self;"
+		when: ClassAdded send: #eventBehaviorAdded: to: self;
+		when: ClassRemoved send: #eventBehaviorRemoved: to: self";
+		when: MethodAdded send: #eventMethodAdded: to: self;
+		when: MethodRemoved send: #eventMethodRemoved: to: self;
+		when: ProtocolAdded send: #eventProtocolAdded: to: self;
+		when: ProtocolRemoved send: #eventProtocolRemoved: to: self;
+		when: ClassModifiedClassDefinition send: #eventBehaviorModified: to: self;
+		when: MethodModified send: #eventMethodModified: to: self;
+		when: ClassRepackaged send: #eventClassRepackaged: to: self;
+		when: ClassRenamed send: #eventClassRenamed: to: self;
+		when: ClassCommented send: #eventClassCommented: to: self;
+		when: MethodRecategorized send: #eventMethodRecategorized: to: self."
+]
+
 { #category : 'private - actions' }
 DockProjectView >> removeProjectModel: aProjectModel [
 
@@ -350,10 +425,11 @@ DockProjectView >> toolbarPresenter [
 
 { #category : 'initialization' }
 DockProjectView >> updateListPresenterExpanding: aPath [
+	
 	mutex critical: [
-		listPresenter roots: (self model children copyWith: self model environmentModel).
-	aPath ifNotNil: [
-		listPresenter expandPath: aPath ] ]
+		listPresenter roots: self model allChildren.
+		aPath ifNotNil: [
+			listPresenter expandPath: aPath ] ]
 ]
 
 { #category : 'initialization' }

@@ -60,5 +60,5 @@ DockTNotificationCenter >> notifySelectEntity: anEntity [
 { #category : 'initialization' }
 DockTNotificationCenter >> registerToDock: aDockBrowser [
 
-	self notificationCenter: aDockBrowser notificationCenter 
+	self notificationCenter: aDockBrowser notificationCenter
 ]

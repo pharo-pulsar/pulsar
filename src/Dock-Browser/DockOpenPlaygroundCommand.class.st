@@ -9,7 +9,7 @@ Class {
 { #category : 'initialization' }
 DockOpenPlaygroundCommand >> defineAction [
 
-	self name: 'Open Playground'.
+	self name: 'New Playground'.
 	self description: 'Open a new playground in your browser'
 ]
 

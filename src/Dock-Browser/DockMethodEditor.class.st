@@ -42,6 +42,24 @@ DockMethodEditor >> connectPresenters [
 		self notifyEntityChanged: self model ]
 ]
 
+{ #category : 'actions' }
+DockMethodEditor >> doBrowseVersionsCommand: anAction [
+	| popover versionsPresenter |
+
+	popover := self newPopover.
+
+	versionsPresenter := self
+		instantiate: DockVersionsBrowser 
+		on: self model newVersionsModel.
+	versionsPresenter registerToDock: self window.
+
+	popover := self newPopover
+		presenter: versionsPresenter;
+		relativeTo: anAction presenter;
+		bePositionBottom;
+		popupModal
+]
+
 { #category : 'private - actions' }
 DockMethodEditor >> doRequestChangeProtocol [
 
@@ -60,6 +78,13 @@ DockMethodEditor >> doRunSampleInstanceCommand: anAction [
 DockMethodEditor >> doRunScriptCommand: anAction [
 
 	self model runScript
+]
+
+{ #category : 'private - actions' }
+DockMethodEditor >> doSubmit: aString [
+
+	super doSubmit: aString.
+	self updateContentActions
 ]
 
 { #category : 'events' }

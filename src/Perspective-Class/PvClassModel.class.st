@@ -232,6 +232,11 @@ PvClassModel >> packageTagName [
 	^ self entity packageTag name
 ]
 
+{ #category : 'accessing' }
+PvClassModel >> resetActionDecorators [
+	"do nothing, class do not have action decorators"
+]
+
 { #category : 'updating' }
 PvClassModel >> saveComment: aString [
 

@@ -266,6 +266,14 @@ PvMethodModel >> name [
 	^ self entity selector
 ]
 
+{ #category : 'instance creation' }
+PvMethodModel >> newVersionsModel [
+
+	^ DockVersionsModel 
+		newEnvironment: self environmentModel 
+		entity: self entity
+]
+
 { #category : 'accessing' }
 PvMethodModel >> protocol [
 
@@ -298,6 +306,12 @@ PvMethodModel >> protocolName [
 PvMethodModel >> removeMethod [
 
 	self entity removeFromSystem
+]
+
+{ #category : 'accessing' }
+PvMethodModel >> resetActionDecorators [
+	
+	actionDecorators := nil
 ]
 
 { #category : 'as yet unclassified' }

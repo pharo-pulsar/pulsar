@@ -6,6 +6,12 @@ Class {
 	#tag : 'Command-Base'
 }
 
+{ #category : 'default' }
+PvSpecCommandGroup class >> defaultDisplayStrategy [
+
+	^ CmUIDisplayAsGroup new
+]
+
 { #category : 'registering' }
 PvSpecCommandGroup >> actionsFor: anId [
 	

@@ -97,12 +97,14 @@ DockBrowser >> eventManyModelDeactivated: anAnnouncement [
 	| editors |
 
 	editors := anAnnouncement value copy.
+	logger trace: editors.
 	"I suspend announcements for most of them"
-	self announcer suspendAllWhile: [
-		editors allButLast 
-			do: [ :each | self maybeUndockView: each ] ].
-	"except the last one, to ensure system update is triggered"
-	self maybeUndockView: editors last
+	self application defer: [
+		self notificationCenter suspendAllWhile: [
+			editors allButLast 
+				do: [ :each | self maybeUndockView: each ] ].
+		"except the last one, to ensure system update is triggered"
+		self maybeUndockView: editors last ]
 ]
 
 { #category : 'events' }
@@ -127,7 +129,8 @@ DockBrowser >> initialExtent [
 DockBrowser >> initialize [
 
 	self setModelBeforeInitialization: PvEnvironmentModel onSystem.
-	super initialize
+	super initialize.
+	self registerToSystemEvents
 ]
 
 { #category : 'initialization' }
@@ -193,6 +196,7 @@ DockBrowser >> maybeDockView: aViewModel [
 DockBrowser >> maybeUndockView: aViewModel [
 
 	aViewModel hasDockEditor ifFalse: [ ^ self ].
+
 	(self findEditorContaining: aViewModel) 
 		ifNotNil: [ :panelPresenter | panelPresenter close ]
 ]
@@ -251,6 +255,14 @@ DockBrowser >> postRestoreSnapshot: aSnapshot [
 DockBrowser >> projectView [
 
 	^ projectView
+]
+
+{ #category : 'initialization' }
+DockBrowser >> registerToSystemEvents [
+
+	"this way I have just one subscription for each dock-browser"
+	self class environment codeChangeAnnouncer weak
+		when: SystemAnnouncement send: #resendAnnouncement: to: self
 ]
 
 { #category : 'actions' }

@@ -100,7 +100,9 @@ PvAction >> defineAction [
 PvAction >> execute [
 	
 	actionBlock ifNil: [ ^ self ].
-	actionBlock cull: self context
+	actionBlock 
+		cull: self context 
+		cull: self
 ]
 
 { #category : 'testing' }

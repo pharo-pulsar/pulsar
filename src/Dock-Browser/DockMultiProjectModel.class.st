@@ -35,17 +35,30 @@ DockMultiProjectModel >> addProject: aBaselineClass [
 ]
 
 { #category : 'accessing' }
+DockMultiProjectModel >> allChildren [
+
+	^ self children copyWith: self environmentModel
+]
+
+{ #category : 'accessing' }
 DockMultiProjectModel >> children [
 
 	^ projectModels
 ]
 
 { #category : 'accessing' }
+DockMultiProjectModel >> findPathForClass: aClass [
+	
+	^ self findPathForClassModel: (PvClassModel 
+		newEnvironment: self environmentModel 
+		entity: aClass)
+]
+
+{ #category : 'accessing' }
 DockMultiProjectModel >> findPathForClassModel: aClassModel [
 	| path |
 	
-	"{ self. aClassModel } inspect."
-	self children withIndexDo: [ :each :index |
+	self allChildren withIndexDo: [ :each :index |
 		path := self 
 			pathTo: { aClassModel packageName. aClassModel packageTagName }
 			in: each children.
@@ -55,6 +68,19 @@ DockMultiProjectModel >> findPathForClassModel: aClassModel [
 			  (self 
 					findRecursivelyPathForClassModel: aClassModel 
 					inNode: path last key) ] ].
+	^ nil
+]
+
+{ #category : 'accessing' }
+DockMultiProjectModel >> findPathForPackage: aPackage [
+	| path |
+	
+	self allChildren withIndexDo: [ :each :index |
+		path := self 
+			pathTo: { aPackage name }
+			in: each children.
+		path ifNotEmpty: [ ^ { index }, (path collect: #value) ] ].
+	
 	^ nil
 ]
 

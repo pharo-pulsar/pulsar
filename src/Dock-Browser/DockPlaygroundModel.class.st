@@ -33,3 +33,9 @@ DockPlaygroundModel >> loadPage: aPage [
 
 	page := aPage
 ]
+
+{ #category : 'instance creation' }
+DockPlaygroundModel >> newVersionsModel [
+
+	^ DockPlaygroundVersionsModel newPage: page
+]

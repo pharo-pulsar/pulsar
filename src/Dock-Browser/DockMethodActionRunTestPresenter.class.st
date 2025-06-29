@@ -38,6 +38,7 @@ DockMethodActionRunTestPresenter >> initializePresenters [
 	buttonPresenter := self newButton
 		addStyle: 'small';
 		addStyle: 'flat';
+		help: 'Execute test';
 		icon: (self iconNamed: 'play');
 		action: [ self execute ]
 ]

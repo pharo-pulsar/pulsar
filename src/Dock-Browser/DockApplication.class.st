@@ -213,7 +213,7 @@ DockApplication >> newSystemTools [
 DockApplication >> prepareAsStandaloneApplication [
 	
 	standalone := true.
-	self killUnusedProcesses.	
+	self killUnusedProcesses.
 	self prepareSchedulerAsStandaloneApplication.
 	self prepareErrorHandlerAsStandaloneApplication
 ]

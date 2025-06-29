@@ -319,7 +319,8 @@ DockEditor >> panelFocused [
 DockEditor >> panelPresented [
 
 	logger trace.
-	self recordLastPresented
+	self recordLastPresented.
+	self panelFocused
 ]
 
 { #category : 'initialization' }
@@ -402,14 +403,15 @@ DockEditor >> updateBreadcrumbs [
 
 { #category : 'initialization' }
 DockEditor >> updateContentActions [
-
-	self model actionDecorators ifNotEmpty: [ :aCollection |  
-		toolbarPresenter contentActions: (SpActionGroup new 
-			addAll: (aCollection collect: [ :each | 
-				each 
-					context: self; 
-					asSpecCommand ]);
-			yourself) ]
+	self application defer: [ 
+		self model resetActionDecorators.
+		self model actionDecorators ifNotEmpty: [ :aCollection |  
+			toolbarPresenter contentActions: (SpActionGroup new 
+				addAll: (aCollection collect: [ :each | 
+					each 
+						context: self; 
+						asSpecCommand ]);
+				yourself) ] ]
 ]
 
 { #category : 'initialization' }

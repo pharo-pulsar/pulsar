@@ -160,6 +160,11 @@ DockContextModel >> realMethod [
 		ifFalse: [ self method ]
 ]
 
+{ #category : 'accessing' }
+DockContextModel >> resetActionDecorators [
+
+]
+
 { #category : 'debug - actions' }
 DockContextModel >> restartCurrentContext [
 
