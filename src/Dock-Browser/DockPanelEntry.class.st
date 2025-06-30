@@ -1,6 +1,6 @@
 Class {
 	#name : 'DockPanelEntry',
-	#superclass : 'AnObsoleteStEntry',
+	#superclass : 'StEntry',
 	#category : 'Dock-Browser-Tool-Spotter',
 	#package : 'Dock-Browser',
 	#tag : 'Tool-Spotter'
