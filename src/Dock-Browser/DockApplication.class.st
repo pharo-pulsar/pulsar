@@ -102,11 +102,24 @@ DockApplication class >> startUp: resuming [
 	self cleanUp
 ]
 
+{ #category : 'settings' }
+DockApplication >> colorForTestResultAt: aStatus [
+	"aStatus is 'Passed', 'Failed' or 'Error'"
+
+	^ self colorsForTestResult at: aStatus
+]
+
 { #category : 'accessing' }
 DockApplication >> colorNamed: aString [
 
 	aString ifNil: [ ^ Smalltalk ui theme textColor ].
 	^ Color named: aString
+]
+
+{ #category : 'settings' }
+DockApplication >> colorsForTestResult [
+
+	^ self configuration colorsForTestResult
 ]
 
 { #category : 'accessing' }

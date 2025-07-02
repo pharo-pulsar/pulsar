@@ -322,14 +322,19 @@ PvMethodModel >> runScript [
 
 { #category : 'updating' }
 PvMethodModel >> runTest [
-	| result |
-
-	result := self methodClass debug: self entity selector.
+	| testCase result |
+	testCase := self methodClass selector: self entity selector.
+	result := testCase debug.
+	
 	self entity
 		propertyAt: #lastTestExecutionResult 
 		put: result.
 
-	^ result
+	^ TestCaseEnded new 
+		testCase: testCase;
+		testSelector: self entity selector;
+		testResult: result;
+		yourself
 ]
 
 { #category : 'accessing' }

@@ -6,11 +6,28 @@ Class {
 	#tag : 'Application'
 }
 
+{ #category : 'accessing' }
+DockGtkConfiguration >> colorsForTestResult [
+
+	^ self isDarkTheme
+		ifTrue: [ self darkColorsForTestResult ]
+		ifFalse: [ self lightColorsForTestResult ]
+]
+
 { #category : 'configuring' }
 DockGtkConfiguration >> configureGeneral: anApplication [
 
 	super configureGeneral: anApplication.
 	self addCSSProviderFromString: self style
+]
+
+{ #category : 'accessing' }
+DockGtkConfiguration >> darkColorsForTestResult [
+
+	^ SmallDictionary newFromPairs: {
+		'Passed'. 'LimeGreen'.
+		'Failed'. 'DarkOrange'.
+		'Error'.  'Tomato' }
 ]
 
 { #category : 'accessing' }
@@ -42,6 +59,15 @@ DockGtkConfiguration >> initialize [
 DockGtkConfiguration >> isDarkTheme [
 	
 	^ GRunLoop defer: [ AdwStyleManager default isDark ]
+]
+
+{ #category : 'accessing' }
+DockGtkConfiguration >> lightColorsForTestResult [
+
+	^ SmallDictionary newFromPairs: {
+		'Passed'. 'Green'.
+		'Failed'. 'Orange'.
+		'Error'.  'Red' }
 ]
 
 { #category : 'configuring' }

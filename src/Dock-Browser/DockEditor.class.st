@@ -119,10 +119,11 @@ DockEditor >> doReset [
 
 { #category : 'private - actions' }
 DockEditor >> doRunTestCommand: anAction [
+	| resultAnnouncement |
 	
-	self model runTest.
-	anAction presenter updatePresenter
-
+	resultAnnouncement := self model runTest.
+	anAction presenter updatePresenter.
+	self notificationCenter announce: resultAnnouncement
 ]
 
 { #category : 'private - actions' }

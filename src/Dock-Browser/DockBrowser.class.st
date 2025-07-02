@@ -119,6 +119,20 @@ DockBrowser >> eventModelDeactivated: anAnnouncement [
 	self maybeUndockView: anAnnouncement value
 ]
 
+{ #category : 'events' }
+DockBrowser >> eventTestCaseEnded: anAnnouncement [
+	| message |
+
+	message := 'Passed'.
+	anAnnouncement testResult hasFailures ifTrue: [ message := 'Failed' ].
+	anAnnouncement testResult hasErrors ifTrue: [ message := 'Error' ].
+	self inform: ('<span foreground="{1}">{2}: {3}.</span>' format: {
+		self application colorForTestResultAt: message.
+		anAnnouncement testCase. 
+		message })
+
+]
+
 { #category : 'initialization' }
 DockBrowser >> initialExtent [
 
@@ -255,6 +269,14 @@ DockBrowser >> postRestoreSnapshot: aSnapshot [
 DockBrowser >> projectView [
 
 	^ projectView
+]
+
+{ #category : 'initialization' }
+DockBrowser >> registerToEvents [
+
+	super registerToEvents.
+	self announcer 
+		when: TestCaseEnded send: #eventTestCaseEnded: to: self
 ]
 
 { #category : 'initialization' }
