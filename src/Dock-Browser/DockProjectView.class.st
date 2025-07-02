@@ -30,13 +30,23 @@ DockProjectView class >> defineActionGroupAction: actionGroup [
 ]
 
 { #category : 'accessing - actions' }
+DockProjectView class >> defineActionGroupExtra: actionGroup [
+	<perspectiveActionGroup: #extra>
+	
+	actionGroup 
+		name: 'Actions';
+		priority: 30;
+		beDisplayedAsGroup
+]
+
+{ #category : 'accessing - actions' }
 DockProjectView class >> defineActionGroupNew: actionGroup [
 	<perspectiveActionGroup: #new>
 	
 	actionGroup 
 		name: 'New';
 		priority: 20;
-		beDisplayedAsSubMenu
+		beDisplayedAsGroup
 ]
 
 { #category : 'accessing - actions' }
@@ -73,7 +83,7 @@ DockProjectView class >> defineActionsOn: aBuilder [
 			PvNewPackageCommand new.
 			PvNewPackageTagCommand new.
 			DockNewClassCommand new.
-			PvNewTraitCommand new
+			PvNewTraitCommand new.
 		};
 		registerGroup: #action with: { 
 			$r mod1 -> PvRenamePackageCommand new.
@@ -84,6 +94,13 @@ DockProjectView class >> defineActionsOn: aBuilder [
 				name: 'Duplicate class'; 
 				"actionEnabled: [ :aContext | aContext selectedItem isClassModel ];"
 				action: [ :aContext | aContext doDuplicateSelectedClass ]
+		};
+		registerGroup: #extra with: { 
+			PvAction new 
+				name: 'Collapse All';
+				description: 'Collapses all open projects';
+				iconCompositeName: 'collapse-all';
+				action: [ :aContext | aContext doCollapseAll ].
 		}
 ]
 
@@ -138,6 +155,12 @@ DockProjectView >> defaultLayout [
 		add: toolbarPresenter expand: false;
 		add: listPresenter;
 		yourself
+]
+
+{ #category : 'private - actions' }
+DockProjectView >> doCollapseAll [
+
+	listPresenter collapseAll
 ]
 
 { #category : 'private - actions' }
@@ -335,7 +358,7 @@ DockProjectView >> initializePresenters [
 	toolbarPresenter addPresenter: (self newMenuButton 
 		addStyle: 'flat';
 		icon: (self iconNamed: 'menu');
-		actions: (self actions actionsFor: #new);
+		actions: (self actions actionsForAll: #(new extra));
 		yourself).
 
 	listPresenter := self newEntityTree.
