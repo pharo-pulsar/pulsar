@@ -28,7 +28,7 @@ PvMethodHierarchyPresenter >> defaultOutputPort [
 { #category : 'initialization' }
 PvMethodHierarchyPresenter >> initializePresenters [
 
-	treePresenter := self newTree.
+	treePresenter := self newEasyTreeListView.
 	treePresenter
 		addStyle: 'stTree';
 		display: [ :aModel | aModel fullName ];

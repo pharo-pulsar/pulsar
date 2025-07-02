@@ -67,11 +67,21 @@ DockHierarchyPresenter >> initializePresenters [
 
 	super initializePresenters.
 	headerPresenter := self instantiate: DockEditorToolbarPresenter.
+	
+	treePresenter searchMatching: [ :anEntity :pattern | 
+		self isEntity: anEntity matching: pattern ].
+	
 	self removeStyle: 'pvNavigation'.
 	self removeStyle: 'pvMethodHierarchyNavigation'.
 	self addStyle: 'dockFlyingBrowser'.
 	self addStyle: 'dockHierarchyFlyingBrowser'.
 
+]
+
+{ #category : 'private - testing' }
+DockHierarchyPresenter >> isEntity: anEntity matching: pattern [
+	
+	^ anEntity fullName asLowercase beginsWith: pattern asLowercase
 ]
 
 { #category : 'initialization' }
