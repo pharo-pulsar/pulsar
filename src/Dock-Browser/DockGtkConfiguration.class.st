@@ -92,8 +92,8 @@ DockGtkConfiguration >> style [
 .pvNavigation { min-width: 450px; min-height: 350px; padding: 5px; }
 button.pvProtocol { font-weight: normal; }
 .pvProtocolChooser { min-width: 250px; min-height: 280px; }
-/* .stCode { font-family: monospace; font-size: 0.95em; } */
 tab .tab-title label { font-size: 0.9em; }
+.dockStack label.count { padding-right: 5px; }
 .dockToolbar { margin: 0px; padding: 0px; }
 .dockEditorBreadcrumb { font-size: 9pt; }
 .dockEditorBreadcrumb label.separator { padding: 0px 5px 0px 5px; }

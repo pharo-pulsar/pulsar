@@ -3,7 +3,8 @@ Class {
 	#superclass : 'DockCollectionView',
 	#instVars : [
 		'toolbarPresenter',
-		'mutex'
+		'mutex',
+		'countPresenter'
 	],
 	#category : 'Dock-Browser-View-Stack',
 	#package : 'Dock-Browser',
@@ -104,6 +105,17 @@ DockStackView >> doCloseSelectedEditors [
 	self closeEditors: listPresenter selectedItems copy
 ]
 
+{ #category : 'initialization' }
+DockStackView >> editorCount [
+	| shownSize fullSize |
+
+	shownSize := listPresenter items size.
+	fullSize := listPresenter unfilteredItems size.
+	^ shownSize = fullSize
+		ifTrue: [ shownSize asString ]
+		ifFalse: [ '{1} / {2}' format: { shownSize. fullSize } ]
+]
+
 { #category : 'events' }
 DockStackView >> eventContextChanged: anAnnouncement [
 
@@ -135,6 +147,7 @@ DockStackView >> eventEditorActivated: anAnnouncement [
 			listPresenter selectedItem ifNotNil: [ listPresenter unselectAll ].
 			listPresenter selectItem: currentItem ]. 
 		^ self ].
+
 	"not there, I need to refresh the list and selec it (unselectAll because 
 	 this is a multi selection list."
 	self updatePresenter.
@@ -170,6 +183,11 @@ DockStackView >> initializePresenters [
 
 	toolbarPresenter := self instantiate: DockToolbarPresenter.
 	toolbarPresenter actions: (self actions actionsFor: #editorStackGeneral).
+	toolbarPresenter addPresenter: (countPresenter := self newLabel
+		addStyle: 'count';
+		addStyle: 'dim';
+		addStyle: 'tinyFont';
+		yourself).
 	
 	listPresenter := self newFilteringList
 		addStyle: 'stList';
@@ -177,6 +195,7 @@ DockStackView >> initializePresenters [
 		rowPresenterClass: DockStackRow;
 		display: [ :aContextModel | aContextModel fullName ];
 		actions: (self actions actionsForAll: #(editorStack editorStackGeneral));
+		whenFilterChangedDo: [ self updateCount ];
 		yourself
 ]
 
@@ -213,14 +232,27 @@ DockStackView >> registerToEvents [
 ]
 
 { #category : 'initialization' }
+DockStackView >> shownEditors [
+
+	^ (self window editors 
+		reject: [ :each | each isClosed ]
+			thenCollect: [ :each | each presenter model ]) 
+			reversed
+]
+
+{ #category : 'initialization' }
+DockStackView >> updateCount [
+
+	countPresenter label: self editorCount
+]
+
+{ #category : 'initialization' }
 DockStackView >> updatePresenter [
 
 	self window ifNil: [ ^ self ].
 	"it may be that the editor is being closed when the update is triggered.
 	 and several events may trigger a new update."
 	self mutex critical: [
-		listPresenter updateItemsKeepingSelection: (self window editors 
-			reject: [ :each | each isClosed ]
-			thenCollect: [ :each | each presenter model ]) 
-			reversed ]
+		listPresenter updateItemsKeepingSelection: self shownEditors.
+		self updateCount ]
 ]
