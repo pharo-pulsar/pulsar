@@ -27,6 +27,7 @@ PvEditorPathPresenter >> addLinkSegment: aString action: aBlock [
 { #category : 'accessing' }
 PvEditorPathPresenter >> addSegment: aPresenter [
 
+	aPresenter ifNil: [ ^ self ].
 	self addSeparator.		
 	self layout add: aPresenter asPresenter
 ]
