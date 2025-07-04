@@ -122,6 +122,14 @@ DockContextModel >> methodClassName [
 	^ self methodClass name
 ]
 
+{ #category : 'private' }
+DockContextModel >> methodModel [
+
+	^ PvMethodModel 
+		newEnvironment: self environmentModel
+		entity: self method
+]
+
 { #category : 'accessing' }
 DockContextModel >> methodName [
 
@@ -234,4 +242,18 @@ DockContextModel >> updateEntityFromStack [
 
 	self entity: self session stack first.
 	name := nil
+]
+
+{ #category : 'updating' }
+DockContextModel >> updateWith: aString notifying: anInteractionModel [
+	| result |
+
+	result := self methodModel 
+		updateWith: aString 
+		notifying: anInteractionModel.
+	result ifTrue: [ 
+		self updateEntityFromStack.
+		self restartCurrentContext ].
+	
+	^ result
 ]

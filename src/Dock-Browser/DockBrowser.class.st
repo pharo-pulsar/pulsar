@@ -276,7 +276,7 @@ DockBrowser >> registerToEvents [
 
 	super registerToEvents.
 	self announcer 
-		when: TestCaseEnded send: #eventTestCaseEnded: to: self
+		when: (TestCaseEnded, TestSuiteEnded) send: #eventTestCaseEnded: to: self
 ]
 
 { #category : 'initialization' }

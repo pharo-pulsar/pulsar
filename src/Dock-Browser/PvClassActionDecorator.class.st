@@ -1,13 +1,13 @@
 Class {
-	#name : 'PvMethodActionDecorator',
+	#name : 'PvClassActionDecorator',
 	#superclass : 'PvActionDecorator',
-	#category : 'Perspective-Method-Model',
-	#package : 'Perspective-Method',
-	#tag : 'Model'
+	#category : 'Dock-Browser-View-Editor',
+	#package : 'Dock-Browser',
+	#tag : 'View-Editor'
 }
 
 { #category : 'accessing' }
-PvMethodActionDecorator class >> allApplyingTo: aModel [
+PvClassActionDecorator class >> allApplyingTo: aModel [
 	
 	"avoid a copy since I know I will not modify it"
 	^ self basicSubclasses
@@ -16,7 +16,7 @@ PvMethodActionDecorator class >> allApplyingTo: aModel [
 ]
 
 { #category : 'testing' }
-PvMethodActionDecorator class >> appliesTo: aMethod [
+PvClassActionDecorator class >> appliesTo: aClass [
 
 	^ false
 ]

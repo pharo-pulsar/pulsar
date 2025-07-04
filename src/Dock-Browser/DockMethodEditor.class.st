@@ -66,7 +66,7 @@ DockMethodEditor >> doRequestChangeProtocol [
 	protocolPresenter popupProtocol
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private - actions' }
 DockMethodEditor >> doRunSampleInstanceCommand: anAction [
 	| result |
 
@@ -74,7 +74,7 @@ DockMethodEditor >> doRunSampleInstanceCommand: anAction [
 	self flag: #TODO. "Open an inspector with the result"
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private - actions' }
 DockMethodEditor >> doRunScriptCommand: anAction [
 
 	self model runScript

@@ -243,9 +243,23 @@ PvMethodModel >> isTestMethod [
 
 { #category : 'updating' }
 PvMethodModel >> lastTestExecutionResult [
-	^ self entity
-		propertyAt: #lastTestExecutionResult 
-		ifAbsent: [ nil ]
+	| lastClassResult result testCase | 
+
+	lastClassResult := TestResult fromTestCaseHistory: self methodClass.
+
+	result := TestResult new.
+
+	testCase := lastClassResult tests 
+		detect: [ :each | each selector = self name ]
+		ifNone: [ ^ nil ].
+
+	(lastClassResult isError: testCase) ifTrue: [ result addError: testCase ].
+	(lastClassResult isFailure: testCase) ifTrue: [ result addFailure: testCase ].
+	(lastClassResult isPassed: testCase) ifTrue: [ result addPass: testCase ].
+	
+	^ result tests
+		ifNotEmpty: [ result ]			
+		ifEmpty: [ nil ]
 ]
 
 { #category : 'accessing' }
@@ -323,13 +337,10 @@ PvMethodModel >> runScript [
 { #category : 'updating' }
 PvMethodModel >> runTest [
 	| testCase result |
+	
 	testCase := self methodClass selector: self entity selector.
 	result := testCase debug.
 	
-	self entity
-		propertyAt: #lastTestExecutionResult 
-		put: result.
-
 	^ TestCaseEnded new 
 		testCase: testCase;
 		testSelector: self entity selector;

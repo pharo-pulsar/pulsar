@@ -70,7 +70,9 @@ DockEditor >> addOverlay: aPresenter [
 { #category : 'accessing - overlay' }
 DockEditor >> addOverlay: aPresenter withConstraints: aBlock [
 
-	self editorOverlayLayout addOverlay: aPresenter withConstraints: aBlock
+	self editorOverlayLayout 
+		addOverlay: aPresenter 
+		withConstraints: aBlock
 ]
 
 { #category : 'initialization' }

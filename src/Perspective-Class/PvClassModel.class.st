@@ -2,7 +2,8 @@ Class {
 	#name : 'PvClassModel',
 	#superclass : 'PvBaseModel',
 	#instVars : [
-		'isNew'
+		'isNew',
+		'actionDecorators'
 	],
 	#category : 'Perspective-Class-Model',
 	#package : 'Perspective-Class',
@@ -39,8 +40,9 @@ PvClassModel >> accept: aVisitor [
 
 { #category : 'accessing' }
 PvClassModel >> actionDecorators [
-
-	^ #()
+	"answer the actions associated with this class. E.g. test"
+	
+	^ actionDecorators ifNil: [ actionDecorators := self collectActionDecorators ]
 ]
 
 { #category : 'updating' }
@@ -95,6 +97,12 @@ PvClassModel >> classDepth [
 PvClassModel >> classSide [
 
 	^ self entity classSide
+]
+
+{ #category : 'private' }
+PvClassModel >> collectActionDecorators [
+
+	^ PvClassActionDecorator allApplyingTo: self
 ]
 
 { #category : 'accessing' }
@@ -215,6 +223,12 @@ PvClassModel >> isOutlineClassEntity [
 ]
 
 { #category : 'accessing' }
+PvClassModel >> lastTestExecutionResult [
+
+	^ TestResult fromTestCaseHistory: self entity
+]
+
+{ #category : 'accessing' }
 PvClassModel >> name [
 
 	^ self entity name asString
@@ -235,6 +249,19 @@ PvClassModel >> packageTagName [
 { #category : 'accessing' }
 PvClassModel >> resetActionDecorators [
 	"do nothing, class do not have action decorators"
+]
+
+{ #category : 'updating' }
+PvClassModel >> runTest [
+	| testCase result |
+	
+	testCase := self entity suite.
+	result := testCase run.
+
+	^ TestSuiteEnded new 
+		testCase: self entity;
+		testResult: result;
+		yourself
 ]
 
 { #category : 'updating' }

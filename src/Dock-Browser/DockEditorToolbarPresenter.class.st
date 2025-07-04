@@ -59,7 +59,7 @@ DockEditorToolbarPresenter >> initializePresenters [
 		addStyle: 'stToolbar';
 		addStyle: 'dockToolbar';
 		displayMode: self application toolbarDisplayMode;
-		yourself	
+		yourself
 ]
 
 { #category : 'accessing' }
