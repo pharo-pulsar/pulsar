@@ -32,7 +32,7 @@ DockVersionsModel >> iconName [
 { #category : 'accessing' }
 DockVersionsModel >> name [
 
-	^ 'Versions of ', self ringDefinition fullName
+	^ 'History of ', self ringDefinition fullName
 ]
 
 { #category : 'accessing' }

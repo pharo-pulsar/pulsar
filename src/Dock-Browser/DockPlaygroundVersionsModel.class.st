@@ -32,7 +32,7 @@ DockPlaygroundVersionsModel >> page: aPage [
 { #category : 'accessing' }
 DockPlaygroundVersionsModel >> title [
 
-	^ 'Page versions'
+	^ 'Page history'
 ]
 
 { #category : 'accessing' }
