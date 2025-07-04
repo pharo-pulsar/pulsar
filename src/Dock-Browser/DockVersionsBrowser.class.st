@@ -85,6 +85,15 @@ DockVersionsBrowser >> initializePresenters [
 ]
 
 { #category : 'initialization' }
+DockVersionsBrowser >> initializeWindow: aWindowPresenter [
+
+	super initializeWindow: aWindowPresenter.
+	aWindowPresenter 
+		title: self model fullName;
+		whenClosedDo: [ self notifyEditorClosed ]
+]
+
+{ #category : 'initialization' }
 DockVersionsBrowser >> updatePatchWith: aDefinition [
 	| nextDefinition |
 	nextDefinition := versionListPresenter items 
