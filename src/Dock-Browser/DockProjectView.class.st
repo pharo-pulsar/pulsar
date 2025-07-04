@@ -160,7 +160,9 @@ DockProjectView >> defaultLayout [
 { #category : 'private - actions' }
 DockProjectView >> doCollapseAll [
 
-	listPresenter collapseAll
+	listPresenter 
+		unselectAll;
+		collapseAll
 ]
 
 { #category : 'private - actions' }
