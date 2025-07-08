@@ -203,9 +203,8 @@ DockBaseBrowser >> systemNavigation [
 
 { #category : 'private' }
 DockBaseBrowser >> windowClosed [
+	self presenters do: [ :each | each windowClosed ].
+	announcer stopScheduler.
+	super windowClosed
 
-	self presenters 
-		do: [ :each | each windowClosed ].
-	super windowClosed.
-	announcer stopScheduler
 ]
