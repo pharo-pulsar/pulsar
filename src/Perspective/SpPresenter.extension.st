@@ -34,7 +34,8 @@ SpPresenter >> systemNavigation [
 		anOwner withPerspectiveDo: [ :perspective | ^ perspective systemNavigation ].
 		anOwner withNearWindowLikeDo: [ :panelWindow | ^ panelWindow systemNavigation ] ].
 	
-	^ super systemNavigation
+	"let application a chance to define its system navigation"
+	^ self application systemNavigation
 ]
 
 { #category : '*Perspective' }
