@@ -327,6 +327,12 @@ DockApplication >> subscribeToSettingsAnnouncements [
 ]
 
 { #category : 'accessing' }
+DockApplication >> systemNavigation [
+
+	^ DockSystemNavigation new
+]
+
+{ #category : 'accessing' }
 DockApplication >> takeSnapshot [
 
 	"do not take the snapshot if there is no windows, because like that I can keep 
