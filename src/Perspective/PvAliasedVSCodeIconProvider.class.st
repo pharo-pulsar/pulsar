@@ -86,7 +86,10 @@ PvAliasedVSCodeIconProvider >> initialize [
 		'smallDebug'. 				'bug'.					"code"
 		'smallPrintIt'. 			'blank'.				"code"
 		'smallProfile'. 			'watch'.				"code"
-		'menu'. 		   	       	'more'. "menu"    		"menu button"
+		'smallUndo'.				'discard'.
+		'smallRedo'. 				'redo'.
+		'smallSave'.				'save'.
+		'menu'. 		   	       	'kebab-vertical'."'more', 'menu'"  "menu button"
 		'pause'. 					'debug-pause'.
 		'priority'.					'flame'.
 		'autoUpdate'.				'radio-tower'.
@@ -125,6 +128,8 @@ PvAliasedVSCodeIconProvider >> initialize [
 		'changeAdd'.				'add'.
 		'changeRemove'.				'remove'.
 		'changeUpdate'.				'remote'. "not good"
+		"same name (just to keep track of them)"
+		'search'.					'search'.
 	 }
 ]
 

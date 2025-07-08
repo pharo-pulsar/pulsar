@@ -20,6 +20,7 @@ BaselineOfPerspective >> baseline: spec [
 		spec package: 'Perspective-Class' with: [ spec requires: 'Perspective' ].
 		spec package: 'Perspective-Method' with: [ spec requires: 'Perspective' ].
 		spec package: 'Dock-Browser' with: [ spec requires: 'Perspective' ].
+		spec package: 'Dock-Tool-Changes' with: [ spec requires: 'Dock-Browser' ].
 		spec package: 'Dock-Browser-Tests' with: [ spec requires: 'Dock-Browser' ] ]
 ]
 
