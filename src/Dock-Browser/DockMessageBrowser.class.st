@@ -35,8 +35,8 @@ DockMessageBrowser >> addPopoverControls [
 
 	controlsPresenter := self instantiate: DockPopoverControlBoxPresenter.
 	controlsPresenter onDock: [ 
-		self notifyActivateEntity: self model.
-		self withPopoverDo: #dismiss ].
+		self withPopoverDo: #dismiss.
+		self notifyActivateEntity: self model ].
 	headerPresenter addPresenter: controlsPresenter
 ]
 
@@ -85,8 +85,8 @@ DockMessageBrowser >> initializePopover: aPopoverPresenter [
 	aPopoverPresenter addShortcutWith: [ :action | action 
 		shortcutKey: Character arrowDown mod3;
 		action: [ 
-			self notifyActivateEntity: self model.
-			self withPopoverDo: #dismiss ] ]
+			self withPopoverDo: #dismiss.
+			self notifyActivateEntity: self model ] ]
 ]
 
 { #category : 'initialization' }

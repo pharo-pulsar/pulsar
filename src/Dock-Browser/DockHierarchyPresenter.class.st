@@ -17,8 +17,8 @@ DockHierarchyPresenter >> addPopoverControls [
 
 	controlsPresenter := self instantiate: DockPopoverControlBoxPresenter.
 	controlsPresenter onDock: [ 
-		self notifyActivateEntity: self model.
-		self withPopoverDo: #dismiss ].
+		self withPopoverDo: #dismiss.
+		self notifyActivateEntity: self model ].
 	headerPresenter addPresenter: controlsPresenter
 ]
 
@@ -59,7 +59,9 @@ DockHierarchyPresenter >> initializePopover: aPopoverPresenter [
 	self addPopoverControls.
 	aPopoverPresenter addShortcutWith: [ :action | action 
 		shortcutKey: KeyboardKey down mod3;
-		action: [ self notifyActivateEntity: self model ] ]
+		action: [ 
+			self withPopoverDo: #dismiss.
+			self notifyActivateEntity: self model ] ]
 ]
 
 { #category : 'initialization' }
