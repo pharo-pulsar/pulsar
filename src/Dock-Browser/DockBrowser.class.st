@@ -290,9 +290,10 @@ DockBrowser >> registerToEvents [
 { #category : 'initialization' }
 DockBrowser >> registerToSystemEvents [
 
-	"this way I have just one subscription for each dock-browser"
-	self class environment codeChangeAnnouncer weak
-		when: SystemAnnouncement send: #resendAnnouncement: to: self
+	self announcer 
+		when: SystemAnnouncement 
+		send: #resendAnnouncement: 
+		to: self
 ]
 
 { #category : 'actions' }
