@@ -11,11 +11,59 @@ DockMethodEditorTest >> classToTest [
 	^ DockClassEditor
 ]
 
+{ #category : 'accessing' }
+DockMethodEditorTest >> openMethodEditorOn: aMethod [
+	| editor |
+
+	editor := DockMethodEditor 
+		newApplication: self application
+		model: (PvMethodModel 
+			newEnvironment: PvEnvironmentModel onSystem
+			entity: aMethod).	
+	editor notificationCenter: Announcer new.
+	editor open.
+	^ editor
+]
+
+{ #category : 'accessing' }
+DockMethodEditorTest >> openMethodEditorWithBrowserOn: aMethod [
+	
+	browser := self openBrowserOnProject.
+	browser openMethod: aMethod.
+	
+	"give some time to open"
+	10 milliSeconds wait.
+	
+	^ browser editors first presenter
+]
+
 { #category : 'running' }
 DockMethodEditorTest >> tearDown [
-
+	
+	self application windows do: [ :each | each close ].
 	self ensureRemoveClass: #DockTestClassToRemove.		
+	self ensureRemoveMethod: #aMethod.
 	super tearDown
+]
+
+{ #category : 'tests' }
+DockMethodEditorTest >> testEditorUpdateWhenCodeUpdateElsewhere [
+	| editor | 
+
+	self class compile: 'aMethod ^ nil'.
+	editor := self openMethodEditorWithBrowserOn: self class >> #aMethod.
+	
+	self 
+		assert: editor editorPresenter text 
+		equals: 'aMethod ^ nil'.
+	
+	self class compile: 'aMethod ^ 42'.
+	"let the editors update. 500 milliSeconds is a lot, but then I am sure is enough :)"
+	500 milliSeconds wait.
+	
+	self 
+		assert: editor editorPresenter text 
+		equals: 'aMethod ^ 42'
 ]
 
 { #category : 'tests' }

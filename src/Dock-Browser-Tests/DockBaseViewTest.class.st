@@ -53,6 +53,14 @@ DockBaseViewTest >> ensureRemoveClass: aClassName [
 ]
 
 { #category : 'private' }
+DockBaseViewTest >> ensureRemoveMethod: aSelector [ 
+
+	self class methodDict
+		at: aSelector
+		ifPresent: [ :aMethod | aMethod removeFromSystem ]
+]
+
+{ #category : 'private' }
 DockBaseViewTest >> indexOfElement: aBlock in: aCollection [
 		
 	aCollection withIndexDo: [ :each :index | 
@@ -76,7 +84,9 @@ DockBaseViewTest >> mockClassName [
 { #category : 'private' }
 DockBaseViewTest >> newBrowser [
 
-	^ DockBrowser newApplication: self application
+	^ (DockBrowser newApplication: self application)
+		loadDefaultWorkspace;
+		yourself
 ]
 
 { #category : 'private' }
