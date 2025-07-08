@@ -102,6 +102,23 @@ DockApplication class >> startUp: resuming [
 	self cleanUp
 ]
 
+{ #category : 'initialization' }
+DockApplication >> cleanUp [
+
+	"weird things can happen when exiting the image in an unconventional way...  
+	 e.g. close the last window will not save the registry clean up hence letting a dockapplication 
+	 registered. We need to ensure this will be correct not just because of the leak, but also 
+	 beacuse if announcements go to dead browsers the system will crash." 
+	(self class codeChangeAnnouncer subscriptions subscriptions 
+		select: [ :each | each subscriber class = DockApplication ])
+		do: [ :each | self class codeChangeAnnouncer subscriptions removeSubscriber: each subscriber ].
+		
+	"also clean processes that may have remained"
+	(Processor allProcesses 
+		select: [ :each | each name beginsWith: self className ])
+		do: [ :each | each terminate ]
+]
+
 { #category : 'settings' }
 DockApplication >> colorForTestResultAt: aStatus [
 	"aStatus is 'Passed', 'Failed' or 'Error'"
@@ -132,6 +149,12 @@ DockApplication >> dockBrowser [
 	 	ifNone: [ nil ]
 ]
 
+{ #category : 'finalization' }
+DockApplication >> finalize [
+
+	self class codeChangeAnnouncer unsubscribe: self
+]
+
 { #category : 'accessing' }
 DockApplication >> iconCache [
 
@@ -143,13 +166,15 @@ DockApplication >> iconCache [
 { #category : 'initialization' }
 DockApplication >> initialize [
 
-	super initialize
+	super initialize.
+	FinalizationRegistry default add: self.
+	self registerToSystemEvents
 ]
 
 { #category : 'initialization' }
 DockApplication >> initializeConfiguration [
 
-	super initializeConfiguration.
+	self resetConfiguration.
 	self 
 		useBackend: #Gtk 
 		with: self newConfiguration
@@ -226,6 +251,7 @@ DockApplication >> newSystemTools [
 DockApplication >> prepareAsStandaloneApplication [
 	
 	standalone := true.
+	self cleanUp.
 	self killUnusedProcesses.
 	self prepareSchedulerAsStandaloneApplication.
 	self prepareErrorHandlerAsStandaloneApplication
@@ -239,9 +265,27 @@ DockApplication >> prepareErrorHandlerAsStandaloneApplication [
 ]
 
 { #category : 'initialization' }
+DockApplication >> registerToSystemEvents [
+
+	"this way I have just one subscription for each application, that will be broadcasted to 
+	 all applications windows"
+	self class codeChangeAnnouncer weak
+		when: SystemAnnouncement 
+		send: #resendAnnouncement: 
+		to: self
+]
+
+{ #category : 'initialization' }
 DockApplication >> reloadConfiguration [
 
 	^ self configuration reloadOnApplication: self
+]
+
+{ #category : 'announcing' }
+DockApplication >> resendAnnouncement: anAnnouncement [
+	
+	self windows do: [ :aWindowPresenter |
+		aWindowPresenter announce: anAnnouncement ]
 ]
 
 { #category : 'running' }
@@ -275,6 +319,11 @@ DockApplication >> start [
 		^ self ].
 		
 	(self new: DockBrowser) open
+]
+
+{ #category : 'settings' }
+DockApplication >> subscribeToSettingsAnnouncements [
+	"do nothing, this thing will not work with morphic"
 ]
 
 { #category : 'accessing' }
