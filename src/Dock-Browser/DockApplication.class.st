@@ -224,6 +224,7 @@ DockApplication >> newIconProvider [
 DockApplication >> newScheduler [ 
 
 	^ TKTWorkerPool new
+		name: self className;
 		poolMaxSize: 5;
 		start
 ]
