@@ -200,6 +200,7 @@ DockEditor >> eventModelRemoved: anAnnouncement [
 DockEditor >> initialize [
 
 	super initialize.
+	self registerToSystemEvents.
 	dirty := false. 
 	updating := false
 ]
@@ -333,6 +334,11 @@ DockEditor >> registerToEvents [
 	self announcer 
 		when: DockModelChanged send: #eventModelChanged: to: self;
 		when: DockModelRemoved send: #eventModelRemoved: to: self
+]
+
+{ #category : 'initialization' }
+DockEditor >> registerToSystemEvents [
+	"subclasses can fill this"
 ]
 
 { #category : 'accessing - overlay' }
