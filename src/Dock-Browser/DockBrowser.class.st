@@ -232,6 +232,14 @@ DockBrowser >> openClass: aClass [
 ]
 
 { #category : 'actions' }
+DockBrowser >> openMethod: aMethod [ 
+
+	self projectView notifyActivateEntity: (PvMethodModel 
+		newEnvironment: self model environmentModel
+		entity: aMethod)
+]
+
+{ #category : 'actions' }
 DockBrowser >> openPlayground [
 
 	self addPresenterClass: DockPlayground
