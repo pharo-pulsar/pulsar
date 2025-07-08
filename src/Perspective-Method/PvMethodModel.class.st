@@ -246,11 +246,10 @@ PvMethodModel >> lastTestExecutionResult [
 	| lastClassResult result testCase | 
 
 	lastClassResult := TestResult fromTestCaseHistory: self methodClass.
-
+ 
 	result := TestResult new.
-
 	testCase := lastClassResult tests 
-		detect: [ :each | each selector = self name ]
+		detect: [ :each | each selector = self entity selector ]
 		ifNone: [ ^ nil ].
 
 	(lastClassResult isError: testCase) ifTrue: [ result addError: testCase ].
