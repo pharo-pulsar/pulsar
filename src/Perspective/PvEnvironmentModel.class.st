@@ -21,6 +21,12 @@ PvEnvironmentModel class >> onSystem [
 ]
 
 { #category : 'accessing' }
+PvEnvironmentModel >> addPackageNamed: aString [ 
+	
+	^ self entity addPackageNamed: aString
+]
+
+{ #category : 'accessing' }
 PvEnvironmentModel >> children [
 
 	^ (self entity packages 

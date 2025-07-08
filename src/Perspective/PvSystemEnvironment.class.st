@@ -6,6 +6,12 @@ Class {
 	#tag : 'Model'
 }
 
+{ #category : 'accessing' }
+PvSystemEnvironment >> addPackageNamed: aName [
+
+	self organizer addPackage: (Package named: aName)
+]
+
 { #category : 'testing' }
 PvSystemEnvironment >> hasPackageNamed: aString [
 

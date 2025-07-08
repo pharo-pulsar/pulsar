@@ -25,6 +25,17 @@ PvProjectModel >> accept: aVisitor [
 	^ aVisitor visitProjectModel: self
 ]
 
+{ #category : 'accessing' }
+PvProjectModel >> addPackageNamed: aName [
+
+	self flag: #TODO. "What to do here? Throw an error?"
+	(self environmentModel hasPackageNamed: aName) 
+		ifTrue: [ ^ self ].
+		
+	self environmentModel addPackageNamed: aName.
+	self flag: #TODO. "I need to add it to the project! (the baseline)"
+]
+
 { #category : 'converting' }
 PvProjectModel >> asClassModel [
 
