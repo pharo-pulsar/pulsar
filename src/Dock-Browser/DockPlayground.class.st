@@ -211,6 +211,12 @@ DockPlayground >> newSystemNavigation [
 ]
 
 { #category : 'accessing - snapshot' }
+DockPlayground >> postRestoreSnapshot: aSnapshot [
+
+	self ensureCodeBindings
+]
+
+{ #category : 'accessing - snapshot' }
 DockPlayground >> snapshot [
 
 	^ DockPlaygroundSnapshot on: self
