@@ -45,7 +45,7 @@ DockMethodActionRunTestPresenter >> initializePresenters [
 
 { #category : 'private' }
 DockMethodActionRunTestPresenter >> statusIconForModel [
-
+ 
 	self contextModel lastTestExecutionResult ifNotNil: [ :result | 
 		result hasErrors ifTrue: [ ^ 'run-test-error' ].	
 		result hasFailures ifTrue: [ ^ 'run-test-failure' ].	

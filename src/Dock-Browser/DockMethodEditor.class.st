@@ -83,8 +83,28 @@ DockMethodEditor >> doRunScriptCommand: anAction [
 { #category : 'private - actions' }
 DockMethodEditor >> doSubmit: aString [
 
-	super doSubmit: aString.
-	self updateContentActions
+	self updatingWhile: [
+		super doSubmit: aString.
+		self updateContentActions ]
+]
+
+{ #category : 'events - system' }
+DockMethodEditor >> eventMethodModified: anAnnouncement [
+
+	(self model entity = anAnnouncement method 
+		or: [ self model entity = anAnnouncement oldMethod ])
+		ifFalse: [ ^ self ].
+	"Is me who is updating, get out"
+	self isUpdating ifTrue: [ ^ self ].
+	
+	self isDirty ifTrue: [ 
+		"self markOutdatedMethod."
+		^ self ].
+		
+	"update model"
+	self model entity: anAnnouncement method. 
+	"update presenter"
+	self updatePresenter
 ]
 
 { #category : 'events' }
@@ -119,6 +139,13 @@ DockMethodEditor >> initializePresenters [
 DockMethodEditor >> originalContent [
 
 	^ self model sourceCode
+]
+
+{ #category : 'initialization' }
+DockMethodEditor >> registerToSystemEvents [
+
+	self announcer 
+		when: MethodModified send: #eventMethodModified: to: self
 ]
 
 { #category : 'initialization' }
