@@ -45,6 +45,12 @@ PvNewClassTemplate >> isAbstract [
 	^ false
 ]
 
+{ #category : 'testing' }
+PvNewClassTemplate >> isTestCase [
+
+	^ false
+]
+
 { #category : 'accessing' }
 PvNewClassTemplate >> name [
 	
