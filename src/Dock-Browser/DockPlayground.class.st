@@ -115,6 +115,7 @@ DockPlayground >> doBrowseVersionsCommand: anAction [
 		instantiate: DockPlaygroundVersionsBrowser 
 		on: self model newVersionsModel.
 	versionsPresenter registerToDock: self window.
+	versionsPresenter whenActivatedDo: [ :anEntry | self contents: anEntry content ].
 
 	popover := self newPopover
 		presenter: versionsPresenter;

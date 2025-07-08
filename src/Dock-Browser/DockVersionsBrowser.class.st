@@ -1,8 +1,8 @@
 Class {
 	#name : 'DockVersionsBrowser',
 	#superclass : 'SpPresenter',
-	#traits : 'SpTModel + DockTNotificationCenter + DockTPanelWindow + DockTSnapshot',
-	#classTraits : 'SpTModel classTrait + DockTNotificationCenter classTrait + DockTPanelWindow classTrait + DockTSnapshot classTrait',
+	#traits : 'SpTModel + DockTNotificationCenter + DockTPanelWindow + DockTSnapshot + PvTActionHolder',
+	#classTraits : 'SpTModel classTrait + DockTNotificationCenter classTrait + DockTPanelWindow classTrait + DockTSnapshot classTrait + PvTActionHolder classTrait',
 	#instVars : [
 		'headerPresenter',
 		'versionListPresenter',
@@ -14,22 +14,39 @@ Class {
 	#tag : 'Tool-Versions'
 }
 
+{ #category : 'accessing - actions' }
+DockVersionsBrowser class >> defineActionsOn: aBuilder [
+	<perspectiveActions>
+
+	aBuilder 
+		registerGroup: #versionActions with: {  
+			PvAction new
+				name: 'Revert';
+				description: 'Revert to this version';
+				iconCompositeName: 'accept';
+				action: [ :aContext | aContext doRevert ].
+		}
+]
+
 { #category : 'initialization' }
 DockVersionsBrowser >> addPopoverControls [
 	| controlsPresenter |
 
 	controlsPresenter := self instantiate: DockPopoverControlBoxPresenter.
 	controlsPresenter onDock: [ 
-		self notifyActivateEntity: self model.
-		self withPopoverDo: #dismiss ].
+		self withPopoverDo: #dismiss.
+		self notifyActivateEntity: self model ].
+	controlsPresenter popoverActions: self versionActions.
 	headerPresenter addPresenter: controlsPresenter
 ]
 
 { #category : 'initialization' }
 DockVersionsBrowser >> connectPresenters [
 	
-	versionListPresenter transmitDo: [ :aDefinition | 
-		self updateSourceWith: aDefinition ]
+	versionListPresenter 
+		transmitDo: [ :aDefinition | self updateSourceWith: aDefinition ].
+	versionListPresenter outputActivationPort
+		transmitDo: [ :aDefinition | self doRevert ]
 ]
 
 { #category : 'api - focus' }
@@ -54,6 +71,14 @@ DockVersionsBrowser >> defaultLayout [
 		yourself
 ]
 
+{ #category : 'actions' }
+DockVersionsBrowser >> doRevert [
+	"take selected version and apply it as current editor content"
+	
+	self  withPopoverDo: #dismiss.
+	self model revertTo: versionListPresenter selectedItem
+]
+
 { #category : 'initialization' }
 DockVersionsBrowser >> initializePopover: aPopoverPresenter [
 	
@@ -61,8 +86,8 @@ DockVersionsBrowser >> initializePopover: aPopoverPresenter [
 	aPopoverPresenter addShortcutWith: [ :action | action 
 		shortcutKey: Character arrowDown mod3;
 		action: [ 
-			self notifyActivateEntity: self model.
-			self withPopoverDo: #dismiss ] ]
+			self withPopoverDo: #dismiss.
+			self notifyActivateEntity: self model ] ]
 ]
 
 { #category : 'initialization' }
@@ -75,6 +100,7 @@ DockVersionsBrowser >> initializePresenters [
 	versionListPresenter := self newEasyListView
 		addStyle: 'stList';
 		display: [ :aDefinition | aDefinition timeStamp epiceaBrowsersAsString ];
+		actions: self versionActions;
 		yourself.
 	patchPresenter := self instantiate: SpPatchPresenter.
 	patchPresenter addStyle: 'stCode'.
@@ -135,4 +161,10 @@ DockVersionsBrowser >> updateSourceWith: aDefinition [
 	
 	self updatePatchWith: aDefinition.
 	self updateSourceCodeWith: aDefinition
+]
+
+{ #category : 'initialization' }
+DockVersionsBrowser >> versionActions [
+
+	^ self actions actionsFor: #versionActions
 ]

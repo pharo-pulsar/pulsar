@@ -35,6 +35,23 @@ DockVersionsModel >> name [
 	^ 'History of ', self ringDefinition fullName
 ]
 
+{ #category : 'as yet unclassified' }
+DockVersionsModel >> revertTo: aRGMethodDefinition [
+	| newSelector realClass |
+
+	aRGMethodDefinition ifNil: [ ^ self ].
+	
+	realClass := self ringDefinition realClass.
+	newSelector := realClass
+		compile: aRGMethodDefinition sourceCode
+		classified: aRGMethodDefinition category
+		withStamp: aRGMethodDefinition stamp
+		notifying: nil.
+		
+	"update entity"
+	self entity: realClass >> newSelector
+]
+
 { #category : 'accessing' }
 DockVersionsModel >> ringDefinition [
 

@@ -24,7 +24,7 @@ Class {
 { #category : 'accessing' }
 DockSpotter class >> defaultExtent [
 
-	^ 700@350
+	^ 700@550
 ]
 
 { #category : 'private - actions' }

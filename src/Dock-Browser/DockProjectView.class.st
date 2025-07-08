@@ -338,6 +338,11 @@ DockProjectView >> eventEditorActivated: anAnnouncement [
 ]
 
 { #category : 'events - system' }
+DockProjectView >> eventMethodModified: anAnnouncement [
+	"why this is still here?"
+]
+
+{ #category : 'events - system' }
 DockProjectView >> eventPackageAdded: anAnnouncement [
 
 	logger trace: anAnnouncement package

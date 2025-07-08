@@ -33,18 +33,7 @@ DockPopoverControlBoxPresenter >> initializePresenters [
 		addStyle: 'dockToolbar';
 		addStyle: 'dockPopoverControlToolbar';
 		displayMode: self application toolbarDisplayMode;
-		fillWith: (SpActionGroup new
-			addActionWith: [ :action | action 
-				name: 'Dock';
-				iconName: 'arrow-down';
-				description: 'Dock popover.';
-				action: [ self announceDock ] ];
-			addActionWith: [ :action | action 
-				name: 'Close';
-				iconName: 'close';
-				description: 'Close popover.';
-				action: [ self withPopoverDo: #dismiss ] ];
-			yourself);
+		fillWith: self popoverControlGroup;
 		yourself	
 ]
 
@@ -52,4 +41,30 @@ DockPopoverControlBoxPresenter >> initializePresenters [
 DockPopoverControlBoxPresenter >> onDock: aBlock [
 
 	dockAction := aBlock
+]
+
+{ #category : 'api - actions' }
+DockPopoverControlBoxPresenter >> popoverActions: anActionGroup [
+
+	toolbarPresenter fillWith: (SpActionGroup new
+		add: anActionGroup;
+		add: self popoverControlGroup;
+		yourself)
+]
+
+{ #category : 'initialization' }
+DockPopoverControlBoxPresenter >> popoverControlGroup [
+
+	^ SpActionGroup new
+		addActionWith: [ :action | action 
+			name: 'Dock';
+			iconName: 'arrow-down';
+			description: 'Dock popover.';
+			action: [ self announceDock ] ];
+		addActionWith: [ :action | action 
+			name: 'Close';
+			iconName: 'close';
+			description: 'Close popover.';
+			action: [ self withPopoverDo: #dismiss ] ];
+		yourself
 ]
