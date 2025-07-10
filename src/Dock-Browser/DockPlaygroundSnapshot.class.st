@@ -35,7 +35,9 @@ DockPlaygroundSnapshot >> restoreTo: aPresenter [
 	"For some reason I need to re-set the model here (even if it is passed on initialization)"
 	aPresenter model: self model.
 	aPresenter codePresenter cursorPositionIndex: cursorPositionIndex.
-	aPresenter codePresenter interactionModel bindings: bindings
+	aPresenter codePresenter interactionModel bindings: bindings.
+	
+	aPresenter postRestoreSnapshot: self
 ]
 
 { #category : 'initialization' }
@@ -43,7 +45,7 @@ DockPlaygroundSnapshot >> snapshot: aPresenter [
 
 	super snapshot: aPresenter.
 	cursorPositionIndex := aPresenter codePresenter cursorPositionIndex.
-	bindings := aPresenter codePresenter interactionModel bindings 
+	bindings := aPresenter codePresenter interactionModel bindings copy 
 		removeKey: #thisBrowser ifAbsent: [];
 		yourself
 ]
