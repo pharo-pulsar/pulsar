@@ -13,6 +13,7 @@ Class {
 DockEntryRowPresenter >> defaultLayout [
 
 	^ SpBoxLayout newHorizontal
+		spacing: 5;
 		add: iconPresenter expand: false;
 		add: descriptionPresenter;
 		yourself
@@ -27,10 +28,12 @@ DockEntryRowPresenter >> initializePresenters [
 
 { #category : 'initialization' }
 DockEntryRowPresenter >> updatePresenter [
-
+	| content |
+	
 	self model ifNil: [ ^ self ].
-
-	(self model content accept: EpIconNameVisitor new) 
+	content := self model content.
+	(content accept: EpIconNameVisitor new) 
 		ifNotNil: [ :aName | iconPresenter image: (self iconNamed: aName asString) ].
-	descriptionPresenter label: self model asString
+	(content accept: DockChangeEntryNameVisitor new)
+		ifNotNil: [ :aString | descriptionPresenter label: self model asString ]
 ]
