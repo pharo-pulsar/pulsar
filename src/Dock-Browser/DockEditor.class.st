@@ -220,14 +220,14 @@ DockEditor >> initializePanelWindow: aWindowPresenter [
 
 { #category : 'initialization' }
 DockEditor >> initializePresenters [
+	self addStyle: 'dockEditor'.
 
 	toolbarPresenter := self instantiate: DockEditorToolbarPresenter.
 	toolbarPresenter actions: self editorToolbarActions.
 
 	(editorPresenter := self newCode)
 		addStyle: 'stCode';
-		addStyle: 'dockEditor';
-		addScrollBarStyle: 'dockEditorScrollBar';
+		addScrollBarStyle: 'stCodeScrollBar';
 		overridingContextMenu;
 		withEditionContextMenu;
 		actions: self editorContextMenuActions;
@@ -424,11 +424,15 @@ DockEditor >> updateContentActions [
 ]
 
 { #category : 'initialization' }
+DockEditor >> updatePanelWindowTitle [
+	self withPanelWindowDo: [ :w | 
+		w title: self model name ]
+]
+
+{ #category : 'initialization' }
 DockEditor >> updatePresenter [
-	
-	self nearWindowLike ifNotNil: [ :aWindow |
-		(DockEditorUpdateVisitor on: self) visit: aWindow ].
-		
+
+	self updateTitle.
 	self updateBreadcrumbs.
 	self updateContentActions
 ]
@@ -436,8 +440,9 @@ DockEditor >> updatePresenter [
 { #category : 'initialization' }
 DockEditor >> updateTitle [
 
-	self withPanelWindowDo: [ :w | 
-		w title: self model name ]
+	self nearWindowLike ifNotNil: [ :aWindow |
+		logger trace: aWindow.
+		(DockEditorUpdateVisitor on: self) visit: aWindow ]
 ]
 
 { #category : 'private - updating' }

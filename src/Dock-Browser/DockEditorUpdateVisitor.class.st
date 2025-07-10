@@ -32,5 +32,10 @@ DockEditorUpdateVisitor >> owner: aPresenter [
 { #category : 'visiting' }
 DockEditorUpdateVisitor >> visitPanelWindowPresenter: aPanelWindowPresenter [
 
-	self owner updateTitle
+	self owner updatePanelWindowTitle
+]
+
+{ #category : 'visiting' }
+DockEditorUpdateVisitor >> visitPopoverPresenter: aPresenter [
+	
 ]

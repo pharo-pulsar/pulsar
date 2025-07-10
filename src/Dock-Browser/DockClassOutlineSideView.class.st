@@ -13,7 +13,9 @@ Class {
 		'updating',
 		'actions',
 		'activeProtocols',
-		'activeVariables'
+		'activeVariables',
+		'previewPopoverActive',
+		'previewPopover'
 	],
 	#category : 'Dock-Browser-View-Outline',
 	#package : 'Dock-Browser',
@@ -125,6 +127,18 @@ DockClassOutlineSideView >> actions [
 	^ actions ifNil: [ actions := PvActionCollector collectFor: self ]
 ]
 
+{ #category : 'private - preview' }
+DockClassOutlineSideView >> activateMethodPreviewPopover [
+
+	self isPreviewPopoverActive ifTrue: [
+		"Second arrow right will transfer focus"
+		previewPopover takeKeyboardFocus.
+		^ self ].
+	
+	previewPopoverActive := true.
+	self maybePopupPreview
+]
+
 { #category : 'private' }
 DockClassOutlineSideView >> collectProtocols [
 
@@ -144,8 +158,21 @@ DockClassOutlineSideView >> connectPresenters [
 		transmitDo: [ :aCollection | self filterMethodsByVariable: aCollection ].
 	protocolListPresenter 
 		transmitDo: [ :aCollection | self filterMethodsByProtocol: aCollection ].
+	listPresenter outputSelectionPort
+		transmitDo: [ :anEntry | self maybePopupPreview ].
 	listPresenter outputActivationPort 
-		transmitDo: [ :anEntity | self owner notifyActivateEntity: anEntity ]
+		transmitDo: [ :anEntity | 
+			self deactivateMethodPreviewPopover.
+			self owner notifyActivateEntity: anEntity ]
+]
+
+{ #category : 'private - preview' }
+DockClassOutlineSideView >> deactivateMethodPreviewPopover [
+
+	self isPreviewPopoverActive ifFalse: [ ^ self ].
+	
+	previewPopoverActive := false.
+	self dismissPreview	
 ]
 
 { #category : 'api - focus' }
@@ -175,6 +202,16 @@ DockClassOutlineSideView >> defaultLayout [
 			add: listPresenter;
 			yourself);
 		yourself
+]
+
+{ #category : 'private - preview' }
+DockClassOutlineSideView >> dismissPreview [
+
+	previewPopover ifNil: [ ^ self ].
+	
+	previewPopover dismiss.
+	previewPopover := nil
+
 ]
 
 { #category : 'private - actions' }
@@ -286,6 +323,7 @@ DockClassOutlineSideView >> includesModel: aModel [
 DockClassOutlineSideView >> initialize [
 
 	super initialize.
+	previewPopoverActive := false.
 	updating := false
 ]
 
@@ -301,8 +339,19 @@ DockClassOutlineSideView >> initializeMethods [
 		display: [ :aModel | aModel name ];
 		searchMatching: [ :aModel :aString | 
 			aModel name asLowercase beginsWith: aString asLowercase ];
-		actions: (self actions actionsForAll: #(method methodCritical));
-		yourself	
+		actions: (SpActionGroup new 
+			add: (self actions actionsForAll: #(method methodCritical));
+			addShortcutWith: [ :action | action 
+				shortcutKey: KeyboardKey left asKeyCombination;
+				action: [ self activateMethodPreviewPopover ] ];
+			addShortcutWith: [ :action | action 
+				shortcutKey: KeyboardKey right asKeyCombination | KeyboardKey escape asKeyCombination;
+				action: [ self deactivateMethodPreviewPopover ] ];
+			yourself);
+		yourself.
+		
+	listPresenter eventHandler 
+		whenFocusLostDo: [ self deactivateMethodPreviewPopover ]
 ]
 
 { #category : 'initialization' }
@@ -347,6 +396,12 @@ DockClassOutlineSideView >> initializeVariables [
 		yourself
 ]
 
+{ #category : 'private - preview' }
+DockClassOutlineSideView >> isPreviewPopoverActive [
+
+	^ previewPopoverActive
+]
+
 { #category : 'initialization' }
 DockClassOutlineSideView >> listToolbarActions [
 
@@ -356,6 +411,13 @@ DockClassOutlineSideView >> listToolbarActions [
 			iconName: #add;
 			description: 'Add a new method';
 			action: [ self doRequestNewMethod ] ]
+]
+
+{ #category : 'private - preview' }
+DockClassOutlineSideView >> maybePopupPreview [
+
+	self isPreviewPopoverActive ifFalse: [ ^ self ].
+	self popupPreview
 ]
 
 { #category : 'private' }
@@ -374,6 +436,33 @@ DockClassOutlineSideView >> methodsForVariable: aVariableModel [
 DockClassOutlineSideView >> newMethodModelForNewMethod [
 
 	self subclassResponsibility
+]
+
+{ #category : 'private - preview' }
+DockClassOutlineSideView >> popupPreview [
+	| selectedModel editorPresenter |
+
+	previewPopover ifNotNil: [ self dismissPreview ].
+
+	selectedModel := listPresenter selectedItem.
+	selectedModel ifNil: [ ^ self ].
+	
+	previewPopover := self newPopover.
+	
+	"is important to instantiate the popover as a child of the popover"
+	editorPresenter := (previewPopover 
+			instantiate: DockMethodEditor 
+			on: selectedModel)
+		addStyle: 'dockPreviewEditor';
+		notificationCenter: self owner notificationCenter;
+		yourself.
+		
+	previewPopover
+		bePositionLeft;
+		doNotTransferFocus;
+		relativeTo: listPresenter;
+		presenter: editorPresenter;
+		popup
 ]
 
 { #category : 'initialization' }
