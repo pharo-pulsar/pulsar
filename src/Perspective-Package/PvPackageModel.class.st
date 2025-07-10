@@ -72,6 +72,12 @@ PvPackageModel >> name [
 	^ self entity name
 ]
 
+{ #category : 'accessing' }
+PvPackageModel >> package [
+
+	^ self entity
+]
+
 { #category : 'helpers' }
 PvPackageModel >> traitDefinitionString [
 	
