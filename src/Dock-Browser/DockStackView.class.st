@@ -109,8 +109,9 @@ DockStackView >> doCloseSelectedEditors [
 DockStackView >> editorCount [
 	| shownSize fullSize |
 
-	shownSize := listPresenter items size.
 	fullSize := listPresenter unfilteredItems size.
+	fullSize = 0 ifTrue: [ ^ '' ].
+	shownSize := listPresenter items size.	
 	^ shownSize = fullSize
 		ifTrue: [ shownSize asString ]
 		ifFalse: [ '{1} / {2}' format: { shownSize. fullSize } ]
