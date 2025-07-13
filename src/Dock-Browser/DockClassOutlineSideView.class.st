@@ -130,10 +130,13 @@ DockClassOutlineSideView >> actions [
 { #category : 'private - preview' }
 DockClassOutlineSideView >> activateMethodPreviewPopover [
 
-	self isPreviewPopoverActive ifTrue: [
-		"Second arrow right will transfer focus"
-		previewPopover takeKeyboardFocus.
-		^ self ].
+	(self isPreviewPopoverActive 
+		and: [ previewPopover isNotNil 
+		and: [ previewPopover isVisible ] ]) 
+		ifTrue: [
+			"Second arrow right will transfer focus"
+			previewPopover takeKeyboardFocus.
+			^ self ].
 	
 	previewPopoverActive := true.
 	self maybePopupPreview
