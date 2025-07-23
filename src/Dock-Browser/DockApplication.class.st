@@ -63,6 +63,7 @@ DockApplication class >> lastSnapshot: aSnapshot [
 DockApplication class >> reset [
 	<script>
 
+	DockUIManager reset.
 	running := nil
 ]
 
