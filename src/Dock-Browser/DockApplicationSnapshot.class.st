@@ -42,6 +42,8 @@ DockApplicationSnapshot >> restoreWindow: aSnapshot to: anApplication [
 
 { #category : 'initialization' }
 DockApplicationSnapshot >> snapshot: anApplication [
-
-	records := anApplication windows collect: [ :each | each snapshot ]
+	"popovers are not snapshoted"
+	records := anApplication windows 
+		reject: [ :each | each isPopover ]
+		thenCollect: [ :each | each snapshot ]
 ]
