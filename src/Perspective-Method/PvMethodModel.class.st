@@ -287,6 +287,13 @@ PvMethodModel >> newVersionsModel [
 		entity: self entity
 ]
 
+{ #category : 'private' }
+PvMethodModel >> prepareForSnapshot [
+
+	decorators := nil.
+	actionDecorators := nil
+]
+
 { #category : 'accessing' }
 PvMethodModel >> protocol [
 
