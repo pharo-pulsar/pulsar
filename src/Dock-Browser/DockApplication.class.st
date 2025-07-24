@@ -302,7 +302,20 @@ DockApplication >> run [
 { #category : 'system startup' }
 DockApplication >> shutDown: quitting [
 
-	self takeSnapshot
+	"Shutingdown is a very critical process and any failure may let the system in a very 
+	 inconsistent status. We need to be sure this will not fail."
+	logger trace.
+	[ 
+		self takeSnapshot.
+	 	logger info: 'Snapshot taken' ]
+	on: Error 
+	fork: [ :e |
+		logger error: e.
+		quitting ifFalse: [ 
+			"If I am just saving, inform the user there was an error taking the snapshot, 
+			 but later, not in the snapshot process."
+			 self schedule: [ 
+				e pass  ] ] ]
 ]
 
 { #category : 'accessing' }
