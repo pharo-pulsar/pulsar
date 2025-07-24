@@ -169,6 +169,11 @@ PvBaseModel >> pageTitle [
 	^ self shortName
 ]
 
+{ #category : 'private' }
+PvBaseModel >> prepareForSnapshot [
+	"This is used when a model will be snapshot, to clean up what is not need/want to be kept "
+]
+
 { #category : 'accessing - compatibility' }
 PvBaseModel >> protocol [
 	

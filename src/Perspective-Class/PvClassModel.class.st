@@ -246,6 +246,12 @@ PvClassModel >> packageTagName [
 	^ self entity packageTag name
 ]
 
+{ #category : 'private' }
+PvClassModel >> prepareForSnapshot [
+
+	actionDecorators := nil
+]
+
 { #category : 'accessing' }
 PvClassModel >> resetActionDecorators [
 	"do nothing, class do not have action decorators"
