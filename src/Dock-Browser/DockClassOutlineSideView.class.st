@@ -339,6 +339,7 @@ DockClassOutlineSideView >> initializeMethods [
 	listPresenter := self newEasyListView 
 		addStyle: 'stList';
 		addStyle: 'dockMethodList';
+		rowPresenterClass: DockMethodRow;
 		display: [ :aModel | aModel name ];
 		searchMatching: [ :aModel :aString | 
 			aModel name asLowercase beginsWith: aString asLowercase ];
