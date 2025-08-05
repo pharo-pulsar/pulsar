@@ -22,6 +22,9 @@ DockEntryRowPresenter >> defaultLayout [
 { #category : 'initialization' }
 DockEntryRowPresenter >> initializePresenters [
 
+	self addStyle: 'stRow'.
+	self addStyle: 'dockChangeEntryRow'.
+
 	iconPresenter := self newImage.
 	descriptionPresenter := self newLabel
 ]
