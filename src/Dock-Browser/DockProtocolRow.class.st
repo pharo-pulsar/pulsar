@@ -25,6 +25,9 @@ DockProtocolRow >> defaultLayout [
 { #category : 'initialization' }
 DockProtocolRow >> initializePresenters [
 
+	self addStyle: 'stRow'.
+	self addStyle: 'dockProtocolRow'.
+
 	iconPresenter := self newImage.
 	namePresenter := self newLabel.
 	countPresenter := self newLabel
@@ -40,6 +43,9 @@ DockProtocolRow >> updatePresenter [
 	
 	iconPresenter image: (self model iconComposite buildOn: self application).
 	namePresenter label: self model name.
+	self model isUnclassified
+		ifTrue: [ namePresenter addStyle: 'unclassified' ]
+		ifFalse: [ namePresenter removeStyle: 'unclassified' ].
 	countPresenter label: (self model numberOfMethods 
 		ifNotNil: [ :aNumber | aNumber asString ]
 		ifNil: [ '' ]).

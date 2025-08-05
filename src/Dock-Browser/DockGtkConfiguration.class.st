@@ -41,7 +41,7 @@ DockGtkConfiguration >> forceDark [
 { #category : 'accessing' }
 DockGtkConfiguration >> forceLight [
 
-		GRunLoop defer: [ AdwStyleManager default ensureLight ].
+	GRunLoop defer: [ AdwStyleManager default ensureLight ].
 	self theme: LnLightTheme new
 ]
 
@@ -83,7 +83,7 @@ DockGtkConfiguration >> style [
 .stList listview, .stTree listview { font-size: 0.9em; } 
 .stTree columnview listview row cell { margin: 0px; padding: 2px; }
 .stTree columnview listview row cell box { border-spacing: 5px; }
-.stRow { margin: 3px; border-spacing: 3px; }
+.stRow { margin: 2px; border-spacing: 2px; }
 .tinyFont {font-size: 0.7em; }
 .searchBox { background-color: @popover_bg_color; }
 .link { padding: 0px; }
@@ -93,6 +93,7 @@ DockGtkConfiguration >> style [
 button.pvProtocol { font-weight: normal; }
 .pvProtocolChooser { min-width: 250px; min-height: 280px; }
 tab .tab-title label { font-size: 0.9em; }
+.dockProtocolRow label.unclassified { color: red; }
 .dockStack label.count { padding-right: 5px; }
 .dockToolbar { margin: 0px; padding: 0px; }
 .dockEditorBreadcrumb { font-size: 9pt; }

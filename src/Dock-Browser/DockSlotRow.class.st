@@ -24,6 +24,9 @@ DockSlotRow >> defaultLayout [
 { #category : 'initialization' }
 DockSlotRow >> initializePresenters [
 
+	self addStyle: 'stRow'.
+	self addStyle: 'dockSlotRow'.
+
 	namePresenter := self newLabel.
 	slotPresenter := self newLabel
 		addStyle: 'dim';
