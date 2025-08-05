@@ -22,19 +22,6 @@ DockApplication class >> applicationName [
 	^ 'dock'
 ]
 
-{ #category : 'private' }
-DockApplication class >> cleanUp [
-	<script>
-	
-	DockUIManager reset.
-	OupsDebuggerSelectionStrategy debuggerSelectionStrategy: nil. 
-	"yes, there are better ways to do this, for for now..."
-	DockWorker allInstances do: #stop.
-	Transcript dependents copy
-		collect: [ :each | each isKindOf: DockTranscript ]
-		thenDo: [ :each | Transcript removeDependent: each ].
-]
-
 { #category : 'accessing' }
 DockApplication class >> defaultBackendName [
 
@@ -62,8 +49,14 @@ DockApplication class >> lastSnapshot: aSnapshot [
 { #category : 'private' }
 DockApplication class >> reset [
 	<script>
-
+	
 	DockUIManager reset.
+	OupsDebuggerSelectionStrategy debuggerSelectionStrategy: nil. 
+	"yes, there are better ways to do this, for for now..."
+	DockWorker allInstances do: #stop.
+	Transcript dependents copy
+		collect: [ :each | each isKindOf: DockTranscript ]
+		thenDo: [ :each | Transcript removeDependent: each ].
 	running := nil
 ]
 
@@ -92,15 +85,14 @@ DockApplication class >> shutDown: quitting [
 	self running ifNotNil: [ :anApplication | 
 		anApplication shutDown: quitting ].
 	quitting ifFalse: [ ^ self ].
-	self running: nil.
-	self cleanUp
+	self reset
 ]
 
 { #category : 'system startup' }
 DockApplication class >> startUp: resuming [
 
 	resuming ifFalse: [ ^ self ].
-	self cleanUp
+	self reset
 ]
 
 { #category : 'initialization' }
@@ -309,13 +301,9 @@ DockApplication >> shutDown: quitting [
 		self takeSnapshot.
 	 	logger info: 'Snapshot taken' ]
 	on: Error 
-	fork: [ :e |
+	do: [ :e |
 		logger error: e.
-		quitting ifFalse: [ 
-			"If I am just saving, inform the user there was an error taking the snapshot, 
-			 but later, not in the snapshot process."
-			 self schedule: [ 
-				e pass  ] ] ]
+		e messageText printToStdout ]
 ]
 
 { #category : 'accessing' }
