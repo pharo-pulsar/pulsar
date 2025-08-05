@@ -51,6 +51,12 @@ PvProtocolModel >> isProtected [
 		anySatisfy: [ :each | lowercaseName beginsWith: each ]
 ]
 
+{ #category : 'testing' }
+PvProtocolModel >> isUnclassified [
+	
+	^ self entity isUnclassifiedProtocol
+]
+
 { #category : 'accessing' }
 PvProtocolModel >> name [
 

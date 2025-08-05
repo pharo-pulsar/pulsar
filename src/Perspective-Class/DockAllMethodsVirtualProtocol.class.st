@@ -43,6 +43,12 @@ DockAllMethodsVirtualProtocol >> iconName [
 	^ #protocolVirtual
 ]
 
+{ #category : 'testing' }
+DockAllMethodsVirtualProtocol >> isUnclassified [
+
+	^ false
+]
+
 { #category : 'accessing' }
 DockAllMethodsVirtualProtocol >> methodSelectors [
 

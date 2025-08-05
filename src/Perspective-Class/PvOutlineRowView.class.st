@@ -30,6 +30,8 @@ PvOutlineRowView >> defaultLayout [
 { #category : 'initialization' }
 PvOutlineRowView >> initializePresenters [
 
+	self addStyle: 'pvOutlineRow'.
+
 	iconPresenter := self newImage.
 	namePresenter := self newLabel.
 	protocolPresenter := self newLink
