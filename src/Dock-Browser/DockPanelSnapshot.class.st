@@ -49,5 +49,11 @@ DockPanelSnapshot >> snapshot: aPresenter [
 
 	presenterClass := aPresenter class.
 	dockPosition := aPresenter panelWindow dockPosition.
-	model := aPresenter model ifNotNil: #prepareForSnapshot	
+	self takeModelSnapshot: aPresenter
+]
+
+{ #category : 'initialization' }
+DockPanelSnapshot >> takeModelSnapshot: aPresenter [
+
+	model := aPresenter model
 ]

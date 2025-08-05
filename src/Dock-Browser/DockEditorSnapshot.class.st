@@ -42,3 +42,9 @@ DockEditorSnapshot >> snapshot: aPresenter [
 	cursorPositionIndex := aPresenter editorPresenter cursorPositionIndex.
 
 ]
+
+{ #category : 'initialization' }
+DockEditorSnapshot >> takeModelSnapshot: aPresenter [
+
+	model := aPresenter model prepareForSnapshot
+]
