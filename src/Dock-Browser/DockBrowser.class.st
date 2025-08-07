@@ -32,6 +32,36 @@ DockBrowser class >> defineImageActionsOn: aBuilder [
 ]
 
 { #category : 'accessing - actions' }
+DockBrowser class >> definePanelActionGroup: actionGroup [
+	<perspectiveActionGroup: #panels>
+	
+	actionGroup 
+		name: 'Panels';
+		priority: 900;
+		beDisplayedAsSubMenu
+]
+
+{ #category : 'accessing - actions' }
+DockBrowser class >> definePanelActionsOn: aBuilder [
+	<perspectiveActions>
+
+	aBuilder registerGroup: #panels with: { 
+		PvAction new 
+			name: 'Toggle panel start'; 
+			action: [ :aContext | aContext togglePanelArea: SpPanelArea start ].
+		PvAction new 
+			name: 'Toggle panel top'; 
+			action: [ :aContext | aContext togglePanelArea: SpPanelArea top ].
+		PvAction new 
+			name: 'Toggle panel end'; 
+			action: [ :aContext | aContext togglePanelArea: SpPanelArea end ].
+		PvAction new 
+			name: 'Toggle panel bottom'; 
+			action: [ :aContext | aContext togglePanelArea: SpPanelArea bottom ].
+	}
+]
+
+{ #category : 'accessing - actions' }
 DockBrowser class >> defineSpotterActionGroup: actionGroup [
 	<perspectiveActionGroup: #spotter>
 	
@@ -166,6 +196,7 @@ DockBrowser >> initializeWorkspace [
 	"defaults"
 	self startWidth: 280"self initialExtent x * 25 percent".
 	self endWidth: 280"self initialExtent x * 25 percent".
+	self topHeight: 180"self initialExtent y * 20 percent".
 	self bottomHeight: 180"self initialExtent y * 20 percent"
 ]
 
@@ -329,6 +360,12 @@ DockBrowser >> spawnRecentChanges [
 	(EpUnifiedBrowserPresenter newApplication: self application) 
 		refresh; 
 		open
+]
+
+{ #category : 'actions' }
+DockBrowser >> togglePanelArea: aPanelArea [
+
+	aPanelArea accept: (DockBrowserPanelAreaVisible on: self)
 ]
 
 { #category : 'initialization' }
