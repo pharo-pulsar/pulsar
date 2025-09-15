@@ -73,14 +73,18 @@ DockContextEditor >> updateBreadcrumbs [
 
 { #category : 'initialization' }
 DockContextEditor >> updateEditor [
+	| context source selectedCodeRange |
 
-	logger trace: self model selectedCodeRange.
+	context := self model context.
+	source := self model sourceCode.
+	selectedCodeRange := self model selectedCodeRange.
 	editorPresenter
-		beForContext: self model context;
-		text: self model sourceCode;
+		beForContext: context;
+		text: source;
 		addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight
-			interval: self model selectedCodeRange;
-			yourself)
+			interval: selectedCodeRange;
+			yourself);
+		scrollValue: 0@(source lineNumberCorrespondingToIndex: selectedCodeRange first)
 ]
 
 { #category : 'initialization' }

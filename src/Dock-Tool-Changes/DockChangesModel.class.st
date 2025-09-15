@@ -14,7 +14,7 @@ DockChangesModel >> directory [
 	^ self monitor sessionStore baseLocator
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 DockChangesModel >> entriesOnReference: aFileReference [
 
 	aFileReference ifNil: [ ^ #() ].

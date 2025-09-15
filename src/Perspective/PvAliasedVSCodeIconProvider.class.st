@@ -33,7 +33,7 @@ PvAliasedVSCodeIconProvider >> initialize [
 	self addAliasesFromPairs: {
 		'add'.						'add'.	
 		'closeAll'.					'close-all'.
-		"#addFolder"
+		'load'. 					'folder-opened'.
 		'groupByMethod'. 			'extensions'.			"browser (extensions)"
 		'library'.					'library'.				"browser (system deps)"
 		'class'.					'symbol-class'.			"type"
@@ -70,7 +70,8 @@ PvAliasedVSCodeIconProvider >> initialize [
 		'variable'.					'symbol-variable'.		"type"
 		'smallInspectIt'.			'eye'.					"inspector..."
 		'inspector'. 				'eye'. 
-		'string'.					'symbol-string'.			"type"
+		'senders'.					'call-incoming'.		"message browser - senders"
+		'string'.					'symbol-string'.		"type"
 		'magnitude'.				'symbol-numeric'.		"type"
 		'collection'.				'symbol-namespace'.		"type"
 		'glamorousClose'. 			'close'.   				"inspector"
@@ -130,6 +131,11 @@ PvAliasedVSCodeIconProvider >> initialize [
 		'changeUpdate'.				'remote'. "not good"
 		"same name (just to keep track of them)"
 		'search'.					'search'.
+		"panels"
+		'panel-left'.				'layout-sidebar-left'.
+		'panel-top'.				'layout-panel-top'.
+		'panel-right'.				'layout-sidebar-right'.
+		'panel-bottom'.				'layout-panel'.
 	 }
 ]
 

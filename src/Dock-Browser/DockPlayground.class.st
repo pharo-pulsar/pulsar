@@ -35,28 +35,25 @@ DockPlayground class >> defineActionsOn: aBuilder [
 
 	aBuilder 
 		registerGroup: #actions with: {
+			PvAction new
+				priority: 1;
+				name: 'New playground';
+				description: 'Create a new playground';
+				iconCompositeName: 'add';
+				action: [ :aContext | aContext doNewPlayground ].		
+			PvAction new
+				priority: 2;
+				name: 'Load page';
+				description: 'Load a playground page';
+				iconCompositeName: 'load';
+				action: [ :aContext | aContext doLoadPage ].	
 			PvAction new 
 				name: 'Versions';
 				description: 'Browse versions of current playground page';
 				iconCompositeName: 'versions';
 				action: [ :aContext :aCommand | aContext doBrowseVersionsCommand: aCommand ].
-		};
-		registerGroup: #tools with: {  
-			PvAction new
-				name: 'New page';
-				description: 'Create a new playground page';
-				action: [ :aContext | aContext doNewPage ].		
-			PvAction new
-				name: 'Load page';
-				description: 'Load a playground page';
-				action: [ :aContext | aContext doLoadPage ].	
-		}; 
-		registerGroup: #CRITICAL with: {
-			PvAction new
-				name: 'Close';
-				description: 'Close Playground';
-				action: [ :aContext | aContext doClose ]
 		}
+	
 ]
 
 { #category : 'private - actions' }
@@ -95,13 +92,9 @@ DockPlayground >> contents: aString [
 { #category : 'layout' }
 DockPlayground >> defaultLayout [
 
-	^ SpOverlayLayout new
-		addOverlay: (SpBoxLayout newHorizontal
-				add: actionsPresenter;
-				add: moreActionsPresenter;
-				yourself) 
-			withConstraints: [ :c | c vAlignStart; hAlignEnd ];
-		child: codePresenter;
+	^ SpBoxLayout newVertical
+		add: toolbarPresenter expand: false;
+		add: codePresenter;
 		yourself
 ]
 
@@ -144,6 +137,12 @@ DockPlayground >> doNewPage [
 	self activatePage: StPlaygroundPage new
 ]
 
+{ #category : 'private - actions' }
+DockPlayground >> doNewPlayground [
+
+	self notificationCenter announce: DockRequestNewPlayground
+]
+
 { #category : 'initialization' }
 DockPlayground >> ensureCodeBindings [
 
@@ -166,16 +165,20 @@ DockPlayground >> initialize [
 { #category : 'initialization' }
 DockPlayground >> initializePresenters [
 
-	"toolbarPresenter := self instantiate: DockToolbarPresenter.
-	toolbarPresenter addPresenterMenuButtonWith: (self actions actionsFor: #tools)."
 	actionsPresenter := self newToolbar
 		displayMode: self application toolbarDisplayMode;
 		fillWith: (self actions actionsFor: #actions).
-	moreActionsPresenter := self newMenuButton
+	
+	moreActionsPresenter := self newButton
 		addStyle: 'flat';
-		icon: (self iconNamed: 'menu');
-		actions: (self actions actionsForAll: #(tools CRITICAL));
+		icon: (self iconNamed: 'close');
+		action: [ self doClose ];
 		yourself.
+
+	toolbarPresenter := self instantiate: DockEditorToolbarPresenter.
+	toolbarPresenter 
+		addPresenter: actionsPresenter;
+		addPresenter: moreActionsPresenter.
 
 	(codePresenter := self newCode)
 		addStyle: 'stCode';

@@ -30,7 +30,8 @@ DockEditor class >> defineNavigationActionsOn: aBuilder [
 	<perspectiveActions>
 
 	aBuilder registerGroup: #navigation with: { 
-		$h mod1 -> DockHierarchyNavigationCommand new
+		$h mod1 -> DockHierarchyNavigationCommand new.
+		DockSendersNavigationCommand new.
 	}
 ]
 

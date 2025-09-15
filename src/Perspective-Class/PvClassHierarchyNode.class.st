@@ -18,6 +18,14 @@ PvClassHierarchyNode class >> for: anObject [
 		yourself
 ]
 
+{ #category : 'comparing' }
+PvClassHierarchyNode >> = other [
+
+	self species = other species ifFalse: [ ^ false ].
+	^ self realModel = other realModel
+	
+]
+
 { #category : 'accessing' }
 PvClassHierarchyNode >> addChildNode: aNode [
 
@@ -78,6 +86,12 @@ PvClassHierarchyNode >> hasChildren [
 PvClassHierarchyNode >> hasParent [
 
 	^ parent notNil
+]
+
+{ #category : 'comparing' }
+PvClassHierarchyNode >> hash [
+
+	^ self species hash bitXor: self realModel hash
 ]
 
 { #category : 'accessing' }

@@ -174,14 +174,13 @@ DockProjectView >> doDuplicateSelectedClass [
 	dialog acceptLabel: 'Duplicate'.
 	
 	dialog asPopover
-		"relativeTo: aCommand presenter;"
+		relativeTo: (self listPresenter selectedRowPresenter ifNil: [ self listPresenter ]);
 		popupModalAndWait.
 	dialog isOk ifFalse: [ ^ self ].
 	
 	duplicateName := dialog text.
 	
 	listPresenter selectedItem realModel duplicateAs: duplicateName.
-	
 ]
 
 { #category : 'private - actions' }

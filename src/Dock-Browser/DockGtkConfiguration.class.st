@@ -99,7 +99,8 @@ tab .tab-title label { font-size: 0.9em; }
 .dockEditorBreadcrumb { font-size: 9pt; }
 .dockEditorBreadcrumb label.separator { padding: 0px 5px 0px 5px; }
 popover .dockPreviewEditor { min-width: 680px; min-height: 340px; }
-.dockSpotter, .dockDialog, .dockFlyingBrowser { margin: 5px; border-spacing: 5px; }
+.dockBrowser { }
+.dockDialog, .dockFlyingBrowser, .dockSpotter { margin: 5px; border-spacing: 5px; }
 .dockSpotter entry.search { margin: 5px 5px 0px 5px; }
 .dockMessageFlyingBrowser { min-width: 680px; min-height: 440px; }
 .dockInspectorFlyingBrowser { min-width: 680px; min-height: 440px; }

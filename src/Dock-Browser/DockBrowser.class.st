@@ -47,16 +47,24 @@ DockBrowser class >> definePanelActionsOn: aBuilder [
 
 	aBuilder registerGroup: #panels with: { 
 		PvAction new 
-			name: 'Toggle panel start'; 
+			name: 'Toggle panel left';
+			description: 'Show/hide the left panel';
+			iconCompositeName: 'panel-left';
 			action: [ :aContext | aContext togglePanelArea: SpPanelArea start ].
 		PvAction new 
 			name: 'Toggle panel top'; 
+			description: 'Show/hide the top panel';
+			iconCompositeName: 'panel-top';
 			action: [ :aContext | aContext togglePanelArea: SpPanelArea top ].
 		PvAction new 
-			name: 'Toggle panel end'; 
+			name: 'Toggle panel right'; 
+			description: 'Show/hide the right panel';
+			iconCompositeName: 'panel-right';
 			action: [ :aContext | aContext togglePanelArea: SpPanelArea end ].
 		PvAction new 
 			name: 'Toggle panel bottom'; 
+			description: 'Show/hide the bottom panel';
+			iconCompositeName: 'panel-bottom';
 			action: [ :aContext | aContext togglePanelArea: SpPanelArea bottom ].
 	}
 ]
@@ -102,6 +110,12 @@ DockBrowser class >> defineToolActionsOn: aBuilder [
 		DockOpenGitRepositoriesCommand new.
 		DockOpenRecentChangesCommand new.
 	}
+]
+
+{ #category : 'private' }
+DockBrowser >> addTool: ann [ 
+
+	self addPresenterClass: ann toolClass
 ]
 
 { #category : 'private' }
@@ -178,6 +192,14 @@ DockBrowser >> initialize [
 ]
 
 { #category : 'initialization' }
+DockBrowser >> initializeStatusbar [
+
+	self statusbar addSuffix: (self newToolbar 
+		displayMode: self application toolbarDisplayMode;
+		fillWith: (self globalActions actionsFor: #panels))
+]
+
+{ #category : 'initialization' }
 DockBrowser >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
@@ -197,7 +219,9 @@ DockBrowser >> initializeWorkspace [
 	self startWidth: 280"self initialExtent x * 25 percent".
 	self endWidth: 280"self initialExtent x * 25 percent".
 	self topHeight: 180"self initialExtent y * 20 percent".
-	self bottomHeight: 180"self initialExtent y * 20 percent"
+	self bottomHeight: 180"self initialExtent y * 20 percent".
+	
+	self initializeStatusbar
 ]
 
 { #category : 'initialization' }
@@ -315,6 +339,7 @@ DockBrowser >> registerToEvents [
 
 	super registerToEvents.
 	self announcer 
+		when: DockRequestToolAnnouncement send: #addTool: to: self;
 		when: (TestCaseEnded, TestSuiteEnded) send: #eventTestCaseEnded: to: self
 ]
 
@@ -357,9 +382,7 @@ DockBrowser >> spawnNewProcessBrowser [
 { #category : 'actions' }
 DockBrowser >> spawnRecentChanges [
 
-	(EpUnifiedBrowserPresenter newApplication: self application) 
-		refresh; 
-		open
+	(DockChangesBrowser newApplication: self application) open
 ]
 
 { #category : 'actions' }

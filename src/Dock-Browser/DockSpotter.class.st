@@ -14,7 +14,9 @@ Class {
 		'tabLayout',
 		'editorsContext',
 		'toolsContext',
-		'environmentContext'
+		'environmentContext',
+		'searchService',
+		'lastSearchText'
 	],
 	#category : 'Dock-Browser-Tool-Spotter',
 	#package : 'Dock-Browser',
@@ -24,7 +26,7 @@ Class {
 { #category : 'accessing' }
 DockSpotter class >> defaultExtent [
 
-	^ 700@550
+	^ 600@450
 ]
 
 { #category : 'private - actions' }
@@ -39,7 +41,6 @@ DockSpotter >> acceptSelection [
 DockSpotter >> connectPresenters [
 
 	searchPresenter 
-		whenTextChangedDo: [ :aString | self doSearch: aString ];
 		whenSubmitDo: [ :aString | self acceptSelection ];
 		addShortcutWith: [ :action | action 
 			shortcutKey: KeyboardKey down asKeyCombination;
@@ -50,6 +51,7 @@ DockSpotter >> connectPresenters [
 		addShortcutWith: [ :action | action 
 			shortcutKey: KeyboardKey left asKeyCombination actionModifier;
 			action: [ self giveFocusToPreviousResultList ] ].
+	
 	resultListPresenter whenActivatedDo: [ :aSelection | self acceptSelection ].
 	editorListPresenter whenActivatedDo: [ :aSelection | self acceptSelection ].
 	toolListPresenter whenActivatedDo: [ :aSelection | self acceptSelection ]
@@ -102,6 +104,22 @@ DockSpotter >> editorsContext [
 		editorsContext := DockSpotterSearchContext searchEditors
 			browser: self owner root;
 			yourself ]
+]
+
+{ #category : 'private' }
+DockSpotter >> ensureSearchService [
+		
+	searchService ifNotNil: [ 
+		searchService isRunning ifFalse: [ searchService restart ].
+		^ searchService ].
+	
+	searchService := TKTParameterizableService new.
+	searchService name: 'DockSpotter service: ', UUID new asString.
+	searchService stepDelay: 200 milliSeconds.
+	searchService step: [ self processSearch ].
+	searchService start.
+	
+	^ searchService
 ]
 
 { #category : 'private' }
@@ -197,6 +215,18 @@ DockSpotter >> newResultList [
 ]
 
 { #category : 'private' }
+DockSpotter >> processSearch [
+	| waitingSearchText |
+
+	waitingSearchText := searchPresenter text.
+	"spinner isVisible ifTrue: [ spinner updateStep ]."
+	
+	waitingSearchText = lastSearchText ifTrue: [ ^ self ].
+	lastSearchText := waitingSearchText.
+	self doSearch: waitingSearchText
+]
+
+{ #category : 'private' }
 DockSpotter >> selectedContext [
 
 	activePresenter = editorListPresenter ifTrue: [ ^ self editorsContext ].
@@ -213,7 +243,8 @@ DockSpotter >> tabActivated: aPresenter [
 	activePresenter := aPresenter.
 	activePresenter ifNotNil: [
 		self updateSearchPlaceHolder.
-		self doSearch: searchPresenter text ]
+		lastSearchText := nil.
+		self ensureSearchService ]
 ]
 
 { #category : 'private' }
@@ -279,6 +310,6 @@ DockSpotter >> visitPanelEntry: anEntry [
 
 { #category : 'private' }
 DockSpotter >> windowClosed [
-
+	searchService ifNotNil: [ searchService stop ].
 	runner stop
 ]

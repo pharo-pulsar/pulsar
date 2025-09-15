@@ -406,6 +406,12 @@ DockClassOutlineSideView >> isPreviewPopoverActive [
 	^ previewPopoverActive
 ]
 
+{ #category : 'private' }
+DockClassOutlineSideView >> listPresenter [
+
+	^ listPresenter
+]
+
 { #category : 'initialization' }
 DockClassOutlineSideView >> listToolbarActions [
 
@@ -461,10 +467,11 @@ DockClassOutlineSideView >> popupPreview [
 		notificationCenter: self owner notificationCenter;
 		yourself.
 		
+	self flag: #TODO. "we need to check for left-right depending on the position of the overview"
 	previewPopover
 		bePositionLeft;
 		doNotTransferFocus;
-		relativeTo: listPresenter;
+		relativeTo: (listPresenter selectedRowPresenter ifNil: [ listPresenter ]);
 		presenter: editorPresenter;
 		popup
 ]

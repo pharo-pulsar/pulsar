@@ -26,7 +26,7 @@ DockEntryRowPresenter >> initializePresenters [
 	self addStyle: 'dockChangeEntryRow'.
 
 	iconPresenter := self newImage.
-	descriptionPresenter := self newLabel
+	descriptionPresenter := self newLabel useMarkup
 ]
 
 { #category : 'initialization' }
@@ -38,5 +38,5 @@ DockEntryRowPresenter >> updatePresenter [
 	(content accept: EpIconNameVisitor new) 
 		ifNotNil: [ :aName | iconPresenter image: (self iconNamed: aName asString) ].
 	(content accept: DockChangeEntryNameVisitor new)
-		ifNotNil: [ :aString | descriptionPresenter label: self model asString ]
+		ifNotNil: [ :aString | descriptionPresenter label: aString ]
 ]
