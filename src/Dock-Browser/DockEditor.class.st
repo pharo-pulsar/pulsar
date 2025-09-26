@@ -143,9 +143,7 @@ DockEditor >> doSubmit: aString [
 	| result oldModel |
 	
 	oldModel := self model copy.
-	result := self model 
-		updateWith: aString
-		notifying: editorPresenter interactionModel.
+	result := self updateModel: aString.
 	result ifTrue: [
 		self unmarkDirty.
 		self notificationCenter announce: (DockModelChanged 
@@ -428,6 +426,14 @@ DockEditor >> updateContentActions [
 						context: self; 
 						asSpecCommand ]);
 				yourself) ] ]
+]
+
+{ #category : 'private - actions' }
+DockEditor >> updateModel: aString [
+
+	^ self model 
+		updateWith: aString
+		notifying: editorPresenter interactionModel
 ]
 
 { #category : 'initialization' }

@@ -87,6 +87,23 @@ DockContextEditor >> updateEditor [
 		scrollValue: 0@(source lineNumberCorrespondingToIndex: selectedCodeRange first)
 ]
 
+{ #category : 'private - actions' }
+DockContextEditor >> updateModel: aString [
+	| force |
+
+	force := false.
+	^  [ 
+		self model 
+			updateWith: aString
+			notifying: editorPresenter interactionModel
+			force: force ]
+		on: DebugAttemptToRewindPostMortemError 
+		do: [ :e | 
+			force := self confirm: 'Can not rewind post mortem context for new method. Accept anyway?'.
+			force ifTrue: [ e retry ].
+			false ]
+]
+
 { #category : 'initialization' }
 DockContextEditor >> updatePresenter [
 

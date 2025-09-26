@@ -246,14 +246,22 @@ DockContextModel >> updateEntityFromStack [
 
 { #category : 'updating' }
 DockContextModel >> updateWith: aString notifying: anInteractionModel [
+
+	^ self error: 'Should not arrive here.'
+]
+
+{ #category : 'updating' }
+DockContextModel >> updateWith: aString notifying: anInteractionModel force: aBoolean [
 	| result |
 
-	result := self methodModel 
-		updateWith: aString 
-		notifying: anInteractionModel.
-	result ifTrue: [ 
+	result := self session 
+		recompileMethodTo: aString
+		inContext: self entity
+		notifying: anInteractionModel
+		force: aBoolean.
+	result ifTrue: [
 		self updateEntityFromStack.
 		self restartCurrentContext ].
-	
+
 	^ result
 ]
