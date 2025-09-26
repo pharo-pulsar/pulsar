@@ -80,6 +80,7 @@ DockGtkConfiguration >> reloadOnApplication: anApplication [
 DockGtkConfiguration >> style [
 
 	^ '
+/* listview { background-color: var(--window-bg-color); } */
 .stList listview, .stTree listview { font-size: 0.9em; } 
 .stTree columnview listview row cell { margin: 0px; padding: 2px; }
 .stTree columnview listview row cell box { border-spacing: 5px; }
@@ -111,5 +112,6 @@ popover .dockPreviewEditor { min-width: 680px; min-height: 340px; }
 .dockPopoverControlToolbar { margin: 0px; padding: 0px 0px 0px 10px; }
 .dockDebuggerToolbar { background-color: var(--window-bg-color); }
 .dockDebuggerToolbar .stToolbar { padding: 1px; }
+.dockPlaygroundBindingsFlyingBrowser { min-width: 280px; min-height: 240px; }
 '
 ]
