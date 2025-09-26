@@ -51,6 +51,14 @@ DockClassEditor >> defaultLayout [
 ]
 
 { #category : 'private - actions' }
+DockClassEditor >> doBrowseSendersCommand: anAction [
+	
+	self systemNavigation 
+		responderPresenter: anAction presenter;
+		browseAllCallsOnClass: self model entity
+]
+
+{ #category : 'private - actions' }
 DockClassEditor >> doResetComment [
 
 	self updateComment

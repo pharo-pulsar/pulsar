@@ -42,6 +42,14 @@ DockMethodEditor >> connectPresenters [
 		self notifyEntityChanged: self model ]
 ]
 
+{ #category : 'private - actions' }
+DockMethodEditor >> doBrowseSendersCommand: anAction [
+	
+self systemNavigation 
+		responderPresenter: anAction presenter;
+		browseAllSendersOf: self model name
+]
+
 { #category : 'actions' }
 DockMethodEditor >> doBrowseVersionsCommand: anAction [
 	| popover versionsPresenter |

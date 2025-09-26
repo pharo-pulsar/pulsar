@@ -113,6 +113,12 @@ DockEditor >> dirtyMarkerPresenter [
 ]
 
 { #category : 'private - actions' }
+DockEditor >> doBrowseSendersCommand: anAction [
+	
+	self subclassResponsibility
+]
+
+{ #category : 'private - actions' }
 DockEditor >> doReset [
 
 	self updatingWhile: [ 
