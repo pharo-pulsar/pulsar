@@ -1,6 +1,14 @@
 Extension { #name : 'SpPresenter' }
 
 { #category : '*Perspective' }
+SpPresenter >> insertPopover: aPresenter [
+
+	aPresenter asPopover
+		relativeTo: self;
+		popup
+]
+
+{ #category : '*Perspective' }
 SpPresenter >> isEditor [
 	
 	^ false
