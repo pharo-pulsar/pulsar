@@ -13,3 +13,9 @@ DockSendersNavigationCommand >> defineAction [
 	self description: 'Show senders'.
 	self iconCompositeName: 'senders'
 ]
+
+{ #category : 'initialization' }
+DockSendersNavigationCommand >> execute [ 
+
+	self context doBrowseSendersCommand: self
+]
