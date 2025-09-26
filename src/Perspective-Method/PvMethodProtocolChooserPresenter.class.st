@@ -43,21 +43,17 @@ PvMethodProtocolChooserPresenter >> defaultLayout [
 PvMethodProtocolChooserPresenter >> filterProtocolsWith: aString [
 	"Selects the first that begins with my string (unless this is nil or unclassified)"
 	| searchString |
-
+	
 	updating ifTrue: [ ^ self ].
 	aString ifNil: [ ^ self ].
-	self updatingWhile: [	
-		searchString := aString trimmed asLowercase.
-		(searchString = Protocol unclassified) ifTrue: [ ^ self ].
-		
-		protocolListPresenter items withIndexDo: [ :each :index | 
-		 	(each asLowercase beginsWith: searchString)
-		 		ifTrue: [
-		 			self updatingWhile: [
-		 				protocolListPresenter 
-		 					selectIndex: index 
-							scrollToSelection: true ].
-		 			^ self ] ] ]
+	self updatingWhile: [
+		searchString := aString trimBoth asLowercase.
+		searchString = Protocol unclassified ifTrue: [ ^ self ].
+		protocolListPresenter items withIndexDo: [ :each :index |
+			(each asLowercase beginsWith: searchString) ifTrue: [
+				self updatingWhile: [ 
+					protocolListPresenter selectIndex: index scrollToSelection: true ].
+				^ self ] ] ]
 ]
 
 { #category : 'initialization' }
