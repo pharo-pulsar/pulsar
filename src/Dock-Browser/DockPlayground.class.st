@@ -47,13 +47,19 @@ DockPlayground class >> defineActionsOn: aBuilder [
 				description: 'Load a playground page';
 				iconCompositeName: 'load';
 				action: [ :aContext | aContext doLoadPage ].	
-			PvAction new 
+			PvAction new
+				priority: 3;
 				name: 'Versions';
 				description: 'Browse versions of current playground page';
 				iconCompositeName: 'versions';
 				action: [ :aContext :aCommand | aContext doBrowseVersionsCommand: aCommand ].
+			PvAction new
+				priority: 4;
+				name: 'Variables';
+				description: 'Browse variables (bindings) defined in current playground';
+				iconCompositeName: 'variables';
+				action: [ :aContext :aCommand | aContext doBrowseBindingsCommand: aCommand ].
 		}
-	
 ]
 
 { #category : 'private - actions' }
@@ -96,6 +102,19 @@ DockPlayground >> defaultLayout [
 		add: toolbarPresenter expand: false;
 		add: codePresenter;
 		yourself
+]
+
+{ #category : 'private - actions' }
+DockPlayground >> doBrowseBindingsCommand: anAction [
+	| bindingsPresenter |
+	
+	bindingsPresenter := self 
+		instantiate: DockPlaygroundBindingsPresenter 
+		on: codePresenter interactionModel.
+		
+	bindingsPresenter asPopover
+		relativeTo: anAction presenter;
+		popup
 ]
 
 { #category : 'private - actions' }
@@ -244,6 +263,16 @@ DockPlayground >> updatePageContent: aString [
 DockPlayground >> updatePresenter [ 
 
 	super updatePresenter. 
+	
+	self updateTitle.
+	
 	self ensureCodeBindings.
 	codePresenter text: self model contents
+]
+
+{ #category : 'initialization' }
+DockPlayground >> updateTitle [
+
+	toolbarPresenter updateBreadcrumbWith: [ :aBreadcrumb |
+		aBreadcrumb addSegment: 'Playground' ]
 ]
