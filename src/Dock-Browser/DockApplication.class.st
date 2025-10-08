@@ -156,6 +156,12 @@ DockApplication >> iconCache [
 		ifAbsentPut: [ PvCompositeIconCache new ]
 ]
 
+{ #category : 'ui requests' }
+DockApplication >> inform: aString [
+
+	aString printToStdout
+]
+
 { #category : 'initialization' }
 DockApplication >> initialize [
 

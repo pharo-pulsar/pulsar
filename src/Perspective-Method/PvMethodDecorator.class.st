@@ -55,3 +55,9 @@ PvMethodDecorator >> model: aModel [
 
 	model := aModel
 ]
+
+{ #category : 'accessing' }
+PvMethodDecorator >> style [
+
+	^ nil
+]

@@ -9,11 +9,17 @@ Class {
 { #category : 'testing' }
 PvMethodExtensionDecorator class >> appliesTo: aMethod [
 
-	^ aMethod isExtension
+	^ aMethod isExtension or: [ aMethod protocol isExtensionProtocol ]
 ]
 
 { #category : 'accessing' }
 PvMethodExtensionDecorator >> colorName [
 
 	^ #gray
+]
+
+{ #category : 'accessing' }
+PvMethodExtensionDecorator >> style [
+
+	^ 'extension'
 ]

@@ -90,6 +90,30 @@ DockClassEditor >> eventModelRemoved: anAnnouncememnt [
 	self flag: #TODO
 ]
 
+{ #category : 'events' }
+DockClassEditor >> eventTestCaseEnded: aTestCaseEnded [
+
+	"(self model isTestCase
+		and: [ aTestCaseEnded testCase class = self model entity ])
+		ifFalse: [ ^ self ].
+		
+	self halt.
+	logger trace: aTestCaseEnded.
+	self updateContentActions"
+]
+
+{ #category : 'events' }
+DockClassEditor >> eventTestSuiteEnded: aTestSuiteEnded [
+
+	(self model isTestCase
+		and: [ aTestSuiteEnded testResult classesTested includes: self model entity ])
+		ifFalse: [ ^ self ].
+
+	logger trace: aTestSuiteEnded.
+
+	self updateContentActions
+]
+
 { #category : 'initialization' }
 DockClassEditor >> initializePresenters [
 
@@ -106,6 +130,15 @@ DockClassEditor >> initializePresenters [
 DockClassEditor >> originalContent [
 
 	^ self model classDefinitionString
+]
+
+{ #category : 'initialization' }
+DockClassEditor >> registerToSystemEvents [
+	
+	super registerToSystemEvents.
+	
+	self announcer
+		when: TestSuiteEnded send: #eventTestSuiteEnded: to: self
 ]
 
 { #category : 'initialization' }

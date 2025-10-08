@@ -128,11 +128,8 @@ DockEditor >> doReset [
 
 { #category : 'private - actions' }
 DockEditor >> doRunTestCommand: anAction [
-	| resultAnnouncement |
-	
-	resultAnnouncement := self model runTest.
-	anAction presenter updatePresenter.
-	self notificationCenter announce: resultAnnouncement
+
+	self model runTestAnnouncingTo: self notificationCenter
 ]
 
 { #category : 'private - actions' }
@@ -197,6 +194,12 @@ DockEditor >> eventModelChanged: ann [
 
 { #category : 'events' }
 DockEditor >> eventModelRemoved: anAnnouncement [
+
+	self subclassResponsibility
+]
+
+{ #category : 'events' }
+DockEditor >> eventTestCaseEnded: aTestCaseEnded [
 
 	self subclassResponsibility
 ]
@@ -344,6 +347,9 @@ DockEditor >> registerToEvents [
 { #category : 'initialization' }
 DockEditor >> registerToSystemEvents [
 	"subclasses can fill this"
+	
+	self announcer
+		when: TestCaseEnded send: #eventTestCaseEnded: to: self
 ]
 
 { #category : 'accessing - overlay' }

@@ -72,6 +72,14 @@ PvProtocolModel >> numberOfMethods [
 	^ self selectors size
 ]
 
+{ #category : 'actions' }
+PvProtocolModel >> renameProtocolTo: aName [
+
+	self entity owningClass 
+		renameProtocol: self name 
+		as: aName
+]
+
 { #category : 'accessing' }
 PvProtocolModel >> selectors [
 	

@@ -18,6 +18,7 @@ DockGtkConfiguration >> colorsForTestResult [
 DockGtkConfiguration >> configureGeneral: anApplication [
 
 	super configureGeneral: anApplication.
+	self addCSSProviderFromString: self paletteStyle.
 	self addCSSProviderFromString: self style
 ]
 
@@ -25,9 +26,21 @@ DockGtkConfiguration >> configureGeneral: anApplication [
 DockGtkConfiguration >> darkColorsForTestResult [
 
 	^ SmallDictionary newFromPairs: {
-		'Passed'. 'LimeGreen'.
-		'Failed'. 'DarkOrange'.
-		'Error'.  'Tomato' }
+		#passed. 	'LightGreen'.
+		#failure. 	'DarkOrange'.
+		#error.  	'Tomato' }
+]
+
+{ #category : 'configuring' }
+DockGtkConfiguration >> darkPaletteStyle [
+
+	^ '
+:root {
+	--test-passed: 	LightGreen;
+	--test-error: 	Tomato;
+	--test-failure: DarkOrange;
+}	
+'
 ]
 
 { #category : 'accessing' }
@@ -65,9 +78,29 @@ DockGtkConfiguration >> isDarkTheme [
 DockGtkConfiguration >> lightColorsForTestResult [
 
 	^ SmallDictionary newFromPairs: {
-		'Passed'. 'Green'.
-		'Failed'. 'Orange'.
-		'Error'.  'Red' }
+		#passed. 	'Green'.
+		#failure. 	'Orange'.
+		#error.  	'Red' }
+]
+
+{ #category : 'configuring' }
+DockGtkConfiguration >> lightPaletteStyle [
+
+	^ '
+:root {
+	--test-passed: 	Green;
+	--test-error: 	Red;
+	--test-failure: Orange;
+}	
+'
+]
+
+{ #category : 'configuring' }
+DockGtkConfiguration >> paletteStyle [
+
+	^ self isDarkTheme
+		ifTrue: [ self darkPaletteStyle ]
+		ifFalse: [ self lightPaletteStyle ]
 ]
 
 { #category : 'configuring' }
@@ -113,5 +146,26 @@ popover .dockPreviewEditor { min-width: 680px; min-height: 340px; }
 .dockDebuggerToolbar { background-color: var(--window-bg-color); }
 .dockDebuggerToolbar .stToolbar { padding: 1px; }
 .dockPlaygroundBindingsFlyingBrowser { min-width: 280px; min-height: 240px; }
+/***
+ * METHOD DECORATIONS 
+ */
+.dockMethodRow .trait { 
+	font-style: italic;  
+	text-decoration-line: underline;
+}
+.dockMethodRow .abstract { 
+	text-decoration-line: underline;
+	text-decoration-style: double;
+}
+.dockMethodRow .extension { 
+	font-style: italic; 
+	text-decoration-line: underline;
+	text-decoration-style: dotted;
+}
+.dockMethodRow .test-unknown { }
+.dockMethodRow .test-passed { color: var(--test-passed); }
+.dockMethodRow .test-error { color: var(--test-error); }
+.dockMethodRow .test-failure { color: var(--test-failure); }
+
 '
 ]

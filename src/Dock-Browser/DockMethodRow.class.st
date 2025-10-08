@@ -30,6 +30,11 @@ DockMethodRow >> initializePresenters [
 DockMethodRow >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
-	
-	namePresenter label: self model name
+		
+	self application defer: [
+		namePresenter label: self model name.
+		namePresenter removeAllStyles.
+		self model decorators
+			reject: [ :each | each style isNil ]
+			thenDo: [ :each | namePresenter addStyle: each style ] ]
 ]

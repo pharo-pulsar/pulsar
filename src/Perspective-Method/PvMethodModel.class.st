@@ -3,7 +3,6 @@ Class {
 	#superclass : 'PvBaseModel',
 	#instVars : [
 		'decorators',
-		'protocol',
 		'actionDecorators'
 	],
 	#category : 'Perspective-Method-Model',
@@ -72,8 +71,7 @@ PvMethodModel >> asOutlineClassModel [
 { #category : 'updating' }
 PvMethodModel >> classifyMethodAs: aString [ 
 	
-	self entity protocol: aString.
-	protocol := nil
+	self entity protocol: aString
 ]
 
 { #category : 'private' }
@@ -99,6 +97,7 @@ PvMethodModel >> colorName [
 { #category : 'compiling' }
 PvMethodModel >> compile: aString notifying: requestor [
 	| selector |
+	self error: 'TO REMOVE'.
 
 	self sourceCode = aString ifTrue: [ ^ self ].
 
@@ -172,7 +171,7 @@ PvMethodModel >> fullName [
 { #category : 'testing' }
 PvMethodModel >> hasDefinedProtocol [
 
-	^ protocol isNotNil and: [ protocol isUnclassifiedProtocol not ] 
+	^ self protocol isNotNil and: [ self protocol isUnclassifiedProtocol not ] 
 ]
 
 { #category : 'accessing - navigating' }
@@ -236,9 +235,30 @@ PvMethodModel >> isOutlineClassEntity [
 ]
 
 { #category : 'testing' }
+PvMethodModel >> isTestError [
+	"this assumes the method is a test method"
+
+	^ self methodClass methodRaisedError: self selector
+]
+
+{ #category : 'testing' }
+PvMethodModel >> isTestFailure [
+	"this assumes the method is a test method"
+
+	^ self methodClass methodFailed: self selector
+]
+
+{ #category : 'testing' }
 PvMethodModel >> isTestMethod [
 	
 	^ self entity isTestMethod
+]
+
+{ #category : 'testing' }
+PvMethodModel >> isTestPassed [
+	"this assumes the method is a test method"
+
+	^ self methodClass methodPassed: self selector
 ]
 
 { #category : 'updating' }
@@ -276,7 +296,7 @@ PvMethodModel >> methodClassName [
 { #category : 'accessing' }
 PvMethodModel >> name [
 
-	^ self entity selector
+	^ self selector
 ]
 
 { #category : 'instance creation' }
@@ -297,13 +317,7 @@ PvMethodModel >> prepareForSnapshot [
 { #category : 'accessing' }
 PvMethodModel >> protocol [
 
-	^ protocol ifNil: [ protocol := self entity protocol ]
-]
-
-{ #category : 'accessing' }
-PvMethodModel >> protocol: aString [
-
-	protocol := aString
+	^ self entity protocol
 ]
 
 { #category : 'accessing' }
@@ -334,24 +348,32 @@ PvMethodModel >> resetActionDecorators [
 	actionDecorators := nil
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'actions' }
 PvMethodModel >> runScript [
 	
 	^ self entity valueWithReceiver: self entity methodClass instanceSide
 ]
 
-{ #category : 'updating' }
-PvMethodModel >> runTest [
-	| testCase result |
+{ #category : 'actions' }
+PvMethodModel >> runTestAnnouncingTo: anAnnouncer [
+	| testSuite testCase |
 	
 	testCase := self methodClass selector: self entity selector.
-	result := testCase debug.
-	
-	^ TestCaseEnded new 
-		testCase: testCase;
-		testSelector: self entity selector;
-		testResult: result;
-		yourself
+	testSuite := TestSuite new
+		addTest: testCase;
+		yourself.
+	"resend announcements"
+	testSuite testSuiteAnnouncer 
+		when: TestCaseAnnouncement
+		send: #announce: 
+		to: anAnnouncer.
+	testSuite debug
+]
+
+{ #category : 'accessing' }
+PvMethodModel >> selector [
+
+	^ self entity selector
 ]
 
 { #category : 'accessing' }
@@ -375,9 +397,10 @@ PvMethodModel >> spotterTitle [
 
 { #category : 'updating' }
 PvMethodModel >> updateWith: aString notifying: anInteractionModel [
- 	| newMethod newSelector selectedClass |
+ 	| newMethod newSelector selectedClass protocol |
 	
  	selectedClass := self entity methodClass.
+ 	protocol := self entity protocol.
 
 	[
 		newMethod := selectedClass compiler 
@@ -399,8 +422,6 @@ PvMethodModel >> updateWith: aString notifying: anInteractionModel [
 
 	"update entity"
 	entity := newMethod.
-	"update protocol"
-	protocol := entity protocol.
 
  	^ true
 ]

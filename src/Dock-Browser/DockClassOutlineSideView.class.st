@@ -102,6 +102,11 @@ DockClassOutlineSideView class >> defineProtocolActionsOn: aBuilder [
 	aBuilder 
 		registerGroup: #protocol with: { 
 			DockNewProtocolCommand new.
+			PvAction new
+				name: 'Rename';
+				shortcut: $r mod1;
+				description: 'Rename protocol';
+				action: [ :aContext :anAction | aContext doRenameProtocolCommand: anAction  ].		 
 		};
 		registerGroup: #protocolCritical with: {
 			$x mod1 -> DockRemoveProtocolCommand new.
@@ -296,6 +301,32 @@ DockClassOutlineSideView >> doRemoveSelectedProtocol [
 ]
 
 { #category : 'private - actions' }
+DockClassOutlineSideView >> doRenameProtocolCommand: anAction [
+	| dialog protocolName selectedProtocolModel |
+	selectedProtocolModel := protocolListPresenter selectedItem.
+	selectedProtocolModel ifNil: [ ^ self ].
+	self flag: #TODO. "Validate can be renamed (e.g. if is virtual, but this should be 
+	by enable/disable the option in the menu)"
+
+	dialog := self instantiate: DockRequestPresenter.
+	dialog 
+		label: 'Protocol Name';
+		text: selectedProtocolModel name.
+	dialog acceptLabel: 'Rename'.
+	
+	dialog asPopover
+		relativeTo: (protocolListPresenter selectedRowPresenter ifNil: [ protocolListPresenter ]);
+		popupModalAndWait.
+	dialog isOk ifFalse: [ ^ self ].
+	
+	protocolName := dialog text.
+	selectedProtocolModel renameProtocolTo: protocolName.
+	self updateProtocols.
+	protocolListPresenter 
+		selectItem: (protocolListPresenter items detect: [ :each | each name = protocolName ])
+]
+
+{ #category : 'private - actions' }
 DockClassOutlineSideView >> doRequestNewMethod [
 
 	self flag: #TODO. "I am using owner, which introcuces perhaps an undesirable coupling..."
@@ -486,7 +517,7 @@ DockClassOutlineSideView >> updateMethods [
 		as: OrderedCollection.	
 	activeVariables ifNotEmpty: [
 		items := items select: [ :each | each isUsingAnyVariable: activeVariables ] ].
-	listPresenter items: items
+	listPresenter updateItemsKeepingSelection: items
 ]
 
 { #category : 'initialization' }

@@ -115,6 +115,15 @@ DockMethodEditor >> eventMethodModified: anAnnouncement [
 	self updatePresenter
 ]
 
+{ #category : 'events - system' }
+DockMethodEditor >> eventMethodRecategorized: anAnnouncement [
+
+	self model entity = anAnnouncement methodRecategorized
+		ifFalse: [ ^ self ].
+
+	self updateProtocol
+]
+
 { #category : 'events' }
 DockMethodEditor >> eventModelChanged: ann [
 	
@@ -130,6 +139,18 @@ DockMethodEditor >> eventModelRemoved: anAnnouncememnt [
 	anAnnouncememnt value = self model ifFalse: [ ^ self ].
 
 	self withPanelWindowDo: [ :aWindow | aWindow close ]
+]
+
+{ #category : 'events' }
+DockMethodEditor >> eventTestCaseEnded: aTestCaseEnded [
+
+	(self model isTestMethod
+		and: [ aTestCaseEnded testCase class = self model methodClass 
+		and: [ aTestCaseEnded testSelector = self model selector ] ])
+		ifFalse: [ ^ self ].
+
+	logger trace: aTestCaseEnded.
+	self updateContentActions
 ]
 
 { #category : 'initialization' }
@@ -151,7 +172,7 @@ DockMethodEditor >> originalContent [
 
 { #category : 'initialization' }
 DockMethodEditor >> registerToSystemEvents [
-
+	super registerToSystemEvents.
 	self announcer 
 		when: MethodModified send: #eventMethodModified: to: self
 ]

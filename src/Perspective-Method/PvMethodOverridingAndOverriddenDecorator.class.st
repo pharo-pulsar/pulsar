@@ -9,7 +9,7 @@ Class {
 { #category : 'testing' }
 PvMethodOverridingAndOverriddenDecorator class >> appliesTo: aMethod [
 	
-	^ aMethod isOverriding and: [ aMethod isOverridden ]
+	^ false "aMethod isOverriding and: [ aMethod isOverridden ]"
 ]
 
 { #category : 'accessing' }

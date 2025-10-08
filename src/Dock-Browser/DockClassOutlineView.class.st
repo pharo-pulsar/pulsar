@@ -85,6 +85,18 @@ DockClassOutlineView >> eventModelChanged: anAnnouncement [
 	changedModel accept: self
 ]
 
+{ #category : 'events' }
+DockClassOutlineView >> eventTestSuiteEnded: aTestSuiteEnded [
+
+	(self model isTestCase
+		and: [ aTestSuiteEnded testResult classesTested includes: self model entity ])
+		ifFalse: [ ^ self ].
+
+	logger trace: aTestSuiteEnded.
+	
+	self withClassSidesDo: [ :each | each updateMethods ] 
+]
+
 { #category : 'initialization' }
 DockClassOutlineView >> initializePresenters [
 
@@ -116,9 +128,18 @@ DockClassOutlineView >> instanceSidePresenter [
 { #category : 'initialization' }
 DockClassOutlineView >> registerToEvents [
 	
+	self registerToSystemEvents.
+	
 	self announcer 
 		when: DockEditorActivated send: #eventEditorActivated: to: self;
 		when: DockModelChanged send: #eventModelChanged: to: self
+]
+
+{ #category : 'initialization' }
+DockClassOutlineView >> registerToSystemEvents [
+	
+	self announcer
+		when: TestSuiteEnded send: #eventTestSuiteEnded: to: self
 ]
 
 { #category : 'private' }
@@ -129,9 +150,8 @@ DockClassOutlineView >> tabActivated: aPresenter [
 
 { #category : 'initialization' }
 DockClassOutlineView >> updatePresenter [
-
-	classSidePresenter model: self model.
-	instanceSidePresenter model: self model.
+	self withClassSidesDo: [ :each | 
+		each model: self model ].
 	self updateTitle
 ]
 
@@ -145,20 +165,14 @@ DockClassOutlineView >> updateTitle [
 { #category : 'events' }
 DockClassOutlineView >> visitClassModel: aModel [
 
-	{ 
-		instanceSidePresenter. 
-		classSidePresenter } 
-	do: [ :each | 
+	self withClassSidesDo: [ :each | 
 		each visitClassModel: aModel ]
 ]
 
 { #category : 'events' }
 DockClassOutlineView >> visitMethodModel: aModel [
 
-	{ 
-		instanceSidePresenter. 
-		classSidePresenter } 
-	do: [ :each |
+	self withClassSidesDo: [ :each |
 		(each includesModel: aModel) 
 			ifTrue: [ tabLayout select: each ].
 		each visitMethodModel: aModel ]
@@ -168,4 +182,14 @@ DockClassOutlineView >> visitMethodModel: aModel [
 DockClassOutlineView >> visitProjectModel: aModel [
 
 	self visitClassModel: aModel asClassModel
+]
+
+{ #category : 'private' }
+DockClassOutlineView >> withClassSidesDo: aBlock [
+
+	{ 
+		classSidePresenter.
+		instanceSidePresenter 
+	}
+	do: [ :each | aBlock value: each ]
 ]

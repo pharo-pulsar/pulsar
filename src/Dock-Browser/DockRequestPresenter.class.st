@@ -108,3 +108,9 @@ DockRequestPresenter >> text [
 
 	^ textPresenter text
 ]
+
+{ #category : 'accessing' }
+DockRequestPresenter >> text: astring [
+
+	^ textPresenter text: astring
+]

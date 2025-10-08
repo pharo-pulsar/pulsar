@@ -164,17 +164,19 @@ DockBrowser >> eventModelDeactivated: anAnnouncement [
 ]
 
 { #category : 'events' }
-DockBrowser >> eventTestCaseEnded: anAnnouncement [
+DockBrowser >> eventTestSuiteEnded: aTestSuiteEnded [
 	| message |
 
-	message := 'Passed'.
-	anAnnouncement testResult hasFailures ifTrue: [ message := 'Failed' ].
-	anAnnouncement testResult hasErrors ifTrue: [ message := 'Error' ].
-	self inform: ('<span foreground="{1}">{2}: {3}.</span>' format: {
-		self application colorForTestResultAt: message.
-		anAnnouncement testCase. 
-		message })
+	self schedule: [
+		self resendAnnouncement: aTestSuiteEnded ].
 
+	self schedule: [
+		message := 'Passed'.
+		aTestSuiteEnded testResult hasFailures ifTrue: [ message := 'Has failures' ].
+		aTestSuiteEnded testResult hasErrors ifTrue: [ message := 'Has errors' ].
+		self inform: ('Test run: <span foreground="{1}">{2}.</span>' format: {
+			self application colorForTestResultAt: aTestSuiteEnded testResult status.
+			message }) ]
 ]
 
 { #category : 'initialization' }
@@ -338,9 +340,9 @@ DockBrowser >> projectView [
 DockBrowser >> registerToEvents [
 
 	super registerToEvents.
+	self registerToTestCaseEvents.
 	self announcer 
-		when: DockRequestToolAnnouncement send: #addTool: to: self;
-		when: (TestCaseEnded, TestSuiteEnded) send: #eventTestCaseEnded: to: self
+		when: DockRequestToolAnnouncement send: #addTool: to: self
 ]
 
 { #category : 'initialization' }
@@ -350,6 +352,16 @@ DockBrowser >> registerToSystemEvents [
 		when: SystemAnnouncement 
 		send: #resendAnnouncement: 
 		to: self
+]
+
+{ #category : 'initialization' }
+DockBrowser >> registerToTestCaseEvents [
+	
+	self announcer
+		when: TestSuiteEnded send: #eventTestSuiteEnded: to: self;
+		when: TestCaseEnded, TestCaseStarted 
+			send: #resendAnnouncement: 
+			to: self
 ]
 
 { #category : 'actions' }

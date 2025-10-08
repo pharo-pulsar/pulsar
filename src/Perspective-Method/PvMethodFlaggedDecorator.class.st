@@ -17,3 +17,9 @@ PvMethodFlaggedDecorator >> iconName [
 
 	^ #flagIcon
 ]
+
+{ #category : 'accessing' }
+PvMethodFlaggedDecorator >> style [
+
+	^ 'flag'
+]

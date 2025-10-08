@@ -222,6 +222,12 @@ PvClassModel >> isOutlineClassEntity [
 	^ self entity isClassOrTrait
 ]
 
+{ #category : 'testing' }
+PvClassModel >> isTestCase [
+
+	^ self entity isTestCase
+]
+
 { #category : 'accessing' }
 PvClassModel >> lastTestExecutionResult [
 
@@ -257,17 +263,17 @@ PvClassModel >> resetActionDecorators [
 	"do nothing, class do not have action decorators"
 ]
 
-{ #category : 'updating' }
-PvClassModel >> runTest [
-	| testCase result |
+{ #category : 'actions' }
+PvClassModel >> runTestAnnouncingTo: anAnnouncer [
+	| testSuite |
 	
-	testCase := self entity suite.
-	result := testCase run.
-
-	^ TestSuiteEnded new 
-		testCase: self entity;
-		testResult: result;
-		yourself
+	testSuite := self entity suite.
+	"resend announcements"
+	testSuite testSuiteAnnouncer 
+		when: TestCaseAnnouncement
+		send: #announce: 
+		to: anAnnouncer.
+	testSuite run
 ]
 
 { #category : 'updating' }
