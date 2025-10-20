@@ -31,10 +31,13 @@ DockSpotter class >> defaultExtent [
 
 { #category : 'private - actions' }
 DockSpotter >> acceptSelection [
+	| item |
 
+	"I take the selected item first because closing the window can destroy 
+	 the selection."
+	item := activePresenter selectedItem.
 	self withWindowDo: [ :aWindow | aWindow close ].
-	activePresenter selectedItem 
-		ifNotNil: [ :anEntry | anEntry accept: self ]
+	item ifNotNil: [ :anEntry | anEntry accept: self ]
 ]
 
 { #category : 'initialization' }
