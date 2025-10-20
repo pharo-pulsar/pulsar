@@ -281,44 +281,22 @@ DockProjectView >> doRequestNewTrait [
 DockProjectView >> eventBehaviorAdded: anAnnouncement [
 	| classAdded path |
 	
-	"not working for the moment"	
-	true ifTrue: [ ^ self ].
-	
 	classAdded := anAnnouncement classAdded.
 	logger trace: classAdded.
 	
-	path := self model findPathForPackage: classAdded package.
-	logger trace: path.
-	logger trace: (listPresenter isExpanded: path).
-	
-	"(listPresenter isExpanded: path) ifTrue: [
-		mutex critical: [
-			self application defer: [
-				listPresenter 
-					collapsePath: path; 
-					expandPath: path ] ] ]"
+	path := self model findPathForClass: classAdded.
+	self refreshProjectPath: path
 ]
 
 { #category : 'events - system' }
 DockProjectView >> eventBehaviorRemoved: anAnnouncement [
 	| classRemoved path |
-
-	"not working for the moment"	
-	true ifTrue: [ ^ self ].
 	
 	classRemoved := anAnnouncement classRemoved.
 	logger trace: classRemoved.
 	
 	path := self model findPathForPackage: classRemoved package.
-	logger trace: path.
-	
-	"this is lame, I need to find a way to refresh without recalculate"
-	"(listPresenter isExpanded: path) ifTrue: [
-		mutex critical: [
-			self application defer: [
-				listPresenter 
-					collapsePath: path; 
-					expandPath: path ] ] ]"
+	self refreshProjectPath: path
 ]
 
 { #category : 'events' }
@@ -391,6 +369,26 @@ DockProjectView >> maybeOpenFlyView [
 DockProjectView >> openedProjects [
 
 	^ self model children
+]
+
+{ #category : 'private' }
+DockProjectView >> refreshProjectPath: path [
+	"this is a hack to force recalculation of package view. Maybe it would 
+	 be worthy to revisit this in the future"
+	| pathToPackage |
+	
+	self flag: #TODO. "Maybe revisit?"
+	
+	logger trace: path.
+	logger trace: (listPresenter isExpanded: path).
+	
+	pathToPackage := path first: 2.
+	(listPresenter isExpanded: pathToPackage) ifTrue: [
+		self application defer: [
+			mutex critical: [
+				listPresenter 
+					collapsePath: pathToPackage; 
+					expandPath: path ] ] ]
 ]
 
 { #category : 'initialization' }
