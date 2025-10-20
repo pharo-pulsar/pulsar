@@ -5,9 +5,7 @@ Class {
 	#classTraits : 'SpTModel classTrait',
 	#instVars : [
 		'logListPresenter',
-		'entryListPresenter',
-		'entryPatchPresenter',
-		'sessionHeaderPresenter'
+		'sessionPresenter'
 	],
 	#category : 'Dock-Tool-Changes',
 	#package : 'Dock-Tool-Changes'
@@ -17,10 +15,7 @@ Class {
 DockChangesBrowser >> connectPresenters [
 
 	logListPresenter 
-		transmitDo: [ :aFileReference | self updateSessionWith: aFileReference ].
-		
-	entryListPresenter 
-		transmitDo: [ :anEntry | self updatePatchWith: anEntry ]
+		transmitDo: [ :aFileReference | self updateSessionWith: aFileReference ]
 ]
 
 { #category : 'layout' }
@@ -29,13 +24,7 @@ DockChangesBrowser >> defaultLayout [
 	^ SpPanedLayout newHorizontal
 		positionOfSlider: 200;
 		add: logListPresenter;
-		add: (SpPanedLayout newVertical 
-			add: (SpBoxLayout newVertical 
-				add: sessionHeaderPresenter expand: false;
-				add: entryListPresenter;
-				yourself);
-			add: entryPatchPresenter;
-			yourself);
+		add: sessionPresenter;
 		yourself
 ]
 
@@ -52,21 +41,13 @@ DockChangesBrowser >> initializePresenters [
 	self addStyle: 'dockBrowser'.
 	self addStyle: 'dockChanges'.
 
+	"list of logs"
 	logListPresenter := self newEasyListView
 		addStyle: 'stList';
 		display: [ :each | each modificationTime epiceaBrowsersAsString ];
 		yourself.
-	sessionHeaderPresenter := self newLabel 
-		addStyle: 'dockHeader';
-		yourself.
-		
-	entryListPresenter := self newEasyListView
-		addStyle: 'stList';
-		beMultipleSelection;
-		rowPresenterClass: DockEntryRowPresenter;
-		yourself.
-		
-	entryPatchPresenter := self instantiate: DockChangesEntryPatchPresenter
+
+	sessionPresenter := self instantiate: DockChangesSessionPresenter
 ]
 
 { #category : 'initialization' }
@@ -74,18 +55,6 @@ DockChangesBrowser >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter title: 'Changes Log'
-]
-
-{ #category : 'initialization' }
-DockChangesBrowser >> updatePatchWith: aCollectionOfEntries [
-	| entry |
-	
-	(aCollectionOfEntries isEmpty or: [ aCollectionOfEntries size > 1 ]) 
-		ifTrue: [ 
-			entryPatchPresenter beEmpty.
-			^ self ].
-	
-	entryPatchPresenter model: aCollectionOfEntries first
 ]
 
 { #category : 'initialization' }
@@ -100,12 +69,6 @@ DockChangesBrowser >> updatePresenter [
 
 { #category : 'initialization' }
 DockChangesBrowser >> updateSessionWith: aFileReference [
-
-	aFileReference ifNil: [
-		sessionHeaderPresenter label: 'No session selected'.
-		entryListPresenter items: #().
-		^ self ].
-	
-	sessionHeaderPresenter label: 'Session: ', aFileReference modificationTime epiceaBrowsersAsString. 
-	entryListPresenter items: (self model entriesOnReference: aFileReference)
+		
+	sessionPresenter model: (aFileReference ifNotNil: [ DockChangesSessionModel newFileReference: aFileReference ])
 ]

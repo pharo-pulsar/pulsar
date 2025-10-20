@@ -15,14 +15,6 @@ DockChangesModel >> directory [
 ]
 
 { #category : 'accessing' }
-DockChangesModel >> entriesOnReference: aFileReference [
-
-	aFileReference ifNil: [ ^ #() ].
-
-	^ (OmFileStore fromFile: aFileReference) entries reversed
-]
-
-{ #category : 'accessing' }
 DockChangesModel >> logFiles [
 
 	^ logFiles ifNil: [ logFiles := self retrieveLogFiles ]
