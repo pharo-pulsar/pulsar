@@ -90,6 +90,8 @@ PvAliasedVSCodeIconProvider >> initialize [
 		'smallUndo'.				'discard'.
 		'smallRedo'. 				'redo'.
 		'smallSave'.				'save'.
+		'undo'. 					'undo'.
+		'redo'. 					'redo'.
 		'menu'. 		   	       	'kebab-vertical'."'more', 'menu'"  "menu button"
 		'pause'. 					'debug-pause'.
 		'priority'.					'flame'.

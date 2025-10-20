@@ -113,7 +113,7 @@ PvContextActionBuilder >> from: aCommandClass [
 { #category : 'accessing' }
 PvContextActionBuilder >> fromCommandClass [
 
-	^ fromCommandClass ifNil: [ PvAction ]
+	^ fromCommandClass ifNil: [ SpAction ]
 ]
 
 { #category : 'accessing' }
