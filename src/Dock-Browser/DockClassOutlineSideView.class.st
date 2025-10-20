@@ -102,9 +102,9 @@ DockClassOutlineSideView class >> defineProtocolActionsOn: aBuilder [
 	aBuilder 
 		registerGroup: #protocol with: { 
 			DockNewProtocolCommand new.
-			PvAction new
+			SpAction new
 				name: 'Rename';
-				shortcut: $r mod1;
+				shortcutKey: $r mod1;
 				description: 'Rename protocol';
 				action: [ :aContext :anAction | aContext doRenameProtocolCommand: anAction  ].		 
 		};

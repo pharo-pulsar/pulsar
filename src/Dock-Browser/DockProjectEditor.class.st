@@ -28,15 +28,15 @@ DockProjectEditor class >> defineActionsOn: aBuilder [
 	<perspectiveActions>
 	
 	aBuilder registerGroup: #new with: { 
-		PvAction new
+		SpAction new
 			name: 'Add package';
 			description: 'Add a package';
 			action: [ :aContext | aContext doAddPackage ].		
-		PvAction new
+		SpAction new
 			name: 'Add project';
 			description: 'Add a dependent project';
 			action: [ :aContext | aContext doAddProject ].		
-		PvAction new
+		SpAction new
 			name: 'Add group';
 			description: 'Add a group';
 			action: [ :aContext | aContext doAddGroup ].		

@@ -50,13 +50,13 @@ DockEditor class >> defineWindowActionsOn: aBuilder [
 	<perspectiveActions>
 
 	aBuilder registerGroup: #extraWindow with: { 
-		PvAction new
+		SpAction new
 			name: 'Maximize';
 			description: 'Maximize current window';
 			action: [ :aContext | aContext withPanelWindowDo: #maximize ].		
-		PvAction new
+		SpAction new
 			name: 'Detach as Window';
-			shortcut: Character arrowUp alt shift;
+			shortcutKey: Character arrowUp alt shift;
 			description: 'Detach this window from the Dock (open a new window)';
 			action: [ :aContext |  ].			
 	}

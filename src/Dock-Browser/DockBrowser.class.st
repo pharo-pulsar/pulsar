@@ -46,25 +46,25 @@ DockBrowser class >> definePanelActionsOn: aBuilder [
 	<perspectiveActions>
 
 	aBuilder registerGroup: #panels with: { 
-		PvAction new 
+		SpAction new 
 			name: 'Toggle panel left';
 			description: 'Show/hide the left panel';
-			iconCompositeName: 'panel-left';
+			iconName: 'panel-left';
 			action: [ :aContext | aContext togglePanelArea: SpPanelArea start ].
-		PvAction new 
+		SpAction new 
 			name: 'Toggle panel top'; 
 			description: 'Show/hide the top panel';
-			iconCompositeName: 'panel-top';
+			iconName: 'panel-top';
 			action: [ :aContext | aContext togglePanelArea: SpPanelArea top ].
-		PvAction new 
+		SpAction new 
 			name: 'Toggle panel right'; 
 			description: 'Show/hide the right panel';
-			iconCompositeName: 'panel-right';
+			iconName: 'panel-right';
 			action: [ :aContext | aContext togglePanelArea: SpPanelArea end ].
-		PvAction new 
+		SpAction new 
 			name: 'Toggle panel bottom'; 
 			description: 'Show/hide the bottom panel';
-			iconCompositeName: 'panel-bottom';
+			iconName: 'panel-bottom';
 			action: [ :aContext | aContext togglePanelArea: SpPanelArea bottom ].
 	}
 ]

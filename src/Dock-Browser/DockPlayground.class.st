@@ -35,29 +35,29 @@ DockPlayground class >> defineActionsOn: aBuilder [
 
 	aBuilder 
 		registerGroup: #actions with: {
-			PvAction new
+			SpAction new
 				priority: 1;
 				name: 'New playground';
 				description: 'Create a new playground';
-				iconCompositeName: 'add';
+				iconName: 'add';
 				action: [ :aContext | aContext doNewPlayground ].		
-			PvAction new
+			SpAction new
 				priority: 2;
 				name: 'Load page';
 				description: 'Load a playground page';
-				iconCompositeName: 'load';
+				iconName: 'load';
 				action: [ :aContext | aContext doLoadPage ].	
-			PvAction new
+			SpAction new
 				priority: 3;
 				name: 'Versions';
 				description: 'Browse versions of current playground page';
-				iconCompositeName: 'versions';
+				iconName: 'versions';
 				action: [ :aContext :aCommand | aContext doBrowseVersionsCommand: aCommand ].
-			PvAction new
+			SpAction new
 				priority: 4;
 				name: 'Variables';
 				description: 'Browse variables (bindings) defined in current playground';
-				iconCompositeName: 'variables';
+				iconName: 'variables';
 				action: [ :aContext :aCommand | aContext doBrowseBindingsCommand: aCommand ].
 		}
 ]

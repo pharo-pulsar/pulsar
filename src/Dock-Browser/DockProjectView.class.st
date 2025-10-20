@@ -90,16 +90,16 @@ DockProjectView class >> defineActionsOn: aBuilder [
 			$x mod1 -> PvRemovePackageCommand new.
 		};
 		registerGroup: #refactors with: {
-			PvAction new 
+			SpAction new 
 				name: 'Duplicate class'; 
 				"actionEnabled: [ :aContext | aContext selectedItem isClassModel ];"
 				action: [ :aContext | aContext doDuplicateSelectedClass ]
 		};
 		registerGroup: #extra with: { 
-			PvAction new 
+			SpAction new 
 				name: 'Collapse All';
 				description: 'Collapses all open projects';
-				iconCompositeName: 'collapse-all';
+				iconName: 'collapse-all';
 				action: [ :aContext | aContext doCollapseAll ].
 		}
 ]

@@ -31,7 +31,7 @@ DockTranscript class >> defineActionsOn: aBuilder [
 	<perspectiveActions>
 
 	aBuilder registerGroup: #transcript with: { 
-		PvAction new 
+		SpAction new 
 			name: 'Clear';
 			description: 'Clear transcript';
 			action: [ :aContext | aContext doClearTranscript ];

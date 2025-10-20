@@ -20,10 +20,10 @@ DockVersionsBrowser class >> defineActionsOn: aBuilder [
 
 	aBuilder 
 		registerGroup: #versionActions with: {  
-			PvAction new
+			SpAction new
 				name: 'Revert';
 				description: 'Revert to this version';
-				iconCompositeName: 'accept';
+				iconName: 'accept';
 				action: [ :aContext | aContext doRevert ].
 		}
 ]

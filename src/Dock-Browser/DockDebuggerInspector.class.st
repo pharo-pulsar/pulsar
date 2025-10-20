@@ -26,15 +26,15 @@ DockDebuggerInspector class >> defineActionsOn: aBuilder [
 
 	aBuilder 
 		registerGroup: #inspectorActions with: {  
-			PvAction new
+			SpAction new
 				name: 'Inspect';
 				description: 'Inspect current receiver';
-				iconCompositeName: 'inspector';
+				iconName: 'inspector';
 				action: [ ].
-			PvAction new
+			SpAction new
 				name: 'Browse';
 				description: 'Browse current receiver''s class';
-				iconCompositeName: 'browser';
+				iconName: 'browser';
 				action: [ :aContext | aContext doBrowseReceiverClass ].
 		}
 ]
