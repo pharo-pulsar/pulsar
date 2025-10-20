@@ -508,6 +508,13 @@ DockClassOutlineSideView >> popupPreview [
 ]
 
 { #category : 'initialization' }
+DockClassOutlineSideView >> resetInteractionStatus [
+
+	"in case is active"
+	self dismissPreview
+]
+
+{ #category : 'initialization' }
 DockClassOutlineSideView >> updateMethods [
 	| items |
 

@@ -55,6 +55,7 @@ DockClassOutlineView >> defaultLayout [
 { #category : 'events' }
 DockClassOutlineView >> eventEditorActivated: anAnnouncement [
 
+	self resetInteractionStatus.
 	"this may be slow, so I schedule it, to not break process..."
 	self schedule: [ 
 		"editor can be closed in the meantime (concurrency problems... :P).
@@ -140,6 +141,14 @@ DockClassOutlineView >> registerToSystemEvents [
 	
 	self announcer
 		when: TestSuiteEnded send: #eventTestSuiteEnded: to: self
+]
+
+{ #category : 'initialization' }
+DockClassOutlineView >> resetInteractionStatus [
+	"reset any status that may be active when interacting with the outline.
+	 e.g. active popovers"
+	 
+	 self withClassSidesDo: [ :each | each resetInteractionStatus ]
 ]
 
 { #category : 'private' }

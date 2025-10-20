@@ -63,6 +63,12 @@ DockEditorToolbarPresenter >> initializePresenters [
 ]
 
 { #category : 'accessing' }
+DockEditorToolbarPresenter >> resetContentActions [
+
+	contentActionPresenter fillWith: SpActionGroup new
+]
+
+{ #category : 'accessing' }
 DockEditorToolbarPresenter >> title: aString [
 	"a convenience method to set simple titles"
 
