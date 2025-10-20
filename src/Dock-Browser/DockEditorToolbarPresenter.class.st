@@ -63,6 +63,13 @@ DockEditorToolbarPresenter >> initializePresenters [
 ]
 
 { #category : 'accessing' }
+DockEditorToolbarPresenter >> title: aString [
+	"a convenience method to set simple titles"
+
+	self updateBreadcrumbWith: [ :aBreadcrumb | aBreadcrumb addSegment: aString ]
+]
+
+{ #category : 'accessing' }
 DockEditorToolbarPresenter >> updateBreadcrumbWith: aBlock [
 
 	titlePresenter updateBreadcrumbWith: aBlock
