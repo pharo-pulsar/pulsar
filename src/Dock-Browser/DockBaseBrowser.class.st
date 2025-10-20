@@ -92,6 +92,7 @@ DockBaseBrowser >> inform: aString [
 	logger trace: aString message: 'inform'.
 	self addToast: (SpPanelToast new 
 		title: aString;
+		timeout: 3;
 		yourself)
 ]
 
