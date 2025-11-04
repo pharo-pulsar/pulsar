@@ -91,7 +91,7 @@ DockInspector >> initializeWindow: aWindowPresenter [
 { #category : 'accessing' }
 DockInspector >> insertPopover: aPresenter [
 
-	self focusedPresenter insertPopover: aPresenter
+	inspectionsPresenter selectedPage activePresenter insertPopover: aPresenter
 ]
 
 { #category : 'private' }
