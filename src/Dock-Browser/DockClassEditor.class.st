@@ -143,9 +143,11 @@ DockClassEditor >> registerToSystemEvents [
 
 { #category : 'initialization' }
 DockClassEditor >> updateBreadcrumbs [
-
+	| name |
+	
+	name := self model name.
 	toolbarPresenter updateBreadcrumbWith: [ :aBreadcrumb | 
-		aBreadcrumb addSegment: self model name ]
+		aBreadcrumb addSegment: name ]
 ]
 
 { #category : 'initialization' }
