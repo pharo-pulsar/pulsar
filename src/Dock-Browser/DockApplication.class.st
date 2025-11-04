@@ -156,7 +156,7 @@ DockApplication >> iconCache [
 		ifAbsentPut: [ PvCompositeIconCache new ]
 ]
 
-{ #category : 'ui requests' }
+{ #category : 'ui - requests' }
 DockApplication >> inform: aString [
 
 	aString printToStdout
@@ -200,6 +200,14 @@ DockApplication >> newConfiguration [
 		yourself
 ]
 
+{ #category : 'ui - dialogs' }
+DockApplication >> newConfirm [
+
+	^ (DockConfirmDialog newApplication: self)
+		parentWindow: self topWindow;
+		yourself
+]
+
 { #category : 'private - factory' }
 DockApplication >> newIconProvider [
 
@@ -217,6 +225,22 @@ DockApplication >> newIconProvider [
 	  StPharoDefaultIconProvider new, 
 	  SgaGtkThemeIconProvider new,
 	  PvDefaultIconProvider new
+]
+
+{ #category : 'ui - dialogs' }
+DockApplication >> newInform [
+
+	^ (DockInformDialog newApplication: self)
+		parentWindow: self topWindow;
+		yourself
+]
+
+{ #category : 'ui - dialogs' }
+DockApplication >> newRequest [
+
+	^ (DockRequestDialog newApplication: self) 
+		parentWindow: self topWindow;
+		yourself
 ]
 
 { #category : 'private - scheduling' }

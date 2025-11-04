@@ -48,6 +48,9 @@ DockUIManager >> application [
 { #category : 'ui requests' }
 DockUIManager >> chooseFrom: optionsArray lines: linesArray title: aString [
 	| result |
+	
+	self flag: #TODO. "Using this is wrong (as everything on UIManager)"
+
 self halt.
 	"this is lame because the code reparator uses a menu :/"
 	result := self application newSelect
@@ -70,4 +73,11 @@ DockUIManager >> handleError: anError [
 		inContext: anError signalerContext.
 
 	(OupsDebugRequest newForException: anError) submit
+]
+
+{ #category : 'ui requests' }
+DockUIManager >> informUser: aString during: aBlock [
+
+	self flag: #TODO. "Using informUser:during: is wrong (as everything on UIManager)"
+	^ aBlock value
 ]

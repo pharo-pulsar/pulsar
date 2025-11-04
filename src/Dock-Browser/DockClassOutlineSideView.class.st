@@ -268,16 +268,16 @@ DockClassOutlineSideView >> doForceRemoveMethod [
 	 that will check all usages, etc.)"
 	| okToRemove selectedMethodModel |
 	
-	selectedMethodModel := listPresenter selectedItem. 
+	selectedMethodModel := listPresenter selectedItem.
 	selectedMethodModel ifNil: [ ^ self ].
-	
+
 	okToRemove := self application newConfirm
 		title: 'Remove method';
-		label: ('Do you want to remove method {1}?' format: { selectedMethodModel name });
+		message: ('Do you want to remove method {1}?' format: { selectedMethodModel name });
 		acceptLabel: 'Remove';
 		openModalWithParent: self window.
 	okToRemove ifFalse: [ ^ self ].
-	
+
 	selectedMethodModel removeMethod.
 	self owner notifyEntityRemoved: selectedMethodModel.
 	self updatePresenter
