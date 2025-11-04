@@ -367,7 +367,9 @@ PvMethodModel >> runTestAnnouncingTo: anAnnouncer [
 		when: TestCaseAnnouncement
 		send: #announce: 
 		to: anAnnouncer.
-	testSuite debug
+	[ testSuite debug ]
+	ensure: [ 
+		testSuite testSuiteAnnouncer unsubscribe: anAnnouncer ]
 ]
 
 { #category : 'accessing' }

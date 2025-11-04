@@ -273,7 +273,9 @@ PvClassModel >> runTestAnnouncingTo: anAnnouncer [
 		when: TestCaseAnnouncement
 		send: #announce: 
 		to: anAnnouncer.
-	testSuite run
+	[ testSuite run ]
+	ensure: [ 
+		testSuite testSuiteAnnouncer unsubscribe: anAnnouncer ]
 ]
 
 { #category : 'updating' }
