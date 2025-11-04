@@ -179,11 +179,14 @@ DockMethodEditor >> registerToSystemEvents [
 
 { #category : 'initialization' }
 DockMethodEditor >> updateBreadcrumbs [
+	| className methodName |
 
+	className := self model methodClassName.
+	methodName := self model name.
 	toolbarPresenter updateBreadcrumbWith: [ :aBreadcrumb |
 		aBreadcrumb 
-			addLinkSegment: self model methodClassName action: [ self announceActivateClass ];
-			addSegment: self model name ]
+			addLinkSegment: className action: [ self announceActivateClass ];
+			addSegment: methodName ]
 ]
 
 { #category : 'initialization' }
