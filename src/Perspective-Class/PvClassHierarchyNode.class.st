@@ -39,6 +39,18 @@ PvClassHierarchyNode >> allChildren [
 	self shouldBeImplemented.
 ]
 
+{ #category : 'testing' }
+PvClassHierarchyNode >> canBeRemoved [
+
+	^ self element canBeRemoved
+]
+
+{ #category : 'as yet unclassified' }
+PvClassHierarchyNode >> canBeRenamed [
+
+	^ self element canBeRenamed
+]
+
 { #category : 'accessing' }
 PvClassHierarchyNode >> children [
 

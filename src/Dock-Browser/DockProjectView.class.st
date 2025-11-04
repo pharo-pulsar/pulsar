@@ -86,8 +86,26 @@ DockProjectView class >> defineActionsOn: aBuilder [
 			PvNewTraitCommand new.
 		};
 		registerGroup: #action with: { 
-			$r mod1 -> PvRenamePackageCommand new.
-			$x mod1 -> PvRemovePackageCommand new.
+			$r mod1 -> (SpAction new
+				priority: 200;
+				dynamicName: [ :aContext | 'Rename ', aContext selectedEntityName ];
+				description: 'Rename package or tag (and all its contexts)';
+				actionEnabled: [ :aContext | aContext canRenameSelectedEntity ];
+				action: [ :aContext | aContext doRenameSelectedEntity ];
+				yourself).
+			$x mod1 -> (SpAction new
+				priority: 210;
+				dynamicName: [ :aContext | 
+					String streamContents: [ :stream | 
+						stream << 'Remove '.
+						stream << aContext selectedEntityName.
+						aContext selectedEntity isProject
+							ifTrue: [ stream << ' from project list' ] ] ];
+				description: 'Remove from project';
+				iconName: 'trash';
+				actionEnabled: [ :aContext | aContext canRemoveSelectedEntity ];
+				action: [ :aContext | aContext doRemoveSelectedEntity ];
+				yourself).
 		};
 		registerGroup: #refactors with: {
 			SpAction new 
@@ -118,6 +136,22 @@ DockProjectView >> addProject: aBaselineClass [
 		takeKeyboardFocus.
 
 	self withWindowDo: [ :aWindow | aWindow updateTitle ]
+]
+
+{ #category : 'testing' }
+DockProjectView >> canRemoveSelectedEntity [
+
+	^ self selectedEntity
+		ifNotNil: [ :anEntityModel | anEntityModel canBeRemoved ]
+		ifNil: [ false ]
+]
+
+{ #category : 'testing' }
+DockProjectView >> canRenameSelectedEntity [
+
+	^ self selectedEntity
+		ifNotNil: [ :anEntityModel | anEntityModel canBeRenamed ]
+		ifNil: [ false ]
 ]
 
 { #category : 'private' }
@@ -443,6 +477,20 @@ DockProjectView >> selectedEntitiesInPath [
 
 	^ listPresenter selection selectedItemsInPath
 
+]
+
+{ #category : 'accessing' }
+DockProjectView >> selectedEntity [
+
+	^ self listPresenter selectedItem
+]
+
+{ #category : 'accessing' }
+DockProjectView >> selectedEntityName [
+
+	^ self selectedEntity
+		ifNotNil: [ :anEntityModel | anEntityModel name ]
+		ifNil: [ 'None' ]
 ]
 
 { #category : 'accessing - snapshot' }

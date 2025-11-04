@@ -25,6 +25,18 @@ PvVirtualPackageTagModel class >> virtualModelsFor: aPackage [
 
 ]
 
+{ #category : 'testing' }
+PvVirtualPackageTagModel >> canBeRemoved [
+
+	^ false
+]
+
+{ #category : 'as yet unclassified' }
+PvVirtualPackageTagModel >> canBeRenamed [
+
+	^ false
+]
+
 { #category : 'accessing - ui' }
 PvVirtualPackageTagModel >> colorName [
 

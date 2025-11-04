@@ -38,6 +38,18 @@ PvBaseModel >> accept: aVisitor [
 	"to ensure specific process from models"
 ]
 
+{ #category : 'testing' }
+PvBaseModel >> canBeRemoved [
+
+	^ true
+]
+
+{ #category : 'as yet unclassified' }
+PvBaseModel >> canBeRenamed [
+
+	^ true
+]
+
 { #category : 'accessing' }
 PvBaseModel >> children [
 	

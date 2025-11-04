@@ -26,6 +26,18 @@ PvEnvironmentModel >> addPackageNamed: aString [
 	^ self entity addPackageNamed: aString
 ]
 
+{ #category : 'testing' }
+PvEnvironmentModel >> canBeRemoved [
+
+	^ false
+]
+
+{ #category : 'as yet unclassified' }
+PvEnvironmentModel >> canBeRenamed [
+
+	^ false
+]
+
 { #category : 'accessing' }
 PvEnvironmentModel >> children [
 

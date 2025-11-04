@@ -33,6 +33,18 @@ PvTreeNodeModel class >> newName: aName iconName: anIconName children: aCollecti
 		yourself
 ]
 
+{ #category : 'testing' }
+PvTreeNodeModel >> canBeRemoved [
+
+	^ false
+]
+
+{ #category : 'testing' }
+PvTreeNodeModel >> canBeRenamed [
+
+	^ false
+]
+
 { #category : 'accessing' }
 PvTreeNodeModel >> children [
 

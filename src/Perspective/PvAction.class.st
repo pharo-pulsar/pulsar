@@ -175,6 +175,12 @@ PvAction >> shortcut: aShortcut [
 	shortcut := aShortcut
 ]
 
+{ #category : 'as yet unclassified' }
+PvAction >> shortcutKey: aShortcut [
+
+	shortcut := aShortcut
+]
+
 { #category : 'private' }
 PvAction >> specCommandClass [
 

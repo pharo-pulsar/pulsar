@@ -6,6 +6,6 @@ Association >> asPvAction [
 	 shortcut -> action"
 
 	^ self value 
-		shortcut: self key;
+		shortcutKey: self key;
 		yourself
 ]
