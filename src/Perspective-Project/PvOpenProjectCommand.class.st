@@ -26,16 +26,15 @@ PvOpenProjectCommand >> defineAction [
 { #category : 'executing' }
 PvOpenProjectCommand >> execute [
 	| result |
-	
+
 	result := self application newSelect
 		title: 'Open project';
-		label: 'Select project';
+		message: 'Select project';
 		items: self allBaselines;
-		display: [ :aClass | aClass name allButFirst: "'BaselineOf' size "10 ];
+		display: [ :aClass | aClass name allButFirst: 10 "'BaselineOf' size " ];
 		displayIcon: [ :aClass | self application iconNamed: 'project' ];
 		openModalWithParent: self context window.
-		
+
 	result ifNil: [ ^ self ].
 	context addProject: result
-		
 ]
