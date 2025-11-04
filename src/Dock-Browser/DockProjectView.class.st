@@ -230,12 +230,19 @@ DockProjectView >> doNewPackageTag [
 DockProjectView >> doNewProject [
 	| projectName project package |
 	
-	projectName := self application newRequest 
-		title: 'New project';
-		label: 'Project name';
-		openModalWithParent: self window.
-	projectName ifNil: [ ^ self ].
 	
+	self application newInform
+		title: 'Work in progress';
+		message: 'Not implemented yet. You can create a baseline for it :)';
+		openModalWithParent: self window.
+	true ifTrue: [ ^ self ].
+	
+	projectName := self application newRequest
+       title: 'New project';
+       message: 'Project name';
+       openModalWithParent: self window.
+	projectName ifNil: [ ^ self ].
+
 	project := self model newProjectNamed: projectName.
 	self addProject: project.
 	self notifyActivateEntity: (self listPresenter roots detect: [ :each | each entity = project ])
