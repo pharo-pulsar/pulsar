@@ -58,7 +58,7 @@ DockEditor class >> defineWindowActionsOn: aBuilder [
 			name: 'Detach as Window';
 			shortcutKey: Character arrowUp alt shift;
 			description: 'Detach this window from the Dock (open a new window)';
-			action: [ :aContext |  ].			
+			action: [ :aContext | aContext doDetachWindow ].			
 	}
 ]
 
