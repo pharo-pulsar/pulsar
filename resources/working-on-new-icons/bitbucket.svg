@@ -1,0 +1,83 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Generator: Adobe Illustrator 25.4.1, SVG Export Plug-In . SVG Version: 6.00 Build 0)  -->
+
+<svg
+   version="1.1"
+   id="Capa_1"
+   x="0px"
+   y="0px"
+   viewBox="0 0 32 32"
+   xml:space="preserve"
+   width="32"
+   height="32"
+   sodipodi:docname="bitbucket.svg"
+   inkscape:version="1.2.1 (9c6d41e4, 2022-07-14)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg"><defs
+   id="defs16" /><sodipodi:namedview
+   id="namedview14"
+   pagecolor="#ffffff"
+   bordercolor="#000000"
+   borderopacity="0.25"
+   inkscape:showpageshadow="2"
+   inkscape:pageopacity="0.0"
+   inkscape:pagecheckerboard="0"
+   inkscape:deskcolor="#d1d1d1"
+   showgrid="false"
+   inkscape:zoom="0.4609375"
+   inkscape:cx="-90.033898"
+   inkscape:cy="256"
+   inkscape:window-width="1280"
+   inkscape:window-height="430"
+   inkscape:window-x="0"
+   inkscape:window-y="880"
+   inkscape:window-maximized="0"
+   inkscape:current-layer="Capa_1" />
+<g
+   id="g11"
+   transform="matrix(0.06250009,0,0,0.06250009,-7.083021e-6,-2.304e-5)">
+	<path
+   style="fill:#2684ff"
+   d="m 16.436,25.814 c -10.23,0 -17.903,9.378 -16.198,18.756 l 69.056,422.86 c 1.705,11.085 11.083,18.756 22.166,18.756 h 334.196 c 7.674,0 14.494,-5.967 16.198,-13.641 L 511.761,45.422 c 1.707,-10.231 -5.967,-18.756 -16.196,-18.756 z m 293.275,305.21 H 203.143 L 175.009,180.125 H 336.14 Z"
+   id="path2" />
+	
+		<linearGradient
+   id="SVGID_1_"
+   gradientUnits="userSpaceOnUse"
+   x1="524.61639"
+   y1="2211.3845"
+   x2="270.31201"
+   y2="2012.8752"
+   gradientTransform="matrix(1,0,0,-1,0,2434)">
+		<stop
+   offset="0.176"
+   style="stop-color:#0052CC"
+   id="stop4" />
+		<stop
+   offset="1"
+   style="stop-color:#2684FF"
+   id="stop6" />
+	</linearGradient>
+	<path
+   style="fill:url(#SVGID_1_)"
+   d="M 488.743,180.125 H 335.286 L 309.71,331.024 H 203.14 L 77.818,480.219 c 0,0 5.968,5.116 14.493,5.116 h 334.196 c 7.674,0 14.494,-5.969 16.198,-13.643 z"
+   id="path9" />
+</g>
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+</svg>

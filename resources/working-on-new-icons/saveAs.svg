@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 16 16"
+   fill="none"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="saveAs.svg"
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1" />
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="39.875"
+     inkscape:cx="8"
+     inkscape:cy="8"
+     inkscape:window-width="1440"
+     inkscape:window-height="891"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1" />
+  <path
+     d="m 5.5250784,1.9968652 v 2.5 h 4.9999996 v -2.5 M 4.5250784,11.996865 V 8.4968652 h 6.9999996 v 3.4999998 m -8.9999996,0.5 V 1.4968652 h 8.9999996 l 2,2 v 8.9999998 z"
+     stroke="#6c707e"
+     stroke-linejoin="round"
+     id="path1" />
+  <ellipse
+     cx="-14.252352"
+     cy="9.9367819"
+     transform="rotate(-90)"
+     fill="#6c707e"
+     id="circle1"
+     rx="0.74764889"
+     ry="0.7988506"
+     style="stroke-width:0.772826" />
+  <ellipse
+     cx="-14.252352"
+     cy="11.931035"
+     transform="rotate(-90)"
+     fill="#6c707e"
+     id="circle2"
+     rx="0.74764889"
+     ry="0.7988506"
+     style="stroke-width:0.772826" />
+  <ellipse
+     cx="-14.252352"
+     cy="13.925287"
+     transform="rotate(-90)"
+     fill="#6c707e"
+     id="circle3"
+     rx="0.74764889"
+     ry="0.7988506"
+     style="stroke-width:0.772826" />
+</svg>

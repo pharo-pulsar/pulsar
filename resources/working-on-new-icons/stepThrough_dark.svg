@@ -1,0 +1,73 @@
+<?xml version="1.0" encoding="UTF-8" standalone="no"?>
+<!-- Copyright 2000-2022 JetBrains s.r.o. and contributors. Use of this source code is governed by the Apache 2.0 license. -->
+
+<svg
+   width="16"
+   height="16"
+   viewBox="0 0 16 16"
+   fill="none"
+   version="1.1"
+   id="svg1"
+   sodipodi:docname="stepOver_dark.svg"
+   inkscape:version="1.4.2 (ebf0e940d0, 2025-05-08)"
+   xmlns:inkscape="http://www.inkscape.org/namespaces/inkscape"
+   xmlns:sodipodi="http://sodipodi.sourceforge.net/DTD/sodipodi-0.dtd"
+   xmlns="http://www.w3.org/2000/svg"
+   xmlns:svg="http://www.w3.org/2000/svg">
+  <defs
+     id="defs1">
+    <marker
+       style="overflow:visible"
+       id="marker12"
+       refX="0"
+       refY="0"
+       orient="auto-start-reverse"
+       inkscape:stockid="Wide, rounded arrow"
+       markerWidth="0.9"
+       markerHeight="0.9"
+       viewBox="0 0 1 1"
+       inkscape:isstock="true"
+       inkscape:collect="always"
+       preserveAspectRatio="xMidYMid">
+      <path
+         style="fill:none;stroke:context-stroke;stroke-width:1;stroke-linecap:round"
+         d="M 3,-3 0,0 3,3"
+         transform="rotate(180,0.125,0)"
+         sodipodi:nodetypes="ccc"
+         id="path12" />
+    </marker>
+  </defs>
+  <sodipodi:namedview
+     id="namedview1"
+     pagecolor="#ffffff"
+     bordercolor="#666666"
+     borderopacity="1.0"
+     inkscape:showpageshadow="2"
+     inkscape:pageopacity="0.0"
+     inkscape:pagecheckerboard="0"
+     inkscape:deskcolor="#d1d1d1"
+     inkscape:zoom="39.875"
+     inkscape:cx="6.9341693"
+     inkscape:cy="9.4043887"
+     inkscape:window-width="2560"
+     inkscape:window-height="1371"
+     inkscape:window-x="0"
+     inkscape:window-y="0"
+     inkscape:window-maximized="1"
+     inkscape:current-layer="svg1" />
+  <path
+     d="m 4.1343046,7.260188 c -0.4308186,0 -0.7800726,0.2833233 -0.7800726,0.6328135 v 6.3281345 c 0,0.349503 0.349254,0.632813 0.7800726,0.632813 H 5.6944501 V 14.221136 H 4.1343046 V 7.8930015 H 5.6944501 V 7.260188 Z"
+     fill="#6c707e"
+     id="path1-5"
+     style="fill:#ced0d6;fill-opacity:1;stroke-width:0.702336;stroke-dasharray:none" />
+  <path
+     d="m 12.512446,7.9105248 h 1.560146 V 14.23866 h -1.560146 v 0.632813 h 1.560146 c 0.430833,0 0.780072,-0.283311 0.780072,-0.632813 V 7.9105248 c 0,-0.3494902 -0.349239,-0.6328133 -0.780072,-0.6328133 h -1.560146 z"
+     fill="#6c707e"
+     id="path2"
+     style="stroke-width:0.702592;fill:#ced0d6;fill-opacity:1" />
+  <path
+     style="fill:none;stroke:#ced0d6;stroke-width:1.058;stroke-linecap:butt;stroke-linejoin:miter;stroke-dasharray:none;stroke-opacity:1;marker-start:url(#marker12)"
+     d="M 9.0980469,11.909339 C 8.003437,-3.0648652 1.6879796,3.6292286 1.6879796,3.6292286"
+     id="path9"
+     sodipodi:nodetypes="cc" />
+</svg>
