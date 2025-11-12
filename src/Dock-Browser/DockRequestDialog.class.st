@@ -54,7 +54,8 @@ DockRequestDialog >> initializeDialogWindow: aDialogWindowPresenter [
 		
 	titlePresenter label: self title.
 	
-	self addButtonsTo: aDialogWindowPresenter
+	self addButtonsTo: aDialogWindowPresenter.
+	self centerToParentWindow: aDialogWindowPresenter
 ]
 
 { #category : 'initialization' }

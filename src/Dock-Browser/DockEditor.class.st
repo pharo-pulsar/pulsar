@@ -99,7 +99,7 @@ DockEditor >> defaultLayout [
 
 	^ SpBoxLayout newVertical
 		add: toolbarPresenter expand: false;
-		add: ((editorOverlayLayout := SpOverlayLayout new)
+		add: (self editorOverlayLayout
 			child: editorPresenter;
 			yourself);
 		yourself
@@ -167,8 +167,7 @@ DockEditor >> editorContextMenuActions [
 
 { #category : 'private - overlay' }
 DockEditor >> editorOverlayLayout [
-
-	^ editorOverlayLayout
+	^  editorOverlayLayout ifNil: [ editorOverlayLayout := SpOverlayLayout new ]
 ]
 
 { #category : 'private' }
@@ -199,9 +198,21 @@ DockEditor >> eventModelRemoved: anAnnouncement [
 ]
 
 { #category : 'events' }
+DockEditor >> eventSyntaxHighlightThemeChanged: ann [
+
+	editorPresenter syntaxHighlightTheme: self application syntaxHighlightTheme
+]
+
+{ #category : 'events' }
 DockEditor >> eventTestCaseEnded: aTestCaseEnded [
 
 	self subclassResponsibility
+]
+
+{ #category : 'events' }
+DockEditor >> eventThemeChanged: ann [
+
+	editorPresenter styleScheme: self application styleScheme
 ]
 
 { #category : 'initialization' }
@@ -287,13 +298,16 @@ DockEditor >> markDirty [
 DockEditor >> newDirtyMarkerPresenter [
 
 	^ self newToolbar
+		addStyle: 'dockDirtyMarker';
 		beIcons;
 		add: (self newToolbarButton
+			addStyle: 'accept';
 			icon: (self iconNamed: #accept);
 			action: [ self doSubmit: editorPresenter text ];
 			help: 'Accept changes';
 			yourself);
 		add: (self newToolbarButton
+			addStyle: 'cancel';
 			icon: (self iconNamed: #cancel);
 			action: [ self doReset ];
 			help: 'Cancel changes';
@@ -349,6 +363,8 @@ DockEditor >> registerToSystemEvents [
 	"subclasses can fill this"
 	
 	self announcer
+		when: DockThemeChanged send: #eventThemeChanged: to: self;
+		when: DockSyntaxHighlightThemeChanged send: #eventSyntaxHighlightThemeChanged: to: self;
 		when: TestCaseEnded send: #eventTestCaseEnded: to: self
 ]
 

@@ -285,18 +285,18 @@ DockClassOutlineSideView >> doForceRemoveMethod [
 
 { #category : 'private - actions' }
 DockClassOutlineSideView >> doRemoveSelectedProtocol [
-	| protocolModel okToRemove |
 
+	| protocolModel okToRemove |
 	protocolModel := protocolListPresenter selectedItem.
 	protocolModel ifNil: [ ^ self ].
-	
-	okToRemove := self application newConfirm 
-		title: 'Remove protocol';
-		label: ('Do you really want to remove protocol "{1}" and all its methods?' format: { protocolModel name });
-		acceptLabel: 'Remove';
-		openModalWithParent: self window.
+
+	okToRemove := self application newConfirm
+		              title: 'Remove protocol';
+		              message: ('Do you really want to remove protocol "{1}" and all its methods?' format: { protocolModel name });
+		              acceptLabel: 'Remove';
+		              openModalWithParent: self window.
 	okToRemove ifFalse: [ ^ self ].
-	
+
 	self halt
 ]
 
@@ -517,8 +517,8 @@ DockClassOutlineSideView >> resetInteractionStatus [
 { #category : 'initialization' }
 DockClassOutlineSideView >> updateMethods [
 	| items |
-
 	updating ifTrue: [ ^ self ].
+
 	items := activeProtocols 
 		flatCollect: [ :each | self methodsForProtocol: each ]
 		as: OrderedCollection.	
@@ -537,8 +537,7 @@ DockClassOutlineSideView >> updatePresenter [
 		"prevent update methods until is its time"
 		self updatingWhile: [
 			self updateVariables.
-			self updateProtocols.
-			activeProtocols := protocolListPresenter selectedItems ].
+			self updateProtocols ].
 		"update methods happens outside the updating flag... :P"
 		self updateMethods ]
 ]
@@ -547,15 +546,16 @@ DockClassOutlineSideView >> updatePresenter [
 DockClassOutlineSideView >> updateProtocols [
 
 	protocolListPresenter updateItemsKeepingSelection: self collectProtocols.
-	protocolListPresenter selectedItem 
-		ifNil: [ protocolListPresenter selectFirst ]
+	protocolListPresenter selectedItems
+		ifEmpty: [ protocolListPresenter selectFirst ].
+	activeProtocols := protocolListPresenter selectedItems
 ]
 
 { #category : 'initialization' }
 DockClassOutlineSideView >> updateVariables [
 
 	variablesListPresenter updateItemsKeepingSelection: self collectVariables.
-	variablesListPresenter selectedItems 
+	variablesListPresenter selectedItems
 		ifEmpty: [ variablesListPresenter selectFirst ].
 	activeVariables := variablesListPresenter selectedItems
 ]

@@ -3,7 +3,8 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'entity',
-		'environmentModel'
+		'environmentModel',
+		'parentModel'
 	],
 	#category : 'Perspective-Model',
 	#package : 'Perspective',
@@ -15,6 +16,17 @@ PvBaseModel class >> newEnvironment: anEnvironmentModel entity: anObject [
 
 	^ self basicNew 
 		environmentModel: anEnvironmentModel;
+		entity: anObject;
+		initialize;
+		yourself
+]
+
+{ #category : 'instance creation' }
+PvBaseModel class >> newEnvironment: anEnvironmentModel parent: aParentModel entity: anObject [
+
+	^ self basicNew 
+		environmentModel: anEnvironmentModel;
+		parentModel: aParentModel;
 		entity: anObject;
 		initialize;
 		yourself
@@ -44,7 +56,7 @@ PvBaseModel >> canBeRemoved [
 	^ true
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'testing' }
 PvBaseModel >> canBeRenamed [
 
 	^ true
@@ -134,6 +146,12 @@ PvBaseModel >> includesClassModel [
 ]
 
 { #category : 'testing' }
+PvBaseModel >> isManagedAndModified [
+
+	^ false
+]
+
+{ #category : 'testing' }
 PvBaseModel >> isOutlineClassEntity [
 
 	^ false
@@ -181,15 +199,28 @@ PvBaseModel >> pageTitle [
 	^ self shortName
 ]
 
+{ #category : 'accessing - navigating' }
+PvBaseModel >> parentModel [ 
+	
+	^ parentModel
+]
+
+{ #category : 'initialization' }
+PvBaseModel >> parentModel: aParentlModel [
+
+	parentModel := aParentlModel
+]
+
+{ #category : 'as yet unclassified' }
+PvBaseModel >> parentModels [
+
+	self parentModel ifNil: [ ^ #() ]. 
+	^ self parentModel parentModels, { self parentModel }
+]
+
 { #category : 'private' }
 PvBaseModel >> prepareForSnapshot [
 	"This is used when a model will be snapshot, to clean up what is not need/want to be kept "
-]
-
-{ #category : 'accessing - compatibility' }
-PvBaseModel >> protocol [
-	
-	^ nil
 ]
 
 { #category : 'accessing' }

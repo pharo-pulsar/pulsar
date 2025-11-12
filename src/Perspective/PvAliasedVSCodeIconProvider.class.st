@@ -51,54 +51,54 @@ PvAliasedVSCodeIconProvider >> initialize [
 		"blank"
 		"classAbstract"
 		'glamorousGo'.				'run'.					"playground (go)"
-		'glamorousMore'.			'file-submodule'.		"playground (pages)"
+		'glamorousMore'.				'file-submodule'.		"playground (pages)"
 		'glamorousSaveToUrl'.		'cloud-upload'.			"playground (upload to the web)"
 		'glamorousTable'. 			'table'.					"playground (bindings)"
 		'package'.					'package'.				"browser-> package"
 		'smallForward'.				'arrow-right'.
-		'smallHierarchyBrowser'.	'type-hierarchy'.		"browser -> navigation hierarchy"
-		'trait'.					'symbol-trait'.			"type"
-		'workspace'.				'lightbulb'. 			"'beaker'."	"playground"
+		'smallHierarchyBrowser'.		'type-hierarchy'.		"browser -> navigation hierarchy"
+		'trait'.						'symbol-trait'.			"type"
+		'workspace'.					'beaker'. 				"'lightbulb'."	"playground"
 		'transcript'. 		 		'terminal'.
 		'announcement'.				'symbol-announcement'. 	"type"
-		'arrowDown'.				'arrow-small-down'.		"browser-> overrides"
+		'arrowDown'.					'arrow-small-down'.		"browser-> overrides"
 		'arrowUp'.					'arrow-small-up'.		"browser-> overriding"
 		'flagIcon'.					'bookmark'.				"browser (to show there are flags)"
 		'smallWindow'.				'symbol-window'.			"type (presenter...)" 
-		'morph'.					'symbol-morph'.			"type"
-		'exception'.				'symbol-event'.			"type"
+		'morph'.						'symbol-morph'.			"type"
+		'exception'.					'symbol-event'.			"type"
 		'variable'.					'symbol-variable'.		"type"
 		'smallInspectIt'.			'eye'.					"inspector..."
 		'inspector'. 				'eye'. 
-		'senders'.					'call-incoming'.		"message browser - senders"
-		'string'.					'symbol-string'.		"type"
-		'magnitude'.				'symbol-numeric'.		"type"
+		'senders'.					'call-incoming'.			"message browser - senders"
+		'string'.					'symbol-string'.			"type"
+		'magnitude'.					'symbol-numeric'.		"type"
 		'collection'.				'symbol-namespace'.		"type"
 		'glamorousClose'. 			'close'.   				"inspector"
 		'history'.					'history'. 				"playground"
-		'smallDelete'. 				'trash'.				"playground..."
-		'delete'	.				'trash'.
+		'smallDelete'. 				'trash'.					"playground..."
+		'delete'	.					'trash'.
 		'smallObjects'.				'beaker'.  				"inspector"
-		'glamorousRefresh'. 		'refresh'. 				"inspector"
+		'glamorousRefresh'. 			'refresh'. 				"inspector"
 		'smallSystemBrowser'. 		'browser'. 				"inspector"
 		'messageBrowser'. 			'browser'. 
 		'referencesIcon'.			'type-hierarchy'.		"message browser"
 		'smallDoIt'. 				'run'.					"code"
 		'smallDebug'. 				'bug'.					"code"
-		'smallPrintIt'. 			'blank'.				"code"
-		'smallProfile'. 			'watch'.				"code"
-		'smallUndo'.				'discard'.
+		'smallPrintIt'. 				'blank'.					"code"
+		'smallProfile'. 				'watch'.					"code"
+		'smallUndo'.					'discard'.
 		'smallRedo'. 				'redo'.
-		'smallSave'.				'save'.
-		'undo'. 					'undo'.
-		'redo'. 					'redo'.
-		'menu'. 		   	       	'kebab-vertical'."'more', 'menu'"  "menu button"
+		'smallSave'.					'save'.
+		'undo'. 						'undo'.
+		'redo'. 						'redo'.
+		'menu'. 		   	       		'kebab-vertical'."'more', 'menu'"  "menu button"
 		'pause'. 					'debug-pause'.
 		'priority'.					'flame'.
 		'autoUpdate'.				'radio-tower'.
 		'stop'.						'debug-stop'.
-		'pause'.					'debug-pause'.
-		'play'. 					'debug-continue'.
+		'pause'.						'debug-pause'.
+		'play'. 						'debug-continue'.
 		'up'. 						'arrow-up'.
 		'down'.						'arrow-down'.
 		'refresh'. 					'refresh'.
@@ -112,8 +112,8 @@ PvAliasedVSCodeIconProvider >> initialize [
 		'protocolVirtualWarning'. 	'warning'.
 		"debugger"
 		'debuggerProceed'. 			'debug-continue'.
-		'debuggerStepInto'. 		'debug-step-into'.
-		'debuggerStepOver'. 		'debug-step-over'.
+		'debuggerStepInto'. 			'debug-step-into'.
+		'debuggerStepOver'. 			'debug-step-over'.
 		'debuggerStepThrough'. 		'debug-step-through'.
 		'debuggerRestart'. 			'debug-restart'.
 		'debuggerReturn'. 			'debug-step-out'.
@@ -122,20 +122,20 @@ PvAliasedVSCodeIconProvider >> initialize [
 		'accept'.					'check'.
 		'cancel'.					'close'.
 		"testing"
-		'run-test'. 				'play'.
+		'run-test'. 					'play'.
 		'run-test-passed'. 			'play-green'.
-		'run-test-failure'. 		'play-yellow'.
+		'run-test-failure'. 			'play-yellow'.
 		'run-test-error'. 			'play-red'.
 		'editorStack'.				'multiple-windows'.
 		"versions"
-		'changeAdd'.				'add'.
+		'changeAdd'.					'add'.
 		'changeRemove'.				'remove'.
 		'changeUpdate'.				'remote'. "not good"
 		"same name (just to keep track of them)"
 		'search'.					'search'.
 		"panels"
 		'panel-left'.				'layout-sidebar-left'.
-		'panel-top'.				'layout-panel-top'.
+		'panel-top'.					'layout-panel-top'.
 		'panel-right'.				'layout-sidebar-right'.
 		'panel-bottom'.				'layout-panel'.
 	 }

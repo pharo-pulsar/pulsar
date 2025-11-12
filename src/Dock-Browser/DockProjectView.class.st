@@ -219,21 +219,23 @@ DockProjectView >> doDuplicateSelectedClass [
 
 { #category : 'private - actions' }
 DockProjectView >> doNewPackage [
+
 	| packageName project package |
-	
-	packageName := self application newRequest 
-		title: 'New package';
-		label: 'Package name';
-		openModalWithParent: self window.
+	packageName := self application newRequest
+		               title: 'New package';
+		               message: 'Package name';
+		               openModalWithParent: self window.
 	packageName ifNil: [ ^ self ].
-	
+
 	project := self closestEntityInPathMatching: [ :each | each isProject ].
 	project ifNil: [ ^ self ].
-	
+
 	package := project addPackageNamed: packageName.
 	self updatePresenter.
-	listPresenter 
-		selectPathByItems: { project. package }
+	listPresenter
+		selectPathByItems: {
+				project.
+				package }
 		scrollToSelection: true
 ]
 
@@ -376,6 +378,7 @@ DockProjectView >> initialize [
 
 { #category : 'initialization' }
 DockProjectView >> initializePresenters [
+
 	self addStyle: 'dockProjectView'.
 
 	toolbarPresenter := self instantiate: DockToolbarPresenter.
@@ -386,8 +389,13 @@ DockProjectView >> initializePresenters [
 		actions: (self actions actionsForAll: #(new extra));
 		yourself).
 
-	listPresenter := self newEntityTree.
-	listPresenter addStyle: 'dockProjectTree'.
+	listPresenter := self newEasyTreeListView
+		addStyle: 'stTree';
+		addStyle: 'dockProjectTree';
+		children: [ :aModel | aModel children ];
+		rowPresenterClass: DockProjectNodeRow;
+		searchMatching: [ :anEntity :pattern | anEntity matches: pattern ];
+		yourself.
 	
 	listPresenter addShortcutWith: [ :act | act 
 		shortcutKey: Character arrowRight alt;

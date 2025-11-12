@@ -3,7 +3,8 @@ Class {
 	#superclass : 'DockBaseBrowser',
 	#instVars : [
 		'projectView',
-		'outlineView'
+		'outlineView',
+		'repositoryView'
 	],
 	#classVars : [
 		'LastWindowSize'
@@ -29,44 +30,6 @@ DockBrowser class >> defineImageActionsOn: aBuilder [
 
 	aBuilder registerGroup: #image with: {
 		$s shift mod1 -> DockImageSaveCommand new  }
-]
-
-{ #category : 'accessing - actions' }
-DockBrowser class >> definePanelActionGroup: actionGroup [
-	<perspectiveActionGroup: #panels>
-	
-	actionGroup 
-		name: 'Panels';
-		priority: 900;
-		beDisplayedAsSubMenu
-]
-
-{ #category : 'accessing - actions' }
-DockBrowser class >> definePanelActionsOn: aBuilder [
-	<perspectiveActions>
-
-	aBuilder registerGroup: #panels with: { 
-		SpAction new 
-			name: 'Toggle panel left';
-			description: 'Show/hide the left panel';
-			iconName: 'panel-left';
-			action: [ :aContext | aContext togglePanelArea: SpPanelArea start ].
-		SpAction new 
-			name: 'Toggle panel top'; 
-			description: 'Show/hide the top panel';
-			iconName: 'panel-top';
-			action: [ :aContext | aContext togglePanelArea: SpPanelArea top ].
-		SpAction new 
-			name: 'Toggle panel right'; 
-			description: 'Show/hide the right panel';
-			iconName: 'panel-right';
-			action: [ :aContext | aContext togglePanelArea: SpPanelArea end ].
-		SpAction new 
-			name: 'Toggle panel bottom'; 
-			description: 'Show/hide the bottom panel';
-			iconName: 'panel-bottom';
-			action: [ :aContext | aContext togglePanelArea: SpPanelArea bottom ].
-	}
 ]
 
 { #category : 'accessing - actions' }
@@ -107,7 +70,10 @@ DockBrowser class >> defineToolActionsOn: aBuilder [
 	aBuilder registerGroup: #tools with: { 
 		DockOpenPlaygroundCommand new.
 		DockOpenProcessBrowserCommand new.
-		DockOpenGitRepositoriesCommand new.
+		SpAction new 
+			priority: 100;
+			name: 'Open Repositories';
+			action: [ :aContext | aContext openRepositories ].
 		DockOpenRecentChangesCommand new.
 	}
 ]
@@ -179,6 +145,18 @@ DockBrowser >> eventTestSuiteEnded: aTestSuiteEnded [
 			message }) ]
 ]
 
+{ #category : 'private' }
+DockBrowser >> informLostChanges: ann [ 
+
+	logger trace: ann.
+	self addToast: (SpPanelToast new 
+		timeout: 10;
+		title: 'Lost Changes Detected.';
+		actionLabel: 'Recover';
+		action: [ self schedule: [ self spawnRecentChanges ] ];
+		yourself)
+]
+
 { #category : 'initialization' }
 DockBrowser >> initialExtent [
 
@@ -203,7 +181,8 @@ DockBrowser >> initializeStatusbar [
 
 { #category : 'initialization' }
 DockBrowser >> initializeWindow: aWindowPresenter [
-
+	self flag: #TODO. "In fact, there is no reason why this cannot be 
+	in the superclass, available to any dockbrowser window"
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter
 		initialExtent: (LastWindowSize ifNil: [ 1000@800 ]);
@@ -216,14 +195,13 @@ DockBrowser >> initializeWindow: aWindowPresenter [
 
 { #category : 'initialization' }
 DockBrowser >> initializeWorkspace [
-
+	super initializeWorkspace.
+	
 	"defaults"
 	self startWidth: 280"self initialExtent x * 25 percent".
 	self endWidth: 280"self initialExtent x * 25 percent".
 	self topHeight: 180"self initialExtent y * 20 percent".
-	self bottomHeight: 180"self initialExtent y * 20 percent".
-	
-	self initializeStatusbar
+	self bottomHeight: 180"self initialExtent y * 20 percent"
 ]
 
 { #category : 'initialization' }
@@ -308,6 +286,19 @@ DockBrowser >> openProject: aBaselineClass [
 	projectView addProject: aBaselineClass
 ]
 
+{ #category : 'actions' }
+DockBrowser >> openRepositories [
+
+	repositoryView ifNil: [ 
+		repositoryView := self 
+			addPresenterClass: DockRepositoriesView 
+			model: (DockRepositoriesModel 
+				newEnvironment: self model
+				parent: self model
+				entity: nil) ].
+	repositoryView takeKeyboardFocus
+]
+
 { #category : 'private' }
 DockBrowser >> outlineView [
 
@@ -326,6 +317,11 @@ DockBrowser >> postRestoreSnapshot: aSnapshot [
 		detect: [ :each | each presenter class = DockClassOutlineView ]
 		ifFound: [ :each | each presenter ]
 		ifNone: [ self addPresenterClass: DockClassOutlineView ].
+	
+	repositoryView := self presenters
+		detect: [ :each | each presenter class = DockRepositoriesView ]
+		ifFound: [ :each | each presenter ]
+		ifNone: [ nil ].
 
 	self updateTitle
 ]
@@ -342,6 +338,7 @@ DockBrowser >> registerToEvents [
 	super registerToEvents.
 	self registerToTestCaseEvents.
 	self announcer 
+		when: DockLostChangesAnnouncement send: #informLostChanges: to: self;
 		when: DockRequestToolAnnouncement send: #addTool: to: self
 ]
 
@@ -364,19 +361,17 @@ DockBrowser >> registerToTestCaseEvents [
 			to: self
 ]
 
+{ #category : 'private' }
+DockBrowser >> repositoryView [
+
+	^ repositoryView
+]
+
 { #category : 'actions' }
 DockBrowser >> saveImage [
 
 	[ Smalltalk snapshot: true andQuit: false ] fork.
 	self inform: 'Image saved'
-]
-
-{ #category : 'actions' }
-DockBrowser >> spawnGitRepositories [
-
-	IceTipRepositoriesBrowser new 
-		application: self application;
-		open
 ]
 
 { #category : 'actions' }
@@ -395,12 +390,6 @@ DockBrowser >> spawnNewProcessBrowser [
 DockBrowser >> spawnRecentChanges [
 
 	(DockChangesBrowser newApplication: self application) open
-]
-
-{ #category : 'actions' }
-DockBrowser >> togglePanelArea: aPanelArea [
-
-	aPanelArea accept: (DockBrowserPanelAreaVisible on: self)
 ]
 
 { #category : 'initialization' }

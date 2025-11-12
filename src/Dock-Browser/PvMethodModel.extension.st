@@ -10,7 +10,7 @@ PvMethodModel >> dockEditorClass [
 PvMethodModel >> isUsingAnyVariable: aCollection [
 
 	^ aCollection anySatisfy: [ :each |
-			self isUsingVariable: each ]
+		self isUsingVariable: each ]
 ]
 
 { #category : '*Dock-Browser' }

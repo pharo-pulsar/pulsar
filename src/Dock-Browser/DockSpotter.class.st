@@ -16,7 +16,8 @@ Class {
 		'toolsContext',
 		'environmentContext',
 		'searchService',
-		'lastSearchText'
+		'lastSearchText',
+		'waitingSearchText'
 	],
 	#category : 'Dock-Browser-Tool-Spotter',
 	#package : 'Dock-Browser',
@@ -44,6 +45,7 @@ DockSpotter >> acceptSelection [
 DockSpotter >> connectPresenters [
 
 	searchPresenter 
+		whenTextChangedDo: [ :newText | waitingSearchText := newText ];
 		whenSubmitDo: [ :aString | self acceptSelection ];
 		addShortcutWith: [ :action | action 
 			shortcutKey: KeyboardKey down asKeyCombination;
@@ -81,11 +83,10 @@ DockSpotter >> defaultLayout [
 { #category : 'private - actions' }
 DockSpotter >> doSearch: aString [
 	
+	"actually, this event can arrive even after close (because of how service works)"
+	runner ifNil: [ ^ self ].
 	"clean all possible pending tasks (this is *a bit* better, but still annoying :("
 	runner purge.
-	runner isBusy ifTrue: [ 
-		runner finalizer finalize.
-		runner start ].
 	"now schedule the last one"
 	runner schedule: [ 
 		| candidates |
@@ -96,8 +97,7 @@ DockSpotter >> doSearch: aString [
 		 and since purge ensures there is always just one pending... this should 
 		 work slightly better.
 		 In anycase it feels smoother :)"
-		runner isEmpty ifTrue: [
-			self udpdateResultListWith: candidates ] ]
+		self udpdateResultListWith: candidates ]
 ]
 
 { #category : 'private' }
@@ -118,7 +118,7 @@ DockSpotter >> ensureSearchService [
 	
 	searchService := TKTParameterizableService new.
 	searchService name: 'DockSpotter service: ', UUID new asString.
-	searchService stepDelay: 200 milliSeconds.
+	searchService stepDelay: 100 milliSeconds.
 	searchService step: [ self processSearch ].
 	searchService start.
 	
@@ -166,7 +166,6 @@ DockSpotter >> giveFocusToResultList [
 DockSpotter >> initialize [
 	
 	super initialize.
-	self flag: #TODO. "I need probably a 'keep just last task' worker"
 	runner := DockWorker new 
 		inTool: self class;
 		start
@@ -219,14 +218,11 @@ DockSpotter >> newResultList [
 
 { #category : 'private' }
 DockSpotter >> processSearch [
-	| waitingSearchText |
-
-	waitingSearchText := searchPresenter text.
-	"spinner isVisible ifTrue: [ spinner updateStep ]."
 	
 	waitingSearchText = lastSearchText ifTrue: [ ^ self ].
+	
 	lastSearchText := waitingSearchText.
-	self doSearch: waitingSearchText
+	self doSearch: lastSearchText
 ]
 
 { #category : 'private' }
@@ -247,6 +243,7 @@ DockSpotter >> tabActivated: aPresenter [
 	activePresenter ifNotNil: [
 		self updateSearchPlaceHolder.
 		lastSearchText := nil.
+		waitingSearchText := searchPresenter text.
 		self ensureSearchService ]
 ]
 
@@ -261,14 +258,18 @@ DockSpotter >> toolsContext [
 
 { #category : 'initialization' }
 DockSpotter >> udpdateResultListWith: aCollection [
+	| selected |
 	
-	"use defer to ensure UI loop"
 	self application defer: [
+		selected := activePresenter selectedItem.
 		emptyPresenter visible: aCollection isEmpty.
-		activePresenter updateItemsKeepingSelection: aCollection.
-		(activePresenter selectedItem isNil 
-			and: [ aCollection isNotEmpty ])
-			ifTrue: [ resultListPresenter selectFirst ] ]
+		activePresenter contentView disableActivationDuring: [
+			activePresenter contentView disableSelectionDuring: [
+				activePresenter items: aCollection ] ].
+		aCollection ifNotEmpty: [
+			selected 
+				ifNotNil: [ activePresenter selectItem: selected ]
+				ifNil: [ activePresenter selectFirst ] ] ]
 ]
 
 { #category : 'initialization' }
@@ -313,6 +314,10 @@ DockSpotter >> visitPanelEntry: anEntry [
 
 { #category : 'private' }
 DockSpotter >> windowClosed [
-	searchService ifNotNil: [ searchService stop ].
-	runner stop
+
+	searchService ifNotNil: [ 
+		searchService stop.
+		searchService := nil ].
+	runner stop.
+	runner := nil
 ]

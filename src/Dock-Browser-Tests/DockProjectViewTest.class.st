@@ -56,7 +56,7 @@ DockProjectViewTest >> testDoRemoveSelectedEntityWhenProjectModel [
 	self waitForUI.
 
 	self assert: browser projectView model children size equals: 1.
-	self assert: browser projectView listPresenter selectedItem class equals: PvProjectModel.
+	self assert: browser projectView listPresenter selectedItem class equals: DockProjectModel.
 
 	"request"	
 	browser projectView doRemoveSelectedEntity.

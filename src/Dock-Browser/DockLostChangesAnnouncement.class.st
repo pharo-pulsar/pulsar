@@ -1,5 +1,5 @@
 Class {
-	#name : 'DockEditorActivated',
+	#name : 'DockLostChangesAnnouncement',
 	#superclass : 'DockAnnouncement',
 	#instVars : [
 		'detector'
@@ -10,13 +10,13 @@ Class {
 }
 
 { #category : 'accessing' }
-DockEditorActivated >> detector [
+DockLostChangesAnnouncement >> detector [
 
 	^ detector
 ]
 
 { #category : 'accessing' }
-DockEditorActivated >> detector: aLostChangesDetector [
+DockLostChangesAnnouncement >> detector: aLostChangesDetector [
 
 	detector := aLostChangesDetector
 ]

@@ -45,7 +45,7 @@ PvClassHierarchyNode >> canBeRemoved [
 	^ self element canBeRemoved
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'testing' }
 PvClassHierarchyNode >> canBeRenamed [
 
 	^ self element canBeRenamed
@@ -116,6 +116,12 @@ PvClassHierarchyNode >> iconComposite [
 PvClassHierarchyNode >> iconName [
 	
 	^ self element iconName
+]
+
+{ #category : 'testing' }
+PvClassHierarchyNode >> isManagedAndModified [ 
+
+	^ self element isManagedAndModified
 ]
 
 { #category : 'testing' }

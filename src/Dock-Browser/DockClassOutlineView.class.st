@@ -73,6 +73,18 @@ DockClassOutlineView >> eventEditorActivated: anAnnouncement [
 ]
 
 { #category : 'events' }
+DockClassOutlineView >> eventMethodChanged: aMethodAnnouncement [
+
+	(self model isSameClass: aMethodAnnouncement method methodClass)
+		ifFalse: [ ^ self ].
+
+	logger trace: aMethodAnnouncement.
+	
+	self withClassSidesDo: [ :each |
+		self schedule: [ each updateMethods ] ]
+]
+
+{ #category : 'events' }
 DockClassOutlineView >> eventModelChanged: anAnnouncement [
 	| changedModel  outlineClassModel |
 
@@ -95,7 +107,8 @@ DockClassOutlineView >> eventTestSuiteEnded: aTestSuiteEnded [
 
 	logger trace: aTestSuiteEnded.
 	
-	self withClassSidesDo: [ :each | each updateMethods ] 
+	self withClassSidesDo: [ :each | 
+		self schedule: [ each updateMethods ] ] 
 ]
 
 { #category : 'initialization' }
@@ -140,6 +153,7 @@ DockClassOutlineView >> registerToEvents [
 DockClassOutlineView >> registerToSystemEvents [
 	
 	self announcer
+		when: MethodAnnouncement send: #eventMethodChanged: to: self;
 		when: TestSuiteEnded send: #eventTestSuiteEnded: to: self
 ]
 

@@ -129,7 +129,7 @@ PvNewMethodTemplate >> protocol [
 { #category : 'accessing' }
 PvNewMethodTemplate >> protocol: aProtocolString [
 
-	protocol := aProtocolString
+	protocol := Protocol named: aProtocolString
 ]
 
 { #category : 'accessing' }

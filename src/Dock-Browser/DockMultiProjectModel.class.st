@@ -25,7 +25,7 @@ DockMultiProjectModel >> accept: aVisitor [
 DockMultiProjectModel >> addProject: aBaselineClass [
 	| newProjectModel |
 
-	newProjectModel := (PvProjectModel 
+	newProjectModel := (DockProjectModel 
 		newEntity: aBaselineClass 
 		environment: self environmentModel).
 	

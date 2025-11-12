@@ -6,14 +6,6 @@ Class {
 	#tag : 'Model'
 }
 
-{ #category : 'instance creation' }
-PvPackageTagModel class >> newPackageTag: aPackageTag [
-
-	^ self new 
-		tag: aPackageTag;
-		yourself
-]
-
 { #category : 'accessing' }
 PvPackageTagModel class >> order [
 
@@ -49,6 +41,17 @@ PvPackageTagModel >> classes [
 PvPackageTagModel >> iconName [
 
 	^ 'tag'
+]
+
+{ #category : 'testing' }
+PvPackageTagModel >> isManagedAndModified [
+
+	^ self parentModels 
+		detect: [ :each | each isProject ]
+		ifFound: [ :aProjectModel | 
+			"aProjectModel repositoryModel isPackageModified: self entity"
+			aProjectModel isManagedAndModified ]
+		ifNone: [ false ]
 ]
 
 { #category : 'testing' }

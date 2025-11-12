@@ -12,6 +12,44 @@ Class {
 	#tag : 'View-Base'
 }
 
+{ #category : 'accessing - actions' }
+DockBaseBrowser class >> definePanelActionGroup: actionGroup [
+	<perspectiveActionGroup: #panels>
+	
+	actionGroup 
+		name: 'Panels';
+		priority: 900;
+		beDisplayedAsSubMenu
+]
+
+{ #category : 'accessing - actions' }
+DockBaseBrowser class >> definePanelActionsOn: aBuilder [
+	<perspectiveActions>
+
+	aBuilder registerGroup: #panels with: { 
+		SpAction new 
+			name: 'Toggle panel left';
+			description: 'Show/hide the left panel';
+			iconName: 'panel-left';
+			action: [ :aContext | aContext togglePanelArea: SpPanelArea start ].
+		SpAction new 
+			name: 'Toggle panel top'; 
+			description: 'Show/hide the top panel';
+			iconName: 'panel-top';
+			action: [ :aContext | aContext togglePanelArea: SpPanelArea top ].
+		SpAction new 
+			name: 'Toggle panel right'; 
+			description: 'Show/hide the right panel';
+			iconName: 'panel-right';
+			action: [ :aContext | aContext togglePanelArea: SpPanelArea end ].
+		SpAction new 
+			name: 'Toggle panel bottom'; 
+			description: 'Show/hide the bottom panel';
+			iconName: 'panel-bottom';
+			action: [ :aContext | aContext togglePanelArea: SpPanelArea bottom ].
+	}
+]
+
 { #category : 'private' }
 DockBaseBrowser >> addGlobalActionsTo: aWindowPresenter [
 
@@ -109,10 +147,24 @@ DockBaseBrowser >> initializePrivateAnnouncer [
 ]
 
 { #category : 'initialization' }
+DockBaseBrowser >> initializeStatusbar [
+
+	self statusbar addSuffix: (self newToolbar 
+		displayMode: self application toolbarDisplayMode;
+		fillWith: (self globalActions actionsFor: #panels))
+]
+
+{ #category : 'initialization' }
 DockBaseBrowser >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	self addGlobalActionsTo: self
+]
+
+{ #category : 'initialization' }
+DockBaseBrowser >> initializeWorkspace [
+	
+	self initializeStatusbar
 ]
 
 { #category : 'private' }
@@ -163,6 +215,9 @@ DockBaseBrowser >> registerToEvents [
 
 	self announcer 
 		"first broadcast"
+		when: DockThemeChanged, DockSyntaxHighlightThemeChanged
+			send: #resendAnnouncement:
+			to: self;
 		when: DockAnnouncement send: #resendAnnouncement: to: self;
 		"now process here"
 		when: DockModelActivated send: #eventModelActivated: to: self;
@@ -199,6 +254,12 @@ DockBaseBrowser >> snapshot [
 DockBaseBrowser >> systemNavigation [
 
 	^ DockSystemNavigation newWindow: self
+]
+
+{ #category : 'private - actions' }
+DockBaseBrowser >> togglePanelArea: aPanelArea [
+
+	aPanelArea accept: (DockBrowserPanelAreaVisible on: self)
 ]
 
 { #category : 'private' }

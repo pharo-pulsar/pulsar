@@ -1,16 +1,17 @@
 Class {
-	#name : 'PvProjectModel',
+	#name : 'DockProjectModel',
 	#superclass : 'PvBaseModel',
 	#instVars : [
-		'baselineClass'
+		'baselineClass',
+		'repositoryModel'
 	],
-	#category : 'Perspective-Project-Model',
-	#package : 'Perspective-Project',
-	#tag : 'Model'
+	#category : 'Dock-Browser-View-Project',
+	#package : 'Dock-Browser',
+	#tag : 'View-Project'
 }
 
 { #category : 'instance creation' }
-PvProjectModel class >> newEntity: anObject environment: anEnvironmentModel [
+DockProjectModel class >> newEntity: anObject environment: anEnvironmentModel [
 
 	^ self basicNew 
 		entity: anObject;
@@ -20,13 +21,13 @@ PvProjectModel class >> newEntity: anObject environment: anEnvironmentModel [
 ]
 
 { #category : 'visiting' }
-PvProjectModel >> accept: aVisitor [
+DockProjectModel >> accept: aVisitor [
 
 	^ aVisitor visitProjectModel: self
 ]
 
 { #category : 'accessing' }
-PvProjectModel >> addPackageNamed: aName [
+DockProjectModel >> addPackageNamed: aName [
 
 	self flag: #TODO. "What to do here? Throw an error?"
 	(self environmentModel hasPackageNamed: aName) 
@@ -37,7 +38,7 @@ PvProjectModel >> addPackageNamed: aName [
 ]
 
 { #category : 'converting' }
-PvProjectModel >> asClassModel [
+DockProjectModel >> asClassModel [
 
 	^ PvClassModel 
 		newEnvironment: self environmentModel 
@@ -45,7 +46,7 @@ PvProjectModel >> asClassModel [
 ]
 
 { #category : 'converting' }
-PvProjectModel >> asOutlineClassModel [
+DockProjectModel >> asOutlineClassModel [
 
 	^ PvOutlineClassModel 
 		newEnvironment: self environmentModel 
@@ -53,7 +54,7 @@ PvProjectModel >> asOutlineClassModel [
 ]
 
 { #category : 'accessing' }
-PvProjectModel >> baselineClassModel [
+DockProjectModel >> baselineClassModel [
 
 	^ PvClassModel 
 		newEnvironment: self environmentModel 
@@ -61,7 +62,7 @@ PvProjectModel >> baselineClassModel [
 ]
 
 { #category : 'accessing' }
-PvProjectModel >> children [
+DockProjectModel >> children [
 
 	^ Array streamContents: [ :stream |
 		stream nextPutAll: self collectPackageModels.
@@ -76,25 +77,29 @@ PvProjectModel >> children [
 ]
 
 { #category : 'accessing' }
-PvProjectModel >> collectPackageModels [
+DockProjectModel >> collectPackageModels [
 
 	^ self collectPackageModelsOn: self entity
 ]
 
 { #category : 'private' }
-PvProjectModel >> collectPackageModelsOn: aBaselineClass [
+DockProjectModel >> collectPackageModelsOn: aBaselineClass [
 	| specs | 
 	
 	"This does not resist demeters law, badly"
 	specs := aBaselineClass new project version packages.
 	^ (specs 
 		select: [ :each | self environmentModel hasPackageNamed: each name ]
-		thenCollect: [ :each | self environmentModel packageModelNamed: each name ])
+		thenCollect: [ :each | 
+			PvPackageModel 
+				newEnvironment: self environmentModel
+				parent: self
+				entity: (self environmentModel packageNamed: each name) ])
 		sorted: #name ascending
 ]
 
 { #category : 'accessing' }
-PvProjectModel >> dependencesEnvironment [
+DockProjectModel >> dependencesEnvironment [
 	| dict |
 
 	dict := SystemDictionary new.
@@ -108,7 +113,7 @@ PvProjectModel >> dependencesEnvironment [
 ]
 
 { #category : 'accessing' }
-PvProjectModel >> dependencyModels [
+DockProjectModel >> dependencyModels [
 	| version |
 
 	version := self entity project version.
@@ -117,45 +122,62 @@ PvProjectModel >> dependencyModels [
 		version projects
 ]
 
+{ #category : 'private' }
+DockProjectModel >> detectRepository [
+
+	^ IceRepository registry 
+		detect: [ :each | each includesPackageNamed: self entity name ]
+		ifNone: [ nil ]
+]
+
 { #category : 'accessing' }
-PvProjectModel >> dockEditorClass [
+DockProjectModel >> dockEditorClass [
 
 	^ DockProjectEditor
 ]
 
 { #category : 'accessing' }
-PvProjectModel >> editorClass [
+DockProjectModel >> editorClass [
 
 	^ PvProjectEditorView
 ]
 
 { #category : 'accessing' }
-PvProjectModel >> fullName [
+DockProjectModel >> fullName [
 	
 	^  self name
 ]
 
 { #category : 'accessing' }
-PvProjectModel >> iconName [
+DockProjectModel >> iconName [
 
 	^ 'project'
 ]
 
 { #category : 'testing' }
-PvProjectModel >> isProject [
+DockProjectModel >> isManagedAndModified [ 
+	"Answer if this project is 'managed' in iceberg"
+
+	^ self repositoryModel
+		ifNotNil: [ :aRepository | aRepository workingCopy isModified ]
+		ifNil: [ false ]
+]
+
+{ #category : 'testing' }
+DockProjectModel >> isProject [
 
 	^ true
 ]
 
 { #category : 'accessing' }
-PvProjectModel >> name [
+DockProjectModel >> name [
 
 	self entity ifNil: [ ^ 'None' ].
 	^ self entity name allButFirst: 10 "BaselineOf"
 ]
 
 { #category : 'private' }
-PvProjectModel >> packagesOn: aBaselineClass [
+DockProjectModel >> packagesOn: aBaselineClass [
 	| specs | 
 	
 	"This does not resist demeters law, badly"
@@ -167,7 +189,7 @@ PvProjectModel >> packagesOn: aBaselineClass [
 ]
 
 { #category : 'accessing' }
-PvProjectModel >> projectEnvironment [
+DockProjectModel >> projectEnvironment [
 	| dict |
 
 	dict := SystemEnvironment new.
@@ -178,7 +200,13 @@ PvProjectModel >> projectEnvironment [
 ]
 
 { #category : 'accessing' }
-PvProjectModel >> systemEnvironment [
+DockProjectModel >> repositoryModel [
+
+	^ repositoryModel ifNil: [ repositoryModel := self detectRepository ]
+]
+
+{ #category : 'accessing' }
+DockProjectModel >> systemEnvironment [
 
 	^ self class environment
 ]

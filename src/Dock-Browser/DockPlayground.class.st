@@ -173,12 +173,24 @@ DockPlayground >> ensureCodeBindings [
 		addBinding: (WorkspaceVariable key: #thisBrowser value: self window)
 ]
 
+{ #category : 'events' }
+DockPlayground >> eventSyntaxHighlightThemeChanged: ann [
+
+	codePresenter syntaxHighlightTheme: self application syntaxHighlightTheme
+]
+
+{ #category : 'events' }
+DockPlayground >> eventThemeChanged: ann [
+
+	codePresenter styleScheme: self application styleScheme
+]
+
 { #category : 'initialization' }
 DockPlayground >> initialize [
 
 	model := DockPlaygroundModel new.
-	super initialize. 
-	
+	super initialize.
+	self registerToSystemEvents
 ]
 
 { #category : 'initialization' }
@@ -237,6 +249,14 @@ DockPlayground >> newSystemNavigation [
 DockPlayground >> postRestoreSnapshot: aSnapshot [
 
 	self ensureCodeBindings
+]
+
+{ #category : 'initialization' }
+DockPlayground >> registerToSystemEvents [
+
+	self announcer
+		when: DockThemeChanged send: #eventThemeChanged: to: self;
+		when: DockSyntaxHighlightThemeChanged send: #eventSyntaxHighlightThemeChanged: to: self
 ]
 
 { #category : 'accessing - snapshot' }

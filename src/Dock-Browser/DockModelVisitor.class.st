@@ -46,6 +46,16 @@ DockModelVisitor >> visitMethodModel: aModel [
 ]
 
 { #category : 'visiting' }
+DockModelVisitor >> visitPackageModel: aModel [
+
+]
+
+{ #category : 'visiting' }
+DockModelVisitor >> visitPackageTagModel: aModel [
+
+]
+
+{ #category : 'visiting' }
 DockModelVisitor >> visitProjectModel: aModel [
 
 ]

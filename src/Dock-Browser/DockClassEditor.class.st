@@ -114,6 +114,14 @@ DockClassEditor >> eventTestSuiteEnded: aTestSuiteEnded [
 	self updateContentActions
 ]
 
+{ #category : 'events' }
+DockClassEditor >> eventThemeChanged: ann [
+
+	super eventThemeChanged: ann.
+
+	commentPresenter styleScheme: self application styleScheme
+]
+
 { #category : 'initialization' }
 DockClassEditor >> initializePresenters [
 

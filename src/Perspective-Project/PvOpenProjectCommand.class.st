@@ -28,6 +28,7 @@ PvOpenProjectCommand >> execute [
 	| result |
 
 	result := self application newSelect
+		extent: 300@500;
 		title: 'Open project';
 		message: 'Select project';
 		items: self allBaselines;

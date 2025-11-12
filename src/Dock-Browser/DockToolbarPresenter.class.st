@@ -79,12 +79,13 @@ DockToolbarPresenter >> initialize [
 { #category : 'initialization' }
 DockToolbarPresenter >> initializePresenters [
 
+	self addStyle: 'dockToolbarPanel'.
+
 	actionToolbarPresenter := self newToolbar
 		addStyle: 'stToolbar';
 		addStyle: 'dockToolbar';
 		displayMode: self application toolbarDisplayMode;
 		yourself	
-
 ]
 
 { #category : 'layout' }

@@ -185,6 +185,13 @@ PvClassModel >> includesClassModel [
 ]
 
 { #category : 'testing' }
+PvClassModel >> includesSelectorInAnySide: aSelector [
+
+	^ (self instanceSide includesSelector: aSelector)
+		or: [ self classSide includesSelector: aSelector ]
+]
+
+{ #category : 'testing' }
 PvClassModel >> inheritsFrom: aClassModel [ 
 	
 	aClassModel ifNil: [ ^ false ].
@@ -220,6 +227,12 @@ PvClassModel >> isNew [
 PvClassModel >> isOutlineClassEntity [
 
 	^ self entity isClassOrTrait
+]
+
+{ #category : 'testing' }
+PvClassModel >> isSameClass: aClass [
+
+	^ self instanceSide = aClass instanceSide 
 ]
 
 { #category : 'testing' }

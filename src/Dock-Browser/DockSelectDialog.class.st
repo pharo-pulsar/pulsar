@@ -1,6 +1,6 @@
 Class {
-	#name : 'DockInformDialog',
-	#superclass : 'SpInformDialog',
+	#name : 'DockSelectDialog',
+	#superclass : 'SpSelectDialog',
 	#instVars : [
 		'titlePresenter',
 		'responseAreaPresenter'
@@ -10,22 +10,19 @@ Class {
 	#tag : 'Application'
 }
 
-{ #category : 'accessing' }
-DockInformDialog class >> defaultPreferredExtent [
-
-	^ 350@100
-]
-
 { #category : 'initialization' }
-DockInformDialog >> addButtonsTo: aDialogWindowPresenter [
+DockSelectDialog >> addButtonsTo: aDialogWindowPresenter [
 
+	responseAreaPresenter add: (self newButton 
+		label: self cancelLabel;
+		action: [ self cancel ]).
 	responseAreaPresenter addSuggested: (self newButton 
 		label: self acceptLabel;
 		action: [ self accept ])
 ]
 
 { #category : 'layout' }
-DockInformDialog >> defaultLayout [
+DockSelectDialog >> defaultLayout [
 
 	^ SpBoxLayout newVertical
 		add: (SpBoxLayout newHorizontal
@@ -34,13 +31,13 @@ DockInformDialog >> defaultLayout [
 			yourself)
 			expand: false;
 		add: messagePresenter expand: false;
-		add: self newNullPresenter;
+		add: list;
 		add: responseAreaPresenter expand: false; 
 		yourself
 ]
 
 { #category : 'initialization' }
-DockInformDialog >> initializeDialogWindow: aDialogWindowPresenter [
+DockSelectDialog >> initializeDialogWindow: aDialogWindowPresenter [
 
 	aDialogWindowPresenter 
 		initialExtent: self extent;
@@ -54,7 +51,7 @@ DockInformDialog >> initializeDialogWindow: aDialogWindowPresenter [
 ]
 
 { #category : 'initialization' }
-DockInformDialog >> initializePresenters [
+DockSelectDialog >> initializePresenters [
 
 	self addStyle: 'message-area'.
 	self addStyle: 'has-heading'.
@@ -71,7 +68,7 @@ DockInformDialog >> initializePresenters [
 ]
 
 { #category : 'private' }
-DockInformDialog >> newDialogLabel [
+DockSelectDialog >> newDialogLabel [
 
 	^ self newLabel
 		addStyle: 'body';
@@ -82,7 +79,7 @@ DockInformDialog >> newDialogLabel [
 ]
 
 { #category : 'private' }
-DockInformDialog >> setLabel: aString [
+DockSelectDialog >> setLabel: aString [
 
 	messagePresenter label: aString
 ]

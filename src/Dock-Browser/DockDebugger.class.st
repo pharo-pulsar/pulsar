@@ -86,6 +86,7 @@ DockDebugger >> initializeWindow: aWindowPresenter [
 
 { #category : 'initialization' }
 DockDebugger >> initializeWorkspace [
+	super initializeWorkspace.
 
 	self startWidth: 380.
 	self bottomHeight: 300.

@@ -51,6 +51,29 @@ DockInspector >> defaultLayout [
 		yourself
 ]
 
+{ #category : 'events' }
+DockInspector >> eventSyntaxHighlightThemeChanged: ann [
+
+	self allPresenters
+		select: [ :each | each isKindOf: SpCodePresenter ]
+		thenDo: [ :each | each syntaxHighlightTheme: self application syntaxHighlightTheme ]
+]
+
+{ #category : 'events' }
+DockInspector >> eventThemeChanged: ann [
+
+	self allPresenters
+		select: [ :each | each isKindOf: SpCodePresenter ]
+		thenDo: [ :each | each styleScheme: self application styleScheme ]
+]
+
+{ #category : 'initialization' }
+DockInspector >> initialize [
+
+	super initialize.
+	self registerToEvents
+]
+
 { #category : 'initialization' }
 DockInspector >> initializePopover: aPopoverPresenter [
 	| nearWindow |
@@ -122,6 +145,14 @@ DockInspector >> newPageForContext: aContext [
 			self keepPresenter: presenter.
 			self addActivationTo: presenter ];"
 		yourself
+]
+
+{ #category : 'initialization' }
+DockInspector >> registerToEvents [
+
+	self announcer 
+		when: DockThemeChanged send: #eventThemeChanged: to: self;
+		when: DockSyntaxHighlightThemeChanged send: #eventSyntaxHighlightThemeChanged: to: self
 ]
 
 { #category : 'initialization' }

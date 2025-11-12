@@ -76,7 +76,7 @@ PvProjectView class >> defineActionsOn: aBuilder [
 { #category : 'accessing' }
 PvProjectView >> activateProject: aBaselineClass [
 
-	self model: (PvProjectModel 
+	self model: (DockProjectModel 
 		newEnvironment: self perspective model
 		entity: aBaselineClass).
 	projectTreePresenter takeKeyboardFocus

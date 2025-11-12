@@ -1,16 +1,19 @@
 Class {
 	#name : 'PvPackageModel',
 	#superclass : 'PvBaseModel',
+	#instVars : [
+		'projectModel'
+	],
 	#category : 'Perspective-Package-Model',
 	#package : 'Perspective-Package',
 	#tag : 'Model'
 }
 
 { #category : 'instance creation' }
-PvPackageModel class >> newPackage: aPackage [
+PvPackageModel class >> newEnvironment: anEnvironmentModel project: projectModel entity: anObject [
 
-	^ self new 
-		package: aPackage;
+	^ (super newEnvironment: anEnvironmentModel entity: anObject)
+		project: projectModel;
 		yourself
 ]
 
@@ -32,6 +35,7 @@ PvPackageModel >> children [
 			collect: [ :each | 
 				each 
 					newEnvironment: self environmentModel 
+					parent: self
 					entity: self entity ]);
 		sorted: #order ascending, #name ascending)
 		yourself
@@ -61,6 +65,17 @@ PvPackageModel >> iconName [
 ]
 
 { #category : 'testing' }
+PvPackageModel >> isManagedAndModified [
+
+	^ self parentModels 
+		detect: [ :each | each isProject ]
+		ifFound: [ :aProjectModel | 
+			"aProjectModel repositoryModel isPackageModified: self entity"
+			aProjectModel isManagedAndModified ]
+		ifNone: [ false ]
+]
+
+{ #category : 'testing' }
 PvPackageModel >> isPackage [
 
 	^ true
@@ -76,6 +91,18 @@ PvPackageModel >> name [
 PvPackageModel >> package [
 
 	^ self entity
+]
+
+{ #category : 'accessing' }
+PvPackageModel >> project [
+
+	^ projectModel
+]
+
+{ #category : 'accessing' }
+PvPackageModel >> project: aProjectModel [
+
+	projectModel := aProjectModel
 ]
 
 { #category : 'helpers' }

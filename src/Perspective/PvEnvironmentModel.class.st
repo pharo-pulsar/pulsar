@@ -32,7 +32,7 @@ PvEnvironmentModel >> canBeRemoved [
 	^ false
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'testing' }
 PvEnvironmentModel >> canBeRenamed [
 
 	^ false
@@ -42,7 +42,11 @@ PvEnvironmentModel >> canBeRenamed [
 PvEnvironmentModel >> children [
 
 	^ (self entity packages 
-		collect: [ :each | PvPackageModel newEnvironment: self entity: each ])
+		collect: [ :each | 
+			PvPackageModel 
+				newEnvironment: self 
+				parent: nil
+				entity: each ])
 		sorted: #name ascending
 ]
 
@@ -81,14 +85,6 @@ PvEnvironmentModel >> name [
 PvEnvironmentModel >> newMultiProjectModel [
 
 	^ DockMultiProjectModel newEnvironment: self
-]
-
-{ #category : 'accessing' }
-PvEnvironmentModel >> packageModelNamed: aString [ 
-	
-	^ PvPackageModel 
-		newEnvironment: self 
-		entity: (self packageNamed: aString)
 ]
 
 { #category : 'accessing' }

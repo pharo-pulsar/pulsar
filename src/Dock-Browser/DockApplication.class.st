@@ -95,6 +95,20 @@ DockApplication class >> startUp: resuming [
 	self reset
 ]
 
+{ #category : 'private' }
+DockApplication >> checkForLostChanges [
+	| lostChangesDetector |
+
+
+	lostChangesDetector := EpLostChangesDetector new.
+	lostChangesDetector hasLostChanges ifFalse: [ ^ self ].
+	
+	self schedule: [
+		self resendAnnouncement: (DockLostChangesAnnouncement new 
+			detector: lostChangesDetector;
+			yourself) ]
+]
+
 { #category : 'initialization' }
 DockApplication >> cleanUp [
 
@@ -252,6 +266,14 @@ DockApplication >> newScheduler [
 		start
 ]
 
+{ #category : 'ui - dialogs' }
+DockApplication >> newSelect [
+
+	^ (DockSelectDialog newApplication: self)
+		parentWindow: self topWindow;
+		yourself
+]
+
 { #category : 'private - factory' }
 DockApplication >> newSettings [
 
@@ -344,19 +366,26 @@ DockApplication >> snapshot [
 
 { #category : 'running' }
 DockApplication >> start [
-	| snapshot |
+	| snapshot browser |
 
 	snapshot := self class lastSnapshot.
-	(snapshot isNotNil and: [ snapshot hasRecords ]) ifTrue: [ 
-		snapshot restoreTo: self.
-		^ self ].
+	(snapshot isNotNil and: [ snapshot hasRecords ]) 
+		ifTrue: [ snapshot restoreTo: self ]
+		ifFalse: [ (DockBrowser newApplication: self) open ].
 		
-	(self new: DockBrowser) open
+	self schedule: [ self checkForLostChanges ]
 ]
 
 { #category : 'settings' }
 DockApplication >> subscribeToSettingsAnnouncements [
 	"do nothing, this thing will not work with morphic"
+]
+
+{ #category : 'private - events' }
+DockApplication >> syntaxHighlightThemeChanged: ann [
+
+	self propertyAt: #syntaxHighlightTheme put: ann newTheme.
+	self resendAnnouncement: ann
 ]
 
 { #category : 'accessing' }
