@@ -1,8 +1,8 @@
 Class {
 	#name : 'DockChangesSessionPresenter',
 	#superclass : 'SpPresenter',
-	#traits : 'SpTModel + DockTActionHolder',
-	#classTraits : 'SpTModel classTrait + DockTActionHolder classTrait',
+	#traits : 'SpTModel + DockTActionContainer',
+	#classTraits : 'SpTModel classTrait + DockTActionContainer classTrait',
 	#instVars : [
 		'entryListPresenter',
 		'entryPatchPresenter',

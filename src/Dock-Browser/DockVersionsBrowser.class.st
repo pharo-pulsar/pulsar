@@ -1,8 +1,8 @@
 Class {
 	#name : 'DockVersionsBrowser',
 	#superclass : 'SpPresenter',
-	#traits : 'SpTModel + DockTNotificationCenter + DockTPanelWindow + DockTSnapshot + DockTActionHolder',
-	#classTraits : 'SpTModel classTrait + DockTNotificationCenter classTrait + DockTPanelWindow classTrait + DockTSnapshot classTrait + DockTActionHolder classTrait',
+	#traits : 'SpTModel + DockTNotificationCenter + DockTPanelWindow + DockTSnapshot + DockTActionContainer',
+	#classTraits : 'SpTModel classTrait + DockTNotificationCenter classTrait + DockTPanelWindow classTrait + DockTSnapshot classTrait + DockTActionContainer classTrait',
 	#instVars : [
 		'headerPresenter',
 		'versionListPresenter',

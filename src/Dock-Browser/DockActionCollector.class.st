@@ -5,9 +5,9 @@ Class {
 		'model',
 		'context'
 	],
-	#category : 'Perspective-Command-Base',
-	#package : 'Perspective',
-	#tag : 'Command-Base'
+	#category : 'Dock-Browser-Actions',
+	#package : 'Dock-Browser',
+	#tag : 'Actions'
 }
 
 { #category : 'instance creation' }

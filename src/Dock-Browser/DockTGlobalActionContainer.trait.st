@@ -3,9 +3,9 @@ Trait {
 	#instVars : [
 		'globalActions'
 	],
-	#category : 'Dock-Browser-Application',
+	#category : 'Dock-Browser-Actions',
 	#package : 'Dock-Browser',
-	#tag : 'Application'
+	#tag : 'Actions'
 }
 
 { #category : 'private' }
