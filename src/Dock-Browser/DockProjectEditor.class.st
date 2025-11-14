@@ -14,34 +14,25 @@ Class {
 }
 
 { #category : 'accessing - actions' }
-DockProjectEditor class >> defineActionGroupNew: actionGroup [
-	<perspectiveActionGroup: #new>
-	
-	actionGroup 
-		name: 'New';
-		priority: 20;
-		beDisplayedAsSubMenu
-]
-
-{ #category : 'accessing - actions' }
 DockProjectEditor class >> defineActionsOn: aBuilder [
-	<perspectiveActions>
+	<dockActions>
 	
-	aBuilder registerGroup: #new with: { 
-		SpAction new
+	aBuilder addGroup: #new with: [ :aGroup | aGroup 
+		priority: 20;
+		name: 'New';
+		beDisplayedAsSubMenu;
+		addActionWith: [ :anAction | anAction
 			name: 'Add package';
 			description: 'Add a package';
-			action: [ :aContext | aContext doAddPackage ].		
-		SpAction new
+			action: [ :aContext | aContext doAddPackage ] ];
+		addActionWith: [ :anAction | anAction
 			name: 'Add project';
 			description: 'Add a dependent project';
-			action: [ :aContext | aContext doAddProject ].		
-		SpAction new
+			action: [ :aContext | aContext doAddProject ] ];	
+		addActionWith: [ :anAction | anAction
 			name: 'Add group';
 			description: 'Add a group';
-			action: [ :aContext | aContext doAddGroup ].		
-		}
-
+			action: [ :aContext | aContext doAddGroup ] ] ]
 ]
 
 { #category : 'initialization' }

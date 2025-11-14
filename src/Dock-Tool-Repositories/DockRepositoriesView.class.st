@@ -17,6 +17,22 @@ DockRepositoriesView class >> defaultDockPosition [
 		yourself
 ]
 
+{ #category : 'accessing - actions' }
+DockRepositoriesView class >> defineActionsOn: aBuilder [
+	<dockActions>
+
+	aBuilder 
+		addGroup: #actions with: [ :aGroup | aGroup 
+			priority: 10;
+			beDisplayedAsGroup;
+			addActionWith: [ :anItem | anItem
+				priority: 1;
+				name: 'Add repository';
+				description: 'Add a new repository';
+				iconName: 'add';
+				action: [ :aContext | aContext doAddRepository ] ] ]
+]
+
 { #category : 'layout' }
 DockRepositoriesView >> defaultLayout [
 

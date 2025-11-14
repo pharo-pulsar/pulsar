@@ -1,8 +1,8 @@
 Class {
 	#name : 'DockChangesSessionPresenter',
 	#superclass : 'SpPresenter',
-	#traits : 'SpTModel + PvTActionHolder',
-	#classTraits : 'SpTModel classTrait + PvTActionHolder classTrait',
+	#traits : 'SpTModel + DockTActionHolder',
+	#classTraits : 'SpTModel classTrait + DockTActionHolder classTrait',
 	#instVars : [
 		'entryListPresenter',
 		'entryPatchPresenter',
@@ -14,22 +14,21 @@ Class {
 
 { #category : 'accessing - actions' }
 DockChangesSessionPresenter class >> defineActionsOn: aBuilder [
-	<perspectiveActions>
+	<dockActions>
 	
-	aBuilder registerGroup: #sessionActions with: {
-		SpAction new
+	aBuilder addGroup: #sessionActions with: [ :aGroup | aGroup 
+		addActionWith: [ :anAction | anAction
 			name: 'Apply';
 			iconName: 'redo';
 			description: 'Preview the application of selected code changes (open a new window to show the effect of re-applying the changes in current image)';
 			actionEnabled: [ :aContext | aContext canApplyOrRevertChanges ];
-			action: [ :aContext | aContext doApply ].
-		SpAction new
+			action: [ :aContext | aContext doApply ] ];
+		addActionWith: [ :anAction | anAction
 			name: 'Revert';
 			iconName: 'undo';
 			description: 'Preview the reversion of selected code changes (open a new window to show the effect of reverting the changes in current image)';
 			actionEnabled: [ :aContext | aContext canApplyOrRevertChanges ];
-			action: [ :aContext | aContext doRevert ]
-	}
+			action: [ :aContext | aContext doRevert ] ] ]
 ]
 
 { #category : 'private' }

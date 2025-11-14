@@ -56,7 +56,7 @@ PvAliasedVSCodeIconProvider >> initialize [
 		'glamorousTable'. 			'table'.					"playground (bindings)"
 		'package'.					'package'.				"browser-> package"
 		'smallForward'.				'arrow-right'.
-		'smallHierarchyBrowser'.		'type-hierarchy'.		"browser -> navigation hierarchy"
+		'hierarchy'.					'type-hierarchy'.		"browser -> navigation hierarchy"
 		'trait'.						'symbol-trait'.			"type"
 		'workspace'.					'beaker'. 				"'lightbulb'."	"playground"
 		'transcript'. 		 		'terminal'.

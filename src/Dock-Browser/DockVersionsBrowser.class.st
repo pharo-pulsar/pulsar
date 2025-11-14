@@ -1,8 +1,8 @@
 Class {
 	#name : 'DockVersionsBrowser',
 	#superclass : 'SpPresenter',
-	#traits : 'SpTModel + DockTNotificationCenter + DockTPanelWindow + DockTSnapshot + PvTActionHolder',
-	#classTraits : 'SpTModel classTrait + DockTNotificationCenter classTrait + DockTPanelWindow classTrait + DockTSnapshot classTrait + PvTActionHolder classTrait',
+	#traits : 'SpTModel + DockTNotificationCenter + DockTPanelWindow + DockTSnapshot + DockTActionHolder',
+	#classTraits : 'SpTModel classTrait + DockTNotificationCenter classTrait + DockTPanelWindow classTrait + DockTSnapshot classTrait + DockTActionHolder classTrait',
 	#instVars : [
 		'headerPresenter',
 		'versionListPresenter',
@@ -16,16 +16,15 @@ Class {
 
 { #category : 'accessing - actions' }
 DockVersionsBrowser class >> defineActionsOn: aBuilder [
-	<perspectiveActions>
+	<dockActions>
 
 	aBuilder 
-		registerGroup: #versionActions with: {  
-			SpAction new
+		addGroup: #versionActions with: [ :aGroup | aGroup 
+			addActionWith: [ :anAction | anAction 
 				name: 'Revert';
 				description: 'Revert to this version';
 				iconName: 'accept';
-				action: [ :aContext | aContext doRevert ].
-		}
+				action: [ :aContext | aContext doRevert ] ] ]
 ]
 
 { #category : 'initialization' }

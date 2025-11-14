@@ -1,3 +1,6 @@
+"
+An editor for stack contexts (that are like methods, but with special behavior) 
+"
 Class {
 	#name : 'DockContextEditor',
 	#superclass : 'DockMethodEditor',

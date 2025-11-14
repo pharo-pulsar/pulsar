@@ -60,6 +60,15 @@ PvActionGroup >> actionsForAll: aCollectionOfNames [
 			all ]
 ]
 
+{ #category : 'registering' }
+PvActionGroup >> addActionWith: aBlock [
+	| action |
+	
+	action := SpAction new.
+	aBlock value: action.
+	self add: action
+]
+
 { #category : 'converting' }
 PvActionGroup >> asSpecGroup [
 
@@ -152,6 +161,14 @@ PvActionGroup >> priority: anObject [
 PvActionGroup >> registerAllActions: aCollection [ 
 	
 	aCollection do: [ :each | self register: each ]
+]
+
+{ #category : 'registering' }
+PvActionGroup >> registerGroup: groupId do: aBlock [
+	| group |
+	
+	group := self findOrRegisterGroupWithId: groupId.
+	aBlock value: group
 ]
 
 { #category : 'registering' }

@@ -20,82 +20,76 @@ DockProjectView class >> defaultDockPosition [
 ]
 
 { #category : 'accessing - actions' }
-DockProjectView class >> defineActionGroupAction: actionGroup [
-	<perspectiveActionGroup: #action>
-	
-	actionGroup 
-		name: 'Action';
-		priority: 30;
-		beDisplayedAsGroup
-]
-
-{ #category : 'accessing - actions' }
-DockProjectView class >> defineActionGroupExtra: actionGroup [
-	<perspectiveActionGroup: #extra>
-	
-	actionGroup 
-		name: 'Actions';
-		priority: 30;
-		beDisplayedAsGroup
-]
-
-{ #category : 'accessing - actions' }
-DockProjectView class >> defineActionGroupNew: actionGroup [
-	<perspectiveActionGroup: #new>
-	
-	actionGroup 
-		name: 'New';
-		priority: 20;
-		beDisplayedAsGroup
-]
-
-{ #category : 'accessing - actions' }
-DockProjectView class >> defineActionGroupProject: actionGroup [
-	<perspectiveActionGroup: #project>
-	
-	actionGroup 
-		name: 'Project';
-		priority: 10;
-		beDisplayedAsSubMenu
-]
-
-{ #category : 'accessing - actions' }
-DockProjectView class >> defineActionGroupRefactors: actionGroup [
-	<perspectiveActionGroup: #refactors>
-	
-	actionGroup 
-		name: 'Refactors';
-		priority: 900;
-		beDisplayedAsSubMenu
-]
-
-{ #category : 'accessing - actions' }
 DockProjectView class >> defineActionsOn: aBuilder [
-	<perspectiveActions>
+	<dockActions>
 	
 	aBuilder 
-		registerGroup: #project with: { 
-			$n mod1		->	PvNewProjectCommand new.
-			$o mod1		-> 	PvOpenProjectCommand new.
-							PvRefreshProjectCommand new.
-		};
-		registerGroup: #new with: { 
-			PvNewPackageCommand new.
-			PvNewPackageTagCommand new.
-			DockNewClassCommand new.
-			PvNewTraitCommand new.
-		};
-		registerGroup: #action with: { 
-			$r mod1 -> (SpAction new
-				priority: 200;
+		addGroup: #project with: [ :aGroup | aGroup 
+			priority: 100;
+			name: 'Project';
+			beDisplayedAsSubMenu;	
+			addActionWith: [ :anAction | anAction 
+				priority: 110;
+				name: 'New project';
+				description: 'Create a new project (baseline)';
+				iconName: 'new-folder';
+				shortcutKey: $n mod1;
+				action: [ :aContext | aContext doNewProject ] ];
+			addActionWith: [ :anAction | anAction 
+				priority: 120;
+				name: 'Open project';
+				description: 'Open project';
+				iconName: #openProject;
+				shortcutKey: $o mod1;
+				action: [ :aContext | aContext doOpenProject ] ];
+			addActionWith: [ :anAction | anAction 
+				priority: 130;
+				name: 'Refresh project';
+				description: 'Refresh this project (reload configuration)';
+				iconName: 'refresh';
+				action: [ :aContext | aContext refreshProject ] ] ];
+		addGroup: #new with: [ :aGroup | aGroup
+			priority: 200;
+			name: 'New';
+			beDisplayedAsGroup;
+			addActionWith: [ :anAction | anAction 
+				priority: 210;
+				name: 'New package';
+				description: 'Add a new package to the environment';
+				iconName: 'new-file';
+				action: [ :aContext | aContext doNewPackage ] ];
+			addActionWith: [ :anAction | anAction
+				priority: 220;
+				name: 'New tag';
+				description: 'Add a new tag to this package';
+				iconName: 'new-file';
+				action: [ :aContext | aContext doNewPackageTag ] ];
+			addActionWith: [ :anAction | anAction
+				priority: 230;
+				name: 'New class';
+				description: 'Add a new class to the environment';
+				iconName: 'new-file';
+				action: [ :aContext | aContext doRequestNewClass ] ];
+			addActionWith: [ :anAction | anAction
+				priority: 240;
+				name: 'New trait';
+				description: 'Add a new trait to the environment';
+				iconName: 'new-file';
+				action: [ :aContext | aContext doRequestNewTrait ] ] ];
+		addGroup: #action with: [ :aGroup | aGroup 
+			priority: 300;
+			name: 'Action';
+			beDisplayedAsGroup	;
+			addActionWith: [ :anAction | anAction
+				priority: 310;
 				dynamicName: [ :aContext | 'Rename ', aContext selectedEntityName ];
 				description: 'Rename package or tag (and all its contexts)';
+				shortcutKey: $r mod1;
 				actionEnabled: [ :aContext | aContext canRenameSelectedEntity ];
-				action: [ :aContext | aContext doRenameSelectedEntity ];
-				yourself).
-			$x mod1 -> (SpAction new
-				priority: 210;
-				dynamicName: [ :aContext | 
+				action: [ :aContext | aContext doRenameSelectedEntity ] ];
+			addActionWith: [ :anAction | anAction 
+				priority: 320;
+				dynamicName: [ :aContext |
 					String streamContents: [ :stream | 
 						stream << 'Remove '.
 						stream << aContext selectedEntityName.
@@ -103,23 +97,18 @@ DockProjectView class >> defineActionsOn: aBuilder [
 							ifTrue: [ stream << ' from project list' ] ] ];
 				description: 'Remove from project';
 				iconName: 'trash';
+				shortcutKey: $x mod1;
 				actionEnabled: [ :aContext | aContext canRemoveSelectedEntity ];
-				action: [ :aContext | aContext doRemoveSelectedEntity ];
-				yourself).
-		};
-		registerGroup: #refactors with: {
-			SpAction new 
-				name: 'Duplicate class'; 
-				"actionEnabled: [ :aContext | aContext selectedItem isClassModel ];"
-				action: [ :aContext | aContext doDuplicateSelectedClass ]
-		};
-		registerGroup: #extra with: { 
-			SpAction new 
+				action: [ :aContext | aContext doRemoveSelectedEntity ] ] ];
+		addGroup: #extra with: [ :aGroup | aGroup 
+			priority: 900;
+			name: 'Extra';
+			beDisplayedAsGroup;
+			addActionWith: [ :anAction | anAction 
 				name: 'Collapse All';
 				description: 'Collapses all open projects';
 				iconName: 'collapse-all';
-				action: [ :aContext | aContext doCollapseAll ].
-		}
+				action: [ :aContext | aContext doCollapseAll ] ] ]
 ]
 
 { #category : 'actions' }
@@ -200,24 +189,6 @@ DockProjectView >> doCollapseAll [
 ]
 
 { #category : 'private - actions' }
-DockProjectView >> doDuplicateSelectedClass [	
-	| dialog duplicateName |
-
-	dialog := self instantiate: DockRequestPresenter.
-	dialog label: 'New class name'.
-	dialog acceptLabel: 'Duplicate'.
-	
-	dialog asPopover
-		relativeTo: (self listPresenter selectedRowPresenter ifNil: [ self listPresenter ]);
-		popupModalAndWait.
-	dialog isOk ifFalse: [ ^ self ].
-	
-	duplicateName := dialog text.
-	
-	listPresenter selectedItem realModel duplicateAs: duplicateName.
-]
-
-{ #category : 'private - actions' }
 DockProjectView >> doNewPackage [
 
 	| packageName project package |
@@ -265,8 +236,7 @@ DockProjectView >> doNewPackageTag [
 { #category : 'private - actions' }
 DockProjectView >> doNewProject [
 	| projectName project package |
-	
-	
+		
 	self application newInform
 		title: 'Work in progress';
 		message: 'Not implemented yet. You can create a baseline for it :)';
@@ -282,6 +252,23 @@ DockProjectView >> doNewProject [
 	project := self model newProjectNamed: projectName.
 	self addProject: project.
 	self notifyActivateEntity: (self listPresenter roots detect: [ :each | each entity = project ])
+]
+
+{ #category : 'private - actions' }
+DockProjectView >> doOpenProject [
+	| result |
+
+	result := self application newSelect
+		extent: 300@500;
+		title: 'Open project';
+		message: 'Select project';
+		items: self model allBaselines;
+		display: [ :aClass | aClass name allButFirst: 10 "'BaselineOf' size " ];
+		displayIcon: [ :aClass | self application iconNamed: 'project' ];
+		openModalWithParent: self window.
+
+	result ifNil: [ ^ self ].
+	self addProject: result
 ]
 
 { #category : 'private - actions' }

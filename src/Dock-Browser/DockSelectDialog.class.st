@@ -30,7 +30,7 @@ DockSelectDialog >> defaultLayout [
 			add: titlePresenter;
 			yourself)
 			expand: false;
-		add: messagePresenter expand: false;
+		add: label expand: false;
 		add: list;
 		add: responseAreaPresenter expand: false; 
 		yourself
@@ -81,5 +81,5 @@ DockSelectDialog >> newDialogLabel [
 { #category : 'private' }
 DockSelectDialog >> setLabel: aString [
 
-	messagePresenter label: aString
+	label label: aString
 ]

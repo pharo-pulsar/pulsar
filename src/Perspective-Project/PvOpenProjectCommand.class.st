@@ -10,8 +10,6 @@ Class {
 PvOpenProjectCommand >> allBaselines [
 		
 	^ BaselineOf allSubclasses sorted: #name ascending
-	
-		
 ]
 
 { #category : 'initialization' }

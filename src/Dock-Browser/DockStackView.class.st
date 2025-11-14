@@ -20,46 +20,28 @@ DockStackView class >> defaultDockPosition [
 		yourself
 ]
 
-{ #category : 'as yet unclassified' }
-DockStackView class >> defineActionGroupGeneral: actionGroup [
-	<perspectiveActionGroup: #editorStackGeneral>
-	
-	actionGroup
-		priority: 1000;
-		beDisplayedAsGroup
-]
-
-{ #category : 'as yet unclassified' }
-DockStackView class >> defineActionGroupStack: actionGroup [
-	<perspectiveActionGroup: #editorStack>
-	
-	actionGroup
-		priority: 10;
-		beDisplayedAsGroup
-]
-
 { #category : 'accessing - actions' }
 DockStackView class >> defineActionsOn: aBuilder [
-	<perspectiveActions>
+	<dockActions>
 
 	aBuilder 
-		registerGroup: #editorStack with: { 
-			$x mod1 -> (SpAction new 
+		addGroup: #editorStack with: [ :aGroup | aGroup
+			priority: 10;
+			beDisplayedAsGroup;
+			addActionWith: [ :anAction | anAction
 				name: 'Close Selected Editors';
 				description: 'Close selected editors';
 				iconName: 'close';
-				action: [ :aContext | aContext doCloseSelectedEditors ];
-				yourself).
-		};
-		registerGroup: #editorStackGeneral with: {
-			SpAction new 
+				shortcutKey: $x mod1;
+				action: [ :aContext | aContext doCloseSelectedEditors ] ] ];
+		addGroup: #editorStackGeneral with: [ :aGroup | aGroup
+			priority: 1000;
+			beDisplayedAsGroup;
+			addActionWith: [ :anAction | anAction
 				name: 'Close All';
 				description: 'Close all editors';
 				iconName: 'closeAll';
-				action: [ :aContext | aContext doCloseEditors ];
-				yourself.
-		}
-	
+				action: [ :aContext | aContext doCloseEditors ] ] ]
 ]
 
 { #category : 'private - actions' }

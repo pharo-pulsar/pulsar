@@ -34,6 +34,13 @@ DockMultiProjectModel >> addProject: aBaselineClass [
 	projectModels := projectModels copyWith: newProjectModel
 ]
 
+{ #category : 'private' }
+DockMultiProjectModel >> allBaselines [
+	"used for opening projects"
+		
+	^ self environmentModel allBaselines sorted: #name ascending
+]
+
 { #category : 'accessing' }
 DockMultiProjectModel >> allChildren [
 

@@ -13,41 +13,27 @@ Class {
 }
 
 { #category : 'accessing - actions' }
-DockBaseBrowser class >> definePanelActionGroup: actionGroup [
-	<perspectiveActionGroup: #panels>
-	
-	actionGroup 
-		name: 'Panels';
-		priority: 900;
-		beDisplayedAsSubMenu
-]
-
-{ #category : 'accessing - actions' }
 DockBaseBrowser class >> definePanelActionsOn: aBuilder [
-	<perspectiveActions>
+	<dockActions>
 
-	aBuilder registerGroup: #panels with: { 
-		SpAction new 
-			name: 'Toggle panel left';
-			description: 'Show/hide the left panel';
-			iconName: 'panel-left';
-			action: [ :aContext | aContext togglePanelArea: SpPanelArea start ].
-		SpAction new 
-			name: 'Toggle panel top'; 
-			description: 'Show/hide the top panel';
-			iconName: 'panel-top';
-			action: [ :aContext | aContext togglePanelArea: SpPanelArea top ].
-		SpAction new 
-			name: 'Toggle panel right'; 
-			description: 'Show/hide the right panel';
-			iconName: 'panel-right';
-			action: [ :aContext | aContext togglePanelArea: SpPanelArea end ].
-		SpAction new 
-			name: 'Toggle panel bottom'; 
-			description: 'Show/hide the bottom panel';
-			iconName: 'panel-bottom';
-			action: [ :aContext | aContext togglePanelArea: SpPanelArea bottom ].
-	}
+	aBuilder addGroup: #panels with: [ :aGroup | aGroup 
+		priority: 1000;
+		name: 'Panels';
+		beDisplayedAsSubMenu.
+		 
+		{  
+			{ 'bottom'.	SpPanelArea bottom }.
+			{ 'left'.	SpPanelArea start }.
+			{ 'right'. 	SpPanelArea end }.
+			{ 'top'. 	SpPanelArea top }.
+		} withIndexDo: [ :each :index |
+			aGroup addActionWith: [ :anItem | anItem 
+				priority: index; 
+				name: 'Toggle panel [each first]';
+				description: 'Show/hide the [each first] panel';
+				iconName: 'panel-[each first]';
+				action: [ :aContext | aContext togglePanelArea: each second  ] ]
+			 ] ].
 ]
 
 { #category : 'private' }
@@ -94,6 +80,24 @@ DockBaseBrowser >> addWindow: aWindow [
 		aWindow presenter registerToDock: self.
 		super addWindow: aWindow.
 		aWindow raise ]
+]
+
+{ #category : 'private - actions' }
+DockBaseBrowser >> doShowSpotterForCommands [
+
+	self showSpotterOn: #commands
+]
+
+{ #category : 'private - actions' }
+DockBaseBrowser >> doShowSpotterForEnvironment [
+
+	self showSpotterOn: #environment
+]
+
+{ #category : 'private - actions' }
+DockBaseBrowser >> doShowSpotterForWindows [
+
+	self showSpotterOn: #windows
 ]
 
 { #category : 'accessing' }
@@ -244,6 +248,22 @@ DockBaseBrowser >> scheduler [
 	^ self application scheduler
 ]
 
+{ #category : 'private - actions' }
+DockBaseBrowser >> showSpotterOn: anOption [
+	| spotter |
+
+	spotter := self
+		instantiate: DockSpotter 
+		on: (DockSpotterModel 
+			newEnvironment: self model environmentModel 
+			origin: self).
+	
+	spotter notificationCenter: self notificationCenter.
+	spotter initialOption: anOption.
+	
+	spotter openModalWithParent: self
+]
+
 { #category : 'accessing - snapshot' }
 DockBaseBrowser >> snapshot [
 
@@ -264,8 +284,8 @@ DockBaseBrowser >> togglePanelArea: aPanelArea [
 
 { #category : 'private' }
 DockBaseBrowser >> windowClosed [
+
 	self presenters do: [ :each | each windowClosed ].
 	announcer stopScheduler.
 	super windowClosed
-
 ]

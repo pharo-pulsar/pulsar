@@ -1,3 +1,9 @@
+"
+This is a base editor from which all things editable should inherit.
+It defines a common behavior between the different buffers that can be edited by the user.
+
+Its default position in the dock browser is center.
+"
 Class {
 	#name : 'DockEditor',
 	#superclass : 'DockBaseView',
@@ -17,49 +23,43 @@ Class {
 }
 
 { #category : 'accessing - actions' }
-DockEditor class >> defineNavigationActionGroup: actionGroup [
-	<perspectiveActionGroup: #navigation>
-	
-	actionGroup 
-		priority: 100;
-		beDisplayedAsSubMenu
-]
-
-{ #category : 'accessing - actions' }
 DockEditor class >> defineNavigationActionsOn: aBuilder [
-	<perspectiveActions>
+	<dockActions>
 
-	aBuilder registerGroup: #navigation with: { 
-		$h mod1 -> DockHierarchyNavigationCommand new.
-		DockSendersNavigationCommand new.
-	}
-]
-
-{ #category : 'accessing - actions' }
-DockEditor class >> defineWindowActionGroupOn: actionGroup [ 
-	<perspectiveActionGroup: #extraWindow>
-
-	actionGroup
-		priority: 1010;
-		name: 'Window';
-		beDisplayedAsSubMenu
+	aBuilder addGroup: #navigation with: [ :aGroup | aGroup 
+		priority: 100;
+		name: 'Navigation';
+		beDisplayedAsSubMenu;
+		addActionWith: [ :anAction | anAction 
+			name: 'Show hierarchy';
+			description: 'Show hierarchy';
+			iconName: #hierarchy; "was #smallHierarchyBrowser... TODO see semantic meaning"
+			shortcutKey: $h mod1; 
+			action: [ :aContext | aContext doShowHierarchy: anAction ] ];
+		addActionWith: [ :anAction | anAction 
+			name: 'Show senders';
+			description: 'Show senders';
+			iconName: #senders;
+			action: [ :aContext | aContext doBrowseSendersCommand: anAction ] ] ]
 ]
 
 { #category : 'accessing - actions' }
 DockEditor class >> defineWindowActionsOn: aBuilder [
-	<perspectiveActions>
+	<dockActions>
 
-	aBuilder registerGroup: #extraWindow with: { 
-		SpAction new
+	aBuilder addGroup: #extraWindow with: [ :aGroup | aGroup
+		priority: 1010;
+		name: 'Window';
+		beDisplayedAsSubMenu;
+		addActionWith: [ :anAction | anAction
 			name: 'Maximize';
 			description: 'Maximize current window';
-			action: [ :aContext | aContext withPanelWindowDo: #maximize ].		
-		SpAction new
+			action: [ :aContext | aContext withPanelWindowDo: #maximize ] ];		
+		addActionWith: [ :anAction | anAction
 			name: 'Detach as Window';
 			shortcutKey: Character arrowUp alt shift;
 			description: 'Detach this window from the Dock (open a new window)';
-			action: [ :aContext | aContext doDetachWindow ].			
-	}
+			action: [ :aContext | aContext doDetachWindow ] ] ]
 ]
 
 { #category : 'accessing - overlay' }
@@ -130,6 +130,29 @@ DockEditor >> doReset [
 DockEditor >> doRunTestCommand: anAction [
 
 	self model runTestAnnouncingTo: self notificationCenter
+]
+
+{ #category : 'private - actions' }
+DockEditor >> doShowHierarchy [
+
+	self subclassResponsibility
+]
+
+{ #category : 'private - actions' }
+DockEditor >> doShowHierarchy: anAction [
+	| popover navigation |
+	
+	popover := self newPopover.
+	navigation := self 
+		instantiate: DockHierarchyPresenter 
+		on: (DockHierarchyModel on: self model). 
+	
+	navigation notificationCenter: self notificationCenter.
+	
+	popover
+		presenter: navigation;
+		relativeTo: anAction presenter;
+		popupModal
 ]
 
 { #category : 'private - actions' }

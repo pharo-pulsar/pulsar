@@ -22,21 +22,20 @@ DockDebuggerInspector class >> defaultDockPosition [
 
 { #category : 'accessing - actions' }
 DockDebuggerInspector class >> defineActionsOn: aBuilder [
-	<perspectiveActions>
+	<dockActions>
 
 	aBuilder 
-		registerGroup: #inspectorActions with: {  
-			SpAction new
+		addGroup: #inspectorActions with: [ :aGroup | aGroup 
+			addActionWith: [ :anAction | anAction 
 				name: 'Inspect';
 				description: 'Inspect current receiver';
 				iconName: 'inspector';
-				action: [ ].
-			SpAction new
+				action: [ :aContext | aContext doInspectReceiver ] ];
+			addActionWith: [ :anAction | anAction 
 				name: 'Browse';
 				description: 'Browse current receiver''s class';
 				iconName: 'browser';
-				action: [ :aContext | aContext doBrowseReceiverClass ].
-		}
+				action: [ :aContext | aContext doBrowseReceiverClass ] ] ]
 ]
 
 { #category : 'layout' }

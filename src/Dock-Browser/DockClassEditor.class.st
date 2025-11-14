@@ -1,3 +1,6 @@
+"
+An editor for classes.
+"
 Class {
 	#name : 'DockClassEditor',
 	#superclass : 'DockEditor',

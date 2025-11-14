@@ -15,67 +15,71 @@ Class {
 }
 
 { #category : 'accessing - actions' }
-DockBrowser class >> defineImageActionGroup: actionGroup [
-	<perspectiveActionGroup: #image>
-	
-	actionGroup 
+DockBrowser class >> defineImageActionsOn: aBuilder [
+	<dockActions>
+
+	aBuilder addGroup: #image with: [ :aGroup | aGroup 
 		name: 'Image';
 		priority: 1000;
-		beDisplayedAsGroup
-]
-
-{ #category : 'accessing - actions' }
-DockBrowser class >> defineImageActionsOn: aBuilder [
-	<perspectiveActions>
-
-	aBuilder registerGroup: #image with: {
-		$s shift mod1 -> DockImageSaveCommand new  }
-]
-
-{ #category : 'accessing - actions' }
-DockBrowser class >> defineSpotterActionGroup: actionGroup [
-	<perspectiveActionGroup: #spotter>
-	
-	actionGroup 
-		name: 'Spotter';
-		priority: 900;
-		beDisplayedAsGroup
+		beDisplayedAsGroup;
+		addActionWith: [ :anItem | anItem
+			name: 'Save';
+			description: 'Save image';
+			shortcutKey: $s shift mod1;
+			action: [ :aContext | aContext saveImage ] ] ]
 ]
 
 { #category : 'accessing - actions' }
 DockBrowser class >> defineSpotterActionsOn: aBuilder [
-	<perspectiveActions>
+	<dockActions>
 
-	aBuilder registerGroup: #spotter with: { 
-		"open default tool"
-		Character cr shift -> DockShowSpotterForEnvironmentCommand new.
-		Character cr shift mod1 -> DockShowSpotterForWindowsCommand new.
-		"Character mod1 mod3 -> PvShowSpotterForCommandsAction new" }
-]
-
-{ #category : 'accessing - actions' }
-DockBrowser class >> defineToolActionGroup: actionGroup [
-	<perspectiveActionGroup: #tools>
-	
-	actionGroup 
-		name: 'Tools';
-		priority: 10;
-		beDisplayedAsGroup
+	self flag: #TODO. "Move this to superclass, but for that I first need to define 
+	what a spotter for a debugger will be, for example (and other possible root-level 
+	browsers)" 
+	aBuilder addGroup: #spotter with: [ :aGroup | aGroup 
+		name: 'Spotter';
+		priority: 900;
+		beDisplayedAsGroup;
+		addActionWith: [ :anItem | anItem 
+			name: 'Spotter for Environment';
+			description: 'Show spotter for Environment';
+			shortcutKey: KeyboardKey enter shift;
+			action: [ :aContext | aContext doShowSpotterForEnvironment ] ];
+		addActionWith: [ :anItem | anItem 
+			name: 'Spotter for Windows';
+			description: 'Show spotter for Windows';
+			shortcutKey: KeyboardKey enter shift mod1;
+			action: [ :aContext | aContext doShowSpotterForWindows ] ];		
+		addActionWith: [ :anItem | anItem 
+			name: 'Spotter for Commands';
+			description: 'Show spotter for Commands';
+			shortcutKey: KeyboardKey enter shift;
+			action: [ :aContext | aContext doShowSpotterForCommands ] ] ]
 ]
 
 { #category : 'accessing - actions' }
 DockBrowser class >> defineToolActionsOn: aBuilder [
-	<perspectiveActions>
+	<dockActions>
 
-	aBuilder registerGroup: #tools with: { 
-		DockOpenPlaygroundCommand new.
-		DockOpenProcessBrowserCommand new.
-		SpAction new 
+	aBuilder addGroup: #tools with: [ :aGroup | aGroup 
+		priority: 10;
+		name: 'tools';
+		beDisplayedAsGroup;
+		addActionWith: [ :anItem | anItem 
 			priority: 100;
-			name: 'Open Repositories';
-			action: [ :aContext | aContext openRepositories ].
-		DockOpenRecentChangesCommand new.
-	}
+			name: 'New Playground';
+			description: 'Open a new playground in your browser';
+			action: [ :aContext | aContext openPlayground ] ];
+		addActionWith: [ :anItem | anItem 
+			priority: 200;
+			name: 'Open Process Browser';
+			description: 'Open the Process Browser';
+			action: [ :aContext | aContext openProcessBrowser ] ];
+		addActionWith: [ :anItem | anItem 
+			priority: 910;
+			name: 'Open Recent Changes';
+			description: 'Open Recent Changes log';
+			action: [ :aContext | aContext spawnRecentChanges ] ] ]
 ]
 
 { #category : 'private' }

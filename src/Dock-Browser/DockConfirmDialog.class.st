@@ -36,7 +36,7 @@ DockConfirmDialog >> defaultLayout [
 			add: titlePresenter;
 			yourself)
 			expand: false;
-		add: messagePresenter expand: false;
+		add: label expand: false;
 		add: self newNullPresenter;
 		add: responseAreaPresenter expand: false; 
 		yourself
@@ -87,5 +87,5 @@ DockConfirmDialog >> newDialogLabel [
 { #category : 'private' }
 DockConfirmDialog >> setLabel: aString [
 
-	messagePresenter label: aString
+	label label: aString
 ]

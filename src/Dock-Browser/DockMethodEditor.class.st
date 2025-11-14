@@ -1,3 +1,6 @@
+"
+An editor for methods.
+"
 Class {
 	#name : 'DockMethodEditor',
 	#superclass : 'DockEditor',
@@ -10,22 +13,18 @@ Class {
 }
 
 { #category : 'accessing - actions' }
-DockMethodEditor class >> defineActionGroupStructuring: actionGroup [
-	<perspectiveActionGroup: #structuring>
-	
-	actionGroup
-		priority: -10;
-		beDisplayedAsGroup
-]
-
-{ #category : 'accessing - actions' }
 DockMethodEditor class >> defineActionsOn: aBuilder [
-	<perspectiveActions>
+	<dockActions>
 
-	aBuilder 
-		registerGroup: #structuring with: {  
-			$p mod1 shift -> DockCategoriseMethodCommand new
-		}
+	aBuilder addGroup: #structuring with: [ :aGroup | aGroup 
+		priority: -10;
+		beDisplayedAsGroup;
+		addActionWith: [ :anAction | anAction
+			name: 'Classify method';
+			description: 'Change protocol of current method';
+			iconName: 'tag';
+			shortcutKey:  $p mod1 shift;
+			action: [ :aContext | aContext doRequestChangeProtocol ] ] ]
 ]
 
 { #category : 'private' }

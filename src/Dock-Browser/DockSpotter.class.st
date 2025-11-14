@@ -162,6 +162,17 @@ DockSpotter >> giveFocusToResultList [
 	activePresenter takeKeyboardFocus
 ]
 
+{ #category : 'as yet unclassified' }
+DockSpotter >> initialOption: anOptionSymbol [
+
+	self layout. "ensure layout exists"
+	anOptionSymbol = #environment ifTrue: [ "nothing to do, original is 1 by default" ^ self ].
+	anOptionSymbol = #windows ifTrue: [ tabLayout selectIndex: 2. ^ self ].
+	anOptionSymbol = #commands ifTrue: [ tabLayout selectIndex: 3. ^ self ].
+	
+	self error: 'Should not arrive here'
+]
+
 { #category : 'initialization' }
 DockSpotter >> initialize [
 	

@@ -1,8 +1,8 @@
 Class {
 	#name : 'DockBaseView',
 	#superclass : 'SpPresenter',
-	#traits : 'SpTModel + PvTActionHolder + DockTNotificationCenter + DockTSnapshot',
-	#classTraits : 'SpTModel classTrait + PvTActionHolder classTrait + DockTNotificationCenter classTrait + DockTSnapshot classTrait',
+	#traits : 'SpTModel + DockTActionHolder + DockTNotificationCenter + DockTSnapshot',
+	#classTraits : 'SpTModel classTrait + DockTActionHolder classTrait + DockTNotificationCenter classTrait + DockTSnapshot classTrait',
 	#category : 'Dock-Browser-View-Base',
 	#package : 'Dock-Browser',
 	#tag : 'View-Base'

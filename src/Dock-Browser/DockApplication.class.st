@@ -227,17 +227,10 @@ DockApplication >> newIconProvider [
 
 	^ (PvAliasedVSCodeIconProvider new
 			application: self;
-			addLocation: (FileLocator imageDirectory / 'perspective' / 'vscode-extraicons') asFileReference;
-			addLocation: (FileLocator imageDirectory / 'perspective' / 'vscode-icons') asFileReference;
-			addLocation: (FileLocator imageDirectory / 'perspective' / 'vscode-codicons') asFileReference;
+			addLocation: self resourcesDir / 'vscode-extraicons';
+			addLocation: self resourcesDir / 'vscode-icons';
+			addLocation: self resourcesDir / 'vscode-codicons';
 			yourself),
-	 (PvLocationWithThemeIconProvider new
-			application: self;
-			addLocation: (FileLocator imageDirectory / 'perspective' / 'idea-extraicons') asFileReference;
-			addLocation: (FileLocator imageDirectory / 'perspective' / 'idea-icons') asFileReference;
-			yourself),
-	  StPharoDefaultIconProvider new, 
-	  SgaGtkThemeIconProvider new,
 	  PvDefaultIconProvider new
 ]
 
@@ -334,6 +327,15 @@ DockApplication >> resendAnnouncement: anAnnouncement [
 		aWindowPresenter announce: anAnnouncement ]
 ]
 
+{ #category : 'private - factory' }
+DockApplication >> resourcesDir [
+	
+	^ IceRepository registry 
+		detect: [ :each | each name = 'DockBrowser' ]
+		ifFound: [ :aRepository | aRepository location / 'resources' ]
+		ifNone: [ FileLocator imageDirectory / 'resources' ].
+]
+
 { #category : 'running' }
 DockApplication >> run [
 
@@ -341,6 +343,14 @@ DockApplication >> run [
 		anApplication shutDown: false ].
 	self start.
 	self class running: self
+]
+
+{ #category : 'accessing' }
+DockApplication >> settings [
+
+	^ self 
+		propertyAt: #settings
+		ifAbsentPut: [ DockSettings new ]
 ]
 
 { #category : 'system startup' }

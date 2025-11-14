@@ -11,5 +11,5 @@ Trait {
 { #category : 'private' }
 DockTGlobalActionContainer >> globalActions [
 
-	^ globalActions ifNil: [ globalActions := PvActionCollector collectFor: self ]
+	^ globalActions ifNil: [ globalActions := DockActionCollector collectFor: self ]
 ]

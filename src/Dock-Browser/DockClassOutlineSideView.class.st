@@ -23,113 +23,90 @@ Class {
 }
 
 { #category : 'accessing - actions' }
-DockClassOutlineSideView class >> defineActionGroupMethod: actionGroup [
-	<perspectiveActionGroup: #method>
-	
-	actionGroup 
-		name: 'Method';
-		priority: 10;
-		beDisplayedAsGroup
-]
-
-{ #category : 'accessing - actions' }
-DockClassOutlineSideView class >> defineActionGroupMethodCritical: actionGroup [
-	<perspectiveActionGroup: #methodCritical>
-	
-	actionGroup 
-		name: 'DANGER';
-		priority: 1000;
-		beDisplayedAsGroup
-]
-
-{ #category : 'accessing - actions' }
-DockClassOutlineSideView class >> defineActionGroupProtocol: actionGroup [
-	<perspectiveActionGroup: #protocol>
-	
-	actionGroup 
-		name: 'Protocol';
-		priority: 10;
-		beDisplayedAsGroup
-]
-
-{ #category : 'accessing - actions' }
-DockClassOutlineSideView class >> defineActionGroupProtocolCritical: actionGroup [
-	<perspectiveActionGroup: #protocolCritical>
-	
-	actionGroup 
-		name: 'DANGER';
-		priority: 1000;
-		beDisplayedAsGroup
-]
-
-{ #category : 'accessing - actions' }
-DockClassOutlineSideView class >> defineActionGroupVariable: actionGroup [
-	<perspectiveActionGroup: #variable>
-	
-	actionGroup 
-		name: 'Method';
-		priority: 10;
-		beDisplayedAsGroup
-]
-
-{ #category : 'accessing - actions' }
-DockClassOutlineSideView class >> defineActionGroupVariableCritical: actionGroup [
-	<perspectiveActionGroup: #variableCritical>
-	
-	actionGroup 
-		name: 'DANGER';
-		priority: 1000;
-		beDisplayedAsGroup
-]
-
-{ #category : 'accessing - actions' }
 DockClassOutlineSideView class >> defineMethodActionsOn: aBuilder [
-	<perspectiveActions>
+	<dockActions>
 	
 	aBuilder 
-		registerGroup: #method with: { 
-			DockNewMethodCommand new.
-		};
-		registerGroup: #methodCritical with: {
-			$x mod1 shift -> DockRemoveMethodCommand new.
-		}
+		addGroup: #method with: [ :aGroup | aGroup
+			priority: 10;
+			name: 'Method';
+			beDisplayedAsGroup;
+			addActionWith: [ :anAction | anAction 
+				name: 'New method';
+				description: 'Add a new method to this class';
+				iconName: 'add';
+				action: [ :aContext | aContext doRequestNewMethod ] ] ];
+		addGroup: #methodCritical with: [ :aGroup | aGroup 
+			priority: 1000;
+			name: 'DANGER ZONE';
+			beDisplayedAsGroup;
+			addActionWith: [ :anAction | anAction 
+				name: 'Force remove method';
+				description: 'Remove this method (without cheching for usages)';
+				shortcutKey: $x mod1 shift;
+				action: [ :aContext | aContext doForceRemoveMethod ] ] ]
 ]
 
 { #category : 'accessing - actions' }
 DockClassOutlineSideView class >> defineProtocolActionsOn: aBuilder [
-	<perspectiveActions>
+	<dockActions>
 	
 	aBuilder 
-		registerGroup: #protocol with: { 
-			DockNewProtocolCommand new.
-			SpAction new
+		addGroup: #protocol with: [ :aGroup | aGroup 
+			priority: 10;
+			name: 'Protocol';
+			beDisplayedAsGroup;
+			addActionWith: [ :anAction | anAction 
+				name: 'New protocol';
+				description: 'Add a new protocol to this class';
+				iconName: 'add';
+				shortcutKey: $n mod1;
+				action: [ :aContext | aContext doAddProtocolCommand: anAction ] ];
+			addActionWith: [ :anAction | anAction 
 				name: 'Rename';
 				shortcutKey: $r mod1;
 				description: 'Rename protocol';
-				action: [ :aContext :anAction | aContext doRenameProtocolCommand: anAction  ].		 
-		};
-		registerGroup: #protocolCritical with: {
-			$x mod1 -> DockRemoveProtocolCommand new.
-		}
+				action: [ :aContext | aContext doRenameProtocolCommand: anAction ] ] ];
+		addGroup: #protocolCritical with: [ :aGroup | aGroup
+			priority: 1000;
+			name: 'DANGER ZONE';
+			beDisplayedAsGroup;
+			addActionWith: [ :anAction | anAction 
+				name: 'Remove protocol';
+				description: 'Remove this protocol and all its methods?';
+				shortcutKey: $x mod1;
+				action: [ :aContext | aContext doRemoveSelectedProtocol ] ] ]
 ]
 
 { #category : 'accessing - actions' }
 DockClassOutlineSideView class >> defineVariableActionsOn: aBuilder [
-	<perspectiveActions>
+	<dockActions>
 	
 	aBuilder 
-		registerGroup: #variable with: { 
-			DockNewVariableCommand new.
-		};
-		registerGroup: #variableCritical with: {
-			$x mod1 -> DockRemoveVariableCommand new.
-		}
+		addGroup: #variable with: [ :aGroup | aGroup
+			priority: 10;
+			name: 'Variables';
+			beDisplayedAsGroup;
+			addActionWith: [ :anAction | anAction 
+				name: 'New slot';
+				description: 'Add a new slot to this class';
+				iconName: 'add';
+				action: [ :aContext | aContext doAddVariableCommand: anAction ] ] ];
+		addGroup: #variableCritical with: [ :aGroup | aGroup
+			priority: 1000;
+			name: 'DANGER ZONE';
+			beDisplayedAsGroup;
+			addActionWith: [ :anAction | anAction 
+				name: 'Remove slot';
+				description: 'Remove this slot';
+				shortcutKey: $x mod1;
+				action: [ :aContext | aContext doRemoveVariable ] ] ]
 ]
 
 { #category : 'accessing' }
 DockClassOutlineSideView >> actions [
 
-	^ actions ifNil: [ actions := PvActionCollector collectFor: self ]
+	^ actions ifNil: [ actions := DockActionCollector collectFor: self ]
 ]
 
 { #category : 'private - preview' }

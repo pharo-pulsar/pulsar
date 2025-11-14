@@ -1,7 +1,8 @@
 Class {
 	#name : 'DockGtkConfiguration',
-	#superclass : 'LnPharoGtkConfiguration',
+	#superclass : 'StPharoGtkConfiguration',
 	#instVars : [
+		'settings',
 		'styleManager',
 		'announcer'
 	],
@@ -14,7 +15,7 @@ Class {
 DockGtkConfiguration >> announceSyntaxHighlightThemeChanged [
 
 	self announcer announce: (DockSyntaxHighlightThemeChanged new
-		newTheme: self syntaxHighlightThemeName;
+		newTheme: self syntaxHighlightTheme;
 		yourself)
 ]
 
@@ -30,6 +31,40 @@ DockGtkConfiguration >> announcer [
 	^ announcer ifNil: [ announcer := Announcer new ]
 ]
 
+{ #category : 'private - settings' }
+DockGtkConfiguration >> applySettings [
+
+	self 
+		settingAt: #theme ifPresent: [ :aValue | self applyTheme: aValue ];
+		settingAt: #syntaxHighlightTheme ifPresent: [ :aValue | self applySyntaxHighlightTheme: aValue ];
+		settingAt: #styleScheme ifPresent: [ :aValue | self appplyStyleScheme: aValue ]
+		
+]
+
+{ #category : 'private - settings' }
+DockGtkConfiguration >> applySyntaxHighlightTheme: aString [
+
+	self syntaxHighlightTheme: aString
+]
+
+{ #category : 'private - settings' }
+DockGtkConfiguration >> applyTheme: aSymbol [
+	"this is a setting before anything... we do not refresh anything as this is the very initial thing to execute"
+	| selector |
+
+	selector := #preferSystem.
+	aSymbol = #dark ifTrue: [ selector := #forceDark ].
+	aSymbol = #light ifTrue: [ selector := #forceLight ].
+	
+	GRunLoop defer: [ self styleManager perform: selector ]
+]
+
+{ #category : 'private - settings' }
+DockGtkConfiguration >> appplyStyleScheme: aString [
+
+	self styleScheme: aString
+]
+
 { #category : 'accessing' }
 DockGtkConfiguration >> colorsForTestResult [
 
@@ -39,22 +74,34 @@ DockGtkConfiguration >> colorsForTestResult [
 ]
 
 { #category : 'configuring' }
-DockGtkConfiguration >> configureGeneral: anApplication [
+DockGtkConfiguration >> configure: anApplication [
 
+	settings := anApplication settings.
+	super configure: anApplication
+]
+
+{ #category : 'configuring' }
+DockGtkConfiguration >> configureGeneral: anApplication [
+	
+	settings := anApplication settings.
+	
 	super configureGeneral: anApplication.
-	self addCSSProviderFromString: self paletteStyle.
 	self addCSSProviderFromString: self style.
 	
+	self announcer
+		when: DockThemeChanged send: #resendAnnouncement: to: anApplication;
+		when: DockSyntaxHighlightThemeChanged send: #syntaxHighlightThemeChanged: to: anApplication.
+		
+	"this is important to happen after the subscription because it may end up updating things" 
+	self applySettings.
+		
+	"we are already in a defer, this is just to ensure it" 
 	GRunLoop defer: [
 		self styleManager
 			"disconnect all possible signal (if I am reconfiguring, 
 			 this can be not nil nor empty)"
 			disconnectAll; 
 			connectNotifyDark: [ self themeChanged ] ].
-			
-	self announcer
-		when: DockThemeChanged send: #resendAnnouncement: to: anApplication;
-		when: DockSyntaxHighlightThemeChanged send: #syntaxHighlightThemeChanged: to: anApplication
 ]
 
 { #category : 'accessing' }
@@ -85,26 +132,67 @@ DockGtkConfiguration >> darkPaletteStyle [
 '
 ]
 
+{ #category : 'private - defaults' }
+DockGtkConfiguration >> defaultStyleScheme [
+
+	^ self isDarkTheme
+		ifTrue: [ self defaultStyleSchemeDark ]
+		ifFalse: [ self defaultStyleSchemeLight ]
+]
+
+{ #category : 'private - defaults' }
+DockGtkConfiguration >> defaultStyleSchemeDark [
+
+	^ 'Adwaita-dark'
+]
+
+{ #category : 'private - defaults' }
+DockGtkConfiguration >> defaultStyleSchemeLight [
+
+	^ 'Adwaita'
+]
+
+{ #category : 'private - defaults' }
+DockGtkConfiguration >> defaultSyntaxHighlightThemeName [
+
+	^ self isDarkTheme
+		ifTrue: [ self defaultSyntaxHighlightThemeNameDark ]
+		ifFalse: [ self defaultSyntaxHighlightThemeNameLight ]
+]
+
+{ #category : 'private - defaults' }
+DockGtkConfiguration >> defaultSyntaxHighlightThemeNameDark [
+	
+	^ 'GitHubDark'
+]
+
+{ #category : 'private - defaults' }
+DockGtkConfiguration >> defaultSyntaxHighlightThemeNameLight [
+	
+	^ 'GitHubLight' "'Blue' 'Vintage' 'Tango' 'Solarized'"
+]
+
 { #category : 'accessing' }
 DockGtkConfiguration >> forceDark [
 
 	self reset.
-	GRunLoop defer: [ self styleManager ensureDark ].
-	self resetTheme
+	GRunLoop defer: [ self styleManager forceDark ].
+	self resetTheme.
+	self settingAt: #theme put: #dark
 ]
 
 { #category : 'accessing' }
 DockGtkConfiguration >> forceLight [
 
 	self reset.
-	GRunLoop defer: [ self styleManager ensureLight ].
-	self resetTheme
+	GRunLoop defer: [ self styleManager forceLight ].
+	self resetTheme.
+	self settingAt: #theme put: #light
 ]
 
 { #category : 'initialization' }
 DockGtkConfiguration >> initialize [
 
-	self resetTheme.		
 	super initialize
 ]
 
@@ -151,19 +239,12 @@ DockGtkConfiguration >> paletteStyle [
 ]
 
 { #category : 'accessing' }
-DockGtkConfiguration >> preferDark [
+DockGtkConfiguration >> preferSystem [
 
 	self reset.
-	GRunLoop defer: [ self styleManager preferDark ].
-	self resetTheme
-]
-
-{ #category : 'accessing' }
-DockGtkConfiguration >> preferLight [
-
-	self reset.
-	GRunLoop defer: [ self styleManager preferLight ].
-	self resetTheme
+	GRunLoop defer: [ self styleManager preferSystem ].
+	self resetTheme.
+	self settingAt: #theme put: #system
 ]
 
 { #category : 'configuring' }
@@ -181,10 +262,46 @@ DockGtkConfiguration >> resetDefaultSyntaxHighlightForTheme [
 
 { #category : 'private' }
 DockGtkConfiguration >> resetTheme [
+		
+	self addCSSProviderFromString: self paletteStyle.
+	self syntaxHighlightTheme: self defaultSyntaxHighlightThemeName.
+	self styleScheme: self defaultStyleScheme
+]
 
-	self theme: (self isDarkTheme
-		ifTrue: [ LnDarkTheme new ]
-		ifFalse: [ LnLightTheme new ])
+{ #category : 'private - settings' }
+DockGtkConfiguration >> settingAt: aKey [
+
+	^ self settings settingAt: #aKey
+]
+
+{ #category : 'private - settings' }
+DockGtkConfiguration >> settingAt: aKey ifAbsent: aBlock [
+
+	^ self settings 
+		settingAt: #aKey
+		ifAbsent: aBlock
+]
+
+{ #category : 'private - settings' }
+DockGtkConfiguration >> settingAt: aKey ifPresent: aBlock [
+
+	^ self settings 
+		settingAt: aKey
+		ifPresent: aBlock
+]
+
+{ #category : 'private - settings' }
+DockGtkConfiguration >> settingAt: aKey put: aValue [
+
+	^ self settings 
+		settingAt: aKey
+		put: aValue
+]
+
+{ #category : 'private' }
+DockGtkConfiguration >> settings [
+
+	^ settings
 ]
 
 { #category : 'accessing - style' }
@@ -287,35 +404,25 @@ DockGtkConfiguration >> styleManager [
 DockGtkConfiguration >> styleScheme: aString [
 
 	super styleScheme: aString.
+	self settingAt: #styleScheme put: aString.
 	self announceThemeChanged
+]
+
+{ #category : 'accessing' }
+DockGtkConfiguration >> syntaxHighlightTheme [
+
+	^ syntaxHighlightThemeName ifNil: [ 
+		syntaxHighlightThemeName := self 
+			settingAt: #syntaxHighlightTheme
+			ifAbsent: [ self defaultSyntaxHighlightThemeName ] ]
 ]
 
 { #category : 'accessing - style' }
 DockGtkConfiguration >> syntaxHighlightTheme: aName [
 
 	super syntaxHighlightTheme: aName.
+	self settingAt: #syntaxHighlightTheme put: aName. 
 	self announceSyntaxHighlightThemeChanged
-]
-
-{ #category : 'accessing' }
-DockGtkConfiguration >> syntaxHighlightThemeName [
-
-	^ syntaxHighlightThemeName ifNil: [ 
-		syntaxHighlightThemeName := self isDarkTheme
-			ifTrue: [ self syntaxHighlightThemeNameDark ]
-			ifFalse: [ self syntaxHighlightThemeNameLight ] ]
-]
-
-{ #category : 'accessing' }
-DockGtkConfiguration >> syntaxHighlightThemeNameDark [
-	
-	^ 'GitHubDark'
-]
-
-{ #category : 'accessing' }
-DockGtkConfiguration >> syntaxHighlightThemeNameLight [
-	
-	^ 'GitHubLight' "'Blue' 'Vintage' 'Tango' 'Solarized'"
 ]
 
 { #category : 'private' }

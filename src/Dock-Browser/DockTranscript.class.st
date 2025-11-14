@@ -28,15 +28,13 @@ DockTranscript class >> defaultTitle [
 
 { #category : 'accessing - actions' }
 DockTranscript class >> defineActionsOn: aBuilder [
-	<perspectiveActions>
+	<dockActions>
 
-	aBuilder registerGroup: #transcript with: { 
-		SpAction new 
+	aBuilder addGroup: #transcript with: [ :aGroup | aGroup 
+		addActionWith: [ :anAction | anAction
 			name: 'Clear';
 			description: 'Clear transcript';
-			action: [ :aContext | aContext doClearTranscript ];
-			yourself.
-	}
+			action: [ :aContext | aContext doClearTranscript ] ] ]
 ]
 
 { #category : 'layout' }

@@ -36,7 +36,7 @@ DockRequestDialog >> defaultLayout [
 			add: titlePresenter;
 			yourself)
 			expand: false;
-		add: messagePresenter expand: false;
+		add: label expand: false;
 		add: textInput expand: false;
 		add: errorLabel expand: false;
 		add: self newNullPresenter;
@@ -89,5 +89,5 @@ DockRequestDialog >> newDialogLabel [
 { #category : 'private' }
 DockRequestDialog >> setLabel: aString [
 
-	messagePresenter label: aString
+	label label: aString
 ]

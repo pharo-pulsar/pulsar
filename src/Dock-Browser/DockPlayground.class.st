@@ -31,35 +31,33 @@ DockPlayground class >> defaultTitle [
 
 { #category : 'accessing - actions' }
 DockPlayground class >> defineActionsOn: aBuilder [
-	<perspectiveActions>
+	<dockActions>
 
-	aBuilder 
-		registerGroup: #actions with: {
-			SpAction new
+	aBuilder addGroup: #actions with: [ :aGroup | aGroup 
+		addActionWith: [ :anAction | anAction
 				priority: 1;
 				name: 'New playground';
 				description: 'Create a new playground';
 				iconName: 'add';
-				action: [ :aContext | aContext doNewPlayground ].		
-			SpAction new
+				action: [ :aContext | aContext doNewPlayground ] ];
+		addActionWith: [ :anAction | anAction
 				priority: 2;
 				name: 'Load page';
 				description: 'Load a playground page';
 				iconName: 'load';
-				action: [ :aContext | aContext doLoadPage ].	
-			SpAction new
+				action: [ :aContext | aContext doLoadPage ] ];	
+		addActionWith: [ :anAction | anAction
 				priority: 3;
 				name: 'Versions';
 				description: 'Browse versions of current playground page';
 				iconName: 'versions';
-				action: [ :aContext :aCommand | aContext doBrowseVersionsCommand: aCommand ].
-			SpAction new
+				action: [ :aContext :aCommand | aContext doBrowseVersionsCommand: aCommand ] ];
+		addActionWith: [ :anAction | anAction
 				priority: 4;
 				name: 'Variables';
 				description: 'Browse variables (bindings) defined in current playground';
 				iconName: 'variables';
-				action: [ :aContext :aCommand | aContext doBrowseBindingsCommand: aCommand ].
-		}
+				action: [ :aContext :aCommand | aContext doBrowseBindingsCommand: aCommand ] ] ]
 ]
 
 { #category : 'private - actions' }

@@ -26,6 +26,12 @@ PvEnvironmentModel >> addPackageNamed: aString [
 	^ self entity addPackageNamed: aString
 ]
 
+{ #category : 'accessing' }
+PvEnvironmentModel >> allBaselines [
+	
+	^ BaselineOf allSubclasses
+]
+
 { #category : 'testing' }
 PvEnvironmentModel >> canBeRemoved [
 

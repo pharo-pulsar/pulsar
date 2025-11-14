@@ -16,7 +16,7 @@ DockUIManager class >> activateOn: anApplication [
 	 application will still ne running!)."
 	application := anApplication.
 	UIManager default: self new.
-	ErrorHandler defaultErrorHandler: UIManager default
+	ErrorHandler default: UIManager default
 
 ]
 
