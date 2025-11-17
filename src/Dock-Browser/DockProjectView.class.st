@@ -24,70 +24,70 @@ DockProjectView class >> defineActionsOn: aBuilder [
 	<dockActions>
 	
 	aBuilder 
-		addGroup: #project with: [ :aGroup | aGroup 
+		addGroup: #project with: [ :group | group 
 			priority: 100;
 			name: 'Project';
 			beDisplayedAsSubMenu;	
-			addActionWith: [ :anAction | anAction 
+			addActionWith: [ :action | action 
 				priority: 110;
 				name: 'New project';
 				description: 'Create a new project (baseline)';
 				iconName: 'new-folder';
 				shortcutKey: $n mod1;
 				action: [ :aContext | aContext doNewProject ] ];
-			addActionWith: [ :anAction | anAction 
+			addActionWith: [ :action | action 
 				priority: 120;
 				name: 'Open project';
 				description: 'Open project';
 				iconName: #openProject;
 				shortcutKey: $o mod1;
 				action: [ :aContext | aContext doOpenProject ] ];
-			addActionWith: [ :anAction | anAction 
+			addActionWith: [ :action | action 
 				priority: 130;
 				name: 'Refresh project';
 				description: 'Refresh this project (reload configuration)';
 				iconName: 'refresh';
 				action: [ :aContext | aContext refreshProject ] ] ];
-		addGroup: #new with: [ :aGroup | aGroup
+		addGroup: #new with: [ :group | group
 			priority: 200;
 			name: 'New';
 			beDisplayedAsGroup;
-			addActionWith: [ :anAction | anAction 
+			addActionWith: [ :action | action 
 				priority: 210;
 				name: 'New package';
 				description: 'Add a new package to the environment';
 				iconName: 'new-file';
 				action: [ :aContext | aContext doNewPackage ] ];
-			addActionWith: [ :anAction | anAction
+			addActionWith: [ :action | action
 				priority: 220;
 				name: 'New tag';
 				description: 'Add a new tag to this package';
 				iconName: 'new-file';
 				action: [ :aContext | aContext doNewPackageTag ] ];
-			addActionWith: [ :anAction | anAction
+			addActionWith: [ :action | action
 				priority: 230;
 				name: 'New class';
 				description: 'Add a new class to the environment';
 				iconName: 'new-file';
 				action: [ :aContext | aContext doRequestNewClass ] ];
-			addActionWith: [ :anAction | anAction
+			addActionWith: [ :action | action
 				priority: 240;
 				name: 'New trait';
 				description: 'Add a new trait to the environment';
 				iconName: 'new-file';
 				action: [ :aContext | aContext doRequestNewTrait ] ] ];
-		addGroup: #action with: [ :aGroup | aGroup 
+		addGroup: #action with: [ :group | group 
 			priority: 300;
 			name: 'Action';
 			beDisplayedAsGroup	;
-			addActionWith: [ :anAction | anAction
+			addActionWith: [ :action | action
 				priority: 310;
 				dynamicName: [ :aContext | 'Rename ', aContext selectedEntityName ];
 				description: 'Rename package or tag (and all its contexts)';
 				shortcutKey: $r mod1;
 				actionEnabled: [ :aContext | aContext canRenameSelectedEntity ];
 				action: [ :aContext | aContext doRenameSelectedEntity ] ];
-			addActionWith: [ :anAction | anAction 
+			addActionWith: [ :action | action 
 				priority: 320;
 				dynamicName: [ :aContext |
 					String streamContents: [ :stream | 
@@ -100,11 +100,11 @@ DockProjectView class >> defineActionsOn: aBuilder [
 				shortcutKey: $x mod1;
 				actionEnabled: [ :aContext | aContext canRemoveSelectedEntity ];
 				action: [ :aContext | aContext doRemoveSelectedEntity ] ] ];
-		addGroup: #extra with: [ :aGroup | aGroup 
+		addGroup: #extra with: [ :group | group 
 			priority: 900;
 			name: 'Extra';
 			beDisplayedAsGroup;
-			addActionWith: [ :anAction | anAction 
+			addActionWith: [ :action | action 
 				name: 'Collapse All';
 				description: 'Collapses all open projects';
 				iconName: 'collapse-all';

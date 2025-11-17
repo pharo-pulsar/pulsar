@@ -46,8 +46,11 @@ DockClassEditor >> defaultLayout [
 			add: ((commentOverlayLayout := SpOverlayLayout new)
 				child: commentPresenter;
 				yourself);
-			add: ((editorOverlayLayout := SpOverlayLayout new) 
-				child: editorPresenter;
+			add: (SpBoxLayout  newVertical
+				add: ((editorOverlayLayout := SpOverlayLayout new) 
+					child: editorPresenter;
+					yourself);
+				add: searchBarPresenter expand: false;				
 				yourself);
 			yourself);
 		yourself

@@ -15,9 +15,7 @@ DockUIManager class >> activateOn: anApplication [
 	"I need this variable because if I save the image it will reset the UIManager (but the 
 	 application will still ne running!)."
 	application := anApplication.
-	UIManager default: self new.
-	ErrorHandler default: UIManager default
-
+	UIManager default: self new
 ]
 
 { #category : 'private' }
@@ -73,6 +71,21 @@ DockUIManager >> handleError: anError [
 		inContext: anError signalerContext.
 
 	(OupsDebugRequest newForException: anError) submit
+]
+
+{ #category : 'error handling' }
+DockUIManager >> handleNotification: aNotification [
+
+	"by default, do nothing"
+	
+	aNotification resume 
+]
+
+{ #category : 'error handling' }
+DockUIManager >> handleWarning: aWarning [
+	"The user should be notified of the occurrence of an exceptional occurrence and given an option of continuing or aborting the computation. The description of the occurrence should include any text specified as the argument of the #signal: message."
+
+	(OupsWarningRequest newForException: aWarning) submit
 ]
 
 { #category : 'ui requests' }

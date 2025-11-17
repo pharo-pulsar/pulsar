@@ -95,6 +95,11 @@ DockGtkConfiguration >> configureGeneral: anApplication [
 	"this is important to happen after the subscription because it may end up updating things" 
 	self applySettings.
 		
+	
+	"now that we have settings processed, we apply the palette (as settings can 
+	 change the theme, hence the palette)"
+	self addCSSProviderFromString: self paletteStyle.
+		
 	"we are already in a defer, this is just to ensure it" 
 	GRunLoop defer: [
 		self styleManager
@@ -119,8 +124,8 @@ DockGtkConfiguration >> darkPaletteStyle [
 	^ '
 :root {
 	/* testing */
-	--test-passed: 	LightGreen;
-	--test-error: 	Tomato;
+	--test-passed: LightGreen;
+	--test-error: Tomato;
 	--test-failure: DarkOrange;
 	/* repositories */
 	--repository-modified: LightGreen;
@@ -128,7 +133,7 @@ DockGtkConfiguration >> darkPaletteStyle [
 	/* markers for editor */
 	--button-bg-cancel-mark: #FF00006F;
 	--button-bg-accept-mark: #00DF006F;
-}	
+}
 '
 ]
 
@@ -383,11 +388,16 @@ popover .dockPreviewEditor { min-width: 680px; min-height: 340px; }
 .dockMethodRow .test-passed { color: var(--test-passed); }
 .dockMethodRow .test-error { color: var(--test-error); }
 .dockMethodRow .test-failure { color: var(--test-failure); }
-/* Repositories (I can also have .notLoaded and .upToDate) */
-.dockRepositories .dockRepositoryRow .missing { color: var(--repository-error); }
-.dockRepositories .dockRepositoryRow .modified { color: var(--repository-modified); }
-.dockRepositories .dockRepositoryRow .error { color: var(--repository-error); }
 
+/* Repositories (I can also have .notLoaded and .upToDate) */
+.dockRepositories .dockRepositoryRow label.missing { color: var(--repository-error); }
+.dockRepositories .dockRepositoryRow label.modified { color: var(--repository-modified); }
+.dockRepositories .dockRepositoryRow label.error { color: var(--repository-error); }
+
+/* search text */
+/* this is a hack because for now I do not want to lose time on this */
+.dockSearchPanel grid { margin: -12px -20px -12px -16px; padding: 0px; border-spacing: 0px; border: 0px; border-top-width: 0px;  border-spacing: 4px; } 
+.buttonToggleSearch { border-radius: 0px; padding: 2px; margin-left: 4px; }
 '
 ]
 

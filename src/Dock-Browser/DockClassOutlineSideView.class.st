@@ -154,10 +154,14 @@ DockClassOutlineSideView >> connectPresenters [
 { #category : 'private - preview' }
 DockClassOutlineSideView >> deactivateMethodPreviewPopover [
 
-	self isPreviewPopoverActive ifFalse: [ ^ self ].
-	
-	previewPopoverActive := false.
-	self dismissPreview	
+	[
+		self isPreviewPopoverActive ifFalse: [ ^ self ].
+		
+		previewPopoverActive := false.
+		self dismissPreview	
+	] on: Error do: [ :e |
+		logger error: e.
+		e printToStdout ]
 ]
 
 { #category : 'api - focus' }

@@ -32,6 +32,6 @@ DockRepositoryRow >> updatePresenter [
 	
 	self application defer: [
 		labelPresenter label: self model name.
-		labelPresenter removeAllStyles. 
-		labelPresenter addStyle: self model status ]
+		labelPresenter removeAllStyles.
+		labelPresenter addStyle: self model status asString ]
 ]

@@ -20,7 +20,7 @@ DockBrowser class >> defineImageActionsOn: aBuilder [
 
 	aBuilder addGroup: #image with: [ :aGroup | aGroup 
 		name: 'Image';
-		priority: 1000;
+		priority: 2000;
 		beDisplayedAsGroup;
 		addActionWith: [ :anItem | anItem
 			name: 'Save';
@@ -41,10 +41,10 @@ DockBrowser class >> defineSpotterActionsOn: aBuilder [
 		priority: 900;
 		beDisplayedAsGroup;
 		addActionWith: [ :anItem | anItem 
-			name: 'Spotter for Environment';
+			name: 'Spotter';
 			description: 'Show spotter for Environment';
 			shortcutKey: KeyboardKey enter shift;
-			action: [ :aContext | aContext doShowSpotterForEnvironment ] ];
+			action: [ :aContext | aContext doShowSpotterForEnvironment ] ]";
 		addActionWith: [ :anItem | anItem 
 			name: 'Spotter for Windows';
 			description: 'Show spotter for Windows';
@@ -54,7 +54,8 @@ DockBrowser class >> defineSpotterActionsOn: aBuilder [
 			name: 'Spotter for Commands';
 			description: 'Show spotter for Commands';
 			shortcutKey: KeyboardKey enter shift;
-			action: [ :aContext | aContext doShowSpotterForCommands ] ] ]
+			action: [ :aContext | aContext doShowSpotterForCommands ] ]" 
+		]
 ]
 
 { #category : 'accessing - actions' }
@@ -65,21 +66,26 @@ DockBrowser class >> defineToolActionsOn: aBuilder [
 		priority: 10;
 		name: 'tools';
 		beDisplayedAsGroup;
-		addActionWith: [ :anItem | anItem 
+		addActionWith: [ :anAction | anAction
 			priority: 100;
 			name: 'New Playground';
 			description: 'Open a new playground in your browser';
 			action: [ :aContext | aContext openPlayground ] ];
-		addActionWith: [ :anItem | anItem 
+		addActionWith: [ :anAction | anAction 
 			priority: 200;
 			name: 'Open Process Browser';
 			description: 'Open the Process Browser';
-			action: [ :aContext | aContext openProcessBrowser ] ];
-		addActionWith: [ :anItem | anItem 
+			action: [ :aContext | aContext spawnNewProcessBrowser ] ];
+		addActionWith: [ :anAction | anAction 
 			priority: 910;
 			name: 'Open Recent Changes';
 			description: 'Open Recent Changes log';
-			action: [ :aContext | aContext spawnRecentChanges ] ] ]
+			action: [ :aContext | aContext spawnRecentChanges ] ];
+		addActionWith: [ :anAction | anAction
+			priority: 920;
+			name: 'Open Repositories';
+			description: 'Open git repositories';
+			action: [ :aContext | aContext openRepositories ] ] ]
 ]
 
 { #category : 'private' }

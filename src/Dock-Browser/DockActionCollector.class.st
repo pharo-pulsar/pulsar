@@ -33,7 +33,7 @@ DockActionCollector >> collect [
 		register: self model class
 		in: container.
 	
-	container entries: (container entries sorted: #priority descending, #name ascending).
+	container entries: (container entries sorted: #priority ascending, #name ascending).
 	container allCommands do: [ :each | each context: self context ]. 
 	
 	^ container

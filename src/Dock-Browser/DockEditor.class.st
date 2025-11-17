@@ -15,7 +15,8 @@ Class {
 		'editorPresenter',
 		'dirty',
 		'editorOverlayLayout',
-		'dirtyMarkerPresenter'
+		'dirtyMarkerPresenter',
+		'searchBarPresenter'
 	],
 	#category : 'Dock-Browser-View-Editor',
 	#package : 'Dock-Browser',
@@ -85,7 +86,7 @@ DockEditor >> connectPresenters [
 	editorPresenter
 		whenTextChangedDo: [ :newText :oldText | self textChangedFrom: oldText to: newText ];
 		whenSubmitDo: [ :aString | self doSubmit: aString ];
-		whenResetDo: [ self doReset ].
+		whenResetDo: [ self doReset ]
 ]
 
 { #category : 'api - focus' }
@@ -102,6 +103,7 @@ DockEditor >> defaultLayout [
 		add: (self editorOverlayLayout
 			child: editorPresenter;
 			yourself);
+		add: searchBarPresenter expand: false;
 		yourself
 ]
 
@@ -190,6 +192,7 @@ DockEditor >> editorContextMenuActions [
 
 { #category : 'private - overlay' }
 DockEditor >> editorOverlayLayout [
+
 	^  editorOverlayLayout ifNil: [ editorOverlayLayout := SpOverlayLayout new ]
 ]
 
@@ -262,6 +265,7 @@ DockEditor >> initializePanelWindow: aWindowPresenter [
 
 { #category : 'initialization' }
 DockEditor >> initializePresenters [
+
 	self addStyle: 'dockEditor'.
 
 	toolbarPresenter := self instantiate: DockEditorToolbarPresenter.
@@ -276,7 +280,9 @@ DockEditor >> initializePresenters [
 		lineNumbers: self application isShowingLineNumbers;
 		systemNavigation: (self systemNavigation
 			responderPresenter: editorPresenter;
-			yourself)
+			yourself).
+			
+	searchBarPresenter := self instantiate: DockSearchBarPresenter on: editorPresenter
 ]
 
 { #category : 'initialization' }

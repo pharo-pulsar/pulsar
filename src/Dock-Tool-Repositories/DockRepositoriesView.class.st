@@ -48,6 +48,8 @@ DockRepositoriesView >> initializePresenters [
 	self addStyle: 'dockRepositories'.
 
 	listToolbarPresenter := self instantiate: DockToolbarPresenter.
+	listToolbarPresenter actions: self actions.	
+
 	listPresenter := self newEasyListView
 		addStyle: 'stList';
 		rowPresenterClass: DockRepositoryRow;

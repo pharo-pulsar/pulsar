@@ -33,11 +33,11 @@ PvAliasedVSCodeIconProvider >> initialize [
 	self addAliasesFromPairs: {
 		'add'.						'add'.	
 		'closeAll'.					'close-all'.
-		'load'. 					'folder-opened'.
+		'load'. 						'folder-opened'.
 		'groupByMethod'. 			'extensions'.			"browser (extensions)"
 		'library'.					'library'.				"browser (system deps)"
-		'class'.					'symbol-class'.			"type"
-		'classAbstract'.			'symbol-class'.			"type"
+		'class'.						'symbol-class'.			"type"
+		'classAbstract'.				'symbol-class'.			"type"
 		'method'. 					'symbol-method'.			"type"
 		'openProject'. 				'folder-opened'.			"browser (open project)"
 		"#overlayClass.
@@ -138,6 +138,17 @@ PvAliasedVSCodeIconProvider >> initialize [
 		'panel-top'.					'layout-panel-top'.
 		'panel-right'.				'layout-sidebar-right'.
 		'panel-bottom'.				'layout-panel'.
+		"search text"
+		'search-forward'.			'arrow-down'.
+		'search-backward'.			'arrow-up'.
+		"placed here as documentation:"
+		"'whole-word'.				'whole-word'.
+		'case-sensitive'. 			'case-sensitive'.
+		'regex'.						'regex'.
+		'chevron-right'. 			'chevron-right'.
+		'chevron-down'.				'chevron-down'.
+		'versions'.					'versions'."
+		'variables'.					'symbol-key'.
 	 }
 ]
 

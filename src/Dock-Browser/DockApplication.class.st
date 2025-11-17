@@ -228,8 +228,8 @@ DockApplication >> newIconProvider [
 	^ (PvAliasedVSCodeIconProvider new
 			application: self;
 			addLocation: self resourcesDir / 'vscode-extraicons';
-			addLocation: self resourcesDir / 'vscode-icons';
 			addLocation: self resourcesDir / 'vscode-codicons';
+			addLocation: self resourcesDir / 'vscode-icons';
 			yourself),
 	  PvDefaultIconProvider new
 ]
@@ -300,6 +300,7 @@ DockApplication >> prepareAsStandaloneApplication [
 DockApplication >> prepareErrorHandlerAsStandaloneApplication [
 
 	DockUIManager activateOn: self.
+	ErrorHandler default: InteractiveErrorHandler new.
 	OupsDebuggerSelectionStrategy debuggerSelectionStrategy: (DockSingleDebuggerSelector on: self)
 ]
 
