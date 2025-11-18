@@ -24,11 +24,12 @@ You are a real programmer... why aren't you using linux?
 ```shell
 pacman -S mingw-w64-clang-aarch64-gtk4 mingw-w64-clang-x86_64-gtksourceview5 mingw-w64-clang-x86_64-libadwaita mingw-w64-clang-x86_64-libpanel mingw-w64-clang-x86_64-libgit2
 ``` 
+
 You **need** to make sure your libraries (usually in `C:\msys2\clang64\bin`) are in the path.
 
 ### 3. A VM *stripped* from external libraries 
-You need it because otherwise the libraries will conflict and everuthign will crash.  
-You can download the last one from the pharo site and remove averything that is not a plugin :)
+You need it because otherwise the libraries will conflict and everythign will crash.  
+You can download (this one one from the pharo site)[https://files.pharo.org/get-files/140/pharo-vm-Windows-X86-stable.zip] and remove everything that is not a plugin :)
 
 ### 4. Download a usable image
 Right now we are using [Pharo14 build 200](https://files.pharo.org/image/140/Pharo14.0-SNAPSHOT.build.200.sha.c126aa2736.arch.64bit.zip)
