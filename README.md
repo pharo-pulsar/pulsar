@@ -22,7 +22,7 @@ You are a real programmer... why aren't you using linux?
 ### 2. Then install this packages (from the msys2 terminal): 
 
 ```shell
-pacman -S mingw-w64-clang-aarch64-gtk4 mingw-w64-clang-x86_64-gtksourceview5 mingw-w64-clang-x86_64-libadwaita mingw-w64-clang-x86_64-libpanel mingw-w64-clang-x86_64-libgit2
+pacman -S pacman -S mingw-w64-clang-x86_64-gtk4 mingw-w64-clang-x86_64-gtksourceview5 mingw-w64-clang-x86_64-libadwaita mingw-w64-clang-x86_64-libpanel mingw-w64-clang-x86_64-libgit2
 ``` 
 
 You **need** to make sure your libraries (usually in `C:\msys2\clang64\bin`) are in the path.
