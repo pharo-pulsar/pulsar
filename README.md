@@ -85,3 +85,5 @@ MetaMetacello load: [ :spec | spec
 (Smalltalk classNamed: #GEnumeration) allSubclassesDo: #initializeEnumeration.
 (Smalltalk classNamed: #StringInterpolationPlugin) install.
 ```
+
+**IMPORTANT!!! For all this to work you need to add your keys to your account in the forge!** 
