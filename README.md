@@ -20,7 +20,8 @@ Download the prepared VM with dependencies **TODO**
 ### Windows
 You are a real programmer... why aren't you using linux?
 
-Download the prepared VM with dependencies **TODO**. 
+[Download the prepared VM with dependencies](https://nextcloud.smallworks.eu/s/eBe3k6dJWfsJMf5).
+This is a temporal location and likely a temporal VM, but for now it should make the job.
 
 ## 2. Download a usable image
 Right now we are using [Pharo14 build 200](https://files.pharo.org/image/140/Pharo14.0-SNAPSHOT.build.200.sha.c126aa2736.arch.64bit.zip)
@@ -89,3 +90,10 @@ MetaMetacello load: [ :spec | spec
 ```
 
 **IMPORTANT!!! For all this to work you need to add your keys to your account in the forge!** 
+
+
+### 5. Run
+
+```Shell
+.\PharoConsole.exe --headless --worker Pharo.image run dock
+```
