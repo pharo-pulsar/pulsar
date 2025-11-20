@@ -141,6 +141,7 @@ PvAliasedVSCodeIconProvider >> initialize [
 		"search text"
 		'search-forward'.			'arrow-down'.
 		'search-backward'.			'arrow-up'.
+		'highlight-all'.				'check-all'.
 		"placed here as documentation:"
 		"'whole-word'.				'whole-word'.
 		'case-sensitive'. 			'case-sensitive'.

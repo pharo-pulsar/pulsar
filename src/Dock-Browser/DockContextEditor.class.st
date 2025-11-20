@@ -15,6 +15,14 @@ DockContextEditor >> beFixedToDock [
 	 when switching contexts"
 ]
 
+{ #category : 'layout' }
+DockContextEditor >> defaultLayout [
+
+	^ SpBoxLayout newVertical 
+		add: super defaultLayout;
+		yourself
+]
+
 { #category : 'events' }
 DockContextEditor >> eventContextChanged: anAnnouncement [
 	| contextModel |
@@ -30,21 +38,29 @@ DockContextEditor >> eventContextChanged: anAnnouncement [
 DockContextEditor >> grabDebugToolbar [
 	| lastOwner debugToolbarPresenter |
 	
+	"the idea of this is that if we have different context editors, we have just one debug toolbar, 
+	 that will be moving between the active ones...
+	 No idea if this is a good idea or is just better to have many toolbars and just toggle visible status, 
+	 but as right now I just have one since context editor... is not a problem ;)"
+	
 	logger trace.
 	
 	"window will be the debugger, I can access the toolbar there"
 	debugToolbarPresenter := self withWindowDo: [ :w | w debugToolbarPresenter ].
-	
+	debugToolbarPresenter model: self model.
+
 	lastOwner := debugToolbarPresenter lastOwner.
-	(lastOwner isNotNil and: [ lastOwner ~= self ]) ifTrue: [ 
+	lastOwner == self ifTrue: [ ^ self ].
+
+	"(lastOwner isNotNil and: [ lastOwner ~= self ]) ifTrue: [ 
 		logger trace: lastOwner.
-		lastOwner removeOverlay: debugToolbarPresenter ].
+		lastOwner removeOverlay: debugToolbarPresenter ]."
 	
 	debugToolbarPresenter lastOwner: self.
-	self 
-		addOverlay: debugToolbarPresenter 
-		withConstraints: [ :c | c hAlignCenter; vAlignEnd ].
-	debugToolbarPresenter model: self model	
+	
+	self layout 
+		add: debugToolbarPresenter 
+		expand: false
 ]
 
 { #category : 'private' }

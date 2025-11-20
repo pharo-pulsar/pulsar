@@ -162,7 +162,7 @@ DockSpotter >> giveFocusToResultList [
 	activePresenter takeKeyboardFocus
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 DockSpotter >> initialOption: anOptionSymbol [
 
 	self layout. "ensure layout exists"

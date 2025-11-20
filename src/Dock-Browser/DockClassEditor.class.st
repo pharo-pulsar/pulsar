@@ -134,9 +134,9 @@ DockClassEditor >> initializePresenters [
 	super initializePresenters.
 	
 	self addStyle: 'dockClassEditor'.
-	commentPresenter := self newCode
+	commentPresenter := (self instantiate: SeEditorPresenter)
 		addStyle: 'stCode';
-		withoutSyntaxHighlight;
+		withHyperlinks;
 		yourself
 ]
 
@@ -180,10 +180,16 @@ DockClassEditor >> updateEditor [
 
 { #category : 'initialization' }
 DockClassEditor >> updatePresenter [
+	commentPresenter 
+		styleScheme: self application styleScheme;
+		language: 'markdown'.
+
 
 	self model ifNil: [ ^ self ].
 	
 	super updatePresenter.
+	
+	
 	self updateComment.
 	self updateEditor.
 	

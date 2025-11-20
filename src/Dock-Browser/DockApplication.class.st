@@ -300,7 +300,9 @@ DockApplication >> prepareAsStandaloneApplication [
 DockApplication >> prepareErrorHandlerAsStandaloneApplication [
 
 	DockUIManager activateOn: self.
-	ErrorHandler default: InteractiveErrorHandler new.
+	ErrorHandler defaultErrorHandler: UIManager default.
+	self flag: #TODO. "In the future it should be something like this but I do not have time right nwo"
+	"ErrorHandler default: InteractiveErrorHandler new."
 	OupsDebuggerSelectionStrategy debuggerSelectionStrategy: (DockSingleDebuggerSelector on: self)
 ]
 

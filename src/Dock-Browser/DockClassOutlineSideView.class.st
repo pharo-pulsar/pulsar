@@ -146,22 +146,15 @@ DockClassOutlineSideView >> connectPresenters [
 	listPresenter outputSelectionPort
 		transmitDo: [ :anEntry | self maybePopupPreview ].
 	listPresenter outputActivationPort 
-		transmitDo: [ :anEntity | 
-			self deactivateMethodPreviewPopover.
-			self owner notifyActivateEntity: anEntity ]
+		transmitDo: [ :anEntity | self entitySelected: anEntity ]
 ]
 
 { #category : 'private - preview' }
 DockClassOutlineSideView >> deactivateMethodPreviewPopover [
 
-	[
-		self isPreviewPopoverActive ifFalse: [ ^ self ].
-		
-		previewPopoverActive := false.
-		self dismissPreview	
-	] on: Error do: [ :e |
-		logger error: e.
-		e printToStdout ]
+	self isPreviewPopoverActive ifFalse: [ ^ self ].
+	previewPopoverActive := false.
+	self dismissPreview
 ]
 
 { #category : 'api - focus' }
@@ -312,6 +305,15 @@ DockClassOutlineSideView >> doRequestNewMethod [
 
 	self flag: #TODO. "I am using owner, which introcuces perhaps an undesirable coupling..."
 	self owner notifyActivateEntity: self newMethodModelForNewMethod
+]
+
+{ #category : 'private' }
+DockClassOutlineSideView >> entitySelected: anEntity [
+
+	self owner schedule: [ 
+		self deactivateMethodPreviewPopover ].
+	self owner schedule: [ 
+		self owner notifyActivateEntity: anEntity ]
 ]
 
 { #category : 'private' }

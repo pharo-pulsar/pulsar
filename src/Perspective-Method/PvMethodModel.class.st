@@ -229,6 +229,12 @@ PvMethodModel >> isLargeHierarchy [
 ]
 
 { #category : 'testing' }
+PvMethodModel >> isNew [
+
+	^ false
+]
+
+{ #category : 'testing' }
 PvMethodModel >> isOutlineClassEntity [
 
 	^ true

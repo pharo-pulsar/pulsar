@@ -26,12 +26,12 @@ DockDebuggerInspector class >> defineActionsOn: aBuilder [
 
 	aBuilder 
 		addGroup: #inspectorActions with: [ :aGroup | aGroup 
-			addActionWith: [ :anAction | anAction 
+			addActionWith: [ :action | action 
 				name: 'Inspect';
 				description: 'Inspect current receiver';
 				iconName: 'inspector';
 				action: [ :aContext | aContext doInspectReceiver ] ];
-			addActionWith: [ :anAction | anAction 
+			addActionWith: [ :action | action 
 				name: 'Browse';
 				description: 'Browse current receiver''s class';
 				iconName: 'browser';

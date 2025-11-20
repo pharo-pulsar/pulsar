@@ -21,7 +21,10 @@ Class {
 		'searchToolbarPresenter',
 		'toggleReplaceButton',
 		'replaceButton',
-		'replaceAllButton'
+		'replaceAllButton',
+		'highlightAllButton',
+		'connected',
+		'searchCountPresenter'
 	],
 	#category : 'Dock-Browser-View-Base',
 	#package : 'Dock-Browser',
@@ -50,9 +53,10 @@ DockSearchBarPresenter >> buildSearchToolbar [
 			vAlignCenter;
 			add: forwardButton;
 			add: backwardButton;
+			add: highlightAllButton;
 			add: caseSensitiveButton;
 			add: wholeWordButton;
-			add: regexButton;
+			"add: regexButton;"
 			add: closeButton;
 			yourself);
 		yourself
@@ -82,8 +86,25 @@ DockSearchBarPresenter >> connectPresenters [
 	searchTextPresenter 
 		whenTextChangedDo: [ :aString | self doSearch: aString ]; 
 		addShortcutWith: [ :action | action 
-			shortcutKey: KeyboardKey escape asKeyCombination;
-			action: [ self doClose ] ].
+			shortcutKey: KeyboardKey escape asKeyCombination | $f mod1;
+			action: [ self doClose ] ];
+		addShortcutWith: [ :action | action 
+			shortcutKey: $r mod1;
+			action: [ toggleReplaceButton state: toggleReplaceButton state not ] ];
+		addShortcutWith: [ :action | action 
+			shortcutKey: KeyboardKey enter asKeyCombination;
+			action: [ self doSearchForward ] ].
+			
+	replaceTextPresenter 
+		addShortcutWith: [ :action | action 
+			shortcutKey: KeyboardKey escape asKeyCombination | $f mod1;
+			action: [ self doClose ] ];
+		addShortcutWith: [ :action | action 
+			shortcutKey:  $r mod1;
+			action: [ toggleReplaceButton state: toggleReplaceButton state not ] ];
+		addShortcutWith: [ :action | action 
+			shortcutKey: KeyboardKey enter asKeyCombination;
+			action: [ self doReplace ] ].
 		
 	self eventHandler 
 		whenFocusLostDo: [ self closeIfNoPresenterHasFocus ]
@@ -107,7 +128,11 @@ DockSearchBarPresenter >> defaultLayout [
 			column: 1 expand: true;
 			column: 2 expand: false;
 			build: [ :aBuilder | aBuilder 
-				add: searchTextPresenter; 	add: searchToolbarPresenter; nextRow;
+				add: (SpOverlayLayout new 
+						addOverlay: searchCountPresenter withConstraints: [ :c | c hAlignEnd; vAlignCenter ];
+						child: searchTextPresenter;
+						yourself); 	
+					add: searchToolbarPresenter; nextRow;
 				add: replaceTextPresenter; 	add: replaceToolbarPresenter ];
 			yourself);
 		yourself
@@ -117,10 +142,13 @@ DockSearchBarPresenter >> defaultLayout [
 DockSearchBarPresenter >> doClose [
 
 	self isVisible ifFalse: [ ^ self ].
-	
-	self model highlightSearchText: false.
-	self doToggleReplace: false.
+
+	self prepareSearchToClose.
+	"reset replace button"
+	toggleReplaceButton state: false.
+	"hide myself"
 	self hide.
+	"restore focus to my caller"
 	self model takeKeyboardFocus
 ]
 
@@ -132,10 +160,10 @@ DockSearchBarPresenter >> doPresent [
 	showing := true.
 	[ 
 		self application defer: [
-			self show.		
+			self prepareSearchToPresent.
+			self show.
 			self takeKeyboardFocus.
-			searchTextPresenter selectAll.
-			self model highlightSearchText: true ] ] 
+			searchTextPresenter selectAll ] ] 
 	ensure: [
 		showing := false ]
 ]
@@ -159,7 +187,8 @@ DockSearchBarPresenter >> doReplaceAll [
 { #category : 'private - actions' }
 DockSearchBarPresenter >> doSearch: aString [
 
-	self model searchText: aString
+	self model searchText: aString.
+	self updateCount
 ]
 
 { #category : 'private - actions' }
@@ -177,7 +206,15 @@ DockSearchBarPresenter >> doSearchForward [
 { #category : 'private - actions' }
 DockSearchBarPresenter >> doToggleCaseSensitive: aState [
 
-	self model caseSensitive: aState
+	self model caseSensitive: aState.
+	self updateSearch
+]
+
+{ #category : 'private - actions' }
+DockSearchBarPresenter >> doToggleHighlightAll: aState [
+
+	self model highlightSearchText: aState.
+	self updateSearch
 ]
 
 { #category : 'private - actions' }
@@ -191,7 +228,8 @@ DockSearchBarPresenter >> doTogglePresent [
 { #category : 'private - actions' }
 DockSearchBarPresenter >> doToggleRegex: aState [
 
-	self model regex: aState
+	self model regex: aState.
+	self updateSearch
 ]
 
 { #category : 'private - actions' }
@@ -208,8 +246,9 @@ DockSearchBarPresenter >> doToggleReplace: aState [
 
 { #category : 'private - actions' }
 DockSearchBarPresenter >> doToggleWholeWord: aState [
-
-	self model wholeWord: aState
+	
+	self model wholeWord: aState.
+	self updateSearch
 ]
 
 { #category : 'initialization' }
@@ -233,8 +272,15 @@ DockSearchBarPresenter >> initializePresenters [
 
 	self initializeSearch.
 	self initializeReplace.
+	
+	self focusOrder: {
+		searchTextPresenter.
+		replaceTextPresenter.
+	}. 
 
-	self hide
+	self hide.
+	
+	
 ]
 
 { #category : 'initialization' }
@@ -267,21 +313,34 @@ DockSearchBarPresenter >> initializeReplace [
 DockSearchBarPresenter >> initializeSearch [
 	
 	self flag: #TODO. "Add a history (with arrows) (history affects also replace if opened, but happens here)"
-	self flag: #TODO. "enter on search text = searchForward"
-	searchTextPresenter := self newSearchInput
+	
+	searchTextPresenter := self newTextInput
 		placeholder: 'Find';
  		yourself.
+	
+	searchCountPresenter := self newLabel
+		addStyle: 'dim';
+		addStyle: 'tinyFont';
+		addStyle: 'count';
+		yourself.
 	
 	forwardButton := self newButton
 		addStyle: 'flat';
 		help: 'Select next search match';
 		icon: (self iconNamed: 'search-forward');
 		action: [ self doSearchForward ].
+		
 	backwardButton := self newButton
 		addStyle: 'flat';
 		help: 'Select previous search match';
 		icon: (self iconNamed: 'search-backward');
 		action: [ self doSearchBackward ].
+	
+	highlightAllButton := self newToggleButton
+		addStyle: 'flat';
+		help: 'Highlight all occurrences of search string';
+		icon: (self iconNamed: 'highlight-all');
+		whenChangedDo: [ :state | self doToggleHighlightAll: state ].
 		
 	caseSensitiveButton := self newToggleButton
 		addStyle: 'flat';
@@ -315,10 +374,58 @@ DockSearchBarPresenter >> model: aModel [
 	self error: 'model can''t be set after creation.'
 ]
 
+{ #category : 'private - actions' }
+DockSearchBarPresenter >> prepareSearchToClose [
+
+	self model endSearch.
+	self model highlightSearchText: false
+]
+
+{ #category : 'initialization' }
+DockSearchBarPresenter >> prepareSearchToPresent [
+
+	self application defer: [
+		self model
+			highlightSearchText: highlightAllButton state;
+			caseSensitive: caseSensitiveButton state;
+			wholeWord: wholeWordButton state;
+			regex: regexButton state.
+		self doSearch: searchTextPresenter text ]
+]
+
+{ #category : 'private - actions' }
+DockSearchBarPresenter >> updateCount [
+	| count |
+
+	searchCountPresenter visible: highlightAllButton state.
+	
+	searchCountPresenter isVisible ifFalse: [ ^ self ].
+	
+	count := self model searchOccurrencesCount.
+	searchCountPresenter label: (searchTextPresenter text 
+		ifNotEmpty: [ 
+			'{1} match{2}' format: { 
+				count. 
+				count = 1 ifTrue: [ '' ] ifFalse: [ 'es' ] } ]
+		ifEmpty: [ '' ])
+]
+
 { #category : 'initialization' }
 DockSearchBarPresenter >> updatePresenter [
 
-	"caseSensitiveButton state: self model isCaseSensitive.
-	wholeWordButton state: self model isWholeWord.
-	regexButton state: self model isRegex"
+	self model ifNil: [ ^ self ].
+
+	self application defer: [
+		self model
+			highlightSearchText: highlightAllButton state;
+			caseSensitive: caseSensitiveButton state;
+			wholeWord: wholeWordButton state;
+			regex: regexButton state.
+		self doSearch: searchTextPresenter text ]
+]
+
+{ #category : 'private - actions' }
+DockSearchBarPresenter >> updateSearch [
+
+	self doSearch: searchTextPresenter text
 ]

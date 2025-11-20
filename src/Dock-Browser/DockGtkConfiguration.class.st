@@ -83,6 +83,7 @@ DockGtkConfiguration >> configure: anApplication [
 { #category : 'configuring' }
 DockGtkConfiguration >> configureGeneral: anApplication [
 	
+	"first to all, so I have settings available for the rest"
 	settings := anApplication settings.
 	
 	super configureGeneral: anApplication.
@@ -94,7 +95,6 @@ DockGtkConfiguration >> configureGeneral: anApplication [
 		
 	"this is important to happen after the subscription because it may end up updating things" 
 	self applySettings.
-		
 	
 	"now that we have settings processed, we apply the palette (as settings can 
 	 change the theme, hence the palette)"
@@ -168,13 +168,13 @@ DockGtkConfiguration >> defaultSyntaxHighlightThemeName [
 { #category : 'private - defaults' }
 DockGtkConfiguration >> defaultSyntaxHighlightThemeNameDark [
 	
-	^ 'GitHubDark'
+	^ 'CodeDark'
 ]
 
 { #category : 'private - defaults' }
 DockGtkConfiguration >> defaultSyntaxHighlightThemeNameLight [
 	
-	^ 'GitHubLight' "'Blue' 'Vintage' 'Tango' 'Solarized'"
+	^ 'CodeLight'
 ]
 
 { #category : 'accessing' }
@@ -397,7 +397,8 @@ popover .dockPreviewEditor { min-width: 680px; min-height: 340px; }
 /* search text */
 /* this is a hack because for now I do not want to lose time on this */
 .dockSearchPanel grid { margin: -12px -20px -12px -16px; padding: 0px; border-spacing: 0px; border: 0px; border-top-width: 0px;  border-spacing: 4px; } 
-.buttonToggleSearch { border-radius: 0px; padding: 2px; margin-left: 4px; }
+.dockSearchPanel .count { margin-right: 10px; }
+.dockSearchPanel .buttonToggleSearch { border-radius: 0px; padding: 2px; margin-left: 4px; }
 '
 ]
 

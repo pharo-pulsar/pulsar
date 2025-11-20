@@ -36,7 +36,7 @@ DockBrowser class >> defineSpotterActionsOn: aBuilder [
 	self flag: #TODO. "Move this to superclass, but for that I first need to define 
 	what a spotter for a debugger will be, for example (and other possible root-level 
 	browsers)" 
-	aBuilder addGroup: #spotter with: [ :aGroup | aGroup 
+	aBuilder addGroup: #spotter with: [ :group | group 
 		name: 'Spotter';
 		priority: 900;
 		beDisplayedAsGroup;

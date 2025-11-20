@@ -29,9 +29,9 @@ DockBaseBrowser class >> definePanelActionsOn: aBuilder [
 		} withIndexDo: [ :each :index |
 			aGroup addActionWith: [ :anItem | anItem 
 				priority: index; 
-				name: 'Toggle panel [each first]';
-				description: 'Show/hide the [each first] panel';
-				iconName: 'panel-[each first]';
+				name: 'Toggle panel ', each first;
+				description: 'Show/hide the ', each first, ' panel';
+				iconName: 'panel-', each first;
 				action: [ :aContext | aContext togglePanelArea: each second  ] ]
 			 ] ].
 ]
