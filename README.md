@@ -5,38 +5,39 @@ package dependencies:
 - gtksourceview5
 - libadwaita
 - libpanel
-- libgit2 (this is not really required but you will want it if you want to commit your changes)
 
-they are to be installed, for the moment through: 
-
-## Linux
+## 1. Download VM
 they should be already in the system, otherwise you can install them using your favourite installer.
 
-## MacOS
-homebrew (TBD)
+### Linux 
+You should be ok, buy you may need `libpanel` and `gtksourceview5` from the list of dependencies. If that is the case, install them using you favorite package manager.
 
-## Windows
+### MacOS
 You are a real programmer... why aren't you using linux?
 
-### 1. You need `msys2` subsystem
-### 2. Then install this packages (from the msys2 terminal): 
+Download the prepared VM with dependencies **TODO**
 
-```shell
-pacman -S mingw-w64-clang-x86_64-gtk4 mingw-w64-clang-x86_64-gtksourceview5 mingw-w64-clang-x86_64-libadwaita mingw-w64-clang-x86_64-libpanel mingw-w64-clang-x86_64-libgit2
-``` 
+### Windows
+You are a real programmer... why aren't you using linux?
 
-You **need** to make sure your libraries (usually in `C:\msys2\clang64\bin`) are in the path.
+Download the prepared VM with dependencies **TODO**. 
 
-### 3. A VM *stripped* from external libraries 
-You need it because otherwise the libraries will conflict and everythign will crash.  
-You can download [this one one from the pharo site](https://files.pharo.org/get-files/130/pharo-vm-Windows-x86_64-stable.zip) and remove everything that is not a plugin :)
-
-### 4. Download a usable image
+## 2. Download a usable image
 Right now we are using [Pharo14 build 200](https://files.pharo.org/image/140/Pharo14.0-SNAPSHOT.build.200.sha.c126aa2736.arch.64bit.zip)
 (We will validate new images time to time but since P14 is changing maby underlying things, we will not be moving so much, 
 we want to deal with our bugs -already a lot- not others bugs).
 
-### 4. Install MetaMetacello
+This build is very alpha and there are problems everywhere... in case of the build 200, you want to execute this as first step: 
+
+```Smalltalk
+Object compile: 'inform: aString
+	"Display a message for the user to read and then dismiss."
+	
+	aString isEmptyOrNil
+		ifFalse: [ UIManager default inform: aString ]'.
+``` 
+
+### 3. Install MetaMetacello
 (this is not really *required* but it will make easier the next step ;)
 
 ```smalltalk
@@ -46,12 +47,12 @@ Metacello new
 	load.
 ```
 
-### 5. Install a lot of packages
+### 4. Install a lot of packages
 
 ```smalltalk
-MetaMetacello load: [ :spec | spec
+MetaMetacello load: [ :spec | spec      
 	lockBaselines;
-	baseline: 'UnifiedFFI' with: [ spec
+	baseline: 'UnifiedFFI' with: [ spec 
 		repository: 'github://pharo-cig/UnifiedFFI:main';
 		className: #BaselineOfUnifiedFFIFull ];
 	baseline: 'StringInterpolation' with: [ spec 
@@ -77,6 +78,7 @@ MetaMetacello load: [ :spec | spec
 	baseline: 'Stargate' with: [ spec repository: 'github://estebanlm/stargate:main' ];
 	baseline: 'Linden' with: [ spec repository: 'git:git@forge.smallworks.eu:estebanlm/linden.git:main' ];
 	baseline: 'Adwaita' with: [ spec repository: 'github://estebanlm/Spec-LibAdwaita:main' ];
+	baseline: 'SourceEditor' with: [ spec repository: 'git:git@forge.smallworks.eu:pharo/SourceEditor.git:main' ];
 	baseline: 'Panel' with: [ spec repository: 'github://estebanlm/Spec-LibPanel:main' ];
 	baseline: 'DockBrowser' with: [ spec 
 		repository: 'git:git@forge.smallworks.eu:pharo/DockBrowser.git:dev';
