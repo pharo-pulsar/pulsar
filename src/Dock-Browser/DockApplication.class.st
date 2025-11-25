@@ -286,6 +286,12 @@ DockApplication >> newSystemTools [
 		yourself
 ]
 
+{ #category : 'accessing' }
+DockApplication >> osPlatform [
+
+	^ OSPlatform current
+]
+
 { #category : 'initialization' }
 DockApplication >> prepareAsStandaloneApplication [
 	
