@@ -159,6 +159,7 @@ DockDebugger >> windowClosed [
 
 { #category : 'event handling' }
 DockDebugger >> windowWillClose [
-	self application windowWillClose: self.
-	^ true
+
+	^ self application windowWillClose: self.
+	
 ]

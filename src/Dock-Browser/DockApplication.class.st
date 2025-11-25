@@ -445,9 +445,55 @@ DockApplication >> useGtkLight [
 ]
 
 { #category : 'accessing' }
-DockApplication >> windowWillClose: aWindow [
+DockApplication >> windowWillClose: aDockWindow [
+	"check if the dockbrowser can be safely saved.
+	 WARNING: as this method execution has to happen inside a gtk callback , we do not have 
+	 debugger fallback if something is wrong. Take care!"
+	| anyEditorDirty canClose modifiedEditors messages lostChanges |
+	
+	canClose := false.
 	
 	"I'm keeping a snapshot of last open window :)"
-	self windows size > 1 ifTrue: [ ^ self ].
-	self takeSnapshot
+	self windows size = 1 
+		ifTrue: [ self takeSnapshot ].
+	
+	[ 
+		messages := OrderedCollection new.
+	
+		"check if editors are modified"
+		modifiedEditors := OrderedCollection new.
+		anyEditorDirty:= false.
+		aDockWindow editors reversed do: [ :each | 
+			| ann  |
+			ann := SpWindowWillClose new.
+			ann window: each.
+			each presenter announce: ann.
+			ann canClose ifFalse: [
+				anyEditorDirty := true. 
+				modifiedEditors add: each title ] ]. 
+		anyEditorDirty ifTrue: [
+			messages add: ('There are modified ditors: ', (', ' join: modifiedEditors)) ].
+		
+		self flag: #TODO. "check last snapshot and see if there are changes to save. This line is not working 
+		(it works just at the startup actions, hence is not useful for us)"
+		lostChanges  := EpLostChangesDetector new hasLostChanges.
+		lostChanges ifTrue: [
+			messages add: 'The image has unsaved changes.' ].
+		
+		canClose := (anyEditorDirty or: [ lostChanges ])
+			ifTrue: [
+				self newConfirm 
+					title: 'Quit Pharo?';
+					message: (
+						(self osPlatform lineEnding join: messages),
+						self osPlatform lineEnding, 'Quit anyway?');
+					cancelLabel: 'Stay';
+					acceptLabel: 'Quit';
+					openModalWithParent: aDockWindow ]
+			ifFalse: [
+				true ] ]
+		on: Error 
+		fork: [ :e | e pass ].
+
+	^ canClose
 ]

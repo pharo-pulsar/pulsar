@@ -394,7 +394,8 @@ DockEditor >> registerToSystemEvents [
 	self announcer
 		when: DockThemeChanged send: #eventThemeChanged: to: self;
 		when: DockSyntaxHighlightThemeChanged send: #eventSyntaxHighlightThemeChanged: to: self;
-		when: TestCaseEnded send: #eventTestCaseEnded: to: self
+		when: TestCaseEnded send: #eventTestCaseEnded: to: self;
+		when: SpWindowWillClose send: #windowWillClose: to: self
 ]
 
 { #category : 'accessing - overlay' }
@@ -523,4 +524,12 @@ DockEditor >> updatingWhile: aBlock [
 DockEditor >> windowActions [
 		
 	^ self actions actionsFor: #extraWindow
+]
+
+{ #category : 'accessing' }
+DockEditor >> windowWillClose: ann [
+
+	self isDirty ifFalse: [ ^ self ].
+	
+	ann denyClose
 ]

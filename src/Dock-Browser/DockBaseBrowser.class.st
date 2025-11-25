@@ -102,6 +102,10 @@ DockBaseBrowser >> doShowSpotterForWindows [
 
 { #category : 'accessing' }
 DockBaseBrowser >> editors [
+	"from my list of presenters, answer those who are containing an editor.
+	 Notice that the answer will be a list os SpPanelWidgetPresenter, containing 
+	 the editor presenter, no the presenter itself."
+
 
 	^ self mutex critical: [ 
 		super presenters select: [ :each | each dockArea = SpPanelArea center ] ]
@@ -288,4 +292,10 @@ DockBaseBrowser >> windowClosed [
 	self presenters do: [ :each | each windowClosed ].
 	announcer stopScheduler.
 	super windowClosed
+]
+
+{ #category : 'event handling' }
+DockBaseBrowser >> windowWillClose [ 
+
+	^ true
 ]

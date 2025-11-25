@@ -414,15 +414,6 @@ DockBrowser >> updateTitle [
 
 { #category : 'event handling' }
 DockBrowser >> windowWillClose [
-	| ann canClose |
 
-	ann := SpWindowWillClose new.
-	canClose := self editors reversed allSatisfy: [ :each | 
-		ann window: each.
-		each announce: ann.
-		ann canClose ].
-		
-	self application windowWillClose: self.
-		
-	^ canClose
+	^ self application windowWillClose: self
 ]
