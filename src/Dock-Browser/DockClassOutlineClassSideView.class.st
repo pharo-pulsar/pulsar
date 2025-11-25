@@ -57,6 +57,27 @@ DockClassOutlineClassSideView >> defaultLayout [
 		yourself
 ]
 
+{ #category : 'private - actions' }
+DockClassOutlineClassSideView >> doAddSharedVariableCommand: aCommand [
+	| variableName dialog result |
+	
+	dialog := self instantiate: DockRequestPresenter.
+	dialog label: 'Shared Variable Name'.
+	dialog acceptLabel: 'Add'.
+	
+	dialog asPopover
+		relativeTo: aCommand presenter;
+		popupModalAndWait.
+	dialog isOk ifFalse: [ ^ self ].
+	variableName := dialog text.
+	
+	self model asClassModel addSharedVariableNamed: variableName.
+	self updateSharedVariables.
+	sharedVariablesPresenter selectItem: (variablesListPresenter items 
+		detect: [ :each | each name = variableName ]).
+	self owner notifyEntityChanged: self model asClassModel
+]
+
 { #category : 'initialization' }
 DockClassOutlineClassSideView >> initializePresenters [
 
@@ -100,7 +121,7 @@ DockClassOutlineClassSideView >> sharedVariablesToolbarActions [
 			name: 'Add';
 			description: 'Add a new shared variable';
 			iconName: #add;
-			action: [ self doAddSharedVariable ] ]	
+			action: [ :aContext | self doAddSharedVariableCommand: action ] ]	
 ]
 
 { #category : 'initialization' }
@@ -112,6 +133,18 @@ DockClassOutlineClassSideView >> updatePresenter [
 		self updatingWhile: [ 
 			super updatePresenter.
 			sharedVariablesPresenter items: self collectSharedVariables ] ]
+]
+
+{ #category : 'updating' }
+DockClassOutlineClassSideView >> updateSharedVariables [
+	| sharedVariables |
+
+	sharedVariables := self collectSharedVariables.
+	sharedVariablesPresenter updateItemsKeepingSelection: self collectSharedVariables.
+	(sharedVariablesPresenter selectedItems isEmpty and: [ sharedVariables isNotEmpty ]) 
+		ifTrue: [ sharedVariablesPresenter selectFirst ].
+		
+	"activeSharedVariables := variablesListPresenter selectedItems"
 ]
 
 { #category : 'visiting' }

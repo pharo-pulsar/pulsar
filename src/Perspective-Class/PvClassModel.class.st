@@ -52,6 +52,12 @@ PvClassModel >> addProtocolNamed: aName [
 ]
 
 { #category : 'updating' }
+PvClassModel >> addSharedVariableNamed: aName [
+
+	self entity addClassVarNamed: aName
+]
+
+{ #category : 'updating' }
 PvClassModel >> addVariableNamed: aName type: aClass [
 
 	self entity addSlot: (aClass named: aName asSymbol)

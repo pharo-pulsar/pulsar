@@ -277,6 +277,7 @@ DockClassOutlineSideView >> doRemoveSelectedProtocol [
 { #category : 'private - actions' }
 DockClassOutlineSideView >> doRenameProtocolCommand: anAction [
 	| dialog protocolName selectedProtocolModel |
+
 	selectedProtocolModel := protocolListPresenter selectedItem.
 	selectedProtocolModel ifNil: [ ^ self ].
 	self flag: #TODO. "Validate can be renamed (e.g. if is virtual, but this should be 
