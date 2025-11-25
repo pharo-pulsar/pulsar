@@ -36,7 +36,7 @@ DockContextEditor >> eventContextChanged: anAnnouncement [
 
 { #category : 'private' }
 DockContextEditor >> grabDebugToolbar [
-	| lastOwner debugToolbarPresenter |
+	| debugToolbarPresenter |
 	
 	"the idea of this is that if we have different context editors, we have just one debug toolbar, 
 	 that will be moving between the active ones...
@@ -49,8 +49,7 @@ DockContextEditor >> grabDebugToolbar [
 	debugToolbarPresenter := self withWindowDo: [ :w | w debugToolbarPresenter ].
 	debugToolbarPresenter model: self model.
 
-	lastOwner := debugToolbarPresenter lastOwner.
-	lastOwner == self ifTrue: [ ^ self ].
+	debugToolbarPresenter lastOwner == self ifTrue: [ ^ self ].
 
 	"(lastOwner isNotNil and: [ lastOwner ~= self ]) ifTrue: [ 
 		logger trace: lastOwner.
