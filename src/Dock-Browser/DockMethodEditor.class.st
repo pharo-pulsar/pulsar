@@ -200,11 +200,13 @@ DockMethodEditor >> updateEditor [
 DockMethodEditor >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
+	
 	self application defer: [
 		super updatePresenter.
 		self updatingWhile: [  
 			self updateProtocol.
-			self updateEditor ] ]
+			self updateEditor.
+			self updateSearch ] ]
 ]
 
 { #category : 'initialization' }

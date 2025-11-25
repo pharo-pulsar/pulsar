@@ -180,6 +180,7 @@ DockClassEditor >> updateEditor [
 
 { #category : 'initialization' }
 DockClassEditor >> updatePresenter [
+
 	commentPresenter 
 		styleScheme: self application styleScheme;
 		language: 'markdown'.
@@ -189,13 +190,7 @@ DockClassEditor >> updatePresenter [
 	
 	super updatePresenter.
 	
-	
 	self updateComment.
 	self updateEditor.
-	
-	self flag: #REVIEW. "select template tab by defdault (as comment should be introduced later)?"
-	self flag: #TODO. "I need a better way than to wait until it is built. I maybe need to implement #withAdapterPerformOrDefer: in the tab layout"
-	"self model isNew ifTrue: [ 
-		self whenBuiltDo: [ 
-			self layout selectIndex: 2 ] ]"
+	self updateSearch
 ]

@@ -503,6 +503,15 @@ DockEditor >> updatePresenter [
 ]
 
 { #category : 'initialization' }
+DockEditor >> updateSearch [
+	"IMPORTANT: this update needs to happen *after* updating the editor 
+	 (because it acts on the changed text of it)"
+	
+	searchBarPresenter isVisible 
+		ifTrue: [ searchBarPresenter updatePresenter ]
+]
+
+{ #category : 'initialization' }
 DockEditor >> updateTitle [
 
 	self nearWindowLike ifNotNil: [ :aWindow |

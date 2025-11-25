@@ -26,6 +26,9 @@ Class {
 		'connected',
 		'searchCountPresenter'
 	],
+	#classVars : [
+		'LastSearch'
+	],
 	#category : 'Dock-Browser-View-Base',
 	#package : 'Dock-Browser',
 	#tag : 'View-Base'
