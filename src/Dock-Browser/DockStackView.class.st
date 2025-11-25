@@ -25,19 +25,19 @@ DockStackView class >> defineActionsOn: aBuilder [
 	<dockActions>
 
 	aBuilder 
-		addGroup: #editorStack with: [ :aGroup | aGroup
+		addGroup: #editorStack with: [ :group | group
 			priority: 10;
 			beDisplayedAsGroup;
-			addActionWith: [ :anAction | anAction
+			addActionWith: [ :action | action
 				name: 'Close Selected Editors';
 				description: 'Close selected editors';
 				iconName: 'close';
 				shortcutKey: $x mod1;
 				action: [ :aContext | aContext doCloseSelectedEditors ] ] ];
-		addGroup: #editorStackGeneral with: [ :aGroup | aGroup
+		addGroup: #editorStackGeneral with: [ :group | group
 			priority: 1000;
 			beDisplayedAsGroup;
-			addActionWith: [ :anAction | anAction
+			addActionWith: [ :action | action
 				name: 'Close All';
 				description: 'Close all editors';
 				iconName: 'closeAll';

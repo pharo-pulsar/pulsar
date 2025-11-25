@@ -33,26 +33,26 @@ DockPlayground class >> defaultTitle [
 DockPlayground class >> defineActionsOn: aBuilder [
 	<dockActions>
 
-	aBuilder addGroup: #actions with: [ :aGroup | aGroup 
-		addActionWith: [ :anAction | anAction
+	aBuilder addGroup: #actions with: [ :group | group 
+		addActionWith: [ :action | action
 				priority: 1;
 				name: 'New playground';
 				description: 'Create a new playground';
 				iconName: 'add';
 				action: [ :aContext | aContext doNewPlayground ] ];
-		addActionWith: [ :anAction | anAction
+		addActionWith: [ :action | action
 				priority: 2;
 				name: 'Load page';
 				description: 'Load a playground page';
 				iconName: 'load';
 				action: [ :aContext | aContext doLoadPage ] ];	
-		addActionWith: [ :anAction | anAction
+		addActionWith: [ :action | action
 				priority: 3;
 				name: 'Versions';
 				description: 'Browse versions of current playground page';
 				iconName: 'versions';
 				action: [ :aContext :aCommand | aContext doBrowseVersionsCommand: aCommand ] ];
-		addActionWith: [ :anAction | anAction
+		addActionWith: [ :action | action
 				priority: 4;
 				name: 'Variables';
 				description: 'Browse variables (bindings) defined in current playground';

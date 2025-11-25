@@ -22,10 +22,10 @@ DockRepositoriesView class >> defineActionsOn: aBuilder [
 	<dockActions>
 
 	aBuilder 
-		addGroup: #actions with: [ :aGroup | aGroup 
+		addGroup: #actions with: [ :group | group 
 			priority: 10;
 			beDisplayedAsGroup;
-			addActionWith: [ :anItem | anItem
+			addActionWith: [ :action | action
 				priority: 1;
 				name: 'Add repository';
 				description: 'Add a new repository';

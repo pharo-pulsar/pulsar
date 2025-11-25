@@ -17,19 +17,19 @@ Class {
 DockProjectEditor class >> defineActionsOn: aBuilder [
 	<dockActions>
 	
-	aBuilder addGroup: #new with: [ :aGroup | aGroup 
+	aBuilder addGroup: #new with: [ :group | group 
 		priority: 20;
 		name: 'New';
 		beDisplayedAsSubMenu;
-		addActionWith: [ :anAction | anAction
+		addActionWith: [ :action | action
 			name: 'Add package';
 			description: 'Add a package';
 			action: [ :aContext | aContext doAddPackage ] ];
-		addActionWith: [ :anAction | anAction
+		addActionWith: [ :action | action
 			name: 'Add project';
 			description: 'Add a dependent project';
 			action: [ :aContext | aContext doAddProject ] ];	
-		addActionWith: [ :anAction | anAction
+		addActionWith: [ :action | action
 			name: 'Add group';
 			description: 'Add a group';
 			action: [ :aContext | aContext doAddGroup ] ] ]

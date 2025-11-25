@@ -16,7 +16,7 @@ Class {
 DockBaseBrowser class >> definePanelActionsOn: aBuilder [
 	<dockActions>
 
-	aBuilder addGroup: #panels with: [ :aGroup | aGroup 
+	aBuilder addGroup: #panels with: [ :group | group 
 		priority: 1000;
 		name: 'Panels';
 		beDisplayedAsSubMenu.
@@ -27,7 +27,7 @@ DockBaseBrowser class >> definePanelActionsOn: aBuilder [
 			{ 'right'. 	SpPanelArea end }.
 			{ 'top'. 	SpPanelArea top }.
 		} withIndexDo: [ :each :index |
-			aGroup addActionWith: [ :anItem | anItem 
+			group addActionWith: [ :action | action 
 				priority: index; 
 				name: 'Toggle panel ', each first;
 				description: 'Show/hide the ', each first, ' panel';

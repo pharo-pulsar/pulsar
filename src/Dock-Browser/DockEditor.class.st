@@ -27,36 +27,36 @@ Class {
 DockEditor class >> defineNavigationActionsOn: aBuilder [
 	<dockActions>
 
-	aBuilder addGroup: #navigation with: [ :aGroup | aGroup 
+	aBuilder addGroup: #navigation with: [ :group | group 
 		priority: 100;
 		name: 'Navigation';
 		beDisplayedAsSubMenu;
-		addActionWith: [ :anAction | anAction 
+		addActionWith: [ :action | action 
 			name: 'Show hierarchy';
 			description: 'Show hierarchy';
 			iconName: #hierarchy; "was #smallHierarchyBrowser... TODO see semantic meaning"
 			shortcutKey: $h mod1; 
-			action: [ :aContext | aContext doShowHierarchy: anAction ] ];
-		addActionWith: [ :anAction | anAction 
+			action: [ :aContext | aContext doShowHierarchy: action ] ];
+		addActionWith: [ :action | action 
 			name: 'Show senders';
 			description: 'Show senders';
 			iconName: #senders;
-			action: [ :aContext | aContext doBrowseSendersCommand: anAction ] ] ]
+			action: [ :aContext | aContext doBrowseSendersCommand: action ] ] ]
 ]
 
 { #category : 'accessing - actions' }
 DockEditor class >> defineWindowActionsOn: aBuilder [
 	<dockActions>
 
-	aBuilder addGroup: #extraWindow with: [ :aGroup | aGroup
+	aBuilder addGroup: #extraWindow with: [ :group | group
 		priority: 1010;
 		name: 'Window';
 		beDisplayedAsSubMenu;
-		addActionWith: [ :anAction | anAction
+		addActionWith: [ :action | action
 			name: 'Maximize';
 			description: 'Maximize current window';
 			action: [ :aContext | aContext withPanelWindowDo: #maximize ] ];		
-		addActionWith: [ :anAction | anAction
+		addActionWith: [ :action | action
 			name: 'Detach as Window';
 			shortcutKey: Character arrowUp alt shift;
 			description: 'Detach this window from the Dock (open a new window)';

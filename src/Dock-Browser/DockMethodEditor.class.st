@@ -16,10 +16,10 @@ Class {
 DockMethodEditor class >> defineActionsOn: aBuilder [
 	<dockActions>
 
-	aBuilder addGroup: #structuring with: [ :aGroup | aGroup 
+	aBuilder addGroup: #structuring with: [ :group | group 
 		priority: -10;
 		beDisplayedAsGroup;
-		addActionWith: [ :anAction | anAction
+		addActionWith: [ :action | action
 			name: 'Classify method';
 			description: 'Change protocol of current method';
 			iconName: 'tag';

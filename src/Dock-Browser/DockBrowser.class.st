@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'projectView',
 		'outlineView',
-		'repositoryView'
+		'repositoryView',
+		'pepe'
 	],
 	#classVars : [
 		'LastWindowSize'
@@ -18,11 +19,11 @@ Class {
 DockBrowser class >> defineImageActionsOn: aBuilder [
 	<dockActions>
 
-	aBuilder addGroup: #image with: [ :aGroup | aGroup 
+	aBuilder addGroup: #image with: [ :group | group 
 		name: 'Image';
 		priority: 2000;
 		beDisplayedAsGroup;
-		addActionWith: [ :anItem | anItem
+		addActionWith: [ :action | action
 			name: 'Save';
 			description: 'Save image';
 			shortcutKey: $s shift mod1;
@@ -40,17 +41,17 @@ DockBrowser class >> defineSpotterActionsOn: aBuilder [
 		name: 'Spotter';
 		priority: 900;
 		beDisplayedAsGroup;
-		addActionWith: [ :anItem | anItem 
+		addActionWith: [ :action | action 
 			name: 'Spotter';
 			description: 'Show spotter for Environment';
 			shortcutKey: KeyboardKey enter shift;
 			action: [ :aContext | aContext doShowSpotterForEnvironment ] ]";
-		addActionWith: [ :anItem | anItem 
+		addActionWith: [ :action | action 
 			name: 'Spotter for Windows';
 			description: 'Show spotter for Windows';
 			shortcutKey: KeyboardKey enter shift mod1;
 			action: [ :aContext | aContext doShowSpotterForWindows ] ];		
-		addActionWith: [ :anItem | anItem 
+		addActionWith: [ :action | action 
 			name: 'Spotter for Commands';
 			description: 'Show spotter for Commands';
 			shortcutKey: KeyboardKey enter shift;
@@ -62,26 +63,26 @@ DockBrowser class >> defineSpotterActionsOn: aBuilder [
 DockBrowser class >> defineToolActionsOn: aBuilder [
 	<dockActions>
 
-	aBuilder addGroup: #tools with: [ :aGroup | aGroup 
+	aBuilder addGroup: #tools with: [ :group | group 
 		priority: 10;
 		name: 'tools';
 		beDisplayedAsGroup;
-		addActionWith: [ :anAction | anAction
+		addActionWith: [ :action | action
 			priority: 100;
 			name: 'New Playground';
 			description: 'Open a new playground in your browser';
 			action: [ :aContext | aContext openPlayground ] ];
-		addActionWith: [ :anAction | anAction 
+		addActionWith: [ :action | action 
 			priority: 200;
 			name: 'Open Process Browser';
 			description: 'Open the Process Browser';
 			action: [ :aContext | aContext spawnNewProcessBrowser ] ];
-		addActionWith: [ :anAction | anAction 
+		addActionWith: [ :action | action 
 			priority: 910;
 			name: 'Open Recent Changes';
 			description: 'Open Recent Changes log';
 			action: [ :aContext | aContext spawnRecentChanges ] ];
-		addActionWith: [ :anAction | anAction
+		addActionWith: [ :action | action
 			priority: 920;
 			name: 'Open Repositories';
 			description: 'Open git repositories';

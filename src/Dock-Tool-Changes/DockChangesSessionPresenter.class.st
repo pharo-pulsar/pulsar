@@ -16,14 +16,14 @@ Class {
 DockChangesSessionPresenter class >> defineActionsOn: aBuilder [
 	<dockActions>
 	
-	aBuilder addGroup: #sessionActions with: [ :aGroup | aGroup 
-		addActionWith: [ :anAction | anAction
+	aBuilder addGroup: #sessionActions with: [ :group | group 
+		addActionWith: [ :action | action
 			name: 'Apply';
 			iconName: 'redo';
 			description: 'Preview the application of selected code changes (open a new window to show the effect of re-applying the changes in current image)';
 			actionEnabled: [ :aContext | aContext canApplyOrRevertChanges ];
 			action: [ :aContext | aContext doApply ] ];
-		addActionWith: [ :anAction | anAction
+		addActionWith: [ :action | action
 			name: 'Revert';
 			iconName: 'undo';
 			description: 'Preview the reversion of selected code changes (open a new window to show the effect of reverting the changes in current image)';

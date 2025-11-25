@@ -27,20 +27,20 @@ DockClassOutlineSideView class >> defineMethodActionsOn: aBuilder [
 	<dockActions>
 	
 	aBuilder 
-		addGroup: #method with: [ :aGroup | aGroup
+		addGroup: #method with: [ :group | group
 			priority: 10;
 			name: 'Method';
 			beDisplayedAsGroup;
-			addActionWith: [ :anAction | anAction 
+			addActionWith: [ :action | action 
 				name: 'New method';
 				description: 'Add a new method to this class';
 				iconName: 'add';
 				action: [ :aContext | aContext doRequestNewMethod ] ] ];
-		addGroup: #methodCritical with: [ :aGroup | aGroup 
+		addGroup: #methodCritical with: [ :group | group 
 			priority: 1000;
 			name: 'DANGER ZONE';
 			beDisplayedAsGroup;
-			addActionWith: [ :anAction | anAction 
+			addActionWith: [ :action | action 
 				name: 'Force remove method';
 				description: 'Remove this method (without cheching for usages)';
 				shortcutKey: $x mod1 shift;
@@ -52,26 +52,26 @@ DockClassOutlineSideView class >> defineProtocolActionsOn: aBuilder [
 	<dockActions>
 	
 	aBuilder 
-		addGroup: #protocol with: [ :aGroup | aGroup 
+		addGroup: #protocol with: [ :group | group 
 			priority: 10;
 			name: 'Protocol';
 			beDisplayedAsGroup;
-			addActionWith: [ :anAction | anAction 
+			addActionWith: [ :action | action 
 				name: 'New protocol';
 				description: 'Add a new protocol to this class';
 				iconName: 'add';
 				shortcutKey: $n mod1;
-				action: [ :aContext | aContext doAddProtocolCommand: anAction ] ];
-			addActionWith: [ :anAction | anAction 
+				action: [ :aContext | aContext doAddProtocolCommand: action ] ];
+			addActionWith: [ :action | action 
 				name: 'Rename';
 				shortcutKey: $r mod1;
 				description: 'Rename protocol';
-				action: [ :aContext | aContext doRenameProtocolCommand: anAction ] ] ];
-		addGroup: #protocolCritical with: [ :aGroup | aGroup
+				action: [ :aContext | aContext doRenameProtocolCommand: action ] ] ];
+		addGroup: #protocolCritical with: [ :group | group
 			priority: 1000;
 			name: 'DANGER ZONE';
 			beDisplayedAsGroup;
-			addActionWith: [ :anAction | anAction 
+			addActionWith: [ :action | action 
 				name: 'Remove protocol';
 				description: 'Remove this protocol and all its methods?';
 				shortcutKey: $x mod1;
@@ -83,20 +83,20 @@ DockClassOutlineSideView class >> defineVariableActionsOn: aBuilder [
 	<dockActions>
 	
 	aBuilder 
-		addGroup: #variable with: [ :aGroup | aGroup
+		addGroup: #variable with: [ :group | group
 			priority: 10;
 			name: 'Variables';
 			beDisplayedAsGroup;
-			addActionWith: [ :anAction | anAction 
+			addActionWith: [ :action | action 
 				name: 'New slot';
 				description: 'Add a new slot to this class';
 				iconName: 'add';
-				action: [ :aContext | aContext doAddVariableCommand: anAction ] ] ];
-		addGroup: #variableCritical with: [ :aGroup | aGroup
+				action: [ :aContext | aContext doAddVariableCommand: action ] ] ];
+		addGroup: #variableCritical with: [ :group | group
 			priority: 1000;
 			name: 'DANGER ZONE';
 			beDisplayedAsGroup;
-			addActionWith: [ :anAction | anAction 
+			addActionWith: [ :action | action 
 				name: 'Remove slot';
 				description: 'Remove this slot';
 				shortcutKey: $x mod1;

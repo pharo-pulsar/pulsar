@@ -30,8 +30,8 @@ DockTranscript class >> defaultTitle [
 DockTranscript class >> defineActionsOn: aBuilder [
 	<dockActions>
 
-	aBuilder addGroup: #transcript with: [ :aGroup | aGroup 
-		addActionWith: [ :anAction | anAction
+	aBuilder addGroup: #transcript with: [ :group | group 
+		addActionWith: [ :action | action
 			name: 'Clear';
 			description: 'Clear transcript';
 			action: [ :aContext | aContext doClearTranscript ] ] ]

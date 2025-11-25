@@ -25,7 +25,7 @@ DockDebuggerInspector class >> defineActionsOn: aBuilder [
 	<dockActions>
 
 	aBuilder 
-		addGroup: #inspectorActions with: [ :aGroup | aGroup 
+		addGroup: #inspectorActions with: [ :group | group 
 			addActionWith: [ :action | action 
 				name: 'Inspect';
 				description: 'Inspect current receiver';

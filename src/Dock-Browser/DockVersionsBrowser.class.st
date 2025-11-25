@@ -19,8 +19,8 @@ DockVersionsBrowser class >> defineActionsOn: aBuilder [
 	<dockActions>
 
 	aBuilder 
-		addGroup: #versionActions with: [ :aGroup | aGroup 
-			addActionWith: [ :anAction | anAction 
+		addGroup: #versionActions with: [ :group | group 
+			addActionWith: [ :action | action 
 				name: 'Revert';
 				description: 'Revert to this version';
 				iconName: 'accept';
