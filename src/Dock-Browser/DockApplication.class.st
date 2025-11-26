@@ -288,6 +288,7 @@ DockApplication >> newSystemTools [
 
 { #category : 'accessing' }
 DockApplication >> osPlatform [
+	"answer current platform (mac, windows or linux)"
 
 	^ OSPlatform current
 ]
@@ -454,10 +455,11 @@ DockApplication >> windowWillClose: aDockWindow [
 	canClose := false.
 	
 	"I'm keeping a snapshot of last open window :)"
-	self windows size = 1 
-		ifTrue: [ self takeSnapshot ].
 	
 	[ 
+		self windows size = 1 
+			ifTrue: [ self takeSnapshot ].
+
 		messages := OrderedCollection new.
 	
 		"check if editors are modified"
@@ -469,10 +471,10 @@ DockApplication >> windowWillClose: aDockWindow [
 			ann window: each.
 			each presenter announce: ann.
 			ann canClose ifFalse: [
-				anyEditorDirty := true. 
+				anyEditorDirty := true.  
 				modifiedEditors add: each title ] ]. 
 		anyEditorDirty ifTrue: [
-			messages add: ('There are modified ditors: ', (', ' join: modifiedEditors)) ].
+			messages add: ('There are modified editors: ', (String cr join: modifiedEditors)) ].
 		
 		self flag: #TODO. "check last snapshot and see if there are changes to save. This line is not working 
 		(it works just at the startup actions, hence is not useful for us)"
@@ -480,13 +482,14 @@ DockApplication >> windowWillClose: aDockWindow [
 		lostChanges ifTrue: [
 			messages add: 'The image has unsaved changes.' ].
 		
+		"if not all exit conditions are satisfied, open a dialog"
 		canClose := (anyEditorDirty or: [ lostChanges ])
 			ifTrue: [
 				self newConfirm 
 					title: 'Quit Pharo?';
 					message: (
-						(self osPlatform lineEnding join: messages),
-						self osPlatform lineEnding, 'Quit anyway?');
+						(String cr join: messages),
+						String cr, 'Quit anyway?');
 					cancelLabel: 'Stay';
 					acceptLabel: 'Quit';
 					openModalWithParent: aDockWindow ]
