@@ -111,7 +111,7 @@ DockClassOutlineSideView >> actions [
 
 { #category : 'private - preview' }
 DockClassOutlineSideView >> activateMethodPreviewPopover [
-
+	
 	(self isPreviewPopoverActive 
 		and: [ previewPopover isNotNil 
 		and: [ previewPopover isVisible ] ]) 
@@ -321,10 +321,12 @@ DockClassOutlineSideView >> entitySelected: anEntity [
 
 	anEntity ifNil: [ ^ self ].
 
-	self maybePopupPreview.
+	logger trace: anEntity.
 
+	self maybePopupPreview.
+  
 	self owner schedule: [
-		self owner notificationCenter announce: (DockModelSelected newValue: anEntity) ]
+		self owner notificationCenter announce: anEntity newSelectionAnnouncement ]
 ]
 
 { #category : 'private' }
@@ -345,6 +347,12 @@ DockClassOutlineSideView >> filterMethodsByVariable: aVariableModel [
 DockClassOutlineSideView >> includesModel: aModel [
 
 	^ listPresenter items includes: aModel
+]
+
+{ #category : 'testing' }
+DockClassOutlineSideView >> includesModelSuchAs: aBlock [
+
+	^ listPresenter items anySatisfy: aBlock 
 ]
 
 { #category : 'initialization' }
@@ -478,6 +486,12 @@ DockClassOutlineSideView >> newMethodModelForNewMethod [
 	self subclassResponsibility
 ]
 
+{ #category : 'private - announcing' }
+DockClassOutlineSideView >> notifyEntityRemoved: anEntity [
+
+	self owner notifyEntityRemoved: anEntity
+]
+
 { #category : 'private - preview' }
 DockClassOutlineSideView >> popupPreview [
 	| selectedModel editorPresenter |
@@ -518,7 +532,10 @@ DockClassOutlineSideView >> resetInteractionStatus [
 { #category : 'initialization' }
 DockClassOutlineSideView >> updateMethods [
 	| items |
+	
 	updating ifTrue: [ ^ self ].
+
+	logger trace.
 
 	items := activeProtocols 
 		flatCollect: [ :each | self methodsForProtocol: each ]
@@ -533,6 +550,8 @@ DockClassOutlineSideView >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	
+	logger trace.
+	
 	"I defer to make the update happen at one in UI thread (it looks smoother)"
 	self application defer: [
 		"prevent update methods until is its time"
@@ -546,6 +565,8 @@ DockClassOutlineSideView >> updatePresenter [
 { #category : 'initialization' }
 DockClassOutlineSideView >> updateProtocols [
 
+	logger trace.
+	
 	protocolListPresenter updateItemsKeepingSelection: self collectProtocols.
 	protocolListPresenter selectedItems
 		ifEmpty: [ protocolListPresenter selectFirst ].
@@ -554,6 +575,8 @@ DockClassOutlineSideView >> updateProtocols [
 
 { #category : 'initialization' }
 DockClassOutlineSideView >> updateVariables [
+
+	logger trace. 
 
 	variablesListPresenter updateItemsKeepingSelection: self collectVariables.
 	variablesListPresenter selectedItems
@@ -580,17 +603,39 @@ DockClassOutlineSideView >> visitClassModel: aModel [
 
 { #category : 'visiting' }
 DockClassOutlineSideView >> visitMethodModel: aModel [
-	| protocolModel |
+	"update the list after a model changes. 
+	 this should not trigger new events."
+	| protocolModel isSameModel |
+		
+	logger trace: aModel.
+
+	"look for the method (but check for isSameAs:, as the method can be changed and then in 
+	 practice is another method). This is just a guard, in general is not needed"	 
+	listPresenter items
+		detect: [ :each | each isSameAs: aModel ] 
+		ifFound: [ :oldModel |
+			logger trace: oldModel = aModel.
+			oldModel = aModel ifFalse: [
+				listPresenter items 
+					replaceAll: oldModel 
+					with: aModel ] ].
+
+	logger trace: listPresenter selectedItem.
 
 	protocolModel := aModel protocolModel.
 	"update protocols in case I have a new one or my current editing 
 	 method is not included in the method list."
 	((protocolListPresenter items includes: protocolModel)
-		and: [ listPresenter items includes: aModel ])
+		and: [ (listPresenter items includes: aModel) ])
 		"ifTrue: [ self updateMethods ]"
 		ifFalse: [ self updateProtocols ].
-	
-	listPresenter
-		selectItem: aModel
-		scrollToSelection: true
+	 
+	"need to reset the selection first otherwise the list will not be updated 
+	 (and I need it to be)"
+	self application defer: [
+		listPresenter disableActivationDuring: [
+			listPresenter unselectAll.
+			listPresenter
+				selectItem: aModel
+				scrollToSelection: true ] ]
 ]

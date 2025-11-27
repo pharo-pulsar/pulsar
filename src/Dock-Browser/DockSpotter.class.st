@@ -227,6 +227,13 @@ DockSpotter >> newResultList [
 		yourself
 ]
 
+{ #category : 'private - announcing' }
+DockSpotter >> notifyActivateEntity: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+	self notificationCenter announce: anEntity realModel newActivationAnnouncement
+]
+
 { #category : 'private' }
 DockSpotter >> processSearch [
 	

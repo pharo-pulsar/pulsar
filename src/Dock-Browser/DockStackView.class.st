@@ -200,7 +200,8 @@ DockStackView >> mutex [
 DockStackView >> notifySelectEntity: aCollection [
 
 	aCollection ifEmpty: [ ^ self ].
-	super notifySelectEntity: aCollection first
+	self notificationCenter 
+		announce: aCollection first newSelectionAnnouncement
 ]
 
 { #category : 'initialization' }

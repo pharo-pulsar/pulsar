@@ -356,10 +356,11 @@ DockEditor >> notifyEditorActivated [
 	self notificationCenter announce: (DockEditorActivated newValue: self)
 ]
 
-{ #category : 'initialization' }
-DockEditor >> notifyEditorClosed [
+{ #category : 'private - announcing' }
+DockEditor >> notifyEntityChanged: anEntity [
 
-	self notificationCenter announce: (DockEditorClosed newValue: self model)
+	anEntity ifNil: [ ^ self ].
+	self notificationCenter announce: (DockModelChanged newValue: anEntity)
 ]
 
 { #category : 'private' }

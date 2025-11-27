@@ -4,9 +4,9 @@ Class {
 	#instVars : [
 		'owner'
 	],
-	#category : 'Dock-Browser-View-Project',
+	#category : 'Dock-Browser-Base',
 	#package : 'Dock-Browser',
-	#tag : 'View-Project'
+	#tag : 'Base'
 }
 
 { #category : 'instance creation' }
@@ -43,6 +43,10 @@ DockModelVisitor >> visitClassModel: aModel [
 { #category : 'visiting' }
 DockModelVisitor >> visitMethodModel: aModel [
 
+]
+
+{ #category : 'visiting' }
+DockModelVisitor >> visitModel: aModel [
 ]
 
 { #category : 'visiting' }

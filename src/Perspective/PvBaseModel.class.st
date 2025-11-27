@@ -1,6 +1,8 @@
 Class {
 	#name : 'PvBaseModel',
 	#superclass : 'Object',
+	#traits : 'DockTModel',
+	#classTraits : 'DockTModel classTrait',
 	#instVars : [
 		'entity',
 		'environmentModel',

@@ -87,13 +87,18 @@ DockClassOutlineView >> eventMethodChanged: aMethodAnnouncement [
 { #category : 'events' }
 DockClassOutlineView >> eventModelChanged: anAnnouncement [
 	| changedModel  outlineClassModel |
-
+	
 	changedModel := anAnnouncement value.
+	
+	logger trace: changedModel.
+	
 	outlineClassModel := changedModel asOutlineClassModel.
+	
 	(self model = outlineClassModel) ifFalse: [ 
 		anAnnouncement oldEntity isNew 
 			ifTrue: [ self model: outlineClassModel ].
 		^ self ].
+		
 	self updatePresenter.
 	changedModel accept: self
 ]
@@ -139,6 +144,27 @@ DockClassOutlineView >> instanceSidePresenter [
 	^ instanceSidePresenter
 ]
 
+{ #category : 'private - announcing' }
+DockClassOutlineView >> notifyActivateEntity: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+	self notificationCenter announce: anEntity realModel newActivationAnnouncement
+]
+
+{ #category : 'private - announcing' }
+DockClassOutlineView >> notifyEntityChanged: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+	self notificationCenter announce: (DockModelChanged newValue: anEntity)
+]
+
+{ #category : 'private - announcing' }
+DockClassOutlineView >> notifyEntityRemoved: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+	self notificationCenter announce: (DockModelRemoved newValue: anEntity)
+]
+
 { #category : 'initialization' }
 DockClassOutlineView >> registerToEvents [
 	
@@ -173,6 +199,9 @@ DockClassOutlineView >> tabActivated: aPresenter [
 
 { #category : 'initialization' }
 DockClassOutlineView >> updatePresenter [
+
+	logger trace.
+
 	self withClassSidesDo: [ :each | 
 		each model: self model ].
 	self updateTitle
@@ -187,13 +216,17 @@ DockClassOutlineView >> updateTitle [
 
 { #category : 'events' }
 DockClassOutlineView >> visitClassModel: aModel [
-
+	
+	logger trace: aModel.
+	
 	self withClassSidesDo: [ :each | 
 		each visitClassModel: aModel ]
 ]
 
 { #category : 'events' }
 DockClassOutlineView >> visitMethodModel: aModel [
+
+	logger trace: aModel.
 
 	self withClassSidesDo: [ :each |
 		(each includesModel: aModel) 

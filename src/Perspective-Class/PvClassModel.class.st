@@ -304,6 +304,12 @@ PvClassModel >> saveComment: aString [
 ]
 
 { #category : 'accessing' }
+PvClassModel >> selectionAnnouncementClass [
+
+	^ DockClassModelSelected
+]
+
+{ #category : 'accessing' }
 PvClassModel >> shortName [
 	
 	^ self name contractTo: self class shortSize

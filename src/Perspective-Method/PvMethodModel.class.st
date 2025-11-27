@@ -247,6 +247,13 @@ PvMethodModel >> isOutlineClassEntity [
 ]
 
 { #category : 'testing' }
+PvMethodModel >> isSameAs: aMethodModel [
+
+	^ self methodClass = aMethodModel methodClass 
+		and: [ self selector = aMethodModel selector ]
+]
+
+{ #category : 'testing' }
 PvMethodModel >> isTestError [
 	"this assumes the method is a test method"
 
@@ -326,6 +333,13 @@ PvMethodModel >> prepareForSnapshot [
 	actionDecorators := nil
 ]
 
+{ #category : 'printing' }
+PvMethodModel >> printOn: stream [ 
+
+	super printOn: stream.
+	stream << '(' << self fullName << ')'
+]
+
 { #category : 'accessing' }
 PvMethodModel >> protocol [
 
@@ -382,6 +396,12 @@ PvMethodModel >> runTestAnnouncingTo: anAnnouncer [
 	[ testSuite debug ]
 	ensure: [ 
 		testSuite testSuiteAnnouncer unsubscribe: anAnnouncer ]
+]
+
+{ #category : 'accessing' }
+PvMethodModel >> selectionAnnouncementClass [
+
+	^ DockMethodModelSelected
 ]
 
 { #category : 'accessing' }

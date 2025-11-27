@@ -170,13 +170,10 @@ DockMethodEditor >> eventModelRemoved: anAnnouncememnt [
 
 { #category : 'events' }
 DockMethodEditor >> eventModelSelected: ann [
-	| realModel |
 	
 	linkedToSelection ifFalse: [ ^ self ].
-	realModel := ann value realModel.
-	realModel isMethodModel ifFalse: [ ^ self ].
 	
-	self model: realModel
+	self model: ann value
 ]
 
 { #category : 'events' }
@@ -224,6 +221,13 @@ DockMethodEditor >> initializePresenters [
 	self addStyle: 'dockMethodEditor'
 ]
 
+{ #category : 'private - announcing' }
+DockMethodEditor >> notifyActivateEntity: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+	self notificationCenter announce: anEntity newActivationAnnouncement
+]
+
 { #category : 'private' }
 DockMethodEditor >> originalContent [
 
@@ -236,7 +240,7 @@ DockMethodEditor >> registerToEvents [
 	super registerToEvents.
 	
 	self announcer 
-		when: DockModelSelected 
+		when: DockMethodModelSelected 
 		send: #eventModelSelected: 
 		to: self
 ]

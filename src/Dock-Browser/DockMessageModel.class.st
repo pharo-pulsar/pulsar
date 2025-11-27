@@ -1,8 +1,8 @@
 Class {
 	#name : 'DockMessageModel',
 	#superclass : 'Object',
-	#traits : 'DockTEditable',
-	#classTraits : 'DockTEditable classTrait',
+	#traits : 'DockTModel + DockTEditable',
+	#classTraits : 'DockTModel classTrait + DockTEditable classTrait',
 	#instVars : [
 		'title',
 		'methods',

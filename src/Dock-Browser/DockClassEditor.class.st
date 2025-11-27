@@ -26,7 +26,7 @@ DockClassEditor class >> defineActionsOn: aBuilder [
 			beDisplayedAsGroup;
 			addActionWith: [ :action | action 
 				name: 'Toggle link';
-				description: 'Toggle method selection link';
+				description: 'Toggle class selection link';
 				iconName: 'link';
 				action: [ :aContext | aContext doToggleSelectionLinkCommand: action ] ] ]
 ]
@@ -132,13 +132,10 @@ DockClassEditor >> eventModelRemoved: anAnnouncememnt [
 
 { #category : 'events' }
 DockClassEditor >> eventModelSelected: ann [
-	| realModel |
 	
 	linkedToSelection ifFalse: [ ^ self ].
-	realModel := ann value realModel.
-	realModel isClassModel ifFalse: [ ^ self ].
 	
-	self model: realModel
+	self model: ann value
 ]
 
 { #category : 'events' }
@@ -220,7 +217,7 @@ DockClassEditor >> registerToEvents [
 	
 		
 	self announcer 
-		when: DockModelSelected 
+		when: DockClassModelSelected 
 		send: #eventModelSelected: 
 		to: self
 ]

@@ -401,6 +401,20 @@ DockProjectView >> maybeOpenFlyView [
 	self halt
 ]
 
+{ #category : 'private - announcing' }
+DockProjectView >> notifyActivateEntity: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+	super notifyActivateEntity: anEntity realModel
+]
+
+{ #category : 'private - announcing' }
+DockProjectView >> notifySelectEntity: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+	self notificationCenter announce: anEntity realModel newSelectionAnnouncement
+]
+
 { #category : 'accessing' }
 DockProjectView >> openedProjects [
 
