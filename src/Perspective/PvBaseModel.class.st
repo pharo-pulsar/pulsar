@@ -146,7 +146,19 @@ PvBaseModel >> includesClassModel [
 ]
 
 { #category : 'testing' }
+PvBaseModel >> isClassModel [
+
+	^ false
+]
+
+{ #category : 'testing' }
 PvBaseModel >> isManagedAndModified [
+
+	^ false
+]
+
+{ #category : 'testing' }
+PvBaseModel >> isMethodModel [
 
 	^ false
 ]
@@ -209,13 +221,6 @@ PvBaseModel >> parentModel [
 PvBaseModel >> parentModel: aParentlModel [
 
 	parentModel := aParentlModel
-]
-
-{ #category : 'as yet unclassified' }
-PvBaseModel >> parentModels [
-
-	self parentModel ifNil: [ ^ #() ]. 
-	^ self parentModel parentModels, { self parentModel }
 ]
 
 { #category : 'private' }

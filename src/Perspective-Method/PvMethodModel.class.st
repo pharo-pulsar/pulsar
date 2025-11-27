@@ -229,6 +229,12 @@ PvMethodModel >> isLargeHierarchy [
 ]
 
 { #category : 'testing' }
+PvMethodModel >> isMethodModel [
+
+	^ true
+]
+
+{ #category : 'testing' }
 PvMethodModel >> isNew [
 
 	^ false

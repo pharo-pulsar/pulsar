@@ -345,7 +345,8 @@ tab .tab-title label { font-size: 0.9em; }
 .dockProtocolRow label.unclassified { color: red; }
 .dockStack label.count { padding-right: 5px; }
 .dockToolbar { margin: 0px; padding: 0px; }
-
+/* Editors */
+.dockEditorLinked { border-width: 1px; border-style: solid; border-color: @accent_bg_color; }
 .dockDirtyMarker button { padding: 2px; }
 .dockDirtyMarker .cancel { background-color: var(--button-bg-cancel-mark); }
 .dockDirtyMarker .accept { background-color: var(--button-bg-accept-mark); }

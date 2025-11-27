@@ -35,6 +35,14 @@ DockContextEditor >> eventContextChanged: anAnnouncement [
 ]
 
 { #category : 'private' }
+DockContextEditor >> extraContentActions [
+
+	"not having for the moment, and I do not want to 'link' context editors... which are 
+	 already linked to the stack"
+	^ #()
+]
+
+{ #category : 'private' }
 DockContextEditor >> grabDebugToolbar [
 	| lastOwner debugToolbarPresenter |
 	

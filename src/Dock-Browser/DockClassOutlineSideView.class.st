@@ -144,9 +144,9 @@ DockClassOutlineSideView >> connectPresenters [
 	protocolListPresenter 
 		transmitDo: [ :aCollection | self filterMethodsByProtocol: aCollection ].
 	listPresenter outputSelectionPort
-		transmitDo: [ :anEntry | self maybePopupPreview ].
+		transmitDo: [ :anEntity | self entitySelected: anEntity ].
 	listPresenter outputActivationPort 
-		transmitDo: [ :anEntity | self entitySelected: anEntity ]
+		transmitDo: [ :anEntity | self entityActivated: anEntity ]
 ]
 
 { #category : 'private - preview' }
@@ -188,12 +188,12 @@ DockClassOutlineSideView >> defaultLayout [
 
 { #category : 'private - preview' }
 DockClassOutlineSideView >> dismissPreview [
+	logger trace.
 
 	previewPopover ifNil: [ ^ self ].
 	
 	previewPopover dismiss.
 	previewPopover := nil
-
 ]
 
 { #category : 'private - actions' }
@@ -308,12 +308,23 @@ DockClassOutlineSideView >> doRequestNewMethod [
 ]
 
 { #category : 'private' }
-DockClassOutlineSideView >> entitySelected: anEntity [
+DockClassOutlineSideView >> entityActivated: anEntity [
 
 	self owner schedule: [ 
 		self deactivateMethodPreviewPopover ].
 	self owner schedule: [ 
 		self owner notifyActivateEntity: anEntity ]
+]
+
+{ #category : 'private' }
+DockClassOutlineSideView >> entitySelected: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+
+	self maybePopupPreview.
+
+	self owner schedule: [
+		self owner notificationCenter announce: (DockModelSelected newValue: anEntity) ]
 ]
 
 { #category : 'private' }
@@ -439,9 +450,14 @@ DockClassOutlineSideView >> listToolbarActions [
 
 { #category : 'private - preview' }
 DockClassOutlineSideView >> maybePopupPreview [
+	| active |
 
-	self isPreviewPopoverActive ifFalse: [ ^ self ].
-	self popupPreview
+	active := self isPreviewPopoverActive.
+	logger trace: active.
+
+	active ifFalse: [ ^ self ].
+	self owner schedule: [ 
+		self popupPreview ]
 ]
 
 { #category : 'private' }
@@ -465,6 +481,8 @@ DockClassOutlineSideView >> newMethodModelForNewMethod [
 { #category : 'private - preview' }
 DockClassOutlineSideView >> popupPreview [
 	| selectedModel editorPresenter |
+	
+	logger trace.
 
 	previewPopover ifNotNil: [ self dismissPreview ].
 

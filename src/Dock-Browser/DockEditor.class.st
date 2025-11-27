@@ -77,6 +77,12 @@ DockEditor >> addOverlay: aPresenter withConstraints: aBlock [
 		withConstraints: aBlock
 ]
 
+{ #category : 'private' }
+DockEditor >> collectContentActions [
+
+	^ self model actionDecorators
+]
+
 { #category : 'initialization' }
 DockEditor >> connectPresenters [
 
@@ -468,9 +474,10 @@ DockEditor >> updateBreadcrumbs [
 
 { #category : 'initialization' }
 DockEditor >> updateContentActions [
+
 	self application defer: [ 
 		self model resetActionDecorators.
-		self model actionDecorators ifNotEmpty: [ :aCollection |  
+		self collectContentActions ifNotEmpty: [ :aCollection |  
 			toolbarPresenter contentActions: (SpActionGroup new 
 				addAll: (aCollection collect: [ :each | 
 					each 

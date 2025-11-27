@@ -211,6 +211,12 @@ PvClassModel >> instanceSide [
 	^ self entity instanceSide
 ]
 
+{ #category : 'testing' }
+PvClassModel >> isClassModel [
+
+	^ true
+]
+
 { #category : 'accessing - navigating' }
 PvClassModel >> isLargeHierarchy [
 

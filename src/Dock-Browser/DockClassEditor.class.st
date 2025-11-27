@@ -6,12 +6,36 @@ Class {
 	#superclass : 'DockEditor',
 	#instVars : [
 		'commentPresenter',
-		'commentOverlayLayout'
+		'commentOverlayLayout',
+		'linkedToSelection'
 	],
 	#category : 'Dock-Browser-View-Editor',
 	#package : 'Dock-Browser',
 	#tag : 'View-Editor'
 }
+
+{ #category : 'accessing - actions' }
+DockClassEditor class >> defineActionsOn: aBuilder [
+	<dockActions>
+
+	aBuilder 
+		addGroup: #editorActions 
+		with: [ :group | group
+			priority: 1;
+			name: 'Editor';
+			beDisplayedAsGroup;
+			addActionWith: [ :action | action 
+				name: 'Toggle link';
+				description: 'Toggle method selection link';
+				iconName: 'link';
+				action: [ :aContext | aContext doToggleSelectionLinkCommand: action ] ] ]
+]
+
+{ #category : 'private' }
+DockClassEditor >> collectContentActions [
+
+	^ super collectContentActions, self extraContentActions
+]
 
 { #category : 'private - updating' }
 DockClassEditor >> commentChangedFrom: oldText to: newText [
@@ -76,6 +100,16 @@ DockClassEditor >> doSaveComment: aString [
 	self model saveComment: aString
 ]
 
+{ #category : 'private - actions' }
+DockClassEditor >> doToggleSelectionLinkCommand: anAction [
+	
+	linkedToSelection := linkedToSelection not.
+	
+	linkedToSelection 
+		ifTrue: [ self addStyle: 'dockEditorLinked' ]
+		ifFalse: [ self removeStyle: 'dockEditorLinked' ]
+]
+
 { #category : 'events' }
 DockClassEditor >> eventModelChanged: ann [
 	
@@ -94,6 +128,17 @@ DockClassEditor >> eventModelChanged: ann [
 DockClassEditor >> eventModelRemoved: anAnnouncememnt [ 
 
 	self flag: #TODO
+]
+
+{ #category : 'events' }
+DockClassEditor >> eventModelSelected: ann [
+	| realModel |
+	
+	linkedToSelection ifFalse: [ ^ self ].
+	realModel := ann value realModel.
+	realModel isClassModel ifFalse: [ ^ self ].
+	
+	self model: realModel
 ]
 
 { #category : 'events' }
@@ -128,6 +173,28 @@ DockClassEditor >> eventThemeChanged: ann [
 	commentPresenter styleScheme: self application styleScheme
 ]
 
+{ #category : 'private' }
+DockClassEditor >> extraContentActions [
+	| nearestWindow |
+
+	self flag: #TODO. "I am linearizing this because meh... so far, so good. I need 
+	to revisit this when I complete the refactor of actions"
+
+	nearestWindow := self nearWindowLike.
+	"no extra actions in popovers"
+	(nearestWindow isNotNil and: [ nearestWindow isPopover ])
+		ifTrue: [ ^ #() ].
+
+	^ (self actions actionsFor: #editorActions) allCommands
+]
+
+{ #category : 'initialization' }
+DockClassEditor >> initialize [
+
+	linkedToSelection := false.
+	super initialize
+]
+
 { #category : 'initialization' }
 DockClassEditor >> initializePresenters [
 
@@ -144,6 +211,18 @@ DockClassEditor >> initializePresenters [
 DockClassEditor >> originalContent [
 
 	^ self model classDefinitionString
+]
+
+{ #category : 'initialization' }
+DockClassEditor >> registerToEvents [
+	
+	super registerToEvents.
+	
+		
+	self announcer 
+		when: DockModelSelected 
+		send: #eventModelSelected: 
+		to: self
 ]
 
 { #category : 'initialization' }
