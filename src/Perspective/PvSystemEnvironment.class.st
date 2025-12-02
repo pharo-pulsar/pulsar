@@ -12,6 +12,18 @@ PvSystemEnvironment >> addPackageNamed: aName [
 	self organizer addPackage: (Package named: aName)
 ]
 
+{ #category : 'query' }
+PvSystemEnvironment >> allBehaviors [
+
+	^ self class environment allBehaviors
+]
+
+{ #category : 'query' }
+PvSystemEnvironment >> allClassesAndTraits [
+
+	^ self class environment allClassesAndTraits
+]
+
 { #category : 'testing' }
 PvSystemEnvironment >> hasPackageNamed: aString [
 

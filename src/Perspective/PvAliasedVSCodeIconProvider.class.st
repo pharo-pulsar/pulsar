@@ -150,6 +150,8 @@ PvAliasedVSCodeIconProvider >> initialize [
 		'chevron-down'.				'chevron-down'.
 		'versions'.					'versions'."
 		'variables'.					'symbol-key'.
+		"'link'.						'link'"
+		'flag'.						'bookmark'.
 	 }
 ]
 

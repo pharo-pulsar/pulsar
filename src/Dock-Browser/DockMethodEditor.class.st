@@ -39,6 +39,16 @@ DockMethodEditor class >> defineActionsOn: aBuilder [
 				action: [ :aContext | aContext doToggleSelectionLinkCommand: action ] ] ]
 ]
 
+{ #category : 'private - actions' }
+DockMethodEditor >> activateWith: anActivationAnnouncement [
+
+	anActivationAnnouncement hasSelection ifFalse: [ ^ self ].
+	
+	editorPresenter addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight
+		interval: anActivationAnnouncement selection;
+		yourself)
+]
+
 { #category : 'private' }
 DockMethodEditor >> announceActivateClass [
 	

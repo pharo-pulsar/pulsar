@@ -148,7 +148,7 @@ DockClassOutlineView >> instanceSidePresenter [
 DockClassOutlineView >> notifyActivateEntity: anEntity [
 
 	anEntity ifNil: [ ^ self ].
-	self notificationCenter announce: anEntity realModel newActivationAnnouncement
+	self notificationCenter announce: anEntity newActivationAnnouncement
 ]
 
 { #category : 'private - announcing' }
@@ -163,6 +163,13 @@ DockClassOutlineView >> notifyEntityRemoved: anEntity [
 
 	anEntity ifNil: [ ^ self ].
 	self notificationCenter announce: (DockModelRemoved newValue: anEntity)
+]
+
+{ #category : 'private - announcing' }
+DockClassOutlineView >> notifySelectEntity: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+	self notificationCenter announce: anEntity newSelectionAnnouncement
 ]
 
 { #category : 'initialization' }

@@ -32,6 +32,18 @@ PvEnvironmentModel >> allBaselines [
 	^ BaselineOf allSubclasses
 ]
 
+{ #category : 'accessing - navigating' }
+PvEnvironmentModel >> allBehaviors [
+
+	^ self entity allBehaviors
+]
+
+{ #category : 'accessing - navigating' }
+PvEnvironmentModel >> allClassesAndTraits [
+
+	^ self entity allClassesAndTraits
+]
+
 { #category : 'testing' }
 PvEnvironmentModel >> canBeRemoved [
 

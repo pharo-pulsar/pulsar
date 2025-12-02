@@ -312,8 +312,7 @@ DockClassOutlineSideView >> entityActivated: anEntity [
 
 	self owner schedule: [ 
 		self deactivateMethodPreviewPopover ].
-	self owner schedule: [ 
-		self owner notifyActivateEntity: anEntity ]
+	self owner notifyActivateEntity: anEntity
 ]
 
 { #category : 'private' }
@@ -325,8 +324,7 @@ DockClassOutlineSideView >> entitySelected: anEntity [
 
 	self maybePopupPreview.
   
-	self owner schedule: [
-		self owner notificationCenter announce: anEntity newSelectionAnnouncement ]
+	self owner notifySelectEntity: anEntity
 ]
 
 { #category : 'private' }

@@ -23,6 +23,7 @@ BaselineOfPerspective >> baseline: spec [
 		spec package: 'Dock-Tool-Changes' with: [ spec requires: 'Dock-Browser' ].
 		spec package: 'Dock-Tool-Repositories' with: [ spec requires: 'Dock-Browser' ].
 		spec package: 'Dock-Tool-ObjectExplorer' with: [ spec requires: 'Dock-Browser' ].
+		spec package: 'Dock-Tool-FlagsConsole' with: [ spec requires: 'Dock-Browser' ].
 		spec package: 'Dock-Browser-Tests' with: [ spec requires: 'Dock-Browser' ] ]
 ]
 

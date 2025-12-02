@@ -7,7 +7,8 @@ Class {
 	#instVars : [
 		'commentPresenter',
 		'commentOverlayLayout',
-		'linkedToSelection'
+		'linkedToSelection',
+		'editorPanelPresenter'
 	],
 	#category : 'Dock-Browser-View-Editor',
 	#package : 'Dock-Browser',
@@ -24,6 +25,11 @@ DockClassEditor class >> defineActionsOn: aBuilder [
 			priority: 1;
 			name: 'Editor';
 			beDisplayedAsGroup;
+			addActionWith: [ :action | action 
+				name: 'Toggle definition';
+				description: 'Toggle fluid class definition';
+				iconName: 'panel-bottom';
+				action: [ :aContext | aContext doToggleDefinitionCommand: action ] ];
 			addActionWith: [ :action | action 
 				name: 'Toggle link';
 				description: 'Toggle class selection link';
@@ -70,11 +76,13 @@ DockClassEditor >> defaultLayout [
 			add: ((commentOverlayLayout := SpOverlayLayout new)
 				child: commentPresenter;
 				yourself);
-			add: (SpBoxLayout  newVertical
-				add: ((editorOverlayLayout := SpOverlayLayout new) 
-					child: editorPresenter;
+			add: ((editorPanelPresenter := self newPresenter)
+				layout: (SpBoxLayout newVertical
+					add: ((editorOverlayLayout := SpOverlayLayout new) 
+						child: editorPresenter;
+						yourself);
+					add: searchBarPresenter expand: false;				
 					yourself);
-				add: searchBarPresenter expand: false;				
 				yourself);
 			yourself);
 		yourself
@@ -98,6 +106,12 @@ DockClassEditor >> doResetComment [
 DockClassEditor >> doSaveComment: aString [
 
 	self model saveComment: aString
+]
+
+{ #category : 'private - actions' }
+DockClassEditor >> doToggleDefinitionCommand: anAction [
+
+	editorPanelPresenter visible: editorPanelPresenter isVisible not
 ]
 
 { #category : 'private - actions' }

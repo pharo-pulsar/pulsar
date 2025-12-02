@@ -35,7 +35,7 @@ PvClassModel class >> newEnvironment: anEnvirontmentModel beNewTraitWithParent: 
 { #category : 'visiting' }
 PvClassModel >> accept: aVisitor [
 
-	^ aVisitor visitClassModel: aVisitor
+	^ aVisitor visitClassModel: self
 ]
 
 { #category : 'accessing' }
@@ -69,6 +69,15 @@ PvClassModel >> asOutlineClassModel [
 	^ PvOutlineClassModel 
 		newEnvironment: self environmentModel 
 		entity: self entity
+]
+
+{ #category : 'converting' }
+PvClassModel >> asPackageModel [
+	
+	^ PvPackageModel 
+		newEnvironment: self environmentModel 
+		parent: nil
+		entity: self entity package
 ]
 
 { #category : 'accessing' }
@@ -275,6 +284,13 @@ PvClassModel >> packageTagName [
 PvClassModel >> prepareForSnapshot [
 
 	actionDecorators := nil
+]
+
+{ #category : 'printing' }
+PvClassModel >> printOn: stream [
+
+	super printOn: stream.
+	stream << '(' << self name << ')'
 ]
 
 { #category : 'accessing' }

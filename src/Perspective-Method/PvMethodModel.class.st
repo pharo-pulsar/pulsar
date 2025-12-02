@@ -68,6 +68,15 @@ PvMethodModel >> asOutlineClassModel [
 		entity: self methodClass
 ]
 
+{ #category : 'converting' }
+PvMethodModel >> asPackageModel [
+	
+	^ PvPackageModel 
+		newEnvironment: self environmentModel 
+		parent: nil
+		entity: self methodClass package
+]
+
 { #category : 'updating' }
 PvMethodModel >> classifyMethodAs: aString [ 
 	

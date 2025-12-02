@@ -315,7 +315,8 @@ DockProjectView >> eventBehaviorAdded: anAnnouncement [
 	logger trace: classAdded.
 	
 	path := self model findPathForClass: classAdded.
-	self refreshProjectPath: path
+	path ifNotNil: [
+		self refreshProjectPath: path ]
 ]
 
 { #category : 'events - system' }
