@@ -1,5 +1,7 @@
 "
 An editor for classes.
+As most of its properties will be edited the class outline panel (`DockClassOutlineView`), this will be used mostly to edit/consult comments. 
+There will be, however, the possibility to toggle the fluid class definition, to provide lowlevel access to class defintions.
 "
 Class {
 	#name : 'DockClassEditor',
@@ -40,7 +42,10 @@ DockClassEditor class >> defineActionsOn: aBuilder [
 { #category : 'private' }
 DockClassEditor >> collectContentActions [
 
-	^ super collectContentActions, self extraContentActions
+	^ SpActionGroup new
+		add: super collectContentActions;
+		add: self extraContentActions;
+		yourself
 ]
 
 { #category : 'private - updating' }
@@ -194,9 +199,10 @@ DockClassEditor >> extraContentActions [
 	nearestWindow := self nearWindowLike.
 	"no extra actions in popovers"
 	(nearestWindow isNotNil and: [ nearestWindow isPopover ])
-		ifTrue: [ ^ #() ].
+		ifTrue: [ ^ SpActionGroup new ].
 
-	^ (self actions actionsFor: #editorActions) allCommands
+	"^ {self model actions actionsFor: #refactoring}, (self actions actionsFor: #editorActions) entries"
+	^ self actions actionsFor: #editorActions
 ]
 
 { #category : 'initialization' }
@@ -258,7 +264,7 @@ DockClassEditor >> updateBreadcrumbs [
 DockClassEditor >> updateComment [
 	
 	self updatingWhile: [
-		commentPresenter text: (self model comment ifEmpty: [ 'No comment' ]) ]
+		commentPresenter text: self model commentOrTemplate ]
 ]
 
 { #category : 'initialization' }
@@ -281,11 +287,5 @@ DockClassEditor >> updatePresenter [
 	
 	
 	self updateComment.
-	self updateEditor.
-	
-	self flag: #REVIEW. "select template tab by defdault (as comment should be introduced later)?"
-	self flag: #TODO. "I need a better way than to wait until it is built. I maybe need to implement #withAdapterPerformOrDefer: in the tab layout"
-	"self model isNew ifTrue: [ 
-		self whenBuiltDo: [ 
-			self layout selectIndex: 2 ] ]"
+	self updateEditor
 ]

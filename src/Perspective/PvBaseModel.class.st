@@ -1,8 +1,8 @@
 Class {
 	#name : 'PvBaseModel',
 	#superclass : 'Object',
-	#traits : 'DockTModel',
-	#classTraits : 'DockTModel classTrait',
+	#traits : 'DockTModel + DockTActionContainer',
+	#classTraits : 'DockTModel classTrait + DockTActionContainer classTrait',
 	#instVars : [
 		'entity',
 		'environmentModel',

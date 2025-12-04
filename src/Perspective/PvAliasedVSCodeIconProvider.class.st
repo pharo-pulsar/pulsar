@@ -152,6 +152,7 @@ PvAliasedVSCodeIconProvider >> initialize [
 		'variables'.					'symbol-key'.
 		"'link'.						'link'"
 		'flag'.						'bookmark'.
+		'refactor'.					'symbol-property'.
 	 }
 ]
 

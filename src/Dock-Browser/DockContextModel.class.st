@@ -28,7 +28,7 @@ DockContextModel >> = other [
 { #category : 'accessing' }
 DockContextModel >> actionDecorators [
 
-	^ #()
+	^ self actions actionsFor: #decoration
 ]
 
 { #category : 'private - accessing' }

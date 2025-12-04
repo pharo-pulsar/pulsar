@@ -1,3 +1,6 @@
+"
+A base for all dock browsers (there should not be a lot, but more than one)
+"
 Class {
 	#name : 'DockBaseBrowser',
 	#superclass : 'SpPanelWindowPresenter',
@@ -16,7 +19,7 @@ Class {
 DockBaseBrowser class >> definePanelActionsOn: aBuilder [
 	<dockActions>
 
-	aBuilder addGroup: #panels with: [ :aGroup | aGroup 
+	aBuilder addGroup: #panels with: [ :group | group 
 		priority: 1000;
 		name: 'Panels';
 		beDisplayedAsSubMenu.
@@ -27,7 +30,7 @@ DockBaseBrowser class >> definePanelActionsOn: aBuilder [
 			{ 'right'. 	SpPanelArea end }.
 			{ 'top'. 	SpPanelArea top }.
 		} withIndexDo: [ :each :index |
-			aGroup addActionWith: [ :anItem | anItem 
+			group addActionWith: [ :action | action 
 				priority: index; 
 				name: 'Toggle panel ', each first;
 				description: 'Show/hide the ', each first, ' panel';
@@ -288,4 +291,10 @@ DockBaseBrowser >> windowClosed [
 	self presenters do: [ :each | each windowClosed ].
 	announcer stopScheduler.
 	super windowClosed
+]
+
+{ #category : 'private' }
+DockBaseBrowser >> windowWillClose [
+
+	^ true
 ]

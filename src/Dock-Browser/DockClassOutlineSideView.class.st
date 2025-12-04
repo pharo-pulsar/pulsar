@@ -1,3 +1,9 @@
+"
+This is the base for a ""side"" in the class outline view. 
+Conceptually (bah, not quitte ""conceptually"", but common way of call the fact that a class is create by another class -- the ""metaclass"", which is known as ""class side"" in general).
+We will extend the ""side"" concept to traits: traits are extra ""sides"" in a multidimensional fashion :)
+
+"
 Class {
 	#name : 'DockClassOutlineSideView',
 	#superclass : 'SpPresenter',
@@ -367,7 +373,7 @@ DockClassOutlineSideView >> initializeMethods [
 	listToolbarPresenter := self instantiate: DockToolbarPresenter.
 	listToolbarPresenter actions:  (self actions actionsFor: #method).
 
-	listPresenter := self newEasyListView 
+	listPresenter := self newFilteringList 
 		addStyle: 'stList';
 		addStyle: 'dockMethodList';
 		rowPresenterClass: DockMethodRow;

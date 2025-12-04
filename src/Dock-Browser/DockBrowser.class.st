@@ -212,6 +212,7 @@ DockBrowser >> initializeWindow: aWindowPresenter [
 
 { #category : 'initialization' }
 DockBrowser >> initializeWorkspace [
+
 	super initializeWorkspace.
 	
 	"defaults"
@@ -436,7 +437,7 @@ DockBrowser >> updateTitle [
 	self title: newTitle
 ]
 
-{ #category : 'event handling' }
+{ #category : 'private' }
 DockBrowser >> windowWillClose [
 	| ann canClose |
 

@@ -49,7 +49,7 @@ PvMethodModel >> accept: aVisitor [
 PvMethodModel >> actionDecorators [
 	"answer the actions associated with this method. E.g. versions, test"
 	
-	^ actionDecorators ifNil: [ actionDecorators := self collectActionDecorators ]
+	^ self actions actionsFor: #decoration
 ]
 
 { #category : 'converting' }
@@ -161,6 +161,48 @@ PvMethodModel >> decorators [
 	^ decorators ifNil: [ decorators := self collectDecorators ]
 ]
 
+{ #category : 'private - definitions' }
+PvMethodModel >> defineDecorationActionsOn: aBuilder [
+	"action decorations for this method. 
+	 this group should define all actions the method model can execute *everywhere* it is 
+	 found (editors, methods lists...)."
+	<dockActions>
+	
+	aBuilder addGroup: #decoration with: [ :group | 
+		group 
+			name: 'Decoration';
+			beDisplayedAsGroup.
+			
+		group addActionWith: [ :action | action 
+			name: 'Versions';
+			description: ('Browse versions of [self name]');
+			iconName: 'versions';
+			action: [ :aContext | aContext doBrowseVersionsCommand: action ] ].
+			
+		self isExampleMethod ifTrue: [
+			group addActionWith: [ :action | action 
+				name: 'Run Sample';
+				description: 'Execute [self name] and take a sample instance';
+				iconName: 'play'	;
+				action: [ :aContext | aContext doRunSampleInstanceCommand: action ] ] ].
+				
+		self isScriptMethod ifTrue: [
+			group addActionWith: [ :action | action 
+				name: 'Run Script';
+				description: 'Execute [self name]';
+				iconName: 'play';
+				action: [ :aContext | aContext doRunScriptCommand: action ] ] ].
+				
+		self isTestMethod ifTrue: [
+			group addActionWith: [ :action | action 
+				name: 'Run Test';
+				description: 'Execute test of current method/class';
+				iconName: 'play';
+				presenterClass: DockMethodActionRunTestPresenter;
+				action: [ :aContext | aContext doRunTestCommand: action ] ] ].
+	]
+]
+
 { #category : 'accessing - editor' }
 PvMethodModel >> editorClass [
 
@@ -226,6 +268,13 @@ PvMethodModel >> includesClassModel [
 ]
 
 { #category : 'testing' }
+PvMethodModel >> isExampleMethod [
+
+	^ (self entity pragmas collect: [ :each | each selector ]) 
+		includesAny: #(sampleInstance example)
+]
+
+{ #category : 'testing' }
 PvMethodModel >> isInstanceSide [
 	
 	^ self entity methodClass isInstanceSide
@@ -260,6 +309,13 @@ PvMethodModel >> isSameAs: aMethodModel [
 
 	^ self methodClass = aMethodModel methodClass 
 		and: [ self selector = aMethodModel selector ]
+]
+
+{ #category : 'testing' }
+PvMethodModel >> isScriptMethod [
+
+	^ (self entity pragmas collect: [ :each | each selector ]) 
+		includes: #script
 ]
 
 { #category : 'testing' }

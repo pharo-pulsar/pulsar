@@ -475,16 +475,13 @@ DockEditor >> updateBreadcrumbs [
 
 { #category : 'initialization' }
 DockEditor >> updateContentActions [
+	| contentActions |
 
-	self application defer: [ 
-		self model resetActionDecorators.
-		self collectContentActions ifNotEmpty: [ :aCollection |  
-			toolbarPresenter contentActions: (SpActionGroup new 
-				addAll: (aCollection collect: [ :each | 
-					each 
-						context: self; 
-						asSpecCommand ]);
-				yourself) ] ]
+	contentActions := DockActionContextVisitor new
+		context: self;
+		visit: self collectContentActions.
+		
+	toolbarPresenter contentActions: contentActions
 ]
 
 { #category : 'private - actions' }

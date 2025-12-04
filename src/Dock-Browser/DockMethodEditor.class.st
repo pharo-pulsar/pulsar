@@ -58,7 +58,10 @@ DockMethodEditor >> announceActivateClass [
 { #category : 'private' }
 DockMethodEditor >> collectContentActions [
 
-	^ super collectContentActions, self extraContentActions
+	^ SpActionGroup new
+		add: super collectContentActions;
+		add: self extraContentActions;
+		yourself
 ]
 
 { #category : 'initialization' }
@@ -208,9 +211,9 @@ DockMethodEditor >> extraContentActions [
 	nearestWindow := self nearWindowLike.
 	"no extra actions in popovers"
 	(nearestWindow isNotNil and: [ nearestWindow isPopover ])
-		ifTrue: [ ^ #() ].
+		ifTrue: [ ^ SpActionGroup new ].
 
-	^ (self actions actionsFor: #editorActions) allCommands
+	^ self actions actionsFor: #editorActions
 ]
 
 { #category : 'initialization' }

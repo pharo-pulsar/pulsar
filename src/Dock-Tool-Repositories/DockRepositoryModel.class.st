@@ -6,6 +6,22 @@ Class {
 }
 
 { #category : 'accessing' }
+DockRepositoryModel >> diffToReferenceCommit [
+	| diff |
+	
+	diff := self entity workingCopy diffToReferenceCommit.
+	
+	
+	^ DockDiffNode on: diff tree
+]
+
+{ #category : 'accessing' }
+DockRepositoryModel >> location [
+
+	^ self entity location
+]
+
+{ #category : 'accessing' }
 DockRepositoryModel >> name [
 
 	^ self entity name

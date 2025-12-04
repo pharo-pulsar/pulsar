@@ -110,6 +110,8 @@ DockFlagsModel >> updateWith: aModel [
 	| updatingModel |
 
 	updatingModel := aModel accept: self.
+	
+	self haltIf: (updatingModel class = PvPackageTagModel).
 	currentModel = updatingModel ifTrue: [ ^ false ].
 	currentModel := updatingModel.
 	self reset.

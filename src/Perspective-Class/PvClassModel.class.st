@@ -42,7 +42,7 @@ PvClassModel >> accept: aVisitor [
 PvClassModel >> actionDecorators [
 	"answer the actions associated with this class. E.g. test"
 	
-	^ actionDecorators ifNil: [ actionDecorators := self collectActionDecorators ]
+	^ self actions actionsFor: #decoration
 ]
 
 { #category : 'updating' }
@@ -120,6 +120,18 @@ PvClassModel >> comment [
 	^ self entity comment
 ]
 
+{ #category : 'accessing' }
+PvClassModel >> commentOrTemplate [
+
+	^ self comment ifEmpty: [ self commentTemplate ]
+]
+
+{ #category : 'accessing' }
+PvClassModel >> commentTemplate [
+
+	^ self entity classCommentBlank
+]
+
 { #category : 'updating' }
 PvClassModel >> compile: aString notifying: requestor [
 	| resultClass |
@@ -137,6 +149,41 @@ PvClassModel >> compile: aString notifying: requestor [
 	do: [ :e | 
 		"we are only interested in class definitions"
 		e compilationContext noPattern ifFalse: [ e pass ] ]
+]
+
+{ #category : 'private - definitions' }
+PvClassModel >> defineDecorationActionsOn: aBuilder [
+	"action decorations for this class. 
+	 this group should define all actions the method class can execute *everywhere* it is 
+	 found (editors, class lists...)."
+	<dockActions>
+	
+	aBuilder addGroup: #decoration with: [ :group | group
+		name: 'Decorations';
+		beDisplayedAsGroup.
+		
+		self isTestCase ifTrue: [
+			group addActionWith: [ :action | action 
+				name: 'Run Test';
+				description: ('Execute test of {1} class' format: { self name });
+				iconName: 'play';
+				presenterClass: DockMethodActionRunTestPresenter;
+				action: [ :aContext | self runTestAnnouncingTo: aContext notificationCenter ] ] ] 
+	]
+]
+
+{ #category : 'private - definitions' }
+PvClassModel >> defineRefactorActionsOn: aBuilder [
+	<dockActions>
+	
+	aBuilder addGroup: #refactoring with: [ :group | group
+		name: 'Refactoring';
+		iconName: 'refactor';
+		beDisplayedAsSubMenu;
+		addActionWith: [ :action | action 
+			name: 'Insert superclass';
+			description: ReInsertSuperclassDriver comment lines first;
+			action: [ :aContext | self halt ] ] ]	
 ]
 
 { #category : 'accessing - ui' }
@@ -353,14 +400,6 @@ PvClassModel >> updateWith: aString notifying: anInteractionModel [
 	isNew := false.
 
 	^ true
-]
-
-{ #category : 'accessing' }
-PvClassModel >> windowCommentIconName [
-
-	^ self entity hasComment
-		ifTrue: [ #comments ]
-		ifFalse: [ #uncommentedClass ]
 ]
 
 { #category : 'accessing - ui' }

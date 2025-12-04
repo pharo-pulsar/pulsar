@@ -23,6 +23,13 @@ DockContextEditor >> defaultLayout [
 		yourself
 ]
 
+{ #category : 'private - definitions' }
+DockContextEditor >> defineDecorationActionsOn: aBuilder [
+	<dockActions>
+	
+	"no decorations for now"
+]
+
 { #category : 'events' }
 DockContextEditor >> eventContextChanged: anAnnouncement [
 	| contextModel |
@@ -39,7 +46,7 @@ DockContextEditor >> extraContentActions [
 
 	"not having for the moment, and I do not want to 'link' context editors... which are 
 	 already linked to the stack"
-	^ #()
+	^ SpActionGroup new
 ]
 
 { #category : 'private' }

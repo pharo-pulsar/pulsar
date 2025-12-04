@@ -18,8 +18,12 @@ DockPackageFlagsModel >> calculateEnvironment [
 	env := SystemEnvironment new.
 	
 	self currentModel ifNotNil: [ :aModel |
+		"sometimes it happens that obsolete classes are still in the model. 
+		 this is an error in the package organiser, but it forces me to do 
+		 a reject like this" 
 		aModel entity definedClasses 
-			do: [ :aClass | env at: aClass name put: aClass ] ].
+			reject: [ :each | each isObsolete ]
+			thenDo: [ :aClass | env at: aClass name put: aClass ] ].
 	
 	^ env
 	
@@ -35,8 +39,8 @@ DockPackageFlagsModel >> isScope: aSymbol [
 DockPackageFlagsModel >> title [
 
 	^ self currentModel 
-		ifNotNil: [ :aModel | 'Flags on: {1} package' format: { aModel name } ]
-		ifNil: [ 'Flags on: no package selected' ]
+		ifNotNil: [ :aModel | 'Flags on {1} package' format: { aModel name } ]
+		ifNil: [ 'No package selected' ]
 ]
 
 { #category : 'visiting' }

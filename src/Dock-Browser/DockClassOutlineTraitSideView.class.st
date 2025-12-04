@@ -1,8 +1,14 @@
+"
+This view present the list of the traits a class/trait can be composed by.
+
+"
 Class {
 	#name : 'DockClassOutlineTraitSideView',
 	#superclass : 'DockClassOutlineSideView',
 	#instVars : [
-		'traitsListPresenter'
+		'traitsListPresenter',
+		'traitInstanceSidePresenter',
+		'traitClassSidePresenter'
 	],
 	#category : 'Dock-Browser-View-Outline',
 	#package : 'Dock-Browser',
@@ -14,17 +20,11 @@ DockClassOutlineTraitSideView >> defaultLayout [
 
 	^ SpPanedLayout newVertical
 		positionOfSlider: 360;
-		add: (SpPanedLayout newVertical 
-			positionOfSlider: 180;
-			add: (SpPanedLayout newVertical 
-				add: traitsListPresenter;
-				add: variablesListPresenter;
-				yourself);			
-			yourself);
-		add: (SpBoxLayout newVertical
-			add: listToolbarPresenter expand: false; 
-			add: listPresenter;
-			yourself);
+		add: traitsListPresenter;
+		"add: (SpTabLayout new 
+			add: traitInstanceSidePresenter label: 'Instance';
+			add: traitClassSidePresenter label: 'Class';
+			yourself);"
 		yourself
 ]
 
@@ -32,9 +32,13 @@ DockClassOutlineTraitSideView >> defaultLayout [
 DockClassOutlineTraitSideView >> initializePresenters [
 
 	super initializePresenters.
+	
 	traitsListPresenter := self newEasyListView
 		addStyle: 'stList';
 		addStyle: 'dockTraitsList';
 		display: #name;
-		yourself
+		yourself.
+		
+	"traitInstanceSidePresenter := self instantiate: DockClassOutlineTraitInstanceSideView.
+	traitClassSidePresenter := self instantiate: DockClassOutlineTraitClassSideView"
 ]

@@ -35,8 +35,8 @@ DockClassFlagsModel >> locationDescriptionFor: aFlag [
 DockClassFlagsModel >> title [
 
 	^ self currentModel
-		ifNotNil:[ :aModel | 'Flags on: {1} class' format: { aModel name } ]
-		ifNil: [ 'Flags on: No class selected' ]
+		ifNotNil:[ :aModel | 'Flags on {1} class' format: { aModel name } ]
+		ifNil: [ 'No class selected' ]
 ]
 
 { #category : 'visiting' }
