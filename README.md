@@ -101,5 +101,5 @@ pharo --worker Pharo.image run dock
 
 in Windows:
 ```Shell
-.\PharoConsole.exe --headless --worker Pharo.image run dock
+PharoConsole.exe --headless --worker Pharo.image run dock
 ```
