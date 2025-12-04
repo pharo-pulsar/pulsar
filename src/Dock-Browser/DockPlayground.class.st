@@ -194,14 +194,20 @@ DockPlayground >> initialize [
 { #category : 'initialization' }
 DockPlayground >> initializePresenters [
 
+	self addStyle: 'dockPlayground'.
+
 	actionsPresenter := self newToolbar
 		displayMode: self application toolbarDisplayMode;
 		fillWith: (self actions actionsFor: #actions).
 	
-	moreActionsPresenter := self newButton
-		addStyle: 'flat';
-		icon: (self iconNamed: 'close');
-		action: [ self doClose ];
+	moreActionsPresenter := self newToolbar 
+		beIcons;
+		add: (self newButton
+			addStyle: 'flat';
+			icon: (self iconNamed: 'close');
+			help: 'Close playground';
+			action: [ self doClose ];
+			yourself);
 		yourself.
 
 	toolbarPresenter := self instantiate: DockEditorToolbarPresenter.

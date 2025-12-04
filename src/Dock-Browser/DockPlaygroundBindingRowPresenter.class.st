@@ -11,6 +11,12 @@ Class {
 	#tag : 'Tool-Playground'
 }
 
+{ #category : 'private' }
+DockPlaygroundBindingRowPresenter >> announceRemove [
+
+	self listView announce: (DockBindingRemoved newValue: self model)
+]
+
 { #category : 'layout' }
 DockPlaygroundBindingRowPresenter >> defaultLayout [
 
@@ -31,8 +37,15 @@ DockPlaygroundBindingRowPresenter >> initializePresenters [
 	removeActionPresenter := self newButton
 		addStyle: 'flat';
 		icon: (self iconNamed: #delete);
-		action: [];
+		action: [ self announceRemove ];
 		yourself
+]
+
+{ #category : 'as yet unclassified' }
+DockPlaygroundBindingRowPresenter >> isReadOnly: aBinding [
+
+	self flag: #TODO. "Hardcoded, this needs to be taken from a list elsewere (same that uses DockPlayground)" 
+	^ aBinding key asSymbol = #thisBrowser.
 ]
 
 { #category : 'initialization' }
@@ -41,5 +54,7 @@ DockPlaygroundBindingRowPresenter >> updatePresenter [
 	self model ifNil: [ ^ self ].
 	
 	namePresenter label: self model key asString.
-	valuePresenter label: ' (', self model value asString, ')'
+	valuePresenter label: ' (', self model value asString, ')'.
+	
+	removeActionPresenter visible: (self isReadOnly: self model) not
 ]

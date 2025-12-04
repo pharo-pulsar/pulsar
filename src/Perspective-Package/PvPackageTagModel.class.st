@@ -12,6 +12,12 @@ PvPackageTagModel class >> order [
 	^ 100
 ]
 
+{ #category : 'visiting' }
+PvPackageTagModel >> accept: aVisitor [
+
+	^ aVisitor visitPackageTagModel: self
+]
+
 { #category : 'accessing' }
 PvPackageTagModel >> children [
 

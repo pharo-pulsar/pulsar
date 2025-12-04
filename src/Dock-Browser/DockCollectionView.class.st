@@ -23,3 +23,17 @@ DockCollectionView >> listPresenter [
 
 	^ listPresenter
 ]
+
+{ #category : 'private - announcing' }
+DockCollectionView >> notifyActivateEntity: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+	self notificationCenter announce: anEntity newActivationAnnouncement
+]
+
+{ #category : 'private - announcing' }
+DockCollectionView >> notifySelectEntity: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+	self notificationCenter announce: anEntity newSelectionAnnouncement
+]

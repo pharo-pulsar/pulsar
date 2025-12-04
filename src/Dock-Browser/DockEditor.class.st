@@ -77,6 +77,12 @@ DockEditor >> addOverlay: aPresenter withConstraints: aBlock [
 		withConstraints: aBlock
 ]
 
+{ #category : 'private' }
+DockEditor >> collectContentActions [
+
+	^ self model actionDecorators
+]
+
 { #category : 'initialization' }
 DockEditor >> connectPresenters [
 
@@ -350,10 +356,11 @@ DockEditor >> notifyEditorActivated [
 	self notificationCenter announce: (DockEditorActivated newValue: self)
 ]
 
-{ #category : 'initialization' }
-DockEditor >> notifyEditorClosed [
+{ #category : 'private - announcing' }
+DockEditor >> notifyEntityChanged: anEntity [
 
-	self notificationCenter announce: (DockEditorClosed newValue: self model)
+	anEntity ifNil: [ ^ self ].
+	self notificationCenter announce: (DockModelChanged newValue: anEntity)
 ]
 
 { #category : 'private' }
@@ -469,15 +476,13 @@ DockEditor >> updateBreadcrumbs [
 
 { #category : 'initialization' }
 DockEditor >> updateContentActions [
-	self application defer: [ 
-		self model resetActionDecorators.
-		self model actionDecorators ifNotEmpty: [ :aCollection |  
-			toolbarPresenter contentActions: (SpActionGroup new 
-				addAll: (aCollection collect: [ :each | 
-					each 
-						context: self; 
-						asSpecCommand ]);
-				yourself) ] ]
+	| contentActions |
+
+	contentActions := DockActionContextVisitor new
+		context: self;
+		visit: self collectContentActions.
+		
+	toolbarPresenter contentActions: contentActions
 ]
 
 { #category : 'private - actions' }

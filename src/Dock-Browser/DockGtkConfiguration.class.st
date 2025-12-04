@@ -330,7 +330,7 @@ paneldock panelframe popover box.dockToolbarPanel { background-color: unset; }
 .stList listview, .stTree listview { font-size: 0.9em; } 
 .stTree columnview listview row cell { margin: 0px; padding: 2px; }
 .stTree columnview listview row cell box { border-spacing: 5px; }
-.stRow { margin: 2px; border-spacing: 2px; }
+.stRow { margin: 1px; border-spacing: 3px; }
 .tinyFont {font-size: 0.7em; }
 .searchBox { background-color: @popover_bg_color; }
 .link { padding: 0px; }
@@ -345,7 +345,8 @@ tab .tab-title label { font-size: 0.9em; }
 .dockProtocolRow label.unclassified { color: red; }
 .dockStack label.count { padding-right: 5px; }
 .dockToolbar { margin: 0px; padding: 0px; }
-
+/* Editors */
+.dockEditorLinked { border-width: 1px; border-style: solid; border-color: @accent_bg_color; }
 .dockDirtyMarker button { padding: 2px; }
 .dockDirtyMarker .cancel { background-color: var(--button-bg-cancel-mark); }
 .dockDirtyMarker .accept { background-color: var(--button-bg-accept-mark); }

@@ -116,6 +116,13 @@ DockMessageBrowser >> notificationCenter: anAnnouncer [
 	editorPresenter notificationCenter: anAnnouncer
 ]
 
+{ #category : 'private - announcing' }
+DockMessageBrowser >> notifyActivateEntity: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+	self notificationCenter announce: anEntity realModel newActivationAnnouncement
+]
+
 { #category : 'accessing - snapshot' }
 DockMessageBrowser >> snapshot [
 

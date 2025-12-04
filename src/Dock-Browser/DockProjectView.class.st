@@ -315,7 +315,8 @@ DockProjectView >> eventBehaviorAdded: anAnnouncement [
 	logger trace: classAdded.
 	
 	path := self model findPathForClass: classAdded.
-	self refreshProjectPath: path
+	path ifNotNil: [
+		self refreshProjectPath: path ]
 ]
 
 { #category : 'events - system' }
@@ -399,6 +400,20 @@ DockProjectView >> initializeWindow: aWindowPresenter [
 DockProjectView >> maybeOpenFlyView [
 
 	self halt
+]
+
+{ #category : 'private - announcing' }
+DockProjectView >> notifyActivateEntity: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+	super notifyActivateEntity: anEntity realModel
+]
+
+{ #category : 'private - announcing' }
+DockProjectView >> notifySelectEntity: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+	self notificationCenter announce: anEntity realModel newSelectionAnnouncement
 ]
 
 { #category : 'accessing' }

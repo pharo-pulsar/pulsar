@@ -147,6 +147,13 @@ DockInspector >> newPageForContext: aContext [
 		yourself
 ]
 
+{ #category : 'private - announcing' }
+DockInspector >> notifyActivateEntity: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+	self notificationCenter announce: anEntity newActivationAnnouncement
+]
+
 { #category : 'initialization' }
 DockInspector >> registerToEvents [
 

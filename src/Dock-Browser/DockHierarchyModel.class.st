@@ -1,8 +1,8 @@
 Class {
 	#name : 'DockHierarchyModel',
 	#superclass : 'Object',
-	#traits : 'DockTEditable',
-	#classTraits : 'DockTEditable classTrait',
+	#traits : 'DockTEditable + DockTModel',
+	#classTraits : 'DockTEditable classTrait + DockTModel classTrait',
 	#instVars : [
 		'parentModel'
 	],

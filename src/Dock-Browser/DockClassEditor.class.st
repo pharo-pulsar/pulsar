@@ -1,17 +1,52 @@
 "
 An editor for classes.
+As most of its properties will be edited the class outline panel (`DockClassOutlineView`), this will be used mostly to edit/consult comments. 
+There will be, however, the possibility to toggle the fluid class definition, to provide lowlevel access to class defintions.
 "
 Class {
 	#name : 'DockClassEditor',
 	#superclass : 'DockEditor',
 	#instVars : [
 		'commentPresenter',
-		'commentOverlayLayout'
+		'commentOverlayLayout',
+		'linkedToSelection',
+		'editorPanelPresenter'
 	],
 	#category : 'Dock-Browser-View-Editor',
 	#package : 'Dock-Browser',
 	#tag : 'View-Editor'
 }
+
+{ #category : 'accessing - actions' }
+DockClassEditor class >> defineActionsOn: aBuilder [
+	<dockActions>
+
+	aBuilder 
+		addGroup: #editorActions 
+		with: [ :group | group
+			priority: 1;
+			name: 'Editor';
+			beDisplayedAsGroup;
+			addActionWith: [ :action | action 
+				name: 'Toggle definition';
+				description: 'Toggle fluid class definition';
+				iconName: 'panel-bottom';
+				action: [ :aContext | aContext doToggleDefinitionCommand: action ] ];
+			addActionWith: [ :action | action 
+				name: 'Toggle link';
+				description: 'Toggle class selection link';
+				iconName: 'link';
+				action: [ :aContext | aContext doToggleSelectionLinkCommand: action ] ] ]
+]
+
+{ #category : 'private' }
+DockClassEditor >> collectContentActions [
+
+	^ SpActionGroup new
+		add: super collectContentActions;
+		add: self extraContentActions;
+		yourself
+]
 
 { #category : 'private - updating' }
 DockClassEditor >> commentChangedFrom: oldText to: newText [
@@ -46,11 +81,13 @@ DockClassEditor >> defaultLayout [
 			add: ((commentOverlayLayout := SpOverlayLayout new)
 				child: commentPresenter;
 				yourself);
-			add: (SpBoxLayout  newVertical
-				add: ((editorOverlayLayout := SpOverlayLayout new) 
-					child: editorPresenter;
+			add: ((editorPanelPresenter := self newPresenter)
+				layout: (SpBoxLayout newVertical
+					add: ((editorOverlayLayout := SpOverlayLayout new) 
+						child: editorPresenter;
+						yourself);
+					add: searchBarPresenter expand: false;				
 					yourself);
-				add: searchBarPresenter expand: false;				
 				yourself);
 			yourself);
 		yourself
@@ -76,6 +113,22 @@ DockClassEditor >> doSaveComment: aString [
 	self model saveComment: aString
 ]
 
+{ #category : 'private - actions' }
+DockClassEditor >> doToggleDefinitionCommand: anAction [
+
+	editorPanelPresenter visible: editorPanelPresenter isVisible not
+]
+
+{ #category : 'private - actions' }
+DockClassEditor >> doToggleSelectionLinkCommand: anAction [
+	
+	linkedToSelection := linkedToSelection not.
+	
+	linkedToSelection 
+		ifTrue: [ self addStyle: 'dockEditorLinked' ]
+		ifFalse: [ self removeStyle: 'dockEditorLinked' ]
+]
+
 { #category : 'events' }
 DockClassEditor >> eventModelChanged: ann [
 	
@@ -94,6 +147,14 @@ DockClassEditor >> eventModelChanged: ann [
 DockClassEditor >> eventModelRemoved: anAnnouncememnt [ 
 
 	self flag: #TODO
+]
+
+{ #category : 'events' }
+DockClassEditor >> eventModelSelected: ann [
+	
+	linkedToSelection ifFalse: [ ^ self ].
+	
+	self model: ann value
 ]
 
 { #category : 'events' }
@@ -128,6 +189,29 @@ DockClassEditor >> eventThemeChanged: ann [
 	commentPresenter styleScheme: self application styleScheme
 ]
 
+{ #category : 'private' }
+DockClassEditor >> extraContentActions [
+	| nearestWindow |
+
+	self flag: #TODO. "I am linearizing this because meh... so far, so good. I need 
+	to revisit this when I complete the refactor of actions"
+
+	nearestWindow := self nearWindowLike.
+	"no extra actions in popovers"
+	(nearestWindow isNotNil and: [ nearestWindow isPopover ])
+		ifTrue: [ ^ SpActionGroup new ].
+
+	"^ {self model actions actionsFor: #refactoring}, (self actions actionsFor: #editorActions) entries"
+	^ self actions actionsFor: #editorActions
+]
+
+{ #category : 'initialization' }
+DockClassEditor >> initialize [
+
+	linkedToSelection := false.
+	super initialize
+]
+
 { #category : 'initialization' }
 DockClassEditor >> initializePresenters [
 
@@ -144,6 +228,18 @@ DockClassEditor >> initializePresenters [
 DockClassEditor >> originalContent [
 
 	^ self model classDefinitionString
+]
+
+{ #category : 'initialization' }
+DockClassEditor >> registerToEvents [
+	
+	super registerToEvents.
+	
+		
+	self announcer 
+		when: DockClassModelSelected 
+		send: #eventModelSelected: 
+		to: self
 ]
 
 { #category : 'initialization' }
@@ -168,7 +264,7 @@ DockClassEditor >> updateBreadcrumbs [
 DockClassEditor >> updateComment [
 	
 	self updatingWhile: [
-		commentPresenter text: (self model comment ifEmpty: [ 'No comment' ]) ]
+		commentPresenter text: self model commentOrTemplate ]
 ]
 
 { #category : 'initialization' }
@@ -191,6 +287,5 @@ DockClassEditor >> updatePresenter [
 	super updatePresenter.
 	
 	self updateComment.
-	self updateEditor.
-	self updateSearch
+	self updateEditor
 ]

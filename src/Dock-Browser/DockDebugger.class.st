@@ -86,6 +86,7 @@ DockDebugger >> initializeWindow: aWindowPresenter [
 
 { #category : 'initialization' }
 DockDebugger >> initializeWorkspace [
+
 	super initializeWorkspace.
 
 	self startWidth: 380.
@@ -157,9 +158,9 @@ DockDebugger >> windowClosed [
 	self model clearSession
 ]
 
-{ #category : 'event handling' }
+{ #category : 'private' }
 DockDebugger >> windowWillClose [
 
-	^ self application windowWillClose: self.
-	
+	self application windowWillClose: self.
+	^ true
 ]

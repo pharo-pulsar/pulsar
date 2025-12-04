@@ -1,3 +1,9 @@
+"
+This is the base for a ""side"" in the class outline view. 
+Conceptually (bah, not quitte ""conceptually"", but common way of call the fact that a class is create by another class -- the ""metaclass"", which is known as ""class side"" in general).
+We will extend the ""side"" concept to traits: traits are extra ""sides"" in a multidimensional fashion :)
+
+"
 Class {
 	#name : 'DockClassOutlineSideView',
 	#superclass : 'SpPresenter',
@@ -111,7 +117,7 @@ DockClassOutlineSideView >> actions [
 
 { #category : 'private - preview' }
 DockClassOutlineSideView >> activateMethodPreviewPopover [
-
+	
 	(self isPreviewPopoverActive 
 		and: [ previewPopover isNotNil 
 		and: [ previewPopover isVisible ] ]) 
@@ -144,9 +150,9 @@ DockClassOutlineSideView >> connectPresenters [
 	protocolListPresenter 
 		transmitDo: [ :aCollection | self filterMethodsByProtocol: aCollection ].
 	listPresenter outputSelectionPort
-		transmitDo: [ :anEntry | self maybePopupPreview ].
+		transmitDo: [ :anEntity | self entitySelected: anEntity ].
 	listPresenter outputActivationPort 
-		transmitDo: [ :anEntity | self entitySelected: anEntity ]
+		transmitDo: [ :anEntity | self entityActivated: anEntity ]
 ]
 
 { #category : 'private - preview' }
@@ -188,12 +194,12 @@ DockClassOutlineSideView >> defaultLayout [
 
 { #category : 'private - preview' }
 DockClassOutlineSideView >> dismissPreview [
+	logger trace.
 
 	previewPopover ifNil: [ ^ self ].
 	
 	previewPopover dismiss.
 	previewPopover := nil
-
 ]
 
 { #category : 'private - actions' }
@@ -309,12 +315,23 @@ DockClassOutlineSideView >> doRequestNewMethod [
 ]
 
 { #category : 'private' }
-DockClassOutlineSideView >> entitySelected: anEntity [
+DockClassOutlineSideView >> entityActivated: anEntity [
 
 	self owner schedule: [ 
 		self deactivateMethodPreviewPopover ].
-	self owner schedule: [ 
-		self owner notifyActivateEntity: anEntity ]
+	self owner notifyActivateEntity: anEntity
+]
+
+{ #category : 'private' }
+DockClassOutlineSideView >> entitySelected: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+
+	logger trace: anEntity.
+
+	self maybePopupPreview.
+  
+	self owner notifySelectEntity: anEntity
 ]
 
 { #category : 'private' }
@@ -337,6 +354,12 @@ DockClassOutlineSideView >> includesModel: aModel [
 	^ listPresenter items includes: aModel
 ]
 
+{ #category : 'testing' }
+DockClassOutlineSideView >> includesModelSuchAs: aBlock [
+
+	^ listPresenter items anySatisfy: aBlock 
+]
+
 { #category : 'initialization' }
 DockClassOutlineSideView >> initialize [
 
@@ -351,7 +374,7 @@ DockClassOutlineSideView >> initializeMethods [
 	listToolbarPresenter := self instantiate: DockToolbarPresenter.
 	listToolbarPresenter actions:  (self actions actionsFor: #method).
 
-	listPresenter := self newEasyListView 
+	listPresenter := self newFilteringList 
 		addStyle: 'stList';
 		addStyle: 'dockMethodList';
 		rowPresenterClass: DockMethodRow;
@@ -440,9 +463,14 @@ DockClassOutlineSideView >> listToolbarActions [
 
 { #category : 'private - preview' }
 DockClassOutlineSideView >> maybePopupPreview [
+	| active |
 
-	self isPreviewPopoverActive ifFalse: [ ^ self ].
-	self popupPreview
+	active := self isPreviewPopoverActive.
+	logger trace: active.
+
+	active ifFalse: [ ^ self ].
+	self owner schedule: [ 
+		self popupPreview ]
 ]
 
 { #category : 'private' }
@@ -463,9 +491,17 @@ DockClassOutlineSideView >> newMethodModelForNewMethod [
 	self subclassResponsibility
 ]
 
+{ #category : 'private - announcing' }
+DockClassOutlineSideView >> notifyEntityRemoved: anEntity [
+
+	self owner notifyEntityRemoved: anEntity
+]
+
 { #category : 'private - preview' }
 DockClassOutlineSideView >> popupPreview [
 	| selectedModel editorPresenter |
+	
+	logger trace.
 
 	previewPopover ifNotNil: [ self dismissPreview ].
 
@@ -501,7 +537,10 @@ DockClassOutlineSideView >> resetInteractionStatus [
 { #category : 'initialization' }
 DockClassOutlineSideView >> updateMethods [
 	| items |
+	
 	updating ifTrue: [ ^ self ].
+
+	logger trace.
 
 	items := activeProtocols 
 		flatCollect: [ :each | self methodsForProtocol: each ]
@@ -516,6 +555,8 @@ DockClassOutlineSideView >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	
+	logger trace.
+	
 	"I defer to make the update happen at one in UI thread (it looks smoother)"
 	self application defer: [
 		"prevent update methods until is its time"
@@ -529,6 +570,8 @@ DockClassOutlineSideView >> updatePresenter [
 { #category : 'initialization' }
 DockClassOutlineSideView >> updateProtocols [
 
+	logger trace.
+	
 	protocolListPresenter updateItemsKeepingSelection: self collectProtocols.
 	protocolListPresenter selectedItems
 		ifEmpty: [ protocolListPresenter selectFirst ].
@@ -537,6 +580,8 @@ DockClassOutlineSideView >> updateProtocols [
 
 { #category : 'initialization' }
 DockClassOutlineSideView >> updateVariables [
+
+	logger trace. 
 
 	variablesListPresenter updateItemsKeepingSelection: self collectVariables.
 	variablesListPresenter selectedItems
@@ -563,17 +608,39 @@ DockClassOutlineSideView >> visitClassModel: aModel [
 
 { #category : 'visiting' }
 DockClassOutlineSideView >> visitMethodModel: aModel [
-	| protocolModel |
+	"update the list after a model changes. 
+	 this should not trigger new events."
+	| protocolModel isSameModel |
+		
+	logger trace: aModel.
+
+	"look for the method (but check for isSameAs:, as the method can be changed and then in 
+	 practice is another method). This is just a guard, in general is not needed"	 
+	listPresenter items
+		detect: [ :each | each isSameAs: aModel ] 
+		ifFound: [ :oldModel |
+			logger trace: oldModel = aModel.
+			oldModel = aModel ifFalse: [
+				listPresenter items 
+					replaceAll: oldModel 
+					with: aModel ] ].
+
+	logger trace: listPresenter selectedItem.
 
 	protocolModel := aModel protocolModel.
 	"update protocols in case I have a new one or my current editing 
 	 method is not included in the method list."
 	((protocolListPresenter items includes: protocolModel)
-		and: [ listPresenter items includes: aModel ])
+		and: [ (listPresenter items includes: aModel) ])
 		"ifTrue: [ self updateMethods ]"
 		ifFalse: [ self updateProtocols ].
-	
-	listPresenter
-		selectItem: aModel
-		scrollToSelection: true
+	 
+	"need to reset the selection first otherwise the list will not be updated 
+	 (and I need it to be)"
+	self application defer: [
+		listPresenter disableActivationDuring: [
+			listPresenter unselectAll.
+			listPresenter
+				selectItem: aModel
+				scrollToSelection: true ] ]
 ]

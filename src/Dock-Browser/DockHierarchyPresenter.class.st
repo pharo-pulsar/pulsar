@@ -92,6 +92,34 @@ DockHierarchyPresenter >> itemToSelect [
 	^ self model parentModel
 ]
 
+{ #category : 'private - announcing' }
+DockHierarchyPresenter >> notifyActivateEntity: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+	self notificationCenter announce: anEntity realModel newActivationAnnouncement
+]
+
+{ #category : 'private - announcing' }
+DockHierarchyPresenter >> notifyEntityChanged: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+	self notificationCenter announce: (DockModelChanged newValue: anEntity realModel)
+]
+
+{ #category : 'private - announcing' }
+DockHierarchyPresenter >> notifyEntityRemoved: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+	self notificationCenter announce: (DockModelRemoved newValue: anEntity realModel)
+]
+
+{ #category : 'private - announcing' }
+DockHierarchyPresenter >> notifySelectEntity: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+	self notificationCenter announce: anEntity realModel newSelectionAnnouncement
+]
+
 { #category : 'accessing - snapshot' }
 DockHierarchyPresenter >> snapshot [
 

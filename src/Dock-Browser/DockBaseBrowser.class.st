@@ -1,3 +1,6 @@
+"
+A base for all dock browsers (there should not be a lot, but more than one)
+"
 Class {
 	#name : 'DockBaseBrowser',
 	#superclass : 'SpPanelWindowPresenter',
@@ -294,8 +297,8 @@ DockBaseBrowser >> windowClosed [
 	super windowClosed
 ]
 
-{ #category : 'event handling' }
-DockBaseBrowser >> windowWillClose [ 
+{ #category : 'private' }
+DockBaseBrowser >> windowWillClose [
 
 	^ true
 ]

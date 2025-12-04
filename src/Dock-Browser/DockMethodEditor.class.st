@@ -5,7 +5,8 @@ Class {
 	#name : 'DockMethodEditor',
 	#superclass : 'DockEditor',
 	#instVars : [
-		'protocolPresenter'
+		'protocolPresenter',
+		'linkedToSelection'
 	],
 	#category : 'Dock-Browser-View-Editor',
 	#package : 'Dock-Browser',
@@ -16,21 +17,51 @@ Class {
 DockMethodEditor class >> defineActionsOn: aBuilder [
 	<dockActions>
 
-	aBuilder addGroup: #structuring with: [ :group | group 
-		priority: -10;
-		beDisplayedAsGroup;
-		addActionWith: [ :action | action
-			name: 'Classify method';
-			description: 'Change protocol of current method';
-			iconName: 'tag';
-			shortcutKey:  $p mod1 shift;
-			action: [ :aContext | aContext doRequestChangeProtocol ] ] ]
+	aBuilder 
+		addGroup: #structuring with: [ :group | group 
+			priority: -10;
+			name: 'Structure';
+			beDisplayedAsGroup;
+			addActionWith: [ :anAction | anAction
+				name: 'Classify method';
+				description: 'Change protocol of current method';
+				iconName: 'tag';
+				shortcutKey:  $p mod1 shift;
+				action: [ :aContext | aContext doRequestChangeProtocol ] ] ];
+		addGroup: #editorActions with: [ :group | group
+			priority: 1;
+			name: 'Editor';
+			beDisplayedAsGroup;
+			addActionWith: [ :action | action 
+				name: 'Toggle link';
+				description: 'Toggle method selection link';
+				iconName: 'link';
+				action: [ :aContext | aContext doToggleSelectionLinkCommand: action ] ] ]
+]
+
+{ #category : 'private - actions' }
+DockMethodEditor >> activateWith: anActivationAnnouncement [
+
+	anActivationAnnouncement hasSelection ifFalse: [ ^ self ].
+	
+	editorPresenter addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight
+		interval: anActivationAnnouncement selection;
+		yourself)
 ]
 
 { #category : 'private' }
 DockMethodEditor >> announceActivateClass [
 	
 	self notifyActivateEntity: self model asClassModel
+]
+
+{ #category : 'private' }
+DockMethodEditor >> collectContentActions [
+
+	^ SpActionGroup new
+		add: super collectContentActions;
+		add: self extraContentActions;
+		yourself
 ]
 
 { #category : 'initialization' }
@@ -44,7 +75,7 @@ DockMethodEditor >> connectPresenters [
 { #category : 'private - actions' }
 DockMethodEditor >> doBrowseSendersCommand: anAction [
 	
-self systemNavigation 
+	self systemNavigation 
 		responderPresenter: anAction presenter;
 		browseAllSendersOf: self model name
 ]
@@ -95,6 +126,16 @@ DockMethodEditor >> doSubmit: aString [
 		self updateContentActions ]
 ]
 
+{ #category : 'private - actions' }
+DockMethodEditor >> doToggleSelectionLinkCommand: anAction [
+	
+	linkedToSelection := linkedToSelection not.
+	
+	linkedToSelection 
+		ifTrue: [ self addStyle: 'dockEditorLinked' ]
+		ifFalse: [ self removeStyle: 'dockEditorLinked' ]
+]
+
 { #category : 'events - system' }
 DockMethodEditor >> eventMethodModified: anAnnouncement [
 
@@ -141,6 +182,14 @@ DockMethodEditor >> eventModelRemoved: anAnnouncememnt [
 ]
 
 { #category : 'events' }
+DockMethodEditor >> eventModelSelected: ann [
+	
+	linkedToSelection ifFalse: [ ^ self ].
+	
+	self model: ann value
+]
+
+{ #category : 'events' }
 DockMethodEditor >> eventTestCaseEnded: aTestCaseEnded [
 
 	(self model isTestMethod
@@ -150,6 +199,28 @@ DockMethodEditor >> eventTestCaseEnded: aTestCaseEnded [
 
 	logger trace: aTestCaseEnded.
 	self updateContentActions
+]
+
+{ #category : 'private' }
+DockMethodEditor >> extraContentActions [ 
+	| nearestWindow |
+
+	self flag: #TODO. "I am linearizing this because meh... so far, so good. I need 
+	to revisit this when I complete the refactor of actions"
+
+	nearestWindow := self nearWindowLike.
+	"no extra actions in popovers"
+	(nearestWindow isNotNil and: [ nearestWindow isPopover ])
+		ifTrue: [ ^ SpActionGroup new ].
+
+	^ self actions actionsFor: #editorActions
+]
+
+{ #category : 'initialization' }
+DockMethodEditor >> initialize [
+
+	linkedToSelection := false.
+	super initialize
 ]
 
 { #category : 'initialization' }
@@ -163,6 +234,13 @@ DockMethodEditor >> initializePresenters [
 	self addStyle: 'dockMethodEditor'
 ]
 
+{ #category : 'private - announcing' }
+DockMethodEditor >> notifyActivateEntity: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+	self notificationCenter announce: anEntity newActivationAnnouncement
+]
+
 { #category : 'private' }
 DockMethodEditor >> originalContent [
 
@@ -170,7 +248,19 @@ DockMethodEditor >> originalContent [
 ]
 
 { #category : 'initialization' }
+DockMethodEditor >> registerToEvents [
+
+	super registerToEvents.
+	
+	self announcer 
+		when: DockMethodModelSelected 
+		send: #eventModelSelected: 
+		to: self
+]
+
+{ #category : 'initialization' }
 DockMethodEditor >> registerToSystemEvents [
+
 	super registerToSystemEvents.
 	self announcer 
 		when: MethodModified send: #eventMethodModified: to: self

@@ -6,6 +6,12 @@ Class {
 	#tag : 'Model'
 }
 
+{ #category : 'query' }
+PvEnvironment >> allClassesAndTraits [
+
+	^ self subclassResponsibility
+]
+
 { #category : 'testing' }
 PvEnvironment >> hasPackageNamed: aString [ 
 	

@@ -17,6 +17,11 @@ DockTPanelWindow classSide >> defaultDockPosition [
 		yourself
 ]
 
+{ #category : 'private - actions' }
+DockTPanelWindow >> activateWith: anActivation [
+	"override to react to an activation detail"
+]
+
 { #category : 'accessing' }
 DockTPanelWindow >> dockPosition [
 

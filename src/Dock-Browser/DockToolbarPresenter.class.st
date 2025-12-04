@@ -53,6 +53,16 @@ DockToolbarPresenter >> addPresenter: aPresenter [
 ]
 
 { #category : 'api' }
+DockToolbarPresenter >> addPresenterCloseButtonWithAction: aBlock [
+
+	^ self addPresenter: (self newButton 
+		addStyle: 'flat';
+		icon: (self iconNamed: 'close');
+		action: aBlock;
+		yourself)
+]
+
+{ #category : 'api' }
 DockToolbarPresenter >> addPresenterMenuButtonWith: anActionGroup [
 
 	^ self addPresenter: (self newMenuButton 

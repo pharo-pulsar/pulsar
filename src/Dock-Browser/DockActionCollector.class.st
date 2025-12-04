@@ -30,7 +30,7 @@ DockActionCollector >> collect [
 	
 	container := SpActionGroup new.
 	self 
-		register: self model class
+		register: self model
 		in: container.
 	
 	container entries: (container entries sorted: #priority ascending, #name ascending).
@@ -64,8 +64,12 @@ DockActionCollector >> model: anObject [
 ]
 
 { #category : 'building' }
-DockActionCollector >> register: aClass in: container [
+DockActionCollector >> register: aModel in: container [
 
-	(Pragma allNamed: #dockActions from: aClass class to: SpPresenter) 
-		do: [ :eachPragma | aClass perform: eachPragma methodSelector with: container ]
+	"instance side"
+	(Pragma allNamed: #dockActions from: aModel class to: SpPresenter) 
+		do: [ :eachPragma | aModel perform: eachPragma methodSelector with: container ].
+	"class side"
+	(Pragma allNamed: #dockActions from: aModel class class to: SpPresenter) 
+		do: [ :eachPragma | aModel class perform: eachPragma methodSelector with: container ].
 ]

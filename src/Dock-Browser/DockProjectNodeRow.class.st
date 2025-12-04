@@ -22,6 +22,9 @@ DockProjectNodeRow >> defaultLayout [
 { #category : 'initialization' }
 DockProjectNodeRow >> initializePresenters [
 
+	self addStyle: 'stRow'.
+	self addStyle: 'dockProjectNodeRow'.
+
 	imagePresenter := self newImage.
 	labelPresenter := self newLabel
 ]

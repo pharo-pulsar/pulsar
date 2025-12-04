@@ -33,6 +33,13 @@ DockRepositoriesView class >> defineActionsOn: aBuilder [
 				action: [ :aContext | aContext doAddRepository ] ] ]
 ]
 
+{ #category : 'initialization' }
+DockRepositoriesView >> connectPresenters [
+
+	listPresenter outputActivationPort
+		transmitDo: [ :aRepositoryModel | self doOpenRepository: aRepositoryModel ]
+]
+
 { #category : 'layout' }
 DockRepositoriesView >> defaultLayout [
 
@@ -40,6 +47,15 @@ DockRepositoriesView >> defaultLayout [
 		add: listToolbarPresenter expand: false;
 		add: listPresenter;
 		yourself
+]
+
+{ #category : 'private - actions' }
+DockRepositoriesView >> doOpenRepository: aRepositoryModel [
+
+	(DockRepositoryBrowser 
+		newApplication: self application
+		model: aRepositoryModel)
+		open
 ]
 
 { #category : 'initialization' }

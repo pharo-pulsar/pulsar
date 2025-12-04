@@ -86,7 +86,12 @@ DockBrowser class >> defineToolActionsOn: aBuilder [
 			priority: 920;
 			name: 'Open Repositories';
 			description: 'Open git repositories';
-			action: [ :aContext | aContext openRepositories ] ] ]
+			action: [ :aContext | aContext openRepositories ] ];
+		addActionWith: [ :anAction | anAction
+			priority: 930;
+			name: 'Open Flag Console';
+			description: 'Open flags console';
+			action: [ :aContext | aContext openFlagsConsole ] ] ]
 ]
 
 { #category : 'private' }
@@ -131,7 +136,9 @@ DockBrowser >> eventManyModelDeactivated: anAnnouncement [
 { #category : 'events' }
 DockBrowser >> eventModelActivated: anAnnouncement [
 	
-	self maybeDockView: anAnnouncement value
+	self 
+		maybeDockView: anAnnouncement value
+		withActivation: anAnnouncement
 ]
 
 { #category : 'events' }
@@ -206,6 +213,7 @@ DockBrowser >> initializeWindow: aWindowPresenter [
 
 { #category : 'initialization' }
 DockBrowser >> initializeWorkspace [
+
 	super initializeWorkspace.
 	
 	"defaults"
@@ -229,7 +237,7 @@ DockBrowser >> loadDefaultWorkspace [
 ]
 
 { #category : 'private' }
-DockBrowser >> maybeDockView: aViewModel [
+DockBrowser >> maybeDockView: aViewModel withActivation: anActivation [
 	"if the entity has an editor associated:
 	 	if the entity is not already there, open it.
 	 	if the entity is already opened, 
@@ -240,16 +248,19 @@ DockBrowser >> maybeDockView: aViewModel [
 
 	aViewModel hasDockEditor ifFalse: [ ^ self ].
 
-	(self findEditorContaining: aViewModel) ifNotNil: [ :panelPresenter | 
-		panelPresenter raiseAndTakeKeyboardFocus.
-		^ self ].
-
-	editorPresenter := self 
-		instantiate: aViewModel dockEditorClass
-		on: aViewModel. 
-	self 
-		addPresenter: editorPresenter 
-		at: editorPresenter dockPosition
+	(self findEditorContaining: aViewModel) 
+		ifNotNil: [ :panelPresenter | 
+			panelPresenter raiseAndTakeKeyboardFocus.
+			editorPresenter := panelPresenter presenter ]
+		ifNil: [
+			editorPresenter := self 
+				instantiate: aViewModel dockEditorClass 
+				on: aViewModel. 
+			self 
+				addPresenter: editorPresenter 
+				at: editorPresenter dockPosition ].
+			
+	editorPresenter activateWith: anActivation
 ]
 
 { #category : 'private' }
@@ -275,6 +286,21 @@ DockBrowser >> openClass: aClass [
 	self projectView notifyActivateEntity: (PvClassModel 
 		newEnvironment: self model environmentModel
 		entity: aClass)
+]
+
+{ #category : 'actions' }
+DockBrowser >> openFlagsConsole [
+	| flagsConsole |
+	
+	flagsConsole := self presenters 
+		detect: [ :each | each presenter isKindOf: DockFlagsConsole ]
+		ifNone: [ 
+			(self 
+				addPresenterClass: DockFlagsConsole 
+				model: (DockFlagsModel defaultScopeClass newEnvironment: self model))
+			panelWindow ].
+
+	flagsConsole raiseAndTakeKeyboardFocus
 ]
 
 { #category : 'actions' }
@@ -412,7 +438,7 @@ DockBrowser >> updateTitle [
 	self title: newTitle
 ]
 
-{ #category : 'event handling' }
+{ #category : 'private' }
 DockBrowser >> windowWillClose [
 
 	^ self application windowWillClose: self

@@ -118,6 +118,13 @@ DockVersionsBrowser >> initializeWindow: aWindowPresenter [
 		whenClosedDo: [ self notifyEditorClosed ]
 ]
 
+{ #category : 'private - announcing' }
+DockVersionsBrowser >> notifyActivateEntity: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+	self notificationCenter announce: anEntity realModel newActivationAnnouncement
+]
+
 { #category : 'initialization' }
 DockVersionsBrowser >> updatePatchWith: aDefinition [
 	| nextDefinition |
