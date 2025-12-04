@@ -94,6 +94,12 @@ MetaMetacello load: [ :spec | spec
 
 ### 5. Run
 
+in Linux/MacOS:
+```Shell
+pharo --worker Pharo.image run dock
+```
+
+in Windows:
 ```Shell
 .\PharoConsole.exe --headless --worker Pharo.image run dock
 ```
