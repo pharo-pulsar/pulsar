@@ -86,7 +86,11 @@ MetaMetacello load: [ :spec | spec
 		className: #BaselineOfPerspective ] ].
 
 (Smalltalk classNamed: #GEnumeration) allSubclassesDo: #initializeEnumeration.
-(Smalltalk classNamed: #StringInterpolationPlugin) install.
+"We want to work with string interpolation, but for now do not install it as it 
+ creates problems while saving changes (they become corrupt, digging why). 
+ Also current implementation is not backward compatible so we need to think how to  
+ do it right."
+"(Smalltalk classNamed: #StringInterpolationPlugin) install."
 ```
 
 **IMPORTANT!!! For all this to work you need to add your keys to your account in the forge!** 
