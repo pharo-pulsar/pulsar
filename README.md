@@ -82,7 +82,7 @@ MetaMetacello load: [ :spec | spec
 	baseline: 'SourceEditor' with: [ spec repository: 'git:git@forge.smallworks.eu:pharo/SourceEditor.git:main' ];
 	baseline: 'Panel' with: [ spec repository: 'github://estebanlm/Spec-LibPanel:main' ];
 	baseline: 'DockBrowser' with: [ spec 
-		repository: 'git:git@forge.smallworks.eu:pharo/DockBrowser.git:dev';
+		repository: 'git:git@forge.smallworks.eu:pharo/DockBrowser.git:main';
 		className: #BaselineOfPerspective ] ].
 
 (Smalltalk classNamed: #GEnumeration) allSubclassesDo: #initializeEnumeration.
