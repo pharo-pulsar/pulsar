@@ -25,7 +25,7 @@ This is a temporal location and likely a temporal VM, but for now it should make
 
 ## 2. Download a usable image
 Right now we are using [Pharo14 build 200](https://files.pharo.org/image/140/Pharo14.0-SNAPSHOT.build.200.sha.c126aa2736.arch.64bit.zip)
-(We will validate new images time to time but since P14 is changing maby underlying things, we will not be moving so much, 
+(We will validate new images time to time but since P14 is changing many underlying things, we will not be moving so much, 
 we want to deal with our bugs -already a lot- not others bugs).
 
 This build is very alpha and there are problems everywhere... in case of the build 200, you want to execute this as first step: 
