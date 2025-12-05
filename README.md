@@ -106,9 +106,14 @@ OSWindowDriver driverClass: OSSDL2Driver.
 
 ### 5. Run
 
-in Linux/MacOS:
+in Linux:
 ```Shell
 pharo --worker Pharo.image run dock
+```
+
+in MacOS:
+```Shell
+./Pharo.app/Contents/Pharo --worker Pharo.image run dock
 ```
 
 in Windows:
