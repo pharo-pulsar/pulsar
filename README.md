@@ -95,6 +95,14 @@ MetaMetacello load: [ :spec | spec
 
 **IMPORTANT!!! For all this to work you need to add your keys to your account in the forge!** 
 
+#### 4.1. In MacOS
+`Spec-Gtk` changes the default driver for the morphic world to `OSGtkDriver` but this is not 
+working properly for the moment, so better if we revert it or your image will not be working
+when tryign to execute it in morphic.
+
+```Smalltalk
+OSWindowDriver driverClass: OSSDL2Driver.
+```  
 
 ### 5. Run
 
