@@ -3,9 +3,9 @@ Trait {
 	#instVars : [
 		'actions'
 	],
-	#category : 'Dock-Browser-Actions',
-	#package : 'Dock-Browser',
-	#tag : 'Actions'
+	#category : 'Perspective-Model',
+	#package : 'Perspective',
+	#tag : 'Model'
 }
 
 { #category : 'private' }
