@@ -12,7 +12,7 @@ SpActionGroup >> actionsFor: groupId [
 SpActionGroup >> actionsForAll: aCollectionOfNames [
 
 	^ aCollectionOfNames
-		inject: PvActionGroup new asSpecGroup
+		inject: SpActionGroup new
 		into: [ :all :each | | group |
 			group := (self actionsFor: each).
 			group hasEntries

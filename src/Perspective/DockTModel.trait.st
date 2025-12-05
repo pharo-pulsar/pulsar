@@ -8,9 +8,9 @@ Important methods:
 "
 Trait {
 	#name : 'DockTModel',
-	#category : 'Dock-Browser-Base',
-	#package : 'Dock-Browser',
-	#tag : 'Base'
+	#category : 'Perspective-Model',
+	#package : 'Perspective',
+	#tag : 'Model'
 }
 
 { #category : 'visiting' }

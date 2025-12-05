@@ -308,7 +308,8 @@ DockApplication >> prepareErrorHandlerAsStandaloneApplication [
 
 	DockUIManager activateOn: self.
 	ErrorHandler defaultErrorHandler: UIManager default.
-	self flag: #TODO. "In the future it should be something like this but I do not have time right nwo"
+	self flag: #TODO. "In the future (P14 > 200) it should be something like this but I do 
+	not have time right now."
 	"ErrorHandler default: InteractiveErrorHandler new."
 	OupsDebuggerSelectionStrategy debuggerSelectionStrategy: (DockSingleDebuggerSelector on: self)
 ]
@@ -487,9 +488,10 @@ DockApplication >> windowWillClose: aDockWindow [
 			ifTrue: [
 				self newConfirm 
 					title: 'Quit Pharo?';
-					message: (
+					"message: (
 						(String cr join: messages),
-						String cr, 'Quit anyway?');
+						String cr, 'Quit anyway?');"  
+					message: 'There are unsaved changes in your environment.<n>Quit anyway?' expandMacros;
 					cancelLabel: 'Stay';
 					acceptLabel: 'Quit';
 					openModalWithParent: aDockWindow ]

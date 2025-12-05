@@ -2,8 +2,7 @@ Class {
 	#name : 'PvClassModel',
 	#superclass : 'PvBaseModel',
 	#instVars : [
-		'isNew',
-		'actionDecorators'
+		'isNew'
 	],
 	#category : 'Perspective-Class-Model',
 	#package : 'Perspective-Class',
@@ -38,7 +37,7 @@ PvClassModel >> accept: aVisitor [
 	^ aVisitor visitClassModel: self
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - actions' }
 PvClassModel >> actionDecorators [
 	"answer the actions associated with this class. E.g. test"
 	
@@ -99,7 +98,7 @@ PvClassModel >> classDefinitionString [
 	than pollute the model"
 	^ self entity isClassOrTrait 
 		ifTrue: [ (PvFluidClassDefinitionPrinter for: self entity) definitionString ]
-		ifFalse: [ self entity classDefinitionString ]	
+		ifFalse: [ self entity classDefinitionString ]
 ]
 
 { #category : 'accessing' }
@@ -112,12 +111,6 @@ PvClassModel >> classDepth [
 PvClassModel >> classSide [
 
 	^ self entity classSide
-]
-
-{ #category : 'private' }
-PvClassModel >> collectActionDecorators [
-
-	^ PvClassActionDecorator allApplyingTo: self
 ]
 
 { #category : 'accessing' }
@@ -136,25 +129,6 @@ PvClassModel >> commentOrTemplate [
 PvClassModel >> commentTemplate [
 
 	^ self entity classCommentBlank
-]
-
-{ #category : 'updating' }
-PvClassModel >> compile: aString notifying: requestor [
-	| resultClass |
-
- 	[ 
-		resultClass := self class compiler
-			source: '(', aString, ') install';
-			context: requestor doItContext;
-			receiver: requestor doItReceiver;
-			requestor: requestor;
-			evaluate.
-		resultClass isBehavior 
-			ifTrue: [ self entity: resultClass ] ]
-	on: OCUndeclaredVariableWarning
-	do: [ :e | 
-		"we are only interested in class definitions"
-		e compilationContext noPattern ifFalse: [ e pass ] ]
 ]
 
 { #category : 'private - definitions' }
@@ -189,7 +163,7 @@ PvClassModel >> defineRefactorActionsOn: aBuilder [
 		addActionWith: [ :action | action 
 			name: 'Insert superclass';
 			description: ReInsertSuperclassDriver comment lines first;
-			action: [ :aContext | self halt ] ] ]	
+			action: [ :aContext | aContext doRefactorInsertClass: action ] ] ]
 ]
 
 { #category : 'accessing - ui' }
@@ -221,23 +195,6 @@ PvClassModel >> hierarchyTopModel [
 		prevNode := node ].
 	
 	^ node
-]
-
-{ #category : 'accessing - ui' }
-PvClassModel >> iconComposite [
-
-	^ PvCompositeIcon new 
-		name: self iconName;
-		in: [ :this | 
-			self entity isAbstract 
-			ifTrue: [ this addAbstract ] ];
-		yourself
-]
-
-{ #category : 'accessing - ui' }
-PvClassModel >> iconName [
-	
-	^ self entity systemIconName
 ]
 
 { #category : 'testing' }
@@ -336,7 +293,6 @@ PvClassModel >> packageTagName [
 { #category : 'private' }
 PvClassModel >> prepareForSnapshot [
 
-	actionDecorators := nil
 ]
 
 { #category : 'printing' }
@@ -344,11 +300,6 @@ PvClassModel >> printOn: stream [
 
 	super printOn: stream.
 	stream << '(' << self name << ')'
-]
-
-{ #category : 'accessing' }
-PvClassModel >> resetActionDecorators [
-	"do nothing, class do not have action decorators"
 ]
 
 { #category : 'actions' }
@@ -406,15 +357,4 @@ PvClassModel >> updateWith: aString notifying: anInteractionModel [
 	isNew := false.
 
 	^ true
-]
-
-{ #category : 'accessing - ui' }
-PvClassModel >> windowIconComposite [
-
-	^ PvCompositeIcon new 
-		name: self iconName;
-		in: [ :this | 
-			self entity isAbstract 
-			ifTrue: [ this addAbstract ] ];
-		yourself
 ]

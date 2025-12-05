@@ -84,6 +84,12 @@ PvBaseModel >> cursorPostitionWhenOpenEditor [
 ]
 
 { #category : 'accessing - ui' }
+PvBaseModel >> dockEditorClass [
+
+	^ self editorClass
+]
+
+{ #category : 'accessing - ui' }
 PvBaseModel >> editorClass [
 
 	^ nil
@@ -228,6 +234,12 @@ PvBaseModel >> parentModel: aParentlModel [
 { #category : 'private' }
 PvBaseModel >> prepareForSnapshot [
 	"This is used when a model will be snapshot, to clean up what is not need/want to be kept "
+]
+
+{ #category : 'accessing' }
+PvBaseModel >> realModel [
+
+	^ self
 ]
 
 { #category : 'accessing' }

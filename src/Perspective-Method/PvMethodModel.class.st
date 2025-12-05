@@ -45,7 +45,7 @@ PvMethodModel >> accept: aVisitor [
 	^ aVisitor visitMethodModel: self
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - actions' }
 PvMethodModel >> actionDecorators [
 	"answer the actions associated with this method. E.g. versions, test"
 	
@@ -95,32 +95,6 @@ PvMethodModel >> collectDecorators [
 	^ PvMethodDecorator allApplyingTo: self
 ]
 
-{ #category : 'accessing - decorated' }
-PvMethodModel >> colorName [
-
-	^ self 
-		decorated: [ :each | each colorName ] 
-		ifNone: [ nil ]
-]
-
-{ #category : 'compiling' }
-PvMethodModel >> compile: aString notifying: requestor [
-	| selector |
-	self error: 'TO REMOVE'.
-
-	self sourceCode = aString ifTrue: [ ^ self ].
-
-	[
-		selector := self entity methodClass 
-			compile: aString
-			classified: self protocol
-			notifying: requestor.
-		self entity: self entity methodClass >> selector ]
-	on: OCSemanticWarning 
-	do: [ :w | 
-		w resume: (w accept: PvMethodCompilationVisitor new) ]
-]
-
 { #category : 'private' }
 PvMethodModel >> decorated: aBlockOrSymbol ifNone: noneBlock [
 
@@ -129,22 +103,6 @@ PvMethodModel >> decorated: aBlockOrSymbol ifNone: noneBlock [
 		detect: [ :each | (aBlockOrSymbol value: each) notNil ]
 		ifFound: [ :each | aBlockOrSymbol value: each ]
 		ifNone: noneBlock
-]
-
-{ #category : 'accessing - decorated' }
-PvMethodModel >> decoratedIconComposite [
-
-	^ PvCompositeIcon new 
-		name: self decoratedIconName;
-		yourself
-]
-
-{ #category : 'accessing - decorated' }
-PvMethodModel >> decoratedIconName [
-
-	^ self 
-		decorated: [ :each | each iconName ] 
-		ifNone: [ #blank ]
 ]
 
 { #category : 'private' }
@@ -201,6 +159,12 @@ PvMethodModel >> defineDecorationActionsOn: aBuilder [
 				presenterClass: DockMethodActionRunTestPresenter;
 				action: [ :aContext | aContext doRunTestCommand: action ] ] ].
 	]
+]
+
+{ #category : 'accessing - ui' }
+PvMethodModel >> dockEditorClass [
+
+	^ DockMethodEditor
 ]
 
 { #category : 'accessing - editor' }
@@ -343,6 +307,19 @@ PvMethodModel >> isTestPassed [
 	"this assumes the method is a test method"
 
 	^ self methodClass methodPassed: self selector
+]
+
+{ #category : 'testing' }
+PvMethodModel >> isUsingAnyVariable: aCollection [
+
+	^ aCollection anySatisfy: [ :each |
+		self isUsingVariable: each ]
+]
+
+{ #category : 'testing' }
+PvMethodModel >> isUsingVariable: aVariableModel [
+
+	^ aVariableModel isIncludedIn: self
 ]
 
 { #category : 'updating' }
@@ -523,12 +500,6 @@ PvMethodModel >> updateWith: aString notifying: anInteractionModel [
 	entity := newMethod.
 
  	^ true
-]
-
-{ #category : 'accessing' }
-PvMethodModel >> windowIconName [
-
-	^ 'method'
 ]
 
 { #category : 'accessing' }
