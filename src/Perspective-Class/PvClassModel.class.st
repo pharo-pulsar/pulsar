@@ -197,6 +197,12 @@ PvClassModel >> hierarchyTopModel [
 	^ node
 ]
 
+{ #category : 'accessing - ui' }
+PvClassModel >> iconName [
+
+	^ self entity systemIconName
+]
+
 { #category : 'testing' }
 PvClassModel >> includesClassModel [
 
