@@ -1,3 +1,8 @@
+"
+A base for all models. 
+(almost) all models that circulate on the browser are required to extend this class to have a series of common behavior.
+
+"
 Class {
 	#name : 'PvBaseModel',
 	#superclass : 'Object',
@@ -50,6 +55,8 @@ PvBaseModel >> = other [
 { #category : 'visiting' }
 PvBaseModel >> accept: aVisitor [
 	"to ensure specific process from models"
+	
+	^ aVisitor visitModel: self
 ]
 
 { #category : 'testing' }
