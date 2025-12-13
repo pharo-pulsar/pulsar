@@ -250,6 +250,14 @@ DockApplication >> newRequest [
 		yourself
 ]
 
+{ #category : 'ui - dialogs' }
+DockApplication >> newRequestText [
+
+	^ (DockRequestTextDialog newApplication: self) 
+		parentWindow: self topWindow;
+		yourself
+]
+
 { #category : 'private - scheduling' }
 DockApplication >> newScheduler [ 
 

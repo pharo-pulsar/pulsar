@@ -86,6 +86,12 @@ DockRequestDialog >> newDialogLabel [
 		yourself
 ]
 
+{ #category : 'api' }
+DockRequestDialog >> placeholder: aString [
+
+	textInput placeholder: aString
+]
+
 { #category : 'private' }
 DockRequestDialog >> setLabel: aString [
 
