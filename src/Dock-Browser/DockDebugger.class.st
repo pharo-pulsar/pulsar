@@ -6,9 +6,6 @@ Class {
 		'contextEditor',
 		'debugToolbarPresenter'
 	],
-	#classVars : [
-		'LastWindowSize'
-	],
 	#category : 'Dock-Browser-Tool-Debugger',
 	#package : 'Dock-Browser',
 	#tag : 'Tool-Debugger'
@@ -72,6 +69,14 @@ DockDebugger >> eventModelSelected: anAnnouncement [
 ]
 
 { #category : 'initialization' }
+DockDebugger >> initializeDefaultWorkspace [
+
+	stackView := self addPresenterClass: DockContextStackPresenter.
+
+	self addPresenterClass: DockDebuggerInspector
+]
+
+{ #category : 'initialization' }
 DockDebugger >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
@@ -91,17 +96,10 @@ DockDebugger >> initializeWorkspace [
 
 	self startWidth: 380.
 	self bottomHeight: 300.
-	debugToolbarPresenter := (self instantiate: DockDebuggerToolbarPresenter on: self model)
+	
+	debugToolbarPresenter := (self instantiate: DockDebuggerToolbarPresenter)
 		debugger: self;
-		yourself.
-			
-	stackView := self addPresenterClass: DockContextStackPresenter.
-
-	"this will be created dynamically, do not add it here.
-	 contextEditor := self addPresenterClass: DockContextEditor."
-	 
-	"self addPresenterClass: DockStackView."
-	self addPresenterClass: DockDebuggerInspector
+		yourself
 ]
 
 { #category : 'accessing - model' }
@@ -110,6 +108,15 @@ DockDebugger >> model: aModel [
 	super model: aModel.
 	self debugToolbarPresenter model: nil.
 	self stackView model: aModel
+]
+
+{ #category : 'accessing - snapshot' }
+DockDebugger >> postRestoreSnapshot: aSnapshot [
+			
+ 	stackView := self presenters
+		detect: [ :each | each presenter class = DockContextStackPresenter ]
+		ifFound: [ :each | each presenter ]
+		ifNone: [ self addPresenterClass: DockContextStackPresenter ]
 ]
 
 { #category : 'initialization' }
@@ -129,6 +136,12 @@ DockDebugger >> session: aDebugSession [
 	self model: (DockDebuggerModel 
 		newEnvironment: PvEnvironmentModel onSystem 
 		entity: aDebugSession)
+]
+
+{ #category : 'accessing - snapshot' }
+DockDebugger >> snapshot [
+
+	^ DockDebuggerSnapshot on: self
 ]
 
 { #category : 'private - accessing' }

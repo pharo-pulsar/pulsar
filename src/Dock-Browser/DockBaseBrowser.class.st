@@ -8,7 +8,11 @@ Class {
 	#classTraits : 'SpTModel classTrait + DockTSnapshot classTrait + DockTGlobalActionContainer classTrait',
 	#instVars : [
 		'actions',
-		'mutex'
+		'mutex',
+		'job'
+	],
+	#classInstVars : [
+		'lastWindowSize'
 	],
 	#category : 'Dock-Browser-View-Base',
 	#package : 'Dock-Browser',
@@ -37,6 +41,16 @@ DockBaseBrowser class >> definePanelActionsOn: aBuilder [
 				iconName: 'panel-', each first;
 				action: [ :aContext | aContext togglePanelArea: each second  ] ]
 			 ] ].
+]
+
+{ #category : 'instance creation' }
+DockBaseBrowser class >> newApplication: anApplication model: aModel snapshot: aSnapshot [
+
+	^ self basicNew
+		application: anApplication;
+		setModelBeforeInitialization: aModel;
+		initializeSnapshot: aSnapshot;
+		yourself
 ]
 
 { #category : 'private' }
@@ -148,13 +162,27 @@ DockBaseBrowser >> inform: aString [
 DockBaseBrowser >> initialize [
 
 	super initialize.
-	self registerToEvents
+	self registerToEvents.
+	self initializeDefaultWorkspace
+]
+
+{ #category : 'initialization' }
+DockBaseBrowser >> initializeDefaultWorkspace [
+	"override this to add things when the browser do not come from a snapshot (not recovening)"
+	
 ]
 
 { #category : 'private - initialization' }
 DockBaseBrowser >> initializePrivateAnnouncer [
 
   announcer := DockTaskAnnouncer new
+]
+
+{ #category : 'initialization' }
+DockBaseBrowser >> initializeSnapshot: aSnapshot [
+
+	super initialize.
+	self registerToEvents
 ]
 
 { #category : 'initialization' }
@@ -188,6 +216,10 @@ DockBaseBrowser >> mutex [
 DockBaseBrowser >> notificationCenter [
 	"using my own announcer as notification center"
 	^ self announcer
+]
+
+{ #category : 'accessing - snapshot' }
+DockBaseBrowser >> postRestoreSnapshot: aSnapshot [
 ]
 
 { #category : 'private' }
@@ -274,7 +306,7 @@ DockBaseBrowser >> showSpotterOn: anOption [
 { #category : 'accessing - snapshot' }
 DockBaseBrowser >> snapshot [
 
-	^ DockBrowserSnapshot on: self
+	^ DockBaseBrowserSnapshot on: self
 ]
 
 { #category : 'accessing' }

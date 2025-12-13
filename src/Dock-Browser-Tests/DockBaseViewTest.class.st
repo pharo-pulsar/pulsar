@@ -84,9 +84,7 @@ DockBaseViewTest >> mockClassName [
 { #category : 'private' }
 DockBaseViewTest >> newBrowser [
 
-	^ (DockBrowser newApplication: self application)
-		loadDefaultWorkspace;
-		yourself
+	^ DockBrowser newApplication: self application
 ]
 
 { #category : 'private' }

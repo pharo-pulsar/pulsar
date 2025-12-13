@@ -25,7 +25,7 @@ DockApplicationSnapshot >> initialize [
 { #category : 'initialization' }
 DockApplicationSnapshot >> restoreTo: anApplication [
 
-	records 
+	(records sorted: #restorePriority ascending)
 		collect: [ :each | self restoreWindow: each to: anApplication  ]
 		thenDo: [ :each | each open ]
 ]

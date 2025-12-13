@@ -12,6 +12,12 @@ DockBaseSnapshot class >> on: aPresenter [
 	^ self new snapshot: aPresenter
 ]
 
+{ #category : 'accessing' }
+DockBaseSnapshot >> restorePriority [
+
+	^ 100
+]
+
 { #category : 'restoring' }
 DockBaseSnapshot >> restoreTo: aPresenter [
 
