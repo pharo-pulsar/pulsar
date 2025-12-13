@@ -430,6 +430,9 @@ DockProjectView >> refreshProjectPath: path [
 	
 	self flag: #TODO. "Maybe revisit?"
 	
+	"under certain conditions (e.g. no project :P), path can be nil"
+	path ifNil: [ ^ self ].
+	
 	logger trace: path.
 	logger trace: (listPresenter isExpanded: path).
 	

@@ -16,21 +16,11 @@ PvAliasedVSCodeIconProvider >> aliasFor: aName [
 		ifAbsent: [ aName ]
 ]
 
-{ #category : 'accessing' }
-PvAliasedVSCodeIconProvider >> iconNamed: aName ifAbsent: aBlock [
-
-	^ super 
-		iconNamed: (self aliasFor: aName) 
-		ifAbsent: [
-			(Smalltalk at: #CollectUsedIcons ifAbsentPut: [ Set new ]) add: aName.
-			aBlock value ]
-]
-
 { #category : 'initialization' }
-PvAliasedVSCodeIconProvider >> initialize [
+PvAliasedVSCodeIconProvider >> createAliases [
+	"a list of pairs"
 
-	super initialize.
-	self addAliasesFromPairs: {
+	^ {
 		'add'.						'add'.	
 		'closeAll'.					'close-all'.
 		'load'. 						'folder-opened'.
@@ -153,7 +143,31 @@ PvAliasedVSCodeIconProvider >> initialize [
 		"'link'.						'link'"
 		'flag'.						'bookmark'.
 		'refactor'.					'symbol-property'.
+		"repositories"
+		'commit'.					'git-commit'.
+		'branch'.					'git-branch'.
+		'merge'.						'git-merge'.
+		'pull'.						'repo-pull'.
+		'push'.						'repo-push'.
+		"'discard'.					'discard'"
 	 }
+]
+
+{ #category : 'accessing' }
+PvAliasedVSCodeIconProvider >> iconNamed: aName ifAbsent: aBlock [
+
+	^ super 
+		iconNamed: (self aliasFor: aName) 
+		ifAbsent: [
+			(Smalltalk at: #CollectUsedIcons ifAbsentPut: [ Set new ]) add: aName.
+			aBlock value ]
+]
+
+{ #category : 'initialization' }
+PvAliasedVSCodeIconProvider >> initialize [
+
+	super initialize.
+	self addAliasesFromPairs: self createAliases
 ]
 
 { #category : 'utilities' }

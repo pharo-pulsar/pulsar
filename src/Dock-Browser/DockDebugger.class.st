@@ -79,14 +79,7 @@ DockDebugger >> initializeDefaultWorkspace [
 { #category : 'initialization' }
 DockDebugger >> initializeWindow: aWindowPresenter [
 
-	super initializeWindow: aWindowPresenter.
-	aWindowPresenter
-		initialExtent: (LastWindowSize ifNil: [ 1000@800 ]);
-		whenResizingDo: [ :ann | LastWindowSize := ann newSize ];
-		whenWillCloseDo: [ :ann | 
-			self windowWillClose 
-				ifFalse: [ ann denyClose ] ];
-		whenClosedDo: [ self windowClosed ]
+	super initializeWindow: aWindowPresenter
 ]
 
 { #category : 'initialization' }

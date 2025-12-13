@@ -18,6 +18,14 @@ DockCollectionView >> connectPresenters [
 		transmitDo: [ :anEntity | self notifyActivateEntity: anEntity ]
 ]
 
+{ #category : 'layout' }
+DockCollectionView >> defaultLayout [
+
+	^ SpBoxLayout newVertical
+		add: listPresenter;
+		yoursel
+]
+
 { #category : 'private' }
 DockCollectionView >> listPresenter [
 

@@ -24,8 +24,20 @@ DockRepositoriesModel >> name [
 	^ 'Repositories'
 ]
 
+{ #category : 'private' }
+DockRepositoriesModel >> prepareForSnapshot [
+
+	^ self copy resetRepositories
+]
+
 { #category : 'accessing' }
 DockRepositoriesModel >> repositories [
 
 	^ repositories ifNil: [ repositories := self collectRepositories ]
+]
+
+{ #category : 'initialization' }
+DockRepositoriesModel >> resetRepositories [
+
+	repositories := nil
 ]

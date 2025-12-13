@@ -7,9 +7,6 @@ Class {
 		'repositoryView',
 		'pepe'
 	],
-	#classVars : [
-		'LastWindowSize'
-	],
 	#category : 'Dock-Browser-View-Browser',
 	#package : 'Dock-Browser',
 	#tag : 'View-Browser'
@@ -178,15 +175,32 @@ DockBrowser >> informLostChanges: ann [
 { #category : 'initialization' }
 DockBrowser >> initialExtent [
 
-	^ LastWindowSize ifNil: [ super initialExtent ]
+	^ self class lastWindowSize ifNil: [ super initialExtent ]
 ]
 
 { #category : 'initialization' }
 DockBrowser >> initialize [
+	"model can be already initialized from the recover snapshot"
+	model ifNil: [
+		"but if not, we need an initial model"
+		model := PvEnvironmentModel onSystem ].
+	super initialize
+]
 
-	self setModelBeforeInitialization: PvEnvironmentModel onSystem.
-	super initialize.
-	self registerToSystemEvents
+{ #category : 'initialization' }
+DockBrowser >> initializeDefaultWorkspace [
+
+	"I need a better control on these one"
+	projectView := self addPresenterClass: DockProjectView model: self model newMultiProjectModel.
+	outlineView := self addPresenterClass: DockClassOutlineView.
+
+	"here, the list of components that are part of the 'sides' but we access 
+	 just while interacting."
+	self addPresenterClass: DockStackView.
+	self addPresenterClass: DockFlagsConsole model: (DockFlagsModel on: self model). 	
+	self addPresenterClass: DockPlayground.
+	
+	self updateTitle
 ]
 
 { #category : 'initialization' }
@@ -199,16 +213,7 @@ DockBrowser >> initializeStatusbar [
 
 { #category : 'initialization' }
 DockBrowser >> initializeWindow: aWindowPresenter [
-	self flag: #TODO. "In fact, there is no reason why this cannot be 
-	in the superclass, available to any dockbrowser window"
-	super initializeWindow: aWindowPresenter.
-	aWindowPresenter
-		initialExtent: (LastWindowSize ifNil: [ 1000@800 ]);
-		whenResizingDo: [ :ann | LastWindowSize := ann newSize ];
-		whenWillCloseDo: [ :ann | 
-			self windowWillClose 
-				ifFalse: [ ann denyClose ] ];
-		whenClosedDo: [ self windowClosed ]
+	super initializeWindow: aWindowPresenter
 ]
 
 { #category : 'initialization' }
@@ -221,19 +226,6 @@ DockBrowser >> initializeWorkspace [
 	self endWidth: 280"self initialExtent x * 25 percent".
 	self topHeight: 180"self initialExtent y * 20 percent".
 	self bottomHeight: 180"self initialExtent y * 20 percent"
-]
-
-{ #category : 'initialization' }
-DockBrowser >> loadDefaultWorkspace [
-
-	"I need a better control on these one"
-	projectView := self addPresenterClass: DockProjectView model: self model newMultiProjectModel.
-	outlineView := self addPresenterClass: DockClassOutlineView.
-
-	"here, the list of components that are part of the 'sides' but we access 
-	 just while interacting."	
-	{ DockStackView. DockPlayground. "DockTranscript" } 
-		do: [ :eachClass | self addPresenterClass: eachClass ]
 ]
 
 { #category : 'private' }
@@ -272,14 +264,6 @@ DockBrowser >> maybeUndockView: aViewModel [
 		ifNotNil: [ :panelPresenter | panelPresenter close ]
 ]
 
-{ #category : 'showing' }
-DockBrowser >> open [
-
-	self presenters ifEmpty: [ 
-		self loadDefaultWorkspace ].
-	super open
-]
-
 { #category : 'actions' }
 DockBrowser >> openClass: aClass [ 
 
@@ -297,7 +281,7 @@ DockBrowser >> openFlagsConsole [
 		ifNone: [ 
 			(self 
 				addPresenterClass: DockFlagsConsole 
-				model: (DockFlagsModel defaultScopeClass newEnvironment: self model))
+				model: (DockFlagsModel on: self model))
 			panelWindow ].
 
 	flagsConsole raiseAndTakeKeyboardFocus
@@ -409,6 +393,12 @@ DockBrowser >> saveImage [
 
 	[ Smalltalk snapshot: true andQuit: false ] fork.
 	self inform: 'Image saved'
+]
+
+{ #category : 'accessing - snapshot' }
+DockBrowser >> snapshot [
+
+	^ DockBrowserSnapshot on: self
 ]
 
 { #category : 'actions' }

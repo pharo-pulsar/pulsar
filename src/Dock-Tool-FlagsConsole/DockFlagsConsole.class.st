@@ -170,7 +170,6 @@ DockFlagsConsole >> initializeWindow: aWindowPresenter [
 DockFlagsConsole >> registerToEvents [
 
 	self announcer
-		"now process here"
 		when: DockModelSelected
 		send: #eventModelSelected:
 		to: self

@@ -27,6 +27,12 @@ DockFlagsModel class >> isDefault [
 	^ false
 ]
 
+{ #category : 'instance creation' }
+DockFlagsModel class >> on: aModel [
+
+	^ self defaultScopeClass newEnvironment: aModel
+]
+
 { #category : 'private' }
 DockFlagsModel >> calculateEnvironment [
 

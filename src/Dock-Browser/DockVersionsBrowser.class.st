@@ -63,7 +63,11 @@ DockVersionsBrowser >> defaultLayout [
 			positionOfSlider: 200;
 			add: versionListPresenter;
 			add: (SpTabLayout new 
-				add: patchPresenter label: 'Patch';
+				add: (SpScrollableLayout new 
+						child: patchPresenter;
+						withoutHScrollbar;
+						yourself) 
+					label: 'Patch';
 				add: sourcePresenter label: 'Source';
 				yourself);
 			yourself);
@@ -122,7 +126,7 @@ DockVersionsBrowser >> initializeWindow: aWindowPresenter [
 DockVersionsBrowser >> notifyActivateEntity: anEntity [
 
 	anEntity ifNil: [ ^ self ].
-	self notificationCenter announce: anEntity realModel newActivationAnnouncement
+	self notificationCenter announce: anEntity newActivationAnnouncement
 ]
 
 { #category : 'initialization' }

@@ -19,6 +19,12 @@ Class {
 	#tag : 'View-Base'
 }
 
+{ #category : 'accessing - defaults' }
+DockBaseBrowser class >> defaultWindowSize [
+
+	^ 1000@800
+]
+
 { #category : 'accessing - actions' }
 DockBaseBrowser class >> definePanelActionsOn: aBuilder [
 	<dockActions>
@@ -41,6 +47,18 @@ DockBaseBrowser class >> definePanelActionsOn: aBuilder [
 				iconName: 'panel-', each first;
 				action: [ :aContext | aContext togglePanelArea: each second  ] ]
 			 ] ].
+]
+
+{ #category : 'private - accessing' }
+DockBaseBrowser class >> lastWindowSize [
+
+	^ lastWindowSize ifNil: [ self defaultWindowSize ]
+]
+
+{ #category : 'private - accessing' }
+DockBaseBrowser class >> lastWindowSize: aPoint [
+
+	lastWindowSize := aPoint
 ]
 
 { #category : 'instance creation' }
@@ -129,6 +147,18 @@ DockBaseBrowser >> editors [
 ]
 
 { #category : 'events' }
+DockBaseBrowser >> eventJobEnd: ann [
+
+	self jobEnd
+]
+
+{ #category : 'events' }
+DockBaseBrowser >> eventJobStart: ann [
+
+	self jobStart
+]
+
+{ #category : 'events' }
 DockBaseBrowser >> eventManyModelDeactivated: anAnnouncement [
 ]
 
@@ -197,13 +227,40 @@ DockBaseBrowser >> initializeStatusbar [
 DockBaseBrowser >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
-	self addGlobalActionsTo: self
+	self addGlobalActionsTo: self.
+	
+	aWindowPresenter
+		initialExtent: self class lastWindowSize;
+		whenResizingDo: [ :ann | self class lastWindowSize: ann newSize ];
+		whenWillCloseDo: [ :ann | 
+			self windowWillClose 
+				ifFalse: [ ann denyClose ] ];
+		whenClosedDo: [ self windowClosed ]
 ]
 
 { #category : 'initialization' }
 DockBaseBrowser >> initializeWorkspace [
+	"IMPORTANT: browser initialize workspace will do just what it has always initialized 
+	 **and that is not restored through a snapshot**.
+	 To create the initial workspace (created without a snapshot), please override 
+	 `initializeDefaultWorkspace` instead this."	
 	
 	self initializeStatusbar
+
+]
+
+{ #category : 'accessing - jobs' }
+DockBaseBrowser >> jobEnd [
+
+	job ifNil: [ ^ self ].
+	job end
+]
+
+{ #category : 'accessing - jobs' }
+DockBaseBrowser >> jobStart [
+
+	job ifNil: [ job := DockJobHandler on: self ].
+	job start
 ]
 
 { #category : 'private' }
@@ -258,14 +315,23 @@ DockBaseBrowser >> registerToEvents [
 
 	self announcer 
 		"first broadcast"
-		when: DockThemeChanged, DockSyntaxHighlightThemeChanged
+		when: DockThemeChanged, DockSyntaxHighlightThemeChanged, DockAnnouncement
 			send: #resendAnnouncement:
 			to: self;
-		when: DockAnnouncement send: #resendAnnouncement: to: self;
 		"now process here"
 		when: DockModelActivated send: #eventModelActivated: to: self;
 		when: DockModelDeactivated send: #eventModelDeactivated: to: self;
 		when: DockManyModelDeactivated send: #eventManyModelDeactivated: to: self
+]
+
+{ #category : 'initialization' }
+DockBaseBrowser >> registerToSystemEvents [
+
+
+	self announcer 
+		when: JobStart send: #eventJobStart: to: self;
+		when: JobEnd send: #eventJobEnd: to: self
+		
 ]
 
 { #category : 'announcing' }

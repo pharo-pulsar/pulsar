@@ -133,7 +133,10 @@ DockGtkConfiguration >> darkPaletteStyle [
 	/* markers for editor */
 	--button-bg-cancel-mark: #FF00006F;
 	--button-bg-accept-mark: #00DF006F;
-}
+	/* repository commit */
+	--commit-outgoing: LightGreen;
+	--commit-incoming: Tomato;
+}}
 '
 ]
 
@@ -231,7 +234,10 @@ DockGtkConfiguration >> lightPaletteStyle [
 	/* markers for editor */
 	--button-bg-cancel-mark: #C000002F; 
 	--button-bg-accept-mark: #00C0002F;
-}	
+	/* repository commit */
+	--commit-outgoing: green;
+	--commit-incoming: red;
+}
 '
 ]
 
@@ -400,6 +406,17 @@ popover .dockPreviewEditor { min-width: 680px; min-height: 340px; }
 .dockSearchPanel grid { margin: -12px -20px -12px -16px; padding: 0px; border-spacing: 0px; border: 0px; border-top-width: 0px;  border-spacing: 4px; } 
 .dockSearchPanel .count { margin-right: 10px; }
 .dockSearchPanel .buttonToggleSearch { border-radius: 0px; padding: 2px; margin-left: 4px; }
+
+/* repository */
+
+.dockRepositoryPatch { margin: 5px; padding: 5px; background-color: var(--card-bg-color); border-radius: 4px; }
+.dockRepositoryPatch box.dockToolbarPanel { background-color: transparent; }
+.dockRepositoryPatch box.dockToolbarPanel box { font-size: 1.0em; margin: 2px 2px 6px 2px; }
+.dockRepositoryCommit label { margin-left: 5px; }
+.dockRepositoryBranchRow label.head { font-weight: bold; }
+.dockRepositoryRow .extra label.outgoing, .dockRepositoryBranchRow .extra label.outgoing { color: var(--commit-outgoing); }
+.dockRepositoryRow .extra label.incoming, .dockRepositoryBranchRow .extra label.incoming{ color: var(--commit-incoming); }
+.dockRepositoryCommitView label.outgoing { color: var(--commit-outgoing); }
 '
 ]
 

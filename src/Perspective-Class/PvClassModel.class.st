@@ -33,7 +33,8 @@ PvClassModel class >> newEnvironment: anEnvirontmentModel beNewTraitWithParent: 
 
 { #category : 'visiting' }
 PvClassModel >> accept: aVisitor [
-
+	self flag: #TODO. "This is a hack, see how it should be for real?"
+	self isNew ifTrue: [ ^ nil ].
 	^ aVisitor visitClassModel: self
 ]
 

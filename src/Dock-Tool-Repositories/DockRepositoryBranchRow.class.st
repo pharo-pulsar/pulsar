@@ -1,8 +1,8 @@
 Class {
-	#name : 'DockRepositoryRow',
+	#name : 'DockRepositoryBranchRow',
 	#superclass : 'SpEasyAbstractRowPresenter',
 	#instVars : [
-		'labelPresenter',
+		'namePresenter',
 		'extraPresenter'
 	],
 	#category : 'Dock-Tool-Repositories',
@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : 'initialization' }
-DockRepositoryRow >> addIncomingCommits: incomingCommits [
+DockRepositoryBranchRow >> addIncomingCommits: incomingCommits [
 
 	extraPresenter layout 
 		add: (self newImage
@@ -23,7 +23,7 @@ DockRepositoryRow >> addIncomingCommits: incomingCommits [
 ]
 
 { #category : 'initialization' }
-DockRepositoryRow >> addOutgoingCommits: outgoingCommits [
+DockRepositoryBranchRow >> addOutgoingCommits: outgoingCommits [
 
 	extraPresenter layout 
 		add: (self newImage
@@ -36,21 +36,21 @@ DockRepositoryRow >> addOutgoingCommits: outgoingCommits [
 ]
 
 { #category : 'layout' }
-DockRepositoryRow >> defaultLayout [
+DockRepositoryBranchRow >> defaultLayout [
 
 	^ SpBoxLayout newHorizontal
-		add: labelPresenter expand: false;
+		add: namePresenter expand: false;
 		add: extraPresenter;
 		yourself
 ]
 
 { #category : 'initialization' }
-DockRepositoryRow >> initializePresenters [
+DockRepositoryBranchRow >> initializePresenters [
 
 	self addStyle: 'stRow'.
-	self addStyle: 'dockRepositoryRow'.
-	
-	labelPresenter := self newLabel.
+	self addStyle: 'dockRepositoryBranchRow'.
+
+	namePresenter := self newLabel.
 	extraPresenter := self newPresenter
 		addStyle: 'extra';
 		layout: (SpBoxLayout newHorizontal
@@ -60,18 +60,18 @@ DockRepositoryRow >> initializePresenters [
 ]
 
 { #category : 'initialization' }
-DockRepositoryRow >> updatePresenter [
+DockRepositoryBranchRow >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	
-	labelPresenter label: self model name.
-	labelPresenter removeAllStyles.
-	labelPresenter addStyle: self model status asString.
-	
+	namePresenter label: self model name.
+	namePresenter removeAllStyles.
+	self model isHead
+		ifTrue: [ namePresenter addStyle: 'head' ].
+		
 	extraPresenter layout removeAll.
-	self model outgoingCommits
+	self model outgoingCommits 
 		ifNotEmpty: [ :outgoingCommits | self addOutgoingCommits: outgoingCommits ].
-	self model incomingCommits
-		ifNotEmpty: [ :incomingCommits | self addIncomingCommits: incomingCommits ].
-
+	self model incomingCommits 
+		ifNotEmpty: [ :incomingCommits | self addIncomingCommits: incomingCommits ]
 ]

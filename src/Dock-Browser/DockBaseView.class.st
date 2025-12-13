@@ -64,6 +64,16 @@ DockBaseView >> registerToEvents [
 	"override this to subscribe to notifications"
 ]
 
+{ #category : 'private' }
+DockBaseView >> scheduleJob: aBlock [
+	"schedule a task that will show the working spinner while it executes"
+
+	self application schedule: [ 
+		self withWindowDo: #jobStart.
+		aBlock ensure: [
+			self withWindowDo: #jobEnd ] ]
+]
+
 { #category : 'accessing' }
 DockBaseView >> spotterTitle [
 	

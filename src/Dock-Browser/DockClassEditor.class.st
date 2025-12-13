@@ -154,7 +154,8 @@ DockClassEditor >> eventModelSelected: ann [
 	
 	linkedToSelection ifFalse: [ ^ self ].
 	
-	self model: ann value
+	self model: ann value.
+	"self notificationCenter announce: ann value newActivationAnnouncement"
 ]
 
 { #category : 'events' }

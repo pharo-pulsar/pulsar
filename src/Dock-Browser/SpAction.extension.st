@@ -2,7 +2,7 @@ Extension { #name : 'SpAction' }
 
 { #category : '*Dock-Browser' }
 SpAction >> asPvAction [
-
+	self flag: #TOREMOVE.
 	^ self
 ]
 

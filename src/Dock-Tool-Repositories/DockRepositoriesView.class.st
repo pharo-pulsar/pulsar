@@ -58,6 +58,12 @@ DockRepositoriesView >> doOpenRepository: aRepositoryModel [
 		open
 ]
 
+{ #category : 'events' }
+DockRepositoriesView >> eventRepositoryModified: ann [
+
+	self updatePresenter
+]
+
 { #category : 'initialization' }
 DockRepositoriesView >> initializePresenters [
 
@@ -81,9 +87,25 @@ DockRepositoriesView >> initializeWindow: aWindowPresenter [
 ]
 
 { #category : 'initialization' }
+DockRepositoriesView >> registerToEvents [
+
+	super registerToEvents.
+	self announcer 
+		when: DockRepositoryModified
+		send: #eventRepositoryModified:
+		to: self
+]
+
+{ #category : 'accessing - snapshot' }
+DockRepositoriesView >> snapshot [
+
+	^ DockRepositoriesSnapshot on: self
+]
+
+{ #category : 'initialization' }
 DockRepositoriesView >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	
-	listPresenter items: (self model repositories sorted: #name ascending)
+	listPresenter updateItemsKeepingSelection: (self model repositories sorted: #name ascending)
 ]

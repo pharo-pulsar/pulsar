@@ -6,7 +6,7 @@ Class {
 	#tag : 'View-Base'
 }
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 DockWorker >> inTool: aClass [
 
 	^ self name: ('{TOOL}-{ID}' format: {#TOOL -> aClass name. #ID -> UUID new} asDictionary)
