@@ -283,6 +283,12 @@ DockProjectView >> doRemoveSelectedEntity [
 ]
 
 { #category : 'private - actions' }
+DockProjectView >> doRenameSelectedEntity [
+	listPresenter selectedItem ifNotNil: [ :aModel |
+		(DockProjectRenameModel on: self) visit: aModel realModel ] 
+]
+
+{ #category : 'private - actions' }
 DockProjectView >> doRequestNewClass [
 	| parent |
 

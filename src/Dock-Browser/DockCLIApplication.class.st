@@ -1,5 +1,9 @@
+"
+This is the command line launcher for Pulsar IDE.
+
+"
 Class {
-	#name : 'DockRunCLIApplication',
+	#name : 'DockCLIApplication',
 	#superclass : 'ClapApplication',
 	#category : 'Dock-Browser-Application',
 	#package : 'Dock-Browser',
@@ -7,8 +11,7 @@ Class {
 }
 
 { #category : 'command line' }
-DockRunCLIApplication class >> commandSpecification [
-
+DockCLIApplication class >> commandSpecification [
 	<commandline>
 	
 	^ (ClapCommandSpec id: #pulsar)
@@ -21,7 +24,7 @@ DockRunCLIApplication class >> commandSpecification [
 ]
 
 { #category : 'execution' }
-DockRunCLIApplication >> execute [
+DockCLIApplication >> execute [
 
 	"reset cleans up but it does not stop the execution of the IDE" 
 	(self hasFlag: #reset) ifTrue: [ self forceReset ].
@@ -30,7 +33,7 @@ DockRunCLIApplication >> execute [
 ]
 
 { #category : 'initialization' }
-DockRunCLIApplication >> forceReset [
+DockCLIApplication >> forceReset [
 	"runs a reset of the application before restart."
 	
 	DockApplication resetLastSnapshot.
@@ -41,7 +44,7 @@ DockRunCLIApplication >> forceReset [
 ]
 
 { #category : 'executing' }
-DockRunCLIApplication >> runApplication [
+DockCLIApplication >> runApplication [
 	self doNotQuitImage.
 
 	[ 
