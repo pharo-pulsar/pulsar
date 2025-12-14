@@ -111,7 +111,7 @@ DockRepositoryModel >> newPushAction [
 
 	^ IceTipStandardAction new 
 		repository: self entity;
-		message: ('Pushing to {1}' format: { self remote name }) ;
+		message: ('Pushing to {1}' format: { self entity branch name }) ;
 		action: [ self entity push ];
 		yourself
 ]
