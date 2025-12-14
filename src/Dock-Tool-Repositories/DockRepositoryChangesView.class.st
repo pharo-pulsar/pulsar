@@ -170,6 +170,15 @@ DockRepositoryChangesView >> doExpandAll [
 		listPresenter expandAll ]
 ]
 
+{ #category : 'events' }
+DockRepositoryChangesView >> eventRepositoryModified: ann [
+
+	ann value = self model ifFalse: [ ^ self ].
+	
+	self model resetDiff.
+	self updatePresenter
+]
+
 { #category : 'initialization' }
 DockRepositoryChangesView >> initializePresenters [
 
@@ -194,11 +203,19 @@ DockRepositoryChangesView >> initializeWindow: aWindowPresenter [
 	aWindowPresenter title: 'Changes'
 ]
 
+{ #category : 'initialization' }
+DockRepositoryChangesView >> registerToEvents [
+
+	super registerToEvents.
+	self announcer 
+		when: DockRepositoryModified
+		send: #eventRepositoryModified:
+		to: self
+]
+
 { #category : 'private' }
 DockRepositoryChangesView >> repositoryModified [
 
-	self model resetDiff.
-	self updatePresenter.
 	"inform to all windows, as all may have things to do"
 	self application resendAnnouncement: (DockRepositoryModified newValue: self model)
 ]

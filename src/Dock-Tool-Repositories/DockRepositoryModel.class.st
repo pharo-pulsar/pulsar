@@ -80,7 +80,7 @@ DockRepositoryModel >> localBranches [
 	self entity isValid ifFalse: [ ^ #() ].
 
 	^ self entity localBranches collect: [ :each | 
-		DockRepositoryBranchModel newRepository: self entity: each ]
+		DockRepositoryLocalBranchModel newRepository: self entity: each ]
 ]
 
 { #category : 'accessing' }
@@ -103,6 +103,15 @@ DockRepositoryModel >> newCommitAction [
 		repository: self entity workingCopy repository;
 		diff: self diffToReferenceCommit;
 		items: self activeNodes;
+		yourself
+]
+
+{ #category : 'instance creation' }
+DockRepositoryModel >> newFetchAction [
+	
+	^ IceTipStandardAction new
+		repository: self entity;
+		action: [ self entity fetch ];
 		yourself
 ]
 
@@ -139,7 +148,7 @@ DockRepositoryModel >> remoteBranches [
 	self entity isValid ifFalse: [ ^ #() ].
 
 	^ self entity remoteTrackedBranches collect: [ :each | 
-		DockRepositoryBranchModel newRepository: self entity: each ]
+		DockRepositoryRemoteBranchModel newRepository: self entity: each ]
 ]
 
 { #category : 'accessing' }

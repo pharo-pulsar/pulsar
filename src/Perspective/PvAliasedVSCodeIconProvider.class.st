@@ -149,6 +149,7 @@ PvAliasedVSCodeIconProvider >> createAliases [
 		'merge'.						'git-merge'.
 		'pull'.						'repo-pull'.
 		'push'.						'repo-push'.
+		'fetch'.						'sync'.
 		"'discard'.					'discard'"
 	 }
 ]

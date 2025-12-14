@@ -111,7 +111,6 @@ DockRepositoryCommitsView >> registerToEvents [
 { #category : 'private' }
 DockRepositoryCommitsView >> repositoryModified [
 
-	self updatePresenter.
 	"inform to all windows, as all may have things to do"
 	self application resendAnnouncement: (DockRepositoryModified newValue: self model)
 ]

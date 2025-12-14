@@ -23,7 +23,7 @@ DockRepositoryBranchModel >> branch [
 { #category : 'accessing' }
 DockRepositoryBranchModel >> incomingCommits [
 
-	^ self branch incomingCommits
+	^ #()
 ]
 
 { #category : 'testing' }
@@ -40,6 +40,6 @@ DockRepositoryBranchModel >> name [
 
 { #category : 'accessing' }
 DockRepositoryBranchModel >> outgoingCommits [
-
-	^ self branch outgoingCommits
+ 
+	^ #()
 ]
