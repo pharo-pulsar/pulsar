@@ -43,6 +43,15 @@ DockRepositoryCommitsView >> defineActionsOn: aBuilder [
 			action: [ self doPull ] ] ]
 ]
 
+{ #category : 'private - actions' }
+DockRepositoryCommitsView >> doPush [
+
+	self scheduleJob: [
+		self model newPushAction 
+			onSuccess: [ self repositoryModified ];
+			executeWithContext: self ]
+]
+
 { #category : 'events' }
 DockRepositoryCommitsView >> eventRepositoryModified: ann [
 
@@ -97,6 +106,14 @@ DockRepositoryCommitsView >> registerToEvents [
 		when: DockRepositoryModified
 		send: #eventRepositoryModified: 
 		to: self
+]
+
+{ #category : 'private' }
+DockRepositoryCommitsView >> repositoryModified [
+
+	self updatePresenter.
+	"inform to all windows, as all may have things to do"
+	self application resendAnnouncement: (DockRepositoryModified newValue: self model)
 ]
 
 { #category : 'initialization' }

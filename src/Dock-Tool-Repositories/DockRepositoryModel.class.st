@@ -106,6 +106,16 @@ DockRepositoryModel >> newCommitAction [
 		yourself
 ]
 
+{ #category : 'instance creation' }
+DockRepositoryModel >> newPushAction [
+
+	^ IceTipStandardAction new 
+		repository: self entity;
+		message: ('Pushing to {1}' format: { self remote name }) ;
+		action: [ self entity push ];
+		yourself
+]
+
 { #category : 'accessing' }
 DockRepositoryModel >> outgoingCommits [
 
