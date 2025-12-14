@@ -45,7 +45,8 @@ DockCLIApplication >> forceReset [
 
 { #category : 'executing' }
 DockCLIApplication >> runApplication [
-	self doNotQuitImage.
+	
+	self context doNotObeyExits.
 
 	[ 
 		DockApplication basicNew
