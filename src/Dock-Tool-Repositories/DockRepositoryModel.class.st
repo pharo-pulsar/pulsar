@@ -53,6 +53,12 @@ DockRepositoryModel >> diffToReferenceCommit [
 ]
 
 { #category : 'accessing' }
+DockRepositoryModel >> headName [
+
+	^ self entity head name
+]
+
+{ #category : 'accessing' }
 DockRepositoryModel >> incomingCommits [
 
 	(self entity isValid and: [ self entity canPush ]) ifFalse: [ ^ #() ].
@@ -60,6 +66,12 @@ DockRepositoryModel >> incomingCommits [
 	^ self entity branch 
 		ifNotNil: [ :aBranch | aBranch incomingCommits ]
 		ifNil: [ #() ]
+]
+
+{ #category : 'testing' }
+DockRepositoryModel >> isHeadInBranch [
+
+	^ self entity head isBranch
 ]
 
 { #category : 'testing' }
