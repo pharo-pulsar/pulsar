@@ -153,7 +153,9 @@ DockRepositoryChangesView >> doCommit [
 	self scheduleJob: [
 		self model newCommitAction
 			message: commitPresenter message;
-			onSuccess: [ self repositoryModified ];
+			onSuccess: [ 
+				self repositoryModified.
+				self takeKeyboardFocus ];
 			executeWithContext: self ]
 ]
 
@@ -169,8 +171,8 @@ DockRepositoryChangesView >> eventRepositoryModified: ann [
 
 	ann value = self model ifFalse: [ ^ self ].
 	
-	self model resetDiff.
-	self updatePresenter
+	"not doing anything right now, I was updating the list here but in fact, 
+	 I do not want to do that right now :P"
 ]
 
 { #category : 'initialization' }
@@ -210,6 +212,8 @@ DockRepositoryChangesView >> registerToEvents [
 { #category : 'private' }
 DockRepositoryChangesView >> repositoryModified [
 
+	self model resetDiff.
+	self updatePresenter.
 	"inform to all windows, as all may have things to do"
 	self application resendAnnouncement: (DockRepositoryModified newValue: self model)
 ]
