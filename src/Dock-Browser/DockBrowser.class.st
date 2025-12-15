@@ -3,9 +3,7 @@ Class {
 	#superclass : 'DockBaseBrowser',
 	#instVars : [
 		'projectView',
-		'outlineView',
-		'repositoryView',
-		'pepe'
+		'outlineView'
 	],
 	#category : 'Dock-Browser-View-Browser',
 	#package : 'Dock-Browser',
@@ -309,7 +307,8 @@ DockBrowser >> openProject: aBaselineClass [
 
 { #category : 'actions' }
 DockBrowser >> openRepositories [
-
+	| repositoryView |
+	repositoryView := self findPresenterClass: DockRepositoriesView.
 	repositoryView ifNil: [ 
 		repositoryView := self 
 			addPresenterClass: DockRepositoriesView 
@@ -339,11 +338,6 @@ DockBrowser >> postRestoreSnapshot: aSnapshot [
 		ifFound: [ :each | each presenter ]
 		ifNone: [ self addPresenterClass: DockClassOutlineView ].
 	
-	repositoryView := self presenters
-		detect: [ :each | each presenter class = DockRepositoriesView ]
-		ifFound: [ :each | each presenter ]
-		ifNone: [ nil ].
-
 	self updateTitle
 ]
 

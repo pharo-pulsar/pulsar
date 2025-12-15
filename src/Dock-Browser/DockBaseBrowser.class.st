@@ -171,11 +171,32 @@ DockBaseBrowser >> eventModelActivated: anAnnouncement [
 DockBaseBrowser >> eventModelDeactivated: anAnnouncement [
 ]
 
+{ #category : 'accessing' }
+DockBaseBrowser >> findAllPresentersClass: aClass [
+	"answer sll presenters matching the class."
+	
+	^ self presenter
+		select: [ :each | each presenter class = aClass ]
+		thenCollect: [ :each | each presenters ]
+]
+
 { #category : 'private' }
 DockBaseBrowser >> findEditorContaining: aViewModel [
 
 	^ self editors 
 		detect: [ :each | each presenter model = aViewModel ]
+		ifNone: [ nil ]
+]
+
+{ #category : 'accessing' }
+DockBaseBrowser >> findPresenterClass: aClass [
+	"answer the first presenter matching the class.
+	 since the browser can have many presenters of the same class, this is useful 
+	 just in certain cases"
+	
+	^ self presenters
+		detect: [ :each | each presenter class = aClass ]
+		ifFound: [ :each | each presenter ]
 		ifNone: [ nil ]
 ]
 

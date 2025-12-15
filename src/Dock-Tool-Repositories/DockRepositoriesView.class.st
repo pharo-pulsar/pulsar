@@ -50,6 +50,12 @@ DockRepositoriesView >> defaultLayout [
 ]
 
 { #category : 'private - actions' }
+DockRepositoriesView >> doClose [
+
+	self withNearWindowLikeDo: [ :aWindow | aWindow close ]
+]
+
+{ #category : 'private - actions' }
 DockRepositoriesView >> doOpenRepository: aRepositoryModel [
 
 	(DockRepositoryBrowser 
@@ -71,6 +77,15 @@ DockRepositoriesView >> initializePresenters [
 
 	listToolbarPresenter := self instantiate: DockToolbarPresenter.
 	listToolbarPresenter actions: self actions.	
+	listToolbarPresenter addPresenter: (self newToolbar 
+		beIcons;
+		add: (self newButton
+			addStyle: 'flat';
+			icon: (self iconNamed: 'close');
+			help: 'Close repositories';
+			action: [ self doClose ];
+			yourself);
+		yourself).
 
 	listPresenter := self newEasyListView
 		addStyle: 'stList';
