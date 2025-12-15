@@ -137,7 +137,8 @@ DockPlayground >> doBrowseVersionsCommand: anAction [
 
 { #category : 'private - actions' }
 DockPlayground >> doClose [
-	self withNearWindowLikeDo: [ :aWindow | aWindow close ] 
+	
+	self withNearWindowLikeDo: [ :aWindow | aWindow close ]
 ]
 
 { #category : 'private - actions' }

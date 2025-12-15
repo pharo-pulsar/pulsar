@@ -63,7 +63,7 @@ DockFlagsConsole >> doActivatePackageScope [
 { #category : 'private - actions' }
 DockFlagsConsole >> doClose [
 
-	self withPanelWindowDo: #close
+	self withNearWindowLikeDo: [ :aWindow | aWindow close ]
 ]
 
 { #category : 'private - events' }
