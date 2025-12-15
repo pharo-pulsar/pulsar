@@ -17,22 +17,6 @@ DockRepositoriesView class >> defaultDockPosition [
 		yourself
 ]
 
-{ #category : 'accessing - actions' }
-DockRepositoriesView class >> defineActionsOn: aBuilder [
-	<dockActions>
-
-	aBuilder 
-		addGroup: #actions with: [ :group | group 
-			priority: 10;
-			beDisplayedAsGroup;
-			addActionWith: [ :action | action
-				priority: 1;
-				name: 'Add repository';
-				description: 'Add a new repository';
-				iconName: 'add';
-				action: [ :aContext | aContext doAddRepository ] ] ]
-]
-
 { #category : 'initialization' }
 DockRepositoriesView >> connectPresenters [
 
@@ -47,6 +31,32 @@ DockRepositoriesView >> defaultLayout [
 		add: listToolbarPresenter expand: false;
 		add: listPresenter;
 		yourself
+]
+
+{ #category : 'accessing - actions' }
+DockRepositoriesView >> defineActionsOn: aBuilder [
+	<dockActions>
+
+	aBuilder 
+		addGroup: #actions with: [ :group | group 
+			priority: 10;
+			beDisplayedAsGroup;
+			addActionWith: [ :action | action
+				priority: 1;
+				name: 'Add repository';
+				description: 'Add a new repository';
+				iconName: 'add';
+				action: [ :aContext | self doAddRepository ] ] ]
+]
+
+{ #category : 'private - actions' }
+DockRepositoriesView >> doAddRepository [
+	
+	((self instantiate: DockRegisterRepositoryDialog) 
+		onAccept: [ self repositoryModified ])
+		asModalWindow
+			owner: self window;
+			open
 ]
 
 { #category : 'private - actions' }
