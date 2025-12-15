@@ -13,9 +13,9 @@ Class {
 DockCollectionView >> connectPresenters [
 
 	listPresenter outputSelectionPort 
-		transmitDo: [ :anEntity | self notifySelectEntity: anEntity ].
+		transmitDo: [ :anEntity | self entitySelected: anEntity ].
 	listPresenter outputActivationPort 
-		transmitDo: [ :anEntity | self notifyActivateEntity: anEntity ]
+		transmitDo: [ :anEntity | self entityActivated: anEntity ]
 ]
 
 { #category : 'layout' }
@@ -24,6 +24,18 @@ DockCollectionView >> defaultLayout [
 	^ SpBoxLayout newVertical
 		add: listPresenter;
 		yoursel
+]
+
+{ #category : 'private' }
+DockCollectionView >> entityActivated: anEntity [ 
+
+	self notifyActivateEntity: anEntity
+]
+
+{ #category : 'private' }
+DockCollectionView >> entitySelected: anEntity [ 
+
+	self notifySelectEntity: anEntity
 ]
 
 { #category : 'private' }
