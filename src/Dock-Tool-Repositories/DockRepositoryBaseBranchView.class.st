@@ -2,7 +2,8 @@ Class {
 	#name : 'DockRepositoryBaseBranchView',
 	#superclass : 'DockCollectionView',
 	#instVars : [
-		'toolbarPresenter'
+		'toolbarPresenter',
+		'toolbarActions'
 	],
 	#category : 'Dock-Tool-Repositories',
 	#package : 'Dock-Tool-Repositories'
@@ -23,13 +24,20 @@ DockRepositoryBaseBranchView >> defaultLayout [
 		yourself
 ]
 
+{ #category : 'private' }
+DockRepositoryBaseBranchView >> entitySelected: anEntity [
+
+	self updateToolbar.
+	"super entitySelected: anEntity."
+]
+
 { #category : 'initialization' }
 DockRepositoryBaseBranchView >> initializePresenters [
 
 	self addStyle: 'dockRepositoryBranch'.
 
 	toolbarPresenter := self instantiate: DockToolbarPresenter. 
-	toolbarPresenter actions: (self actions actionsFor: #gitActions).
+	toolbarPresenter actions: self toolbarActions.
 
 	listPresenter := self newEasyListView
 		addStyle: 'stList';
@@ -42,6 +50,20 @@ DockRepositoryBaseBranchView >> initializePresenters [
 DockRepositoryBaseBranchView >> maybeSort: aCollection [
 
 	^ aCollection
+]
+
+{ #category : 'private' }
+DockRepositoryBaseBranchView >> selectedItemName [
+
+	^ self selectedItem 
+		ifNotNil: [ :each | each name ]
+		ifNil: [ 'Unknown' ]
+]
+
+{ #category : 'initialization' }
+DockRepositoryBaseBranchView >> toolbarActions [
+
+	^ toolbarActions ifNil: [ toolbarActions := self actions actionsFor: #gitActions ]
 ]
 
 { #category : 'initialization' }
@@ -57,4 +79,10 @@ DockRepositoryBaseBranchView >> updatePresenter [
 			self application defer: [ 
 				listPresenter items: branches] ] 
 		ensure: [ self withWindowDo: #jobEnd ] ]
+]
+
+{ #category : 'private' }
+DockRepositoryBaseBranchView >> updateToolbar [
+
+	toolbarActions allCommands do: [ :each | each updateEnableStatus ]
 ]

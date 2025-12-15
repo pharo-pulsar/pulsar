@@ -38,6 +38,12 @@ DockCollectionView >> entitySelected: anEntity [
 	self notifySelectEntity: anEntity
 ]
 
+{ #category : 'private - testing' }
+DockCollectionView >> hasSelectedItem [
+
+	^ self selectedItem isNotNil
+]
+
 { #category : 'private' }
 DockCollectionView >> listPresenter [
 
@@ -56,4 +62,10 @@ DockCollectionView >> notifySelectEntity: anEntity [
 
 	anEntity ifNil: [ ^ self ].
 	self notificationCenter announce: anEntity newSelectionAnnouncement
+]
+
+{ #category : 'private - accessing' }
+DockCollectionView >> selectedItem [
+
+	^ listPresenter ifNotNil: #selectedItem
 ]
