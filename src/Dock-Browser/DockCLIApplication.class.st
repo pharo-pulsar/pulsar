@@ -40,6 +40,11 @@ DockCLIApplication >> forceReset [
 	DockApplication reset.
 	Deprecation reset.
 	
+	"also clean processes that may have remained"
+	(Processor allProcesses 
+		select: [ :each | each name beginsWith: 'FFICallback' ])
+		do: [ :each | each terminate ].	
+	
 	TKTWatchDog reset
 ]
 
