@@ -30,17 +30,7 @@ DockRepositoryCommitsView >> defaultLayout [
 DockRepositoryCommitsView >> defineActionsOn: aBuilder [
 	<dockActions>
 	
-	aBuilder addGroup: #gitActions with: [ :group | group 
-		addActionWith: [ :action | action 
-			name: 'Push';
-			iconName: 'push';
-			description: 'Push current branch to remote';
-			action: [ self doPush ] ];
-		addActionWith: [ :action | action 
-			name: 'Pull';
-			iconName: 'pull';
-			description: 'Pull current branch from remote';
-			action: [ self doPull ] ] ]
+	aBuilder addGroup: #gitActions with: [ :group | group  ]
 ]
 
 { #category : 'private - actions' }
