@@ -47,7 +47,7 @@ PvAliasedVSCodeIconProvider >> createAliases [
 		'package'.					'package'.				"browser-> package"
 		'smallForward'.				'arrow-right'.
 		'hierarchy'.					'type-hierarchy'.		"browser -> navigation hierarchy"
-		'trait'.						'symbol-trait'.			"type"
+		'trait'.						'symbol-interface'.		"'symbol-trait'." "type"
 		'workspace'.					'beaker'. 				"'lightbulb'."	"playground"
 		'transcript'. 		 		'terminal'.
 		'announcement'.				'symbol-announcement'. 	"type"
@@ -144,8 +144,8 @@ PvAliasedVSCodeIconProvider >> createAliases [
 		'flag'.						'bookmark'.
 		'refactor'.					'symbol-property'.
 		"repositories"
-		'commit'.					'git-commit'.
-		'branch'.					'git-branch'.
+		'commit'.					'check'. "'git-commit'."
+		'branch'.					'repo-forked'.
 		'merge'.						'git-merge'.
 		'pull'.						'repo-pull'.
 		'push'.						'repo-push'.
@@ -168,6 +168,12 @@ PvAliasedVSCodeIconProvider >> iconNamed: aName ifAbsent: aBlock [
 PvAliasedVSCodeIconProvider >> initialize [
 
 	super initialize.
+	self initializeAliases
+]
+
+{ #category : 'initialization' }
+PvAliasedVSCodeIconProvider >> initializeAliases [
+
 	self addAliasesFromPairs: self createAliases
 ]
 
