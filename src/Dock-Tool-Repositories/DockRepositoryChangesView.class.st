@@ -69,12 +69,6 @@ DockRepositoryChangesView >> defineActionsOn: aBuilder [
 			shortcutKey: $c actionModifier;
 			action: [ self doCommit ] ];
 		addActionWith: [ :action | action 
-			name: 'Branch';
-			iconName: 'branch';
-			description: 'Create a branch before commit';
-			shortcutKey: $b actionModifier;
-			action: [ self doCreateBranch ] ];
-		addActionWith: [ :action | action 
 			name: 'Discard';
 			iconName: 'discard';
 			description: 'Discard current changes and restore HEAD';
