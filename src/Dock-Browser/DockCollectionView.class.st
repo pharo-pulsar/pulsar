@@ -18,6 +18,12 @@ DockCollectionView >> connectPresenters [
 		transmitDo: [ :anEntity | self entityActivated: anEntity ]
 ]
 
+{ #category : 'api - focus' }
+DockCollectionView >> defaultKeyboardFocus [
+	
+	^ listPresenter
+]
+
 { #category : 'layout' }
 DockCollectionView >> defaultLayout [
 

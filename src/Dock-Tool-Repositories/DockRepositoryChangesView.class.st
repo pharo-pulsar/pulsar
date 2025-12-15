@@ -153,9 +153,7 @@ DockRepositoryChangesView >> doCommit [
 	self scheduleJob: [
 		self model newCommitAction
 			message: commitPresenter message;
-			onSuccess: [ 
-				self repositoryModified.
-				self takeKeyboardFocus ];
+			onSuccess: [ self repositoryModified ];
 			executeWithContext: self ]
 ]
 
@@ -215,7 +213,9 @@ DockRepositoryChangesView >> repositoryModified [
 	self model resetDiff.
 	self updatePresenter.
 	"inform to all windows, as all may have things to do"
-	self application resendAnnouncement: (DockRepositoryModified newValue: self model)
+	self application resendAnnouncement: (DockRepositoryModified newValue: self model).
+	
+	self takeKeyboardFocus
 ]
 
 { #category : 'private' }
