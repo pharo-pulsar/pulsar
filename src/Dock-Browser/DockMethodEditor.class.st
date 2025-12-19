@@ -138,6 +138,7 @@ DockMethodEditor >> doToggleSelectionLinkCommand: anAction [
 
 { #category : 'events - system' }
 DockMethodEditor >> eventMethodModified: anAnnouncement [
+	| methodModified |
 
 	(self model entity = anAnnouncement method 
 		or: [ self model entity = anAnnouncement oldMethod ])
@@ -149,8 +150,12 @@ DockMethodEditor >> eventMethodModified: anAnnouncement [
 		"self markOutdatedMethod."
 		^ self ].
 		
+	methodModified := anAnnouncement method.
+		
+	logger trace: methodModified.
+		
 	"update model"
-	self model entity: anAnnouncement method. 
+	self model entity: methodModified. 
 	"update presenter"
 	self updatePresenter
 ]
@@ -162,6 +167,16 @@ DockMethodEditor >> eventMethodRecategorized: anAnnouncement [
 		ifFalse: [ ^ self ].
 
 	self updateProtocol
+]
+
+{ #category : 'events - system' }
+DockMethodEditor >> eventMethodRemoved: anAnnouncement [
+
+
+	(self model entity = anAnnouncement methodRemoved)
+		ifFalse: [ ^ self ].
+	
+	self forceClose
 ]
 
 { #category : 'events' }
@@ -263,7 +278,8 @@ DockMethodEditor >> registerToSystemEvents [
 
 	super registerToSystemEvents.
 	self announcer 
-		when: MethodModified send: #eventMethodModified: to: self
+		when: MethodModified send: #eventMethodModified: to: self;
+		when: MethodRemoved send: #eventMethodRemoved: to: self
 ]
 
 { #category : 'initialization' }

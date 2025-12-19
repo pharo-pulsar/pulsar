@@ -77,6 +77,15 @@ DockContextEditor >> grabDebugToolbar [
 		expand: false
 ]
 
+{ #category : 'initialization' }
+DockContextEditor >> initializePresenters [
+
+	super initializePresenters.
+	"a context editor is always linked for now (there is just one, linked to the stack). 
+	 but it looks ugly, so for now I am not activating it."
+	"editorPresenter addStyle: 'dockEditorLinked'"
+]
+
 { #category : 'private' }
 DockContextEditor >> panelFocused [
 

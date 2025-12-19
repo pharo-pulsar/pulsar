@@ -20,6 +20,8 @@ DockRepositoriesView class >> defaultDockPosition [
 { #category : 'initialization' }
 DockRepositoriesView >> connectPresenters [
 
+	listPresenter outputSelectionPort
+		transmitDo: [ :aRepositoryModel | self entitySelected: aRepositoryModel ].
 	listPresenter outputActivationPort
 		transmitDo: [ :aRepositoryModel | self doOpenRepository: aRepositoryModel ]
 ]
@@ -33,7 +35,7 @@ DockRepositoriesView >> defaultLayout [
 		yourself
 ]
 
-{ #category : 'accessing - actions' }
+{ #category : 'private - definitions' }
 DockRepositoriesView >> defineActionsOn: aBuilder [
 	<dockActions>
 
@@ -46,7 +48,14 @@ DockRepositoriesView >> defineActionsOn: aBuilder [
 				name: 'Add repository';
 				description: 'Add a new repository';
 				iconName: 'add';
-				action: [ :aContext | self doAddRepository ] ] ]
+				action: [ self doAddRepository ] ];
+			addActionWith: [ :action | action
+				priority: 1;
+				name: 'Repair repository';
+				description: 'Repair repository';
+				iconName: 'repair';
+				actionEnabled: [ self hasSelectedRepository and: [ self selectedRepository needsRepair ] ];
+				action: [ self doRepairSelectedRepository ] ] ]
 ]
 
 { #category : 'private - actions' }
@@ -74,10 +83,40 @@ DockRepositoriesView >> doOpenRepository: aRepositoryModel [
 		open
 ]
 
+{ #category : 'private - actions' }
+DockRepositoriesView >> doRepairSelectedRepository [
+	| result |
+	
+	self flag: #TODO. "in fact, this should be a bit better (we have helps and that
+	we can use, just I'm lazy to create a new dialog right now)"
+	result := self application newSelect
+		title: 'Repository broken';
+		message: 'Select from available repair actions';
+		items: self selectedRepository repairActions;
+		display: [ :aRepaitAction | aRepaitAction title ];
+		openModalWithParent: self window.
+
+	result ifNil: [ ^ self ].
+	
+	
+]
+
+{ #category : 'private' }
+DockRepositoriesView >> entitySelected: aRepositoryModel [
+
+	self updateToolbar
+]
+
 { #category : 'events' }
 DockRepositoriesView >> eventRepositoryModified: ann [
 
 	self updatePresenter
+]
+
+{ #category : 'private - testing' }
+DockRepositoriesView >> hasSelectedRepository [
+
+	^ self selectedRepository isNotNil
 ]
 
 { #category : 'initialization' }
@@ -86,7 +125,7 @@ DockRepositoriesView >> initializePresenters [
 	self addStyle: 'dockRepositories'.
 
 	listToolbarPresenter := self instantiate: DockToolbarPresenter.
-	listToolbarPresenter actions: self actions.	
+	listToolbarPresenter actions: self actions.
 	listToolbarPresenter addPresenter: (self newToolbar 
 		beIcons;
 		add: (self newButton
@@ -97,7 +136,7 @@ DockRepositoriesView >> initializePresenters [
 			yourself);
 		yourself).
 
-	listPresenter := self newEasyListView
+	listPresenter := self newFilteringList
 		addStyle: 'stList';
 		rowPresenterClass: DockRepositoryRow;
 		display: [ :aRepositoryModel | aRepositoryModel name ];
@@ -121,6 +160,12 @@ DockRepositoriesView >> registerToEvents [
 		to: self
 ]
 
+{ #category : 'private - accessing' }
+DockRepositoriesView >> selectedRepository [
+
+	^ listPresenter ifNotNil: #selectedItem
+]
+
 { #category : 'accessing - snapshot' }
 DockRepositoriesView >> snapshot [
 
@@ -133,4 +178,10 @@ DockRepositoriesView >> updatePresenter [
 	self model ifNil: [ ^ self ].
 	
 	listPresenter updateItemsKeepingSelection: (self model repositories sorted: #name ascending)
+]
+
+{ #category : 'private' }
+DockRepositoriesView >> updateToolbar [
+
+	self actions allCommands do: [ :each | each updateEnableStatus ]
 ]

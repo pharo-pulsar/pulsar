@@ -14,11 +14,11 @@ Class {
 DockCLIApplication class >> commandSpecification [
 	<commandline>
 	
-	^ (ClapCommandSpec id: #pulsar)
-		  description: 'Run Pulsar IDE';
+	^ (ClapCommandSpec id: #dock)
+		  description: 'Run Dock IDE';
 		  commandClass: self;
 		  addHelp;
-		  addFlag: #reset description: 'Reset pulsar IDE (cleaning up snapshot and living processes)';
+		  addFlag: #reset description: 'Reset dock IDE (cleaning up snapshot and living processes)';
 		  "addPositional: #applicationName description: 'the name of the application to run';"
 		  yourself
 ]

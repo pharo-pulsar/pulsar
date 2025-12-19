@@ -150,6 +150,7 @@ PvAliasedVSCodeIconProvider >> createAliases [
 		'pull'.						'repo-pull'.
 		'push'.						'repo-push'.
 		'fetch'.						'sync'.
+		'repair'.					'symbol-property'.
 		"'discard'.					'discard'"
 	 }
 ]

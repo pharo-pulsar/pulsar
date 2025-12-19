@@ -77,6 +77,12 @@ DockEditor >> addOverlay: aPresenter withConstraints: aBlock [
 		withConstraints: aBlock
 ]
 
+{ #category : 'private - actions' }
+DockEditor >> close [
+
+	self withNearWindowLikeDo: #close
+]
+
 { #category : 'private' }
 DockEditor >> collectContentActions [
 
@@ -245,6 +251,14 @@ DockEditor >> eventTestCaseEnded: aTestCaseEnded [
 DockEditor >> eventThemeChanged: ann [
 
 	editorPresenter styleScheme: self application styleScheme
+]
+
+{ #category : 'private - actions' }
+DockEditor >> forceClose [
+
+	self withPanelWindowDo: [ :aWindow | aWindow forceClose ].
+	
+	self close
 ]
 
 { #category : 'initialization' }

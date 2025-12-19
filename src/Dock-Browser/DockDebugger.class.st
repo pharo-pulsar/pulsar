@@ -15,8 +15,8 @@ Class {
 DockDebugger >> debugSession: aDebugSession [
 
 	logger trace: aDebugSession.
+	
 	self session: aDebugSession.
-
 	self open
 ]
 
@@ -47,12 +47,18 @@ DockDebugger >> eventContextChanged: anAnnouncement [
 { #category : 'events' }
 DockDebugger >> eventModelActivated: anAnnouncement [
 	
+	self flag: #TODO. "Find a better way than filter by class"
+	(anAnnouncement value class = DockContextModel) ifTrue: [ ^ self] .
+
 	"not doing this for the moment (let's first make the debugger work)"
 	
 	"contextEditor beFixedToDock."
 	"setting contextEditor to nil will ensure a new one is created in next selection (keeping 
 	 current one as 'fixed' one."
 	"contextEditor := nil"
+	
+	super eventModelActivated: anAnnouncement
+
 ]
 
 { #category : 'events' }

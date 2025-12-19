@@ -129,14 +129,15 @@ DockGtkConfiguration >> darkPaletteStyle [
 	--test-failure: DarkOrange;
 	/* repositories */
 	--repository-modified: LightGreen;
+	--repository-detached: DarkOrange;
 	--repository-error: Tomato;	
 	/* markers for editor */
 	--button-bg-cancel-mark: #FF00006F;
 	--button-bg-accept-mark: #00DF006F;
 	/* repository commit */
 	--commit-outgoing: LightGreen;
-	--commit-incoming: Tomato;
-}}
+	--commit-incoming: Yellow;
+}
 '
 ]
 
@@ -230,13 +231,14 @@ DockGtkConfiguration >> lightPaletteStyle [
 	--test-failure: orange;
 	/* repositories */
 	--repository-modified: green;
+	--repository-detached: orange;
 	--repository-error: red;
 	/* markers for editor */
 	--button-bg-cancel-mark: #C000002F; 
 	--button-bg-accept-mark: #00C0002F;
 	/* repository commit */
 	--commit-outgoing: green;
-	--commit-incoming: red;
+	--commit-incoming: orange;
 }
 '
 ]
@@ -374,7 +376,7 @@ popover .dockPreviewEditor { min-width: 680px; min-height: 340px; }
 .dockPopoverControlToolbar { margin: 0px; padding: 0px 0px 0px 10px; }
 .dockDebuggerToolbar { background-color: var(--window-bg-color); }
 .dockDebuggerToolbar .stToolbar { padding: 1px; }
-.dockPlaygroundBindingsFlyingBrowser { min-width: 280px; min-height: 240px; }
+.dockPlaygroundBindingsFlyingBrowser { min-width: 400px; min-height: 240px; }
 /***
  * METHOD DECORATIONS 
  */
@@ -398,6 +400,7 @@ popover .dockPreviewEditor { min-width: 680px; min-height: 340px; }
 
 /* Repositories (I can also have .notLoaded and .upToDate) */
 .dockRepositories .dockRepositoryRow label.missing { color: var(--repository-error); }
+.dockRepositories .dockRepositoryRow label.detached { color: var(--repository-detached); } 
 .dockRepositories .dockRepositoryRow label.modified { color: var(--repository-modified); }
 .dockRepositories .dockRepositoryRow label.error { color: var(--repository-error); }
 

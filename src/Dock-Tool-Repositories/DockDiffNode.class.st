@@ -31,6 +31,14 @@ DockDiffNode >> active: aBoolean [
 ]
 
 { #category : 'accessing' }
+DockDiffNode >> allChildren [
+
+	^ Array streamContents: [ :stream | 
+		self withAllChildrenDo: [ :aNode | 
+			stream nextPut: aNode ] ]
+]
+
+{ #category : 'accessing' }
 DockDiffNode >> children [
 
 	^ children ifNil: [ children := self collectChildren ]

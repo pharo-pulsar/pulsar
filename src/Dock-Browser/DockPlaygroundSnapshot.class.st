@@ -49,7 +49,5 @@ DockPlaygroundSnapshot >> snapshot: aPresenter [
 	super snapshot: aPresenter.
 	content := aPresenter codePresenter text.
 	cursorPositionIndex := aPresenter codePresenter cursorPositionIndex.
-	bindings := aPresenter codePresenter interactionModel bindings copy 
-		removeKey: #thisBrowser ifAbsent: [];
-		yourself
+	bindings := aPresenter codePresenter interactionModel lastingBindings
 ]

@@ -3,7 +3,8 @@ Class {
 	#superclass : 'PvBaseModel',
 	#instVars : [
 		'diff',
-		'diffNode'
+		'diffNode',
+		'mutex'
 	],
 	#category : 'Dock-Tool-Repositories',
 	#package : 'Dock-Tool-Repositories'
@@ -26,12 +27,19 @@ DockRepositoryModel >> commitsTo: aNumber [
 	^ Array new: aNumber streamContents: [ :stream | 
 		| count |
 		count := 0.
-		self entity branch commitsDo: [ :aCommit | 
-			count < aNumber ifTrue: [ 
-				stream nextPut: (DockRepositoryCommitModel 
-					newRepository: self 
-					entity: aCommit).
-				count := count + 1 ] ] ]
+		self critical: [
+			self entity branch commitsDo: [ :aCommit | 
+				count < aNumber ifTrue: [ 
+					stream nextPut: (DockRepositoryCommitModel 
+						newRepository: self 
+						entity: aCommit).
+					count := count + 1 ] ] ] ]
+]
+
+{ #category : 'private' }
+DockRepositoryModel >> critical: aBlock [
+
+	^ self mutex critical: aBlock
 ]
 
 { #category : 'accessing' }
@@ -49,13 +57,20 @@ DockRepositoryModel >> diffNode [
 DockRepositoryModel >> diffToReferenceCommit [
 
 	^ diff ifNil: [ 
-		diff := self entity workingCopy diffToReferenceCommit ]
+		diff := self critical: [ 
+			self entity workingCopy diffToReferenceCommit ] ]
+]
+
+{ #category : 'testing' }
+DockRepositoryModel >> hasUpstream [
+
+	^ self entity branch hasUpstream
 ]
 
 { #category : 'accessing' }
 DockRepositoryModel >> headName [
 
-	^ self entity head name
+	^ self critical: [ self entity head name ]
 ]
 
 { #category : 'accessing' }
@@ -63,15 +78,29 @@ DockRepositoryModel >> incomingCommits [
 
 	(self entity isValid and: [ self entity canPush ]) ifFalse: [ ^ #() ].
 
-	^ self entity branch 
-		ifNotNil: [ :aBranch | aBranch incomingCommits ]
-		ifNil: [ #() ]
+	^ self critical: [  
+		self entity branch 
+			ifNotNil: [ :aBranch | aBranch incomingCommits ]
+			ifNil: [ #() ] ]
+]
+
+{ #category : 'testing' }
+DockRepositoryModel >> isDetached [
+
+	^ self entity workingCopy isDetached 
+		or: [ self entity head isDetached ]
 ]
 
 { #category : 'testing' }
 DockRepositoryModel >> isHeadInBranch [
 
-	^ self entity head isBranch
+	^ self critical: [ self entity head isBranch ]
+]
+
+{ #category : 'testing' }
+DockRepositoryModel >> isMissing [
+
+	^ self entity isMissing
 ]
 
 { #category : 'testing' }
@@ -88,10 +117,12 @@ DockRepositoryModel >> isOutgoingCommit: aCommitModel [
 
 { #category : 'accessing' }
 DockRepositoryModel >> localBranches [
+	| branches |
 
 	self entity isValid ifFalse: [ ^ #() ].
 
-	^ self entity localBranches collect: [ :each | 
+	branches := self critical: [ self entity localBranches ].
+	^ branches collect: [ :each | 
 		DockRepositoryLocalBranchModel newRepository: self entity: each ]
 ]
 
@@ -101,13 +132,25 @@ DockRepositoryModel >> location [
 	^ self entity location
 ]
 
+{ #category : 'private' }
+DockRepositoryModel >> mutex [
+
+	^ mutex ifNil: [ mutex := Mutex new ]
+]
+
 { #category : 'accessing' }
 DockRepositoryModel >> name [
 
 	^ self entity name
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'testing' }
+DockRepositoryModel >> needsRepair [
+
+	^ self isMissing or: [ self isDetached ]
+]
+
+{ #category : 'actions - command' }
 DockRepositoryModel >> newCommitAction [
 
 	^ IceTipCommitAction new
@@ -118,7 +161,7 @@ DockRepositoryModel >> newCommitAction [
 		yourself
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'actions - command' }
 DockRepositoryModel >> newFetchAction [
 	
 	^ IceTipStandardAction new
@@ -127,13 +170,23 @@ DockRepositoryModel >> newFetchAction [
 		yourself
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'actions - command' }
 DockRepositoryModel >> newPushAction [
 
 	^ IceTipStandardAction new 
 		repository: self entity;
 		message: ('Pushing to {1}' format: { self entity branch name }) ;
-		action: [ self entity push ];
+		action: [ self entity pushTo: self remoteToPush ];
+		yourself
+]
+
+{ #category : 'actions - command' }
+DockRepositoryModel >> newPushActionTo: aRemote [
+
+	^ IceTipStandardAction new 
+		repository: self entity;
+		message: ('Pushing to {1}' format: { self entity branch name }) ;
+		action: [ self entity pushTo: (aRemote ifNil: [ self entity branch upstream remote ]) ];
 		yourself
 ]
 
@@ -142,9 +195,10 @@ DockRepositoryModel >> outgoingCommits [
 
 	(self entity isValid and: [ self entity canPush ]) ifFalse: [ ^ #() ].
 
-	^ self entity branch 
-		ifNotNil: [ : aBranch | aBranch outgoingCommits ]
-		ifNil: [ #() ]
+	^ self critical: [ 
+		self entity branch 
+			ifNotNil: [ : aBranch | aBranch outgoingCommits ]
+			ifNil: [ #() ] ]
 ]
 
 { #category : 'accessing' }
@@ -156,11 +210,40 @@ DockRepositoryModel >> packages [
 
 { #category : 'accessing' }
 DockRepositoryModel >> remoteBranches [
+	| branches |
 
 	self entity isValid ifFalse: [ ^ #() ].
 
-	^ self entity remoteTrackedBranches collect: [ :each | 
+	branches := self critical: [ self entity remoteTrackedBranches ].
+	^ branches collect: [ :each | 
 		DockRepositoryRemoteBranchModel newRepository: self entity: each ]
+]
+
+{ #category : 'private' }
+DockRepositoryModel >> remoteToPush [
+	| head |
+
+	head := self entity head.
+	^ head upstream remote
+]
+
+{ #category : 'accessing' }
+DockRepositoryModel >> remotes [
+
+	self flag: #TODO. "This needs to be a model"
+	^ self entity remotes
+]
+
+{ #category : 'accessing' }
+DockRepositoryModel >> repairActions [
+
+	^ DockRepositoryRepairAction allAvailableFor: self entity
+]
+
+{ #category : 'accessing' }
+DockRepositoryModel >> repositoryLocation [
+
+	^ self entity location
 ]
 
 { #category : 'accessing' }
@@ -170,11 +253,18 @@ DockRepositoryModel >> resetDiff [
 	diffNode := nil
 ]
 
+{ #category : 'actions' }
+DockRepositoryModel >> setUpstream: aRemote [ 
+
+	self entity branch setUpstreamIfMissing: aRemote
+]
+
 { #category : 'accessing' }
 DockRepositoryModel >> status [
 	
 	[
-		self entity isMissing 				ifTrue: [ ^ #missing ].
+		self isMissing 						ifTrue: [ ^ #missing ].
+		self isDetached 						ifTrue: [ ^ #detached ].
 		self entity loadedPackages isEmpty 	ifTrue: [ ^ #notLoaded ].
 		self entity 	workingCopy isModified 	ifTrue: [ ^ #modified ].
 		^ #upToDate ]
@@ -182,6 +272,14 @@ DockRepositoryModel >> status [
 	do: [ :e | 
 		logger error: e.
 		^ #error ]
+]
+
+{ #category : 'actions' }
+DockRepositoryModel >> switchToBranchNamed: branchName [
+
+	self entity
+		ensureBranch: branchName;
+		switchToBranchNamed: branchName
 ]
 
 { #category : 'accessing' }

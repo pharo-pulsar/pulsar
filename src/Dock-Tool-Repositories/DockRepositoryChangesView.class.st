@@ -5,7 +5,8 @@ Class {
 	#name : 'DockRepositoryChangesView',
 	#superclass : 'DockCollectionView',
 	#instVars : [
-		'toolbarPresenter'
+		'toolbarPresenter',
+		'isDisplayed'
 	],
 	#category : 'Dock-Tool-Repositories',
 	#package : 'Dock-Tool-Repositories'
@@ -104,6 +105,18 @@ DockRepositoryChangesView >> defineCollapseActionsOn: aBuilder [
 			action: [ self doExpandAll ] ] ]
 ]
 
+{ #category : 'private - definitions' }
+DockRepositoryChangesView >> defineExtraActionsOn: aBuilder [
+	<dockActions>
+	
+	aBuilder addGroup: #extra with: [ :group | group 
+		beDisplayedAsGroup;
+		addActionWith: [ :action | action 
+			name: 'Open repository location';
+			description: 'Open repository location';
+			action: [ self doOpenRepositoryLocation ] ] ]
+]
+
 { #category : 'private - actions' }
 DockRepositoryChangesView >> doCollapseAll [
 
@@ -164,6 +177,20 @@ DockRepositoryChangesView >> doExpandAll [
 		listPresenter expandAll ]
 ]
 
+{ #category : 'private - actions' }
+DockRepositoryChangesView >> doOpenRepositoryLocation [
+	
+	self model repositoryLocation
+		ifNotNil: [ :aReference | WebBrowser openOn: aReference fullName ]
+]
+
+{ #category : 'private - actions' }
+DockRepositoryChangesView >> doRefresh [
+
+	self model resetDiff.
+	self updatePresenter
+]
+
 { #category : 'events' }
 DockRepositoryChangesView >> eventRepositoryModified: ann [
 
@@ -174,13 +201,23 @@ DockRepositoryChangesView >> eventRepositoryModified: ann [
 ]
 
 { #category : 'initialization' }
+DockRepositoryChangesView >> initialize [ 
+	
+	isDisplayed := false.
+	super initialize.
+	self whenDisplayDo: [
+		isDisplayed := true.
+		self updatePresenter ]
+]
+
+{ #category : 'initialization' }
 DockRepositoryChangesView >> initializePresenters [
 
 	self addStyle: 'dockRepositoryChangesView'.
 
 	toolbarPresenter := self instantiate: DockToolbarPresenter.
 	toolbarPresenter actions: (self actions actionsFor: #gitActions).
-	toolbarPresenter addPresenterMenuButtonWith: (self actions actionsFor: #collapse).
+	toolbarPresenter addPresenterMenuButtonWith: (self actions actionsForAll: #(collapse extra)).
 
 	listPresenter := self newEasyTreeListView
 		addStyle: 'stTree';
@@ -235,19 +272,15 @@ DockRepositoryChangesView >> updatePresenter [
 	
 	self model ifNil: [ ^ self ].
 
-	self application schedule: [
-		self flag: #TODO. "I need to wait to let the window time to draw itself, otherwise 
-		 this will be working in the middle and will have a long wait to show some repositories.
-		 This should not happen, as this is in a taslk, but anyway... I need to review 
-		 this later."
-		100 milliSeconds wait.
-		self scheduleJob: [
-			| diff |
-			"first calculate it in a scheduled task" 
-			diff := self model diffNode.
-			"then show it in UI thread"
-			self application defer: [
-				listPresenter 
-					roots: diff children;
-					expandAll ] ] ]
+	isDisplayed ifFalse: [ ^ self ].
+
+	self scheduleJob: [
+		| diff |
+		"first calculate it in a scheduled task" 
+		diff := self model diffNode.
+		"then show it in UI thread"
+		self application defer: [
+			listPresenter 
+				roots: diff children;
+				expandAll ] ]
 ]

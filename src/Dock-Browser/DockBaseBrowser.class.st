@@ -109,6 +109,12 @@ DockBaseBrowser >> addPresenterClass: aClass position: aDockPosition [
 ]
 
 { #category : 'private' }
+DockBaseBrowser >> addTool: ann [ 
+
+	self addPresenterClass: ann toolClass
+]
+
+{ #category : 'private' }
 DockBaseBrowser >> addWindow: aWindow [
 
 	self mutex critical: [ 
@@ -165,10 +171,15 @@ DockBaseBrowser >> eventManyModelDeactivated: anAnnouncement [
 { #category : 'events' }
 DockBaseBrowser >> eventModelActivated: anAnnouncement [
 	
+	self 
+		maybeDockView: anAnnouncement value
+		withActivation: anAnnouncement
 ]
 
 { #category : 'events' }
 DockBaseBrowser >> eventModelDeactivated: anAnnouncement [
+	
+	self maybeUndockView: anAnnouncement value
 ]
 
 { #category : 'accessing' }
@@ -214,6 +225,7 @@ DockBaseBrowser >> initialize [
 
 	super initialize.
 	self registerToEvents.
+	self registerToSystemEvents.
 	self initializeDefaultWorkspace
 ]
 
@@ -233,7 +245,8 @@ DockBaseBrowser >> initializePrivateAnnouncer [
 DockBaseBrowser >> initializeSnapshot: aSnapshot [
 
 	super initialize.
-	self registerToEvents
+	self registerToEvents.
+	self registerToSystemEvents
 ]
 
 { #category : 'initialization' }
@@ -282,6 +295,42 @@ DockBaseBrowser >> jobStart [
 
 	job ifNil: [ job := DockJobHandler on: self ].
 	job start
+]
+
+{ #category : 'private' }
+DockBaseBrowser >> maybeDockView: aViewModel withActivation: anActivation [
+	"if the entity has an editor associated:
+	 	if the entity is not already there, open it.
+	 	if the entity is already opened, 
+			if it can have multiple views: open it.
+			if it is single view: select it
+	 otherwise ignore it"
+	| editorPresenter |
+
+	aViewModel hasDockEditor ifFalse: [ ^ self ].
+
+	(self findEditorContaining: aViewModel) 
+		ifNotNil: [ :panelPresenter | 
+			panelPresenter raiseAndTakeKeyboardFocus.
+			editorPresenter := panelPresenter presenter ]
+		ifNil: [
+			editorPresenter := self 
+				instantiate: aViewModel dockEditorClass 
+				on: aViewModel. 
+			self 
+				addPresenter: editorPresenter 
+				at: editorPresenter dockPosition ].
+	
+	editorPresenter activateWith: anActivation
+]
+
+{ #category : 'private' }
+DockBaseBrowser >> maybeUndockView: aViewModel [
+
+	aViewModel hasDockEditor ifFalse: [ ^ self ].
+
+	(self findEditorContaining: aViewModel) 
+		ifNotNil: [ :panelPresenter | panelPresenter close ]
 ]
 
 { #category : 'private' }
@@ -348,15 +397,16 @@ DockBaseBrowser >> registerToEvents [
 { #category : 'initialization' }
 DockBaseBrowser >> registerToSystemEvents [
 
-
 	self announcer 
 		when: JobStart send: #eventJobStart: to: self;
-		when: JobEnd send: #eventJobEnd: to: self
-		
+		when: JobEnd send: #eventJobEnd: to: self;
+		when: SystemAnnouncement send: #resendAnnouncement: to: self
 ]
 
 { #category : 'announcing' }
 DockBaseBrowser >> resendAnnouncement: anAnnouncement [
+
+	logger trace: anAnnouncement.
 	
 	self presentersDo: [ :aWindowPresenter |
 		aWindowPresenter presenter announce: anAnnouncement ]

@@ -33,15 +33,6 @@ DockRepositoryCommitsView >> defineActionsOn: aBuilder [
 	aBuilder addGroup: #gitActions with: [ :group | group  ]
 ]
 
-{ #category : 'private - actions' }
-DockRepositoryCommitsView >> doPush [
-
-	self scheduleJob: [
-		self model newPushAction 
-			onSuccess: [ self repositoryModified ];
-			executeWithContext: self ]
-]
-
 { #category : 'events' }
 DockRepositoryCommitsView >> eventRepositoryModified: ann [
 

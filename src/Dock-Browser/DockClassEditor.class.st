@@ -272,7 +272,10 @@ DockClassEditor >> updateComment [
 DockClassEditor >> updateEditor [
 	
 	self updatingWhile: [  
-		editorPresenter text: self model classDefinitionString ]
+		editorPresenter 
+			"this makes the editor not well styled"
+			"beForBehavior: self model instanceSide;"
+			text: self model classDefinitionString ]
 ]
 
 { #category : 'initialization' }

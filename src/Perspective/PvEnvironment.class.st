@@ -12,6 +12,12 @@ PvEnvironment >> allClassesAndTraits [
 	^ self subclassResponsibility
 ]
 
+{ #category : 'converting' }
+PvEnvironment >> asRBNamespace [
+
+	self subclassResponsibility
+]
+
 { #category : 'testing' }
 PvEnvironment >> hasPackageNamed: aString [ 
 	

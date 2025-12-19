@@ -90,12 +90,6 @@ DockBrowser class >> defineToolActionsOn: aBuilder [
 ]
 
 { #category : 'private' }
-DockBrowser >> addTool: ann [ 
-
-	self addPresenterClass: ann toolClass
-]
-
-{ #category : 'private' }
 DockBrowser >> composeTitle [
 
 	^ (projectView isNotNil and: [ projectView openedProjects isNotEmpty ])
@@ -126,20 +120,6 @@ DockBrowser >> eventManyModelDeactivated: anAnnouncement [
 				do: [ :each | self maybeUndockView: each ] ].
 		"except the last one, to ensure system update is triggered"
 		self maybeUndockView: editors last ]
-]
-
-{ #category : 'events' }
-DockBrowser >> eventModelActivated: anAnnouncement [
-	
-	self 
-		maybeDockView: anAnnouncement value
-		withActivation: anAnnouncement
-]
-
-{ #category : 'events' }
-DockBrowser >> eventModelDeactivated: anAnnouncement [
-	
-	self maybeUndockView: anAnnouncement value
 ]
 
 { #category : 'events' }
@@ -178,10 +158,9 @@ DockBrowser >> initialExtent [
 
 { #category : 'initialization' }
 DockBrowser >> initialize [
+
 	"model can be already initialized from the recover snapshot"
-	model ifNil: [
-		"but if not, we need an initial model"
-		model := PvEnvironmentModel onSystem ].
+	model ifNil: [ model := PvEnvironmentModel onSystem ].
 	super initialize
 ]
 
@@ -224,42 +203,6 @@ DockBrowser >> initializeWorkspace [
 	self endWidth: 280"self initialExtent x * 25 percent".
 	self topHeight: 180"self initialExtent y * 20 percent".
 	self bottomHeight: 180"self initialExtent y * 20 percent"
-]
-
-{ #category : 'private' }
-DockBrowser >> maybeDockView: aViewModel withActivation: anActivation [
-	"if the entity has an editor associated:
-	 	if the entity is not already there, open it.
-	 	if the entity is already opened, 
-			if it can have multiple views: open it.
-			if it is single view: select it
-	 otherwise ignore it"
-	| editorPresenter |
-
-	aViewModel hasDockEditor ifFalse: [ ^ self ].
-
-	(self findEditorContaining: aViewModel) 
-		ifNotNil: [ :panelPresenter | 
-			panelPresenter raiseAndTakeKeyboardFocus.
-			editorPresenter := panelPresenter presenter ]
-		ifNil: [
-			editorPresenter := self 
-				instantiate: aViewModel dockEditorClass 
-				on: aViewModel. 
-			self 
-				addPresenter: editorPresenter 
-				at: editorPresenter dockPosition ].
-			
-	editorPresenter activateWith: anActivation
-]
-
-{ #category : 'private' }
-DockBrowser >> maybeUndockView: aViewModel [
-
-	aViewModel hasDockEditor ifFalse: [ ^ self ].
-
-	(self findEditorContaining: aViewModel) 
-		ifNotNil: [ :panelPresenter | panelPresenter close ]
 ]
 
 { #category : 'actions' }
@@ -355,15 +298,6 @@ DockBrowser >> registerToEvents [
 	self announcer 
 		when: DockLostChangesAnnouncement send: #informLostChanges: to: self;
 		when: DockRequestToolAnnouncement send: #addTool: to: self
-]
-
-{ #category : 'initialization' }
-DockBrowser >> registerToSystemEvents [
-
-	self announcer 
-		when: SystemAnnouncement 
-		send: #resendAnnouncement: 
-		to: self
 ]
 
 { #category : 'initialization' }

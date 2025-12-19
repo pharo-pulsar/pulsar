@@ -27,7 +27,7 @@ DockRepositoryLocalBranchView >> defineActionsOn: aBuilder [
 			description: 'Create a new branch from current HEAD';
 			shortcutKey: $b actionModifier;
 			actionEnabled: [ self hasSelectedItem and: [ self selectedItem isHead ] ];
-			action: [ self doCreateBranch ] ];
+			action: [ self doCreateBranchCommand: action ] ];
 		addActionWith: [ :action | action 
 			dynamicName: [ 'Merge branch {1} into {2} ' format: { self selectedItemName. self model headName } ];
 			iconName: 'merge';
@@ -52,10 +52,51 @@ DockRepositoryLocalBranchView >> defineActionsOn: aBuilder [
 ]
 
 { #category : 'private - actions' }
+DockRepositoryLocalBranchView >> doCreateBranchCommand: anAction [
+	| dialog branchName |
+
+	dialog := self instantiate: DockRequestPresenter.
+	dialog 
+		label: 'Branch Name';
+		text: ''.
+	dialog acceptLabel: 'Create'.
+	
+	dialog asPopover
+		relativeTo: anAction presenter;
+		popupModalAndWait.
+	dialog isOk ifFalse: [ ^ self ].
+	
+	branchName := dialog text.
+	
+	self model switchToBranchNamed: branchName.
+	self repositoryModified
+]
+
+{ #category : 'private - actions' }
 DockRepositoryLocalBranchView >> doFetchRepositories [
 
 	self scheduleJob: [
 		self model newFetchAction
+			onSuccess: [ self repositoryModified ];
+			executeWithContext: self ]
+]
+
+{ #category : 'actions' }
+DockRepositoryLocalBranchView >> doPush [
+	| remote |
+
+	remote := nil.
+	self model hasUpstream ifFalse: [
+		remote := self application newSelect
+			title: 'Upstream missing';
+			message: 'Select remote to push to (set upstream)';
+			items: self model remotes;
+			display: [ :aRemote | aRemote name ];
+			openModalWithParent: self window.
+		remote ifNil: [ ^ self ] ].
+
+	self scheduleJob: [	
+		(self model newPushActionTo: remote)
 			onSuccess: [ self repositoryModified ];
 			executeWithContext: self ]
 ]

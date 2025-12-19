@@ -17,12 +17,6 @@ DockRepositoryBrowser class >> defaultWindowSize [
 	^ 900@900
 ]
 
-{ #category : 'private' }
-DockRepositoryBrowser >> addTool: ann [ 
-
-	self addPresenterClass: ann toolClass
-]
-
 { #category : 'private - definitions' }
 DockRepositoryBrowser >> defineExtraActionsOn: aBuilder [
 	<dockActions>

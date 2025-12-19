@@ -44,6 +44,12 @@ PvEnvironmentModel >> allClassesAndTraits [
 	^ self entity allClassesAndTraits
 ]
 
+{ #category : 'converting' }
+PvEnvironmentModel >> asRBNamespace [
+
+	^ self entity asRBNamespace
+]
+
 { #category : 'testing' }
 PvEnvironmentModel >> canBeRemoved [
 

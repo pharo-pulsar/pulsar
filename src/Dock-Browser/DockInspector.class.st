@@ -147,7 +147,7 @@ DockInspector >> newPageForContext: aContext [
 		yourself
 ]
 
-{ #category : 'private - announcing' }
+{ #category : 'nil' }
 DockInspector >> notifyActivateEntity: anEntity [
 
 	anEntity ifNil: [ ^ self ].

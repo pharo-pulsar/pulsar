@@ -29,37 +29,6 @@ DockPlayground class >> defaultTitle [
 	^ 'Playground'
 ]
 
-{ #category : 'accessing - actions' }
-DockPlayground class >> defineActionsOn: aBuilder [
-	<dockActions>
-
-	aBuilder addGroup: #actions with: [ :group | group 
-		addActionWith: [ :action | action
-				priority: 1;
-				name: 'New playground';
-				description: 'Create a new playground';
-				iconName: 'add';
-				action: [ :aContext | aContext doNewPlayground ] ];
-		addActionWith: [ :action | action
-				priority: 2;
-				name: 'Load page';
-				description: 'Load a playground page';
-				iconName: 'load';
-				action: [ :aContext | aContext doLoadPage ] ];	
-		addActionWith: [ :action | action
-				priority: 3;
-				name: 'Versions';
-				description: 'Browse versions of current playground page';
-				iconName: 'versions';
-				action: [ :aContext :aCommand | aContext doBrowseVersionsCommand: aCommand ] ];
-		addActionWith: [ :action | action
-				priority: 4;
-				name: 'Variables';
-				description: 'Browse variables (bindings) defined in current playground';
-				iconName: 'variables';
-				action: [ :aContext :aCommand | aContext doBrowseBindingsCommand: aCommand ] ] ]
-]
-
 { #category : 'private - actions' }
 DockPlayground >> activatePage: page [
 
@@ -100,6 +69,37 @@ DockPlayground >> defaultLayout [
 		add: toolbarPresenter expand: false;
 		add: codePresenter;
 		yourself
+]
+
+{ #category : 'private - definitions' }
+DockPlayground >> defineActionsOn: aBuilder [
+	<dockActions>
+
+	aBuilder addGroup: #actions with: [ :group | group 
+		addActionWith: [ :action | action
+			priority: 1;
+			name: 'New playground';
+			description: 'Create a new playground';
+			iconName: 'add';
+			action: [ self doNewPlayground ] ];
+		addActionWith: [ :action | action
+			priority: 2;
+			name: 'Load page';
+			description: 'Load a playground page';
+			iconName: 'load';
+			action: [ self doLoadPage ] ];	
+		addActionWith: [ :action | action
+			priority: 3;
+			name: 'Versions';
+			description: 'Browse versions of current playground page';
+			iconName: 'versions';
+			action: [ self doBrowseVersionsCommand: action ] ];
+		addActionWith: [ :action | action
+			priority: 4;
+			name: 'Variables';
+			description: 'Browse variables (bindings) defined in current playground';
+			iconName: 'variables';
+			action: [ self doBrowseBindingsCommand: action ] ] ]
 ]
 
 { #category : 'private - actions' }
@@ -164,12 +164,6 @@ DockPlayground >> doNewPlayground [
 { #category : 'initialization' }
 DockPlayground >> ensureCodeBindings [
 
-	(codePresenter interactionModel bindings keys
-		anySatisfy: [ :each | each = #thisBrowser ])
-		ifTrue: [ ^ self ].
-		
-	codePresenter interactionModel 
-		addBinding: (WorkspaceVariable key: #thisBrowser value: self window)
 ]
 
 { #category : 'events' }
@@ -239,7 +233,7 @@ DockPlayground >> insertPopover: aPresenter [
 { #category : 'private' }
 DockPlayground >> newInteractionModel [
 
-	^ StPlaygroundInteractionModel new
+	^ DockPlaygroundInteractionModel new
 ]
 
 { #category : 'private' }
@@ -252,8 +246,6 @@ DockPlayground >> newSystemNavigation [
 
 { #category : 'accessing - snapshot' }
 DockPlayground >> postRestoreSnapshot: aSnapshot [
-
-	self ensureCodeBindings
 ]
 
 { #category : 'initialization' }
@@ -291,7 +283,6 @@ DockPlayground >> updatePresenter [
 	
 	self updateTitle.
 	
-	self ensureCodeBindings.
 	codePresenter text: self model contents
 ]
 

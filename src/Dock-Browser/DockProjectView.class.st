@@ -165,12 +165,6 @@ DockProjectView >> closestPathInPathMatching: aBlock [
 	^ nil
 ]
 
-{ #category : 'api - focus' }
-DockProjectView >> defaultKeyboardFocus [
-
-	^ listPresenter
-]
-
 { #category : 'layout' }
 DockProjectView >> defaultLayout [
 

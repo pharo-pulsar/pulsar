@@ -192,6 +192,30 @@ DockClassOutlineSideView >> defaultLayout [
 		yourself
 ]
 
+{ #category : 'private - definitions' }
+DockClassOutlineSideView >> defineMethodRefactorActionsOn: aBuilder [
+	<dockActions>
+
+	aBuilder addGroup: #methodRefactors with: [ :group | group 
+		name: 'Refactors';
+		beDisplayedAsSubMenu;
+		addActionWith: [ :action | action
+			dynamicName: [ 'Rename {1}' format: { self selectedMethodName } ];
+			description: [ 'Rename method' ];
+			actionEnabled: [ self hasSelectedMethod ];
+			action: [ self doRenameMethod ] ];
+		addActionWith: [ :action | action
+			dynamicName: [ 'Pull up {1}' format: { self selectedMethodName } ];
+			description: [ 'Pullup method' ];
+			actionEnabled: [ self hasSelectedMethod ];
+			action: [ self doPullUpMethod ] ];
+		addActionWith: [ :action | action
+			dynamicName: [ 'Push down {1}' format: { self selectedMethodName } ];
+			description: [ 'Push down method' ];
+			actionEnabled: [ self hasSelectedMethod ];
+			action: [ self doPushUpMethod ] ] ]
+]
+
 { #category : 'private - preview' }
 DockClassOutlineSideView >> dismissPreview [
 	logger trace.
@@ -263,6 +287,28 @@ DockClassOutlineSideView >> doForceRemoveMethod [
 	self updatePresenter
 ]
 
+{ #category : 'private - refactors' }
+DockClassOutlineSideView >> doPullUpMethod [
+
+	self schedule: [
+		(RePullUpMethodDriver newApplication: self application)
+			model: (RBNamespace onEnvironment: RBBrowserEnvironment new)
+				scopes: { RBBrowserEnvironment new }
+				pullUpMethods: { self selectedMethod entity };
+			runRefactoring ]
+]
+
+{ #category : 'private - refactors' }
+DockClassOutlineSideView >> doPushDownMethod [
+
+	self schedule: [
+		(RePushDownMethodDriver newApplication: self application)
+			model: (RBNamespace onEnvironment: RBBrowserEnvironment new)
+				scopes: { RBBrowserEnvironment new }
+				pushDownMethods: { self selectedMethod entity };
+			runRefactoring ]	
+]
+
 { #category : 'private - actions' }
 DockClassOutlineSideView >> doRemoveSelectedProtocol [
 
@@ -278,6 +324,12 @@ DockClassOutlineSideView >> doRemoveSelectedProtocol [
 	okToRemove ifFalse: [ ^ self ].
 
 	self halt
+]
+
+{ #category : 'private - refactors' }
+DockClassOutlineSideView >> doRenameMethod [
+
+	
 ]
 
 { #category : 'private - actions' }
@@ -348,6 +400,12 @@ DockClassOutlineSideView >> filterMethodsByVariable: aVariableModel [
 	self updateMethods
 ]
 
+{ #category : 'private - testing' }
+DockClassOutlineSideView >> hasSelectedMethod [
+
+	^ self selectedMethod isNotNil
+]
+
 { #category : 'testing' }
 DockClassOutlineSideView >> includesModel: aModel [
 
@@ -382,7 +440,7 @@ DockClassOutlineSideView >> initializeMethods [
 		searchMatching: [ :aModel :aString | 
 			aModel name asLowercase beginsWith: aString asLowercase ];
 		actions: (SpActionGroup new 
-			add: (self actions actionsForAll: #(method methodCritical));
+			add: (self actions actionsForAll: #(method methodRefactors methodCritical));
 			addShortcutWith: [ :action | action 
 				shortcutKey: KeyboardKey left asKeyCombination;
 				action: [ self activateMethodPreviewPopover ] ];
@@ -444,7 +502,7 @@ DockClassOutlineSideView >> isPreviewPopoverActive [
 	^ previewPopoverActive
 ]
 
-{ #category : 'private' }
+{ #category : 'private - accessing' }
 DockClassOutlineSideView >> listPresenter [
 
 	^ listPresenter
@@ -532,6 +590,26 @@ DockClassOutlineSideView >> resetInteractionStatus [
 
 	"in case is active"
 	self dismissPreview
+]
+
+{ #category : 'private' }
+DockClassOutlineSideView >> schedule: aBlock [
+
+	self owner schedule: aBlock
+]
+
+{ #category : 'private - accessing' }
+DockClassOutlineSideView >> selectedMethod [
+
+	^ listPresenter selectedItem
+]
+
+{ #category : 'private - accessing' }
+DockClassOutlineSideView >> selectedMethodName [
+
+	^ self selectedMethod 
+		ifNotNil: [ :aModel | aModel name ]
+		ifNil: [ 'Unknown' ]
 ]
 
 { #category : 'initialization' }
