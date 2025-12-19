@@ -39,23 +39,20 @@ DockRepositoriesView >> defaultLayout [
 DockRepositoriesView >> defineActionsOn: aBuilder [
 	<dockActions>
 
-	aBuilder 
-		addGroup: #actions with: [ :group | group 
-			priority: 10;
-			beDisplayedAsGroup;
-			addActionWith: [ :action | action
-				priority: 1;
-				name: 'Add repository';
-				description: 'Add a new repository';
-				iconName: 'add';
-				action: [ self doAddRepository ] ];
-			addActionWith: [ :action | action
-				priority: 1;
-				name: 'Repair repository';
-				description: 'Repair repository';
-				iconName: 'repair';
-				actionEnabled: [ self hasSelectedRepository and: [ self selectedRepository needsRepair ] ];
-				action: [ self doRepairSelectedRepository ] ] ]
+	aBuilder addGroup: #actions with: [ :group | group 
+		addActionWith: [ :action | action
+			priority: 1;
+			name: 'Add repository';
+			description: 'Add a new repository';
+			iconName: 'add';
+			action: [ self doAddRepository ] ];
+		addActionWith: [ :action | action
+			priority: 1;
+			name: 'Repair repository';
+			description: 'Repair repository';
+			iconName: 'repair';
+			actionEnabled: [ self hasSelectedRepository and: [ self selectedRepository needsRepair ] ];
+			action: [ self doRepairSelectedRepository ] ] ]
 ]
 
 { #category : 'private - actions' }
@@ -125,16 +122,10 @@ DockRepositoriesView >> initializePresenters [
 	self addStyle: 'dockRepositories'.
 
 	listToolbarPresenter := self instantiate: DockToolbarPresenter.
-	listToolbarPresenter actions: self actions.
-	listToolbarPresenter addPresenter: (self newToolbar 
-		beIcons;
-		add: (self newButton
-			addStyle: 'flat';
-			icon: (self iconNamed: 'close');
-			help: 'Close repositories';
-			action: [ self doClose ];
-			yourself);
-		yourself).
+	listToolbarPresenter actions: (self actions actionsFor: #actions).
+	listToolbarPresenter 
+		addPresenterCloseButton: 'Close repositories' 
+		action: [ self doClose ].
 
 	listPresenter := self newFilteringList
 		addStyle: 'stList';
