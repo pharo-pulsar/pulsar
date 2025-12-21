@@ -79,7 +79,8 @@ DockDebugger >> initializeDefaultWorkspace [
 
 	stackView := self addPresenterClass: DockContextStackPresenter.
 
-	self addPresenterClass: DockDebuggerInspector
+	(self addPresenterClass: DockDebuggerInspector) beForReceiver.
+	self addPresenterClass: DockDebuggerInspector.
 ]
 
 { #category : 'initialization' }

@@ -5,7 +5,8 @@ Class {
 	#classTraits : 'DockTNotificationCenter classTrait + DockTPanelWindow classTrait + DockTSnapshot classTrait + DockTGlobalActionContainer classTrait + SpTModel classTrait',
 	#instVars : [
 		'contextInspectorPresenter',
-		'headerPresenter'
+		'headerPresenter',
+		'isForReceiver'
 	],
 	#category : 'Dock-Browser-Tool-Debugger',
 	#package : 'Dock-Browser',
@@ -38,6 +39,18 @@ DockDebuggerInspector class >> defineActionsOn: aBuilder [
 				action: [ :aContext | aContext doBrowseReceiverClass ] ] ]
 ]
 
+{ #category : 'accessing' }
+DockDebuggerInspector >> beForContext [
+
+	isForReceiver := false
+]
+
+{ #category : 'accessing' }
+DockDebuggerInspector >> beForReceiver [
+
+	isForReceiver := true
+]
+
 { #category : 'layout' }
 DockDebuggerInspector >> defaultLayout [
 
@@ -61,7 +74,7 @@ DockDebuggerInspector >> eventModelSelected: anAnnouncement [
 
 { #category : 'initialization' }
 DockDebuggerInspector >> initialize [
-
+	self beForContext.
 	super initialize.
 	self registerToEvents
 ]
@@ -87,7 +100,9 @@ DockDebuggerInspector >> initializeWindow: aWindowPresenter [
 { #category : 'private' }
 DockDebuggerInspector >> inspectContextModel: aContextModel [
 
-	contextInspectorPresenter model: aContextModel entity.
+	contextInspectorPresenter model: (isForReceiver
+		ifTrue: [ aContextModel entity receiver ]
+		ifFalse: [ aContextModel entity ] ).
 	self model: (DockInspectorModel on: aContextModel entity receiver)
 ]
 
@@ -112,8 +127,9 @@ DockDebuggerInspector >> updatePresenter [
 	self model ifNil: [ ^ self ].
 
 	timeToRun := [
-		headerPresenter updateBreadcrumbWith: [ :aBreadcrumb | 
-			aBreadcrumb addSegment: 'Context' ].
+		headerPresenter title: (isForReceiver
+			ifTrue: [ 'Receiver' ]
+			ifFalse: [ 'Context' ]).
 		contextInspectorPresenter updatePresenter.
 	] timeToRun.
 	logger trace: timeToRun
