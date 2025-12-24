@@ -29,7 +29,7 @@ DockCollectionView >> defaultLayout [
 
 	^ SpBoxLayout newVertical
 		add: listPresenter;
-		yoursel
+		yourself
 ]
 
 { #category : 'private' }

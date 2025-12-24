@@ -19,98 +19,6 @@ DockProjectView class >> defaultDockPosition [
 		yourself
 ]
 
-{ #category : 'accessing - actions' }
-DockProjectView class >> defineActionsOn: aBuilder [
-	<dockActions>
-	
-	aBuilder 
-		addGroup: #project with: [ :group | group 
-			priority: 100;
-			name: 'Project';
-			beDisplayedAsSubMenu;	
-			addActionWith: [ :action | action 
-				priority: 110;
-				name: 'New project';
-				description: 'Create a new project (baseline)';
-				iconName: 'new-folder';
-				shortcutKey: $n mod1;
-				action: [ :aContext | aContext doNewProject ] ];
-			addActionWith: [ :action | action 
-				priority: 120;
-				name: 'Open project';
-				description: 'Open project';
-				iconName: #openProject;
-				shortcutKey: $o mod1;
-				action: [ :aContext | aContext doOpenProject ] ];
-			addActionWith: [ :action | action 
-				priority: 130;
-				name: 'Refresh project';
-				description: 'Refresh this project (reload configuration)';
-				iconName: 'refresh';
-				action: [ :aContext | aContext refreshProject ] ] ];
-		addGroup: #new with: [ :group | group
-			priority: 200;
-			name: 'New';
-			beDisplayedAsGroup;
-			addActionWith: [ :action | action 
-				priority: 210;
-				name: 'New package';
-				description: 'Add a new package to the environment';
-				iconName: 'new-file';
-				action: [ :aContext | aContext doNewPackage ] ];
-			addActionWith: [ :action | action
-				priority: 220;
-				name: 'New tag';
-				description: 'Add a new tag to this package';
-				iconName: 'new-file';
-				action: [ :aContext | aContext doNewPackageTag ] ];
-			addActionWith: [ :action | action
-				priority: 230;
-				name: 'New class';
-				description: 'Add a new class to the environment';
-				iconName: 'new-file';
-				action: [ :aContext | aContext doRequestNewClass ] ];
-			addActionWith: [ :action | action
-				priority: 240;
-				name: 'New trait';
-				description: 'Add a new trait to the environment';
-				iconName: 'new-file';
-				action: [ :aContext | aContext doRequestNewTrait ] ] ];
-		addGroup: #action with: [ :group | group 
-			priority: 300;
-			name: 'Action';
-			beDisplayedAsGroup	;
-			addActionWith: [ :action | action
-				priority: 310;
-				dynamicName: [ :aContext | 'Rename ', aContext selectedEntityName ];
-				description: 'Rename package or tag (and all its contexts)';
-				shortcutKey: $r mod1;
-				actionEnabled: [ :aContext | aContext canRenameSelectedEntity ];
-				action: [ :aContext | aContext doRenameSelectedEntity ] ];
-			addActionWith: [ :action | action 
-				priority: 320;
-				dynamicName: [ :aContext |
-					String streamContents: [ :stream | 
-						stream << 'Remove '.
-						stream << aContext selectedEntityName.
-						aContext selectedEntity isProject
-							ifTrue: [ stream << ' from project list' ] ] ];
-				description: 'Remove from project';
-				iconName: 'trash';
-				shortcutKey: $x mod1;
-				actionEnabled: [ :aContext | aContext canRemoveSelectedEntity ];
-				action: [ :aContext | aContext doRemoveSelectedEntity ] ] ];
-		addGroup: #extra with: [ :group | group 
-			priority: 900;
-			name: 'Extra';
-			beDisplayedAsGroup;
-			addActionWith: [ :action | action 
-				name: 'Collapse All';
-				description: 'Collapses all open projects';
-				iconName: 'collapse-all';
-				action: [ :aContext | aContext doCollapseAll ] ] ]
-]
-
 { #category : 'actions' }
 DockProjectView >> addProject: aBaselineClass [
 	| path |
@@ -174,12 +82,134 @@ DockProjectView >> defaultLayout [
 		yourself
 ]
 
+{ #category : 'private - definitions' }
+DockProjectView >> defineActionsOn: aBuilder [
+	<dockActions>
+	
+	aBuilder 
+		addGroup: #project with: [ :group | group 
+			priority: 100;
+			name: 'Project';
+			beDisplayedAsSubMenu;	
+			addActionWith: [ :action | action 
+				priority: 110;
+				name: 'New project';
+				description: 'Create a new project (baseline)';
+				iconName: 'new-folder';
+				shortcutKey: $n mod1;
+				action: [ self doNewProject ] ];
+			addActionWith: [ :action | action 
+				priority: 120;
+				name: 'Open project';
+				description: 'Open project';
+				iconName: #openProject;
+				shortcutKey: $o mod1;
+				action: [ self doOpenProject ] ];
+			addActionWith: [ :action | action 
+				priority: 130;
+				name: 'Refresh project';
+				description: 'Refresh this project (reload configuration)';
+				iconName: 'refresh';
+				action: [ self refreshProject ] ] ];
+		addGroup: #new with: [ :group | group
+			priority: 200;
+			name: 'New';
+			beDisplayedAsGroup;
+			addActionWith: [ :action | action 
+				priority: 210;
+				name: 'New package';
+				description: 'Add a new package to the environment';
+				iconName: 'new-file';
+				action: [ self doNewPackage ] ];
+			addActionWith: [ :action | action
+				priority: 220;
+				name: 'New tag';
+				description: 'Add a new tag to this package';
+				iconName: 'new-file';
+				action: [ self doNewPackageTag ] ];
+			addActionWith: [ :action | action
+				priority: 230;
+				name: 'New class';
+				description: 'Add a new class to the environment';
+				iconName: 'new-file';
+				action: [ self doRequestNewClass ] ];
+			addActionWith: [ :action | action
+				priority: 240;
+				name: 'New trait';
+				description: 'Add a new trait to the environment';
+				iconName: 'new-file';
+				action: [ self doRequestNewTrait ] ] ];
+		addGroup: #action with: [ :group | group 
+			priority: 300;
+			name: 'Action';
+			beDisplayedAsGroup	;
+			addActionWith: [ :action | action
+				priority: 310;
+				dynamicName: [ 'Rename {1}' format: { self selectedEntityName } ];
+				description: 'Rename package or tag (and all its contexts)';
+				shortcutKey: $r mod1;
+				actionEnabled: [ self canRenameSelectedEntity ];
+				action: [ self doRenameSelectedEntity ] ];
+			addActionWith: [ :action | action 
+				priority: 320;
+				dynamicName: [ 
+					String streamContents: [ :stream | 
+						stream << 'Remove '.
+						stream << self selectedEntityName.
+						self selectedEntity isProject
+							ifTrue: [ stream << ' from project list' ] ] ];
+				description: 'Remove from project';
+				iconName: 'trash';
+				shortcutKey: $x mod1;
+				actionEnabled: [ self canRemoveSelectedEntity ];
+				action: [ self doRemoveSelectedEntity ] ] ];
+		addGroup: #extra with: [ :group | group 
+			priority: 900;
+			name: 'Extra';
+			beDisplayedAsGroup;
+			addActionWith: [ :action | action 
+				name: 'Collapse All';
+				description: 'Collapses all open projects';
+				iconName: 'collapse-all';
+				action: [ self doCollapseAll ] ] ]
+]
+
+{ #category : 'private - definitions' }
+DockProjectView >> defineClassRefactorActionsOn: aBuilder [
+	<dockActions>
+
+	aBuilder addGroup: #classRefactors with: [ :group | group 
+		priority: 400;
+		name: 'Refactors';
+		beDisplayedAsSubMenu;
+		addActionWith: [ :action | action
+			dynamicName: [ 'Rename {1}' format: { self selectedEntityName } ];
+			description: [ 'Rename class' ];
+			actionEnabled: [ self hasSelectedClass ];
+			action: [ self doRenameClass ] ]; 
+		addActionWith: [ :action | action
+			dynamicName: [ 'Duplicate {1}' format: { self selectedEntityName } ];
+			description: [ 'Rename class' ];
+			actionEnabled: [ self hasSelectedClass ];
+			action: [ self doDuplicateClass ] ] ]
+]
+
 { #category : 'private - actions' }
 DockProjectView >> doCollapseAll [
 
 	listPresenter 
 		unselectAll;
 		collapseAll
+]
+
+{ #category : 'private - refactors' }
+DockProjectView >> doDuplicateClass [
+
+	self application schedule: [
+		(ReDuplicateClassDriver newApplication: self application)
+			className: self selectedEntityName asSymbol;
+			scopes: { RBClassEnvironment class: self selectedEntity realModel entity };
+			runRefactoring ]
 ]
 
 { #category : 'private - actions' }
@@ -356,11 +386,20 @@ DockProjectView >> eventPackageAdded: anAnnouncement [
 	logger trace: anAnnouncement package
 ]
 
+{ #category : 'testing' }
+DockProjectView >> hasSelectedClass [
+
+	^ self selectedEntity
+		ifNotNil: [ :anEntityModel | anEntityModel realModel isClassModel ]
+		ifNil: [ false ]
+]
+
 { #category : 'initialization' }
 DockProjectView >> initialize [
 
 	mutex := Mutex new.
 	super initialize.
+	self registerToEvents.
 	self registerToSystemEvents
 ]
 
@@ -383,6 +422,7 @@ DockProjectView >> initializePresenters [
 		children: [ :aModel | aModel children ];
 		rowPresenterClass: DockProjectNodeRow;
 		searchMatching: [ :anEntity :pattern | anEntity matches: pattern ];
+		actions: self actions;
 		yourself.
 	
 	listPresenter addShortcutWith: [ :act | act 
@@ -450,7 +490,9 @@ DockProjectView >> registerToEvents [
 
 	super registerToEvents.
 	self announcer 
-		when: DockEditorActivated send: #eventEditorActivated: to: self	
+		when: DockEditorActivated 
+		send: #eventEditorActivated: 
+		to: self	
 ]
 
 { #category : 'initialization' }

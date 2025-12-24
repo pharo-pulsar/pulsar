@@ -74,6 +74,7 @@ DockDebuggerInspector >> eventModelSelected: anAnnouncement [
 
 { #category : 'initialization' }
 DockDebuggerInspector >> initialize [
+
 	self beForContext.
 	super initialize.
 	self registerToEvents

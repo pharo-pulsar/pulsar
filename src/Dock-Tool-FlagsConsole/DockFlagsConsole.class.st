@@ -1,3 +1,8 @@
+"
+A console to show flags in code. 
+the console filters flags by package (the default) and class.
+
+"
 Class {
 	#name : 'DockFlagsConsole',
 	#superclass : 'DockBaseView',

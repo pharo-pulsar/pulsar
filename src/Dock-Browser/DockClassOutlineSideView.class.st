@@ -329,7 +329,18 @@ DockClassOutlineSideView >> doRemoveSelectedProtocol [
 { #category : 'private - refactors' }
 DockClassOutlineSideView >> doRenameMethod [
 
-	
+	self application schedule: [ 
+		| rbClasses rbModel method |
+		
+		method := self selectedMethod entity.
+		rbClasses := RBClassEnvironment classes: method methodClass withAllSubclasses.
+		rbModel := RBNamespace onEnvironment: rbClasses.
+		(ReRenameMethodDriver newApplication: self application)
+			scopes: { rbClasses }
+				model: rbModel
+				renameMethodSignature: method
+				in: method methodClass;
+			runRefactoring ]
 ]
 
 { #category : 'private - actions' }
