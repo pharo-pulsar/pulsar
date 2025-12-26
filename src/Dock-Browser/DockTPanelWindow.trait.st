@@ -4,6 +4,8 @@ Trait {
 		'dockPosition',
 		'lastTimePresented'
 	],
+	#traits : 'DockTPanelWindowWithPlacedIcon',
+	#classTraits : 'DockTPanelWindowWithPlacedIcon classTrait',
 	#category : 'Dock-Browser-View-Base',
 	#package : 'Dock-Browser',
 	#tag : 'View-Base'
@@ -75,13 +77,6 @@ DockTPanelWindow >> notifyEditorActivated [
 DockTPanelWindow >> notifyEditorClosed [
 
 	self notificationCenter announce: (DockEditorClosed newValue: self model)
-]
-
-{ #category : 'private' }
-DockTPanelWindow >> panelPlaced: aWindowPresenter [
-
-	"react to window placed"
-
 ]
 
 { #category : 'accessing' }

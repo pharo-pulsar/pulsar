@@ -1,8 +1,8 @@
 Class {
 	#name : 'DockPlayground',
 	#superclass : 'DockBaseView',
-	#traits : 'DockTSnapshot',
-	#classTraits : 'DockTSnapshot classTrait',
+	#traits : 'DockTSnapshot + DockTPanelWindowWithPlacedIcon',
+	#classTraits : 'DockTSnapshot classTrait + DockTPanelWindowWithPlacedIcon classTrait',
 	#instVars : [
 		'codePresenter',
 		'toolbarPresenter',
@@ -187,6 +187,13 @@ DockPlayground >> initialize [
 ]
 
 { #category : 'initialization' }
+DockPlayground >> initializePanelWindow: aWindowPanelPresenter [
+
+	super initializePanelWindow: aWindowPanelPresenter.
+	aWindowPanelPresenter whenPlacedDo: [ self panelPlaced: aWindowPanelPresenter ]
+]
+
+{ #category : 'initialization' }
 DockPlayground >> initializePresenters [
 
 	self addStyle: 'dockPlayground'.
@@ -221,7 +228,7 @@ DockPlayground >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter 
 		title: self class defaultTitle;
-		windowIcon: (self iconNamed: 'workspace')
+		windowIcon: (self iconNamed: self panelPlacedIconName)
 ]
 
 { #category : 'accessing' }
@@ -242,6 +249,12 @@ DockPlayground >> newSystemNavigation [
 	^ self systemNavigation
 		responderPresenter: codePresenter;
 		yourself
+]
+
+{ #category : 'private' }
+DockPlayground >> panelPlacedIconName [
+
+	^ 'workspace'
 ]
 
 { #category : 'accessing - snapshot' }

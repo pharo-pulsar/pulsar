@@ -1,3 +1,6 @@
+"
+An inspector to be shown as a popover or docked in a browser.
+"
 Class {
 	#name : 'DockInspector',
 	#superclass : 'SpPresenter',
@@ -107,7 +110,7 @@ DockInspector >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
 		title: (self model ifNotNil: [ :aModel | aModel fullName ] ifNil: [ '' ]);
-		windowIcon: (self iconNamed: 'inspector');
+		windowIcon: (self iconNamed: self panelPlacedIconName);
 		whenClosedDo: [ self notifyEditorClosed  ]
 ]
 
@@ -152,6 +155,12 @@ DockInspector >> notifyActivateEntity: anEntity [
 
 	anEntity ifNil: [ ^ self ].
 	self notificationCenter announce: anEntity newActivationAnnouncement
+]
+
+{ #category : 'private' }
+DockInspector >> panelPlacedIconName [
+
+	^ 'inspector'
 ]
 
 { #category : 'initialization' }

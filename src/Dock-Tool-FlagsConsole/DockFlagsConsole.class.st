@@ -6,6 +6,8 @@ the console filters flags by package (the default) and class.
 Class {
 	#name : 'DockFlagsConsole',
 	#superclass : 'DockBaseView',
+	#traits : 'DockTPanelWindowWithPlacedIcon',
+	#classTraits : 'DockTPanelWindowWithPlacedIcon classTrait',
 	#instVars : [
 		'#toolbarPresenter',
 		'#listPresenter',
@@ -113,6 +115,14 @@ DockFlagsConsole >> initialize [
 ]
 
 { #category : 'initialization' }
+DockFlagsConsole >> initializePanelWindow: aWindowPresenter [
+
+	super initializePanelWindow: aWindowPresenter.
+	aWindowPresenter 
+		whenPlacedDo: [ self panelPlaced: aWindowPresenter ]
+]
+
+{ #category : 'initialization' }
 DockFlagsConsole >> initializePresenters [
 
 
@@ -168,7 +178,13 @@ DockFlagsConsole >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter 
 		title: self class defaultTitle;
-		windowIcon: (self iconNamed: 'flag')
+		windowIcon: (self iconNamed: self panelPlacedIconName)
+]
+
+{ #category : 'private' }
+DockFlagsConsole >> panelPlacedIconName [
+
+	^ 'flag'
 ]
 
 { #category : 'initialization' }

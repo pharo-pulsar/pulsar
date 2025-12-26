@@ -1,6 +1,8 @@
 Class {
 	#name : 'DockContextStackPresenter',
 	#superclass : 'DockCollectionView',
+	#traits : 'DockTPanelWindowWithPlacedIcon',
+	#classTraits : 'DockTPanelWindowWithPlacedIcon classTrait',
 	#category : 'Dock-Browser-Tool-Debugger',
 	#package : 'Dock-Browser',
 	#tag : 'Tool-Debugger'
@@ -64,17 +66,15 @@ DockContextStackPresenter >> initializePresenters [
 { #category : 'initialization' }
 DockContextStackPresenter >> initializeWindow: aWindowPresenter [
 
-	aWindowPresenter title: 'Stack'
+	aWindowPresenter 
+		title: 'Stack';
+		windowIcon: (self iconNamed: self panelPlacedIconName)
 ]
 
 { #category : 'private' }
-DockContextStackPresenter >> panelPlaced: aPanelWidgetPresenter [
-	| inHorizontalArea |
+DockContextStackPresenter >> panelPlacedIconName [
 
-	inHorizontalArea := { SpPanelArea top. SpPanelArea bottom } includes: aPanelWidgetPresenter dockPosition area.
-	aPanelWidgetPresenter windowIcon: (inHorizontalArea
-		ifTrue: [ (self iconNamed: 'stack') ]
-		ifFalse: [ nil ])
+	^ 'stack'
 ]
 
 { #category : 'api - selection' }
