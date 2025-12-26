@@ -43,6 +43,14 @@ DockContextStackPresenter >> findFirstRelevantStackIndex [
 ]
 
 { #category : 'initialization' }
+DockContextStackPresenter >> initializePanelWindow: aWindowPresenter [
+
+	super initializePanelWindow: aWindowPresenter.
+	aWindowPresenter 
+		whenPlacedDo: [ self panelPlaced: aWindowPresenter ]
+]
+
+{ #category : 'initialization' }
 DockContextStackPresenter >> initializePresenters [
 
 	self addStyle: 'dockDebugger'.
@@ -57,6 +65,16 @@ DockContextStackPresenter >> initializePresenters [
 DockContextStackPresenter >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter title: 'Stack'
+]
+
+{ #category : 'private' }
+DockContextStackPresenter >> panelPlaced: aPanelWidgetPresenter [
+	| inHorizontalArea |
+
+	inHorizontalArea := { SpPanelArea top. SpPanelArea bottom } includes: aPanelWidgetPresenter dockPosition area.
+	aPanelWidgetPresenter windowIcon: (inHorizontalArea
+		ifTrue: [ (self iconNamed: 'stack') ]
+		ifFalse: [ nil ])
 ]
 
 { #category : 'api - selection' }

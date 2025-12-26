@@ -277,6 +277,7 @@ DockEditor >> initializePanelWindow: aWindowPresenter [
 	aWindowPresenter
 		actions: self windowActions;
 		whenPresentedDo: [ self panelPresented ];
+		whenPlacedDo: [ "self panelPlaced" ];
 		whenFocusReceivedDo: [ self panelFocused ];
 		whenSaveDo: [ :ann | ann success: self saveContent ];
 		whenDiscardDo: [ :ann | 
@@ -389,6 +390,13 @@ DockEditor >> panelFocused [
 
 	logger trace.
 	self notifyEditorActivated
+]
+
+{ #category : 'private' }
+DockEditor >> panelPlaced [
+
+	logger trace.
+	"right now nothing"
 ]
 
 { #category : 'private' }

@@ -40,7 +40,8 @@ DockTPanelWindow >> initializePanelWindow: aWindowPresenter [
 	super initializePanelWindow: aWindowPresenter.
 	aWindowPresenter 
 		whenPresentedDo: [ self recordLastPresented ];
-		whenFocusReceivedDo: [ self notifyEditorActivated ]
+		whenFocusReceivedDo: [ self notifyEditorActivated ];
+		whenPlacedDo: [ self panelPlaced: aWindowPresenter ]
 ]
 
 { #category : 'initialization' }
@@ -74,6 +75,13 @@ DockTPanelWindow >> notifyEditorActivated [
 DockTPanelWindow >> notifyEditorClosed [
 
 	self notificationCenter announce: (DockEditorClosed newValue: self model)
+]
+
+{ #category : 'private' }
+DockTPanelWindow >> panelPlaced: aWindowPresenter [
+
+	"react to window placed"
+
 ]
 
 { #category : 'accessing' }

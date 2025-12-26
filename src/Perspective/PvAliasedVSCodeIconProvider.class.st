@@ -152,6 +152,7 @@ PvAliasedVSCodeIconProvider >> createAliases [
 		'fetch'.						'sync'.
 		'repair'.					'symbol-property'.
 		"'discard'.					'discard'"
+		'stack'.						'debug-stackframe'. "stack panel of debugger"
 	 }
 ]
 
