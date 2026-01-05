@@ -6,7 +6,8 @@ Class {
 	#superclass : 'DockEditor',
 	#instVars : [
 		'protocolPresenter',
-		'linkedToSelection'
+		'linkedToSelection',
+		'refactorPresenter'
 	],
 	#category : 'Dock-Browser-View-Editor',
 	#package : 'Dock-Browser',
@@ -246,6 +247,13 @@ DockMethodEditor >> initializePresenters [
 	protocolPresenter := self instantiate: DockProtocolButtonPresenter.
 	toolbarPresenter addPresenter: protocolPresenter.
 	
+	refactorPresenter := self newMenuButton
+		addStyle: 'flat'; 
+		icon: (self iconNamed: #refactor);
+		help: 'Refactors';
+		yourself.
+	toolbarPresenter addPresenter: refactorPresenter.
+	
 	self addStyle: 'dockMethodEditor'
 ]
 
@@ -292,6 +300,13 @@ DockMethodEditor >> updateBreadcrumbs [
 		aBreadcrumb 
 			addLinkSegment: className action: [ self announceActivateClass ];
 			addSegment: methodName ]
+]
+
+{ #category : 'initialization' }
+DockMethodEditor >> updateContentActions [
+
+	super updateContentActions.
+	refactorPresenter actions: (self model refactorActionsWithContextOn: self)
 ]
 
 { #category : 'initialization' }

@@ -59,6 +59,17 @@ PvBaseModel >> accept: aVisitor [
 	^ aVisitor visitModel: self
 ]
 
+{ #category : 'accessing' }
+PvBaseModel >> actionsWithContext: aContext [ 
+	"collect actions by setting a particular context. As the actions can actually change (as context may vay)
+	 we instantiate new actions on each call. Is responsibility of the caller to keep them."
+
+	^ DockActionCollector new 
+		model: self;
+		context: aContext;
+		collect
+]
+
 { #category : 'testing' }
 PvBaseModel >> canBeRemoved [
 
@@ -247,6 +258,14 @@ PvBaseModel >> prepareForSnapshot [
 PvBaseModel >> realModel [
 
 	^ self
+]
+
+{ #category : 'accessing - actions' }
+PvBaseModel >> refactorActionsWithContextOn: aContextPresenter [
+	"This are refactors associated to the model objects. 
+	 Not all of them have, in those cases (as default) we answer an empty group."
+
+	^ SpActionGroup new
 ]
 
 { #category : 'accessing' }

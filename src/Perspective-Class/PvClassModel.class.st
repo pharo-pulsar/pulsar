@@ -157,14 +157,23 @@ PvClassModel >> defineDecorationActionsOn: aBuilder [
 PvClassModel >> defineRefactorActionsOn: aBuilder [
 	<dockActions>
 	
-	aBuilder addGroup: #refactoring with: [ :group | group
-		name: 'Refactoring';
-		iconName: 'refactor';
+	"this actions cannot be used directly in this context (the model 
+	 context), because execute them require interact with the UI"
+	aBuilder addGroup: #refactors with: [ :group | group
+		name: 'Refactors';
 		beDisplayedAsSubMenu;
-		addActionWith: [ :action | action 
-			name: 'Insert superclass';
-			description: ReInsertSuperclassDriver comment lines first;
-			action: [ :aContext | aContext doRefactorInsertClass: action ] ] ]
+		addActionWith: [ :action | action
+			name: ('Rename {1}' format: { self name });
+			description: 'Rename class';
+			action: [ :aContext | aContext doRenameClass: self ] ]; 
+		addActionWith: [ :action | action
+			name: ( 'Duplicate {1}' format: { self name });
+			description: 'Rename class';
+			action: [ :aContext | aContext doDuplicateClass: self ] ];
+		addActionWith: [ :action | action
+			name: ( 'Remove {1}' format: { self name });
+			description: 'Remove class';
+			action: [ :aContext | aContext doRemoveClass: self ] ] ]
 ]
 
 { #category : 'accessing - ui' }
@@ -307,6 +316,13 @@ PvClassModel >> printOn: stream [
 
 	super printOn: stream.
 	stream << '(' << self name << ')'
+]
+
+{ #category : 'accessing - actions' }
+PvClassModel >> refactorActionsWithContextOn: aContextPresenter [
+
+	^ (self actions actionsFor: #refactors) 
+		copyWithContext: (DockRefactorClassContext on: aContextPresenter)
 ]
 
 { #category : 'actions' }

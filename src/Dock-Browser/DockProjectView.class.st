@@ -1,3 +1,9 @@
+"
+A view of the system based on `projects` (which for now are organised in baselines). 
+The view alloes the navigation (and model interaction) trough projects, packages and classes.
+
+Conceptually, this is the entry-point of the browser user to explore the system.
+"
 Class {
 	#name : 'DockProjectView',
 	#superclass : 'DockCollectionView',
@@ -139,30 +145,6 @@ DockProjectView >> defineActionsOn: aBuilder [
 				description: 'Add a new trait to the environment';
 				iconName: 'new-file';
 				action: [ self doRequestNewTrait ] ] ];
-		addGroup: #action with: [ :group | group 
-			priority: 300;
-			name: 'Action';
-			beDisplayedAsGroup	;
-			addActionWith: [ :action | action
-				priority: 310;
-				dynamicName: [ 'Rename {1}' format: { self selectedEntityName } ];
-				description: 'Rename package or tag (and all its contexts)';
-				shortcutKey: $r mod1;
-				actionEnabled: [ self canRenameSelectedEntity ];
-				action: [ self doRenameSelectedEntity ] ];
-			addActionWith: [ :action | action 
-				priority: 320;
-				dynamicName: [ 
-					String streamContents: [ :stream | 
-						stream << 'Remove '.
-						stream << self selectedEntityName.
-						self selectedEntity isProject
-							ifTrue: [ stream << ' from project list' ] ] ];
-				description: 'Remove from project';
-				iconName: 'trash';
-				shortcutKey: $x mod1;
-				actionEnabled: [ self canRemoveSelectedEntity ];
-				action: [ self doRemoveSelectedEntity ] ] ];
 		addGroup: #extra with: [ :group | group 
 			priority: 900;
 			name: 'Extra';
@@ -172,26 +154,6 @@ DockProjectView >> defineActionsOn: aBuilder [
 				description: 'Collapses all open projects';
 				iconName: 'collapse-all';
 				action: [ self doCollapseAll ] ] ]
-]
-
-{ #category : 'private - definitions' }
-DockProjectView >> defineClassRefactorActionsOn: aBuilder [
-	<dockActions>
-
-	aBuilder addGroup: #classRefactors with: [ :group | group 
-		priority: 400;
-		name: 'Refactors';
-		beDisplayedAsSubMenu;
-		addActionWith: [ :action | action
-			dynamicName: [ 'Rename {1}' format: { self selectedEntityName } ];
-			description: [ 'Rename class' ];
-			actionEnabled: [ self hasSelectedClass ];
-			action: [ self doRenameClass ] ]; 
-		addActionWith: [ :action | action
-			dynamicName: [ 'Duplicate {1}' format: { self selectedEntityName } ];
-			description: [ 'Rename class' ];
-			actionEnabled: [ self hasSelectedClass ];
-			action: [ self doDuplicateClass ] ] ]
 ]
 
 { #category : 'private - actions' }
@@ -208,7 +170,8 @@ DockProjectView >> doDuplicateClass [
 	self application schedule: [
 		(ReDuplicateClassDriver newApplication: self application)
 			className: self selectedEntityName asSymbol;
-			scopes: { RBClassEnvironment class: self selectedEntity realModel entity };
+			"scopes: { RBClassEnvironment class: self selectedEntity realModel entity };"
+			scopes: { RBBrowserEnvironment new };
 			runRefactoring ]
 ]
 
@@ -295,6 +258,25 @@ DockProjectView >> doOpenProject [
 	self addProject: result
 ]
 
+{ #category : 'private - refactors' }
+DockProjectView >> doRemoveClass [
+	| parentPath |
+
+	"take parent path"
+	parentPath := listPresenter selection selectedPath allButLast.
+	self application schedule: [
+		"run refactor"
+		(ReRemoveClassDriver newApplication: self application) 
+			classes: { self selectedEntity };
+			model: RBBrowserEnvironment new;
+			scopes: { RBBrowserEnvironment new };
+			runRefactoring.
+		"select parent because if refactor went right, the selection was lost"	
+		listPresenter
+			selectPath: parentPath
+			scrollToSelection: true ]
+]
+
 { #category : 'private - actions' }
 DockProjectView >> doRemoveSelectedEntity [
 	"this can be anything on the tree: 
@@ -304,6 +286,25 @@ DockProjectView >> doRemoveSelectedEntity [
 
 	listPresenter selectedItem ifNotNil: [ :aModel |
 		(DockProjectRemoveModel on: self) visit: aModel realModel ] 
+]
+
+{ #category : 'private - refactors' }
+DockProjectView >> doRenameClass [
+	| parentPath |
+
+	"take parent path"
+	parentPath := listPresenter selection selectedPath allButLast.
+	self application schedule: [
+		"run refactor"
+		(ReRenameClassDriver newApplication: self owner application) 
+			oldName: self selectedEntityName asSymbol;
+			model: RBBrowserEnvironment new;
+			scopes: { RBBrowserEnvironment new };
+			runRefactoring.
+		"select parent because if refactor went right, the selection was lost"	
+		listPresenter
+			selectPath: parentPath
+			scrollToSelection: true ]
 ]
 
 { #category : 'private - actions' }
@@ -360,6 +361,18 @@ DockProjectView >> eventBehaviorRemoved: anAnnouncement [
 	self refreshProjectPath: path
 ]
 
+{ #category : 'events - system' }
+DockProjectView >> eventBehaviorRenamed: anAnnouncement [
+	| classRenamed path |
+	
+	classRenamed := anAnnouncement classRenamed.
+	logger trace: classRenamed.
+	
+	path := self model findPathForClass: classRenamed.
+	path ifNotNil: [
+		self refreshProjectPath: path ]
+]
+
 { #category : 'events' }
 DockProjectView >> eventEditorActivated: anAnnouncement [
 	| classModel path |
@@ -394,6 +407,12 @@ DockProjectView >> hasSelectedClass [
 		ifNil: [ false ]
 ]
 
+{ #category : 'testing' }
+DockProjectView >> hasSelectedEntity [
+
+	^ self selectedEntity isNotNil
+]
+
 { #category : 'initialization' }
 DockProjectView >> initialize [
 
@@ -422,7 +441,10 @@ DockProjectView >> initializePresenters [
 		children: [ :aModel | aModel children ];
 		rowPresenterClass: DockProjectNodeRow;
 		searchMatching: [ :anEntity :pattern | anEntity matches: pattern ];
-		actions: self actions;
+		actions: (SpActionGroup new
+			add: self actions;
+			addDynamicGroup: #dynamic with: [ :group | group add: self refactorActions ];
+			yourself);
 		yourself.
 	
 	listPresenter addShortcutWith: [ :act | act 
@@ -462,6 +484,14 @@ DockProjectView >> openedProjects [
 	^ self model children
 ]
 
+{ #category : 'initialization' }
+DockProjectView >> refactorActions [
+
+	self hasSelectedEntity ifFalse: [ ^ SpActionGroup new ].
+
+	^ self selectedEntity realModel refactorActionsWithContextOn: self
+]
+
 { #category : 'private' }
 DockProjectView >> refreshProjectPath: path [
 	"this is a hack to force recalculation of package view. Maybe it would 
@@ -499,24 +529,25 @@ DockProjectView >> registerToEvents [
 DockProjectView >> registerToSystemEvents [
 
 	self announcer
-		when: PackageAdded send: #eventPackageAdded: to: self;"
-		when: PackageRenamed send: #eventPackageRenamed: to: self;
-		when: PackageRemoved send: #eventPackageRemoved: to: self;
-		when: PackageTagAdded send: #eventPackageTagAdded: to: self;
-		when: PackageTagRemoved send: #eventPackageTagRemoved: to: self;
-		when: PackageTagRenamed send: #eventPackageTagRenamed: to: self;"
-		when: ClassAdded send: #eventBehaviorAdded: to: self;
-		when: ClassRemoved send: #eventBehaviorRemoved: to: self";
-		when: MethodAdded send: #eventMethodAdded: to: self;
-		when: MethodRemoved send: #eventMethodRemoved: to: self;
-		when: ProtocolAdded send: #eventProtocolAdded: to: self;
-		when: ProtocolRemoved send: #eventProtocolRemoved: to: self;
-		when: ClassModifiedClassDefinition send: #eventBehaviorModified: to: self;
-		when: MethodModified send: #eventMethodModified: to: self;
-		when: ClassRepackaged send: #eventClassRepackaged: to: self;
-		when: ClassRenamed send: #eventClassRenamed: to: self;
-		when: ClassCommented send: #eventClassCommented: to: self;
-		when: MethodRecategorized send: #eventMethodRecategorized: to: self."
+		when: PackageAdded 					send: #eventPackageAdded: 		to: self;"
+		when: PackageRenamed 				send: #eventPackageRenamed: 		to: self;
+		when: PackageRemoved 				send: #eventPackageRemoved: 		to: self;
+		when: PackageTagAdded 				send: #eventPackageTagAdded: 	to: self;
+		when: PackageTagRemoved 				send: #eventPackageTagRemoved: 	to: self;
+		when: PackageTagRenamed 				send: #eventPackageTagRenamed: 	to: self;"
+		when: ClassAdded 					send: #eventBehaviorAdded: 		to: self;
+		when: ClassRemoved 					send: #eventBehaviorRemoved: 	to: self;
+		when: ClassRenamed 					send: #eventBehaviorRenamed: 	to: self";
+		when: MethodAdded 					send: #eventMethodAdded: 		to: self;
+		when: MethodRemoved 					send: #eventMethodRemoved: 		to: self;
+		when: ProtocolAdded 					send: #eventProtocolAdded: 		to: self;
+		when: ProtocolRemoved 				send: #eventProtocolRemoved: 	to: self;
+		when: ClassModifiedClassDefinition 	send: #eventBehaviorModified: 	to: self;
+		when: MethodModified 				send: #eventMethodModified: 		to: self;
+		when: ClassRepackaged 				send: #eventClassRepackaged: 	to: self;
+		when: ClassRenamed 					send: #eventClassRenamed: 		to: self;
+		when: ClassCommented 				send: #eventClassCommented: 		to: self;
+		when: MethodRecategorized 			send: #eventMethodRecategorized:	to: self."
 ]
 
 { #category : 'private - actions' }

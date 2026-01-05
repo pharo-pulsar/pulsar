@@ -7,6 +7,12 @@ Class {
 }
 
 { #category : 'visiting' }
+DockProjectRemoveModel >> visitClassModel: aModel [
+
+	self owner doRemoveClass
+]
+
+{ #category : 'visiting' }
 DockProjectRemoveModel >> visitProjectModel: aModel [
 
 	self owner removeProjectModel: aModel

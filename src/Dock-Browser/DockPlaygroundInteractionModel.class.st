@@ -59,6 +59,12 @@ DockPlaygroundInteractionModel >> removeAllBindings [
 	super bindings removeAll
 ]
 
+{ #category : 'accessing' }
+DockPlaygroundInteractionModel >> removeBindingNamed: aName [
+
+	super bindings removeKey: aName asSymbol
+]
+
 { #category : 'binding' }
 DockPlaygroundInteractionModel >> transientBindings [
 

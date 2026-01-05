@@ -102,12 +102,6 @@ PvActionGroup >> configureSpecGroup: group from: aContext [
 		ifFound: [ :aPragma | (class perform: aPragma methodSelector with: group) ]
 ]
 
-{ #category : 'private' }
-PvActionGroup >> entries: aCollection [
-
-	entries := aCollection
-]
-
 { #category : 'registering' }
 PvActionGroup >> findOrRegisterGroupWithId: groupId [
 	

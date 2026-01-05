@@ -161,6 +161,29 @@ PvMethodModel >> defineDecorationActionsOn: aBuilder [
 	]
 ]
 
+{ #category : 'private - definitions' }
+PvMethodModel >> defineRefactorActionsOn: aBuilder [
+	<dockActions>
+
+	"this actions cannot be used directly in this context (the model 
+	 context), because execute them require interact with the UI"
+	aBuilder addGroup: #refactors with: [ :group | group 
+		name: 'Refactors';
+		beDisplayedAsSubMenu;
+		addActionWith: [ :action | action
+			name: ('Rename {1}' format: { self name });
+			description: 'Rename method';
+			action: [ :aContext | aContext doRenameMethod: self ] ];
+		addActionWith: [ :action | action
+			name: ('Pull up {1}' format: { self name });
+			description: 'Pull up method';
+			action: [ :aContext | aContext doPullUpMethod: self ] ];
+		addActionWith: [ :action | action
+			name: ('Push down {1}' format: { self name });
+			description: 'Push down method';
+			action: [ :aContext | aContext doPushUpMethod: self ] ] ]
+]
+
 { #category : 'accessing - ui' }
 PvMethodModel >> dockEditorClass [
 
@@ -402,6 +425,13 @@ PvMethodModel >> protocolName [
 	^ self protocol 
 		ifNotNil: [ :aProtocol | aProtocol name ]
 		ifNil: [ 'no protocol' ]
+]
+
+{ #category : 'accessing - actions' }
+PvMethodModel >> refactorActionsWithContextOn: aContextPresenter [
+
+	^ (self actions actionsFor: #refactors) 
+		copyWithContext: (DockRefactorMethodContext on: aContextPresenter)
 ]
 
 { #category : 'updating' }

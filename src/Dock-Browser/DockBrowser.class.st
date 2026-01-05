@@ -86,7 +86,12 @@ DockBrowser class >> defineToolActionsOn: aBuilder [
 			priority: 930;
 			name: 'Open Flag Console';
 			description: 'Open flags console';
-			action: [ :aContext | aContext openFlagsConsole ] ] ]
+			action: [ :aContext | aContext openFlagsConsole ] ];
+		addActionWith: [ :anAction | anAction
+			priority: 940;
+			name: 'Open Critiques Console';
+			description: 'Open critiques console';
+			action: [ :aContext | aContext openCritiquesConsole ] ] ]
 ]
 
 { #category : 'private' }
@@ -211,6 +216,21 @@ DockBrowser >> openClass: aClass [
 	self projectView notifyActivateEntity: (PvClassModel 
 		newEnvironment: self model environmentModel
 		entity: aClass)
+]
+
+{ #category : 'actions' }
+DockBrowser >> openCritiquesConsole [
+	| critiquesConsole |
+	
+	critiquesConsole := self presenters 
+		detect: [ :each | each presenter isKindOf: DockCritiquesConsole ]
+		ifNone: [ 
+			(self 
+				addPresenterClass: DockCritiquesConsole 
+				model: (DockCritiquesModel on: self model))
+			panelWindow ].
+
+	critiquesConsole raiseAndTakeKeyboardFocus
 ]
 
 { #category : 'actions' }

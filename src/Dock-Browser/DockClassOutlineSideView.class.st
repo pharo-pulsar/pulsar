@@ -1,6 +1,6 @@
 "
 This is the base for a ""side"" in the class outline view. 
-Conceptually (bah, not quitte ""conceptually"", but common way of call the fact that a class is create by another class -- the ""metaclass"", which is known as ""class side"" in general).
+Conceptually (bah, not quitte ""conceptually"", but common way of call the fact that a class is create by another class -> the ""metaclass"", which is known as ""class side"" in general).
 We will extend the ""side"" concept to traits: traits are extra ""sides"" in a multidimensional fashion :)
 
 "
@@ -218,12 +218,13 @@ DockClassOutlineSideView >> defineMethodRefactorActionsOn: aBuilder [
 
 { #category : 'private - preview' }
 DockClassOutlineSideView >> dismissPreview [
+
 	logger trace.
 
 	previewPopover ifNil: [ ^ self ].
-	
-	previewPopover dismiss.
-	previewPopover := nil
+	[ previewPopover dismiss ]
+	ensure: [ 
+		previewPopover := nil ]
 ]
 
 { #category : 'private - actions' }
@@ -287,28 +288,6 @@ DockClassOutlineSideView >> doForceRemoveMethod [
 	self updatePresenter
 ]
 
-{ #category : 'private - refactors' }
-DockClassOutlineSideView >> doPullUpMethod [
-
-	self schedule: [
-		(RePullUpMethodDriver newApplication: self application)
-			model: (RBNamespace onEnvironment: RBBrowserEnvironment new)
-				scopes: { RBBrowserEnvironment new }
-				pullUpMethods: { self selectedMethod entity };
-			runRefactoring ]
-]
-
-{ #category : 'private - refactors' }
-DockClassOutlineSideView >> doPushDownMethod [
-
-	self schedule: [
-		(RePushDownMethodDriver newApplication: self application)
-			model: (RBNamespace onEnvironment: RBBrowserEnvironment new)
-				scopes: { RBBrowserEnvironment new }
-				pushDownMethods: { self selectedMethod entity };
-			runRefactoring ]	
-]
-
 { #category : 'private - actions' }
 DockClassOutlineSideView >> doRemoveSelectedProtocol [
 
@@ -324,23 +303,6 @@ DockClassOutlineSideView >> doRemoveSelectedProtocol [
 	okToRemove ifFalse: [ ^ self ].
 
 	self halt
-]
-
-{ #category : 'private - refactors' }
-DockClassOutlineSideView >> doRenameMethod [
-
-	self application schedule: [ 
-		| rbClasses rbModel method |
-		
-		method := self selectedMethod entity.
-		rbClasses := RBClassEnvironment classes: method methodClass withAllSubclasses.
-		rbModel := RBNamespace onEnvironment: rbClasses.
-		(ReRenameMethodDriver newApplication: self application)
-			scopes: { rbClasses }
-				model: rbModel
-				renameMethodSignature: method
-				in: method methodClass;
-			runRefactoring ]
 ]
 
 { #category : 'private - actions' }
@@ -451,7 +413,8 @@ DockClassOutlineSideView >> initializeMethods [
 		searchMatching: [ :aModel :aString | 
 			aModel name asLowercase beginsWith: aString asLowercase ];
 		actions: (SpActionGroup new 
-			add: (self actions actionsForAll: #(method methodRefactors methodCritical));
+			add: (self actions actionsForAll: #(method methodCritical));
+			addDynamicGroup: #dynamic with: [ :group | group add: self refactorActions ];
 			addShortcutWith: [ :action | action 
 				shortcutKey: KeyboardKey left asKeyCombination;
 				action: [ self activateMethodPreviewPopover ] ];
@@ -460,7 +423,7 @@ DockClassOutlineSideView >> initializeMethods [
 				action: [ self deactivateMethodPreviewPopover ] ];
 			yourself);
 		yourself.
-		
+	
 	listPresenter eventHandler 
 		whenFocusLostDo: [ self deactivateMethodPreviewPopover ]
 ]
@@ -597,9 +560,18 @@ DockClassOutlineSideView >> popupPreview [
 ]
 
 { #category : 'initialization' }
+DockClassOutlineSideView >> refactorActions [
+
+	self hasSelectedMethod ifFalse: [ ^ SpActionGroup new ].
+
+	^ self selectedMethod refactorActionsWithContextOn: self
+]
+
+{ #category : 'initialization' }
 DockClassOutlineSideView >> resetInteractionStatus [
 
-	"in case is active"
+	previewPopoverActive := false.
+	"in case it was active"
 	self dismissPreview
 ]
 

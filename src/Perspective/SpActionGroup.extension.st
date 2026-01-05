@@ -19,15 +19,3 @@ SpActionGroup >> actionsForAll: aCollectionOfNames [
 				ifTrue: [ all register: group ].
 			all ]
 ]
-
-{ #category : '*Perspective' }
-SpActionGroup >> entries: aCollection [
-
-	self decoratedGroup entries: aCollection
-]
-
-{ #category : '*Perspective' }
-SpActionGroup >> hasEntries [
-
-	^ self entries isNotEmpty
-]

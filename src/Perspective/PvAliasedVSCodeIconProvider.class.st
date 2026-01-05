@@ -153,6 +153,7 @@ PvAliasedVSCodeIconProvider >> createAliases [
 		'repair'.					'symbol-property'.
 		"'discard'.					'discard'"
 		'stack'.						'debug-stackframe'. "stack panel of debugger"
+		'critiques'.					'bell'.
 	 }
 ]
 

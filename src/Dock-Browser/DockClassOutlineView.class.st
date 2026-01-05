@@ -58,13 +58,14 @@ DockClassOutlineView >> eventEditorActivated: anAnnouncement [
 	self resetInteractionStatus.
 	"this may be slow, so I schedule it, to not break process..."
 	self schedule: [ 
+		| activatedModel outlineModel |
+		
 		"editor can be closed in the meantime (concurrency problems... :P).
-		 value holds an editor, so its window is a PanelWindow"
+		 value holds an editor, I can then ask for its window to know if this 
+		 is still around."
 		anAnnouncement value window isOpen ifTrue: [
-			| activatedModel outlineModel |
 			activatedModel := anAnnouncement value model.
 			outlineModel := activatedModel asOutlineClassModel.		
-						
 			self model = outlineModel ifFalse: [
 				logger trace: outlineModel.
 				self model: outlineModel ].

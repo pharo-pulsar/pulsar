@@ -86,7 +86,7 @@ DockContextStackPresenter >> selectFirst [
 { #category : 'api - selection' }
 DockContextStackPresenter >> selectFirstRelevantStackIndex [
 	
-listPresenter 
+	listPresenter 
 		selectIndex: self findFirstRelevantStackIndex 
 		scrollToSelection: true
 ]

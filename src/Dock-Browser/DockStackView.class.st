@@ -131,7 +131,7 @@ DockStackView >> eventEditorActivated: anAnnouncement [
 			listPresenter selectItem: currentItem ]. 
 		^ self ].
 
-	"not there, I need to refresh the list and selec it (unselectAll because 
+	"not there, I need to refresh the list and select it (unselectAll because 
 	 this is a multi selection list."
 	self updatePresenter.
 	self mutex critical: [
