@@ -57,6 +57,21 @@ PvPackageModel >> classes [
 		as: OrderedCollection
 ]
 
+{ #category : 'private - definitions' }
+PvPackageModel >> defineRefactorActionsOn: aBuilder [
+	<dockActions>
+	
+	"this actions cannot be used directly in this context (the model 
+	 context), because execute them require interact with the UI"
+	aBuilder addGroup: #refactors with: [ :group | group
+		name: 'Refactors';
+		beDisplayedAsSubMenu;
+		addActionWith: [ :action | action
+			name: ('Rename {1}' format: { self name });
+			description: 'Rename package';
+			action: [ :aContext | aContext doRenamePackage: self ] ] ]
+]
+
 { #category : 'accessing' }
 PvPackageModel >> iconName [
 
@@ -103,6 +118,19 @@ PvPackageModel >> project [
 PvPackageModel >> project: aProjectModel [
 
 	projectModel := aProjectModel
+]
+
+{ #category : 'accessing - actions' }
+PvPackageModel >> refactorActionsWithContextOn: aContextPresenter [
+
+	^ (self actions actionsFor: #refactors) 
+		copyWithContext: (DockRefactorPackageContext on: aContextPresenter)
+]
+
+{ #category : 'actions' }
+PvPackageModel >> renameTo: aNewName [
+
+	self entity renameTo: aNewName
 ]
 
 { #category : 'helpers' }
