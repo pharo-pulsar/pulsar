@@ -315,10 +315,7 @@ PulsarApplication >> prepareAsStandaloneApplication [
 PulsarApplication >> prepareErrorHandlerAsStandaloneApplication [
 
 	PulsarUIManager activateOn: self.
-	ErrorHandler defaultErrorHandler: UIManager default.
-	self flag: #TODO. "In the future (P14 > 200) it should be something like this but I do 
-	not have time right now."
-	"ErrorHandler default: InteractiveErrorHandler new."
+	ErrorHandler default: InteractiveErrorHandler new.
 	OupsDebuggerSelectionStrategy debuggerSelectionStrategy: (PulsarSingleDebuggerSelector on: self)
 ]
 
@@ -350,7 +347,7 @@ PulsarApplication >> resendAnnouncement: anAnnouncement [
 PulsarApplication >> resourcesDir [
 	
 	^ IceRepository registry 
-		detect: [ :each | each name = 'PulsarBrowser' ]
+		detect: [ :each | each name = 'Pulsar' ]
 		ifFound: [ :aRepository | aRepository location / 'resources' ]
 		ifNone: [ FileLocator imageDirectory / 'resources' ].
 ]

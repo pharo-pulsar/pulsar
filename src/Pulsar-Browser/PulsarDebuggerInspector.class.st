@@ -108,17 +108,17 @@ PulsarDebuggerInspector >> inspectContextModel: aContextModel [
 ]
 
 { #category : 'initialization' }
-PulsarDebuggerInspector >> registerToPulsar: aPulsarBrowser [
-
-	self notificationCenter: aPulsarBrowser notificationCenter
-]
-
-{ #category : 'initialization' }
 PulsarDebuggerInspector >> registerToEvents [
 
 	self announcer
 		when: PulsarDebuggerContextChanged send: #eventContextChanged: to: self;
 		when: PulsarModelSelected send: #eventModelSelected: to: self
+]
+
+{ #category : 'initialization' }
+PulsarDebuggerInspector >> registerToPulsar: aPulsarBrowser [
+
+	self notificationCenter: aPulsarBrowser notificationCenter
 ]
 
 { #category : 'initialization' }

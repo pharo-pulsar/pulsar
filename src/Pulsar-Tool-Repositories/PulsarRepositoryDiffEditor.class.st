@@ -117,7 +117,7 @@ PulsarRepositoryDiffEditor >> updatePresenter [
 		"since large repositories (e.g. pharo itself) can have a lot of changes when working 
 		 on an outdated branch, we skip the diff for the root, as calculate this will take a 
 		 lot of time without giving real value to the user."
-		self model isRoot 
+		(self model isRoot and: [ self model isBigChange ])
 			ifTrue: [ ^ self updateRootContents ].
 
 		self schedule: [
@@ -131,7 +131,7 @@ PulsarRepositoryDiffEditor >> updateRootContents [
 		layout: (SpBoxLayout newVertical 
 			vAlignStart;
 			add: (self newLabel 
-				label: 'Please select a node of the diff tree';
+				label: 'I can''t display the changes (changeset is too big). Please select a node of the diff tree';
 				yourself);
 			yourself);
 		yourself)

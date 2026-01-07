@@ -53,6 +53,16 @@ PulsarDiffNode >> collectChildren [
 			yourself ]
 ]
 
+{ #category : 'accessing' }
+PulsarDiffNode >> countChildren [
+	| count |
+
+	count := 0.
+	self withAllChildrenDo: [ :aNode | 
+		count := count + 1 ].
+	^ count
+]
+
 { #category : 'private' }
 PulsarDiffNode >> createPatch [
 	| operation from to |
@@ -115,6 +125,12 @@ PulsarDiffNode >> initialize [
 PulsarDiffNode >> isActive [
 
 	^ active
+]
+
+{ #category : 'accessing' }
+PulsarDiffNode >> isBigChange [
+
+	^ self countChildren > 500
 ]
 
 { #category : 'testing' }

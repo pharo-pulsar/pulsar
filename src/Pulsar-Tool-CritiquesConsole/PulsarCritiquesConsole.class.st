@@ -134,10 +134,14 @@ PulsarCritiquesConsole >> initializePresenters [
 
 
 	self initializeToolbar.
-	listPresenter := self newEasyColumnView
+	"listPresenter := self newEasyColumnView
 		addStyle: 'stList';
 		addColumn: (SpStringTableColumn title: 'Name' evaluated: [ :aCritique | aCritique rule ruleName ]);
 		addColumn: (SpStringTableColumn title: 'Message' evaluated: [ :aCritique | aCritique tinyHint ]);
+		yourself"
+	listPresenter := self newEasyListView
+		addStyle: 'stList';
+		display: [ :aCritique | aCritique rule ruleName ];
 		yourself
 ]
 
@@ -204,7 +208,7 @@ PulsarCritiquesConsole >> panelPlaced: aPanelWidgetPresenter [
 { #category : 'private' }
 PulsarCritiquesConsole >> panelPlacedIconName [
 
-	^ 'critics'
+	^ 'critiques'
 ]
 
 { #category : 'initialization' }

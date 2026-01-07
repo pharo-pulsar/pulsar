@@ -1,10 +1,15 @@
+"
+A editor stack view that provides a list od open editors.
+Editors can be sorted in diferent ways (open time, last activated time...). Default one is ""open time""
+"
 Class {
 	#name : 'PulsarStackView',
 	#superclass : 'PulsarCollectionView',
 	#instVars : [
 		'toolbarPresenter',
 		'mutex',
-		'countPresenter'
+		'countPresenter',
+		'sortingSelector'
 	],
 	#category : 'Pulsar-Browser-View-Stack',
 	#package : 'Pulsar-Browser',
@@ -42,6 +47,44 @@ PulsarStackView class >> defineActionsOn: aBuilder [
 				description: 'Close all editors';
 				iconName: 'closeAll';
 				action: [ :aContext | aContext doCloseEditors ] ] ]
+]
+
+{ #category : 'initialization' }
+PulsarStackView >> addCountPresenter [
+	
+	toolbarPresenter addPresenter: (countPresenter := self newLabel
+		addStyle: 'count';
+		addStyle: 'dim';
+		addStyle: 'tinyFont';
+		yourself)
+]
+
+{ #category : 'initialization' }
+PulsarStackView >> addSortingToolbar [
+	| firstActivationTime lastActivationTime |
+	
+	firstActivationTime := self newToggleButton
+		addStyle: 'flat';
+		icon: (self iconNamed: #firstActivationTime);
+		help: 'Toggle sorting by first activation time';
+		state: (self isSortingBy: #firstActivationTime);
+		whenActivatedDo: [ self doSortBy: #firstActivationTime ];
+		yourself.
+	lastActivationTime := self newToggleButton
+		addStyle: 'flat';
+		icon: (self iconNamed: #lastActivationTime);
+		help: 'Toggle sorting by last activation time';
+		state: (self isSortingBy: #lastActivationTime);
+		whenActivatedDo: [ self doSortBy: #lastActivationTime ];
+		yourself.
+		
+	firstActivationTime associatedToggleButtons: { lastActivationTime }.
+	
+	toolbarPresenter addPresenter: (self newToolbar
+		displayMode: self application toolbarDisplayMode;
+		add: firstActivationTime;
+		add: lastActivationTime;
+		yourself)
 ]
 
 { #category : 'private - actions' }
@@ -87,7 +130,18 @@ PulsarStackView >> doCloseSelectedEditors [
 	self closeEditors: listPresenter selectedItems copy
 ]
 
-{ #category : 'initialization' }
+{ #category : 'private - actions' }
+PulsarStackView >> doSortBy: aSelector [
+	| item |
+
+	item := listPresenter selectedItem.
+	sortingSelector := aSelector.
+	self updatePresenter.
+	item ifNotNil: [
+		listPresenter selectItem: item ]
+]
+
+{ #category : 'private' }
 PulsarStackView >> editorCount [
 	| shownSize fullSize |
 
@@ -110,33 +164,12 @@ PulsarStackView >> eventEditorActivated: anAnnouncement [
 	| currentItem activatedEditor |
 
 	activatedEditor := anAnnouncement value. 
-	
-	"if is closed (it may happen when closing many editors that I receive an activation
-	 that will immediately be closed), then I need just to update in order to refresh 
-	 the list and return. "
-	activatedEditor withPanelWindowDo: [ :w | 
-		w isClosed ifTrue: [
-			self updatePresenter.
-			^ self ] ].
-
-	"get the item in list (just to know if we have it in the list"
-	currentItem := listPresenter items
-		detect: [ :each | each = activatedEditor model ]
-		ifNone: [ nil ].
-		
-	"if it is already there, I just need to select it"
-	currentItem ifNotNil: [
-		self mutex critical: [
-			listPresenter selectedItem ifNotNil: [ listPresenter unselectAll ].
-			listPresenter selectItem: currentItem ]. 
-		^ self ].
-
-	"not there, I need to refresh the list and select it (unselectAll because 
-	 this is a multi selection list."
-	self updatePresenter.
 	self mutex critical: [
-		listPresenter selectedItem ifNotNil: [ listPresenter unselectAll ].
-		listPresenter selectItem: anAnnouncement value model ]
+		self updatePresenter.
+		activatedEditor withPanelWindowDo: [ :w | 
+			w isClosed 
+				ifTrue: [ ^ self ] ].
+		listPresenter selectItem: activatedEditor model ]
 ]
 
 { #category : 'events' }
@@ -159,6 +192,19 @@ PulsarStackView >> eventModelChanged: anAnnouncement [
 	self updatePresenter
 ]
 
+{ #category : 'private' }
+PulsarStackView >> firstActivationTime: aCollection [ 
+
+	^ aCollection reversed
+]
+
+{ #category : 'initialization' }
+PulsarStackView >> initialize [
+
+	sortingSelector := #firstActivationTime.
+	super initialize
+]
+
 { #category : 'initialization' }
 PulsarStackView >> initializePresenters [
 
@@ -166,11 +212,8 @@ PulsarStackView >> initializePresenters [
 
 	toolbarPresenter := self instantiate: PulsarToolbarPresenter.
 	toolbarPresenter actions: (self actions actionsFor: #editorStackGeneral).
-	toolbarPresenter addPresenter: (countPresenter := self newLabel
-		addStyle: 'count';
-		addStyle: 'dim';
-		addStyle: 'tinyFont';
-		yourself).
+	self addSortingToolbar.
+	self addCountPresenter.
 	
 	listPresenter := self newFilteringList
 		addStyle: 'stList';
@@ -188,6 +231,18 @@ PulsarStackView >> initializeWindow: aWindowPresenter [
 	aWindowPresenter 
 		title: 'Editor Stack'";
 		windowIcon: (self iconNamed: 'editorStack')"
+]
+
+{ #category : 'private - testing' }
+PulsarStackView >> isSortingBy: aSelector [
+
+	^ sortingSelector = aSelector
+]
+
+{ #category : 'private' }
+PulsarStackView >> lastActivationTime: aCollection [ 
+
+	^ aCollection sorted: [ :a | a presenter lastTimePresented ] descending
 ]
 
 { #category : 'private' }
@@ -215,13 +270,18 @@ PulsarStackView >> registerToEvents [
 		when: PulsarDebuggerContextChanged send: #eventContextChanged: to: self
 ]
 
-{ #category : 'initialization' }
+{ #category : 'private' }
 PulsarStackView >> shownEditors [
+	| editors |
 
-	^ (self window editors 
-		reject: [ :each | each isClosed ]
-			thenCollect: [ :each | each presenter model ]) 
-			reversed
+	editors := self sortEditors: (self window editors reject: [ :each | each isClosed ]).
+	^ editors collect: [ :each | each presenter model ]
+]
+
+{ #category : 'private' }
+PulsarStackView >> sortEditors: aCollection [
+
+	^ self perform: sortingSelector asMutator with: aCollection 
 ]
 
 { #category : 'initialization' }

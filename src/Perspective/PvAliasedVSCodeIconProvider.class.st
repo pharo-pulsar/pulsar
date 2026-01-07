@@ -154,6 +154,8 @@ PvAliasedVSCodeIconProvider >> createAliases [
 		"'discard'.					'discard'"
 		'stack'.						'debug-stackframe'. "stack panel of debugger"
 		'critiques'.					'bell'.
+		'firstActivationTime'. 		'arrow-up'. 
+		'lastActivationTime'.		'arrow-down'.
 	 }
 ]
 

@@ -29,16 +29,6 @@ PulsarBaseView >> dockPosition [
 ]
 
 { #category : 'scripting' }
-PulsarBaseView >> newPulsarToolbar [
-
-	^ self newToolbar
-		addStyle: 'stToolbar';
-		addStyle: 'dockToolbar';
-		displayMode: self application toolbarDisplayMode;
-		yourself
-]
-
-{ #category : 'scripting' }
 PulsarBaseView >> newEntityTree [
 
 	^ self newEasyTreeListView
@@ -51,17 +41,27 @@ PulsarBaseView >> newEntityTree [
 		yourself
 ]
 
+{ #category : 'scripting' }
+PulsarBaseView >> newPulsarToolbar [
+
+	^ self newToolbar
+		addStyle: 'stToolbar';
+		addStyle: 'dockToolbar';
+		displayMode: self application toolbarDisplayMode;
+		yourself
+]
+
+{ #category : 'initialization' }
+PulsarBaseView >> registerToEvents [
+	"override this to subscribe to notifications"
+]
+
 { #category : 'initialization' }
 PulsarBaseView >> registerToPulsar: aPulsarBrowser [
 
 	"take the announcer of the dock to broadcast what happens"
 	self notificationCenter: aPulsarBrowser announcer.
 	self registerToEvents
-]
-
-{ #category : 'initialization' }
-PulsarBaseView >> registerToEvents [
-	"override this to subscribe to notifications"
 ]
 
 { #category : 'private' }

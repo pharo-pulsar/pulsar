@@ -27,6 +27,12 @@ PulsarCritiquesModel class >> isDefault [
 	^ false
 ]
 
+{ #category : 'instance creation' }
+PulsarCritiquesModel class >> on: aModel [
+
+	^ self newEnvironment: aModel
+]
+
 { #category : 'private' }
 PulsarCritiquesModel >> calculateEnvironment [
 
@@ -41,8 +47,16 @@ PulsarCritiquesModel >> collectCritiques [
 
 	rules := self rules.	
 	checker := ReSmalllintChecker new.
-	checker classRules: rules.
-	checker checkClass: self currentModel entity.
+	
+	self currentModel isMethodModel
+		ifTrue: [
+			checker
+				getCritiquesAbout: self currentModel entity
+				by: (rules select: [ :r | r class checksMethod ]) ]
+		ifFalse: [			
+			checker classRules: rules.
+			checker checkClass: self currentModel entity ].
+			
 	^ checker critiques sorted: [ :each | each rule ruleName ] ascending
 ]
 
