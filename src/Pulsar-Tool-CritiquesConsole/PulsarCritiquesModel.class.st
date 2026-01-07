@@ -110,7 +110,9 @@ PulsarCritiquesModel >> rules [
 { #category : 'accessing' }
 PulsarCritiquesModel >> title [
 
-	^ 'Critiques'
+	^ self currentModel 
+		ifNotNil: [ 'Critiques of {1}' format: { self currentModel fullName } ]
+		ifNil: [ 'Critiques' ] 
 ]
 
 { #category : 'updating' }
