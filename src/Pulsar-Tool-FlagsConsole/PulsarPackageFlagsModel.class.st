@@ -39,7 +39,7 @@ PulsarPackageFlagsModel >> isScope: aSymbol [
 PulsarPackageFlagsModel >> title [
 
 	^ self currentModel 
-		ifNotNil: [ :aModel | 'Flags on {1} package' format: { aModel name } ]
+		ifNotNil: [ :aModel | 'Flags on {1}' format: { aModel name } ]
 		ifNil: [ 'No package selected' ]
 ]
 
