@@ -11,7 +11,7 @@ Trait {
 { #category : 'accessing' }
 PvTActionHolder >> actions [
 
-	^ actions ifNil: [ actions := DockActionCollector collectFor: self ]
+	^ actions ifNil: [ actions := PulsarActionCollector collectFor: self ]
 ]
 
 { #category : 'accessing' }

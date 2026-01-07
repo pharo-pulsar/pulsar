@@ -6,8 +6,8 @@ A base for all models.
 Class {
 	#name : 'PvBaseModel',
 	#superclass : 'Object',
-	#traits : 'DockTModel + DockTActionContainer',
-	#classTraits : 'DockTModel classTrait + DockTActionContainer classTrait',
+	#traits : 'PulsarTModel + PulsarTActionContainer',
+	#classTraits : 'PulsarTModel classTrait + PulsarTActionContainer classTrait',
 	#instVars : [
 		'entity',
 		'environmentModel',
@@ -64,7 +64,7 @@ PvBaseModel >> actionsWithContext: aContext [
 	"collect actions by setting a particular context. As the actions can actually change (as context may vay)
 	 we instantiate new actions on each call. Is responsibility of the caller to keep them."
 
-	^ DockActionCollector new 
+	^ PulsarActionCollector new 
 		model: self;
 		context: aContext;
 		collect

@@ -40,7 +40,7 @@ PvOutlineClassModel >> collectClassProtocols [
 	^ ((self entity classSide protocols 
 		collect: [ :each | PvProtocolModel newEnvironment: self environmentModel entity: each ])
 		sorted: #name ascending)
-		copyWithFirst: (DockAllMethodsVirtualProtocol newEntity: self entity classSide)
+		copyWithFirst: (PulsarAllMethodsVirtualProtocol newEntity: self entity classSide)
 ]
 
 { #category : 'accessing - collecting' }
@@ -59,7 +59,7 @@ PvOutlineClassModel >> collectClassVariables [
 		
 	^ (self entity classSide slots 
 		collect: [ :each | PvSlotModel newEnvironment: self environmentModel entity: each ])
-		copyWithFirst: (DockNoneVirtualSlot newEntity: self entity classSide)
+		copyWithFirst: (PulsarNoneVirtualSlot newEntity: self entity classSide)
 ]
 
 { #category : 'accessing - collecting' }
@@ -87,7 +87,7 @@ PvOutlineClassModel >> collectProtocols [
 	^ ((self entity instanceSide protocols 
 		collect: [ :each | PvProtocolModel newEnvironment: self environmentModel entity: each ])
 		sorted: #name ascending)
-		copyWithFirst: (DockAllMethodsVirtualProtocol newEntity: self entity instanceSide)
+		copyWithFirst: (PulsarAllMethodsVirtualProtocol newEntity: self entity instanceSide)
 ]
 
 { #category : 'accessing - collecting' }
@@ -95,7 +95,7 @@ PvOutlineClassModel >> collectVariables [
 	
 	^ (self entity instanceSide slots
 		collect: [ :each | PvSlotModel newEnvironment: self entity: each ])
-		copyWithFirst: (DockNoneVirtualSlot newEntity: self entity instanceSide)
+		copyWithFirst: (PulsarNoneVirtualSlot newEntity: self entity instanceSide)
 ]
 
 { #category : 'accessing' }

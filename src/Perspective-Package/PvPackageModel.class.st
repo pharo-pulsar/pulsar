@@ -124,7 +124,7 @@ PvPackageModel >> project: aProjectModel [
 PvPackageModel >> refactorActionsWithContextOn: aContextPresenter [
 
 	^ (self actions actionsFor: #refactors) 
-		copyWithContext: (DockRefactorPackageContext on: aContextPresenter)
+		copyWithContext: (PulsarRefactorPackageContext on: aContextPresenter)
 ]
 
 { #category : 'actions' }

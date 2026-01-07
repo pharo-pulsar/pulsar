@@ -156,7 +156,7 @@ PvMethodModel >> defineDecorationActionsOn: aBuilder [
 				name: 'Run Test';
 				description: 'Execute test of current method/class';
 				iconName: 'play';
-				presenterClass: DockMethodActionRunTestPresenter;
+				presenterClass: PulsarMethodActionRunTestPresenter;
 				action: [ :aContext | aContext doRunTestCommand: action ] ] ].
 	]
 ]
@@ -187,7 +187,7 @@ PvMethodModel >> defineRefactorActionsOn: aBuilder [
 { #category : 'accessing - ui' }
 PvMethodModel >> dockEditorClass [
 
-	^ DockMethodEditor
+	^ PulsarMethodEditor
 ]
 
 { #category : 'accessing - editor' }
@@ -386,7 +386,7 @@ PvMethodModel >> name [
 { #category : 'instance creation' }
 PvMethodModel >> newVersionsModel [
 
-	^ DockVersionsModel 
+	^ PulsarVersionsModel 
 		newEnvironment: self environmentModel 
 		entity: self entity
 ]
@@ -431,7 +431,7 @@ PvMethodModel >> protocolName [
 PvMethodModel >> refactorActionsWithContextOn: aContextPresenter [
 
 	^ (self actions actionsFor: #refactors) 
-		copyWithContext: (DockRefactorMethodContext on: aContextPresenter)
+		copyWithContext: (PulsarRefactorMethodContext on: aContextPresenter)
 ]
 
 { #category : 'updating' }
@@ -473,7 +473,7 @@ PvMethodModel >> runTestAnnouncingTo: anAnnouncer [
 { #category : 'accessing' }
 PvMethodModel >> selectionAnnouncementClass [
 
-	^ DockMethodModelSelected
+	^ PulsarMethodModelSelected
 ]
 
 { #category : 'accessing' }

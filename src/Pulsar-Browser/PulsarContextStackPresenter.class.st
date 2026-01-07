@@ -1,0 +1,108 @@
+Class {
+	#name : 'PulsarContextStackPresenter',
+	#superclass : 'PulsarCollectionView',
+	#traits : 'PulsarTPanelWindowWithPlacedIcon',
+	#classTraits : 'PulsarTPanelWindowWithPlacedIcon classTrait',
+	#category : 'Pulsar-Browser-Tool-Debugger',
+	#package : 'Pulsar-Browser',
+	#tag : 'Tool-Debugger'
+}
+
+{ #category : 'defaults' }
+PulsarContextStackPresenter class >> defaultPulsarPosition [
+
+	^ SpPanelPosition new 
+		area: SpPanelArea start;
+		row: 1;
+		yourself
+]
+
+{ #category : 'layout' }
+PulsarContextStackPresenter >> defaultLayout [
+
+	^ SpBoxLayout newVertical
+		add: listPresenter;
+		yourself
+]
+
+{ #category : 'accessing' }
+PulsarContextStackPresenter >> dockPosition [
+
+	^ self class defaultPulsarPosition
+]
+
+{ #category : 'private' }
+PulsarContextStackPresenter >> findFirstRelevantStackIndex [
+	| counter |
+	
+	counter := 1.
+	listPresenter items do: [ :contextModel | 
+		contextModel methodClass == TestAsserter 
+			ifFalse: [ ^ counter ].
+		counter := counter + 1 ].
+	
+	^ 1
+]
+
+{ #category : 'initialization' }
+PulsarContextStackPresenter >> initializePanelWindow: aWindowPresenter [
+
+	super initializePanelWindow: aWindowPresenter.
+	aWindowPresenter 
+		whenPlacedDo: [ self panelPlaced: aWindowPresenter ]
+]
+
+{ #category : 'initialization' }
+PulsarContextStackPresenter >> initializePresenters [
+
+	self addStyle: 'dockDebugger'.
+	listPresenter := self newEasyListView
+		addStyle: 'stList';
+		addStyle: 'dockContextStackList';
+		display: [ :aModel | aModel name ];
+		yourself
+]
+
+{ #category : 'initialization' }
+PulsarContextStackPresenter >> initializeWindow: aWindowPresenter [
+
+	aWindowPresenter 
+		title: 'Stack';
+		windowIcon: (self iconNamed: self panelPlacedIconName)
+]
+
+{ #category : 'private' }
+PulsarContextStackPresenter >> panelPlacedIconName [
+
+	^ 'stack'
+]
+
+{ #category : 'api - selection' }
+PulsarContextStackPresenter >> selectFirst [ 
+
+	listPresenter selectFirst
+]
+
+{ #category : 'api - selection' }
+PulsarContextStackPresenter >> selectFirstRelevantStackIndex [
+	
+	listPresenter 
+		selectIndex: self findFirstRelevantStackIndex 
+		scrollToSelection: true
+]
+
+{ #category : 'accessing' }
+PulsarContextStackPresenter >> selectedContextModel [
+
+	^ listPresenter selectedItem
+]
+
+{ #category : 'initialization' }
+PulsarContextStackPresenter >> updatePresenter [
+
+	self model ifNil: [ ^ self ].
+	
+	self application defer: [
+		listPresenter items: self model stack.
+		self selectFirstRelevantStackIndex ]
+]

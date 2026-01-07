@@ -53,7 +53,7 @@ PvExploreBrowser >> initializeViews [
 { #category : 'actions' }
 PvExploreBrowser >> openProject: aBaselineClass [
 
-	projectView model: (DockProjectModel 
+	projectView model: (PulsarProjectModel 
 		newEntity: aBaselineClass
 		environment: self model)
 ]

@@ -148,7 +148,7 @@ PvClassModel >> defineDecorationActionsOn: aBuilder [
 				name: 'Run Test';
 				description: ('Execute test of {1} class' format: { self name });
 				iconName: 'play';
-				presenterClass: DockMethodActionRunTestPresenter;
+				presenterClass: PulsarMethodActionRunTestPresenter;
 				action: [ :aContext | self runTestAnnouncingTo: aContext notificationCenter ] ] ] 
 	]
 ]
@@ -322,7 +322,7 @@ PvClassModel >> printOn: stream [
 PvClassModel >> refactorActionsWithContextOn: aContextPresenter [
 
 	^ (self actions actionsFor: #refactors) 
-		copyWithContext: (DockRefactorClassContext on: aContextPresenter)
+		copyWithContext: (PulsarRefactorClassContext on: aContextPresenter)
 ]
 
 { #category : 'actions' }
@@ -349,7 +349,7 @@ PvClassModel >> saveComment: aString [
 { #category : 'accessing' }
 PvClassModel >> selectionAnnouncementClass [
 
-	^ DockClassModelSelected
+	^ PulsarClassModelSelected
 ]
 
 { #category : 'accessing' }

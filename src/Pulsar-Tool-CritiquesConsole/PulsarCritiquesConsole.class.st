@@ -1,0 +1,246 @@
+"
+A console to show critics in code. 
+the console filters critics by method (the default), class and package.
+
+"
+Class {
+	#name : 'PulsarCritiquesConsole',
+	#superclass : 'PulsarBaseView',
+	#traits : 'PulsarTPanelWindowWithPlacedIcon',
+	#classTraits : 'PulsarTPanelWindowWithPlacedIcon classTrait',
+	#instVars : [
+		'toolbarPresenter',
+		'listPresenter',
+		'lastIncomingModel'
+	],
+	#category : 'Pulsar-Tool-CritiquesConsole',
+	#package : 'Pulsar-Tool-CritiquesConsole'
+}
+
+{ #category : 'defaults' }
+PulsarCritiquesConsole class >> defaultPulsarPosition [
+
+	^ SpPanelPosition new 
+		area: SpPanelArea bottom;
+		yourself
+]
+
+{ #category : 'accessing' }
+PulsarCritiquesConsole class >> defaultTitle [
+
+	^ 'Critiques'
+]
+
+{ #category : 'initialization' }
+PulsarCritiquesConsole >> connectPresenters [
+
+	listPresenter outputActivationPort
+		transmitDo: [ :aCritic | self entityActivated: aCritic ]
+]
+
+{ #category : 'api - focus' }
+PulsarCritiquesConsole >> defaultKeyboardFocus [
+
+	^ listPresenter
+]
+
+{ #category : 'layout' }
+PulsarCritiquesConsole >> defaultLayout [
+
+	^ SpBoxLayout newVertical
+		add: toolbarPresenter expand: false;
+		add: listPresenter;
+		yourself
+]
+
+{ #category : 'private - actions' }
+PulsarCritiquesConsole >> doActivateClassScope [
+
+	self model: (PulsarClassCritiquesModel newEnvironment: self model environmentModel).
+	self updateWithLastIncomingModel
+]
+
+{ #category : 'private - actions' }
+PulsarCritiquesConsole >> doActivateMethodScope [
+
+	self model: (PulsarMethodCritiquesModel newEnvironment: self model environmentModel).
+	self updateWithLastIncomingModel
+]
+
+{ #category : 'private - actions' }
+PulsarCritiquesConsole >> doActivatePackageScope [
+
+	self model: (PulsarPackageCritiquesModel newEnvironment: self model environmentModel).
+	self updateWithLastIncomingModel
+]
+
+{ #category : 'private - actions' }
+PulsarCritiquesConsole >> doClose [
+
+	self withNearWindowLikeDo: [ :aWindow | aWindow close ]
+]
+
+{ #category : 'private - events' }
+PulsarCritiquesConsole >> entityActivated: anEntity [
+
+	self notificationCenter announce: (self model newActivationAnnouncementFor: anEntity)
+]
+
+{ #category : 'events' }
+PulsarCritiquesConsole >> eventMethodChanged: aMethodAnnouncement [
+	| method methodModel |
+
+	method := aMethodAnnouncement method.
+	methodModel := PvMethodModel 
+		newEnvironment: self model environmentModel
+		entity: method.
+	
+	self model reset.
+	self model updateWith: methodModel.
+	self updatePresenter
+]
+
+{ #category : 'events' }
+PulsarCritiquesConsole >> eventModelSelected: ann [
+	| incomingModel |
+	
+	incomingModel := ann value.
+	
+	lastIncomingModel = incomingModel ifTrue: [ ^ self ].
+	lastIncomingModel := incomingModel.
+
+	(self model updateWith: incomingModel)
+		ifTrue: [ self updatePresenter ]
+]
+
+{ #category : 'initialization' }
+PulsarCritiquesConsole >> initialize [
+
+	super initialize.
+	self registerToEvents.
+	self registerToSystemEvents
+]
+
+{ #category : 'initialization' }
+PulsarCritiquesConsole >> initializePanelWindow: aWindowPresenter [
+
+	super initializePanelWindow: aWindowPresenter.
+	aWindowPresenter 
+		whenPlacedDo: [ self panelPlaced: aWindowPresenter ]
+]
+
+{ #category : 'initialization' }
+PulsarCritiquesConsole >> initializePresenters [
+
+
+	self initializeToolbar.
+	listPresenter := self newEasyColumnView
+		addStyle: 'stList';
+		addColumn: (SpStringTableColumn title: 'Name' evaluated: [ :aCritique | aCritique rule ruleName ]);
+		addColumn: (SpStringTableColumn title: 'Message' evaluated: [ :aCritique | aCritique tinyHint ]);
+		yourself
+]
+
+{ #category : 'initialization' }
+PulsarCritiquesConsole >> initializeToolbar [
+	| scopeMethodButton scopeClassButton |
+	
+	"scopeMethodButton := self newToggleButton
+		addStyle: 'flat';
+		icon: (self iconNamed: #method);
+		help: 'Toggle method scope';
+		state: (self model isScope: #method);
+		whenActivatedDo: [ self doActivateMethodScope ];
+		yourself.
+	scopeClassButton := self newToggleButton
+		addStyle: 'flat';
+		icon: (self iconNamed: #class);
+		help: 'Toggle class scope';
+		state: (self model isScope: #class);
+		whenActivatedDo: [ self doActivateClassScope ];
+		yourself.
+		
+	scopeMethodButton associatedToggleButtons: { scopeClassButton }."
+	
+	toolbarPresenter := self instantiate: PulsarEditorToolbarPresenter.
+	"toolbarPresenter addPresenter: (self newToolbar
+		displayMode: self application toolbarDisplayMode;
+		add: scopeMethodButton;
+		add: scopeClassButton;
+		add: scopePackageButton;
+		yourself)."
+	toolbarPresenter addPresenter: (self newToolbar 
+		beIcons; 
+		add: (self newButton
+			addStyle: 'flat';
+			icon: (self iconNamed: 'close');
+			help: 'Close critics console';
+			action: [ self doClose ];
+			yourself);
+		yourself)
+]
+
+{ #category : 'initialization' }
+PulsarCritiquesConsole >> initializeWindow: aWindowPresenter [
+
+	aWindowPresenter 
+		title: self class defaultTitle;
+		windowIcon: (self iconNamed: self panelPlacedIconName)
+]
+
+{ #category : 'private' }
+PulsarCritiquesConsole >> panelPlaced: aPanelWidgetPresenter [
+	| inHorizontalArea iconName |
+
+	iconName := self panelPlacedIconName.
+	iconName ifNil: [ ^ self ].
+	
+	inHorizontalArea := { SpPanelArea top. SpPanelArea bottom } includes: aPanelWidgetPresenter dockPosition area.
+	aPanelWidgetPresenter windowIcon: (inHorizontalArea
+		ifTrue: [ self iconNamed: iconName ]
+		ifFalse: [ nil ])
+]
+
+{ #category : 'private' }
+PulsarCritiquesConsole >> panelPlacedIconName [
+
+	^ 'critics'
+]
+
+{ #category : 'initialization' }
+PulsarCritiquesConsole >> registerToEvents [
+
+	self announcer
+		when: PulsarModelSelected
+		send: #eventModelSelected:
+		to: self
+]
+
+{ #category : 'initialization' }
+PulsarCritiquesConsole >> registerToSystemEvents [
+	
+	self announcer
+		when: MethodAnnouncement send: #eventMethodChanged: to: self
+]
+
+{ #category : 'initialization' }
+PulsarCritiquesConsole >> updatePresenter [
+
+	self model ifNil: [ ^ self ].
+
+	self application schedule: [ 
+		| critiques |
+		"first calculate outside (in the task)"
+		critiques := self model critiques.
+		"now call the ui thread with the data already there"
+		self application defer: [
+			toolbarPresenter title: self model title.
+			listPresenter items: critiques ] ]
+]
+
+{ #category : 'private' }
+PulsarCritiquesConsole >> updateWithLastIncomingModel [
+
+	(self model updateWith: lastIncomingModel)
+		ifTrue: [ self updatePresenter ]
+]

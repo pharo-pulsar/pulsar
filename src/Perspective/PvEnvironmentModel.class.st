@@ -108,7 +108,7 @@ PvEnvironmentModel >> name [
 { #category : 'factory' }
 PvEnvironmentModel >> newMultiProjectModel [
 
-	^ DockMultiProjectModel newEnvironment: self
+	^ PulsarMultiProjectModel newEnvironment: self
 ]
 
 { #category : 'accessing' }
