@@ -315,7 +315,7 @@ PulsarApplication >> prepareAsStandaloneApplication [
 PulsarApplication >> prepareErrorHandlerAsStandaloneApplication [
 
 	PulsarUIManager activateOn: self.
-	ErrorHandler default: InteractiveErrorHandler new.
+	ErrorHandler default: PulsarErrorHandler new.
 	OupsDebuggerSelectionStrategy debuggerSelectionStrategy: (PulsarSingleDebuggerSelector on: self)
 ]
 

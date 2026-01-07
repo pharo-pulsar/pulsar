@@ -32,6 +32,24 @@ PulsarDebugger >> defaultKeyboardFocus [
 	^ stackView
 ]
 
+{ #category : 'private - definitions' }
+PulsarDebugger >> defineExtraActionsOn: aBuilder [
+	<dockActions>
+
+	aBuilder addGroup: #extra with: [ :group | group 
+		beDisplayedAsGroup;
+		addActionWith: [ :action | action 
+			name: 'New Payground';
+			description: 'Open a new playground';
+			action: [ self doNewPlayground ] ] ]
+]
+
+{ #category : 'private - actions' }
+PulsarDebugger >> doNewPlayground [
+
+	self notificationCenter announce: PulsarRequestNewPlayground
+]
+
 { #category : 'events' }
 PulsarDebugger >> eventContextChanged: anAnnouncement [
 	
