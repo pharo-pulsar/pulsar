@@ -17,24 +17,6 @@ PulsarRepositoryBrowser class >> defaultWindowSize [
 	^ 900@900
 ]
 
-{ #category : 'private - definitions' }
-PulsarRepositoryBrowser >> defineExtraActionsOn: aBuilder [
-	<dockActions>
-
-	aBuilder addGroup: #extra with: [ :group | group 
-		beDisplayedAsGroup;
-		addActionWith: [ :action | action 
-			name: 'New Payground';
-			description: 'Open a new playground';
-			action: [ self doNewPlayground ] ] ]
-]
-
-{ #category : 'private - actions' }
-PulsarRepositoryBrowser >> doNewPlayground [
-
-	self notificationCenter announce: PulsarRequestNewPlayground
-]
-
 { #category : 'initialization' }
 PulsarRepositoryBrowser >> initializeDefaultWorkspace [
 			
@@ -67,9 +49,7 @@ PulsarRepositoryBrowser >> initializeWorkspace [
 { #category : 'initialization' }
 PulsarRepositoryBrowser >> registerToEvents [
 
-	super registerToEvents.
-	self announcer 
-		when: PulsarRequestToolAnnouncement send: #addTool: to: self
+	super registerToEvents
 ]
 
 { #category : 'accessing - snapshot' }

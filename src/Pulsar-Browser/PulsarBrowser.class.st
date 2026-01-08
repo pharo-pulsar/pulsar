@@ -112,6 +112,13 @@ PulsarBrowser >> defaultKeyboardFocus [
 	^ projectView
 ]
 
+{ #category : 'private - definitions' }
+PulsarBrowser >> defineExtraActionsOn: aBuilder [
+	<dockActions>
+	"nothing here for now, but we override because the playground is 
+	 already in the tool list"
+]
+
 { #category : 'events' }
 PulsarBrowser >> eventManyModelDeactivated: anAnnouncement [
 	| editors |
@@ -317,8 +324,9 @@ PulsarBrowser >> registerToEvents [
 	super registerToEvents.
 	self registerToTestCaseEvents.
 	self announcer 
-		when: PulsarLostChangesAnnouncement send: #informLostChanges: to: self;
-		when: PulsarRequestToolAnnouncement send: #addTool: to: self
+		when: PulsarLostChangesAnnouncement 
+			send: #informLostChanges:
+			to: self
 ]
 
 { #category : 'initialization' }

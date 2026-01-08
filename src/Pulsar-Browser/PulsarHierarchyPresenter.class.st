@@ -94,9 +94,21 @@ PulsarHierarchyPresenter >> itemToSelect [
 
 { #category : 'private - announcing' }
 PulsarHierarchyPresenter >> notifyActivateEntity: anEntity [
+	| announcement |
 
 	anEntity ifNil: [ ^ self ].
-	self notificationCenter announce: anEntity realModel newActivationAnnouncement
+
+	announcement := anEntity realModel newActivationAnnouncement.
+	"if I am in a panel window, I want to show the activation in the next column. 
+	 it it is the first column (at the left, the most usual case), I put it next, 
+	 if is in another column, I put it previous"
+	self withPanelWindowDo: [ :w |
+		announcement desiredPosition: (w dockPosition copy
+			column: ((w dockPosition column > 1) 
+				ifTrue: [ w dockPosition column - 1 ]
+				ifFalse: [ w dockPosition column + 1 ]);
+			yourself) ].
+	self notificationCenter announce: announcement
 ]
 
 { #category : 'private - announcing' }

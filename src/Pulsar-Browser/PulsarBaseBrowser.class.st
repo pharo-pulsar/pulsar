@@ -109,7 +109,7 @@ PulsarBaseBrowser >> addPresenterClass: aClass position: aPulsarPosition [
 ]
 
 { #category : 'private' }
-PulsarBaseBrowser >> addTool: ann [ 
+PulsarBaseBrowser >> addTool: ann [
 
 	self addPresenterClass: ann toolClass
 ]
@@ -121,6 +121,24 @@ PulsarBaseBrowser >> addWindow: aWindow [
 		aWindow presenter registerToPulsar: self.
 		super addWindow: aWindow.
 		aWindow raise ]
+]
+
+{ #category : 'private - definitions' }
+PulsarBaseBrowser >> defineExtraActionsOn: aBuilder [
+	<dockActions>
+
+	aBuilder addGroup: #extra with: [ :group | group 
+		beDisplayedAsGroup;
+		addActionWith: [ :action | action 
+			name: 'New Payground';
+			description: 'Open a new playground';
+			action: [ self doNewPlayground ] ] ]
+]
+
+{ #category : 'private - actions' }
+PulsarBaseBrowser >> doNewPlayground [
+
+	self notificationCenter announce: PulsarRequestNewPlayground
 ]
 
 { #category : 'private - actions' }
@@ -172,7 +190,7 @@ PulsarBaseBrowser >> eventManyModelDeactivated: anAnnouncement [
 PulsarBaseBrowser >> eventModelActivated: anAnnouncement [
 	
 	self 
-		maybePulsarView: anAnnouncement value
+		maybeDockView: anAnnouncement value
 		withActivation: anAnnouncement
 ]
 
@@ -298,7 +316,7 @@ PulsarBaseBrowser >> jobStart [
 ]
 
 { #category : 'private' }
-PulsarBaseBrowser >> maybePulsarView: aViewModel withActivation: anActivation [
+PulsarBaseBrowser >> maybeDockView: aViewModel withActivation: anActivation [
 	"if the entity has an editor associated:
 	 	if the entity is not already there, open it.
 	 	if the entity is already opened, 
@@ -316,10 +334,12 @@ PulsarBaseBrowser >> maybePulsarView: aViewModel withActivation: anActivation [
 		ifNil: [
 			editorPresenter := self 
 				instantiate: aViewModel dockEditorClass 
-				on: aViewModel. 
+				on: aViewModel.
 			self 
 				addPresenter: editorPresenter 
-				at: editorPresenter dockPosition ].
+				at: (anActivation hasDesiredPosition 
+					ifTrue: [ anActivation desiredPosition ]
+					ifFalse:[ editorPresenter dockPosition ]) ].
 	
 	editorPresenter activateWith: anActivation
 ]
@@ -391,7 +411,8 @@ PulsarBaseBrowser >> registerToEvents [
 		"now process here"
 		when: PulsarModelActivated send: #eventModelActivated: to: self;
 		when: PulsarModelDeactivated send: #eventModelDeactivated: to: self;
-		when: PulsarManyModelDeactivated send: #eventManyModelDeactivated: to: self
+		when: PulsarManyModelDeactivated send: #eventManyModelDeactivated: to: self;
+		when: PulsarRequestToolAnnouncement send: #addTool: to: self
 ]
 
 { #category : 'initialization' }

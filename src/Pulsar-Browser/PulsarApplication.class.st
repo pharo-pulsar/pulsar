@@ -146,16 +146,6 @@ PulsarApplication >> colorsForTestResult [
 	^ self configuration colorsForTestResult
 ]
 
-{ #category : 'accessing' }
-PulsarApplication >> dockBrowser [
-	"for now the application will have just one Pulsar active (it can have a lot more windows, but more than 
-	 one dock feels very disturbing)"
-	 
-	 ^ self windows 
-	 	detect: [ :each | each class = PulsarBrowser ]
-	 	ifNone: [ nil ]
-]
-
 { #category : 'finalization' }
 PulsarApplication >> finalize [
 
@@ -317,6 +307,16 @@ PulsarApplication >> prepareErrorHandlerAsStandaloneApplication [
 	PulsarUIManager activateOn: self.
 	ErrorHandler default: PulsarErrorHandler new.
 	OupsDebuggerSelectionStrategy debuggerSelectionStrategy: (PulsarSingleDebuggerSelector on: self)
+]
+
+{ #category : 'accessing' }
+PulsarApplication >> pulsarBrowser [
+	"for now the application will have just one Pulsar active (it can have a lot more windows, but more than 
+	 one dock feels very disturbing)"
+	 
+	 ^ self windows 
+	 	detect: [ :each | each class = PulsarBrowser ]
+	 	ifNone: [ nil ]
 ]
 
 { #category : 'initialization' }

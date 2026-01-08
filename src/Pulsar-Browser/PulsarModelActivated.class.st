@@ -2,12 +2,31 @@ Class {
 	#name : 'PulsarModelActivated',
 	#superclass : 'PulsarAnnouncement',
 	#instVars : [
-		'selection'
+		'selection',
+		'desiredPosition'
 	],
 	#category : 'Pulsar-Browser-Announcement',
 	#package : 'Pulsar-Browser',
 	#tag : 'Announcement'
 }
+
+{ #category : 'accessing' }
+PulsarModelActivated >> desiredPosition [
+
+	^ desiredPosition
+]
+
+{ #category : 'accessing' }
+PulsarModelActivated >> desiredPosition: aPanelPosition [
+
+	desiredPosition := aPanelPosition
+]
+
+{ #category : 'testing' }
+PulsarModelActivated >> hasDesiredPosition [
+
+	^ self desiredPosition isNotNil
+]
 
 { #category : 'testing' }
 PulsarModelActivated >> hasSelection [
