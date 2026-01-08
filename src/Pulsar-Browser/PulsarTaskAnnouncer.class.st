@@ -16,6 +16,7 @@ PulsarTaskAnnouncer class >> synchronicAnnouncements [
 
 { #category : 'announce' }
 PulsarTaskAnnouncer >> announce: anAnnouncement [
+
 	"not the best if you want to record the announcements (see super 
 	 implementation), but well..."
 	(self isSuspended or: [ self isSynchronic: anAnnouncement ])

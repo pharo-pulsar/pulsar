@@ -84,7 +84,7 @@ PulsarRepositoryDiffEditor >> updatePatchContents [
 				stream nextPut: eachModel ] ] ].
 		
 	contents := SpBoxLayout newVertical vAlignStart.
-
+	"40 is a magic number"
 	(nodes groupsOf: 40) do: [ :eachGroup | 
 		self schedule: [
 			self withWindowDo: #jobStart.

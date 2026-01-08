@@ -45,5 +45,17 @@ PulsarRefactorContext >> owner: aPresenter [
 { #category : 'private' }
 PulsarRefactorContext >> schedule: aBlock [
 
-	self application schedule: aBlock
+	self 
+		deprecated: 'This is confusing, use #scheduleTask:' 
+		transformWith:
+			'`@receiver schedule: `@arg' -> 
+			'`@receiver scheduleTask: `@arg'.
+
+	^ self scheduleTask: aBlock
+]
+
+{ #category : 'private' }
+PulsarRefactorContext >> scheduleTask: aBlock [
+
+	self application scheduleTask: aBlock
 ]

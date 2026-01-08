@@ -65,21 +65,17 @@ PulsarBaseBrowserSnapshot >> restoreTo: aPulsarBrowser [
 
 { #category : 'restoring' }
 PulsarBaseBrowserSnapshot >> selectLastActiveEditorOn: aPulsarBrowser [
-	| editors  lastPresented |
-	
+
+	| editors lastPresented |
 	editors := aPulsarBrowser editors.
 	editors ifEmpty: [ ^ self ].
 
-	lastPresented := (editors 
-		sorted: [ :each | each presenter lastTimePresented ifNil: [ DateAndTime epoch ] ] 
-		descending)
-		first.
-		
+	lastPresented := (editors sorted: [ :each | each presenter lastTimePresented ifNil: [ DateAndTime epoch ] ] descending) first.
+
 	aPulsarBrowser whenOpenedDo: [
-		aPulsarBrowser application schedule: [
-			100 milliSeconds wait.
-			aPulsarBrowser application defer: [
-				lastPresented raiseAndTakeKeyboardFocus ] ] ]
+			aPulsarBrowser application scheduleTask: [
+					100 milliSeconds wait.
+					aPulsarBrowser application defer: [ lastPresented raiseAndTakeKeyboardFocus ] ] ]
 ]
 
 { #category : 'initialization' }

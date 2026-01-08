@@ -20,7 +20,6 @@ PulsarRefactorMethodContext >> doPullUpMethod: aMethodModel [
 { #category : 'refactoring' }
 PulsarRefactorMethodContext >> doPushUpMethod: aMethodModel [
 
-
 	self schedule: [
 		(RePullUpMethodDriver newApplication: self application)
 			model: (RBNamespace onEnvironment: RBBrowserEnvironment new)

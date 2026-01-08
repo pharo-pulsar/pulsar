@@ -1,3 +1,7 @@
+"
+The Pulsar application. 
+Entry point of the IDE, it ensures all conditions are set before initiating session (recovering from last stapshot or creating a default environment)
+"
 Class {
 	#name : 'PulsarApplication',
 	#superclass : 'StPharoApplication',
@@ -102,7 +106,7 @@ PulsarApplication >> checkForLostChanges [
 	lostChangesDetector := EpLostChangesDetector new.
 	lostChangesDetector hasLostChanges ifFalse: [ ^ self ].
 	
-	self schedule: [
+	self scheduleTask: [
 		self resendAnnouncement: (PulsarLostChangesAnnouncement new 
 			detector: lostChangesDetector;
 			yourself) ]
@@ -362,6 +366,7 @@ PulsarApplication >> run [
 
 { #category : 'schedulling' }
 PulsarApplication >> schedule: aBlock [
+
 	self 
 		deprecated: 'This is confusing, use #scheduleTask:' 
 		transformWith: 
@@ -408,14 +413,14 @@ PulsarApplication >> snapshot [
 
 { #category : 'running' }
 PulsarApplication >> start [
-	| snapshot browser |
 
+	| snapshot browser |
 	snapshot := self class lastSnapshot.
-	(snapshot isNotNil and: [ snapshot hasRecords ]) 
+	(snapshot isNotNil and: [ snapshot hasRecords ])
 		ifTrue: [ snapshot restoreTo: self ]
 		ifFalse: [ (PulsarBrowser newApplication: self) open ].
-		
-	self schedule: [ self checkForLostChanges ]
+
+	self scheduleTask: [ self checkForLostChanges ]
 ]
 
 { #category : 'settings' }

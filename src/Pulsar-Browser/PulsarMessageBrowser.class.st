@@ -91,6 +91,7 @@ PulsarMessageBrowser >> initializePresenters [
 	
 	headerPresenter := self instantiate: PulsarEditorToolbarPresenter.
 	countPresenter := self newLabel
+		addStyle: 'count';
 		addStyle: 'dim';
 		addStyle: 'tinyFont';
 		yourself.
@@ -99,8 +100,21 @@ PulsarMessageBrowser >> initializePresenters [
 	messageListPresenter := self newFilteringList
 		addStyle: 'stList';
 		display: #fullName;
+		whenFilterChangedDo: [ self updateCount ];
 		yourself.
 	editorPresenter := self instantiate: PulsarMethodEditor
+]
+
+{ #category : 'private' }
+PulsarMessageBrowser >> messageCount [
+	| shownSize fullSize |
+
+	fullSize := messageListPresenter unfilteredItems size.
+	fullSize = 0 ifTrue: [ ^ '' ].
+	shownSize := messageListPresenter items size.	
+	^ shownSize = fullSize
+		ifTrue: [ shownSize asString ]
+		ifFalse: [ '{1} / {2}' format: { shownSize. fullSize } ]
 ]
 
 { #category : 'private' }
@@ -130,6 +144,12 @@ PulsarMessageBrowser >> snapshot [
 ]
 
 { #category : 'initialization' }
+PulsarMessageBrowser >> updateCount [
+
+	countPresenter label: self messageCount
+]
+
+{ #category : 'initialization' }
 PulsarMessageBrowser >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
@@ -137,6 +157,6 @@ PulsarMessageBrowser >> updatePresenter [
 	self application defer: [ 
 		headerPresenter updateBreadcrumbWith: [ :aBreadcrumb | 
 			aBreadcrumb addSegment: self model title ].
-		countPresenter label: self model methodCount asString.	
-		messageListPresenter items: self model methodModels ]
+		messageListPresenter items: self model methodModels.
+		self updateCount ]
 ]

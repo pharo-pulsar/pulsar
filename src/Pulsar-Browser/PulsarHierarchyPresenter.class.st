@@ -99,15 +99,19 @@ PulsarHierarchyPresenter >> notifyActivateEntity: anEntity [
 	anEntity ifNil: [ ^ self ].
 
 	announcement := anEntity realModel newActivationAnnouncement.
+	
 	"if I am in a panel window, I want to show the activation in the next column. 
 	 it it is the first column (at the left, the most usual case), I put it next, 
 	 if is in another column, I put it previous"
-	self withPanelWindowDo: [ :w |
-		announcement desiredPosition: (w panelPosition copy
-			column: ((w panelPosition column > 1) 
-				ifTrue: [ w panelPosition column - 1 ]
-				ifFalse: [ w panelPosition column + 1 ]);
-			yourself) ].
+	self withPanelWindowDo: [ :aPanelWindow |
+		"just if I am inside a panel window and I am not e.g. a popover"
+		self nearWindowLike = aPanelWindow ifTrue: [
+			announcement desiredPosition: (aPanelWindow panelPosition copy
+				column: ((aPanelWindow panelPosition column > 1) 
+					ifTrue: [ aPanelWindow panelPosition column - 1 ]
+					ifFalse: [ aPanelWindow panelPosition column + 1 ]);
+				yourself) ] ].
+				
 	self notificationCenter announce: announcement
 ]
 
