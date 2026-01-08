@@ -96,7 +96,8 @@ PulsarClassOutlineView >> eventModelChanged: anAnnouncement [
 	outlineClassModel := changedModel asOutlineClassModel.
 	
 	(self model = outlineClassModel) ifFalse: [ 
-		anAnnouncement oldEntity isNew 
+		(anAnnouncement oldEntity isNotNil 
+			and: [ anAnnouncement oldEntity isNew ]) 
 			ifTrue: [ self model: outlineClassModel ].
 		^ self ].
 		
