@@ -87,6 +87,9 @@ MetaMetacello load: [ :spec | spec
  Also current implementation is not backward compatible so we need to think how to  
  do it right."
 "(Smalltalk classNamed: #StringInterpolationPlugin) install."
+
+"we ban this rule because is annoying since we use LF as end line (in linux). Also this should be agnostic, we should not care about it."
+ReMethodSourceContainsLinefeedsRule enabled: false.
 ```
 
 **IMPORTANT!!! For all this to work you need to add your keys to your account in the forge!** 
