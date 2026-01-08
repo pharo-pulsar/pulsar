@@ -179,6 +179,7 @@ PulsarBrowser >> initializeDefaultWorkspace [
 	"here, the list of components that are part of the 'sides' but we access 
 	 just while interacting."
 	self addPresenterClass: PulsarStackView.
+	self addPresenterClass: PulsarCritiquesConsole model: (PulsarCritiquesModel on: self model). 	
 	self addPresenterClass: PulsarFlagsConsole model: (PulsarFlagsModel on: self model). 	
 	self addPresenterClass: PulsarPlayground.
 	

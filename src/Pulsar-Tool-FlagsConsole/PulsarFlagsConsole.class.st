@@ -31,6 +31,28 @@ PulsarFlagsConsole class >> defaultTitle [
 	^ 'Flags'
 ]
 
+{ #category : 'private' }
+PulsarFlagsConsole >> checkIncomingModel: aModel [
+
+	lastIncomingModel = aModel ifTrue: [ ^ self ].
+	lastIncomingModel := aModel.
+
+	(self model updateWith: aModel)
+		ifTrue: [ self updatePresenter ]
+]
+
+{ #category : 'private' }
+PulsarFlagsConsole >> checkIncomingModel: aModel forceUpdate: forceBoolean [ 
+
+	lastIncomingModel = aModel ifTrue: [ ^ self ].
+	lastIncomingModel := aModel.
+
+	((self model updateWith: aModel) or: [ forceBoolean ])
+		ifTrue: [
+			self model reset.
+			self updatePresenter ]
+]
+
 { #category : 'initialization' }
 PulsarFlagsConsole >> connectPresenters [
 
@@ -80,30 +102,23 @@ PulsarFlagsConsole >> entityActivated: anEntity [
 ]
 
 { #category : 'events' }
-PulsarFlagsConsole >> eventMethodChanged: aMethodAnnouncement [
-	| method methodModel |
+PulsarFlagsConsole >> eventEditorActivated: ann [
 
-	method := aMethodAnnouncement method.
-	methodModel := PvMethodModel 
-		newEnvironment: self model environmentModel
-		entity: method.
-	
-	self model reset.
-	self model updateWith: methodModel.
-	self updatePresenter
+	self 
+		checkIncomingModel: ann value model
+		forceUpdate: false
 ]
 
 { #category : 'events' }
-PulsarFlagsConsole >> eventModelSelected: ann [
-	| incomingModel |
-	
-	incomingModel := ann value.
-	
-	lastIncomingModel = incomingModel ifTrue: [ ^ self ].
-	lastIncomingModel := incomingModel.
+PulsarFlagsConsole >> eventMethodChanged: aMethodAnnouncement [
+	| methodModel |
 
-	(self model updateWith: incomingModel)
-		ifTrue: [ self updatePresenter ]
+	methodModel := self model newMethodModelFor: aMethodAnnouncement method.
+	
+	"reset to force updating... maybe not the best way?"
+	lastIncomingModel = methodModel 
+		ifTrue: [ lastIncomingModel := nil ].
+	self checkIncomingModel: methodModel forceUpdate: true
 ]
 
 { #category : 'initialization' }
@@ -191,8 +206,8 @@ PulsarFlagsConsole >> panelPlacedIconName [
 PulsarFlagsConsole >> registerToEvents [
 
 	self announcer
-		when: PulsarModelSelected
-		send: #eventModelSelected:
+		when: PulsarEditorActivated 
+		send: #eventEditorActivated: 
 		to: self
 ]
 
@@ -200,7 +215,9 @@ PulsarFlagsConsole >> registerToEvents [
 PulsarFlagsConsole >> registerToSystemEvents [
 	
 	self announcer
-		when: MethodAnnouncement send: #eventMethodChanged: to: self
+		when: MethodAnnouncement 
+		send: #eventMethodChanged: 
+		to: self
 ]
 
 { #category : 'initialization' }

@@ -89,6 +89,14 @@ PulsarFlagsModel >> newActivationAnnouncementFor: aFlag [
 	^ announcement
 ]
 
+{ #category : 'instance creation' }
+PulsarFlagsModel >> newMethodModelFor: aMethod [
+
+	^ PvMethodModel 
+		newEnvironment: self environmentModel
+		entity: aMethod
+]
+
 { #category : 'private' }
 PulsarFlagsModel >> newSystemNavigation [
 

@@ -31,6 +31,26 @@ PulsarCritiquesConsole class >> defaultTitle [
 	^ 'Critiques'
 ]
 
+{ #category : 'private' }
+PulsarCritiquesConsole >> checkIncomingModel: aModel [
+
+	lastIncomingModel = aModel ifTrue: [ ^ self ].
+	lastIncomingModel := aModel.
+
+	(self model updateWith: aModel)
+		ifTrue: [ self updatePresenter ]
+]
+
+{ #category : 'private' }
+PulsarCritiquesConsole >> checkIncomingModel: aModel forceUpdate: forceBoolean [ 
+
+	lastIncomingModel = aModel ifTrue: [ ^ self ].
+	lastIncomingModel := aModel.
+
+	((self model updateWith: aModel) or: [ forceBoolean ])
+		ifTrue: [ self updatePresenter ]
+]
+
 { #category : 'initialization' }
 PulsarCritiquesConsole >> connectPresenters [
 
@@ -87,6 +107,14 @@ PulsarCritiquesConsole >> entityActivated: anEntity [
 ]
 
 { #category : 'events' }
+PulsarCritiquesConsole >> eventEditorActivated: ann [
+	
+	self 
+		checkIncomingModel: ann value model 
+		forceUpdate: false
+]
+
+{ #category : 'events' }
 PulsarCritiquesConsole >> eventMethodChanged: aMethodAnnouncement [
 	| method methodModel |
 
@@ -95,22 +123,10 @@ PulsarCritiquesConsole >> eventMethodChanged: aMethodAnnouncement [
 		newEnvironment: self model environmentModel
 		entity: method.
 	
-	self model reset.
-	self model updateWith: methodModel.
-	self updatePresenter
-]
-
-{ #category : 'events' }
-PulsarCritiquesConsole >> eventModelSelected: ann [
-	| incomingModel |
-	
-	incomingModel := ann value.
-	
-	lastIncomingModel = incomingModel ifTrue: [ ^ self ].
-	lastIncomingModel := incomingModel.
-
-	(self model updateWith: incomingModel)
-		ifTrue: [ self updatePresenter ]
+	"reset to force updating... maybe not the best way?"
+	lastIncomingModel = methodModel 
+		ifTrue: [ lastIncomingModel := nil ].
+	self checkIncomingModel: methodModel forceUpdate: true
 ]
 
 { #category : 'initialization' }
@@ -192,6 +208,14 @@ PulsarCritiquesConsole >> initializeWindow: aWindowPresenter [
 		windowIcon: (self iconNamed: self panelPlacedIconName)
 ]
 
+{ #category : 'instance creation' }
+PulsarCritiquesConsole >> newMethodModelFor: aMethod [
+
+	^ PvMethodModel
+		newEnvironment: self environmentModel
+		entity: aMethod
+]
+
 { #category : 'private' }
 PulsarCritiquesConsole >> panelPlaced: aPanelWidgetPresenter [
 	| inHorizontalArea iconName |
@@ -215,9 +239,8 @@ PulsarCritiquesConsole >> panelPlacedIconName [
 PulsarCritiquesConsole >> registerToEvents [
 
 	self announcer
-		when: PulsarModelSelected
-		send: #eventModelSelected:
-		to: self
+		"when: PulsarModelActivated send: #eventModelActivated: to: self;"
+		when: PulsarEditorActivated send: #eventEditorActivated: to: self
 ]
 
 { #category : 'initialization' }
