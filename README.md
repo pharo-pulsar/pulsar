@@ -10,7 +10,7 @@ package dependencies:
 they should be already in the system, otherwise you can install them using your favourite installer.
 
 ### Linux 
-You should be ok, buy you may need `libpanel` and `gtksourceview5` from the list of dependencies. If that is the case, install them using you favorite package manager.
+You should be ok, but you may need `libpanel` and `gtksourceview5` from the list of dependencies. If that is the case, install them using you favorite package manager.
 
 ### MacOS
 You are a real programmer... why aren't you using linux?
@@ -20,15 +20,14 @@ Download the prepared VM with dependencies **TODO**
 ### Windows
 You are a real programmer... why aren't you using linux?
 
-[Download the prepared VM with dependencies](https://nextcloud.smallworks.eu/s/eBe3k6dJWfsJMf5).
-This is a temporal location and likely a temporal VM, but for now it should make the job.
+Download the prepared VM with dependencies **TODO**
 
 ## 2. Download a usable image
-Right now we are using [Pharo14 build 200](https://files.pharo.org/image/140/Pharo14.0-SNAPSHOT.build.200.sha.c126aa2736.arch.64bit.zip)
-(We will validate new images time to time but since P14 is changing many underlying things, we will not be moving so much, 
-we want to deal with our bugs -already a lot- not others bugs).
+Right now we are using [Pharo14 build 395](https://files.pharo.org/image/140/Pharo14.0-SNAPSHOT.build.395.sha.fe1493a44b.arch.64bit.zip)
+(We will validate new images time to time but since P14 is changing many underlying things, we prefer not to move so much, 
+we want to deal with our own bugs -already a lot- not others bugs).
 
-This build is very alpha and there are problems everywhere... in case of the build 200, you want to execute this as first step: 
+This build is very alpha and there are problems everywhere... in case of the build 395, you want to execute this as first step: 
 
 ```Smalltalk
 Object compile: 'inform: aString
@@ -51,8 +50,7 @@ Metacello new
 ### 4. Install a lot of packages
 
 ```smalltalk
-MetaMetacello load: [ :spec | spec      
-	lockBaselines;
+MetaMetacello load: [ :spec | spec
 	baseline: 'UnifiedFFI' with: [ spec 
 		repository: 'github://pharo-cig/UnifiedFFI:main';
 		className: #BaselineOfUnifiedFFIFull ];
@@ -81,9 +79,7 @@ MetaMetacello load: [ :spec | spec
 	baseline: 'Adwaita' with: [ spec repository: 'github://estebanlm/Spec-LibAdwaita:main' ];
 	baseline: 'SourceEditor' with: [ spec repository: 'git:git@forge.smallworks.eu:pharo/SourceEditor.git:main' ];
 	baseline: 'Panel' with: [ spec repository: 'github://estebanlm/Spec-LibPanel:main' ];
-	baseline: 'DockBrowser' with: [ spec 
-		repository: 'git:git@forge.smallworks.eu:pharo/DockBrowser.git:main';
-		className: #BaselineOfPerspective ] ].
+	baseline: 'Pulsar' with: [ spec repository: 'git:git@forge.smallworks.eu:pharo/Pulsar.git:main' ] ].
 
 (Smalltalk classNamed: #GEnumeration) allSubclassesDo: #initializeEnumeration.
 "We want to work with string interpolation, but for now do not install it as it 
@@ -108,12 +104,19 @@ OSWindowDriver driverClass: OSSDL2Driver.
 
 in Linux:
 ```Shell
-pharo --worker Pharo.image run dock
+pharo --worker Pharo.image openPulsar
+```
+
+**NOTE:** You may want to create an alias in your shell to easy the start. I use fishshell and I have defined this function in my `config.fish` : 
+```fish
+function psr
+    pharo --worker $argv[1] openPulsar $argv[2..-1]
+end
 ```
 
 in MacOS:
 ```Shell
-./Pharo.app/Contents/Pharo --worker Pharo.image run dock
+./Pharo.app/Contents/Pharo --worker --headless Pharo.image openPulsar
 ```
 
 in Windows:
