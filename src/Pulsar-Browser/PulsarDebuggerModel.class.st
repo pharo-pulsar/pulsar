@@ -33,11 +33,11 @@ PulsarDebuggerModel >> clearSession [
 		clear
 ]
 
-{ #category : 'accessing' }
+{ #category : 'initialization' }
 PulsarDebuggerModel >> entity: aDebugSession [
 
 	logger trace: aDebugSession.
-	actionModel := StDebuggerActionModel on: aDebugSession.
+	actionModel := StDebuggerClientModel on: aDebugSession.
 	logger trace: actionModel.
 	super entity: aDebugSession
 ]
