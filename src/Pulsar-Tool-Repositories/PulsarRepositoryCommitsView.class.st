@@ -9,7 +9,7 @@ Class {
 }
 
 { #category : 'defaults' }
-PulsarRepositoryCommitsView class >> defaultPulsarPosition [
+PulsarRepositoryCommitsView class >> defaultPanelPosition [
 
 	^ SpPanelPosition new
 		area: SpPanelArea start;

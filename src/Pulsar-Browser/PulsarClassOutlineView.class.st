@@ -18,7 +18,7 @@ Class {
 }
 
 { #category : 'defaults' }
-PulsarClassOutlineView class >> defaultPulsarPosition [
+PulsarClassOutlineView class >> defaultPanelPosition [
 
 	^ SpPanelPosition new
 		area: SpPanelArea end;

@@ -1,8 +1,8 @@
 Trait {
 	#name : 'PulsarTPanelWindow',
 	#instVars : [
-		'dockPosition',
-		'lastTimePresented'
+		'lastTimePresented',
+		'panelPosition'
 	],
 	#traits : 'PulsarTPanelWindowWithPlacedIcon',
 	#classTraits : 'PulsarTPanelWindowWithPlacedIcon classTrait',
@@ -12,7 +12,7 @@ Trait {
 }
 
 { #category : 'defaults' }
-PulsarTPanelWindow classSide >> defaultPulsarPosition [
+PulsarTPanelWindow classSide >> defaultPanelPosition [
 
 	^ SpPanelPosition new 
 		area: SpPanelArea center;
@@ -22,18 +22,6 @@ PulsarTPanelWindow classSide >> defaultPulsarPosition [
 { #category : 'private - actions' }
 PulsarTPanelWindow >> activateWith: anActivation [
 	"override to react to an activation detail"
-]
-
-{ #category : 'accessing' }
-PulsarTPanelWindow >> dockPosition [
-
-	^ dockPosition ifNil: [ dockPosition := self class defaultPulsarPosition ]
-]
-
-{ #category : 'accessing' }
-PulsarTPanelWindow >> dockPosition: aPulsarPosition [
-
-	dockPosition := aPulsarPosition
 ]
 
 { #category : 'initialization' }
@@ -77,6 +65,18 @@ PulsarTPanelWindow >> notifyEditorActivated [
 PulsarTPanelWindow >> notifyEditorClosed [
 
 	self notificationCenter announce: (PulsarEditorClosed newValue: self model)
+]
+
+{ #category : 'accessing' }
+PulsarTPanelWindow >> panelPosition [
+
+	^ panelPosition ifNil: [ panelPosition := self class defaultPanelPosition ]
+]
+
+{ #category : 'accessing' }
+PulsarTPanelWindow >> panelPosition: aPanelPosition [
+
+	panelPosition := aPanelPosition
 ]
 
 { #category : 'accessing' }

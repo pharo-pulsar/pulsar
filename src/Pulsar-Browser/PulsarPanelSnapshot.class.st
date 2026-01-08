@@ -11,12 +11,6 @@ Class {
 	#tag : 'Snapshot'
 }
 
-{ #category : 'accessing' }
-PulsarPanelSnapshot >> dockPosition [
-
-	^ dockPosition
-]
-
 { #category : 'restoring' }
 PulsarPanelSnapshot >> instantiateOn: parentPresenter [
 
@@ -29,6 +23,12 @@ PulsarPanelSnapshot >> instantiateOn: parentPresenter [
 PulsarPanelSnapshot >> model [
 
 	^ model
+]
+
+{ #category : 'accessing' }
+PulsarPanelSnapshot >> panelPosition [
+
+	^ dockPosition
 ]
 
 { #category : 'accessing' }
@@ -48,7 +48,7 @@ PulsarPanelSnapshot >> restoreTo: aPresenter [
 PulsarPanelSnapshot >> snapshot: aPresenter [
 
 	presenterClass := aPresenter class.
-	dockPosition := aPresenter panelWindow dockPosition.
+	dockPosition := aPresenter panelWindow panelPosition.
 	self takeModelSnapshot: aPresenter
 ]
 

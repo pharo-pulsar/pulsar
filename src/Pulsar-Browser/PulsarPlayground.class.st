@@ -16,7 +16,7 @@ Class {
 }
 
 { #category : 'defaults' }
-PulsarPlayground class >> defaultPulsarPosition [
+PulsarPlayground class >> defaultPanelPosition [
 
 	^ SpPanelPosition new 
 		area: SpPanelArea bottom;

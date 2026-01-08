@@ -83,7 +83,7 @@ PulsarBaseBrowser >> addPresenterClass: aClass [
 	| view |
 
 	view := self instantiate: aClass.
-	self addPresenter: view at: view dockPosition.
+	self addPresenter: view at: view panelPosition.
 	
 	^ view
 ]
@@ -93,7 +93,7 @@ PulsarBaseBrowser >> addPresenterClass: aClass model: aModel [
 	| view |
 
 	view := self instantiate: aClass on: aModel.
-	self addPresenter: view at: view dockPosition.
+	self addPresenter: view at: view panelPosition.
 	
 	^ view
 ]
@@ -339,7 +339,7 @@ PulsarBaseBrowser >> maybeDockView: aViewModel withActivation: anActivation [
 				addPresenter: editorPresenter 
 				at: (anActivation hasDesiredPosition 
 					ifTrue: [ anActivation desiredPosition ]
-					ifFalse:[ editorPresenter dockPosition ]) ].
+					ifFalse:[ editorPresenter panelPosition ]) ].
 	
 	editorPresenter activateWith: anActivation
 ]

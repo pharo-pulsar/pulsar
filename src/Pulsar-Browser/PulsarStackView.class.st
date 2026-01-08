@@ -17,7 +17,7 @@ Class {
 }
 
 { #category : 'defaults' }
-PulsarStackView class >> defaultPulsarPosition [
+PulsarStackView class >> defaultPanelPosition [
 
 	^ SpPanelPosition new 
 		area: SpPanelArea start;

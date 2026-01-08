@@ -9,7 +9,7 @@ Class {
 }
 
 { #category : 'defaults' }
-PulsarBaseView class >> defaultPulsarPosition [
+PulsarBaseView class >> defaultPanelPosition [
 
 	^ SpPanelPosition new 
 		area: SpPanelArea center;
@@ -20,12 +20,6 @@ PulsarBaseView class >> defaultPulsarPosition [
 PulsarBaseView >> colorNamed: aString [
 
 	^ self application colorNamed: aString
-]
-
-{ #category : 'accessing' }
-PulsarBaseView >> dockPosition [
-
-	^ self class defaultPulsarPosition
 ]
 
 { #category : 'scripting' }
@@ -51,6 +45,12 @@ PulsarBaseView >> newPulsarToolbar [
 		yourself
 ]
 
+{ #category : 'accessing' }
+PulsarBaseView >> panelPosition [
+
+	^ self class defaultPanelPosition
+]
+
 { #category : 'initialization' }
 PulsarBaseView >> registerToEvents [
 	"override this to subscribe to notifications"
@@ -68,10 +68,9 @@ PulsarBaseView >> registerToPulsar: aPulsarBrowser [
 PulsarBaseView >> scheduleJob: aBlock [
 	"schedule a task that will show the working spinner while it executes"
 
-	self application schedule: [ 
-		self withWindowDo: #jobStart.
-		aBlock ensure: [
-			self withWindowDo: #jobEnd ] ]
+	self application scheduleTask: [
+			self withWindowDo: #jobStart.
+			aBlock ensure: [ self withWindowDo: #jobEnd ] ]
 ]
 
 { #category : 'accessing' }

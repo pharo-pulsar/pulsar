@@ -13,7 +13,7 @@ Class {
 }
 
 { #category : 'defaults' }
-PulsarTranscript class >> defaultPulsarPosition [
+PulsarTranscript class >> defaultPanelPosition [
 
 	^ SpPanelPosition new 
 		area: SpPanelArea bottom;

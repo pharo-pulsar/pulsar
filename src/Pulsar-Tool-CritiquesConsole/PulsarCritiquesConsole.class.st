@@ -18,7 +18,7 @@ Class {
 }
 
 { #category : 'defaults' }
-PulsarCritiquesConsole class >> defaultPulsarPosition [
+PulsarCritiquesConsole class >> defaultPanelPosition [
 
 	^ SpPanelPosition new 
 		area: SpPanelArea bottom;
@@ -242,14 +242,13 @@ PulsarCritiquesConsole >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 
-	self application schedule: [ 
-		| critiques |
-		"first calculate outside (in the task)"
-		critiques := self model critiques.
-		"now call the ui thread with the data already there"
-		self application defer: [
-			toolbarPresenter title: self model title.
-			listPresenter items: critiques ] ]
+	self application scheduleTask: [
+			| critiques |
+			"first calculate outside (in the task)"
+			critiques := self model critiques. "now call the ui thread with the data already there"
+			self application defer: [
+					toolbarPresenter title: self model title.
+					listPresenter items: critiques ] ]
 ]
 
 { #category : 'private' }

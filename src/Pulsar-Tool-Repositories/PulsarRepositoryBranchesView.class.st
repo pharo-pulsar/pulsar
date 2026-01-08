@@ -12,7 +12,7 @@ Class {
 }
 
 { #category : 'defaults' }
-PulsarRepositoryBranchesView class >> defaultPulsarPosition [
+PulsarRepositoryBranchesView class >> defaultPanelPosition [
 
 	^ SpPanelPosition new
 		area: SpPanelArea start;

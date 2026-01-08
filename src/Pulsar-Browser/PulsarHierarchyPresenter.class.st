@@ -103,10 +103,10 @@ PulsarHierarchyPresenter >> notifyActivateEntity: anEntity [
 	 it it is the first column (at the left, the most usual case), I put it next, 
 	 if is in another column, I put it previous"
 	self withPanelWindowDo: [ :w |
-		announcement desiredPosition: (w dockPosition copy
-			column: ((w dockPosition column > 1) 
-				ifTrue: [ w dockPosition column - 1 ]
-				ifFalse: [ w dockPosition column + 1 ]);
+		announcement desiredPosition: (w panelPosition copy
+			column: ((w panelPosition column > 1) 
+				ifTrue: [ w panelPosition column - 1 ]
+				ifFalse: [ w panelPosition column + 1 ]);
 			yourself) ].
 	self notificationCenter announce: announcement
 ]

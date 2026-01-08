@@ -14,7 +14,7 @@ Class {
 }
 
 { #category : 'defaults' }
-PulsarDebuggerInspector class >> defaultPulsarPosition [
+PulsarDebuggerInspector class >> defaultPanelPosition [
 
 	^ SpPanelPosition new 
 		area: SpPanelArea bottom;

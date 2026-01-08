@@ -9,7 +9,7 @@ Class {
 }
 
 { #category : 'defaults' }
-PulsarContextStackPresenter class >> defaultPulsarPosition [
+PulsarContextStackPresenter class >> defaultPanelPosition [
 
 	^ SpPanelPosition new 
 		area: SpPanelArea start;
@@ -23,12 +23,6 @@ PulsarContextStackPresenter >> defaultLayout [
 	^ SpBoxLayout newVertical
 		add: listPresenter;
 		yourself
-]
-
-{ #category : 'accessing' }
-PulsarContextStackPresenter >> dockPosition [
-
-	^ self class defaultPulsarPosition
 ]
 
 { #category : 'private' }
@@ -75,6 +69,12 @@ PulsarContextStackPresenter >> initializeWindow: aWindowPresenter [
 PulsarContextStackPresenter >> panelPlacedIconName [
 
 	^ 'stack'
+]
+
+{ #category : 'accessing' }
+PulsarContextStackPresenter >> panelPosition [
+
+	^ self class defaultPanelPosition
 ]
 
 { #category : 'api - selection' }

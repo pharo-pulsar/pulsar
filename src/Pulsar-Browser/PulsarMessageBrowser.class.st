@@ -15,7 +15,7 @@ Class {
 }
 
 { #category : 'defaults' }
-PulsarMessageBrowser class >> defaultPulsarPosition [
+PulsarMessageBrowser class >> defaultPanelPosition [
 
 	^ SpPanelPosition new 
 		area: SpPanelArea center;
@@ -64,12 +64,6 @@ PulsarMessageBrowser >> defaultLayout [
 			add: editorPresenter;
 			yourself);
 		yourself
-]
-
-{ #category : 'accessing' }
-PulsarMessageBrowser >> dockPosition [
-
-	^ dockPosition ifNil: [ dockPosition := self class defaultPulsarPosition ]
 ]
 
 { #category : 'initialization' }
@@ -121,6 +115,12 @@ PulsarMessageBrowser >> notifyActivateEntity: anEntity [
 
 	anEntity ifNil: [ ^ self ].
 	self notificationCenter announce: anEntity realModel newActivationAnnouncement
+]
+
+{ #category : 'accessing' }
+PulsarMessageBrowser >> panelPosition [
+
+	^ panelPosition ifNil: [ panelPosition := self class defaultPanelPosition ]
 ]
 
 { #category : 'accessing - snapshot' }

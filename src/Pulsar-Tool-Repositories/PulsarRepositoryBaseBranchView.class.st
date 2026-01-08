@@ -70,15 +70,13 @@ PulsarRepositoryBaseBranchView >> toolbarActions [
 PulsarRepositoryBaseBranchView >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
-	
+
 	self withWindowDo: #jobStart.
-	self application schedule: [ 
-		| branches |
-		[ 
-			branches := self maybeSort: self branches.
-			self application defer: [ 
-				listPresenter items: branches] ] 
-		ensure: [ self withWindowDo: #jobEnd ] ]
+	self application scheduleTask: [
+			| branches |
+			[
+				branches := self maybeSort: self branches.
+				self application defer: [ listPresenter items: branches ] ] ensure: [ self withWindowDo: #jobEnd ] ]
 ]
 
 { #category : 'private' }

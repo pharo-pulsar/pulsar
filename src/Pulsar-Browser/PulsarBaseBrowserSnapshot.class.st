@@ -42,7 +42,7 @@ PulsarBaseBrowserSnapshot >> restorePanelSnapshot: aSnapshot to: aPulsarBrowser 
 	panelPresenter :=  aSnapshot instantiateOn: aPulsarBrowser.
 	aPulsarBrowser 
 		addPresenter: panelPresenter 
-		at: aSnapshot dockPosition.
+		at: aSnapshot panelPosition.
 	aSnapshot restoreTo: panelPresenter
 ]
 

@@ -1,7 +1,7 @@
 Extension { #name : 'SpPresenter' }
 
 { #category : '*Pulsar-Browser' }
-SpPresenter >> dockPosition [
+SpPresenter >> panelPosition [
 
 	^ SpPanelArea bottom
 ]

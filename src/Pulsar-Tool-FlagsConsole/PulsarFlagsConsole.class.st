@@ -18,7 +18,7 @@ Class {
 }
 
 { #category : 'defaults' }
-PulsarFlagsConsole class >> defaultPulsarPosition [
+PulsarFlagsConsole class >> defaultPanelPosition [
 
 	^ SpPanelPosition new 
 		area: SpPanelArea bottom;
@@ -225,14 +225,13 @@ PulsarFlagsConsole >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 
-	self application schedule: [ 
-		| flags |
-		"first calculate outside (in the task)"
-		flags := self model flags.
-		"now call the ui thread with the data already there"
-		self application defer: [
-			toolbarPresenter title: self model title.
-			listPresenter items: flags ] ]
+	self application scheduleTask: [
+			| flags |
+			"first calculate outside (in the task)"
+			flags := self model flags. "now call the ui thread with the data already there"
+			self application defer: [
+					toolbarPresenter title: self model title.
+					listPresenter items: flags ] ]
 ]
 
 { #category : 'private' }

@@ -13,7 +13,7 @@ Class {
 }
 
 { #category : 'defaults' }
-PulsarRepositoryChangesView class >> defaultPulsarPosition [
+PulsarRepositoryChangesView class >> defaultPanelPosition [
 
 	^ SpPanelPosition new
 		area: SpPanelArea start;

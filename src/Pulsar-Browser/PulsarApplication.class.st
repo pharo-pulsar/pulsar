@@ -4,7 +4,6 @@ Class {
 	#traits : 'SgaTApplication + PulsarTScheduling',
 	#classTraits : 'SgaTApplication classTrait + PulsarTScheduling classTrait',
 	#instVars : [
-		'name',
 		'standalone'
 	],
 	#classInstVars : [
@@ -359,6 +358,23 @@ PulsarApplication >> run [
 		anApplication shutDown: false ].
 	self start.
 	self class running: self
+]
+
+{ #category : 'schedulling' }
+PulsarApplication >> schedule: aBlock [
+	self 
+		deprecated: 'This is confusing, use #scheduleTask:' 
+		transformWith: 
+			'`@receiver schedule: `@arg' -> 
+			'`@receiver scheduleTask: `@arg'.
+
+	^ self scheduleTask: aBlock
+]
+
+{ #category : 'private - scheduling' }
+PulsarApplication >> scheduleTask: aBlock [
+
+	^ self scheduler schedule: aBlock
 ]
 
 { #category : 'accessing' }

@@ -52,7 +52,7 @@ PulsarCritiquesModel >> collectCritiques [
 		ifTrue: [
 			checker
 				getCritiquesAbout: self currentModel entity
-				by: (rules select: [ :r | r class checksMethod ]) ]
+				by: (rules select: [ :aRule | aRule class checksMethod ]) ]
 		ifFalse: [			
 			checker classRules: rules.
 			checker checkClass: self currentModel entity ].
@@ -104,7 +104,9 @@ PulsarCritiquesModel >> reset [
 PulsarCritiquesModel >> rules [
 
 	self flag: #LATER. "This could be optimised to not being calculated each time" 
-	^ ReRuleManager visibleRuleClasses collect: [ :aClass | aClass new ]
+	^ ReRuleManager visibleRuleClasses 
+		select: [ :each | each enabled ]
+		thenCollect: [ :each | each new ]
 ]
 
 { #category : 'accessing' }
