@@ -103,7 +103,7 @@ PulsarCritiquesModel >> reset [
 { #category : 'private' }
 PulsarCritiquesModel >> rules [
 
-	self flag: #TODO. "This could be optimised to not being calculated each time" 
+	self flag: #LATER. "This could be optimised to not being calculated each time" 
 	^ ReRuleManager visibleRuleClasses collect: [ :aClass | aClass new ]
 ]
 
