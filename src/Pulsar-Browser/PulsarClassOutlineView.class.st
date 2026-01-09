@@ -1,3 +1,8 @@
+"
+A class outline view displays the class structure.
+
+
+"
 Class {
 	#name : 'PulsarClassOutlineView',
 	#superclass : 'PulsarBaseView',
@@ -55,20 +60,18 @@ PulsarClassOutlineView >> defaultLayout [
 { #category : 'events' }
 PulsarClassOutlineView >> eventEditorActivated: anAnnouncement [
 
-	self resetInteractionStatus.
-	"this may be slow, so I schedule it, to not break process..."
-	self schedule: [ 
+	self resetInteractionStatus. "this may be slow, so I schedule it, to not break process..."
+	self queueTask: [
 		| activatedModel outlineModel |
-		
 		"editor can be closed in the meantime (concurrency problems... :P).
-		 value holds an editor, I can then ask for its window to know if this 
-		 is still around."
+	 	 value holds an editor, I can then ask for its window to know if this 
+	 	 is still around."
 		anAnnouncement value window isOpen ifTrue: [
 			activatedModel := anAnnouncement value model.
-			outlineModel := activatedModel asOutlineClassModel.		
+			outlineModel := activatedModel asOutlineClassModel.
 			self model = outlineModel ifFalse: [
 				logger trace: outlineModel.
-				self model: outlineModel ].
+				self model: outlineModel ]. 
 			"visit after to be able to post-process"
 			activatedModel accept: self ] ]
 ]
@@ -76,13 +79,12 @@ PulsarClassOutlineView >> eventEditorActivated: anAnnouncement [
 { #category : 'events' }
 PulsarClassOutlineView >> eventMethodChanged: aMethodAnnouncement [
 
-	(self model isSameClass: aMethodAnnouncement method methodClass)
-		ifFalse: [ ^ self ].
+	(self model isSameClass: aMethodAnnouncement method methodClass) ifFalse: [ ^ self ].
 
 	logger trace: aMethodAnnouncement.
-	
-	self withClassSidesDo: [ :each |
-		self schedule: [ each updateMethods ] ]
+
+	self withClassSidesDo: [ :each | 
+		self queueTask: [ each updateMethods ] ]
 ]
 
 { #category : 'events' }

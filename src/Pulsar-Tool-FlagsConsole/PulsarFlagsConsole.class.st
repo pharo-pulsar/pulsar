@@ -226,12 +226,13 @@ PulsarFlagsConsole >> updatePresenter [
 	self model ifNil: [ ^ self ].
 
 	self application scheduleTask: [
-			| flags |
-			"first calculate outside (in the task)"
-			flags := self model flags. "now call the ui thread with the data already there"
-			self application defer: [
-					toolbarPresenter title: self model title.
-					listPresenter items: flags ] ]
+		| flags |
+		"first calculate outside (in the task)"
+		flags := self model flags. 
+		"now call the ui thread with the data already there"
+		self application defer: [
+			toolbarPresenter title: self model title.
+			listPresenter items: flags ] ]
 ]
 
 { #category : 'private' }

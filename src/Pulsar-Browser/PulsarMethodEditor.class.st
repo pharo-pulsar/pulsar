@@ -35,7 +35,7 @@ PulsarMethodEditor class >> defineActionsOn: aBuilder [
 			beDisplayedAsGroup;
 			addActionWith: [ :action | action 
 				name: 'Toggle link';
-				description: 'Toggle method selection link';
+				description: 'Toggle method selection link.', String cr, 'Link this editor with the method selection in the class outline.';
 				iconName: 'link';
 				action: [ :aContext | aContext doToggleSelectionLinkCommand: action ] ] ]
 ]

@@ -342,7 +342,7 @@ PulsarClassOutlineSideView >> doRequestNewMethod [
 { #category : 'private' }
 PulsarClassOutlineSideView >> entityActivated: anEntity [
 
-	self owner schedule: [ 
+	self owner queueTask: [ 
 		self deactivateMethodPreviewPopover ].
 	self owner notifyActivateEntity: anEntity
 ]
@@ -495,14 +495,13 @@ PulsarClassOutlineSideView >> listToolbarActions [
 
 { #category : 'private - preview' }
 PulsarClassOutlineSideView >> maybePopupPreview [
-	| active |
 
+	| active |
 	active := self isPreviewPopoverActive.
 	logger trace: active.
 
 	active ifFalse: [ ^ self ].
-	self owner schedule: [ 
-		self popupPreview ]
+	self owner queueTask: [ self popupPreview ]
 ]
 
 { #category : 'private' }

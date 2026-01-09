@@ -19,10 +19,10 @@ PulsarTaskAnnouncer >> announce: anAnnouncement [
 
 	"not the best if you want to record the announcements (see super 
 	 implementation), but well..."
-	(self isSuspended or: [ self isSynchronic: anAnnouncement ])
+	(self isSuspended or: [ self isSynchronic: anAnnouncement ]) 
 		ifTrue: [ ^ super announce: anAnnouncement ].
 
-	self schedule: [ 
+	self queueTask: [ 
 		super announce: anAnnouncement ]
 ]
 

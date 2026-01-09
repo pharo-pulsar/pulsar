@@ -77,30 +77,32 @@ PulsarRepositoryDiffEditor >> registerToEvents [
 { #category : 'initialization' }
 PulsarRepositoryDiffEditor >> updatePatchContents [
 	| contents nodes |
-
+	
 	nodes := Array streamContents: [ :stream |
 		self model withAllChildrenDo: [ :eachModel | 
 			eachModel hasChanges ifTrue: [ 
 				stream nextPut: eachModel ] ] ].
-		
-	contents := SpBoxLayout newVertical vAlignStart.
-	"40 is a magic number"
-	(nodes groupsOf: 40) do: [ :eachGroup | 
-		self schedule: [
-			self withWindowDo: #jobStart.
-			[ 
-				eachGroup do: [ :eachModel |
-					| patchPresenter |	
-					patchPresenter := (self instantiate: PulsarRepositoryPatchPresenter on: eachModel).
-					self application defer: [
-						contents add: patchPresenter ] ] ]
-			ensure: [ self withWindowDo: #jobEnd ] ] ].
-		
-	self application defer: [
-		self layout child: (self newPresenter 
-			layout: contents;
-			yourself) ] 
 
+	contents := SpBoxLayout newVertical vAlignStart. 
+	"40 is a magic number"
+	(nodes groupsOf: 40) do: [ :eachGroup |
+		self queueTask: [
+			self withWindowDo: #jobStart.
+			[
+				eachGroup do: [ :eachModel |
+					| patchPresenter |
+					patchPresenter := self 
+						instantiate: PulsarRepositoryPatchPresenter 
+						on: eachModel.
+					self application defer: [ 
+						contents add: patchPresenter ] ] ] 
+			ensure: [ 
+				self withWindowDo: #jobEnd ] ] ].
+
+	self application defer: [
+		self layout child: (self newPresenter
+			 layout: contents;
+			 yourself) ]
 ]
 
 { #category : 'initialization' }
@@ -108,19 +110,17 @@ PulsarRepositoryDiffEditor >> updatePresenter [
 	| contents |
 	
 	self model ifNil: [ ^ self ].
-	
+
 	lastDiffNodeModel = self model ifNil: [ ^ self ].
 	lastDiffNodeModel := self model.
-	
-	self mutex critical: [
-		self purgeTask.
-		"since large repositories (e.g. pharo itself) can have a lot of changes when working 
-		 on an outdated branch, we skip the diff for the root, as calculate this will take a 
-		 lot of time without giving real value to the user."
-		(self model isRoot and: [ self model isBigChange ])
-			ifTrue: [ ^ self updateRootContents ].
 
-		self schedule: [
+	self mutex critical: [
+		self purgeTask. 
+		"since large repositories (e.g. pharo itself) can have a lot of changes when working 
+	 	 on an outdated branch, we skip the diff for the root, as calculate this will take a 
+	 	 lot of time without giving real value to the user."
+		(self model isRoot and: [ self model isBigChange ]) ifTrue: [ ^ self updateRootContents ].
+		self queueTask: [ 
 			self updatePatchContents ] ]
 ]
 

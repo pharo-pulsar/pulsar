@@ -34,7 +34,8 @@ PulsarClassEditor class >> defineActionsOn: aBuilder [
 				action: [ :aContext | aContext doToggleDefinitionCommand: action ] ];
 			addActionWith: [ :action | action 
 				name: 'Toggle link';
-				description: 'Toggle class selection link';
+				description: 'Toggle class selection link.', String cr, 'Link this editor with the class selection in the project view.';
+				
 				iconName: 'link';
 				action: [ :aContext | aContext doToggleSelectionLinkCommand: action ] ] ]
 ]

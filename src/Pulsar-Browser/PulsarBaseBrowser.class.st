@@ -435,6 +435,7 @@ PulsarBaseBrowser >> resendAnnouncement: anAnnouncement [
 
 { #category : 'private - schedulling' }
 PulsarBaseBrowser >> schedule: aBlock [
+
 	self 
 		deprecated: 'This is confusing, use #scheduleTask:' 
 		transformWith: 

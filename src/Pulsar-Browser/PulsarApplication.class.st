@@ -102,7 +102,6 @@ PulsarApplication class >> startUp: resuming [
 PulsarApplication >> checkForLostChanges [
 	| lostChangesDetector |
 
-
 	lostChangesDetector := EpLostChangesDetector new.
 	lostChangesDetector hasLostChanges ifFalse: [ ^ self ].
 	
@@ -413,8 +412,8 @@ PulsarApplication >> snapshot [
 
 { #category : 'running' }
 PulsarApplication >> start [
-
 	| snapshot browser |
+	
 	snapshot := self class lastSnapshot.
 	(snapshot isNotNil and: [ snapshot hasRecords ])
 		ifTrue: [ snapshot restoreTo: self ]
