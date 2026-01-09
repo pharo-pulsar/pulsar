@@ -167,7 +167,7 @@ PulsarBaseBrowser >> editors [
 
 
 	^ self mutex critical: [ 
-		super presenters select: [ :each | each dockArea = SpPanelArea center ] ]
+		super presenters select: [ :each | each panelArea = SpPanelArea center ] ]
 ]
 
 { #category : 'events' }

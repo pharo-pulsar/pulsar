@@ -15,9 +15,7 @@ Class {
 { #category : 'defaults' }
 PulsarTranscript class >> defaultPanelPosition [
 
-	^ SpPanelPosition new 
-		area: SpPanelArea bottom;
-		yourself
+	^ SpPanelPosition bottomArea
 ]
 
 { #category : 'defaults' }

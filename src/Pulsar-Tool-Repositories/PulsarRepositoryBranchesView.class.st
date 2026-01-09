@@ -14,8 +14,7 @@ Class {
 { #category : 'defaults' }
 PulsarRepositoryBranchesView class >> defaultPanelPosition [
 
-	^ SpPanelPosition new
-		area: SpPanelArea start;
+	^ SpPanelPosition startArea
 		row: 2;
 		yourself
 ]

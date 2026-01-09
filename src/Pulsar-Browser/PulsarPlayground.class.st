@@ -18,9 +18,7 @@ Class {
 { #category : 'defaults' }
 PulsarPlayground class >> defaultPanelPosition [
 
-	^ SpPanelPosition new 
-		area: SpPanelArea bottom;
-		yourself
+	^ SpPanelPosition bottomArea
 ]
 
 { #category : 'defaults' }

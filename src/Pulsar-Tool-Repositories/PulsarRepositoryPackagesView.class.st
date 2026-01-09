@@ -11,8 +11,7 @@ Class {
 { #category : 'defaults' }
 PulsarRepositoryPackagesView class >> defaultPanelPosition [
 
-	^ SpPanelPosition new
-		area: SpPanelArea start;
+	^ SpPanelPosition startArea
 		row: 1;
 		column: 2;
 		yourself

@@ -11,9 +11,7 @@ Class {
 { #category : 'defaults' }
 PulsarBaseView class >> defaultPanelPosition [
 
-	^ SpPanelPosition new 
-		area: SpPanelArea center;
-		yourself
+	^ SpPanelPosition centerArea
 ]
 
 { #category : 'private' }

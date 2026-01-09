@@ -11,8 +11,7 @@ Class {
 { #category : 'defaults' }
 PulsarRepositoryCommitsView class >> defaultPanelPosition [
 
-	^ SpPanelPosition new
-		area: SpPanelArea start;
+	^ SpPanelPosition startArea
 		row: 3;
 		yourself
 ]

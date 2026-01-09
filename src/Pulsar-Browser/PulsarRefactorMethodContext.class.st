@@ -38,7 +38,7 @@ PulsarRefactorMethodContext >> doRenameMethod: aMethodModel [
 			rbModel := RBNamespace onEnvironment: rbClasses.
 
 			(ReRenameMethodDriver newApplication: self application)
-				scopes: { rbClasses }
+				scopes: { RBBrowserEnvironment new. rbClasses }
 				model: rbModel
 				renameMethodSignature: method
 				in: method methodClass;

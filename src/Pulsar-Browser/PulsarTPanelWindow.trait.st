@@ -14,9 +14,7 @@ Trait {
 { #category : 'defaults' }
 PulsarTPanelWindow classSide >> defaultPanelPosition [
 
-	^ SpPanelPosition new 
-		area: SpPanelArea center;
-		yourself
+	^ SpPanelPosition centerArea
 ]
 
 { #category : 'private - actions' }

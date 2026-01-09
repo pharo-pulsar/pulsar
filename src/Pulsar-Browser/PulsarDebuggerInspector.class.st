@@ -16,9 +16,7 @@ Class {
 { #category : 'defaults' }
 PulsarDebuggerInspector class >> defaultPanelPosition [
 
-	^ SpPanelPosition new 
-		area: SpPanelArea bottom;
-		yourself
+	^ SpPanelPosition bottomArea
 ]
 
 { #category : 'accessing - actions' }

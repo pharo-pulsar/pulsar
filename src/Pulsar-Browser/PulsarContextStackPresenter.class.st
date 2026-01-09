@@ -11,8 +11,7 @@ Class {
 { #category : 'defaults' }
 PulsarContextStackPresenter class >> defaultPanelPosition [
 
-	^ SpPanelPosition new 
-		area: SpPanelArea start;
+	^ SpPanelPosition startArea
 		row: 1;
 		yourself
 ]

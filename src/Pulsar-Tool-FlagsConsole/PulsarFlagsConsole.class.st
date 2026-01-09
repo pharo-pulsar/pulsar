@@ -20,9 +20,7 @@ Class {
 { #category : 'defaults' }
 PulsarFlagsConsole class >> defaultPanelPosition [
 
-	^ SpPanelPosition new 
-		area: SpPanelArea bottom;
-		yourself
+	^ SpPanelPosition bottomArea
 ]
 
 { #category : 'accessing' }

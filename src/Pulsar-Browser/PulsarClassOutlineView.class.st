@@ -25,9 +25,7 @@ Class {
 { #category : 'defaults' }
 PulsarClassOutlineView class >> defaultPanelPosition [
 
-	^ SpPanelPosition new
-		area: SpPanelArea end;
-		yourself
+	^ SpPanelPosition endArea
 ]
 
 { #category : 'private' }

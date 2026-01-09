@@ -18,7 +18,7 @@ PulsarTPanelWindowWithPlacedIcon >> panelPlaced: aPanelWidgetPresenter [
 	iconName := self panelPlacedIconName.
 	iconName ifNil: [ ^ self ].
 		
-	inHorizontalArea := { SpPanelArea top. SpPanelArea bottom } includes: aPanelWidgetPresenter panelPosition area.
+	inHorizontalArea := { SpPanelArea top. SpPanelArea bottom } includes: aPanelWidgetPresenter panelArea.
 	aPanelWidgetPresenter windowIcon: (inHorizontalArea
 		ifTrue: [ self iconNamed: iconName ]
 		ifFalse: [ nil ])

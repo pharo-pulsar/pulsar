@@ -17,9 +17,7 @@ Class {
 { #category : 'defaults' }
 PulsarMessageBrowser class >> defaultPanelPosition [
 
-	^ SpPanelPosition new 
-		area: SpPanelArea center;
-		yourself
+	^ SpPanelPosition centerArea
 ]
 
 { #category : 'initialization' }

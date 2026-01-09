@@ -19,8 +19,7 @@ Class {
 { #category : 'defaults' }
 PulsarStackView class >> defaultPanelPosition [
 
-	^ SpPanelPosition new 
-		area: SpPanelArea start;
+	^ SpPanelPosition startArea
 		row: 2;
 		yourself
 ]

@@ -15,9 +15,7 @@ Class {
 { #category : 'defaults' }
 PulsarRepositoryChangesView class >> defaultPanelPosition [
 
-	^ SpPanelPosition new
-		area: SpPanelArea start;
-		yourself
+	^ SpPanelPosition startArea
 ]
 
 { #category : 'initialization' }
