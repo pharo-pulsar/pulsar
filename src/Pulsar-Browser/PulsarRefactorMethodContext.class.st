@@ -31,17 +31,16 @@ PulsarRefactorMethodContext >> doPushUpMethod: aMethodModel [
 { #category : 'refactoring' }
 PulsarRefactorMethodContext >> doRenameMethod: aMethodModel [
 
-	self schedule: [ 
-		| rbClasses rbModel method |
-		
-		method := aMethodModel entity.
-		rbClasses := RBClassEnvironment classes: method methodClass withAllSubclasses.
-		rbModel := RBNamespace onEnvironment: rbClasses.
-		
-		(ReRenameMethodDriver newApplication: self application)
-			scopes: { rbClasses }
+	self scheduleTask: [
+			| rbClasses rbModel method |
+			method := aMethodModel entity.
+			rbClasses := RBClassEnvironment classes: method methodClass withAllSubclasses.
+			rbModel := RBNamespace onEnvironment: rbClasses.
+
+			(ReRenameMethodDriver newApplication: self application)
+				scopes: { rbClasses }
 				model: rbModel
 				renameMethodSignature: method
 				in: method methodClass;
-			runRefactoring ]
+				runRefactoring ]
 ]

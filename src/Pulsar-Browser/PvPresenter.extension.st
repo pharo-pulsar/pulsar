@@ -3,7 +3,7 @@ Extension { #name : 'PvPresenter' }
 { #category : '*Pulsar-Browser' }
 PvPresenter >> panelPosition [
 
-	^ SpPanelArea center
+	^ SpPanelPosition center
 ]
 
 { #category : '*Pulsar-Browser' }

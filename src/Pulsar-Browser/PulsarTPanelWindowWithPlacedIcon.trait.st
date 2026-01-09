@@ -14,6 +14,7 @@ Trait {
 { #category : 'private' }
 PulsarTPanelWindowWithPlacedIcon >> panelPlaced: aPanelWidgetPresenter [
 	| inHorizontalArea iconName |
+
 	iconName := self panelPlacedIconName.
 	iconName ifNil: [ ^ self ].
 		
