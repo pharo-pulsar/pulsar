@@ -91,6 +91,17 @@ PvOutlineClassModel >> collectProtocols [
 ]
 
 { #category : 'accessing - collecting' }
+PvOutlineClassModel >> collectTraitUsers [
+	
+	^ self entity users 
+		collect: [ :eachClass | 
+			PvClassModel 
+				newEnvironment: self environmentModel
+				entity: eachClass ]
+		as: Array
+]
+
+{ #category : 'accessing - collecting' }
 PvOutlineClassModel >> collectVariables [
 	
 	^ (self entity instanceSide slots

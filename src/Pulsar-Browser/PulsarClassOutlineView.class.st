@@ -80,9 +80,9 @@ PulsarClassOutlineView >> eventMethodChanged: aMethodAnnouncement [
 	(self model isSameClass: aMethodAnnouncement method methodClass) ifFalse: [ ^ self ].
 
 	logger trace: aMethodAnnouncement.
-
-	self withClassSidesDo: [ :each | 
-		self queueTask: [ each updateMethods ] ]
+	self withSidesDo: [ :each | 
+		self queueTask: [
+			each updateMethods ] ]
 ]
 
 { #category : 'events' }
@@ -114,7 +114,7 @@ PulsarClassOutlineView >> eventTestSuiteEnded: aTestSuiteEnded [
 
 	logger trace: aTestSuiteEnded.
 	
-	self withClassSidesDo: [ :each | 
+	self withSidesDo: [ :each | 
 		self schedule: [ each updateMethods ] ] 
 ]
 
@@ -197,7 +197,7 @@ PulsarClassOutlineView >> resetInteractionStatus [
 	"reset any status that may be active when interacting with the outline.
 	 e.g. active popovers"
 	 
-	 self withClassSidesDo: [ :each | each resetInteractionStatus ]
+	 self withSidesDo: [ :each | each resetInteractionStatus ]
 ]
 
 { #category : 'private' }
@@ -206,13 +206,20 @@ PulsarClassOutlineView >> tabActivated: aPresenter [
 	currentActiveSidePresenter := aPresenter
 ]
 
+{ #category : 'private' }
+PulsarClassOutlineView >> traitSidePresenter [
+
+	^ traitSidePresenter
+]
+
 { #category : 'initialization' }
 PulsarClassOutlineView >> updatePresenter [
 
 	logger trace.
 
-	self withClassSidesDo: [ :each | 
+	self withSidesDo: [ :each | 
 		each model: self model ].
+		
 	self updateTitle
 ]
 
@@ -228,7 +235,7 @@ PulsarClassOutlineView >> visitClassModel: aModel [
 	
 	logger trace: aModel.
 	
-	self withClassSidesDo: [ :each | 
+	self withSidesDo: [ :each | 
 		each visitClassModel: aModel ]
 ]
 
@@ -237,7 +244,7 @@ PulsarClassOutlineView >> visitMethodModel: aModel [
 
 	logger trace: aModel.
 
-	self withClassSidesDo: [ :each |
+	self withSidesDo: [ :each |
 		(each includesModel: aModel) 
 			ifTrue: [ tabLayout select: each ].
 		each visitMethodModel: aModel ]
@@ -250,11 +257,13 @@ PulsarClassOutlineView >> visitProjectModel: aModel [
 ]
 
 { #category : 'private' }
-PulsarClassOutlineView >> withClassSidesDo: aBlock [
+PulsarClassOutlineView >> withSidesDo: aBlock [
 
 	{ 
 		classSidePresenter.
-		instanceSidePresenter 
+		instanceSidePresenter.
+		traitSidePresenter.
 	}
-	do: [ :each | aBlock value: each ]
+	do: [ :each | 
+		aBlock value: each ]
 ]

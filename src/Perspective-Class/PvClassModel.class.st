@@ -282,6 +282,12 @@ PvClassModel >> isTestCase [
 	^ self entity isTestCase
 ]
 
+{ #category : 'testing' }
+PvClassModel >> isTrait [
+
+	^ self entity instanceSide isTrait
+]
+
 { #category : 'accessing' }
 PvClassModel >> lastTestExecutionResult [
 

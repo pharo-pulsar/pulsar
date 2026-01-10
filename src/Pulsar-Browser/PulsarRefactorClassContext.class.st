@@ -9,11 +9,11 @@ Class {
 { #category : 'refactors' }
 PulsarRefactorClassContext >> doDuplicateClass: aClassModel [
 
-	self schedule: [
-		(ReDuplicateClassDriver newApplication: self application)
-			className: aClassModel name asSymbol;
-			scopes: { RBBrowserEnvironment new };
-			runRefactoring ]
+	self scheduleTask: [
+			(ReDuplicateClassDriver newApplication: self application)
+				className: aClassModel name asSymbol;
+				scopes: { RBBrowserEnvironment new };
+				runRefactoring ]
 ]
 
 { #category : 'refactors' }
