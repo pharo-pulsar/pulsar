@@ -10,7 +10,8 @@ Class {
 		'commentPresenter',
 		'commentOverlayLayout',
 		'linkedToSelection',
-		'editorPanelPresenter'
+		'editorPanelPresenter',
+		'refactorPresenter'
 	],
 	#category : 'Pulsar-Browser-View-Editor',
 	#package : 'Pulsar-Browser',
@@ -219,6 +220,13 @@ PulsarClassEditor >> initializePresenters [
 
 	super initializePresenters.
 	
+	refactorPresenter := self newMenuButton
+		addStyle: 'flat'; 
+		icon: (self iconNamed: #refactor);
+		help: 'Refactors';
+		yourself.
+	toolbarPresenter addPresenter: refactorPresenter.
+	
 	self addStyle: 'dockClassEditor'.
 	commentPresenter := (self instantiate: SeEditorPresenter)
 		addStyle: 'stCode';
@@ -267,6 +275,13 @@ PulsarClassEditor >> updateComment [
 	
 	self updatingWhile: [
 		commentPresenter text: self model commentOrTemplate ]
+]
+
+{ #category : 'initialization' }
+PulsarClassEditor >> updateContentActions [
+
+	super updateContentActions.
+	refactorPresenter actions: (self model refactorActionsWithContextOn: self)
 ]
 
 { #category : 'initialization' }
