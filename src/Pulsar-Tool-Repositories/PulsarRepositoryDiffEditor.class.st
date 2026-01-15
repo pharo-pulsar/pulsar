@@ -1,8 +1,8 @@
 Class {
 	#name : 'PulsarRepositoryDiffEditor',
 	#superclass : 'PulsarBaseView',
-	#traits : 'PulsarTPanelWindow + PulsarTScheduling',
-	#classTraits : 'PulsarTPanelWindow classTrait + PulsarTScheduling classTrait',
+	#traits : 'PulsarTPanelWindow + PulsarTTaskWorker',
+	#classTraits : 'PulsarTPanelWindow classTrait + PulsarTTaskWorker classTrait',
 	#instVars : [
 		'toolbarPresenter',
 		'lastDiffNodeModel',
@@ -58,10 +58,10 @@ PulsarRepositoryDiffEditor >> newScheduler [
 { #category : 'private' }
 PulsarRepositoryDiffEditor >> purgeTask [
 
-	self scheduler purge.
-	[ self scheduler currentTaskExecution ifNotNil: #cancel ]
-	on: Error do: [ :e | 
-		logger info: 'Task was already cancelled but we do not care.' ]
+	self taskWorker purge.
+	[ self taskWorker currentTaskExecution ifNotNil: #cancel ]
+		on: Error
+		do: [ :e | logger info: 'Task was already cancelled but we do not care.' ]
 ]
 
 { #category : 'initialization' }
@@ -141,8 +141,8 @@ PulsarRepositoryDiffEditor >> updateRootContents [
 { #category : 'private' }
 PulsarRepositoryDiffEditor >> windowClosed [
 
-	scheduler ifNil: [ ^ self ].
+	taskWorker ifNil: [ ^ self ].
 	self purgeTask.
 	self scheduler stop.
-	scheduler := nil
+	taskWorker := nil
 ]

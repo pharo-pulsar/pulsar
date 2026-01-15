@@ -133,6 +133,17 @@ PulsarEditor >> doBrowseSendersCommand: anAction [
 ]
 
 { #category : 'private - actions' }
+PulsarEditor >> doDetachWindow [
+	| newBrowser |
+
+	newBrowser := PulsarGenericBrowser newApplication: self application.
+	self withPanelWindowDo: [ :w |
+		self window remove: w.
+		newBrowser addWindow: w ].
+	newBrowser open
+]
+
+{ #category : 'private - actions' }
 PulsarEditor >> doReset [
 
 	self updatingWhile: [ 

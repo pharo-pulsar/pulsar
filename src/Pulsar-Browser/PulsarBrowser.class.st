@@ -136,18 +136,17 @@ PulsarBrowser >> eventManyModelDeactivated: anAnnouncement [
 
 { #category : 'events' }
 PulsarBrowser >> eventTestSuiteEnded: aTestSuiteEnded [
+
 	| message |
+	self scheduleTask: [ self resendAnnouncement: aTestSuiteEnded ].
 
-	self schedule: [
-		self resendAnnouncement: aTestSuiteEnded ].
-
-	self schedule: [
-		message := 'Passed'.
-		aTestSuiteEnded testResult hasFailures ifTrue: [ message := 'Has failures' ].
-		aTestSuiteEnded testResult hasErrors ifTrue: [ message := 'Has errors' ].
-		self inform: ('Test run: <span foreground="{1}">{2}.</span>' format: {
-			self application colorForTestResultAt: aTestSuiteEnded testResult status.
-			message }) ]
+	self scheduleTask: [
+			message := 'Passed'.
+			aTestSuiteEnded testResult hasFailures ifTrue: [ message := 'Has failures' ].
+			aTestSuiteEnded testResult hasErrors ifTrue: [ message := 'Has errors' ].
+			self inform: ('Test run: <span foreground="{1}">{2}.</span>' format: {
+						 (self application colorForTestResultAt: aTestSuiteEnded testResult status).
+						 message }) ]
 ]
 
 { #category : 'private' }
@@ -203,6 +202,7 @@ PulsarBrowser >> initializeStatusbar [
 
 { #category : 'initialization' }
 PulsarBrowser >> initializeWindow: aWindowPresenter [
+
 	super initializeWindow: aWindowPresenter
 ]
 

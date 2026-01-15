@@ -56,12 +56,21 @@ PulsarRepositoriesView >> defineActionsOn: aBuilder [
 
 { #category : 'private - actions' }
 PulsarRepositoriesView >> doAddRepository [
+	| presenter dialog |
 	
-	((self instantiate: PulsarRegisterRepositoryDialog) 
-		onAccept: [ self repositoryModified ])
-		asModalWindow
-			owner: self window;
-			open
+	presenter := self instantiate: PulsarRegisterRepositoryDialog.
+	
+	dialog := presenter asModalWindow
+		owner: self window;
+		open.
+	dialog isOk ifFalse: [ ^ self ].
+	
+	self scheduleJob: [
+		| repository |
+		repository := presenter repositoryCreator createRepository.
+		repository register.
+		self model resetRepositories.
+		self updatePresenter ]
 ]
 
 { #category : 'private - actions' }

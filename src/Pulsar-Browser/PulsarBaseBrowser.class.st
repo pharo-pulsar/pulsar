@@ -424,6 +424,12 @@ PulsarBaseBrowser >> registerToSystemEvents [
 		when: SystemAnnouncement send: #resendAnnouncement: to: self
 ]
 
+{ #category : 'private' }
+PulsarBaseBrowser >> remove: aPanelWindowPresenter [
+
+	aPanelWindowPresenter forceClose
+]
+
 { #category : 'announcing' }
 PulsarBaseBrowser >> resendAnnouncement: anAnnouncement [
 
@@ -448,13 +454,7 @@ PulsarBaseBrowser >> schedule: aBlock [
 { #category : 'private - schedulling' }
 PulsarBaseBrowser >> scheduleTask: aBlock [
 
-	^ self scheduler scheduleTask: aBlock
-]
-
-{ #category : 'private - schedulling' }
-PulsarBaseBrowser >> scheduler [
-
-	^ self application scheduler
+	^ self application scheduleTask: aBlock
 ]
 
 { #category : 'private - actions' }
@@ -495,7 +495,7 @@ PulsarBaseBrowser >> togglePanelArea: aPanelArea [
 PulsarBaseBrowser >> windowClosed [
 
 	self presenters do: [ :each | each windowClosed ].
-	announcer stopScheduler.
+	announcer stopTaskWorker.
 	super windowClosed
 ]
 

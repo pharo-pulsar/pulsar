@@ -65,6 +65,12 @@ PulsarContextStackPresenter >> initializeWindow: aWindowPresenter [
 ]
 
 { #category : 'private' }
+PulsarContextStackPresenter >> panelPlaced: aPanelWidgetPresenter [
+
+	self maybeActivateIconOnPanel: aPanelWidgetPresenter
+]
+
+{ #category : 'private' }
 PulsarContextStackPresenter >> panelPlacedIconName [
 
 	^ 'stack'

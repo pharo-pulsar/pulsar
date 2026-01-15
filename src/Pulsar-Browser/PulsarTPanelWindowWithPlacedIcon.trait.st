@@ -12,7 +12,7 @@ Trait {
 }
 
 { #category : 'private' }
-PulsarTPanelWindowWithPlacedIcon >> panelPlaced: aPanelWidgetPresenter [
+PulsarTPanelWindowWithPlacedIcon >> maybeActivateIconOnPanel: aPanelWidgetPresenter [
 	| inHorizontalArea iconName |
 
 	iconName := self panelPlacedIconName.
@@ -22,6 +22,11 @@ PulsarTPanelWindowWithPlacedIcon >> panelPlaced: aPanelWidgetPresenter [
 	aPanelWidgetPresenter windowIcon: (inHorizontalArea
 		ifTrue: [ self iconNamed: iconName ]
 		ifFalse: [ nil ])
+]
+
+{ #category : 'private' }
+PulsarTPanelWindowWithPlacedIcon >> panelPlaced: aPanelWidgetPresenter [
+	self maybeActivateIconOnPanel: aPanelWidgetPresenter
 ]
 
 { #category : 'private' }

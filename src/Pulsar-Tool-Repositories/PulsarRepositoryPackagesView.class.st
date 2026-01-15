@@ -26,10 +26,29 @@ PulsarRepositoryPackagesView >> defaultLayout [
 		yourself
 ]
 
+{ #category : 'private - definitions' }
+PulsarRepositoryPackagesView >> defineActionsOn: aBuilder [
+	<dockActions>
+	
+	aBuilder addGroup: #actions with: [ :group | group 
+		addActionWith: [ :action | action 
+			name: 'Add Package';
+			iconName: #add;
+			description: 'Add a Package';
+			action: [ ] ]"; 
+		addActionWith: [ :action | action 
+			name: 'Load';
+			iconName: #load;
+			description: 'Load baseline';
+			actionEnabled: [ listPresenter selectedItem isBaseline ];
+			action: [ ] ]" ]
+]
+
 { #category : 'initialization' }
 PulsarRepositoryPackagesView >> initializePresenters [
 
 	toolbarPresenter := self instantiate: PulsarToolbarPresenter.
+	toolbarPresenter actions: (self actions actionsFor: #actions).
 	listPresenter := self newEasyListView
 		display: [ :aPackageModel | aPackageModel name ];
 		yourself

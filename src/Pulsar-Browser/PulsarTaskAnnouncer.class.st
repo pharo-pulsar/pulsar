@@ -1,8 +1,8 @@
 Class {
 	#name : 'PulsarTaskAnnouncer',
 	#superclass : 'Announcer',
-	#traits : 'PulsarTScheduling',
-	#classTraits : 'PulsarTScheduling classTrait',
+	#traits : 'PulsarTTaskWorker',
+	#classTraits : 'PulsarTTaskWorker classTrait',
 	#category : 'Pulsar-Browser-View-Browser',
 	#package : 'Pulsar-Browser',
 	#tag : 'View-Browser'

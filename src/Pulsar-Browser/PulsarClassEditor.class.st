@@ -196,9 +196,6 @@ PulsarClassEditor >> eventThemeChanged: ann [
 PulsarClassEditor >> extraContentActions [
 	| nearestWindow |
 
-	self flag: #TODO. "I am linearizing this because meh... so far, so good. I need 
-	to revisit this when I complete the refactor of actions"
-
 	nearestWindow := self nearWindowLike.
 	"no extra actions in popovers"
 	(nearestWindow isNotNil and: [ nearestWindow isPopover ])

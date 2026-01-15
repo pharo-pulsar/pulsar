@@ -24,6 +24,7 @@ PvAliasedVSCodeIconProvider >> createAliases [
 		'add'.						'add'.	
 		'closeAll'.					'close-all'.
 		'load'. 						'folder-opened'.
+		'open'. 						'folder-opened'.
 		'groupByMethod'. 			'extensions'.			"browser (extensions)"
 		'library'.					'library'.				"browser (system deps)"
 		'class'.						'symbol-class'.			"type"

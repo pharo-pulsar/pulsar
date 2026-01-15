@@ -5,10 +5,11 @@ Entry point of the IDE, it ensures all conditions are set before initiating sess
 Class {
 	#name : 'PulsarApplication',
 	#superclass : 'StPharoApplication',
-	#traits : 'SgaTApplication + PulsarTScheduling',
-	#classTraits : 'SgaTApplication classTrait + PulsarTScheduling classTrait',
+	#traits : 'SgaTApplication',
+	#classTraits : 'SgaTApplication classTrait',
 	#instVars : [
-		'standalone'
+		'standalone',
+		'scheduler'
 	],
 	#classInstVars : [
 		'lastSnapshot',
@@ -278,14 +279,6 @@ PulsarApplication >> newSettings [
 		yourself
 ]
 
-{ #category : 'private - factory' }
-PulsarApplication >> newSystemTools [
-
-	^ Smalltalk tools deepCopy
-		register: StMessageBrowser as: #messageList;
-		yourself
-]
-
 { #category : 'accessing' }
 PulsarApplication >> osPlatform [
 	"answer current platform (mac, windows or linux)"
@@ -319,6 +312,17 @@ PulsarApplication >> pulsarBrowser [
 	 ^ self windows 
 	 	detect: [ :each | each class = PulsarBrowser ]
 	 	ifNone: [ nil ]
+]
+
+{ #category : 'private - scheduling' }
+PulsarApplication >> queueTask: aBlock [
+	"queue task works on a single working, ensure tasks are queued 
+	 (they will happen in FIFO order)"
+
+	^ self scheduler schedule: [
+		aBlock 
+			on: Error 
+			fork: [ :e | e pass ] ]
 ]
 
 { #category : 'initialization' }
@@ -378,7 +382,16 @@ PulsarApplication >> schedule: aBlock [
 { #category : 'private - scheduling' }
 PulsarApplication >> scheduleTask: aBlock [
 
-	^ self scheduler schedule: aBlock
+	^ self scheduler schedule: [ 
+		aBlock 
+			on: Error 
+			fork: [ :e | e pass ] ]
+]
+
+{ #category : 'private - scheduling' }
+PulsarApplication >> scheduler [
+
+	^ scheduler ifNil: [ scheduler := self newScheduler ]
 ]
 
 { #category : 'accessing' }

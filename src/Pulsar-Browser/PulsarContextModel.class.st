@@ -37,6 +37,14 @@ PulsarContextModel >> actionModel [
 	^ self debuggerModel actionModel
 ]
 
+{ #category : 'converting' }
+PulsarContextModel >> asClassModel [
+
+	^ PvClassModel 
+		newEnvironment: self environmentModel 
+		entity: self methodClass
+]
+
 { #category : 'debug - testing' }
 PulsarContextModel >> canExecuteDebugCommand [
 

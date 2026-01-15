@@ -6,8 +6,8 @@ A class outline view displays the class structure.
 Class {
 	#name : 'PulsarClassOutlineView',
 	#superclass : 'PulsarBaseView',
-	#traits : 'PulsarTScheduling + PulsarTSnapshot',
-	#classTraits : 'PulsarTScheduling classTrait + PulsarTSnapshot classTrait',
+	#traits : 'PulsarTTaskWorker + PulsarTSnapshot',
+	#classTraits : 'PulsarTTaskWorker classTrait + PulsarTSnapshot classTrait',
 	#instVars : [
 		'toolbarPresenter',
 		'structureTreePresenter',
@@ -108,14 +108,11 @@ PulsarClassOutlineView >> eventModelChanged: anAnnouncement [
 { #category : 'events' }
 PulsarClassOutlineView >> eventTestSuiteEnded: aTestSuiteEnded [
 
-	(self model isTestCase
-		and: [ aTestSuiteEnded testResult classesTested includes: self model entity ])
-		ifFalse: [ ^ self ].
+	(self model isTestCase and: [ aTestSuiteEnded testResult classesTested includes: self model entity ]) ifFalse: [ ^ self ].
 
 	logger trace: aTestSuiteEnded.
-	
-	self withSidesDo: [ :each | 
-		self schedule: [ each updateMethods ] ] 
+
+	self withSidesDo: [ :each | self queueTask: [ each updateMethods ] ]
 ]
 
 { #category : 'initialization' }
