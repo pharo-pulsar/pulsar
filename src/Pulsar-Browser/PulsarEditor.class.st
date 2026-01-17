@@ -57,9 +57,9 @@ PulsarEditor class >> defineWindowActionsOn: aBuilder [
 			description: 'Maximize current window';
 			action: [ :aContext | aContext withPanelWindowDo: #maximize ] ];		
 		addActionWith: [ :action | action
-			name: 'Detach as Window';
+			name: 'Detach';
 			shortcutKey: Character arrowUp alt shift;
-			description: 'Detach this window from the Pulsar (open a new window)';
+			description: 'Detach this window from this browser (open a new window)';
 			action: [ :aContext | aContext doDetachWindow ] ] ]
 ]
 
@@ -134,13 +134,19 @@ PulsarEditor >> doBrowseSendersCommand: anAction [
 
 { #category : 'private - actions' }
 PulsarEditor >> doDetachWindow [
-	| newBrowser |
+	| newBrowser panelWindow |
 
-	newBrowser := PulsarGenericBrowser newApplication: self application.
-	self withPanelWindowDo: [ :w |
-		self window remove: w.
-		newBrowser addWindow: w ].
-	newBrowser open
+	newBrowser := PulsarDetachedBrowser 
+		newApplication: self application 
+		model: self window model.
+	panelWindow := self panelWindow.
+	
+	"it seems to look better if I open it first (the visualisation effect is nicer)"
+	newBrowser open.
+	"first remove it from this browser"
+	self window remove: panelWindow.
+	"now add it to the new one"
+	newBrowser addWindow: panelWindow
 ]
 
 { #category : 'private - actions' }

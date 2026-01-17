@@ -279,6 +279,7 @@ PulsarBrowser >> openProject: aBaselineClass [
 { #category : 'actions' }
 PulsarBrowser >> openRepositories [
 	| repositoryView |
+
 	repositoryView := self findPresenterClass: PulsarRepositoriesView.
 	repositoryView ifNil: [ 
 		repositoryView := self 
