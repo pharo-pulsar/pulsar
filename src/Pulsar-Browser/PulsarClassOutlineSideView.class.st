@@ -290,16 +290,16 @@ PulsarClassOutlineSideView >> doForceRemoveMethod [
 
 { #category : 'private - actions' }
 PulsarClassOutlineSideView >> doRemoveSelectedProtocol [
-
 	| protocolModel okToRemove |
+	
 	protocolModel := protocolListPresenter selectedItem.
 	protocolModel ifNil: [ ^ self ].
 
 	okToRemove := self application newConfirm
-		              title: 'Remove protocol';
-		              message: ('Do you really want to remove protocol "{1}" and all its methods?' format: { protocolModel name });
-		              acceptLabel: 'Remove';
-		              openModalWithParent: self window.
+		title: 'Remove protocol';
+		message: ('Do you really want to remove protocol "{1}" and all its methods?' format: { protocolModel name });
+		acceptLabel: 'Remove';
+		openModalWithParent: self window.
 	okToRemove ifFalse: [ ^ self ].
 
 	self halt
