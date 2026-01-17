@@ -122,6 +122,8 @@ PulsarFlagsModel >> title [
 { #category : 'updating' }
 PulsarFlagsModel >> updateWith: aModel [
 	| updatingModel |
+	
+	aModel ifNil: [ ^ false ].
 
 	updatingModel := aModel accept: self.
 	
