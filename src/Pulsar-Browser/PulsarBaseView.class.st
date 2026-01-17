@@ -20,6 +20,14 @@ PulsarBaseView >> colorNamed: aString [
 	^ self application colorNamed: aString
 ]
 
+{ #category : 'initialization' }
+PulsarBaseView >> initializePanelWindow: aPanelwindowPresenter [
+
+	super initializePanelWindow: aPanelwindowPresenter.
+	aPanelwindowPresenter whenTransferredDo: [ :ann | 
+		self panelTransferredFrom: ann fromWindow to: ann toWindow ]
+]
+
 { #category : 'scripting' }
 PulsarBaseView >> newEntityTree [
 
@@ -47,6 +55,12 @@ PulsarBaseView >> newPulsarToolbar [
 PulsarBaseView >> panelPosition [
 
 	^ self class defaultPanelPosition
+]
+
+{ #category : 'private' }
+PulsarBaseView >> panelTransferredFrom: fromWindow to: toWindow [ 
+
+	self notificationCenter: toWindow announcer
 ]
 
 { #category : 'initialization' }
