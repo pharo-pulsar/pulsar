@@ -102,7 +102,7 @@ PulsarChangesSessionPresenter >> initializePresenters [
 	entryListPresenter := self newEasyListView
 		addStyle: 'stList';
 		beMultipleSelection;
-		rowPresenterClass: PulsarEntryRowPresenter;
+		rowPresenterClass: PulsarEntryRow;
 		actions: self sessionActions;
 		yourself.
 	entryPatchPresenter := self instantiate: PulsarChangesEntryPatchPresenter.

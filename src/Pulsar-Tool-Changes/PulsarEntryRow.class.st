@@ -1,5 +1,5 @@
 Class {
-	#name : 'PulsarEntryRowPresenter',
+	#name : 'PulsarEntryRow',
 	#superclass : 'SpEasyAbstractRowPresenter',
 	#instVars : [
 		'descriptionPresenter',
@@ -10,7 +10,7 @@ Class {
 }
 
 { #category : 'layout' }
-PulsarEntryRowPresenter >> defaultLayout [
+PulsarEntryRow >> defaultLayout [
 
 	^ SpBoxLayout newHorizontal
 		spacing: 5;
@@ -20,7 +20,7 @@ PulsarEntryRowPresenter >> defaultLayout [
 ]
 
 { #category : 'initialization' }
-PulsarEntryRowPresenter >> initializePresenters [
+PulsarEntryRow >> initializePresenters [
 
 	self addStyle: 'stRow'.
 	self addStyle: 'dockChangeEntryRow'.
@@ -30,7 +30,7 @@ PulsarEntryRowPresenter >> initializePresenters [
 ]
 
 { #category : 'initialization' }
-PulsarEntryRowPresenter >> updatePresenter [
+PulsarEntryRow >> updatePresenter [
 	| content |
 	
 	self model ifNil: [ ^ self ].
