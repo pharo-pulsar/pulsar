@@ -333,7 +333,7 @@ PulsarBaseBrowser >> maybeDockView: aViewModel withActivation: anActivation [
 			editorPresenter := panelPresenter presenter ]
 		ifNil: [
 			editorPresenter := self 
-				instantiate: aViewModel dockEditorClass 
+				instantiate: aViewModel pulsarEditorClass 
 				on: aViewModel.
 			self 
 				addPresenter: editorPresenter 

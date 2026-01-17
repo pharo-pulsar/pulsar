@@ -20,12 +20,6 @@ PulsarHierarchyModel class >> on: aParentModel [
 ]
 
 { #category : 'accessing' }
-PulsarHierarchyModel >> dockEditorClass [
-
-	^ PulsarHierarchyPresenter
-]
-
-{ #category : 'accessing' }
 PulsarHierarchyModel >> fullName [
 
 	^ 'Hierarchy on ', self parentModel fullName
@@ -67,6 +61,12 @@ PulsarHierarchyModel >> parentModel [
 PulsarHierarchyModel >> parentModel: aModel [
 
 	parentModel := aModel
+]
+
+{ #category : 'accessing' }
+PulsarHierarchyModel >> pulsarEditorClass [
+
+	^ PulsarHierarchyPresenter
 ]
 
 { #category : 'accessing' }

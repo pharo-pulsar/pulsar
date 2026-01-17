@@ -9,12 +9,6 @@ Class {
 }
 
 { #category : 'accessing' }
-PulsarInspectorModel >> dockEditorClass [
-
-	^ PulsarInspector
-]
-
-{ #category : 'accessing' }
 PulsarInspectorModel >> fullName [
 
 	^ self windowTitle
@@ -32,6 +26,12 @@ PulsarInspectorModel >> iconComposite [
 PulsarInspectorModel >> iconName [
 
 	^ #inspector
+]
+
+{ #category : 'accessing' }
+PulsarInspectorModel >> pulsarEditorClass [
+
+	^ PulsarInspector
 ]
 
 { #category : 'accessing' }

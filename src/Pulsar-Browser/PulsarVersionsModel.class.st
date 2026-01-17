@@ -12,12 +12,6 @@ Class {
 }
 
 { #category : 'accessing' }
-PulsarVersionsModel >> dockEditorClass [
-
-	^ PulsarVersionsBrowser
-]
-
-{ #category : 'accessing' }
 PulsarVersionsModel >> fullName [
 
 	^ self name
@@ -33,6 +27,12 @@ PulsarVersionsModel >> iconName [
 PulsarVersionsModel >> name [
 
 	^ 'History of ', self ringDefinition fullName
+]
+
+{ #category : 'accessing' }
+PulsarVersionsModel >> pulsarEditorClass [
+
+	^ PulsarVersionsBrowser
 ]
 
 { #category : 'as yet unclassified' }

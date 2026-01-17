@@ -131,12 +131,6 @@ PulsarProjectModel >> detectRepository [
 ]
 
 { #category : 'accessing' }
-PulsarProjectModel >> dockEditorClass [
-
-	^ PulsarProjectEditor
-]
-
-{ #category : 'accessing' }
 PulsarProjectModel >> editorClass [
 
 	^ PvProjectEditorView
@@ -197,6 +191,12 @@ PulsarProjectModel >> projectEnvironment [
 		do: [ :eachPackage | 
 			eachPackage definedClasses do: [ :each | dict at: each name put: each ] ].
 	^ dict
+]
+
+{ #category : 'accessing' }
+PulsarProjectModel >> pulsarEditorClass [
+
+	^ PulsarProjectEditor
 ]
 
 { #category : 'accessing' }

@@ -184,12 +184,6 @@ PvMethodModel >> defineRefactorActionsOn: aBuilder [
 			action: [ :aContext | aContext doPushUpMethod: self ] ] ]
 ]
 
-{ #category : 'accessing - ui' }
-PvMethodModel >> dockEditorClass [
-
-	^ PulsarMethodEditor
-]
-
 { #category : 'accessing - editor' }
 PvMethodModel >> editorClass [
 
@@ -425,6 +419,12 @@ PvMethodModel >> protocolName [
 	^ self protocol 
 		ifNotNil: [ :aProtocol | aProtocol name ]
 		ifNil: [ 'no protocol' ]
+]
+
+{ #category : 'accessing - ui' }
+PvMethodModel >> pulsarEditorClass [
+
+	^ PulsarMethodEditor
 ]
 
 { #category : 'accessing - actions' }

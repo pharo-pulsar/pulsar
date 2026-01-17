@@ -5,14 +5,14 @@ Trait {
 	#tag : 'View-Base'
 }
 
-{ #category : 'accessing' }
-PulsarTEditable >> dockEditorClass [
-
-	^ self required
-]
-
 { #category : 'testing' }
 PulsarTEditable >> hasPulsarEditor [
 
-	^ self dockEditorClass isNotNil
+	^ self pulsarEditorClass isNotNil
+]
+
+{ #category : 'accessing' }
+PulsarTEditable >> pulsarEditorClass [
+
+	^ self required
 ]

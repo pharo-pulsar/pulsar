@@ -25,12 +25,6 @@ PulsarMessageModel class >> newEnvironment: anEnvironmentModel title: aString me
 ]
 
 { #category : 'accessing' }
-PulsarMessageModel >> dockEditorClass [
-
-	^ PulsarMessageBrowser
-]
-
-{ #category : 'accessing' }
 PulsarMessageModel >> environmentModel [
 
 	^ environmentModel
@@ -88,6 +82,12 @@ PulsarMessageModel >> methods [
 PulsarMessageModel >> methods: aCollection [
 
 	methods := aCollection
+]
+
+{ #category : 'accessing' }
+PulsarMessageModel >> pulsarEditorClass [
+
+	^ PulsarMessageBrowser
 ]
 
 { #category : 'accessing' }

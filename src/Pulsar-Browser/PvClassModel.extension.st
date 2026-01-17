@@ -1,7 +1,7 @@
 Extension { #name : 'PvClassModel' }
 
 { #category : '*Pulsar-Browser' }
-PvClassModel >> dockEditorClass [
+PvClassModel >> pulsarEditorClass [
 
 	^ PulsarClassEditor
 ]
