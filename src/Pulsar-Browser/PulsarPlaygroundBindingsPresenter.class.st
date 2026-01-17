@@ -93,7 +93,7 @@ PulsarPlaygroundBindingsPresenter >> initializePresenters [
 	bindingsListPresenter := self newEasyListView
 		addStyle: 'stList';
 		addStyle: 'dockPlaygroundBindingList';
-		rowPresenterClass: PulsarPlaygroundBindingRowPresenter;
+		rowPresenterClass: PulsarPlaygroundBindingRow;
 		yourself
 ]
 

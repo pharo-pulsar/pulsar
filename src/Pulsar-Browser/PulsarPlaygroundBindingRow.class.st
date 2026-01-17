@@ -1,5 +1,5 @@
 Class {
-	#name : 'PulsarPlaygroundBindingRowPresenter',
+	#name : 'PulsarPlaygroundBindingRow',
 	#superclass : 'SpEasyAbstractRowPresenter',
 	#instVars : [
 		'namePresenter',
@@ -12,13 +12,13 @@ Class {
 }
 
 { #category : 'private' }
-PulsarPlaygroundBindingRowPresenter >> announceRemove [
+PulsarPlaygroundBindingRow >> announceRemove [
 
 	self listView announce: (PulsarBindingRemoved newValue: self model)
 ]
 
 { #category : 'layout' }
-PulsarPlaygroundBindingRowPresenter >> defaultLayout [
+PulsarPlaygroundBindingRow >> defaultLayout [
 
 	^ SpBoxLayout newHorizontal
 		add: namePresenter expand: false;
@@ -28,7 +28,7 @@ PulsarPlaygroundBindingRowPresenter >> defaultLayout [
 ]
 
 { #category : 'initialization' }
-PulsarPlaygroundBindingRowPresenter >> initializePresenters [
+PulsarPlaygroundBindingRow >> initializePresenters [
 
 	namePresenter := self newLabel.
 	valuePresenter := self newLabel 
@@ -41,15 +41,15 @@ PulsarPlaygroundBindingRowPresenter >> initializePresenters [
 		yourself
 ]
 
-{ #category : 'as yet unclassified' }
-PulsarPlaygroundBindingRowPresenter >> isReadOnly: aBinding [
+{ #category : 'testing' }
+PulsarPlaygroundBindingRow >> isReadOnly: aBinding [
 
 	self flag: #TODO. "Hardcoded, this needs to be taken from a list elsewere (same that uses PulsarPlayground)" 
 	^ aBinding key asSymbol = #thisBrowser.
 ]
 
 { #category : 'initialization' }
-PulsarPlaygroundBindingRowPresenter >> updatePresenter [
+PulsarPlaygroundBindingRow >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	
