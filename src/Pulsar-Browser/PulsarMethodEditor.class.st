@@ -140,7 +140,9 @@ PulsarMethodEditor >> doToggleSelectionLinkCommand: anAction [
 { #category : 'events - system' }
 PulsarMethodEditor >> eventMethodModified: anAnnouncement [
 	| methodModified |
-
+	
+	anAnnouncement printToStdout.
+	
 	(self model entity = anAnnouncement method 
 		or: [ self model entity = anAnnouncement oldMethod ])
 		ifFalse: [ ^ self ].
@@ -163,10 +165,22 @@ PulsarMethodEditor >> eventMethodModified: anAnnouncement [
 
 { #category : 'events - system' }
 PulsarMethodEditor >> eventMethodRecategorized: anAnnouncement [
-
-	self model entity = anAnnouncement methodRecategorized
+	| methodModified |
+	
+	
+	methodModified := anAnnouncement methodRecategorized.
+	
+	(self model entity = methodModified)
 		ifFalse: [ ^ self ].
-
+		
+	"Is me who is updating, get out"
+	self isUpdating ifTrue: [ ^ self ].
+		
+	methodModified := anAnnouncement method.
+		
+	logger trace: methodModified.
+		
+	"update protocol"
 	self updateProtocol
 ]
 
@@ -286,6 +300,7 @@ PulsarMethodEditor >> registerToSystemEvents [
 
 	super registerToSystemEvents.
 	self announcer 
+		when: MethodRecategorized send: #eventMethodRecategorized: to: self;
 		when: MethodModified send: #eventMethodModified: to: self;
 		when: MethodRemoved send: #eventMethodRemoved: to: self
 ]
