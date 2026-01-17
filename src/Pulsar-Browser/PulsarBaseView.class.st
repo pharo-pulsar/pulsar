@@ -25,7 +25,9 @@ PulsarBaseView >> initializePanelWindow: aPanelwindowPresenter [
 
 	super initializePanelWindow: aPanelwindowPresenter.
 	aPanelwindowPresenter whenTransferredDo: [ :ann | 
-		self panelTransferredFrom: ann fromWindow to: ann toWindow ]
+		self 
+			panelTransferredFrom: ann fromWindow 
+			to: ann toWindow ]
 ]
 
 { #category : 'scripting' }
