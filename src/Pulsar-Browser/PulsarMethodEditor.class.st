@@ -141,8 +141,6 @@ PulsarMethodEditor >> doToggleSelectionLinkCommand: anAction [
 PulsarMethodEditor >> eventMethodModified: anAnnouncement [
 	| methodModified |
 	
-	anAnnouncement printToStdout.
-	
 	(self model entity = anAnnouncement method 
 		or: [ self model entity = anAnnouncement oldMethod ])
 		ifFalse: [ ^ self ].
@@ -192,6 +190,27 @@ PulsarMethodEditor >> eventMethodRemoved: anAnnouncement [
 		ifFalse: [ ^ self ].
 	
 	self forceClose
+]
+
+{ #category : 'events - system' }
+PulsarMethodEditor >> eventMethodRepackaged: anAnnouncement [
+	| methodModified |
+	
+	methodModified := anAnnouncement methodRepackaged.
+	
+	(self model entity = methodModified)
+		ifFalse: [ ^ self ].
+		
+	"Is me who is updating, get out"
+	self isUpdating ifTrue: [ ^ self ].
+		
+	methodModified := anAnnouncement method.
+		
+	logger trace: methodModified.
+		
+	"update protocol"
+	self updateProtocol.
+	self flag: #REVIEW. "Maybe I need to react to other stuff if method is repackaged?"
 ]
 
 { #category : 'events' }
@@ -301,6 +320,7 @@ PulsarMethodEditor >> registerToSystemEvents [
 	super registerToSystemEvents.
 	self announcer 
 		when: MethodRecategorized send: #eventMethodRecategorized: to: self;
+		when: MethodRepackaged send: #eventMethodRepackaged: to: self;
 		when: MethodModified send: #eventMethodModified: to: self;
 		when: MethodRemoved send: #eventMethodRemoved: to: self
 ]
