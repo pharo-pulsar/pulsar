@@ -143,6 +143,6 @@ PulsarRepositoryDiffEditor >> windowClosed [
 
 	taskWorker ifNil: [ ^ self ].
 	self purgeTask.
-	self scheduler stop.
+	self taskWorker stop.
 	taskWorker := nil
 ]

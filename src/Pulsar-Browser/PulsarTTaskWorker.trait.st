@@ -1,3 +1,6 @@
+"
+Add a task worker to be used in instances that require to queue tasks to be executed in FIFO order.
+"
 Trait {
 	#name : 'PulsarTTaskWorker',
 	#instVars : [

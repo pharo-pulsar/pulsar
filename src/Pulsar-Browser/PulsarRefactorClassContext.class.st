@@ -30,11 +30,11 @@ PulsarRefactorClassContext >> doRemoveClass: aClassModel [
 { #category : 'refactors' }
 PulsarRefactorClassContext >> doRenameClass: aClassModel [
 
-	self flag: #TODO. "Verify which system events are triggered on this" 
-	self schedule: [
-		(ReRenameClassDriver newApplication: self owner application) 
-			oldName: aClassModel name asSymbol;
-			model: RBBrowserEnvironment new;
-			scopes: { RBBrowserEnvironment new };
-			runRefactoring ]
+	self flag: #TODO. "Verify which system events are triggered on this"
+	self scheduleTask: [
+			(ReRenameClassDriver newApplication: self owner application)
+				oldName: aClassModel name asSymbol;
+				model: RBBrowserEnvironment new;
+				scopes: { RBBrowserEnvironment new };
+				runRefactoring ]
 ]

@@ -135,9 +135,9 @@ PulsarClassOutlineView >> initializePresenters [
 { #category : 'initialization' }
 PulsarClassOutlineView >> initializeWindow: aWindowPresenter [
 
-	aWindowPresenter 
+	aWindowPresenter
 		title: 'Outline';
-		whenClosedDo: [ self stopScheduler ]
+		whenClosedDo: [ self stopTaskWorker ]
 ]
 
 { #category : 'private' }
