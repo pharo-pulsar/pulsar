@@ -25,13 +25,13 @@ PulsarDetachedBrowser >> defineViewActionsOn: aBuilder [
 	aBuilder addGroup: #view with: [ :group | group 
 		beDisplayedAsGroup;
 		addActionWith: [ :action | action 
-			name: 'Add Class Ouline';
+			name: 'Open Class Outline';
 			description: 'Open a class outline panel';
-			action: [ self doAddClassOutlineView ] ] ]
+			action: [ self doOpenClassOutlineView ] ] ]
 ]
 
 { #category : 'private - actions' }
-PulsarDetachedBrowser >> doAddClassOutlineView [
+PulsarDetachedBrowser >> doOpenClassOutlineView [
 	| outlineView |
 
 	outlineView := (self findPresenterClass: PulsarClassOutlineView)
