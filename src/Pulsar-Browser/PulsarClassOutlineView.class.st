@@ -82,7 +82,9 @@ PulsarClassOutlineView >> eventMethodChanged: aMethodAnnouncement [
 	logger trace: aMethodAnnouncement.
 	self withSidesDo: [ :each | 
 		self queueTask: [
-			each updateMethods ] ]
+			"since the overview may be on refresh but this time *I need* 
+			 to refresh, I force the update"
+			each updateMethodsForce: true ] ]
 ]
 
 { #category : 'events' }
@@ -112,7 +114,8 @@ PulsarClassOutlineView >> eventTestSuiteEnded: aTestSuiteEnded [
 
 	logger trace: aTestSuiteEnded.
 
-	self withSidesDo: [ :each | self queueTask: [ each updateMethods ] ]
+	self withSidesDo: [ :each | 
+		self queueTask: [ each updateMethods ] ]
 ]
 
 { #category : 'initialization' }

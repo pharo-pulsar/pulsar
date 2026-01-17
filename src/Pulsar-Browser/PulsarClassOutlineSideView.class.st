@@ -596,9 +596,15 @@ PulsarClassOutlineSideView >> selectedMethodName [
 
 { #category : 'initialization' }
 PulsarClassOutlineSideView >> updateMethods [
+	
+	self updateMethodsForce: false
+]
+
+{ #category : 'initialization' }
+PulsarClassOutlineSideView >> updateMethodsForce: forceBoolean [
 	| items |
 	
-	updating ifTrue: [ ^ self ].
+	(updating and: [ forceBoolean not ]) ifTrue: [ ^ self ].
 
 	logger trace.
 
