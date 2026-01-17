@@ -10,7 +10,7 @@ Class {
 	#tag : 'View-Browser'
 }
 
-{ #category : 'accessing - actions' }
+{ #category : 'private - definitions' }
 PulsarBrowser class >> defineImageActionsOn: aBuilder [
 	<dockActions>
 
@@ -25,7 +25,7 @@ PulsarBrowser class >> defineImageActionsOn: aBuilder [
 			action: [ :aContext | aContext saveImage ] ] ]
 ]
 
-{ #category : 'accessing - actions' }
+{ #category : 'private - definitions' }
 PulsarBrowser class >> defineSpotterActionsOn: aBuilder [
 	<dockActions>
 
@@ -54,7 +54,7 @@ PulsarBrowser class >> defineSpotterActionsOn: aBuilder [
 		]
 ]
 
-{ #category : 'accessing - actions' }
+{ #category : 'private - definitions' }
 PulsarBrowser class >> defineToolActionsOn: aBuilder [
 	<dockActions>
 

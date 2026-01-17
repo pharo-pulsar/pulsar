@@ -18,7 +18,7 @@ Class {
 	#tag : 'View-Editor'
 }
 
-{ #category : 'accessing - actions' }
+{ #category : 'private - definitions' }
 PulsarClassEditor class >> defineActionsOn: aBuilder [
 	<dockActions>
 

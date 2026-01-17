@@ -12,7 +12,7 @@ Class {
 	#package : 'Pulsar-Tool-Changes'
 }
 
-{ #category : 'accessing - actions' }
+{ #category : 'private - definitions' }
 PulsarChangesSessionPresenter class >> defineActionsOn: aBuilder [
 	<dockActions>
 	

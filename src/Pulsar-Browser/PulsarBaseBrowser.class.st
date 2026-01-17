@@ -25,7 +25,7 @@ PulsarBaseBrowser class >> defaultWindowSize [
 	^ 1000@800
 ]
 
-{ #category : 'accessing - actions' }
+{ #category : 'private - definitions' }
 PulsarBaseBrowser class >> definePanelActionsOn: aBuilder [
 	<dockActions>
 
