@@ -7,5 +7,5 @@ PvPresenter >> panelPosition [
 ]
 
 { #category : '*Pulsar-Browser' }
-PvPresenter >> registerToPulsar: aPulsarBrowser [
+PvPresenter >> registerToBrowser: aPulsarBrowser [
 ]

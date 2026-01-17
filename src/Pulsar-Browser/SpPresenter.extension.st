@@ -7,5 +7,5 @@ SpPresenter >> panelPosition [
 ]
 
 { #category : '*Pulsar-Browser' }
-SpPresenter >> registerToPulsar: aPulsarBrowser [
+SpPresenter >> registerToBrowser: aPulsarBrowser [
 ]

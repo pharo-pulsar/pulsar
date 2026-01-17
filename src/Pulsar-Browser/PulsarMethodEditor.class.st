@@ -90,7 +90,7 @@ PulsarMethodEditor >> doBrowseVersionsCommand: anAction [
 	versionsPresenter := self
 		instantiate: PulsarVersionsBrowser 
 		on: self model newVersionsModel.
-	versionsPresenter registerToPulsar: self window.
+	versionsPresenter registerToBrowser: self window.
 
 	popover := self newPopover
 		presenter: versionsPresenter;

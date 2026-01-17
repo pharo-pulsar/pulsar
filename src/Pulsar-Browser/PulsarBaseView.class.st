@@ -50,16 +50,16 @@ PulsarBaseView >> panelPosition [
 ]
 
 { #category : 'initialization' }
-PulsarBaseView >> registerToEvents [
-	"override this to subscribe to notifications"
-]
-
-{ #category : 'initialization' }
-PulsarBaseView >> registerToPulsar: aPulsarBrowser [
+PulsarBaseView >> registerToBrowser: aPulsarBrowser [
 
 	"take the announcer of the dock to broadcast what happens"
 	self notificationCenter: aPulsarBrowser announcer.
 	self registerToEvents
+]
+
+{ #category : 'initialization' }
+PulsarBaseView >> registerToEvents [
+	"override this to subscribe to notifications"
 ]
 
 { #category : 'private' }

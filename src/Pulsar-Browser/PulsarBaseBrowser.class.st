@@ -118,7 +118,7 @@ PulsarBaseBrowser >> addTool: ann [
 PulsarBaseBrowser >> addWindow: aWindow [
 
 	self mutex critical: [ 
-		aWindow presenter registerToPulsar: self.
+		aWindow presenter registerToBrowser: self.
 		super addWindow: aWindow.
 		aWindow raise ]
 ]

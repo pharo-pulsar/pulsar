@@ -21,7 +21,7 @@ PulsarTNotificationCenter >> notificationCenter: anAnnouncer [
 ]
 
 { #category : 'initialization' }
-PulsarTNotificationCenter >> registerToPulsar: aPulsarBrowser [
+PulsarTNotificationCenter >> registerToBrowser: aPulsarBrowser [
 
 	self notificationCenter: aPulsarBrowser notificationCenter
 ]

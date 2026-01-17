@@ -122,7 +122,7 @@ PulsarPlayground >> doBrowseVersionsCommand: anAction [
 	versionsPresenter := self
 		instantiate: PulsarPlaygroundVersionsBrowser 
 		on: self model newVersionsModel.
-	versionsPresenter registerToPulsar: self window.
+	versionsPresenter registerToBrowser: self window.
 	versionsPresenter whenActivatedDo: [ :anEntry | 
 		codePresenter text: anEntry content ].
 
