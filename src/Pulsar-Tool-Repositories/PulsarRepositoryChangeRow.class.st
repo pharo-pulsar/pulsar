@@ -32,7 +32,7 @@ PulsarRepositoryChangeRow >> defaultLayout [
 PulsarRepositoryChangeRow >> initializePresenters [
 
 	self addStyle: 'stRow'.
-	self addStyle: 'dockRepositoryChangeRow'.
+	self addStyle: 'pulsarRepositoryChangeRow'.
 	
 	checkBoxPresenter := self newCheckBox.
 	imagePresenter := self newImage.

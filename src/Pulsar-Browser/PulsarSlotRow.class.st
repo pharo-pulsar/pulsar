@@ -25,7 +25,7 @@ PulsarSlotRow >> defaultLayout [
 PulsarSlotRow >> initializePresenters [
 
 	self addStyle: 'stRow'.
-	self addStyle: 'dockSlotRow'.
+	self addStyle: 'pulsarSlotRow'.
 
 	namePresenter := self newLabel.
 	slotPresenter := self newLabel

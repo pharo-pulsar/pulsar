@@ -23,7 +23,7 @@ PulsarProjectNodeRow >> defaultLayout [
 PulsarProjectNodeRow >> initializePresenters [
 
 	self addStyle: 'stRow'.
-	self addStyle: 'dockProjectNodeRow'.
+	self addStyle: 'pulsarProjectNodeRow'.
 
 	imagePresenter := self newImage.
 	labelPresenter := self newLabel

@@ -304,7 +304,7 @@ PulsarEditor >> initializePanelWindow: aWindowPresenter [
 { #category : 'initialization' }
 PulsarEditor >> initializePresenters [
 
-	self addStyle: 'dockEditor'.
+	self addStyle: 'pulsarEditor'.
 
 	toolbarPresenter := self instantiate: PulsarEditorToolbarPresenter.
 	toolbarPresenter actions: self editorToolbarActions.
@@ -365,7 +365,7 @@ PulsarEditor >> markDirty [
 PulsarEditor >> newDirtyMarkerPresenter [
 
 	^ self newToolbar
-		addStyle: 'dockDirtyMarker';
+		addStyle: 'pulsarDirtyMarker';
 		beIcons;
 		add: (self newToolbarButton
 			addStyle: 'accept';

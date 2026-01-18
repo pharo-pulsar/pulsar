@@ -211,7 +211,7 @@ PulsarRepositoryChangesView >> initialize [
 { #category : 'initialization' }
 PulsarRepositoryChangesView >> initializePresenters [
 
-	self addStyle: 'dockRepositoryChangesView'.
+	self addStyle: 'pulsarRepositoryChangesView'.
 
 	toolbarPresenter := self instantiate: PulsarToolbarPresenter.
 	toolbarPresenter actions: (self actions actionsFor: #gitActions).
@@ -219,7 +219,7 @@ PulsarRepositoryChangesView >> initializePresenters [
 
 	listPresenter := self newEasyTreeListView
 		addStyle: 'stTree';
-		addStyle: 'dockRepositoryChangesTree';
+		addStyle: 'pulsarRepositoryChangesTree';
 		rowPresenterClass: PulsarRepositoryChangeRow;
 		display: [ :aNode | aNode description ];
 		children: [ :aNode | aNode children ];

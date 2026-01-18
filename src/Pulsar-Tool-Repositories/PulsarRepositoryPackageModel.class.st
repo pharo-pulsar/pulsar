@@ -14,6 +14,18 @@ PulsarRepositoryPackageModel class >> on: aPackage [
 		yourself
 ]
 
+{ #category : 'testing' }
+PulsarRepositoryPackageModel >> isBaseline [
+
+	^ self name beginsWith: 'BaselineOf'
+]
+
+{ #category : 'testing' }
+PulsarRepositoryPackageModel >> isLoaded [
+
+	^ self repository isPackageLoaded: self
+]
+
 { #category : 'accessing' }
 PulsarRepositoryPackageModel >> name [
 

@@ -53,7 +53,7 @@ PulsarRepositoryCommitDialog >> initializeDialogWindow: aDialogWindowPresenter [
 { #category : 'initialization' }
 PulsarRepositoryCommitDialog >> initializePresenters [
 
-	self addStyle: 'dockRepositoryCommit'.
+	self addStyle: 'pulsarRepositoryCommit'.
 
 	placeholderPresenter := self newLabel
 		addStyle: 'dim';

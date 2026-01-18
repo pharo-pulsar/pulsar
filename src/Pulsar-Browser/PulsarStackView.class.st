@@ -207,7 +207,7 @@ PulsarStackView >> initialize [
 { #category : 'initialization' }
 PulsarStackView >> initializePresenters [
 
-	self addStyle: 'dockStack'.
+	self addStyle: 'pulsarStack'.
 
 	toolbarPresenter := self instantiate: PulsarToolbarPresenter.
 	toolbarPresenter actions: (self actions actionsFor: #editorStackGeneral).

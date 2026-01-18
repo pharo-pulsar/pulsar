@@ -78,7 +78,7 @@ PulsarRequestPresenter >> initializeButtons [
 { #category : 'initialization' }
 PulsarRequestPresenter >> initializePresenters [
 	
-	self addStyle: 'dockDialog'.
+	self addStyle: 'pulsarDialog'.
 	
 	self initializeButtons.
 	labelPresenter := self newLabel.

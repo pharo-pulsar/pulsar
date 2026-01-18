@@ -23,7 +23,7 @@ PulsarEntryRow >> defaultLayout [
 PulsarEntryRow >> initializePresenters [
 
 	self addStyle: 'stRow'.
-	self addStyle: 'dockChangeEntryRow'.
+	self addStyle: 'pulsarChangeEntryRow'.
 
 	iconPresenter := self newImage.
 	descriptionPresenter := self newLabel useMarkup

@@ -84,8 +84,8 @@ PulsarMessageBrowser >> initializePopover: aPopoverPresenter [
 { #category : 'initialization' }
 PulsarMessageBrowser >> initializePresenters [
 
-	self addStyle: 'dockFlyingBrowser'.
-	self addStyle: 'dockMessageFlyingBrowser'.
+	self addStyle: 'pulsarFlyingBrowser'.
+	self addStyle: 'pulsarMessageFlyingBrowser'.
 	
 	headerPresenter := self instantiate: PulsarEditorToolbarPresenter.
 	countPresenter := self newLabel

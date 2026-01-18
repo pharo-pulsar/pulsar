@@ -133,8 +133,8 @@ PulsarMethodEditor >> doToggleSelectionLinkCommand: anAction [
 	linkedToSelection := linkedToSelection not.
 	
 	linkedToSelection 
-		ifTrue: [ self addStyle: 'dockEditorLinked' ]
-		ifFalse: [ self removeStyle: 'dockEditorLinked' ]
+		ifTrue: [ self addStyle: 'pulsarEditorLinked' ]
+		ifFalse: [ self removeStyle: 'pulsarEditorLinked' ]
 ]
 
 { #category : 'events - system' }
@@ -287,7 +287,7 @@ PulsarMethodEditor >> initializePresenters [
 		yourself.
 	toolbarPresenter addPresenter: refactorPresenter.
 	
-	self addStyle: 'dockMethodEditor'
+	self addStyle: 'pulsarMethodEditor'
 ]
 
 { #category : 'private - announcing' }

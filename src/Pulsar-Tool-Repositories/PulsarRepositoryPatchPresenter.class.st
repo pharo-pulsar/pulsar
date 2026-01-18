@@ -24,7 +24,7 @@ PulsarRepositoryPatchPresenter >> defaultLayout [
 { #category : 'initialization' }
 PulsarRepositoryPatchPresenter >> initializePresenters [
 
-	self addStyle: 'dockRepositoryPatch'.
+	self addStyle: 'pulsarRepositoryPatch'.
 
 	headerPresenter := self instantiate: PulsarEditorToolbarPresenter.
 	patchPresenter := self instantiate: SpPatchPresenter.

@@ -30,8 +30,8 @@ PulsarPopoverControlBoxPresenter >> initializePresenters [
 
 	toolbarPresenter := self newToolbar
 		addStyle: 'stToolbar';
-		addStyle: 'dockToolbar';
-		addStyle: 'dockPopoverControlToolbar';
+		addStyle: 'pulsarToolbar';
+		addStyle: 'pulsarPopoverControlToolbar';
 		displayMode: self application toolbarDisplayMode;
 		fillWith: self popoverControlGroup;
 		yourself	

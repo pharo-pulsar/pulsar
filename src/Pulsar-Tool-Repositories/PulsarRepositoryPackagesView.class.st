@@ -46,10 +46,13 @@ PulsarRepositoryPackagesView >> defineActionsOn: aBuilder [
 
 { #category : 'initialization' }
 PulsarRepositoryPackagesView >> initializePresenters [
+	self addStyle: 'pulsarRepositoryPackages'.
 
 	toolbarPresenter := self instantiate: PulsarToolbarPresenter.
 	toolbarPresenter actions: (self actions actionsFor: #actions).
 	listPresenter := self newEasyListView
+		addStyle: 'stList';
+		rowPresenterClass: PulsarRepositoryPackageRow;
 		display: [ :aPackageModel | aPackageModel name ];
 		yourself
 ]
@@ -63,7 +66,7 @@ PulsarRepositoryPackagesView >> initializeWindow: aWindowPresenter [
 { #category : 'private' }
 PulsarRepositoryPackagesView >> maybeSort: aCollection [
 
-	^ aCollection sort: #name ascending
+	^ aCollection sort: #isLoaded descending, #isBaseline descending, #name ascending
 ]
 
 { #category : 'initialization' }

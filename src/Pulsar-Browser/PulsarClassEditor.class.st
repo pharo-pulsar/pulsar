@@ -127,8 +127,8 @@ PulsarClassEditor >> doToggleSelectionLinkCommand: anAction [
 	linkedToSelection := linkedToSelection not.
 	
 	linkedToSelection 
-		ifTrue: [ self addStyle: 'dockEditorLinked' ]
-		ifFalse: [ self removeStyle: 'dockEditorLinked' ]
+		ifTrue: [ self addStyle: 'pulsarEditorLinked' ]
+		ifFalse: [ self removeStyle: 'pulsarEditorLinked' ]
 ]
 
 { #category : 'events' }
@@ -224,7 +224,7 @@ PulsarClassEditor >> initializePresenters [
 		yourself.
 	toolbarPresenter addPresenter: refactorPresenter.
 	
-	self addStyle: 'dockClassEditor'.
+	self addStyle: 'pulsarClassEditor'.
 	commentPresenter := (self instantiate: SeEditorPresenter)
 		addStyle: 'stCode';
 		withHyperlinks;

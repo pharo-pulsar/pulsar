@@ -97,8 +97,8 @@ PulsarInspector >> initializePopover: aPopoverPresenter [
 PulsarInspector >> initializePresenters [
 
 	self
-		addStyle: 'dockFlyingBrowser';
-		addStyle: 'dockInspectorFlyingBrowser'.
+		addStyle: 'pulsarFlyingBrowser';
+		addStyle: 'pulsarInspectorFlyingBrowser'.
 		
 	headerPresenter := self instantiate: PulsarEditorToolbarPresenter.
 	inspectionsPresenter := self newNotebook

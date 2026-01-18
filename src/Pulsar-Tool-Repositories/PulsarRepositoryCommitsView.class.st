@@ -43,7 +43,7 @@ PulsarRepositoryCommitsView >> eventRepositoryModified: ann [
 { #category : 'initialization' }
 PulsarRepositoryCommitsView >> initializePresenters [
 	
-	self addStyle: 'dockRepositoryCommitView'.
+	self addStyle: 'pulsarRepositoryCommit'.
 
 	toolbarPresenter := self instantiate: PulsarToolbarPresenter.
 	toolbarPresenter actions: (self actions actionsFor: #gitActions).

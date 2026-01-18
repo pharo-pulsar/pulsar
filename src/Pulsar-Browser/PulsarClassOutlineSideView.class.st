@@ -407,7 +407,7 @@ PulsarClassOutlineSideView >> initializeMethods [
 
 	listPresenter := self newFilteringList 
 		addStyle: 'stList';
-		addStyle: 'dockMethodList';
+		addStyle: 'pulsarMethodList';
 		rowPresenterClass: PulsarMethodRow;
 		display: [ :aModel | aModel name ];
 		searchMatching: [ :aModel :aString | 
@@ -444,7 +444,7 @@ PulsarClassOutlineSideView >> initializeProtocols [
 
 	protocolListPresenter := self newEasyListView
 		addStyle: 'stList';
-		addStyle: 'dockProtocolList';
+		addStyle: 'pulsarProtocolList';
 		beMultipleSelection;
 		rowPresenterClass: PulsarProtocolRow;
 		searchMatching: [ :aModel :aString | 
@@ -461,7 +461,7 @@ PulsarClassOutlineSideView >> initializeVariables [
 
 	variablesListPresenter := self newEasyListView
 		addStyle: 'stList';
-		addStyle: 'dockVariablesList';
+		addStyle: 'pulsarVariablesList';
 		beMultipleSelection;
 		rowPresenterClass: PulsarSlotRow;
 		searchMatching: [ :aModel :aString | 
@@ -545,7 +545,7 @@ PulsarClassOutlineSideView >> popupPreview [
 	editorPresenter := (previewPopover 
 			instantiate: PulsarMethodEditor 
 			on: selectedModel)
-		addStyle: 'dockPreviewEditor';
+		addStyle: 'pulsarPreviewEditor';
 		notificationCenter: self owner notificationCenter;
 		yourself.
 		

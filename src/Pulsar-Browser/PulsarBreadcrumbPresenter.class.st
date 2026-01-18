@@ -26,7 +26,7 @@ PulsarBreadcrumbPresenter >> defaultLayout [
 PulsarBreadcrumbPresenter >> initializePresenters [
 
 	super initializePresenters. 
-	self addStyle: 'dockEditorBreadcrumb'
+	self addStyle: 'pulsarEditorBreadcrumb'
 ]
 
 { #category : 'accessing' }

@@ -96,8 +96,8 @@ PulsarVersionsBrowser >> initializePopover: aPopoverPresenter [
 { #category : 'initialization' }
 PulsarVersionsBrowser >> initializePresenters [
 
-	self addStyle: 'dockFlyingBrowser'.
-	self addStyle: 'dockVersionsFlyingBrowser'.
+	self addStyle: 'pulsarFlyingBrowser'.
+	self addStyle: 'pulsarVersionsFlyingBrowser'.
 	
 	headerPresenter := self instantiate: PulsarEditorToolbarPresenter.
 	versionListPresenter := self newEasyListView

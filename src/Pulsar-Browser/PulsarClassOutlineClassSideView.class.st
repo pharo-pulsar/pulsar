@@ -93,7 +93,7 @@ PulsarClassOutlineClassSideView >> initializeSharedVariables [
 	
 	sharedVariablesPresenter := self newEasyListView
 		addStyle: 'stList';
-		addStyle: 'dockSharedVariablesList';
+		addStyle: 'pulsarSharedVariablesList';
 		display: #name;
 		yourself
 ]

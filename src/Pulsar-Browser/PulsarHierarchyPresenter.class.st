@@ -75,8 +75,8 @@ PulsarHierarchyPresenter >> initializePresenters [
 	
 	self removeStyle: 'pvNavigation'.
 	self removeStyle: 'pvMethodHierarchyNavigation'.
-	self addStyle: 'dockFlyingBrowser'.
-	self addStyle: 'dockHierarchyFlyingBrowser'.
+	self addStyle: 'pulsarFlyingBrowser'.
+	self addStyle: 'pulsarHierarchyFlyingBrowser'.
 
 ]
 

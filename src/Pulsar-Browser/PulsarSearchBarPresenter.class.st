@@ -264,7 +264,7 @@ PulsarSearchBarPresenter >> initialize [
 { #category : 'initialization' }
 PulsarSearchBarPresenter >> initializePresenters [
 
-	self addStyle: 'dockSearchPanel'.
+	self addStyle: 'pulsarSearchPanel'.
 	
 	toggleReplaceButton := self newToggleButton
 		addStyle: 'flat';
@@ -281,9 +281,7 @@ PulsarSearchBarPresenter >> initializePresenters [
 		replaceTextPresenter.
 	}. 
 
-	self hide.
-	
-	
+	self hide
 ]
 
 { #category : 'initialization' }

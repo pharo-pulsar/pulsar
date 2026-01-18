@@ -424,7 +424,7 @@ PulsarProjectView >> initialize [
 { #category : 'initialization' }
 PulsarProjectView >> initializePresenters [
 
-	self addStyle: 'dockProjectView'.
+	self addStyle: 'pulsarProjectView'.
 
 	toolbarPresenter := self instantiate: PulsarToolbarPresenter.
 	toolbarPresenter actions: (self actions actionsFor: #project).	
@@ -436,7 +436,7 @@ PulsarProjectView >> initializePresenters [
 
 	listPresenter := self newEasyTreeListView
 		addStyle: 'stTree';
-		addStyle: 'dockProjectTree';
+		addStyle: 'pulsarProjectTree';
 		children: [ :aModel | aModel children ];
 		rowPresenterClass: PulsarProjectNodeRow;
 		searchMatching: [ :anEntity :pattern | anEntity matches: pattern ];

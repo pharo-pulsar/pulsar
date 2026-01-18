@@ -137,6 +137,7 @@ PulsarGtkConfiguration >> darkPaletteStyle [
 	/* repository commit */
 	--commit-outgoing: LightGreen;
 	--commit-incoming: Yellow;
+	--package-notloaded: DarkGray;
 }
 '
 ]
@@ -239,6 +240,7 @@ PulsarGtkConfiguration >> lightPaletteStyle [
 	/* repository commit */
 	--commit-outgoing: green;
 	--commit-incoming: orange;
+	--package-notloaded: #A0A0A0;
 }
 '
 ]
@@ -330,10 +332,10 @@ panelframetabbar tabbar tabboxchild tab { min-height: 0px; padding: 2px; border:
 panelframetabbar tabbar tabboxchild tab:selected { background-color: alpha(@accent_bg_color, 0.85); color: @accent_fg_color; }
 panelframetabbar tabbar widget.end-action  { min-height: 0px; padding: 0px; margin: 0px; }
 paneldock listview { background-color: var(--window-bg-color); }
-paneldock box.dockToolbarPanel { background-color: var(--window-bg-color); }
+paneldock box.pulsarToolbarPanel { background-color: var(--window-bg-color); }
 panelgrid listview { background-color: var(--view-bg-color); } /* reset central part so I can see clear */
 paneldock panelframe popover listview { background-color: var(--view-bg-color); }
-paneldock panelframe popover box.dockToolbarPanel { background-color: unset; }
+paneldock panelframe popover box.pulsarToolbarPanel { background-color: unset; }
 
 .stList listview, .stTree listview { font-size: 0.9em; } 
 .stTree columnview listview row cell { margin: 0px; padding: 2px; }
@@ -348,78 +350,79 @@ paneldock panelframe popover box.dockToolbarPanel { background-color: unset; }
 button.pvProtocol { font-weight: normal; }
 .pvProtocolChooser { min-width: 250px; min-height: 280px; }
 tab .tab-title label { font-size: 0.9em; }
-.dockProjectView .modified { color: green; }
+.pulsarProjectView .modified { color: green; }
 
-.dockProtocolRow label.unclassified { color: red; }
-.dockStack label.count { padding-right: 5px; }
-.dockToolbar { margin: 0px; padding: 0px; }
+.pulsarProtocolRow label.unclassified { color: red; }
+.pulsarStack label.count { padding-right: 5px; }
+.pulsarToolbar { margin: 0px; padding: 0px; }
 /* Editors */
-.dockEditorLinked { border-width: 1px; border-style: solid; border-color: @accent_bg_color; }
-.dockDirtyMarker button { padding: 2px; }
-.dockDirtyMarker .cancel { background-color: var(--button-bg-cancel-mark); }
-.dockDirtyMarker .accept { background-color: var(--button-bg-accept-mark); }
-.dockEditorBreadcrumb { font-size: 9pt; }
-.dockEditorBreadcrumb label.separator { padding: 0px 5px 0px 5px; }
-popover .dockPreviewEditor { min-width: 680px; min-height: 340px; }
-.dockBrowser { }
-.dockDialog, .dockFlyingBrowser { margin: 5px; border-spacing: 5px; }
+.pulsarEditorLinked { border-width: 1px; border-style: solid; border-color: @accent_bg_color; }
+.pulsarDirtyMarker button { padding: 2px; }
+.pulsarDirtyMarker .cancel { background-color: var(--button-bg-cancel-mark); }
+.pulsarDirtyMarker .accept { background-color: var(--button-bg-accept-mark); }
+.pulsarEditorBreadcrumb { font-size: 9pt; }
+.pulsarEditorBreadcrumb label.separator { padding: 0px 5px 0px 5px; }
+popover .pulsarPreviewEditor { min-width: 680px; min-height: 340px; }
+.pulsarBrowser { }
+.pulsarDialog, .pulsarFlyingBrowser { margin: 5px; border-spacing: 5px; }
 
-.dockSpotter { margin: 5px; border-spacing: 5px; min-width: 700px; }
-.dockSpotter entry.search { margin: 15px 10px 5px 10px; }
+.pulsarSpotter { margin: 5px; border-spacing: 5px; min-width: 700px; }
+.pulsarSpotter entry.search { margin: 15px 10px 5px 10px; }
 
-.dockMessageFlyingBrowser { min-width: 680px; min-height: 440px; }
-.dockInspectorFlyingBrowser { min-width: 680px; min-height: 440px; }
-.dockHierarchyFlyingBrowser { min-width: 450px; min-height: 350px; }
-.dockVersionsFlyingBrowser { min-width: 680px; min-height: 440px; }
-.dockFlyingBrowser notebook tabs tab { padding: 2px; }
-.dockFlyingBrowser notebook tabs tab label { font-size: 0.9em }
-.dockPopoverControlToolbar { margin: 0px; padding: 0px 0px 0px 10px; }
-.dockDebuggerToolbar { background-color: var(--window-bg-color); }
-.dockDebuggerToolbar .stToolbar { padding: 1px; }
-.dockPlaygroundBindingsFlyingBrowser { min-width: 400px; min-height: 240px; }
+.pulsarMessageFlyingBrowser { min-width: 680px; min-height: 440px; }
+.pulsarInspectorFlyingBrowser { min-width: 680px; min-height: 440px; }
+.pulsarHierarchyFlyingBrowser { min-width: 450px; min-height: 350px; }
+.pulsarVersionsFlyingBrowser { min-width: 680px; min-height: 440px; }
+.pulsarFlyingBrowser notebook tabs tab { padding: 2px; }
+.pulsarFlyingBrowser notebook tabs tab label { font-size: 0.9em }
+.pulsarPopoverControlToolbar { margin: 0px; padding: 0px 0px 0px 10px; }
+.pulsarDebuggerToolbar { background-color: var(--window-bg-color); }
+.pulsarDebuggerToolbar .stToolbar { padding: 1px; }
+.pulsarPlaygroundBindingsFlyingBrowser { min-width: 400px; min-height: 240px; }
 /***
  * METHOD DECORATIONS 
  */
-.dockMethodRow .trait { 
+.pulsarMethodRow .trait { 
 	font-style: italic;  
 	text-decoration-line: underline;
 }
-.dockMethodRow .abstract { 
+.pulsarMethodRow .abstract { 
 	text-decoration-line: underline;
 	text-decoration-style: double;
 }
-.dockMethodRow .extension { 
+.pulsarMethodRow .extension { 
 	font-style: italic; 
 	text-decoration-line: underline;
 	text-decoration-style: dotted;
 }
-.dockMethodRow .test-unknown { }
-.dockMethodRow .test-passed { color: var(--test-passed); }
-.dockMethodRow .test-error { color: var(--test-error); }
-.dockMethodRow .test-failure { color: var(--test-failure); }
+.pulsarMethodRow .test-unknown { }
+.pulsarMethodRow .test-passed { color: var(--test-passed); }
+.pulsarMethodRow .test-error { color: var(--test-error); }
+.pulsarMethodRow .test-failure { color: var(--test-failure); }
 
 /* Repositories (I can also have .notLoaded and .upToDate) */
-.dockRepositories .dockRepositoryRow label.missing { color: var(--repository-error); }
-.dockRepositories .dockRepositoryRow label.detached { color: var(--repository-detached); } 
-.dockRepositories .dockRepositoryRow label.modified { color: var(--repository-modified); }
-.dockRepositories .dockRepositoryRow label.error { color: var(--repository-error); }
+.pulsarRepositories .pulsarRepositoryRow label.missing { color: var(--repository-error); }
+.pulsarRepositories .pulsarRepositoryRow label.detached { color: var(--repository-detached); } 
+.pulsarRepositories .pulsarRepositoryRow label.modified { color: var(--repository-modified); }
+.pulsarRepositories .pulsarRepositoryRow label.error { color: var(--repository-error); }
 
 /* search text */
 /* this is a hack because for now I do not want to lose time on this */
-.dockSearchPanel grid { margin: -12px -20px -12px -16px; padding: 0px; border-spacing: 0px; border: 0px; border-top-width: 0px;  border-spacing: 4px; } 
-.dockSearchPanel .count { margin-right: 10px; }
-.dockSearchPanel .buttonToggleSearch { border-radius: 0px; padding: 2px; margin-left: 4px; }
+.pulsarSearchPanel grid { margin: -12px -20px -12px -16px; padding: 0px; border-spacing: 0px; border: 0px; border-top-width: 0px;  border-spacing: 4px; } 
+.pulsarSearchPanel .count { margin-right: 10px; }
+.pulsarSearchPanel .buttonToggleSearch { border-radius: 0px; padding: 2px; margin-left: 4px; }
 
 /* repository */
-
-.dockRepositoryPatch { margin: 5px; padding: 5px; background-color: var(--card-bg-color); border-radius: 4px; }
-.dockRepositoryPatch box.dockToolbarPanel { background-color: transparent; }
-.dockRepositoryPatch box.dockToolbarPanel box { font-size: 1.0em; margin: 2px 2px 6px 2px; }
-.dockRepositoryCommit label { margin-left: 5px; }
-.dockRepositoryBranchRow label.head { font-weight: bold; }
-.dockRepositoryRow .extra label.outgoing, .dockRepositoryBranchRow .extra label.outgoing { color: var(--commit-outgoing); }
-.dockRepositoryRow .extra label.incoming, .dockRepositoryBranchRow .extra label.incoming{ color: var(--commit-incoming); }
-.dockRepositoryCommitView label.outgoing { color: var(--commit-outgoing); }
+.pulsarRepositoryPatch { margin: 5px; padding: 5px; background-color: var(--card-bg-color); border-radius: 4px; }
+.pulsarRepositoryPatch box.pulsarToolbarPanel { background-color: transparent; }
+.pulsarRepositoryPatch box.pulsarToolbarPanel box { font-size: 1.0em; margin: 2px 2px 6px 2px; }
+.pulsarRepositoryCommit label { margin-left: 5px; }
+.pulsarRepositoryBranchRow label.head { font-weight: bold; }
+.pulsarRepositoryRow .extra label.outgoing, .pulsarRepositoryBranchRow .extra label.outgoing { color: var(--commit-outgoing); }
+.pulsarRepositoryRow .extra label.incoming, .pulsarRepositoryBranchRow .extra label.incoming{ color: var(--commit-incoming); }
+.pulsarRepositoryCommitView label.outgoing { color: var(--commit-outgoing); }
+.pulsarRepositoryPackageRow label.loaded { }
+.pulsarRepositoryPackageRow label.notloaded { color: var(--package-notloaded); }
 '
 ]
 

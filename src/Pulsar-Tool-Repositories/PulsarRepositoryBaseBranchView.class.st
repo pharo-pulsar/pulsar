@@ -34,7 +34,7 @@ PulsarRepositoryBaseBranchView >> entitySelected: anEntity [
 { #category : 'initialization' }
 PulsarRepositoryBaseBranchView >> initializePresenters [
 
-	self addStyle: 'dockRepositoryBranch'.
+	self addStyle: 'pulsarRepositoryBranch'.
 
 	toolbarPresenter := self instantiate: PulsarToolbarPresenter. 
 	toolbarPresenter actions: self toolbarActions.

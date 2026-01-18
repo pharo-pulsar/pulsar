@@ -77,11 +77,11 @@ PulsarDebuggerToolbarPresenter >> defaultLayout [
 { #category : 'initialization' }
 PulsarDebuggerToolbarPresenter >> initializePresenters [
 
-	self addStyle: 'dockDebuggerToolbar'.
+	self addStyle: 'pulsarDebuggerToolbar'.
 
 	toolbarPresenter := self newToolbar
 		addStyle: 'stToolbar';
-		addStyle: 'dockDebuggerActionsToolbar';
+		addStyle: 'pulsarDebuggerActionsToolbar';
 		displayMode: self application toolbarDisplayMode;
 		fillWith: self toolbarActions
 ]

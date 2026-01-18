@@ -127,7 +127,7 @@ PulsarRepositoriesView >> hasSelectedRepository [
 { #category : 'initialization' }
 PulsarRepositoriesView >> initializePresenters [
 
-	self addStyle: 'dockRepositories'.
+	self addStyle: 'pulsarRepositories'.
 
 	listToolbarPresenter := self instantiate: PulsarToolbarPresenter.
 	listToolbarPresenter actions: (self actions actionsFor: #actions).

@@ -57,7 +57,7 @@ PulsarEditorToolbarPresenter >> initializePresenters [
 	titlePresenter := self instantiate: PulsarBreadcrumbPresenter.
 	contentActionPresenter := self newToolbar
 		addStyle: 'stToolbar';
-		addStyle: 'dockToolbar';
+		addStyle: 'pulsarToolbar';
 		displayMode: self application toolbarDisplayMode;
 		yourself
 ]

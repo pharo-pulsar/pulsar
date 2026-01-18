@@ -56,7 +56,7 @@ PulsarNewSlotPresenter >> initializeDialogWindow: aDialogWindowPresenter [
 { #category : 'initialization' }
 PulsarNewSlotPresenter >> initializePresenters [
 
-	self addStyle: 'dockDialog'.
+	self addStyle: 'Dialog'.
 
 	namePresenter := self newTextInput.
 	slotPresenter := self newDropDown.

@@ -191,7 +191,7 @@ PulsarSpotter >> initializeDialogWindow: aDialogWindowPresenter [
 PulsarSpotter >> initializePresenters [
 
 	self addStyle: 'stSpotter'.
-	self addStyle: 'dockSpotter'.
+	self addStyle: 'pulsarSpotter'.
 
 	emptyPresenter := self newLabel 
 		addStyle: 'dim';

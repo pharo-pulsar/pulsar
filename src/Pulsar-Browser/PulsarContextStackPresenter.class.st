@@ -48,10 +48,11 @@ PulsarContextStackPresenter >> initializePanelWindow: aWindowPresenter [
 { #category : 'initialization' }
 PulsarContextStackPresenter >> initializePresenters [
 
-	self addStyle: 'dockDebugger'.
+	self addStyle: 'pulsarDebugger'.
+
 	listPresenter := self newEasyListView
 		addStyle: 'stList';
-		addStyle: 'dockContextStackList';
+		addStyle: 'pulsarContextStackList';
 		display: [ :aModel | aModel name ];
 		yourself
 ]

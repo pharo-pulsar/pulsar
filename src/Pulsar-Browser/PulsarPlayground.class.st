@@ -194,7 +194,7 @@ PulsarPlayground >> initializePanelWindow: aWindowPanelPresenter [
 { #category : 'initialization' }
 PulsarPlayground >> initializePresenters [
 
-	self addStyle: 'dockPlayground'.
+	self addStyle: 'pulsarPlayground'.
 
 	actionsPresenter := self newToolbar
 		displayMode: self application toolbarDisplayMode;

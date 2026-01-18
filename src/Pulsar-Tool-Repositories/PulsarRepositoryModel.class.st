@@ -115,6 +115,12 @@ PulsarRepositoryModel >> isOutgoingCommit: aCommitModel [
 	^ false
 ]
 
+{ #category : 'testing' }
+PulsarRepositoryModel >> isPackageLoaded: aPackageModel [
+
+	^ self entity workingCopy isLoadedPackageNamed: aPackageModel name
+]
+
 { #category : 'accessing' }
 PulsarRepositoryModel >> localBranches [
 	| branches |

@@ -100,11 +100,11 @@ PulsarToolbarPresenter >> initialize [
 { #category : 'initialization' }
 PulsarToolbarPresenter >> initializePresenters [
 
-	self addStyle: 'dockToolbarPanel'.
+	self addStyle: 'pulsarToolbarPanel'.
 
 	actionToolbarPresenter := self newToolbar
 		addStyle: 'stToolbar';
-		addStyle: 'dockToolbar';
+		addStyle: 'pulsarToolbar';
 		displayMode: self application toolbarDisplayMode;
 		yourself	
 ]

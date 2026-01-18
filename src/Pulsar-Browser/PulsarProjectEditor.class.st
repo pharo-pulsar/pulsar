@@ -86,7 +86,7 @@ PulsarProjectEditor >> doAddProject [
 { #category : 'initialization' }
 PulsarProjectEditor >> initializePresenters [
 
-	self addStyle: 'dockProjectEditor'.
+	self addStyle: 'pulsarProjectEditor'.
 	
 	dependentListToolbarPresenter := self instantiate: PulsarToolbarPresenter.
 	dependentListToolbarPresenter addPresenter: (self newMenuButton 

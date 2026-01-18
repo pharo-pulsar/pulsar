@@ -25,7 +25,7 @@ PulsarSpotterRow >> defaultLayout [
 PulsarSpotterRow >> initializePresenters [
 
 	self addStyle: 'stRow'.
-	self addStyle: 'dockSpotterRow'.
+	self addStyle: 'pulsarSpotterRow'.
 	
 	iconPresenter := self newImage.
 	namePresenter := self newLabel.

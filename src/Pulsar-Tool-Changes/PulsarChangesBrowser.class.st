@@ -38,8 +38,8 @@ PulsarChangesBrowser >> initialize [
 { #category : 'initialization' }
 PulsarChangesBrowser >> initializePresenters [
 
-	self addStyle: 'dockBrowser'.
-	self addStyle: 'dockChanges'.
+	self addStyle: 'pulsarBrowser'.
+	self addStyle: 'pulsarChanges'.
 
 	"list of logs"
 	logListPresenter := self newEasyListView

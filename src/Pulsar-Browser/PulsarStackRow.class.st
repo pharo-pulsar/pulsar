@@ -23,7 +23,7 @@ PulsarStackRow >> defaultLayout [
 PulsarStackRow >> initializePresenters [
 
 	self addStyle: 'stRow'.
-	self addStyle: 'dockStackRow'.
+	self addStyle: 'pulsarStackRow'.
 	
 	iconPresenter := self newImage.
 	namePresenter := self newLabel

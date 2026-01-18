@@ -48,7 +48,7 @@ PulsarRepositoryRow >> defaultLayout [
 PulsarRepositoryRow >> initializePresenters [
 
 	self addStyle: 'stRow'.
-	self addStyle: 'dockRepositoryRow'.
+	self addStyle: 'pulsarRepositoryRow'.
 	
 	labelPresenter := self newLabel.
 	extraPresenter := self newPresenter

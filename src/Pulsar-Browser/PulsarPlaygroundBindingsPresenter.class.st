@@ -78,8 +78,8 @@ PulsarPlaygroundBindingsPresenter >> eventBindingRemoved: ann [
 PulsarPlaygroundBindingsPresenter >> initializePresenters [
 
 	self
-		addStyle: 'dockFlyingBrowser';
-		addStyle: 'dockPlaygroundBindingsFlyingBrowser'.
+		addStyle: 'pulsarFlyingBrowser';
+		addStyle: 'pulsarPlaygroundBindingsFlyingBrowser'.
 		
 	toolbarPresenter := self instantiate: PulsarToolbarPresenter.
 	toolbarPresenter actions: self actions.
@@ -92,7 +92,7 @@ PulsarPlaygroundBindingsPresenter >> initializePresenters [
 
 	bindingsListPresenter := self newEasyListView
 		addStyle: 'stList';
-		addStyle: 'dockPlaygroundBindingList';
+		addStyle: 'PlaygroundBindingList';
 		rowPresenterClass: PulsarPlaygroundBindingRow;
 		yourself
 ]
