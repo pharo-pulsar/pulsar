@@ -28,8 +28,7 @@ PulsarTPanelWindow >> initializePanelWindow: aWindowPresenter [
 	super initializePanelWindow: aWindowPresenter.
 	aWindowPresenter 
 		whenPresentedDo: [ self recordLastPresented ];
-		whenFocusReceivedDo: [ self notifyEditorActivated ];
-		whenPlacedDo: [ self panelPlaced: aWindowPresenter ]
+		whenFocusReceivedDo: [ self notifyEditorActivated ]
 ]
 
 { #category : 'initialization' }

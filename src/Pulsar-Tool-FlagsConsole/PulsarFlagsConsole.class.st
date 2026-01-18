@@ -6,8 +6,6 @@ the console filters flags by package (the default) and class.
 Class {
 	#name : 'PulsarFlagsConsole',
 	#superclass : 'PulsarBaseView',
-	#traits : 'PulsarTPanelWindowWithPlacedIcon',
-	#classTraits : 'PulsarTPanelWindowWithPlacedIcon classTrait',
 	#instVars : [
 		'#toolbarPresenter',
 		'#listPresenter',
@@ -125,14 +123,6 @@ PulsarFlagsConsole >> initialize [
 	super initialize.
 	self registerToEvents.
 	self registerToSystemEvents
-]
-
-{ #category : 'initialization' }
-PulsarFlagsConsole >> initializePanelWindow: aWindowPresenter [
-
-	super initializePanelWindow: aWindowPresenter.
-	aWindowPresenter 
-		whenPlacedDo: [ self panelPlaced: aWindowPresenter ]
 ]
 
 { #category : 'initialization' }

@@ -294,7 +294,6 @@ PulsarEditor >> initializePanelWindow: aWindowPresenter [
 	aWindowPresenter
 		actions: self windowActions;
 		whenPresentedDo: [ self panelPresented ];
-		whenPlacedDo: [ "self panelPlaced" ];
 		whenFocusReceivedDo: [ self panelFocused ];
 		whenSaveDo: [ :ann | ann success: self saveContent ];
 		whenDiscardDo: [ :ann | 

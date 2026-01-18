@@ -6,8 +6,6 @@ the console filters critics by method (the default), class and package.
 Class {
 	#name : 'PulsarCritiquesConsole',
 	#superclass : 'PulsarBaseView',
-	#traits : 'PulsarTPanelWindowWithPlacedIcon',
-	#classTraits : 'PulsarTPanelWindowWithPlacedIcon classTrait',
 	#instVars : [
 		'toolbarPresenter',
 		'listPresenter',
@@ -133,14 +131,6 @@ PulsarCritiquesConsole >> initialize [
 	super initialize.
 	self registerToEvents.
 	self registerToSystemEvents
-]
-
-{ #category : 'initialization' }
-PulsarCritiquesConsole >> initializePanelWindow: aWindowPresenter [
-
-	super initializePanelWindow: aWindowPresenter.
-	aWindowPresenter 
-		whenPlacedDo: [ self panelPlaced: aWindowPresenter ]
 ]
 
 { #category : 'initialization' }

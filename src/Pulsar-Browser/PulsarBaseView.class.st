@@ -1,8 +1,8 @@
 Class {
 	#name : 'PulsarBaseView',
 	#superclass : 'SpPresenter',
-	#traits : 'SpTModel + PulsarTActionContainer + PulsarTNotificationCenter + PulsarTSnapshot',
-	#classTraits : 'SpTModel classTrait + PulsarTActionContainer classTrait + PulsarTNotificationCenter classTrait + PulsarTSnapshot classTrait',
+	#traits : 'SpTModel + PulsarTActionContainer + PulsarTNotificationCenter + PulsarTSnapshot + PulsarTPanelWindowWithPlacedIcon',
+	#classTraits : 'SpTModel classTrait + PulsarTActionContainer classTrait + PulsarTNotificationCenter classTrait + PulsarTSnapshot classTrait + PulsarTPanelWindowWithPlacedIcon classTrait',
 	#category : 'Pulsar-Browser-View-Base',
 	#package : 'Pulsar-Browser',
 	#tag : 'View-Base'
@@ -24,10 +24,9 @@ PulsarBaseView >> colorNamed: aString [
 PulsarBaseView >> initializePanelWindow: aPanelwindowPresenter [
 
 	super initializePanelWindow: aPanelwindowPresenter.
-	aPanelwindowPresenter whenTransferredDo: [ :ann | 
-		self 
-			panelTransferredFrom: ann fromWindow 
-			to: ann toWindow ]
+	aPanelwindowPresenter 
+		whenPlacedDo: [ self panelPlaced: aPanelwindowPresenter ];
+		whenTransferredDo: [ :ann | self panelTransferredFrom: ann fromWindow to: ann toWindow ]
 ]
 
 { #category : 'scripting' }

@@ -147,7 +147,7 @@ PvAliasedVSCodeIconProvider >> createAliases [
 		"repositories"
 		'commit'.					'check'. "'git-commit'."
 		'branch'.					'repo-forked'.
-		'merge'.						'git-merge'.
+		'merge'.						'merge'.
 		'pull'.						'repo-pull'.
 		'push'.						'repo-push'.
 		'fetch'.						'sync'.
@@ -157,6 +157,7 @@ PvAliasedVSCodeIconProvider >> createAliases [
 		'critiques'.					'bell'.
 		'firstActivationTime'. 		'arrow-up'. 
 		'lastActivationTime'.		'arrow-down'.
+		'overview'.					'map'.
 	 }
 ]
 

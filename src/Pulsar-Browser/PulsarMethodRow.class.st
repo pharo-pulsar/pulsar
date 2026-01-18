@@ -21,7 +21,7 @@ PulsarMethodRow >> defaultLayout [
 PulsarMethodRow >> initializePresenters [
 
 	self addStyle: 'stRow'.
-	self addStyle: 'MethodRow'.
+	self addStyle: 'pulsarMethodRow'.
 
 	namePresenter := self newLabel
 ]

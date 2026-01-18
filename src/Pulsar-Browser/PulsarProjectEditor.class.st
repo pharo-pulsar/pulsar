@@ -84,6 +84,15 @@ PulsarProjectEditor >> doAddProject [
 ]
 
 { #category : 'initialization' }
+PulsarProjectEditor >> initializePanelWindow: aWindowPresenter [
+
+	super initializePanelWindow: aWindowPresenter.
+	aWindowPresenter 
+		whenPresentedDo: [ self recordLastPresented ];
+		whenFocusReceivedDo: [ self notifyEditorActivated ]
+]
+
+{ #category : 'initialization' }
 PulsarProjectEditor >> initializePresenters [
 
 	self addStyle: 'pulsarProjectEditor'.

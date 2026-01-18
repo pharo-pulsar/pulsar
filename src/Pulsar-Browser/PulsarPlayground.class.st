@@ -1,8 +1,8 @@
 Class {
 	#name : 'PulsarPlayground',
 	#superclass : 'PulsarBaseView',
-	#traits : 'PulsarTSnapshot + PulsarTPanelWindowWithPlacedIcon',
-	#classTraits : 'PulsarTSnapshot classTrait + PulsarTPanelWindowWithPlacedIcon classTrait',
+	#traits : 'PulsarTSnapshot',
+	#classTraits : 'PulsarTSnapshot classTrait',
 	#instVars : [
 		'codePresenter',
 		'toolbarPresenter',
@@ -182,13 +182,6 @@ PulsarPlayground >> initialize [
 	model := PulsarPlaygroundModel new.
 	super initialize.
 	self registerToSystemEvents
-]
-
-{ #category : 'initialization' }
-PulsarPlayground >> initializePanelWindow: aWindowPanelPresenter [
-
-	super initializePanelWindow: aWindowPanelPresenter.
-	aWindowPanelPresenter whenPlacedDo: [ self panelPlaced: aWindowPanelPresenter ]
 ]
 
 { #category : 'initialization' }

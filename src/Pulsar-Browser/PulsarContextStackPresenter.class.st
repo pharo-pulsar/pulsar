@@ -1,8 +1,6 @@
 Class {
 	#name : 'PulsarContextStackPresenter',
 	#superclass : 'PulsarCollectionView',
-	#traits : 'PulsarTPanelWindowWithPlacedIcon',
-	#classTraits : 'PulsarTPanelWindowWithPlacedIcon classTrait',
 	#category : 'Pulsar-Browser-Tool-Debugger',
 	#package : 'Pulsar-Browser',
 	#tag : 'Tool-Debugger'
@@ -35,14 +33,6 @@ PulsarContextStackPresenter >> findFirstRelevantStackIndex [
 		counter := counter + 1 ].
 	
 	^ 1
-]
-
-{ #category : 'initialization' }
-PulsarContextStackPresenter >> initializePanelWindow: aWindowPresenter [
-
-	super initializePanelWindow: aWindowPresenter.
-	aWindowPresenter 
-		whenPlacedDo: [ self panelPlaced: aWindowPresenter ]
 ]
 
 { #category : 'initialization' }
