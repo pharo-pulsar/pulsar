@@ -90,6 +90,8 @@ MetaMetacello load: [ :spec | spec
 
 "we ban this rule because is annoying since we use LF as end line (in linux). Also this should be agnostic, we should not care about it."
 ReMethodSourceContainsLinefeedsRule enabled: false.
+"And this one, since there is no real need of this and is also annoying :P"
+ReCompactSourceCodeRule enabled: false.
 ```
 
 **IMPORTANT!!! For all this to work you need to add your keys to your account in the forge!** 
