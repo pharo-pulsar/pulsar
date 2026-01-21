@@ -1,8 +1,8 @@
 Class {
 	#name : 'PulsarInspectorModel',
 	#superclass : 'StInspectorModel',
-	#traits : 'PulsarTModel + PulsarTEditable',
-	#classTraits : 'PulsarTModel classTrait + PulsarTEditable classTrait',
+	#traits : 'PulsarTModel + PulsarTEditable + PulsarTModelSnapshot',
+	#classTraits : 'PulsarTModel classTrait + PulsarTEditable classTrait + PulsarTModelSnapshot classTrait',
 	#category : 'Pulsar-Browser-Tool-Inspector',
 	#package : 'Pulsar-Browser',
 	#tag : 'Tool-Inspector'
