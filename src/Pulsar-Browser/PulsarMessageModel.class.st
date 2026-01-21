@@ -1,8 +1,8 @@
 Class {
 	#name : 'PulsarMessageModel',
 	#superclass : 'Object',
-	#traits : 'PulsarTModel + PulsarTEditable',
-	#classTraits : 'PulsarTModel classTrait + PulsarTEditable classTrait',
+	#traits : 'PulsarTModel + PulsarTEditable + PulsarTModelSnapshot',
+	#classTraits : 'PulsarTModel classTrait + PulsarTEditable classTrait + PulsarTModelSnapshot classTrait',
 	#instVars : [
 		'title',
 		'methods',

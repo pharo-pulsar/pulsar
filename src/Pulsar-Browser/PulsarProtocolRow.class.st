@@ -26,7 +26,7 @@ PulsarProtocolRow >> defaultLayout [
 PulsarProtocolRow >> initializePresenters [
 
 	self addStyle: 'stRow'.
-	self addStyle: 'ProtocolRow'.
+	self addStyle: 'pulsarProtocolRow'.
 
 	iconPresenter := self newImage.
 	namePresenter := self newLabel.
