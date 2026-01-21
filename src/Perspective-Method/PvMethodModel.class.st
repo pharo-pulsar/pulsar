@@ -52,6 +52,13 @@ PvMethodModel >> actionDecorators [
 	^ self actions actionsFor: #decoration
 ]
 
+{ #category : 'accessing - actions' }
+PvMethodModel >> actionsWithContextOn: aContextPresenter [
+
+	^ (self actions actionsFor: 'refactors') 
+		copyWithContext: (PulsarRefactorMethodContext on: aContextPresenter)
+]
+
 { #category : 'converting' }
 PvMethodModel >> asClassModel [
 	
@@ -181,7 +188,7 @@ PvMethodModel >> defineRefactorActionsOn: aBuilder [
 		addActionWith: [ :action | action
 			name: ('Push down {1}' format: { self name });
 			description: 'Push down method';
-			action: [ :aContext | aContext doPushUpMethod: self ] ] ]
+			action: [ :aContext | aContext doPushDownMethod: self ] ] ]
 ]
 
 { #category : 'accessing - editor' }
@@ -425,13 +432,6 @@ PvMethodModel >> protocolName [
 PvMethodModel >> pulsarEditorClass [
 
 	^ PulsarMethodEditor
-]
-
-{ #category : 'accessing - actions' }
-PvMethodModel >> refactorActionsWithContextOn: aContextPresenter [
-
-	^ (self actions actionsFor: #refactors) 
-		copyWithContext: (PulsarRefactorMethodContext on: aContextPresenter)
 ]
 
 { #category : 'updating' }

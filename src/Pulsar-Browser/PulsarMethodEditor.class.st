@@ -341,7 +341,7 @@ PulsarMethodEditor >> updateBreadcrumbs [
 PulsarMethodEditor >> updateContentActions [
 
 	super updateContentActions.
-	refactorPresenter actions: (self model refactorActionsWithContextOn: self)
+	refactorPresenter actions: (self model actionsWithContextOn: self) beDisplayedAsGroup
 ]
 
 { #category : 'initialization' }

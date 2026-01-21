@@ -17,6 +17,13 @@ PvPackageModel class >> newEnvironment: anEnvironmentModel project: projectModel
 		yourself
 ]
 
+{ #category : 'accessing - actions' }
+PvPackageModel >> actionsWithContextOn: aContextPresenter [
+
+	^ (self actions actionsFor: 'refactors') 
+		copyWithContext: (PulsarRefactorPackageContext on: aContextPresenter)
+]
+
 { #category : 'accessing' }
 PvPackageModel >> addPackageTagNamed: aString [
 
@@ -118,13 +125,6 @@ PvPackageModel >> project [
 PvPackageModel >> project: aProjectModel [
 
 	projectModel := aProjectModel
-]
-
-{ #category : 'accessing - actions' }
-PvPackageModel >> refactorActionsWithContextOn: aContextPresenter [
-
-	^ (self actions actionsFor: #refactors) 
-		copyWithContext: (PulsarRefactorPackageContext on: aContextPresenter)
 ]
 
 { #category : 'actions' }

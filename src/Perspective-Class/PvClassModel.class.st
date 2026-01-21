@@ -45,6 +45,13 @@ PvClassModel >> actionDecorators [
 	^ self actions actionsFor: #decoration
 ]
 
+{ #category : 'accessing - actions' }
+PvClassModel >> actionsWithContextOn: aContextPresenter [
+
+	^ (self actions actionsFor: 'refactors') 
+		copyWithContext: (PulsarRefactorClassContext on: aContextPresenter)
+]
+
 { #category : 'updating' }
 PvClassModel >> addProtocolNamed: aName [
 
@@ -317,13 +324,6 @@ PvClassModel >> printOn: stream [
 
 	super printOn: stream.
 	stream << '(' << self name << ')'
-]
-
-{ #category : 'accessing - actions' }
-PvClassModel >> refactorActionsWithContextOn: aContextPresenter [
-
-	^ (self actions actionsFor: #refactors) 
-		copyWithContext: (PulsarRefactorClassContext on: aContextPresenter)
 ]
 
 { #category : 'actions' }

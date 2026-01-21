@@ -70,6 +70,14 @@ PvBaseModel >> actionsWithContext: aContext [
 		collect
 ]
 
+{ #category : 'accessing - actions' }
+PvBaseModel >> actionsWithContextOn: aContextPresenter [
+	"This are refactors associated to the model objects. 
+	 Not all of them have, in those cases (as default) we answer an empty group."
+
+	^ SpActionGroup new
+]
+
 { #category : 'testing' }
 PvBaseModel >> canBeRemoved [
 
@@ -253,14 +261,6 @@ PvBaseModel >> pulsarEditorClass [
 PvBaseModel >> realModel [
 
 	^ self
-]
-
-{ #category : 'accessing - actions' }
-PvBaseModel >> refactorActionsWithContextOn: aContextPresenter [
-	"This are refactors associated to the model objects. 
-	 Not all of them have, in those cases (as default) we answer an empty group."
-
-	^ SpActionGroup new
 ]
 
 { #category : 'accessing' }
