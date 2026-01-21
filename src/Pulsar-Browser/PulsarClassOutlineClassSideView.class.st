@@ -28,35 +28,6 @@ PulsarClassOutlineClassSideView >> collectVariables [
 	^ self model collectClassVariables
 ]
 
-{ #category : 'layout' }
-PulsarClassOutlineClassSideView >> defaultLayout [
-
-	^ SpPanedLayout newVertical
-		positionOfSlider: 360;
-		add: (SpPanedLayout newVertical 
-			positionOfSlider: 200;
-			add: (SpPanedLayout newVertical 
-				add: (SpBoxLayout newVertical
-					add: variablesToolbarPresenter expand: false;
-					add: variablesListPresenter;
-					yourself);
-				add: (SpBoxLayout newVertical
-					add: sharedVariablesToolbarPresenter expand: false;
-					add: sharedVariablesPresenter;
-					yourself);
-				yourself);
-			add: (SpBoxLayout newVertical
-				add: protocolToolbarPresenter expand: false;
-				add: protocolListPresenter;
-				yourself);
-			yourself);
-		add: (SpBoxLayout newVertical
-			add: listToolbarPresenter expand: false;
-			add: listPresenter;
-			yourself);
-		yourself
-]
-
 { #category : 'private - actions' }
 PulsarClassOutlineClassSideView >> doAddSharedVariableCommand: aCommand [
 	| variableName dialog result |
@@ -76,6 +47,35 @@ PulsarClassOutlineClassSideView >> doAddSharedVariableCommand: aCommand [
 	sharedVariablesPresenter selectItem: (variablesListPresenter items 
 		detect: [ :each | each name = variableName ]).
 	self owner notifyEntityChanged: self model asClassModel
+]
+
+{ #category : 'layout' }
+PulsarClassOutlineClassSideView >> horizontalLayout [
+
+	^ SpPanedLayout newHorizontal
+		positionOfSlider: 360;
+		add: (SpPanedLayout newHorizontal 
+			positionOfSlider: 200;
+			add: (SpPanedLayout newHorizontal 
+				add: (SpBoxLayout newVertical
+					add: variablesToolbarPresenter expand: false;
+					add: variablesListPresenter;
+					yourself);
+				add: (SpBoxLayout newVertical
+					add: sharedVariablesToolbarPresenter expand: false;
+					add: sharedVariablesPresenter;
+					yourself);
+				yourself);
+			add: (SpBoxLayout newVertical
+				add: protocolToolbarPresenter expand: false;
+				add: protocolListPresenter;
+				yourself);
+			yourself);
+		add: (SpBoxLayout newVertical
+			add: listToolbarPresenter expand: false;
+			add: listPresenter;
+			yourself);
+		yourself
 ]
 
 { #category : 'initialization' }
@@ -145,6 +145,35 @@ PulsarClassOutlineClassSideView >> updateSharedVariables [
 		ifTrue: [ sharedVariablesPresenter selectFirst ].
 		
 	"activeSharedVariables := variablesListPresenter selectedItems"
+]
+
+{ #category : 'layout' }
+PulsarClassOutlineClassSideView >> verticalLayout [
+
+	^ SpPanedLayout newVertical
+		positionOfSlider: 360;
+		add: (SpPanedLayout newVertical 
+			positionOfSlider: 200;
+			add: (SpPanedLayout newVertical 
+				add: (SpBoxLayout newVertical
+					add: variablesToolbarPresenter expand: false;
+					add: variablesListPresenter;
+					yourself);
+				add: (SpBoxLayout newVertical
+					add: sharedVariablesToolbarPresenter expand: false;
+					add: sharedVariablesPresenter;
+					yourself);
+				yourself);
+			add: (SpBoxLayout newVertical
+				add: protocolToolbarPresenter expand: false;
+				add: protocolListPresenter;
+				yourself);
+			yourself);
+		add: (SpBoxLayout newVertical
+			add: listToolbarPresenter expand: false;
+			add: listPresenter;
+			yourself);
+		yourself
 ]
 
 { #category : 'visiting' }

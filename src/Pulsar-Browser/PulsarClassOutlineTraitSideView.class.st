@@ -11,7 +11,9 @@ Class {
 		'traitClassSidePresenter',
 		'usersPresenter',
 		'usersHeaderPresenter',
-		'usersListPresenter'
+		'usersListPresenter',
+		'traitsPresenter',
+		'traitsHeaderPresenter'
 	],
 	#category : 'Pulsar-Browser-View-Outline',
 	#package : 'Pulsar-Browser',
@@ -41,16 +43,11 @@ PulsarClassOutlineTraitSideView >> connectPresenters [
 
 	super connectPresenters.
 	
+	traitsListPresenter outputActivationPort
+		transmitDo: [ :anEntity | self entityActivated: anEntity ].
+	
 	usersListPresenter outputActivationPort
 		transmitDo: [ :anEntity | self entityActivated: anEntity ]
-]
-
-{ #category : 'layout' }
-PulsarClassOutlineTraitSideView >> defaultLayout [
-
-	^ SpPanedLayout newVertical
-		add: usersPresenter;
-		yourself
 ]
 
 { #category : 'initialization' }
@@ -65,12 +62,39 @@ PulsarClassOutlineTraitSideView >> initializePresenters [
 
 	super initializePresenters.
 	
+	self initializeUsersPresenter.
+	self initializeTraitsPresenter
+]
+
+{ #category : 'initialization' }
+PulsarClassOutlineTraitSideView >> initializeTraitsPresenter [
+
+	traitsPresenter := self newPresenter.
+	
+	traitsHeaderPresenter := self instantiate: PulsarEditorToolbarPresenter.
+	traitsHeaderPresenter title: 'Traits'.
+	
+	traitsListPresenter := self newEasyListView
+		addStyle: 'stList';
+		display: [ :aModel | aModel name ];
+		yourself.
+		
+	traitsPresenter layout: (SpBoxLayout newVertical
+		add: traitsHeaderPresenter expand: false;
+		add: traitsListPresenter;
+		yourself)
+]
+
+{ #category : 'initialization' }
+PulsarClassOutlineTraitSideView >> initializeUsersPresenter [
+
 	usersPresenter := self newPresenter.
 	
 	usersHeaderPresenter := self instantiate: PulsarEditorToolbarPresenter.
 	usersHeaderPresenter title: 'Users'.
 	
 	usersListPresenter := self newEasyListView
+		addStyle: 'stList';
 		display: [ :aModel | aModel name ];
 		yourself.
 		
@@ -94,9 +118,12 @@ PulsarClassOutlineTraitSideView >> updatePresenter [
 	self model ifNil: [ ^ self ].
 
 	super updatePresenter.
+	
 	self model isTrait
 		ifTrue: [ self updateUsersPresenter ]
-		ifFalse: [ self hideUsersPresenter ]
+		ifFalse: [ self hideUsersPresenter ].
+
+	traitsListPresenter items: self model traits
 ]
 
 { #category : 'initialization' }
@@ -104,4 +131,13 @@ PulsarClassOutlineTraitSideView >> updateUsersPresenter [
 
 	usersPresenter show.
 	usersListPresenter items: self collectTraitUsers
+]
+
+{ #category : 'layout' }
+PulsarClassOutlineTraitSideView >> verticalLayout [
+
+	^ SpPanedLayout newVertical
+		add: usersPresenter;
+		add: traitsPresenter;
+		yourself
 ]

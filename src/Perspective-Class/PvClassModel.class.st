@@ -359,6 +359,15 @@ PvClassModel >> shortName [
 	^ self name contractTo: self class shortSize
 ]
 
+{ #category : 'accessing' }
+PvClassModel >> traits [
+
+	^ self entity traits collect: [ :each | 
+		PvClassModel 
+			newEnvironment: self environmentModel
+			entity: each ]
+]
+
 { #category : 'updating' }
 PvClassModel >> updateWith: aString notifying: anInteractionModel [
 	| fluidDefinition |

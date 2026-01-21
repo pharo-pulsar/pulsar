@@ -174,6 +174,25 @@ PulsarClassOutlineView >> notifySelectEntity: anEntity [
 	self notificationCenter announce: anEntity newSelectionAnnouncement
 ]
 
+{ #category : 'private' }
+PulsarClassOutlineView >> panelPlaced: aPanelWidgetPresenter [
+	| inHorizontalArea |
+
+	super panelPlaced: aPanelWidgetPresenter.
+
+	inHorizontalArea := { SpPanelArea top. SpPanelArea bottom } includes: aPanelWidgetPresenter panelArea.
+	self withSidesDo: [ :each | 
+		inHorizontalArea 
+			ifTrue: [ each useHorizontalLayout ]
+			ifFalse: [ each useVerticalLayout ] ]
+]
+
+{ #category : 'private' }
+PulsarClassOutlineView >> panelPlacedIconName [
+
+	^ #overview
+]
+
 { #category : 'initialization' }
 PulsarClassOutlineView >> registerToEvents [
 	

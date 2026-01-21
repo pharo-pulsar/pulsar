@@ -92,3 +92,9 @@ PvNewClassTemplate >> parentModel: aPackageOrTag [
 
 	parentModel := aPackageOrTag
 ]
+
+{ #category : 'accessing' }
+PvNewClassTemplate >> traits [
+
+	^ #()
+]

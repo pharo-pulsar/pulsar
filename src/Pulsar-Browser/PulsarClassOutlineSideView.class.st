@@ -21,7 +21,8 @@ Class {
 		'activeProtocols',
 		'activeVariables',
 		'previewPopoverActive',
-		'previewPopover'
+		'previewPopover',
+		'usingLayout'
 	],
 	#category : 'Pulsar-Browser-View-Outline',
 	#package : 'Pulsar-Browser',
@@ -171,25 +172,8 @@ PulsarClassOutlineSideView >> defaultKeyboardFocus [
 
 { #category : 'layout' }
 PulsarClassOutlineSideView >> defaultLayout [
-
-	^ SpPanedLayout newVertical
-		positionOfSlider: 360;
-		add: (SpPanedLayout newVertical 
-			positionOfSlider: 180;
-			add: (SpBoxLayout newVertical
-				add: variablesToolbarPresenter expand: false;
-				add: variablesListPresenter;
-				yourself);
-			add: (SpBoxLayout newVertical 
-				add: protocolToolbarPresenter expand: false;
-				add: protocolListPresenter;
-				yourself);
-			yourself);
-		add: (SpBoxLayout newVertical 
-			add: listToolbarPresenter expand: false;
-			add: listPresenter;
-			yourself);
-		yourself
+	usingLayout := #vertical.
+	^ self verticalLayout
 ]
 
 { #category : 'private - definitions' }
@@ -379,6 +363,29 @@ PulsarClassOutlineSideView >> hasSelectedMethod [
 	^ self selectedMethod isNotNil
 ]
 
+{ #category : 'layout' }
+PulsarClassOutlineSideView >> horizontalLayout [
+
+	^ SpPanedLayout newHorizontal
+		positionOfSlider: 360;
+		add: (SpPanedLayout newHorizontal 
+			positionOfSlider: 180;
+			add: (SpBoxLayout newVertical
+				add: variablesToolbarPresenter expand: false;
+				add: variablesListPresenter;
+				yourself);
+			add: (SpBoxLayout newVertical 
+				add: protocolToolbarPresenter expand: false;
+				add: protocolListPresenter;
+				yourself);
+			yourself);
+		add: (SpBoxLayout newVertical 
+			add: listToolbarPresenter expand: false;
+			add: listPresenter;
+			yourself);
+		yourself
+]
+
 { #category : 'testing' }
 PulsarClassOutlineSideView >> includesModel: aModel [
 
@@ -563,7 +570,7 @@ PulsarClassOutlineSideView >> refactorActions [
 
 	self hasSelectedMethod ifFalse: [ ^ SpActionGroup new ].
 
-	^ self selectedMethod refactorActionsWithContextOn: self
+	^ self selectedMethod actionsWithContextOn: self
 ]
 
 { #category : 'initialization' }
@@ -663,6 +670,47 @@ PulsarClassOutlineSideView >> updatingWhile: aBlock [
 	updating := true.
 	^ aBlock ensure: [ 
 		updating := oldUpdating ]
+]
+
+{ #category : 'layout' }
+PulsarClassOutlineSideView >> useHorizontalLayout [
+
+	usingLayout = #horizontal ifTrue: [ ^ self ].
+	
+	usingLayout := #horizontal.
+	self layout: self horizontalLayout
+]
+
+{ #category : 'layout' }
+PulsarClassOutlineSideView >> useVerticalLayout [
+
+	usingLayout = #vertical ifTrue: [ ^ self ].
+	
+	usingLayout := #vertical.
+	self layout: self verticalLayout
+]
+
+{ #category : 'layout' }
+PulsarClassOutlineSideView >> verticalLayout [
+
+	^ SpPanedLayout newVertical
+		positionOfSlider: 360;
+		add: (SpPanedLayout newVertical 
+			positionOfSlider: 180;
+			add: (SpBoxLayout newVertical
+				add: variablesToolbarPresenter expand: false;
+				add: variablesListPresenter;
+				yourself);
+			add: (SpBoxLayout newVertical 
+				add: protocolToolbarPresenter expand: false;
+				add: protocolListPresenter;
+				yourself);
+			yourself);
+		add: (SpBoxLayout newVertical 
+			add: listToolbarPresenter expand: false;
+			add: listPresenter;
+			yourself);
+		yourself
 ]
 
 { #category : 'visiting' }
