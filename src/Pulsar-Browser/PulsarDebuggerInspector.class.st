@@ -5,8 +5,7 @@ Class {
 	#classTraits : 'PulsarTNotificationCenter classTrait + PulsarTPanelWindow classTrait + PulsarTSnapshot classTrait + PulsarTGlobalActionContainer classTrait + SpTModel classTrait',
 	#instVars : [
 		'contextInspectorPresenter',
-		'headerPresenter',
-		'isForReceiver'
+		'headerPresenter'
 	],
 	#category : 'Pulsar-Browser-Tool-Debugger',
 	#package : 'Pulsar-Browser',
@@ -37,18 +36,6 @@ PulsarDebuggerInspector class >> defineActionsOn: aBuilder [
 				action: [ :aContext | aContext doBrowseReceiverClass ] ] ]
 ]
 
-{ #category : 'accessing' }
-PulsarDebuggerInspector >> beForContext [
-
-	isForReceiver := false
-]
-
-{ #category : 'accessing' }
-PulsarDebuggerInspector >> beForReceiver [
-
-	isForReceiver := true
-]
-
 { #category : 'layout' }
 PulsarDebuggerInspector >> defaultLayout [
 
@@ -73,7 +60,6 @@ PulsarDebuggerInspector >> eventModelSelected: anAnnouncement [
 { #category : 'initialization' }
 PulsarDebuggerInspector >> initialize [
 
-	self beForContext.
 	super initialize.
 	self registerToEvents
 ]
@@ -99,10 +85,14 @@ PulsarDebuggerInspector >> initializeWindow: aWindowPresenter [
 { #category : 'private' }
 PulsarDebuggerInspector >> inspectContextModel: aContextModel [
 
-	contextInspectorPresenter model: (isForReceiver
-		ifTrue: [ aContextModel entity receiver ]
-		ifFalse: [ aContextModel entity ] ).
+	contextInspectorPresenter model: (self inspectorModelOf: aContextModel).
 	self model: (PulsarInspectorModel on: aContextModel entity receiver)
+]
+
+{ #category : 'private' }
+PulsarDebuggerInspector >> inspectorModelOf: aContextModel [
+
+	^ self subclassResponsibility
 ]
 
 { #category : 'initialization' }
@@ -120,15 +110,19 @@ PulsarDebuggerInspector >> registerToEvents [
 ]
 
 { #category : 'initialization' }
+PulsarDebuggerInspector >> title [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'initialization' }
 PulsarDebuggerInspector >> updatePresenter [
 	| timeToRun |
 
 	self model ifNil: [ ^ self ].
 
 	timeToRun := [
-		headerPresenter title: (isForReceiver
-			ifTrue: [ 'Receiver' ]
-			ifFalse: [ 'Context' ]).
+		headerPresenter title: self title.
 		contextInspectorPresenter updatePresenter.
 	] timeToRun.
 	logger trace: timeToRun

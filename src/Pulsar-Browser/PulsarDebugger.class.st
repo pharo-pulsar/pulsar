@@ -32,6 +32,28 @@ PulsarDebugger >> defaultKeyboardFocus [
 	^ stackView
 ]
 
+{ #category : 'private - definitions' }
+PulsarDebugger >> defineViewActionsOn: aBuilder [
+	<dockActions>
+
+	aBuilder addGroup: #view with: [ :group | group 
+		beDisplayedAsGroup;
+		addActionWith: [ :action | action 
+			name: 'Open Class Outline';
+			description: 'Open a class outline panel';
+			action: [ self doOpenClassOutlineView ] ] ]
+]
+
+{ #category : 'private - actions' }
+PulsarDebugger >> doOpenClassOutlineView [
+	| outlineView |
+
+	outlineView := (self findPresenterClass: PulsarClassOutlineView)
+		ifNil: [ self addPresenterClass: PulsarClassOutlineView ].
+		
+	outlineView takeKeyboardFocus
+]
+
 { #category : 'events' }
 PulsarDebugger >> eventContextChanged: anAnnouncement [
 	
@@ -79,8 +101,8 @@ PulsarDebugger >> initializeDefaultWorkspace [
 
 	stackView := self addPresenterClass: PulsarContextStackPresenter.
 
-	(self addPresenterClass: PulsarDebuggerInspector) beForReceiver.
-	self addPresenterClass: PulsarDebuggerInspector.
+	self addPresenterClass: PulsarDebuggerReceiverInspector.
+	self addPresenterClass: PulsarDebuggerContextInspector
 ]
 
 { #category : 'initialization' }
