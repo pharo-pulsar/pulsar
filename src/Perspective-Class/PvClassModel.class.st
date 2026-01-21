@@ -312,11 +312,6 @@ PvClassModel >> packageTagName [
 	^ self entity packageTag name
 ]
 
-{ #category : 'private' }
-PvClassModel >> prepareForSnapshot [
-
-]
-
 { #category : 'printing' }
 PvClassModel >> printOn: stream [
 

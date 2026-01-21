@@ -1,6 +1,8 @@
 Class {
 	#name : 'PulsarPlaygroundModel',
 	#superclass : 'Object',
+	#traits : 'PulsarTModelSnapshot',
+	#classTraits : 'PulsarTModelSnapshot classTrait',
 	#instVars : [
 		'page'
 	],
@@ -38,4 +40,8 @@ PulsarPlaygroundModel >> loadPage: aPage [
 PulsarPlaygroundModel >> newVersionsModel [
 
 	^ PulsarPlaygroundVersionsModel newPage: page
+]
+
+{ #category : 'private' }
+PulsarPlaygroundModel >> prepareForSnapshot [
 ]

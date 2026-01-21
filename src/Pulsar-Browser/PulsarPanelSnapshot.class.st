@@ -55,5 +55,5 @@ PulsarPanelSnapshot >> snapshot: aPresenter [
 { #category : 'initialization' }
 PulsarPanelSnapshot >> takeModelSnapshot: aPresenter [
 
-	model := aPresenter model
+	model := aPresenter model ifNotNil: [ :aModel | aModel prepareForSnapshot ]
 ]

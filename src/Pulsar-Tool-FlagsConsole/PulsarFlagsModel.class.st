@@ -4,8 +4,8 @@ A base for all flags.
 Class {
 	#name : 'PulsarFlagsModel',
 	#superclass : 'Object',
-	#traits : 'PulsarTEnvironmentModel + PulsarTModelVisitor',
-	#classTraits : 'PulsarTEnvironmentModel classTrait + PulsarTModelVisitor classTrait',
+	#traits : 'PulsarTEnvironmentModel + PulsarTModelVisitor + PulsarTModelSnapshot',
+	#classTraits : 'PulsarTEnvironmentModel classTrait + PulsarTModelVisitor classTrait + PulsarTModelSnapshot classTrait',
 	#instVars : [
 		'flags',
 		'changeAction',
@@ -108,9 +108,21 @@ PulsarFlagsModel >> newSystemNavigation [
 ]
 
 { #category : 'private' }
+PulsarFlagsModel >> prepareForSnapshot [
+
+	^ self copy resetCurrentModel
+]
+
+{ #category : 'private' }
 PulsarFlagsModel >> reset [
 
 	flags := nil
+]
+
+{ #category : 'private' }
+PulsarFlagsModel >> resetCurrentModel [
+
+	currentModel := nil
 ]
 
 { #category : 'accessing' }

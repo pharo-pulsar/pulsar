@@ -4,8 +4,8 @@ A base for all flags.
 Class {
 	#name : 'PulsarCritiquesModel',
 	#superclass : 'Object',
-	#traits : 'PulsarTEnvironmentModel + PulsarTModelVisitor',
-	#classTraits : 'PulsarTEnvironmentModel classTrait + PulsarTModelVisitor classTrait',
+	#traits : 'PulsarTEnvironmentModel + PulsarTModelVisitor + PulsarTModel + PulsarTModelSnapshot',
+	#classTraits : 'PulsarTEnvironmentModel classTrait + PulsarTModelVisitor classTrait + PulsarTModel classTrait + PulsarTModelSnapshot classTrait',
 	#instVars : [
 		'critiques',
 		'changeAction',
@@ -95,9 +95,21 @@ PulsarCritiquesModel >> newActivationAnnouncementFor: aCritic [
 ]
 
 { #category : 'private' }
+PulsarCritiquesModel >> prepareForSnapshot [
+
+	^ self copy resetCurrentModel
+]
+
+{ #category : 'private' }
 PulsarCritiquesModel >> reset [
 
 	critiques := nil
+]
+
+{ #category : 'private' }
+PulsarCritiquesModel >> resetCurrentModel [
+
+	currentModel := nil
 ]
 
 { #category : 'private' }

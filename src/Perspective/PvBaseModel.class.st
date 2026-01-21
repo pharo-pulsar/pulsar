@@ -6,8 +6,8 @@ A base for all models.
 Class {
 	#name : 'PvBaseModel',
 	#superclass : 'Object',
-	#traits : 'PulsarTModel + PulsarTActionContainer',
-	#classTraits : 'PulsarTModel classTrait + PulsarTActionContainer classTrait',
+	#traits : 'PulsarTModel + PulsarTActionContainer + PulsarTModelSnapshot',
+	#classTraits : 'PulsarTModel classTrait + PulsarTActionContainer classTrait + PulsarTModelSnapshot classTrait',
 	#instVars : [
 		'entity',
 		'environmentModel',
@@ -241,11 +241,6 @@ PvBaseModel >> parentModel [
 PvBaseModel >> parentModel: aParentlModel [
 
 	parentModel := aParentlModel
-]
-
-{ #category : 'private' }
-PvBaseModel >> prepareForSnapshot [
-	"This is used when a model will be snapshot, to clean up what is not need/want to be kept "
 ]
 
 { #category : 'accessing - ui' }
