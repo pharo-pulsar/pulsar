@@ -143,10 +143,9 @@ PulsarEditor >> doDetachWindow [
 	
 	"it seems to look better if I open it first (the visualisation effect is nicer)"
 	newBrowser open.
-	"first remove it from this browser"
-	self window remove: panelWindow.
-	"now add it to the new one"
-	newBrowser addWindow: panelWindow
+	newBrowser 
+		moveWindow: panelWindow 
+		from: self window
 ]
 
 { #category : 'private - actions' }
