@@ -1,8 +1,9 @@
 Class {
 	#name : 'PulsarRepositoryLocalBranchModel',
 	#superclass : 'PulsarRepositoryBranchModel',
-	#category : 'Pulsar-Tool-Repositories',
-	#package : 'Pulsar-Tool-Repositories'
+	#category : 'Pulsar-Tool-Repositories-Model',
+	#package : 'Pulsar-Tool-Repositories',
+	#tag : 'Model'
 }
 
 { #category : 'accessing' }

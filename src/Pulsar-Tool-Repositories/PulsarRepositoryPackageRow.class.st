@@ -4,8 +4,9 @@ Class {
 	#instVars : [
 		'namePresenter'
 	],
-	#category : 'Pulsar-Tool-Repositories',
-	#package : 'Pulsar-Tool-Repositories'
+	#category : 'Pulsar-Tool-Repositories-View-Packages',
+	#package : 'Pulsar-Tool-Repositories',
+	#tag : 'View-Packages'
 }
 
 { #category : 'layout' }

@@ -4,15 +4,16 @@ Class {
 	#instVars : [
 		'listToolbarPresenter'
 	],
-	#category : 'Pulsar-Tool-Repositories',
-	#package : 'Pulsar-Tool-Repositories'
+	#category : 'Pulsar-Tool-Repositories-View-Repositories',
+	#package : 'Pulsar-Tool-Repositories',
+	#tag : 'View-Repositories'
 }
 
 { #category : 'defaults' }
 PulsarRepositoriesView class >> defaultPanelPosition [
 
 	^ SpPanelPosition startArea
-		row: 1;
+		row: 3;
 		yourself
 ]
 

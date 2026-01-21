@@ -274,7 +274,7 @@ PulsarRepositoryChangesView >> updatePresenter [
 
 	self scheduleJob: [
 		| diff |
-		"first calculate it in a scheduled task" 
+		"first calculate it in a scheduled task"
 		diff := self model diffNode.
 		"then show it in UI thread"
 		self application defer: [

@@ -1,14 +1,15 @@
 Class {
 	#name : 'PulsarRepositoryBaseModel',
 	#superclass : 'Object',
-	#traits : 'PulsarTModel',
-	#classTraits : 'PulsarTModel classTrait',
+	#traits : 'PulsarTModel + PulsarTActionContainer + PulsarTModelSnapshot',
+	#classTraits : 'PulsarTModel classTrait + PulsarTActionContainer classTrait + PulsarTModelSnapshot classTrait',
 	#instVars : [
 		'repository',
 		'entity'
 	],
-	#category : 'Pulsar-Tool-Repositories',
-	#package : 'Pulsar-Tool-Repositories'
+	#category : 'Pulsar-Tool-Repositories-Model',
+	#package : 'Pulsar-Tool-Repositories',
+	#tag : 'Model'
 }
 
 { #category : 'instance creation' }

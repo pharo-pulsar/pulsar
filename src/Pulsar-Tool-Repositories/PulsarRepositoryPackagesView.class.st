@@ -4,8 +4,9 @@ Class {
 	#instVars : [
 		'toolbarPresenter'
 	],
-	#category : 'Pulsar-Tool-Repositories',
-	#package : 'Pulsar-Tool-Repositories'
+	#category : 'Pulsar-Tool-Repositories-View-Packages',
+	#package : 'Pulsar-Tool-Repositories',
+	#tag : 'View-Packages'
 }
 
 { #category : 'defaults' }
@@ -15,6 +16,11 @@ PulsarRepositoryPackagesView class >> defaultPanelPosition [
 		row: 1;
 		column: 2;
 		yourself
+]
+
+{ #category : 'initialization' }
+PulsarRepositoryPackagesView >> connectPresenters [
+	
 ]
 
 { #category : 'layout' }
@@ -44,8 +50,34 @@ PulsarRepositoryPackagesView >> defineActionsOn: aBuilder [
 			action: [ ] ]" ]
 ]
 
+{ #category : 'private - actions' }
+PulsarRepositoryPackagesView >> doInstallBaseline: aPackageModel [
+ 	| presenter |
+ 	
+ 	presenter := self instantiate: PulsarInstallBaselineDialog.
+ 	(presenter asModalWindow
+ 		owner: self window;
+ 		open;
+ 		isOk)
+ 		ifFalse: [ ^ self ].
+ 
+ 	self scheduleJob: [
+ 		aPackageModel 
+ 			installBaselineGroups: presenter groups
+ 			upgradePolicy: presenter upgradePolicy
+ 			conflictPolicy: presenter conflictPolicy.
+ 		self updatePresenter ]
+]
+
+{ #category : 'testing' }
+PulsarRepositoryPackagesView >> hasSelectedPackage [
+
+	^ self selectedPackage isNotNil
+]
+
 { #category : 'initialization' }
 PulsarRepositoryPackagesView >> initializePresenters [
+	
 	self addStyle: 'pulsarRepositoryPackages'.
 
 	toolbarPresenter := self instantiate: PulsarToolbarPresenter.
@@ -54,6 +86,10 @@ PulsarRepositoryPackagesView >> initializePresenters [
 		addStyle: 'stList';
 		rowPresenterClass: PulsarRepositoryPackageRow;
 		display: [ :aPackageModel | aPackageModel name ];
+		actions: (SpActionGroup new
+			add: self actions;
+			addDynamicGroup: #dynamic with: [ :group | group add: self packageActions ];
+			yourself);
 		yourself
 ]
 
@@ -67,6 +103,20 @@ PulsarRepositoryPackagesView >> initializeWindow: aWindowPresenter [
 PulsarRepositoryPackagesView >> maybeSort: aCollection [
 
 	^ aCollection sort: #isLoaded descending, #isBaseline descending, #name ascending
+]
+
+{ #category : 'initialization' }
+PulsarRepositoryPackagesView >> packageActions [
+
+	self hasSelectedPackage ifFalse: [ ^ SpActionGroup new ].
+
+	^ self selectedPackage actionsWithContextOn: self
+]
+
+{ #category : 'accessing' }
+PulsarRepositoryPackagesView >> selectedPackage [
+
+	^ listPresenter selectedItem
 ]
 
 { #category : 'initialization' }
