@@ -42,9 +42,3 @@ PulsarEditorSnapshot >> snapshot: aPresenter [
 	cursorPositionIndex := aPresenter editorPresenter cursorPositionIndex.
 
 ]
-
-{ #category : 'initialization' }
-PulsarEditorSnapshot >> takeModelSnapshot: aPresenter [
-
-	model := aPresenter model prepareForSnapshot
-]
