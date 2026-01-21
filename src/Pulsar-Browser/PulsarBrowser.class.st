@@ -212,10 +212,10 @@ PulsarBrowser >> initializeWorkspace [
 	super initializeWorkspace.
 	
 	"defaults"
-	self startWidth: 280"self initialExtent x * 25 percent".
-	self endWidth: 280"self initialExtent x * 25 percent".
-	self topHeight: 180"self initialExtent y * 20 percent".
-	self bottomHeight: 180"self initialExtent y * 20 percent"
+	self startWidth: 300.
+	self endWidth: 300.
+	self topHeight: 250.
+	self bottomHeight: 250
 ]
 
 { #category : 'actions' }
