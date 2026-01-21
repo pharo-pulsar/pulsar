@@ -26,6 +26,13 @@ PulsarProjectModel >> accept: aVisitor [
 	^ aVisitor visitProjectModel: self
 ]
 
+{ #category : 'accessing - actions' }
+PulsarProjectModel >> actionsWithContextOn: aContextPresenter [
+
+	^ (self actions actionsFor: 'operations') 
+		copyWithContext: aContextPresenter
+]
+
 { #category : 'accessing' }
 PulsarProjectModel >> addPackageNamed: aName [
 
@@ -96,6 +103,19 @@ PulsarProjectModel >> collectPackageModelsOn: aBaselineClass [
 				parent: self
 				entity: (self environmentModel packageNamed: each name) ])
 		sorted: #name ascending
+]
+
+{ #category : 'private - definitions' }
+PulsarProjectModel >> defineActionsOn: aBuilder [
+	<dockActions>
+	
+	aBuilder addGroup: 'operations' with: [ :group | group 
+		name: 'Operations';
+		beDisplayedAsGroup;
+		addActionWith: [ :actions | actions 
+			name: ('Close project {1}' format: { self name });
+			description: 'Remove project from projects list';
+			action: [ :aContext | aContext doCloseProject: self ] ] ]
 ]
 
 { #category : 'accessing' }

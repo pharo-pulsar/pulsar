@@ -88,71 +88,88 @@ PulsarProjectView >> defaultLayout [
 ]
 
 { #category : 'private - definitions' }
-PulsarProjectView >> defineActionsOn: aBuilder [
+PulsarProjectView >> defineExtraActionsOn: aBuilder [
 	<dockActions>
 	
-	aBuilder 
-		addGroup: #project with: [ :group | group 
-			priority: 100;
-			name: 'Project';
-			beDisplayedAsSubMenu;	
-			addActionWith: [ :action | action 
-				priority: 110;
-				name: 'New project';
-				description: 'Create a new project (baseline)';
-				iconName: 'new-folder';
-				shortcutKey: $n mod1;
-				action: [ self doNewProject ] ];
-			addActionWith: [ :action | action 
-				priority: 120;
-				name: 'Open project';
-				description: 'Open project';
-				iconName: #openProject;
-				shortcutKey: $o mod1;
-				action: [ self doOpenProject ] ];
-			addActionWith: [ :action | action 
-				priority: 130;
-				name: 'Refresh project';
-				description: 'Refresh this project (reload configuration)';
-				iconName: 'refresh';
-				action: [ self refreshProject ] ] ];
-		addGroup: #new with: [ :group | group
-			priority: 200;
-			name: 'New';
-			beDisplayedAsGroup;
-			addActionWith: [ :action | action 
-				priority: 210;
-				name: 'New package';
-				description: 'Add a new package to the environment';
-				iconName: 'new-file';
-				action: [ self doNewPackage ] ];
-			addActionWith: [ :action | action
-				priority: 220;
-				name: 'New tag';
-				description: 'Add a new tag to this package';
-				iconName: 'new-file';
-				action: [ self doNewPackageTag ] ];
-			addActionWith: [ :action | action
-				priority: 230;
-				name: 'New class';
-				description: 'Add a new class to the environment';
-				iconName: 'new-file';
-				action: [ self doRequestNewClass ] ];
-			addActionWith: [ :action | action
-				priority: 240;
-				name: 'New trait';
-				description: 'Add a new trait to the environment';
-				iconName: 'new-file';
-				action: [ self doRequestNewTrait ] ] ];
-		addGroup: #extra with: [ :group | group 
-			priority: 900;
-			name: 'Extra';
-			beDisplayedAsGroup;
-			addActionWith: [ :action | action 
-				name: 'Collapse All';
-				description: 'Collapses all open projects';
-				iconName: 'collapse-all';
-				action: [ self doCollapseAll ] ] ]
+	aBuilder addGroup: 'extra' with: [ :group | group 
+		priority: 900;
+		name: 'Extra';
+		beDisplayedAsGroup;
+		addActionWith: [ :action | action 
+			name: 'Collapse All';
+			description: 'Collapses all open projects';
+			iconName: 'collapse-all';
+			action: [ self doCollapseAll ] ] ]
+]
+
+{ #category : 'private - definitions' }
+PulsarProjectView >> defineNewActionsOn: aBuilder [
+	<dockActions>
+	
+	aBuilder addGroup: #new with: [ :group | group
+		priority: 200;
+		name: 'New';
+		beDisplayedAsGroup;
+		addActionWith: [ :action | action 
+			priority: 210;
+			name: 'New package';
+			description: 'Add a new package to the environment';
+			iconName: 'new-file';
+			action: [ self doNewPackage ] ];
+		addActionWith: [ :action | action
+			priority: 220;
+			name: 'New tag';
+			description: 'Add a new tag to this package';
+			iconName: 'new-file';
+			action: [ self doNewPackageTag ] ];
+		addActionWith: [ :action | action
+			priority: 230;
+			name: 'New class';
+			description: 'Add a new class to the environment';
+			iconName: 'new-file';
+			action: [ self doRequestNewClass ] ];
+		addActionWith: [ :action | action
+			priority: 240;
+			name: 'New trait';
+			description: 'Add a new trait to the environment';
+			iconName: 'new-file';
+			action: [ self doRequestNewTrait ] ] ]
+]
+
+{ #category : 'private - definitions' }
+PulsarProjectView >> defineProjectActionsOn: aBuilder [
+	<dockActions>
+	
+	aBuilder addGroup: #project with: [ :group | group 
+		priority: 100;
+		name: 'Project';
+		beDisplayedAsSubMenu;	
+		addActionWith: [ :action | action 
+			priority: 110;
+			name: 'New project';
+			description: 'Create a new project (baseline)';
+			iconName: 'new-folder';
+			shortcutKey: $n mod1;
+			action: [ self doNewProject ] ];
+		addActionWith: [ :action | action 
+			priority: 120;
+			name: 'Open project';
+			description: 'Open project';
+			iconName: #openProject;
+			shortcutKey: $o mod1;
+			action: [ self doOpenProject ] ];
+		addActionWith: [ :action | action 
+			priority: 130;
+			name: 'Refresh project';
+			description: 'Refresh this project (reload configuration)';
+			iconName: 'refresh';
+			action: [ self refreshProject ] ] ]
+]
+
+{ #category : 'private - actions' }
+PulsarProjectView >> doCloseProject: aProjectModel [
+
+	self removeProjectModel: aProjectModel
 ]
 
 { #category : 'private - actions' }
@@ -488,7 +505,7 @@ PulsarProjectView >> refactorActions [
 
 	self hasSelectedEntity ifFalse: [ ^ SpActionGroup new ].
 
-	^ self selectedEntity realModel refactorActionsWithContextOn: self
+	^ self selectedEntity realModel actionsWithContextOn: self
 ]
 
 { #category : 'private' }
