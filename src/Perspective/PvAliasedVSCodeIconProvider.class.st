@@ -21,10 +21,14 @@ PvAliasedVSCodeIconProvider >> createAliases [
 	"a list of pairs"
 
 	^ {
+		"add, new, etc. usually a + simbol"
 		'add'.						'add'.	
+		"close all opened editors (or all 'anything'"
 		'closeAll'.					'close-all'.
-		'load'. 						'folder-opened'.
+		"open a new project (or a new existing document)"
 		'open'. 						'folder-opened'.
+		"load a new element of anything. Is similar to open and can be the same icon."
+		'load'. 						'folder-opened'.
 		'groupByMethod'. 			'extensions'.			"browser (extensions)"
 		'library'.					'library'.				"browser (system deps)"
 		'class'.						'symbol-class'.			"type"
@@ -145,6 +149,7 @@ PvAliasedVSCodeIconProvider >> createAliases [
 		'flag'.						'bookmark'.
 		'refactor'.					'symbol-property'.
 		"repositories"
+		'repositories'.				'repo'.
 		'commit'.					'check'. "'git-commit'."
 		'branch'.					'repo-forked'.
 		'merge'.						'merge'.
@@ -158,6 +163,8 @@ PvAliasedVSCodeIconProvider >> createAliases [
 		'firstActivationTime'. 		'arrow-up'. 
 		'lastActivationTime'.		'arrow-down'.
 		'overview'.					'map'.
+		"roassal view"
+		"'graph'.					'graph'."
 	 }
 ]
 

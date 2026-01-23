@@ -221,8 +221,8 @@ PulsarApplication >> newIconProvider [
 	^ (PvAliasedVSCodeIconProvider new
 			application: self;
 			addLocation: self resourcesDir / 'vscode-extraicons';
-			addLocation: self resourcesDir / 'vscode-codicons';
 			addLocation: self resourcesDir / 'vscode-icons';
+			addLocation: self resourcesDir / 'vscode-codicons';
 			yourself),
 	  PvDefaultIconProvider new
 ]

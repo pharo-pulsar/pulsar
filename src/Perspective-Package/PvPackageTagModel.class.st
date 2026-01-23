@@ -46,7 +46,7 @@ PvPackageTagModel >> classes [
 { #category : 'accessing' }
 PvPackageTagModel >> iconName [
 
-	^ 'tag'
+	^ nil "'tag'"
 ]
 
 { #category : 'testing' }
