@@ -49,6 +49,18 @@ PulsarDetachedBrowser >> initializeWindow: aWindowPresenter [
 
 ]
 
+{ #category : 'initialization' }
+PulsarDetachedBrowser >> initializeWorkspace [
+
+	super initializeWorkspace.
+
+	"defaults"
+	self startWidth: 300.
+	self endWidth: 300.
+	self topHeight: 250.
+	self bottomHeight: 250
+]
+
 { #category : 'accessing - snapshot' }
 PulsarDetachedBrowser >> snapshot [
 
