@@ -323,6 +323,8 @@ PulsarGtkConfiguration >> settings [
 PulsarGtkConfiguration >> style [
 
 	^ ' 
+popover label { color: unset; }
+popover label.dim { color: LightSlateGrey; }
 toast { border-radius: 4px; padding: 0px 8px; }
 panelframeswitcher { margin: 2px; min-height: 20px; min-width: 20px; }
 panelframeswitcher button { border: 1px; border-radius: 4px; box-shadow: none; }
