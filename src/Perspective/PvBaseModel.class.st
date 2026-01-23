@@ -6,11 +6,10 @@ A base for all models.
 Class {
 	#name : 'PvBaseModel',
 	#superclass : 'Object',
-	#traits : 'PulsarTModel + PulsarTActionContainer + PulsarTModelSnapshot',
-	#classTraits : 'PulsarTModel classTrait + PulsarTActionContainer classTrait + PulsarTModelSnapshot classTrait',
+	#traits : 'PulsarTModel + PulsarTActionContainer + PulsarTModelSnapshot + PulsarTEnvironmentModel',
+	#classTraits : 'PulsarTModel classTrait + PulsarTActionContainer classTrait + PulsarTModelSnapshot classTrait + PulsarTEnvironmentModel classTrait',
 	#instVars : [
 		'entity',
-		'environmentModel',
 		'parentModel'
 	],
 	#category : 'Perspective-Model',
@@ -127,18 +126,6 @@ PvBaseModel >> entity: anObject [
 	entity := anObject
 ]
 
-{ #category : 'accessing - navigating' }
-PvBaseModel >> environmentModel [ 
-	
-	^ environmentModel
-]
-
-{ #category : 'initialization' }
-PvBaseModel >> environmentModel: anEnvironmentModel [ 
-	
-	environmentModel := anEnvironmentModel
-]
-
 { #category : 'testing' }
 PvBaseModel >> hasEditor [
 
@@ -164,13 +151,6 @@ PvBaseModel >> iconComposite [
 PvBaseModel >> iconName [
 
 	^ nil
-]
-
-{ #category : 'testing' }
-PvBaseModel >> includesClassModel [
-
-	self flag: #TODO. "This has to be solved in a better way (a double dispatch or something like that)"
-	^ false
 ]
 
 { #category : 'testing' }
