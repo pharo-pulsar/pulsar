@@ -34,7 +34,9 @@ PulsarProjectNodeRow >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	
-	imagePresenter image: (self iconNamed: (self model iconName ifNil: [ #blank ])).
+	self model iconName 
+		ifNotNil: [ :aName | imagePresenter show; image: (self iconNamed: aName) ]
+		ifNil: [ imagePresenter hide ].
 	labelPresenter label: self model name.
 	
 	"self model isManagedAndModified
