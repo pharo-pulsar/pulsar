@@ -391,9 +391,12 @@ PulsarProjectView >> eventBehaviorRenamed: anAnnouncement [
 
 { #category : 'events' }
 PulsarProjectView >> eventEditorActivated: anAnnouncement [
-	| classModel path |
+	| editorModel classModel path |
 	
-	classModel := anAnnouncement value model asClassModel.
+	editorModel := anAnnouncement value model.
+	editorModel includesClassModel ifFalse: [ ^ self ].
+	
+	classModel := editorModel asClassModel.
 	(listPresenter selectedItem isNotNil and: [ listPresenter selectedItem realModel = classModel ]) 
 		ifTrue: [ ^ self ].
  

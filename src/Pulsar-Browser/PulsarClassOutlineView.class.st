@@ -56,7 +56,11 @@ PulsarClassOutlineView >> defaultLayout [
 ]
 
 { #category : 'events' }
-PulsarClassOutlineView >> eventEditorActivated: anAnnouncement [
+PulsarClassOutlineView >> eventEditorActivated: anAnnounceement [
+	| editor |
+	
+	editor := anAnnounceement value.
+	editor model includesClassModel ifFalse: [ ^ self ].
 
 	self resetInteractionStatus. "this may be slow, so I schedule it, to not break process..."
 	self queueTask: [
@@ -64,8 +68,8 @@ PulsarClassOutlineView >> eventEditorActivated: anAnnouncement [
 		"editor can be closed in the meantime (concurrency problems... :P).
 	 	 value holds an editor, I can then ask for its window to know if this 
 	 	 is still around."
-		anAnnouncement value window isOpen ifTrue: [
-			activatedModel := anAnnouncement value model.
+		editor window isOpen ifTrue: [
+			activatedModel := editor model.
 			outlineModel := activatedModel asOutlineClassModel.
 			self model = outlineModel ifFalse: [
 				logger trace: outlineModel.

@@ -106,6 +106,10 @@ PulsarCritiquesConsole >> entityActivated: anEntity [
 
 { #category : 'events' }
 PulsarCritiquesConsole >> eventEditorActivated: ann [
+	| editorModel |
+	
+	editorModel := ann value model.
+	editorModel includesClassModel ifFalse: [ ^ self ].
 	
 	self 
 		checkIncomingModel: ann value model 

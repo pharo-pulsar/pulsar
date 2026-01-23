@@ -1,3 +1,6 @@
+"
+Providing a stub to prepare models to be snapshot
+"
 Trait {
 	#name : 'PulsarTModelSnapshot',
 	#category : 'Pulsar-Browser-Snapshot',

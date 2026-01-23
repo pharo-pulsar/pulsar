@@ -280,10 +280,10 @@ PulsarEditor >> forceClose [
 { #category : 'initialization' }
 PulsarEditor >> initialize [
 
-	super initialize.
-	self registerToSystemEvents.
 	dirty := false. 
-	updating := false
+	updating := false.
+	super initialize.
+	self registerToSystemEvents
 ]
 
 { #category : 'initialization' }
