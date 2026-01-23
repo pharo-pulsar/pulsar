@@ -25,6 +25,24 @@ PulsarTModel >> activationAnnouncementClass [
 	^ PulsarModelActivated
 ]
 
+{ #category : 'accessing' }
+PulsarTModel >> fullName [
+
+	^ self name
+]
+
+{ #category : 'accessing' }
+PulsarTModel >> iconName [
+
+	^ self shouldBeImplemented
+]
+
+{ #category : 'accessing' }
+PulsarTModel >> name [
+
+	^ self shouldBeImplemented
+]
+
 { #category : 'instance creation' }
 PulsarTModel >> newActivationAnnouncement [
 
