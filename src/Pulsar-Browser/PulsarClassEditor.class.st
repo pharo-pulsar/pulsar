@@ -217,6 +217,8 @@ PulsarClassEditor >> initializePresenters [
 
 	super initializePresenters.
 	
+	self addStyle: 'pulsarClassEditor'.
+
 	refactorPresenter := self newMenuButton
 		addStyle: 'flat'; 
 		icon: (self iconNamed: #refactor);
@@ -224,7 +226,6 @@ PulsarClassEditor >> initializePresenters [
 		yourself.
 	toolbarPresenter addPresenter: refactorPresenter.
 	
-	self addStyle: 'pulsarClassEditor'.
 	commentPresenter := (self instantiate: SeEditorPresenter)
 		addStyle: 'stCode';
 		withHyperlinks;
