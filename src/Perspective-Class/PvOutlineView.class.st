@@ -145,7 +145,7 @@ PvOutlineView >> initializePresenters [
 					yourself ] 
 			bind: [ :aPresenter :aModel | | c | 
 				c := aPresenter layout children.
-				c first image: (aModel iconComposite buildOn: self application).
+				c first image: (self iconNamed: aModel iconName).
 				c second label: aModel name ]);
 		addColumn: ((SpColumnViewColumn 
 			newTitle: 'Protocol' 

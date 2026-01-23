@@ -114,7 +114,7 @@ PvClassHierarchyNode >> iconComposite [
 
 { #category : 'accessing' }
 PvClassHierarchyNode >> iconName [
-	
+
 	^ self element iconName
 ]
 

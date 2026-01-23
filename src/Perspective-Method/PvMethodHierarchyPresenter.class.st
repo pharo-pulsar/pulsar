@@ -32,7 +32,7 @@ PvMethodHierarchyPresenter >> initializePresenters [
 	treePresenter
 		addStyle: 'stTree';
 		display: [ :aModel | aModel fullName ];
-		displayIcon: [ :aModel | aModel iconComposite buildOn: self application ];
+		displayIcon: [ :aModel | self iconNamed: aModel iconName ];
 		children: [ :aModel | aModel ifNotNil: [ aModel children ] ].
 
 	self addStyle: 'pvNavigation'.

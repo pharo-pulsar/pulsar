@@ -1,3 +1,6 @@
+"
+A message browser (to show senders and implementors)
+"
 Class {
 	#name : 'PulsarMessageBrowser',
 	#superclass : 'SpPresenter',

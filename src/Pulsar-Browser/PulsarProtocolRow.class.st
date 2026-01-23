@@ -41,7 +41,7 @@ PulsarProtocolRow >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	
-	iconPresenter image: (self model iconComposite buildOn: self application).
+	iconPresenter image: (self iconNamed: self model iconName).
 	namePresenter label: self model name.
 	self model isUnclassified
 		ifTrue: [ namePresenter addStyle: 'unclassified' ]

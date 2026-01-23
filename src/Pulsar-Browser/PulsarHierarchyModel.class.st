@@ -35,8 +35,14 @@ PulsarHierarchyModel >> hierarchyTopModel [
 PulsarHierarchyModel >> iconComposite [
 	
 	^ PvCompositeIcon new
-		name: #smallHierarchyBrowser;
+		name: self iconName;
 		yourself
+]
+
+{ #category : 'accessing - ui' }
+PulsarHierarchyModel >> iconName [
+
+	^ #smallHierarchyBrowser
 ]
 
 { #category : 'testing' }

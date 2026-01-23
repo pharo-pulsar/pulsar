@@ -35,7 +35,7 @@ PulsarBaseView >> newEntityTree [
 	^ self newEasyTreeListView
 		addStyle: 'stTree';
 		display: [ :aModel | aModel name ];
-		displayIcon: [ :aModel | aModel iconComposite buildOn: self application ];
+		displayIcon: [ :aModel | self iconNamed: aModel iconName ];
 		displayColor: [ :aModel | self colorNamed: aModel colorName ];
 		children: [ :aModel | aModel children ];
 		searchMatching: [ :anEntity :pattern | anEntity matches: pattern ];
