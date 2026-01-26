@@ -101,10 +101,7 @@ PulsarRepositoriesView >> doRepairSelectedRepository [
 		items: self selectedRepository repairActions;
 		display: [ :aRepaitAction | aRepaitAction title ];
 		openModalWithParent: self window.
-
-	result ifNil: [ ^ self ].
-	
-	
+	result ifNil: [ ^ self ]
 ]
 
 { #category : 'private' }
@@ -148,6 +145,12 @@ PulsarRepositoriesView >> initializePresenters [
 PulsarRepositoriesView >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter title: 'Repository'
+]
+
+{ #category : 'private' }
+PulsarRepositoriesView >> panelPlacedIconName [
+
+	^ 'repositories'
 ]
 
 { #category : 'initialization' }

@@ -69,6 +69,15 @@ PulsarRepositoryPackagesView >> doInstallBaseline: aPackageModel [
  		self updatePresenter ]
 ]
 
+{ #category : 'private - actions' }
+PulsarRepositoryPackagesView >> doLoadPackage: aPackageModel [
+ 	| presenter |
+ 	
+ 	self scheduleJob: [
+ 		aPackageModel load.
+ 		self updatePresenter ]
+]
+
 { #category : 'testing' }
 PulsarRepositoryPackagesView >> hasSelectedPackage [
 
@@ -82,7 +91,7 @@ PulsarRepositoryPackagesView >> initializePresenters [
 
 	toolbarPresenter := self instantiate: PulsarToolbarPresenter.
 	toolbarPresenter actions: (self actions actionsFor: #actions).
-	listPresenter := self newEasyListView
+	listPresenter := self newFilteringList
 		addStyle: 'stList';
 		rowPresenterClass: PulsarRepositoryPackageRow;
 		display: [ :aPackageModel | aPackageModel name ];
@@ -124,5 +133,6 @@ PulsarRepositoryPackagesView >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	
-	listPresenter items: (self maybeSort: self model packages)
+	self scheduleJob: [
+		listPresenter items: (self maybeSort: self model packages) ]
 ]

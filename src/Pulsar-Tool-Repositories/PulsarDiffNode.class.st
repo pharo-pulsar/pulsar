@@ -131,7 +131,7 @@ PulsarDiffNode >> isActive [
 { #category : 'accessing' }
 PulsarDiffNode >> isBigChange [
 
-	^ self countChildren > 500
+	^ self countChildren > 750
 ]
 
 { #category : 'testing' }

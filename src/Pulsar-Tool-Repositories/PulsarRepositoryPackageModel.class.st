@@ -122,6 +122,12 @@ PulsarRepositoryPackageModel >> isLoaded [
 	^ self repository isPackageLoaded: self
 ]
 
+{ #category : 'actions' }
+PulsarRepositoryPackageModel >> load [
+
+	self entity load
+]
+
 { #category : 'accessing' }
 PulsarRepositoryPackageModel >> name [
 
