@@ -27,12 +27,12 @@ PulsarDebuggerInspector class >> defineActionsOn: aBuilder [
 			addActionWith: [ :action | action 
 				name: 'Inspect';
 				description: 'Inspect current receiver';
-				iconName: 'inspector';
+				iconName: 'inspector.neutral';
 				action: [ :aContext | aContext doInspectReceiver ] ];
 			addActionWith: [ :action | action 
 				name: 'Browse';
 				description: 'Browse current receiver''s class';
-				iconName: 'browser';
+				iconName: 'browse.neutral';
 				action: [ :aContext | aContext doBrowseReceiverClass ] ] ]
 ]
 

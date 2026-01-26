@@ -24,6 +24,11 @@ PulsarProjectView class >> defaultPanelPosition [
 		yourself
 ]
 
+{ #category : 'private' }
+PulsarProjectView >> activateContextPopover [
+
+]
+
 { #category : 'actions' }
 PulsarProjectView >> addProject: aBaselineClass [
 	| path |
@@ -76,6 +81,12 @@ PulsarProjectView >> closestPathInPathMatching: aBlock [
 			ifTrue: [ ^ selectedEntities copyFrom: 1 to: index ] ].
 
 	^ nil
+]
+
+{ #category : 'private' }
+PulsarProjectView >> deactivateContextPopover [
+
+	
 ]
 
 { #category : 'layout' }
@@ -148,7 +159,7 @@ PulsarProjectView >> defineProjectActionsOn: aBuilder [
 			priority: 110;
 			name: 'New project';
 			description: 'Create a new project (baseline)';
-			iconName: 'new-folder';
+			iconName: 'add';
 			shortcutKey: $n mod1;
 			action: [ self doNewProject ] ];
 		addActionWith: [ :action | action 
@@ -178,17 +189,6 @@ PulsarProjectView >> doCollapseAll [
 	listPresenter 
 		unselectAll;
 		collapseAll
-]
-
-{ #category : 'private - refactors' }
-PulsarProjectView >> doDuplicateClass [
-
-	self application schedule: [
-		(ReDuplicateClassDriver newApplication: self application)
-			className: self selectedEntityName asSymbol;
-			"scopes: { RBClassEnvironment class: self selectedEntity realModel entity };"
-			scopes: { RBBrowserEnvironment new };
-			runRefactoring ]
 ]
 
 { #category : 'private - actions' }
@@ -463,12 +463,14 @@ PulsarProjectView >> initializePresenters [
 		actions: (SpActionGroup new
 			add: self actions;
 			addDynamicGroup: #dynamic with: [ :group | group add: self refactorActions ];
+			addShortcutWith: [ :action | action 
+				shortcutKey: KeyboardKey right asKeyCombination; 
+				action: [ self activateContextPopover ] ];	
+			addShortcutWith: [ :action | action 
+				shortcutKey: KeyboardKey left asKeyCombination | KeyboardKey escape asKeyCombination; 
+				action: [ self deactivateContextPopover ] ];	
 			yourself);
-		yourself.
-	
-	listPresenter addShortcutWith: [ :act | act 
-		shortcutKey: Character arrowRight alt;
-		action: [ self maybeOpenFlyView ] ]
+		yourself
 ]
 
 { #category : 'initialization' }

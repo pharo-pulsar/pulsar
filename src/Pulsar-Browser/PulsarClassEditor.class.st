@@ -41,15 +41,6 @@ PulsarClassEditor class >> defineActionsOn: aBuilder [
 				action: [ :aContext | aContext doToggleSelectionLinkCommand: action ] ] ]
 ]
 
-{ #category : 'private' }
-PulsarClassEditor >> collectContentActions [
-
-	^ SpActionGroup new
-		add: super collectContentActions;
-		add: self extraContentActions;
-		yourself
-]
-
 { #category : 'private - updating' }
 PulsarClassEditor >> commentChangedFrom: oldText to: newText [
 
@@ -190,19 +181,6 @@ PulsarClassEditor >> eventThemeChanged: ann [
 	super eventThemeChanged: ann.
 
 	commentPresenter styleScheme: self application styleScheme
-]
-
-{ #category : 'private' }
-PulsarClassEditor >> extraContentActions [
-	| nearestWindow |
-
-	nearestWindow := self nearWindowLike.
-	"no extra actions in popovers"
-	(nearestWindow isNotNil and: [ nearestWindow isPopover ])
-		ifTrue: [ ^ SpActionGroup new ].
-
-	"^ {self model actions actionsFor: #refactoring}, (self actions actionsFor: #editorActions) entries"
-	^ self actions actionsFor: #editorActions
 ]
 
 { #category : 'initialization' }

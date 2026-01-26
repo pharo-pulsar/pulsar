@@ -86,7 +86,10 @@ PulsarEditor >> close [
 { #category : 'private' }
 PulsarEditor >> collectContentActions [
 
-	^ self model actionDecorators
+	^ SpActionGroup new
+		add: self modelContentActions;
+		add: self extraContentActions;
+		yourself
 ]
 
 { #category : 'initialization' }
@@ -269,6 +272,18 @@ PulsarEditor >> eventThemeChanged: ann [
 	editorPresenter styleScheme: self application styleScheme
 ]
 
+{ #category : 'private' }
+PulsarEditor >> extraContentActions [ 
+	| nearestWindow |
+
+	nearestWindow := self nearWindowLike.
+	"no extra actions in popovers"
+	(nearestWindow isNotNil and: [ nearestWindow isPopover ])
+		ifTrue: [ ^ SpActionGroup new ].
+
+	^ self actions actionsFor: #editorActions
+]
+
 { #category : 'private - actions' }
 PulsarEditor >> forceClose [
 
@@ -357,6 +372,12 @@ PulsarEditor >> markDirty [
 	self 
 		addOverlay: self dirtyMarkerPresenter 
 		withConstraints: [ :c | c hAlignEnd; vAlignStart ]
+]
+
+{ #category : 'private' }
+PulsarEditor >> modelContentActions [
+
+	^ self model actionDecorators
 ]
 
 { #category : 'private' }

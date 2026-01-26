@@ -56,15 +56,6 @@ PulsarMethodEditor >> announceActivateClass [
 	self notifyActivateEntity: self model asClassModel
 ]
 
-{ #category : 'private' }
-PulsarMethodEditor >> collectContentActions [
-
-	^ SpActionGroup new
-		add: super collectContentActions;
-		add: self extraContentActions;
-		yourself
-]
-
 { #category : 'initialization' }
 PulsarMethodEditor >> connectPresenters [
 
@@ -248,21 +239,6 @@ PulsarMethodEditor >> eventTestCaseEnded: aTestCaseEnded [
 
 	logger trace: aTestCaseEnded.
 	self updateContentActions
-]
-
-{ #category : 'private' }
-PulsarMethodEditor >> extraContentActions [ 
-	| nearestWindow |
-
-	self flag: #TODO. "I am linearizing this because meh... so far, so good. I need 
-	to revisit this when I complete the refactor of actions"
-
-	nearestWindow := self nearWindowLike.
-	"no extra actions in popovers"
-	(nearestWindow isNotNil and: [ nearestWindow isPopover ])
-		ifTrue: [ ^ SpActionGroup new ].
-
-	^ self actions actionsFor: #editorActions
 ]
 
 { #category : 'initialization' }
