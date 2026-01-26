@@ -645,7 +645,11 @@ PulsarClassOutlineSideView >> updateProtocols [
 
 	logger trace.
 	
-	protocolListPresenter updateItemsKeepingSelection: self collectProtocols.
+	protocolListPresenter updateItemsKeepingSelection: (self collectProtocols sorted: 
+		#isVirtual descending,
+		#isExtension ascending,
+		#isPrivate ascending,
+		#name ascending).
 	protocolListPresenter selectedItems
 		ifEmpty: [ protocolListPresenter selectFirst ].
 	activeProtocols := protocolListPresenter selectedItems

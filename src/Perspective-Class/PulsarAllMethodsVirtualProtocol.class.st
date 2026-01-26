@@ -44,9 +44,21 @@ PulsarAllMethodsVirtualProtocol >> iconName [
 ]
 
 { #category : 'testing' }
+PulsarAllMethodsVirtualProtocol >> isExtension [
+	
+	^ true
+]
+
+{ #category : 'testing' }
 PulsarAllMethodsVirtualProtocol >> isUnclassified [
 
 	^ false
+]
+
+{ #category : 'testing' }
+PulsarAllMethodsVirtualProtocol >> isVirtual [
+	
+	^ true
 ]
 
 { #category : 'accessing' }

@@ -57,6 +57,12 @@ PvProtocolModel >> isUnclassified [
 	^ self entity isUnclassifiedProtocol
 ]
 
+{ #category : 'testing' }
+PvProtocolModel >> isVirtual [
+
+	^ false
+]
+
 { #category : 'accessing' }
 PvProtocolModel >> name [
 
