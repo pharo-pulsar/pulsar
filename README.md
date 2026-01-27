@@ -54,6 +54,7 @@ MetaMetacello load: [ :spec | spec
 	baseline: 'UnifiedFFI' with: [ spec 
 		repository: 'github://pharo-cig/UnifiedFFI:main';
 		className: #BaselineOfUnifiedFFIFull ];
+	baseline: 'Resvg' with: [ spec repository: 'github://pharo-cig/pharo-resvg:main' ]; 
 	baseline: 'StringInterpolation' with: [ spec 
 		repository: 'github://estebanlm/pharo-string-interpolation:master';
 		loads: #('StringInterpolation') ];
@@ -66,10 +67,10 @@ MetaMetacello load: [ :spec | spec
 		repository: 'github://pharo-spec/Spec:dev-3.0';
 		loads: #(default 'Spec2-Alexandrie' 'Spec2-Adapters-Morphic-Alexandrie') ];
 	baseline: 'Gtk' with: [ spec 
-		repository: 'github://pharo-spec/gtk-bindings:gtk4';
+		repository: 'github://pharo-spec/gtk-bindings:main';
 		loads: #(default 'Gtk-Utils') ];
 	baseline: 'SpecGtk' with: [ spec 
-		repository: 'github://pharo-spec/Spec-Gtk:gtk4';
+		repository: 'github://pharo-spec/Spec-Gtk:main';
 		loads: #(default) ];
 	baseline: 'NewTools' with: [ spec 
 		repository: 'github://pharo-spec/NewTools:dev-2.0';
