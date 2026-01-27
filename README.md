@@ -5,6 +5,7 @@ package dependencies:
 - gtksourceview5
 - libadwaita
 - libpanel
+- resvg
 
 ## 1. Download VM
 they should be already in the system, otherwise you can install them using your favourite installer.
