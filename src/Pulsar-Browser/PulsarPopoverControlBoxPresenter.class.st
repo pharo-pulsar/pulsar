@@ -11,7 +11,7 @@ Class {
 }
 
 { #category : 'private' }
-PulsarPopoverControlBoxPresenter >> announcePulsar [ 
+PulsarPopoverControlBoxPresenter >> announceDock [ 
 
 	dockAction ifNil: [ ^ self ].
 	dockAction value
@@ -28,13 +28,12 @@ PulsarPopoverControlBoxPresenter >> defaultLayout [
 { #category : 'initialization' }
 PulsarPopoverControlBoxPresenter >> initializePresenters [
 
-	toolbarPresenter := self newToolbar
+	(toolbarPresenter := self newToolbar)
 		addStyle: 'stToolbar';
 		addStyle: 'pulsarToolbar';
 		addStyle: 'pulsarPopoverControlToolbar';
 		displayMode: self application toolbarDisplayMode;
-		fillWith: self popoverControlGroup;
-		yourself	
+		fillWith: self popoverControlGroup
 ]
 
 { #category : 'events' }
@@ -58,9 +57,9 @@ PulsarPopoverControlBoxPresenter >> popoverControlGroup [
 	^ SpActionGroup new
 		addActionWith: [ :action | action 
 			name: 'Pulsar';
-			iconName: 'arrow-down';
-			description: 'Pulsar popover.';
-			action: [ self announcePulsar ] ];
+			iconName: 'arrowDown';
+			description: 'Dock popover.';
+			action: [ self announceDock ] ];
 		addActionWith: [ :action | action 
 			name: 'Close';
 			iconName: 'close';

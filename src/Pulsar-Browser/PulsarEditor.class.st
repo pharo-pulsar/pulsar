@@ -199,9 +199,7 @@ PulsarEditor >> doSubmit: aString [
 	result := self updateModel: aString.
 	result ifTrue: [
 		self unmarkDirty.
-		self notificationCenter announce: (PulsarModelChanged 
-			newValue: self model
-			oldEntity: oldModel) ].
+		self notifyModelChangedFrom: oldModel to: self model ].
 
 	^ result
 ]
@@ -342,7 +340,10 @@ PulsarEditor >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
 		title: (self model ifNotNil: #name);
-		whenClosedDo: [ self notifyEditorClosed ]
+		whenClosedDo: [ self notifyEditorClosed ].
+		
+	self panelPlacedIconName ifNotNil: [ :aName |
+		aWindowPresenter windowIcon: (self iconNamed: aName) ]
 ]
 
 { #category : 'testing' }
@@ -412,6 +413,14 @@ PulsarEditor >> notifyEntityChanged: anEntity [
 
 	anEntity ifNil: [ ^ self ].
 	self notificationCenter announce: (PulsarModelChanged newValue: anEntity)
+]
+
+{ #category : 'private - announcing' }
+PulsarEditor >> notifyModelChangedFrom: oldModel to: newModel [
+
+	self notificationCenter announce: (PulsarModelChanged 
+		newValue: newModel
+		oldEntity: oldModel)
 ]
 
 { #category : 'private' }
@@ -553,8 +562,12 @@ PulsarEditor >> updateModel: aString [
 
 { #category : 'initialization' }
 PulsarEditor >> updatePanelWindowTitle [
+
 	self withPanelWindowDo: [ :w | 
-		w title: self model name ]
+		w title: self model name.
+		"it may have an icon, but is the panelPlacedIconName which needs to give it to me"
+		self panelPlacedIconName ifNotNil: [ :aName | 
+			w windowIcon: (self iconNamed: aName) ] ]
 ]
 
 { #category : 'initialization' }

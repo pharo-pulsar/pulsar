@@ -25,24 +25,27 @@ PulsarProtocolButtonPresenter >> defaultLayout [
 
 	^ SpBoxLayout newHorizontal
 		vAlignCenter;
+		"add: chooserPresenter expand: false;"
+		add: '[';
 		add: protocolPresenter;
-		add: chooserPresenter expand: false;
+		add: ']';
 		yourself
 ]
 
 { #category : 'initialization' }
 PulsarProtocolButtonPresenter >> initializePresenters [
-	self addStyle: 'pvMethodProtocol'.
 
-	protocolPresenter := self newLabel
-		addStyle: 'flat';
+	self addStyle: 'pulsarMethodProtocol'.
+
+	protocolPresenter := self newLink
+		action: [ self popupProtocol ];
 		yourself.
 		
-	chooserPresenter := self newButton
+	"chooserPresenter := self newButton
 		addStyle: 'flat';
 		icon: (self iconNamed: 'tag');
 		action: [ self popupProtocol ];
-		yourself
+		yourself"
 ]
 
 { #category : 'actions' }

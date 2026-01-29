@@ -78,6 +78,12 @@ PulsarSelectDialog >> newDialogLabel [
 		yourself
 ]
 
+{ #category : 'scripting - widgets' }
+PulsarSelectDialog >> newList [
+
+	^ self newFilteringList
+]
+
 { #category : 'private' }
 PulsarSelectDialog >> setLabel: aString [
 

@@ -61,7 +61,8 @@ PulsarMethodEditor >> connectPresenters [
 
 	super connectPresenters.
 	protocolPresenter whenProtocolChangedDo: [ :aProtocolModel |
-		self notifyEntityChanged: self model ]
+		self notifyEntityChanged: self model.
+		self takeKeyboardFocus ]
 ]
 
 { #category : 'private - actions' }
