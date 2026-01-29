@@ -51,17 +51,23 @@ PulsarMDINeutralIconProvider >> application: anApplication [
 	application := anApplication
 ]
 
-{ #category : 'utilities' }
+{ #category : 'private' }
 PulsarMDINeutralIconProvider >> colorFor: iconName forceNeutral: forceBoolean [
-	| index iconColorTable |
 
-	index := self isDarkTheme 
-		ifTrue: [ 2 ]
-		ifFalse: [ 1 ].
+	^ self isDarkTheme
+		ifTrue: [ self darkColorFor: iconName forceNeutral: forceBoolean ]
+		ifFalse: [ self lightColorFor: iconName forceNeutral: forceBoolean ]
+]
+
+{ #category : 'private' }
+PulsarMDINeutralIconProvider >> colorFor: iconName themePosition: aNumber forceNeutral: forceBoolean [
+	"1 is the position of light colors
+	 2 is the position of dark colors 
+	 (see #createTable)"
 	
 	^ forceBoolean 
-		ifTrue: [ self neutralColors at: index ]
-		ifFalse: [ (colorTable at: iconName ifAbsent: [ self neutralColors ]) at: index ]
+		ifTrue: [ self neutralColors at: aNumber ]
+		ifFalse: [ (colorTable at: iconName ifAbsent: [ self neutralColors ]) at: aNumber ]
 ]
 
 { #category : 'initialization' }
@@ -227,6 +233,15 @@ PulsarMDINeutralIconProvider >> createTable [
 	)
 ]
 
+{ #category : 'private' }
+PulsarMDINeutralIconProvider >> darkColorFor: iconName forceNeutral: forceBoolean [
+	
+	^ self 
+		colorFor: iconName 
+		themePosition: 2 "the position of dark colors (see #createTable)"
+		forceNeutral: forceBoolean
+]
+
 { #category : 'accessing' }
 PulsarMDINeutralIconProvider >> iconNamed: aName ifAbsent: aBlock [
 
@@ -260,6 +275,15 @@ PulsarMDINeutralIconProvider >> initializeTable [
 PulsarMDINeutralIconProvider >> isDarkTheme [
 
 	^ self application configuration isDarkTheme
+]
+
+{ #category : 'private' }
+PulsarMDINeutralIconProvider >> lightColorFor: iconName forceNeutral: forceBoolean [
+	
+	^ self 
+		colorFor: iconName 
+		themePosition: 1 "the position of light colors (see #createTable)"
+		forceNeutral: forceBoolean
 ]
 
 { #category : 'utilities' }
