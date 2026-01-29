@@ -1,3 +1,6 @@
+"
+A panel to show registered repositories. 
+"
 Class {
 	#name : 'PulsarRepositoriesView',
 	#superclass : 'PulsarCollectionView',

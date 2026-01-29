@@ -6,7 +6,8 @@ Class {
 	#superclass : 'PulsarCollectionView',
 	#instVars : [
 		'toolbarPresenter',
-		'isDisplayed'
+		'isDisplayed',
+		'toolbarActions'
 	],
 	#category : 'Pulsar-Tool-Repositories',
 	#package : 'Pulsar-Tool-Repositories'
@@ -24,6 +25,7 @@ PulsarRepositoryChangesView >> connectPresenters [
 	super connectPresenters.
 	
 	listPresenter addActionWith: [ :action | action
+		priority: 0;
 		dynamicName: [ 
 			listPresenter selectedItem 
 				ifNotNil: [ :aNode | 
@@ -68,11 +70,6 @@ PulsarRepositoryChangesView >> defineActionsOn: aBuilder [
 			shortcutKey: $c actionModifier;
 			action: [ self doCommit ] ];
 		addActionWith: [ :action | action 
-			name: 'Discard';
-			iconName: 'discard';
-			description: 'Discard current changes and restore HEAD';
-			action: [ self doDiscardChanges ] ];
-		addActionWith: [ :action | action 
 			name: 'Refresh';
 			iconName: 'refresh';
 			description: 'Refresh repository changes';
@@ -112,7 +109,26 @@ PulsarRepositoryChangesView >> defineExtraActionsOn: aBuilder [
 		addActionWith: [ :action | action 
 			name: 'Open repository location';
 			description: 'Open repository location';
-			action: [ self doOpenRepositoryLocation ] ] ]
+			action: [ self doOpenRepositoryLocation ] ];
+		addActionWith: [ :action | action 
+			name: 'Recalculate dirty packages';
+			description: 'Recalculate disrty packages of this repository';
+			action: [ self doRecalculateDirtyPackages ] ] ]
+]
+
+{ #category : 'private - definitions' }
+PulsarRepositoryChangesView >> defineNodeActionsOn: aBuilder [
+	<dockActions>
+	
+	aBuilder addGroup: #nodeActions with: [ :group | group
+		beDisplayedAsGroup;
+		addActionWith: [ :action | action
+			priority: 101;
+			name: 'Discard changes';
+			iconName: 'discard';
+			description: 'Discard changes in current node and restore repository HEAD';
+			actionEnabled: [ self hasSelectedItem ];
+			action: [ self doDiscardSelectedChanges ] ] ]
 ]
 
 { #category : 'private - actions' }
@@ -169,6 +185,18 @@ PulsarRepositoryChangesView >> doCommit [
 ]
 
 { #category : 'private - actions' }
+PulsarRepositoryChangesView >> doDiscardSelectedChanges [
+	| node |
+
+	node := self selectedItem.
+	node ifNil: [ ^ self ].
+	
+	self scheduleJob: [
+		self model discardChangesOn: node.
+		self updatePresenter ]
+]
+
+{ #category : 'private - actions' }
 PulsarRepositoryChangesView >> doExpandAll [
 
 	self scheduleJob: [
@@ -183,10 +211,25 @@ PulsarRepositoryChangesView >> doOpenRepositoryLocation [
 ]
 
 { #category : 'private - actions' }
+PulsarRepositoryChangesView >> doRecalculateDirtyPackages [
+	
+	self scheduleJob: [
+		self model recalculateDirtyChanges.
+		self updatePresenter ]
+]
+
+{ #category : 'private - actions' }
 PulsarRepositoryChangesView >> doRefresh [
 
 	self model resetDiff.
 	self updatePresenter
+]
+
+{ #category : 'private' }
+PulsarRepositoryChangesView >> entitySelected: ann [
+
+	super entitySelected: ann.
+	self updateToolbar
 ]
 
 { #category : 'events' }
@@ -214,7 +257,7 @@ PulsarRepositoryChangesView >> initializePresenters [
 	self addStyle: 'pulsarRepositoryChangesView'.
 
 	toolbarPresenter := self instantiate: PulsarToolbarPresenter.
-	toolbarPresenter actions: (self actions actionsFor: #gitActions).
+	toolbarPresenter actions: self toolbarActions.
 	toolbarPresenter addPresenterMenuButtonWith: (self actions actionsForAll: #(collapse extra)).
 
 	listPresenter := self newEasyTreeListView
@@ -223,6 +266,7 @@ PulsarRepositoryChangesView >> initializePresenters [
 		rowPresenterClass: PulsarRepositoryChangeRow;
 		display: [ :aNode | aNode description ];
 		children: [ :aNode | aNode children ];
+		actions: (self actions actionsFor: #nodeActions);
 		yourself
 ]
 
@@ -266,6 +310,13 @@ PulsarRepositoryChangesView >> toggleActiveInBranch [
 ]
 
 { #category : 'initialization' }
+PulsarRepositoryChangesView >> toolbarActions [
+
+	^ toolbarActions ifNil: [ 
+		toolbarActions := (self actions actionsForAll: #(gitActions nodeActions)) ]
+]
+
+{ #category : 'initialization' }
 PulsarRepositoryChangesView >> updatePresenter [
 	
 	self model ifNil: [ ^ self ].
@@ -281,4 +332,10 @@ PulsarRepositoryChangesView >> updatePresenter [
 			listPresenter 
 				roots: diff children;
 				expandAll ] ]
+]
+
+{ #category : 'private' }
+PulsarRepositoryChangesView >> updateToolbar [
+
+	self toolbarActions allCommands do: [ :each | each updateEnableStatus ]
 ]

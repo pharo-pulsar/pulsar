@@ -41,13 +41,36 @@ PulsarRepositoryPackagesView >> defineActionsOn: aBuilder [
 			name: 'Add Package';
 			iconName: #add;
 			description: 'Add a Package';
-			action: [ ] ]"; 
+			action: [ self doAddPackageCommand: action ] ]"; 
 		addActionWith: [ :action | action 
 			name: 'Load';
 			iconName: #load;
 			description: 'Load baseline';
 			actionEnabled: [ listPresenter selectedItem isBaseline ];
 			action: [ ] ]" ]
+]
+
+{ #category : 'private - actions' }
+PulsarRepositoryPackagesView >> doAddPackageCommand: anAction [
+	| result |
+
+	result := self application newSelect
+		extent: 300@500;
+		title: 'Add package';
+		message: 'Select package';
+		items: (self model allPackagesAvailableToAdd sorted: #name ascending);
+		display: [ :aPackage | aPackage name ];
+		displayIcon: [ :aClass | self application iconNamed: 'package' ];
+		openModalWithParent: self window.
+	result ifNil: [ ^ self ].
+	
+	self scheduleJob: [
+		self model addPackage: result.
+		self updatePresenter. 
+		self application deferToNextCycle: [
+			listPresenter 
+				selectItem: result 
+				scrollToSelection: true ] ]
 ]
 
 { #category : 'private - actions' }

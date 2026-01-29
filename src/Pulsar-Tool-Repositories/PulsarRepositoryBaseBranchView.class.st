@@ -85,5 +85,5 @@ PulsarRepositoryBaseBranchView >> updatePresenter [
 { #category : 'private' }
 PulsarRepositoryBaseBranchView >> updateToolbar [
 
-	toolbarActions allCommands do: [ :each | each updateEnableStatus ]
+	self toolbarActions allCommands do: [ :each | each updateEnableStatus ]
 ]

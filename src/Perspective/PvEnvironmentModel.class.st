@@ -29,7 +29,7 @@ PvEnvironmentModel >> addPackageNamed: aString [
 { #category : 'accessing' }
 PvEnvironmentModel >> allBaselines [
 	
-	^ BaselineOf allSubclasses
+	^ self entity allBaselines 
 ]
 
 { #category : 'accessing - navigating' }
@@ -42,6 +42,12 @@ PvEnvironmentModel >> allBehaviors [
 PvEnvironmentModel >> allClassesAndTraits [
 
 	^ self entity allClassesAndTraits
+]
+
+{ #category : 'accessing - navigating' }
+PvEnvironmentModel >> allPackages [
+
+	^ self entity allPackages
 ]
 
 { #category : 'converting' }
@@ -64,13 +70,11 @@ PvEnvironmentModel >> canBeRenamed [
 
 { #category : 'accessing' }
 PvEnvironmentModel >> children [
-
-	^ (self entity packages 
-		collect: [ :each | 
-			PvPackageModel 
-				newEnvironment: self 
-				parent: nil
-				entity: each ])
+	^ (self entity allPackages collect: [ :each |
+		PvPackageModel 
+			newEnvironment: self 
+			parent: nil 
+			entity: each ]) 
 		sorted: #name ascending
 ]
 

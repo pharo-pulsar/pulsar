@@ -13,6 +13,12 @@ PvSystemEnvironment >> addPackageNamed: aName [
 ]
 
 { #category : 'query' }
+PvSystemEnvironment >> allBaselines [
+
+	^ BaselineOf allSubclasses
+]
+
+{ #category : 'query' }
 PvSystemEnvironment >> allBehaviors [
 
 	^ self class environment allBehaviors
@@ -22,6 +28,12 @@ PvSystemEnvironment >> allBehaviors [
 PvSystemEnvironment >> allClassesAndTraits [
 
 	^ self class environment allClassesAndTraits
+]
+
+{ #category : 'query' }
+PvSystemEnvironment >> allPackages [
+
+	^ self organizer packages
 ]
 
 { #category : 'testing' }
@@ -51,5 +63,9 @@ PvSystemEnvironment >> packageNamed: aString [
 { #category : 'accessing' }
 PvSystemEnvironment >> packages [
 	
-	^ self organizer packages
+	self 
+		deprecated: 'We use #allPackages for consistency' 
+		transformWith: '`@receiver packages' -> '`@receiver allPackages'.
+	
+	^ self allPackages
 ]

@@ -20,6 +20,21 @@ PulsarRepositoryModel >> activeNodes [
 				ifTrue: [ stream nextPut: each node ] ] ]
 ]
 
+{ #category : 'actions' }
+PulsarRepositoryModel >> addPackage: aPackage [
+
+	self entity workingCopy addPackageNamed: aPackage name
+]
+
+{ #category : 'accessing' }
+PulsarRepositoryModel >> allPackagesAvailableToAdd [
+	| packageNames |
+	
+	packageNames := self entity workingCopy packages collect: #name.
+	^ self environmentModel allPackages 
+		reject: [ :each  | packageNames includes: each name ]
+]
+
 { #category : 'accessing' }
 PulsarRepositoryModel >> commitsTo: aNumber [
 
@@ -60,6 +75,13 @@ PulsarRepositoryModel >> diffToReferenceCommit [
 	^ diff ifNil: [ 
 		diff := self critical: [ 
 			self entity workingCopy diffToReferenceCommit ] ]
+]
+
+{ #category : 'actions' }
+PulsarRepositoryModel >> discardChangesOn: aNode [
+
+	self entity workingCopy discardChanges: aNode entity.
+	self resetDiff
 ]
 
 { #category : 'testing' }
@@ -219,6 +241,13 @@ PulsarRepositoryModel >> packages [
 PulsarRepositoryModel >> project [
 
 	^ self entity project
+]
+
+{ #category : 'actions' }
+PulsarRepositoryModel >> recalculateDirtyChanges [
+
+	self entity workingCopy forceCalculateDirtyPackages.
+	self resetDiff
 ]
 
 { #category : 'accessing' }

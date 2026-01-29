@@ -7,14 +7,15 @@ The UI takes inspiration from lazygit (TUI), for its simplicity and power.
 Class {
 	#name : 'PulsarRepositoryBrowser',
 	#superclass : 'PulsarBaseBrowser',
-	#category : 'Pulsar-Tool-Repositories',
-	#package : 'Pulsar-Tool-Repositories'
+	#category : 'Pulsar-Tool-Repositories-View-Repository',
+	#package : 'Pulsar-Tool-Repositories',
+	#tag : 'View-Repository'
 }
 
 { #category : 'accessing - defaults' }
 PulsarRepositoryBrowser class >> defaultWindowSize [
 
-	^ 900@900
+	^ 1000@900
 ]
 
 { #category : 'initialization' }
