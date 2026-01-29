@@ -9,12 +9,6 @@ Class {
 	#tag : 'Tool-Debugger'
 }
 
-{ #category : 'accessing' }
-PulsarContextEditor >> beFixedToPulsar [
-	"prepare this context editor as 'fixed' to the debugger dock (it will not be modified 
-	 when switching contexts"
-]
-
 { #category : 'layout' }
 PulsarContextEditor >> defaultLayout [
 
