@@ -182,6 +182,10 @@ PvClassModel >> defineRefactorActionsOn: aBuilder [
 			description: 'Insert a superclass';
 			action: [ :aContext |  aContext doInsertSuperclass: self ] ];
 		addActionWith: [ :action | action
+			name: 'Insert subclass';
+			description: 'Insert a subclass';
+			action: [ :aContext |  aContext doInsertSubclass: self ] ];
+		addActionWith: [ :action | action
 			name: ( 'Remove {1}' format: { self name });
 			description: 'Remove class';
 			action: [ :aContext | aContext doRemoveClass: self ] ] ]
