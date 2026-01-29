@@ -160,6 +160,12 @@ PvBaseModel >> isClassModel [
 ]
 
 { #category : 'testing' }
+PvBaseModel >> isContextModel [
+
+	^ false
+]
+
+{ #category : 'testing' }
 PvBaseModel >> isManagedAndModified [
 
 	^ false

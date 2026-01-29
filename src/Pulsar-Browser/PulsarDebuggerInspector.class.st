@@ -53,8 +53,12 @@ PulsarDebuggerInspector >> eventContextChanged: anAnnouncement [
 
 { #category : 'events' }
 PulsarDebuggerInspector >> eventModelSelected: anAnnouncement [
+	| selectedModel |
 	
-	self inspectContextModel: anAnnouncement value
+	selectedModel := anAnnouncement value.
+	selectedModel isContextModel ifFalse: [ ^ self ].
+	
+	self inspectContextModel: selectedModel
 ]
 
 { #category : 'initialization' }

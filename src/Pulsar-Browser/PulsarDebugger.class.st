@@ -85,14 +85,15 @@ PulsarDebugger >> eventModelActivated: anAnnouncement [
 
 { #category : 'events' }
 PulsarDebugger >> eventModelSelected: anAnnouncement [
-	| contextModel |
+	| selectedModel |
 	
-	contextModel := anAnnouncement value.
+	selectedModel := anAnnouncement value.
+	selectedModel isContextModel ifFalse: [ ^ self ].
 
 	contextEditor ifNil: [
 		contextEditor := self addPresenterClass: PulsarContextEditor ].
-	logger trace: contextModel.
-	contextEditor model: contextModel.
+	logger trace: selectedModel.
+	contextEditor model: selectedModel.
 	debugToolbarPresenter updatePresenter
 ]
 

@@ -112,6 +112,12 @@ PulsarContextModel >> inOneLine [
 	^ string
 ]
 
+{ #category : 'testing' }
+PulsarContextModel >> isContextModel [
+
+	^ true
+]
+
 { #category : 'accessing' }
 PulsarContextModel >> method [
 
