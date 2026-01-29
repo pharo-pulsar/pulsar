@@ -343,7 +343,7 @@ paneldock panelframe popover box.pulsarToolbarPanel { background-color: unset; }
 .stTree columnview listview row cell { margin: 0px; padding: 2px; }
 .stTree columnview listview row cell box { border-spacing: 5px; }
 .stRow { margin: 1px; border-spacing: 3px; }
-.tinyFont {font-size: 0.7em; }
+.tinyFont {font-size: 0.7em; font-weigth: normal; }
 .searchBox { background-color: @popover_bg_color; }
 .link { padding: 0px; }
 .cell-link { font-size: smaller; font-weight: normal; color: gray; min-width: 10px; }
@@ -365,7 +365,6 @@ tab .tab-title label { font-size: 0.9em; }
 .pulsarEditorBreadcrumb { font-size: 9pt; }
 .pulsarEditorBreadcrumb label.separator { padding: 0px 5px 0px 5px; }
 popover .pulsarPreviewEditor { min-width: 680px; min-height: 340px; }
-.pulsarBrowser { }
 .pulsarDialog, .pulsarFlyingBrowser { margin: 5px; border-spacing: 5px; }
 
 .pulsarSpotter { margin: 5px; border-spacing: 5px; min-width: 700px; }
@@ -397,10 +396,13 @@ popover .pulsarPreviewEditor { min-width: 680px; min-height: 340px; }
 	text-decoration-line: underline;
 	text-decoration-style: dotted;
 }
-.pulsarMethodRow .test-unknown { }
+/* .pulsarMethodRow .test-unknown { } */
 .pulsarMethodRow .test-passed { color: var(--test-passed); }
 .pulsarMethodRow .test-error { color: var(--test-error); }
 .pulsarMethodRow .test-failure { color: var(--test-failure); }
+
+.pulsarMethodProtocol { border-spacing: 3px; }
+.pulsarMethodProtocol button { font-weight: normal; font-size: 9pt; }
 
 /* Repositories (I can also have .notLoaded and .upToDate) */
 .pulsarRepositories .pulsarRepositoryRow label.missing { color: var(--repository-error); }
@@ -422,8 +424,8 @@ popover .pulsarPreviewEditor { min-width: 680px; min-height: 340px; }
 .pulsarRepositoryBranchRow label.head { font-weight: bold; }
 .pulsarRepositoryRow .extra label.outgoing, .pulsarRepositoryBranchRow .extra label.outgoing { color: var(--commit-outgoing); }
 .pulsarRepositoryRow .extra label.incoming, .pulsarRepositoryBranchRow .extra label.incoming{ color: var(--commit-incoming); }
-.pulsarRepositoryCommitView label.outgoing { color: var(--commit-outgoing); }
-.pulsarRepositoryPackageRow label.loaded { }
+.pulsarRepositoryCommit label.outgoing { color: var(--commit-outgoing); }
+/* .pulsarRepositoryPackageRow label.loaded { } */
 .pulsarRepositoryPackageRow label.notloaded { color: var(--package-notloaded); }
 '
 ]
