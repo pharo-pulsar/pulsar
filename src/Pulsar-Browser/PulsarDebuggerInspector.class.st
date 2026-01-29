@@ -69,6 +69,17 @@ PulsarDebuggerInspector >> initialize [
 ]
 
 { #category : 'initialization' }
+PulsarDebuggerInspector >> initializePanelWindow: aPanelWindowPresenter [
+ 
+	super initializePanelWindow: aPanelWindowPresenter.
+	aPanelWindowPresenter 
+		whenPlacedDo: [ self panelPlaced: aPanelWindowPresenter ];
+		whenTransferredDo: [ :ann | self panelTransferredFrom: ann fromWindow to: ann toWindow ];
+		whenPresentedDo: [ self recordLastPresented ];
+		whenFocusReceivedDo: [ self notifyEditorActivated ]
+]
+
+{ #category : 'initialization' }
 PulsarDebuggerInspector >> initializePresenters [
 
 	headerPresenter := self instantiate: PulsarEditorToolbarPresenter.
@@ -79,10 +90,9 @@ PulsarDebuggerInspector >> initializePresenters [
 { #category : 'initialization' }
 PulsarDebuggerInspector >> initializeWindow: aWindowPresenter [
 
-	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
-		title: (self model ifNotNil: [ :aModel | aModel fullName ] ifNil: [ '' ]);
-		windowIcon: (self iconNamed: 'inspector');
+		title: self title;
+		windowIcon: (self iconNamed: self panelPlacedIconName);
 		whenClosedDo: [ self notifyEditorClosed ]
 ]
 
