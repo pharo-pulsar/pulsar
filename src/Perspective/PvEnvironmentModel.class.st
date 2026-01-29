@@ -96,7 +96,7 @@ PvEnvironmentModel >> hasPackageNamed: aString [
 { #category : 'accessing' }
 PvEnvironmentModel >> iconName [
 
-	^ 'library'
+	^ 'systemEnvironment'
 ]
 
 { #category : 'accessing' }
