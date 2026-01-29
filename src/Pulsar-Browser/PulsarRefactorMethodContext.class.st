@@ -8,13 +8,13 @@ Class {
 
 { #category : 'refactoring' }
 PulsarRefactorMethodContext >> doPullUpMethod: aMethodModel [
-	
-	self schedule: [
-		(RePullUpMethodDriver newApplication: self application)
-			model: (RBNamespace onEnvironment: RBBrowserEnvironment new)
+
+	self scheduleTask: [
+			(RePullUpMethodDriver newApplication: self application)
+				model: (RBNamespace onEnvironment: RBBrowserEnvironment new)
 				scopes: { RBBrowserEnvironment new }
 				pullUpMethods: { aMethodModel entity };
-			runRefactoring ]	
+				runRefactoring ]
 ]
 
 { #category : 'refactoring' }
