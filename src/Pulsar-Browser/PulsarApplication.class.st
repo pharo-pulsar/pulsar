@@ -149,6 +149,16 @@ PulsarApplication >> colorsForTestResult [
 	^ self configuration colorsForTestResult
 ]
 
+{ #category : 'schedulling' }
+PulsarApplication >> deferToNextCycle: aBlock [
+	"I need to force a next cycle for certain functions"
+	
+	[
+		Processor yield.
+		self defer: aBlock 
+	] fork
+]
+
 { #category : 'finalization' }
 PulsarApplication >> finalize [
 
@@ -380,7 +390,6 @@ PulsarApplication >> schedule: aBlock [
 
 { #category : 'private - scheduling' }
 PulsarApplication >> scheduleTask: aBlock [
-
 	^ self scheduler schedule: [ 
 		aBlock 
 			on: Error 

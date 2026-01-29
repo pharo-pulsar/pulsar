@@ -121,9 +121,9 @@ PvMethodProtocolChooserPresenter >> updatePresenter [
 			| protocolName | 
 			protocolName := self model protocolName.
 			protocolListPresenter selectItem: protocolName.
-			protocolNamePresenter 
-				text: protocolName;
-				selectAll ] ]
+			protocolNamePresenter text: protocolName.
+		 	self application deferToNextCycle: [ 
+		 		protocolNamePresenter selectAll ] ] ]
 ]
 
 { #category : 'private' }
