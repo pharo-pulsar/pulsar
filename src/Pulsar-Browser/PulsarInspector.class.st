@@ -110,7 +110,6 @@ PulsarInspector >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
 		title: (self model ifNotNil: [ :aModel | aModel fullName ] ifNil: [ '' ]);
-		windowIcon: (self iconNamed: self panelPlacedIconName);
 		whenClosedDo: [ self notifyEditorClosed  ]
 ]
 

@@ -34,13 +34,13 @@ PulsarEditor class >> defineNavigationActionsOn: aBuilder [
 		addActionWith: [ :action | action 
 			name: 'Show hierarchy';
 			description: 'Show hierarchy';
-			iconName: #hierarchy; "was #smallHierarchyBrowser... TODO see semantic meaning"
+			iconName: 'hierarchy.neutral';
 			shortcutKey: $h mod1; 
 			action: [ :aContext | aContext doShowHierarchy: action ] ];
 		addActionWith: [ :action | action 
 			name: 'Show senders';
 			description: 'Show senders';
-			iconName: #senders;
+			iconName: 'senders.neutral';
 			action: [ :aContext | aContext doBrowseSendersCommand: action ] ] ]
 ]
 

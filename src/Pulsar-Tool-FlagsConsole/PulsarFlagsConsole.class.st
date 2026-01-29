@@ -150,14 +150,14 @@ PulsarFlagsConsole >> initializeToolbar [
 	
 	scopeClassButton := self newToggleButton
 		addStyle: 'flat';
-		icon: (self iconNamed: #class);
+		icon: (self iconNamed: 'class.neutral');
 		help: 'Toggle class scope';
 		state: (self model isScope: #class);
 		whenActivatedDo: [ self doActivateClassScope ];
 		yourself.
 	scopePackageButton := self newToggleButton
 		addStyle: 'flat';
-		icon: (self iconNamed: #package);
+		icon: (self iconNamed: 'package.neutral');
 		help: 'Toggle package scope';
 		state: (self model isScope: #package);
 		whenActivatedDo: [ self doActivatePackageScope ];

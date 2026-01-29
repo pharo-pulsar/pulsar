@@ -294,20 +294,22 @@ PulsarSearchBarPresenter >> initializeReplace [
 	
 	replaceButton := self newButton
 		addStyle: 'flat';
-		icon: (self iconNamed: 'replace');
+		addStyle: 'tinyFont';
+		label: 'Replace';
 		help: 'Replace next occurrence';
 		action: [ self doReplace ].
 	
 	replaceAllButton := self newButton
 		addStyle: 'flat';
-		icon: (self iconNamed: 'replace-all');
+		addStyle: 'tinyFont';
+		label: 'Replace All';
 		help: 'Replace all occurrences';
 		action: [ self doReplaceAll ].
 
 	replaceToolbarPresenter := self buildReplaceToolbar.
 	
 	replaceTextPresenter hide.
-	replaceToolbarPresenter hide.
+	replaceToolbarPresenter hide
 ]
 
 { #category : 'initialization' }

@@ -218,12 +218,11 @@ PulsarApplication >> newConfirm [
 { #category : 'private - factory' }
 PulsarApplication >> newIconProvider [
 
-	^ (PvAliasedVSCodeIconProvider new
-			application: self;
-			addLocation: self resourcesDir / 'vscode-extraicons';
-			addLocation: self resourcesDir / 'vscode-icons';
-			addLocation: self resourcesDir / 'vscode-codicons';
-			yourself),
+	^ (PulsarMDINeutralIconProvider new
+		application: self;
+		addLocation: self resourcesDir / 'MaterialDesign' / 'extras';
+		addLocation: self resourcesDir / 'MaterialDesign' / 'svg';
+		yourself),
 	  PvDefaultIconProvider new
 ]
 

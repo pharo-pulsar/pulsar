@@ -99,6 +99,12 @@ PulsarDebuggerInspector >> inspectorModelOf: aContextModel [
 	^ self subclassResponsibility
 ]
 
+{ #category : 'private' }
+PulsarDebuggerInspector >> panelPlacedIconName [
+
+	^ 'inspector.neutral'
+]
+
 { #category : 'initialization' }
 PulsarDebuggerInspector >> registerToBrowser: aPulsarBrowser [
 
