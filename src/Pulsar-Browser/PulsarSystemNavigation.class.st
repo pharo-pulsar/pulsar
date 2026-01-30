@@ -83,7 +83,13 @@ PulsarSystemNavigation >> browseVersionsOf: aMethod [
 { #category : 'accessing' }
 PulsarSystemNavigation >> environmentModel [
 
-	^ self window model environmentModel
+	^ environmentModel ifNil:[ self window model environmentModel ]
+]
+
+{ #category : 'accessing' }
+PulsarSystemNavigation >> environmentModel: anEnvironmentModel [
+
+	environmentModel := anEnvironmentModel
 ]
 
 { #category : 'accessing' }
