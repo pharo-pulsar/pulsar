@@ -35,3 +35,11 @@ BaselineOfPulsar >> linden: spec [
 		spec repository: 'gitlab://estebanlm/linden' ]
 
 ]
+
+{ #category : 'accessing' }
+BaselineOfPulsar >> project [
+
+	^ super project
+		loadType: #atomic;
+		yourself
+]
