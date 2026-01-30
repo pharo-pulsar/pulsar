@@ -24,7 +24,7 @@ You are a real programmer... why aren't you using linux?
 Download the prepared VM with dependencies **TODO**
 
 ## 2. Download a usable image
-Right now we are using [Pharo14 build 395](https://files.pharo.org/image/140/Pharo14.0-SNAPSHOT.build.395.sha.fe1493a44b.arch.64bit.zip)
+Right now we are using [Pharo14 build 395](https://files.pharo.org/image/140/https://files.pharo.org/image/140/Pharo14.0-SNAPSHOT.build.482.sha.3c5495cc6b.arch.64bit.zip)
 (We will validate new images time to time but since P14 is changing many underlying things, we prefer not to move so much, 
 we want to deal with our own bugs -already a lot- not others bugs).
 
@@ -55,6 +55,7 @@ MetaMetacello load: [ :spec | spec
 	baseline: 'UnifiedFFI' with: [ spec 
 		repository: 'github://pharo-cig/UnifiedFFI:main';
 		className: #BaselineOfUnifiedFFIFull ];
+	baseline: 'Alexandrie' with: [ spec repository: 'github://pharo-graphics/Alexandrie:master' ]; 
 	baseline: 'Resvg' with: [ spec repository: 'github://pharo-cig/pharo-resvg:main' ]; 
 	baseline: 'StringInterpolation' with: [ spec 
 		repository: 'github://estebanlm/pharo-string-interpolation:master';
