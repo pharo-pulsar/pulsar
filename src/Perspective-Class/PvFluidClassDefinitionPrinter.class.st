@@ -63,7 +63,7 @@ PvFluidClassDefinitionPrinter >> classDefinitionTemplateInPackage: aPackageName 
 			<< String tab << 'package: ''' << aPackageName << '''' ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'accessing' }
 PvFluidClassDefinitionPrinter >> classSlotDefinitionsOn: aStream [
 	"If the class has many instance variable print one slot per line, do the same for complex slots."
 	| oneSlotPerLine localSlots |
@@ -127,4 +127,18 @@ PvFluidClassDefinitionPrinter >> traitDefinitionTemplateInPackage: aPackageName 
 			<< String tab << 'classSlots: {};' << String cr
 			<< String tab << 'tag: ''' << (aTagName ifNil: [ '' ]) << ''';' << String cr
 			<< String tab << 'package: ''' << aPackageName << '''' ]
+]
+
+{ #category : 'accessing' }
+PvFluidClassDefinitionPrinter >> traitsOn: strm [
+	"uses: can the last part of a definition so watch out for terminating ;"
+
+	forClass hasTraitComposition ifTrue: [
+		"forClass traitComposition innerClass = TEmpty ifTrue: [ ^ self ]."
+		"isEmpty traitComposition should probably moved to Trait."
+		strm
+			crtab;
+			nextPutAll: 'traits: {';
+			nextPutAll: forClass traitCompositionString;
+			nextPutAll: '};' ]
 ]
