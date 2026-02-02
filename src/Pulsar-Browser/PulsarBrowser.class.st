@@ -189,6 +189,8 @@ PulsarBrowser >> initializeDefaultWorkspace [
 	self addPresenterClass: PulsarFlagsConsole model: (PulsarFlagsModel on: self model). 	
 	self addPresenterClass: PulsarPlayground.
 	
+	self addPresenterClass: PulsarWelcomeView.
+	
 	self updateTitle
 ]
 

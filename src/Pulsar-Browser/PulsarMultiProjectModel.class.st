@@ -121,6 +121,7 @@ PulsarMultiProjectModel >> name [
 
 { #category : 'actions' }
 PulsarMultiProjectModel >> newProjectNamed: aName [
+
 	| baselineName baselineClass |
 	self flag: #TODO. "I am missing validations, handling of errors, etc" 
 

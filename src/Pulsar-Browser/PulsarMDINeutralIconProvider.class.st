@@ -150,6 +150,7 @@ PulsarMDINeutralIconProvider >> createTable [
 		('smallHierarchyBrowser'  'file-tree-outline'             '#0f766e' '#67e8f9')
 		('references'             'file-tree-outline'             '#0f766e' '#67e8f9')
 		('browse'             	  'view-list-outline'  			'#0f766e' '#67e8f9')
+		('pharo'					  'lighthouse'					'#0f766e' '#67e8f9')
 
 		"Files / project / data UI"
 		('open'                   'folder-open-outline')
