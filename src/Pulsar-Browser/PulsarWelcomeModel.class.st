@@ -1,8 +1,8 @@
 Class {
 	#name : 'PulsarWelcomeModel',
 	#superclass : 'Object',
-	#traits : 'PulsarTModel + PulsarTSnapshot',
-	#classTraits : 'PulsarTModel classTrait + PulsarTSnapshot classTrait',
+	#traits : 'PulsarTModel + PulsarTModelSnapshot',
+	#classTraits : 'PulsarTModel classTrait + PulsarTModelSnapshot classTrait',
 	#category : 'Pulsar-Browser-View-Welcome',
 	#package : 'Pulsar-Browser',
 	#tag : 'View-Welcome'
