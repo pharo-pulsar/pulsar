@@ -14,15 +14,14 @@ PulsarWelcomeModel >> contents [
 	^ '
 
 
-
 Welcome to Pharo, an immersive live programming environment.
 
-Pharo is a pure object-oriented programming language and a powerful environment, focused on 
-simplicity and immediate feedback (think IDE and OS rolled into one).
+Pharo is a pure object-oriented programming language and a powerful environment, 
+focused on simplicity and immediate feedback (think IDE and OS rolled into one).
 
 For more information, please visit here: http://pharo.org	
 
-Onboarding information here, links to documentation, etc...
+TODO: Onboarding information here, links to documentation, etc...
 '
 ]
 
