@@ -1,8 +1,8 @@
 Class {
 	#name : 'PulsarHierarchyModel',
 	#superclass : 'Object',
-	#traits : 'PulsarTEditable + PulsarTModel',
-	#classTraits : 'PulsarTEditable classTrait + PulsarTModel classTrait',
+	#traits : 'PulsarTEditable + PulsarTModel + PulsarTModelSnapshot',
+	#classTraits : 'PulsarTEditable classTrait + PulsarTModel classTrait + PulsarTModelSnapshot classTrait',
 	#instVars : [
 		'parentModel'
 	],
