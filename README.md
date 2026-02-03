@@ -11,7 +11,8 @@ package dependencies:
 they should be already in the system, otherwise you can install them using your favourite installer.
 
 ### Linux 
-You should be ok, but you may need `libpanel` and `gtksourceview5` from the list of dependencies. If that is the case, install them using you favorite package manager.
+You should be ok, but you may need `resvg`, `libpanel` and `gtksourceview5` from the list of dependencies. 
+If that is the case, install them using you favorite package manager.
 
 ### MacOS
 You are a real programmer... why aren't you using linux?
@@ -24,19 +25,10 @@ You are a real programmer... why aren't you using linux?
 Download the prepared VM with dependencies **TODO**
 
 ## 2. Download a usable image
-Right now we are using [Pharo14 build 395](https://files.pharo.org/image/140/https://files.pharo.org/image/140/Pharo14.0-SNAPSHOT.build.482.sha.3c5495cc6b.arch.64bit.zip)
+Right now we are using [Pharo14 build 482](https://files.pharo.org/image/140/https://files.pharo.org/image/140/Pharo14.0-SNAPSHOT.build.482.sha.3c5495cc6b.arch.64bit.zip)
 (We will validate new images time to time but since P14 is changing many underlying things, we prefer not to move so much, 
 we want to deal with our own bugs -already a lot- not others bugs).
 
-This build is very alpha and there are problems everywhere... in case of the build 395, you want to execute this as first step: 
-
-```Smalltalk
-Object compile: 'inform: aString
-	"Display a message for the user to read and then dismiss."
-	
-	aString isEmptyOrNil
-		ifFalse: [ UIManager default inform: aString ]'.
-``` 
 
 ### 3. Install MetaMetacello
 (this is not really *required* but it will make easier the next step ;)
@@ -129,5 +121,5 @@ in MacOS:
 
 in Windows:
 ```Shell
-PharoConsole.exe --headless --worker Pharo.image run dock
+PharoConsole.exe --worker --headless Pharo.image openPulsar
 ```
