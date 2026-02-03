@@ -258,8 +258,8 @@ PvMethodModel >> includesClassModel [
 { #category : 'testing' }
 PvMethodModel >> isExampleMethod [
 
-	^ (self entity pragmas collect: [ :each | each selector ]) 
-		includesAny: #(sampleInstance example)
+	^ ((self entity pragmas collect: [ :each | each selector ]) includesAny: #(sampleInstance example))
+		or: [ self entity isClassSide and: [ self selector beginsWith: 'example' ] ]
 ]
 
 { #category : 'testing' }
@@ -448,8 +448,14 @@ PvMethodModel >> resetActionDecorators [
 
 { #category : 'actions' }
 PvMethodModel >> runScript [
+	| result |
 	
-	^ self entity valueWithReceiver: self entity methodClass instanceSide
+	result := self entity valueWithReceiver: self entity methodClass instanceSide.
+	"avoid result if it was ^self" 
+	(result isBehavior and: [ result = self entity methodClass instanceSide ]) 
+		ifTrue: [ ^ nil ].
+	
+	^ result
 ]
 
 { #category : 'actions' }

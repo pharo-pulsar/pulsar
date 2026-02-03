@@ -99,10 +99,16 @@ PulsarMethodEditor >> doRequestChangeProtocol [
 
 { #category : 'private - actions' }
 PulsarMethodEditor >> doRunSampleInstanceCommand: anAction [
-	| result |
+	| result inspector |
 
 	result := self model runScript.
-	self flag: #TODO. "Open an inspector with the result"
+	result ifNil: [ ^ self ].
+	
+	inspector := self
+		instantiate: PulsarInspector
+		on: (PulsarInspectorModel on: result).
+		
+	anAction presenter insertPopover: inspector
 ]
 
 { #category : 'private - actions' }
