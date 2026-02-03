@@ -296,13 +296,21 @@ PulsarApplication >> osPlatform [
 ]
 
 { #category : 'initialization' }
+PulsarApplication >> performSanityCheck [
+
+	PulsarSanityCheck new run
+]
+
+{ #category : 'initialization' }
 PulsarApplication >> prepareAsStandaloneApplication [
 	
 	standalone := true.
 	self cleanUp.
 	self killUnusedProcesses.
 	self prepareSchedulerAsStandaloneApplication.
-	self prepareErrorHandlerAsStandaloneApplication
+	self prepareErrorHandlerAsStandaloneApplication.
+	
+	self performSanityCheck
 ]
 
 { #category : 'initialization' }

@@ -1,6 +1,8 @@
 Class {
 	#name : 'PulsarPlaygroundVersionsModel',
 	#superclass : 'Object',
+	#traits : 'PulsarTModel + PulsarTModelSnapshot + PulsarTEditable',
+	#classTraits : 'PulsarTModel classTrait + PulsarTModelSnapshot classTrait + PulsarTEditable classTrait',
 	#instVars : [
 		'page'
 	],
@@ -18,6 +20,18 @@ PulsarPlaygroundVersionsModel class >> newPage: aPage [
 ]
 
 { #category : 'accessing' }
+PulsarPlaygroundVersionsModel >> iconName [
+
+	^ 'versions'
+]
+
+{ #category : 'accessing' }
+PulsarPlaygroundVersionsModel >> name [
+
+	^ 'Playground Versions'
+]
+
+{ #category : 'accessing' }
 PulsarPlaygroundVersionsModel >> page [
 
 	^ page
@@ -27,6 +41,12 @@ PulsarPlaygroundVersionsModel >> page [
 PulsarPlaygroundVersionsModel >> page: aPage [
 
 	page := aPage
+]
+
+{ #category : 'accessing' }
+PulsarPlaygroundVersionsModel >> pulsarEditorClass [
+
+	^ PulsarPlaygroundVersionsBrowser 
 ]
 
 { #category : 'accessing' }
