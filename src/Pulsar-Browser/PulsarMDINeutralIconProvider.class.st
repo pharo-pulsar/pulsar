@@ -178,8 +178,8 @@ PulsarMDINeutralIconProvider >> createTable [
 		('chevron-down'           'chevron-down')
 		('search-forward'         'arrow-down')
 		('search-backward'        'arrow-up')
-		('firstActivationTime'    'arrow-up')
-		('lastActivationTime'     'arrow-down')
+		('firstActivationTime'    'account-plus-outline')
+		('lastActivationTime'     'account-eye-outline')
 
 		"Panels / layout / windows"
 		('panel-left'             'dock-left')

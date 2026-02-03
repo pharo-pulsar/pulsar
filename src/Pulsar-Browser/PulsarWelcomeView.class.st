@@ -27,7 +27,8 @@ PulsarWelcomeView >> defaultLayout [
 
 { #category : 'events' }
 PulsarWelcomeView >> eventSyntaxHighlightThemeChanged: ann [
-	contentPresenter syntaxHighlightTheme: self application syntaxHighlightTheme
+
+	"contentPresenter syntaxHighlightTheme: self application syntaxHighlightTheme"
 ]
 
 { #category : 'events' }
@@ -57,6 +58,12 @@ PulsarWelcomeView >> initializePresenters [
 PulsarWelcomeView >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter title: self model name
+]
+
+{ #category : 'accessing - snapshot' }
+PulsarWelcomeView >> snapshot [
+
+	^ PulsarPanelSnapshot on: self
 ]
 
 { #category : 'initialization' }

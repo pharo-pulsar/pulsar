@@ -470,6 +470,15 @@ PulsarApplication >> takeSnapshot [
 	self class lastSnapshot: self snapshot
 ]
 
+{ #category : 'private - events' }
+PulsarApplication >> themeChanged: ann [
+	
+	"reset icon provider because I will need to change them"
+	"iconProvider := nil."
+	
+	self resendAnnouncement: ann
+]
+
 { #category : 'settings' }
 PulsarApplication >> toolbarDisplayMode [
 

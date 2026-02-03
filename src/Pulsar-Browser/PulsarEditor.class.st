@@ -267,7 +267,8 @@ PulsarEditor >> eventTestCaseEnded: aTestCaseEnded [
 { #category : 'events' }
 PulsarEditor >> eventThemeChanged: ann [
 
-	editorPresenter styleScheme: self application styleScheme
+	editorPresenter styleScheme: self application styleScheme.
+	self updateContentActions
 ]
 
 { #category : 'private' }

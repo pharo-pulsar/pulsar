@@ -90,7 +90,7 @@ PulsarGtkConfiguration >> configureGeneral: anApplication [
 	self addCSSProviderFromString: self style.
 	
 	self announcer
-		when: PulsarThemeChanged send: #resendAnnouncement: to: anApplication;
+		when: PulsarThemeChanged send: #themeChanged: to: anApplication;
 		when: PulsarSyntaxHighlightThemeChanged send: #syntaxHighlightThemeChanged: to: anApplication.
 		
 	"this is important to happen after the subscription because it may end up updating things" 
@@ -345,6 +345,7 @@ paneldock panelframe popover box.pulsarToolbarPanel { background-color: unset; }
 .stRow { margin: 1px; border-spacing: 3px; }
 .tinyFont {font-size: 0.7em; font-weigth: normal; }
 .searchBox { background-color: @popover_bg_color; }
+.searchBox entry { margin: 2px; }
 .link { padding: 0px; }
 .cell-link { font-size: smaller; font-weight: normal; color: gray; min-width: 10px; }
 .pvEditorScrollBar { min-height: 150px; }
