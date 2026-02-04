@@ -11,14 +11,13 @@ jobs:
 
     steps:
  
-      - name: Install Pharo VM
-        run: |
-          # Add OBS repo (WARNING: trusted=yes disables signature verification for this repo)
-          echo "deb [trusted=yes] https://download.opensuse.org/repositories/devel:/languages:/pharo:/stable/xUbuntu_24.04/ /" \
-            > /etc/apt/sources.list.d/obs-pharo.list
-          apt-get update
-          apt-get install -y pharo
-          pharo --version
+#      - name: Install Pharo VM
+#        run: |
+#          # Add OBS repo (WARNING: trusted=yes disables signature verification for this repo)
+#          echo "deb [trusted=yes] https://download.opensuse.org/repositories/devel:/languages:/pharo:/stable/xUbuntu_24.04/ /" \
+#            > /etc/apt/sources.list.d/obs-pharo.list
+#          apt-get update
+#          apt-get install -y pharo
 
       - name: Setup SSH key
         env:
