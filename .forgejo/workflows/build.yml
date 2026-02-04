@@ -11,14 +11,6 @@ jobs:
 
     steps:
          
-#      - name: Install Pharo VM
-#        run: |
-#          # Add OBS repo (WARNING: trusted=yes disables signature verification for this repo)
-#          echo "deb [trusted=yes] https://download.opensuse.org/repositories/devel:/languages:/pharo:/stable/xUbuntu_24.04/ /" \
-#            > /etc/apt/sources.list.d/obs-pharo.list
-#          apt-get update
-#          apt-get install -y pharo
-
       - uses: actions/checkout@v4
 
       - name: Setup SSH key
@@ -35,4 +27,4 @@ jobs:
       - name: Run build script
         run: |
           mkdir build && cd build
-          python3 ../.ci/scripts/build.py
+          python -u ../.ci/scripts/build.py
