@@ -1,0 +1,23 @@
+MetaMetacello load: [ :spec | spec
+	baseline: 'Alexandrie' with: [ spec repository: 'github://pharo-graphics/Alexandrie:master' ]; 
+	baseline: 'Resvg' with: [ spec repository: 'github://pharo-cig/pharo-resvg:main' ]; 
+	baseline: 'Themes' with: [ spec 
+		repository: 'github://estebanlm/Themes:main';
+		loads: #('HighlightStyles') ]; 
+	baseline: 'Spec2' with: [ spec 
+		repository: 'github://pharo-spec/Spec:dev-3.0';
+		loads: #(default 'Spec2-Alexandrie' 'Spec2-Adapters-Morphic-Alexandrie') ];
+	baseline: 'Gtk' with: [ spec 
+		repository: 'github://pharo-spec/gtk-bindings:main';
+		loads: #(default 'Gtk-Utils') ];
+	baseline: 'SpecGtk' with: [ spec 
+		repository: 'github://pharo-spec/Spec-Gtk:main';
+		loads: #(default) ];
+	baseline: 'NewTools' with: [ spec 
+		repository: 'github://pharo-spec/NewTools:dev-2.0';
+		loads: #(default 'NewTools-Gtk') ];
+	baseline: 'Stargate' with: [ spec repository: 'github://estebanlm/stargate:main' ];
+	baseline: 'Adwaita' with: [ spec repository: 'github://estebanlm/Spec-LibAdwaita:main' ];
+	baseline: 'SourceEditor' with: [ spec repository: 'git:git@forge.smallworks.eu:pharo/SourceEditor.git:main' ];
+	baseline: 'Panel' with: [ spec repository: 'github://estebanlm/Spec-LibPanel:main' ];
+	baseline: 'Pulsar' with: [ spec repository: 'git:git@forge.smallworks.eu:pharo/Pulsar.git:main' ] ]
