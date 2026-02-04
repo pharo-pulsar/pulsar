@@ -10,7 +10,7 @@ jobs:
       image: forge.smallworks.eu/pharo/build-env:ubuntu-24.04
 
     steps:
- 
+         
 #      - name: Install Pharo VM
 #        run: |
 #          # Add OBS repo (WARNING: trusted=yes disables signature verification for this repo)
@@ -18,6 +18,8 @@ jobs:
 #            > /etc/apt/sources.list.d/obs-pharo.list
 #          apt-get update
 #          apt-get install -y pharo
+
+      - uses: actions/checkout@v4
 
       - name: Setup SSH key
         env:
