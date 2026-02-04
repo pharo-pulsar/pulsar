@@ -1,0 +1,33 @@
+name: Build Pulsar
+
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: docker
+    container:
+      image: ubuntu:24.04
+
+    steps:
+      - name: Install Pharo and Dependencies
+        run: |
+          echo 'deb http://download.opensuse.org/repositories/devel:/languages:/pharo:/stable/xUbuntu_24.04/ /' | tee /etc/apt/sources.list.d/devel:languages:pharo:stable.list
+          curl -fsSL https://download.opensuse.org/repositories/devel:languages:pharo:stable/xUbuntu_24.04/Release.key | gpg --dearmor | tee /etc/apt/trusted.gpg.d/devel_languages_pharo_stable.gpg > /dev/null
+          apt-get update
+          apt-get install -y openssh-client
+          apt-get install -y pharo
+
+      - name: Setup SSH key
+        env:
+          CI_SSH_KEY: ${{ secrets.CI_SSH_KEY }}
+        run: |
+          mkdir -p /root/.ssh
+          chmod 700 /root/.ssh
+          printf "%s" "$CI_SSH_KEY" > /root/.ssh/id_ed25519
+          chmod 600 /root/.ssh/id_ed25519
+          ssh-keyscan forge.smallworks.eu >> /root/.ssh/known_hosts
+          ssh-keyscan github.com >> /root/.ssh/known_hosts
+
+      - name: Run build script
+        run: echo "Install"
