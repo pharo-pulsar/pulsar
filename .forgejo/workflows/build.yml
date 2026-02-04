@@ -17,8 +17,15 @@ jobs:
  
       - name: Install Pharo VM
         run: |
-          echo 'deb http://download.opensuse.org/repositories/devel:/languages:/pharo:/stable/xUbuntu_24.04/ /' | tee /etc/apt/sources.list.d/devel:languages:pharo:stable.list
-          curl -fsSL https://download.opensuse.org/repositories/devel:languages:pharo:stable/xUbuntu_24.04/Release.key | gpg --dearmor | tee /etc/apt/trusted.gpg.d/devel_languages_pharo_stable.gpg > /dev/null
+          install -d -m 0755 /usr/share/keyrings
+
+          curl -fsSL https://download.opensuse.org/repositories/devel:/languages:/pharo:/stable/xUbuntu_24.04/Release.key \
+            | gpg --dearmor \
+            | sudo tee /usr/share/keyrings/obs-pharo.gpg > /dev/null
+
+          echo "deb [signed-by=/usr/share/keyrings/obs-pharo.gpg] https://download.opensuse.org/repositories/devel:/languages:/pharo:/stable/xUbuntu_24.04/ /" \
+            | sudo tee /etc/apt/sources.list.d/obs-pharo.list
+
           apt-get update
           apt-get install -y pharo
 
