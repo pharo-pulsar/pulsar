@@ -10,12 +10,16 @@ jobs:
       image: ubuntu:24.04
 
     steps:
-      - name: Install Pharo and Dependencies
+      - name: Install Dependencies
+        run: |
+          apt-get update
+          apt-get install -y openssh-client curl gpg
+ 
+      - name: Install Pharo VM
         run: |
           echo 'deb http://download.opensuse.org/repositories/devel:/languages:/pharo:/stable/xUbuntu_24.04/ /' | tee /etc/apt/sources.list.d/devel:languages:pharo:stable.list
           curl -fsSL https://download.opensuse.org/repositories/devel:languages:pharo:stable/xUbuntu_24.04/Release.key | gpg --dearmor | tee /etc/apt/trusted.gpg.d/devel_languages_pharo_stable.gpg > /dev/null
           apt-get update
-          apt-get install -y openssh-client
           apt-get install -y pharo
 
       - name: Setup SSH key
