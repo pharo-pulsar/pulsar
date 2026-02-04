@@ -1,8 +1,13 @@
 "Set use custom keys"
-IceCredentialsProvider useCustomSsh: true.
-IceCredentialsProvider sshCredentials
-	publicKey: '/root/.ssh/id_ed25519.pub';
-	privateKey: '/root/.ssh/id_ed25519'.
+[ 
+	| home |
+
+	home := OSEnvironment current at: 'HOME'.
+	IceCredentialsProvider useCustomSsh: true.
+	IceCredentialsProvider sshCredentials
+		publicKey: (home, '/.ssh/id_ed25519.pub');
+		privateKey: (home, '/.ssh/id_ed25519').
+] value.
 
 "Install MetaMetacello"
 Metacello new 
