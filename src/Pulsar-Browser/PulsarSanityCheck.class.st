@@ -15,7 +15,7 @@ PulsarSanityCheck >> checkLibrary: aClass [
 
 	logger trace: aClass name.
 	
-	self log: '📚 Verifying '; log: aClass name.
+	self log: '📙 Verifying '; log: aClass name.
 	self log: '. Present: '.
 	
 	[ name := aClass uniqueInstance libraryName ]
@@ -40,6 +40,20 @@ PulsarSanityCheck >> checkLibrary: aClass [
 	self newLine
 ]
 
+{ #category : 'running' }
+PulsarSanityCheck >> checkThreadedVM [
+	| result |
+
+	self log: '⛑️  Virtual Machine running in Worker thread: '.
+	result := Smalltalk vm isRunningInWorkerThread.
+
+	result 
+		ifTrue: [ self log: '✅' ]
+		ifFalse: [ self log: '❌'. error := true ].
+		
+	self newLine
+]
+
 { #category : 'private' }
 PulsarSanityCheck >> log: aString [
 
@@ -57,6 +71,9 @@ PulsarSanityCheck >> run [
 
 	error := false.
 
+	"verify threaded vm"
+	self checkThreadedVM.
+	"libraries"
 	GObjectLibrary withAllSubclasses 
 		do: [ :each | self checkLibrary: each ].
 	self checkLibrary: LibResvg.
