@@ -73,6 +73,18 @@ def download_with_progress(url, dest):
                 sys.stdout.flush()
         sys.stdout.write("\n✅ Done.\n")
 
+def download_without_progress(url, dest):
+    """Download a file without showing progress."""
+    with urllib.request.urlopen(url) as response, open(dest, "wb") as out_file:
+        print(f"Downloading {url}")
+        while True:
+            chunk = response.read(8192)
+            if not chunk:
+                break
+            out_file.write(chunk)
+        
+        print("✅ Done.")
+
 def prepare_image(version=DEFAULT_VERSION, build=None, dest_dir=DEFAULT_DIR_PREFIX, image_name=None, kill=False):
     """
     Prepare a Pharo image with the given version, build, and destination directory.
@@ -127,7 +139,7 @@ def prepare_image(version=DEFAULT_VERSION, build=None, dest_dir=DEFAULT_DIR_PREF
         download_url = f"http://files.pharo.org/get-files/{flat_version}/pharo{arch_suffix}.zip"
 
     print(f"Downloading Pharo {version} from {download_url}")
-    download_with_progress(download_url, keep_file_name)
+    download_without_progress(download_url, keep_file_name)
 
     # Handle backup logic
     if os.path.isdir(dest_dir):
