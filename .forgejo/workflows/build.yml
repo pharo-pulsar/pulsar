@@ -24,6 +24,9 @@ jobs:
           ssh-keyscan forge.smallworks.eu >> /root/.ssh/known_hosts
           ssh-keyscan github.com >> /root/.ssh/known_hosts
 
+      - name: Test SSH agent
+        ssh -o BatchMode=yes -T git@forge.smallworks.eu
+
       - name: Run build script
         run: |
           mkdir build && cd build
