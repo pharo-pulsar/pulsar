@@ -50,11 +50,17 @@ def prepare_tarball():
         "tar", 
         "-czf", 
         "-C", buildenv.DEST_DIR,        
-        f"{buildenv.DEST_DIR}/{buildenv.DEST_IMAGE_NAME}.tar.gz", 
-        f"{buildenv.DEST_DIR}/{buildenv.DEST_IMAGE_NAME}.image", 
-        f"{buildenv.DEST_DIR}/{buildenv.DEST_IMAGE_NAME}.changes", 
-        sources[0].name])
+        f"{buildenv.DEST_IMAGE_NAME}.tar.gz", 
+        f"{buildenv.DEST_IMAGE_NAME}.image", 
+        f"{buildenv.DEST_IMAGE_NAME}.changes", 
+        sources[0].name, 
+        "resources"])
 
+    print("✅ Done.")
+
+def copy_resources():
+    print("📦 Copying resources")
+    run(["cp", "-r", f"{BASE_DIR}/resources", f"{buildenv.DEST_DIR}"])
     print("✅ Done.")
 
 def main() -> None:
@@ -72,8 +78,10 @@ def main() -> None:
     for script in [ "PreLoad.st", "Load.st", "PostLoad.st" ]:
         evaluate_pharo_script(f"{BASE_DIR}/{script}")
     print("✅ Done script processing.")
+    
+    copy_resources()
 
-    # not reallu needed
+    # not really needed
     # cleanup_local()
 
     prepare_tarball()
