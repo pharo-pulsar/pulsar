@@ -4,7 +4,7 @@
 
 	home := OSEnvironment current at: 'HOME'.
 
-	Stdio stdout << ((home asFileReference / '.ssh') entries asStringWithCr). 
+	Stdio stdout << ((home asFileReference / '.ssh') entries asStringWithCr); lf; flush. 
 
 	IceCredentialsProvider useCustomSsh: true.
 	IceCredentialsProvider sshCredentials
