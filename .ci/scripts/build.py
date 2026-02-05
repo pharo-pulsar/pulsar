@@ -5,8 +5,8 @@ import subprocess
 
 from pathlib import Path
 
-BASE_DIR = Path(__file__).resolve().parent
-REPO_DIR = BASE_DIR.parent.parent
+SCRIPT_DIR = Path(__file__).resolve().parent
+REPOSITORY_DIR = SCRIPT_DIR.parent.parent
 
 def run(cmd):
     """Run shell command safely."""
@@ -61,7 +61,7 @@ def prepare_tarball():
 
 def copy_resources():
     print("📦 Copying resources")
-    run(["cp", "-r", f"{REPO_DIR}/resources", f"{buildenv.DEST_DIR}"])
+    run(["cp", "-r", f"{REPOSITORY_DIR}/resources", f"{buildenv.DEST_DIR}"])
     print("✅ Done.")
 
 def main() -> None:
@@ -77,7 +77,7 @@ def main() -> None:
     # Evaluate the scripts
     print("Evaluating configuration scripts")
     for script in [ "PreLoad.st", "Load.st", "PostLoad.st" ]:
-        evaluate_pharo_script(f"{BASE_DIR}/{script}")
+        evaluate_pharo_script(f"{SCRIPT_DIR}/{script}")
     print("✅ Done script processing.")
     
     copy_resources()
