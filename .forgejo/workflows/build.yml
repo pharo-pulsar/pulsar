@@ -29,5 +29,5 @@ jobs:
 
       - name: Run build script
         run: |
-          mkdir build && cd build
+          mkdir -p build && cd build
           python -u ../.ci/scripts/build.py
