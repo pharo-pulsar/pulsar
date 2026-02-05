@@ -49,8 +49,8 @@ def prepare_tarball():
 
     run([
         "tar", 
-        "-czf", 
         "-C", buildenv.DEST_DIR,        
+        "-czf", 
         f"{buildenv.DEST_IMAGE_NAME}.tar.gz", 
         f"{buildenv.DEST_IMAGE_NAME}.image", 
         f"{buildenv.DEST_IMAGE_NAME}.changes", 
