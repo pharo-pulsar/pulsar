@@ -6,6 +6,7 @@ import subprocess
 from pathlib import Path
 
 BASE_DIR = Path(__file__).resolve().parent
+REPO_DIR = BASE_DIR.parent.parent
 
 def run(cmd):
     """Run shell command safely."""
@@ -60,7 +61,7 @@ def prepare_tarball():
 
 def copy_resources():
     print("📦 Copying resources")
-    run(["cp", "-r", f"{BASE_DIR}/resources", f"{buildenv.DEST_DIR}"])
+    run(["cp", "-r", f"{REPO_DIR}/resources", f"{buildenv.DEST_DIR}"])
     print("✅ Done.")
 
 def main() -> None:
