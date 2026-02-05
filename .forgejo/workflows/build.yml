@@ -36,20 +36,21 @@ jobs:
         run: |
           mkdir -p build && cd build
           python -u ../.ci/scripts/build.py
-          ls -l dist
+          ls -lR 
 
       - name: Set nightly date
         if: github.event_name == 'schedule'
         run: |
           echo "NIGHTLY_DATE=$(date +%F)" >> $GITHUB_ENV
           echo "NIGHTLY_DATE=${{ env.NIGHTLY_DATE }}"
-          ls -l dist
+          ls -lR
 
       - name: Upload nightly artifact
         if: github.event_name == 'schedule'
         run: |
+          ls -lR
           mv dist/Pulsar.tar.gz dist/Pulsar-${NIGHTLY_DATE}.tar.gz
-          ls -l dist
+           
 
       - name: Upload nightly artifact
         if: github.event_name == 'schedule'
@@ -63,14 +64,14 @@ jobs:
         run: |
           echo "TAG_NAME=${{ github.ref_name }}" >> $GITHUB_ENV
           echo "TAG_NAME=${{ github.ref_name }}"
-          ls -l dist
+          ls -lR
 
       - name: Upload tagged artifact
         if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
         run: |
           TAG="${{ github.ref_name }}"
           mv dist/Pulsar.tar.gz dist/Pulsar-${TAG_NAME}.tar.gz
-          ls -l dist
+          ls -lR
 
       - name: Upload stable artifact
         if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
