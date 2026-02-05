@@ -1,7 +1,12 @@
 name: Build Pulsar
 
 on:
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
   push:
+    tags:
+      - 'v*'
 
 jobs:
   test:
@@ -30,4 +35,36 @@ jobs:
       - name: Run build script
         run: |
           mkdir -p build && cd build
-          python -u ../.ci/scripts/build.py
+          python -u ../.ci/scripts/build.py 
+
+      - name: Set nightly date
+        if: github.event_name == 'schedule'
+        run: echo "NIGHTLY_DATE=$(date +%F)" >> $GITHUB_ENV
+
+      - name: Upload nightly artifact
+        if: github.event_name == 'schedule'
+        run: mv dist/Pulsar.tar.gz dist/Pulsar-${NIGHTLY_DATE}.tar.gz
+
+      - name: Upload nightly artifact
+        if: github.event_name == 'schedule'
+        uses: actions/upload-artifact@v4
+        with:
+          name: nightly-build
+          path: dist/Pulsar-${{ env.NIGHTLY_DATE }}.tar.gz
+
+      - name: Set tag name
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+        run: echo "TAG_NAME=${{ github.ref_name }}" >> $GITHUB_ENV
+
+      - name: Upload tagged artifact
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+        run: |
+          TAG="${{ github.ref_name }}"
+          mv dist/Pulsar.tar.gz dist/Pulsar-${TAG_NAME}.tar.gz
+
+      - name: Upload stable artifact
+        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+        uses: actions/upload-artifact@v4
+        with:
+          name: stable-build
+          path: dist/Pulsar-${{ env.TAG_NAME }}.tar.gz
