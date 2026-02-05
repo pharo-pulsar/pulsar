@@ -12,4 +12,6 @@ ReMethodSourceContainsLinefeedsRule enabled: false.
 "And this one, since there is no real need of this and is also annoying :P"
 ReCompactSourceCodeRule enabled: false.
 
+"Reset iceberg"
 IceCredentialsProvider useCustomSsh: false.
+IceRepository registry do:[ :each | each location: nil ].
