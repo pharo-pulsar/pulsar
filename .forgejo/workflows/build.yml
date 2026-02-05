@@ -35,7 +35,9 @@ jobs:
       - name: Run build script
         run: |
           mkdir -p build && cd build
-          python -u ../.ci/scripts/build.py 
+          python -u ../.ci/scripts/build.py
+          ls -l
+          ls -l dist
 
       - name: Set nightly date
         if: github.event_name == 'schedule'
