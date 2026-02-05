@@ -49,7 +49,7 @@ jobs:
 
       - name: Upload nightly artifact
         if: github.event_name == 'schedule'
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: nightly-build
           path: build/dist/Pulsar-${{ env.NIGHTLY_DATE }}.tar.gz
@@ -63,13 +63,11 @@ jobs:
       - name: Rename tagged artifact
         if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
         run: |
-          ls -R build/dist
           mv build/dist/Pulsar.tar.gz build/dist/Pulsar-${TAG_NAME}.tar.gz
-          ls -R build/dist
 
       - name: Upload stable artifact
         if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
-        uses: actions/upload-artifact@v4
+        uses: actions/upload-artifact@v3
         with:
           name: stable-build
           path: build/dist/Pulsar-${{ env.TAG_NAME }}.tar.gz
