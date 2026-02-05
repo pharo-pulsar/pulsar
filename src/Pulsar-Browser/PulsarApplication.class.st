@@ -370,9 +370,9 @@ PulsarApplication >> resendAnnouncement: anAnnouncement [
 PulsarApplication >> resourcesDir [
 	
 	^ IceRepository registry 
-		detect: [ :each | each name = 'Pulsar' ]
+		detect: [ :each | (each name = 'Pulsar') and: [ each location isNotNil ] ]
 		ifFound: [ :aRepository | aRepository location / 'resources' ]
-		ifNone: [ FileLocator imageDirectory / 'resources' ].
+		ifNone: [ FileLocator imageDirectory / 'resources' ]
 ]
 
 { #category : 'running' }
