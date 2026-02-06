@@ -1,0 +1,82 @@
+name: Nightly-build Pulsar
+
+on:
+  schedule:
+    - cron: "0 6 * * *"
+  workflow_dispatch:
+
+jobs:
+  nightly:
+    runs-on: docker
+    container:
+      image: forge.smallworks.eu/pharo/build-env:ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup SSH key
+        env:
+          CI_SSH_PRIVATE_KEY: ${{ secrets.CI_SSH_PRIVATE_KEY }}
+          CI_SSH_PUBLIC_KEY: ${{ secrets.CI_SSH_PUBLIC_KEY }}
+        run: |
+          mkdir -p /root/.ssh
+          chmod 700 /root/.ssh
+          printf "%s" "$CI_SSH_PRIVATE_KEY" > /root/.ssh/id_ed25519
+          printf "%s" "$CI_SSH_PUBLIC_KEY" > /root/.ssh/id_ed25519.pub
+          chmod 600 /root/.ssh/id_ed25519
+          chmod 600 /root/.ssh/id_ed25519.pub
+          ssh-keyscan forge.smallworks.eu >> /root/.ssh/known_hosts
+          ssh-keyscan github.com >> /root/.ssh/known_hosts
+
+      - name: Run build script
+        run: |
+          mkdir -p build && cd build
+          python -u ../.ci/scripts/build.py
+
+      - name: Set nightly date
+        run: |
+          NIGHTLY_DATE=$(date +%F)
+          echo "NIGHTLY_DATE=$NIGHTLY_DATE" >> $GITHUB_ENV
+          echo "Nightly date: $NIGHTLY_DATE"
+
+      - name: Rename nightly artifact
+        run: mv build/dist/Pulsar.tar.gz build/dist/Pulsar-${NIGHTLY_DATE}.tar.gz
+
+      - name: Keep nightly-built artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: nightly-build
+          path: build/dist/Pulsar-${{ env.NIGHTLY_DATE }}.tar.gz
+
+      - name: Upload nightly-built artifact to Packages
+        run: |
+          FILE="Pulsar-${NIGHTLY_DATE}.tar.gz"
+
+          curl -f -X PUT \
+            -H "Authorization: token $FORGEJO_TOKEN" \
+            --upload-file build/dist/$FILE \
+            "$FORGEJO_SERVER_URL/api/packages/$FORGEJO_REPOSITORY_OWNER/generic/builds/nightly-build/${NIGHTLY_DATE}/$FILE"
+
+      - name: Cleanup old nightly builds (keep last 10 days)
+        run: |
+          KEEP_DAYS=10
+          CUTOFF_DATE=$(date -d "-${KEEP_DAYS} days" +%F)
+
+          echo "Keeping nightly builds >= $CUTOFF_DATE"
+
+          curl -s \
+            -H "Authorization: token $FORGEJO_TOKEN" \
+            "$FORGEJO_SERVER_URL/api/packages/$FORGEJO_REPOSITORY_OWNER/generic/builds/nightly-build" \
+          | jq -r '.[].version' \
+          | sort \
+          | while read VERSION; do
+              if [[ "$VERSION" < "$CUTOFF_DATE" ]]; then
+                echo "Deleting nightly build $VERSION"
+                curl -f -X DELETE \
+                  -H "Authorization: token $FORGEJO_TOKEN" \
+                  "$FORGEJO_SERVER_URL/api/packages/$FORGEJO_REPOSITORY_OWNER/generic/builds/nightly-build/$VERSION"
+              else
+                echo "Keeping nightly build $VERSION"
+              fi
+            done

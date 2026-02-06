@@ -1,15 +1,12 @@
-name: Build Pulsar
+name: Release Pulsar
 
 on:
-  schedule:
-    - cron: "0 6 * * *"
-  workflow_dispatch:
   push:
     tags:
       - 'v*'
 
 jobs:
-  test:
+  release:
     runs-on: docker
     container:
       image: forge.smallworks.eu/pharo/build-env:ubuntu-24.04
@@ -35,39 +32,38 @@ jobs:
       - name: Run build script
         run: |
           mkdir -p build && cd build
-          python -u ../.ci/scripts/build.py
-
-      - name: Set nightly date
-        if: github.event_name == 'schedule'
-        run: |
-          echo "NIGHTLY_DATE=$(date +%F)" >> $GITHUB_ENV
-          echo "NIGHTLY_DATE=${{ env.NIGHTLY_DATE }}"
-
-      - name: Rename nightly artifact
-        if: github.event_name == 'schedule'
-        run: mv build/dist/Pulsar.tar.gz build/dist/Pulsar-${NIGHTLY_DATE}.tar.gz
-
-      - name: Upload nightly artifact
-        if: github.event_name == 'schedule'
-        uses: actions/upload-artifact@v3
-        with:
-          name: nightly-build
-          path: build/dist/Pulsar-${{ env.NIGHTLY_DATE }}.tar.gz
+          python -u ../.ci/scripts/build.py --release
 
       - name: Set tag name
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
         run: |
           echo "TAG_NAME=${{ github.ref_name }}" >> $GITHUB_ENV
-          echo "TAG_NAME=${{ github.ref_name }}"
+          echo "TAG_NAME=${TAG_NAME}"
 
-      - name: Rename tagged artifact
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+      - name: Rename release artifact
         run: |
           mv build/dist/Pulsar.tar.gz build/dist/Pulsar-${TAG_NAME}.tar.gz
 
-      - name: Upload stable artifact
-        if: github.event_name == 'push' && startsWith(github.ref, 'refs/tags/v')
+      - name: Generate checksums
+        run: |
+          cd build/dist
+          sha256sum Pulsar-${TAG_NAME}.tar.gz > Pulsar-${TAG_NAME}.tar.gz.sha256
+          sha256sum Pulsar-${TAG_NAME}.tar.gz > checksums.txt
+
+      - name: Keep release artifact
         uses: actions/upload-artifact@v3
         with:
           name: stable-build
           path: build/dist/Pulsar-${{ env.TAG_NAME }}.tar.gz
+
+      - name: Upload release artifacts to Packages
+        run: |
+          for FILE in \
+            Pulsar-${TAG_NAME}.tar.gz \
+            Pulsar-${TAG_NAME}.tar.gz.sha256 \
+            checksums.txt
+          do
+            curl -f -X PUT \
+              -H "Authorization: token $FORGEJO_TOKEN" \
+              --upload-file build/dist/$FILE \
+              "$FORGEJO_SERVER_URL/api/packages/$FORGEJO_REPOSITORY_OWNER/generic/builds/releases/${TAG_NAME}/$FILE"
+          done
