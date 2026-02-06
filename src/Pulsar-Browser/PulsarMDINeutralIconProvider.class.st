@@ -246,12 +246,13 @@ PulsarMDINeutralIconProvider >> darkColorFor: iconName forceNeutral: forceBoolea
 { #category : 'accessing' }
 PulsarMDINeutralIconProvider >> iconNamed: aName ifAbsent: aBlock [
 
-	^ self mutex critical: [ 
-		super 
-			iconNamed: aName
-			ifAbsent: [
-				(Smalltalk at: #CollectUsedIcons ifAbsentPut: [ Set new ]) add: aName.
-				aBlock value ] ]
+	^ super 
+		iconNamed: aName
+		ifAbsent: [
+			(Smalltalk 
+				at: #CollectUsedIcons ifAbsentPut: [ Set new ]) 
+				add: aName.
+			aBlock value ]
 ]
 
 { #category : 'initialization' }
