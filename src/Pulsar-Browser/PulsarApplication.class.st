@@ -372,7 +372,9 @@ PulsarApplication >> resourcesDir [
 	^ IceRepository registry 
 		detect: [ :each | (each name = 'Pulsar') and: [ each location isNotNil ] ]
 		ifFound: [ :aRepository | aRepository location / 'resources' ]
-		ifNone: [ FileLocator imageDirectory / 'resources' ]
+		ifNone: [ 
+			"this will be a 'production' environment"
+			FileLocator imageDirectory / 'pulsar-resources' ]
 ]
 
 { #category : 'running' }
