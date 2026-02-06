@@ -15,3 +15,6 @@ ReCompactSourceCodeRule enabled: false.
 "Reset iceberg"
 IceCredentialsProvider useCustomSsh: false.
 IceRepository registry do:[ :each | each location: nil ].
+
+"cleaning agressively as a last step to ensure image will go down."
+Smalltalk cleanUp: true
