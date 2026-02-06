@@ -69,7 +69,7 @@ PulsarRepositoryLocalBranchView >> doCreateBranchCommand: anAction [
 	branchName := dialog text.
 	
 	self model switchToBranchNamed: branchName.
-	self repositoryModified
+	self notifyRepositoryModified
 ]
 
 { #category : 'private - actions' }
@@ -77,28 +77,20 @@ PulsarRepositoryLocalBranchView >> doFetchRepositories [
 
 	self scheduleJob: [
 		self model newFetchAction
-			onSuccess: [ self repositoryModified ];
+			onSuccess: [ self notifyRepositoryModified ];
 			executeWithContext: self ]
 ]
 
 { #category : 'actions' }
+PulsarRepositoryLocalBranchView >> doPull [
+
+	(PulsarRepositoryActionContext on: self) doPull: self model
+]
+
+{ #category : 'actions' }
 PulsarRepositoryLocalBranchView >> doPush [
-	| remote |
 
-	remote := nil.
-	self model hasUpstream ifFalse: [
-		remote := self application newSelect
-			title: 'Upstream missing';
-			message: 'Select remote to push to (set upstream)';
-			items: self model remotes;
-			display: [ :aRemote | aRemote name ];
-			openModalWithParent: self window.
-		remote ifNil: [ ^ self ] ].
-
-	self scheduleJob: [	
-		(self model newPushActionTo: remote)
-			onSuccess: [ self repositoryModified ];
-			executeWithContext: self ]
+	(PulsarRepositoryActionContext on: self) doPush: self model
 ]
 
 { #category : 'private' }
@@ -108,7 +100,7 @@ PulsarRepositoryLocalBranchView >> maybeSort: aCollection [
 ]
 
 { #category : 'private' }
-PulsarRepositoryLocalBranchView >> repositoryModified [
+PulsarRepositoryLocalBranchView >> notifyRepositoryModified [
 
 	"inform to all windows, as all may have things to do"
 	self application resendAnnouncement: (PulsarRepositoryModified newValue: self model)

@@ -160,28 +160,8 @@ PulsarRepositoryChangesView >> doCollapseToPackages [
 
 { #category : 'private - actions' }
 PulsarRepositoryChangesView >> doCommit [
-	| commitPresenter dialog |
 
-	commitPresenter := self instantiate: PulsarRepositoryCommitDialog.
-	
-	(dialog := commitPresenter asModalWindow) 
-		owner: self window;
-		open.
-	dialog isOk ifFalse: [ ^ self ].
-	
-	commitPresenter message trimBoth ifEmpty: [ 
-		(self application newConfirm
-				title: 'Empty commit message';
-				message: 'Your message is empty. Do you want to commit anyway?';
-				acceptLabel: 'Commit';
-				openModalWithParent: self window)
-			ifFalse: [ ^ self ] ].
-	
-	self scheduleJob: [
-		self model newCommitAction
-			message: commitPresenter message;
-			onSuccess: [ self repositoryModified ];
-			executeWithContext: self ]
+	(PulsarRepositoryActionContext on: self) doCommit: self model
 ]
 
 { #category : 'private - actions' }
@@ -237,8 +217,8 @@ PulsarRepositoryChangesView >> eventRepositoryModified: ann [
 
 	ann value = self model ifFalse: [ ^ self ].
 	
-	"not doing anything right now, I was updating the list here but in fact, 
-	 I do not want to do that right now :P"
+	self model resetDiff.
+	self updatePresenter
 ]
 
 { #category : 'initialization' }
@@ -284,17 +264,6 @@ PulsarRepositoryChangesView >> registerToEvents [
 		when: PulsarRepositoryModified
 		send: #eventRepositoryModified:
 		to: self
-]
-
-{ #category : 'private' }
-PulsarRepositoryChangesView >> repositoryModified [
-
-	self model resetDiff.
-	self updatePresenter.
-	"inform to all windows, as all may have things to do"
-	self application resendAnnouncement: (PulsarRepositoryModified newValue: self model).
-	
-	self takeKeyboardFocus
 ]
 
 { #category : 'private' }

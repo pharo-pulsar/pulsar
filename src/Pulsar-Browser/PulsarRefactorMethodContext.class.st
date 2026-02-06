@@ -1,6 +1,6 @@
 Class {
 	#name : 'PulsarRefactorMethodContext',
-	#superclass : 'PulsarRefactorContext',
+	#superclass : 'PulsarRefactorActionContext',
 	#category : 'Pulsar-Browser-View-Refactoring',
 	#package : 'Pulsar-Browser',
 	#tag : 'View-Refactoring'

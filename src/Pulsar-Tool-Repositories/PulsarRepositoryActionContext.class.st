@@ -1,0 +1,61 @@
+"
+A context to perform repository actions (since the call can be in different places, I need to concentrate them)
+"
+Class {
+	#name : 'PulsarRepositoryActionContext',
+	#superclass : 'PulsarActionContext',
+	#category : 'Pulsar-Tool-Repositories',
+	#package : 'Pulsar-Tool-Repositories'
+}
+
+{ #category : 'actions' }
+PulsarRepositoryActionContext >> doCommit: aModel [
+	| commitPresenter dialog |
+
+	commitPresenter := self owner instantiate: PulsarRepositoryCommitDialog.
+	
+	(dialog := commitPresenter asModalWindow) 
+		owner: self window;
+		open.
+	dialog isOk ifFalse: [ ^ self ].
+	
+	commitPresenter message trimBoth ifEmpty: [ 
+		(self application newConfirm
+				title: 'Empty commit message';
+				message: 'Your message is empty. Do you want to commit anyway?';
+				acceptLabel: 'Commit';
+				openModalWithParent: self window)
+			ifFalse: [ ^ self ] ].
+	
+	self scheduleJob: [
+		aModel newCommitAction
+			message: commitPresenter message;
+			onSuccess: [ self notifyRepositoryModified: aModel ];
+			executeWithContext: self ]
+]
+
+{ #category : 'actions' }
+PulsarRepositoryActionContext >> doPush: aModel [
+	| remote |
+
+	remote := nil.
+	aModel hasUpstream ifFalse: [
+		remote := self application newSelect
+			title: 'Upstream missing';
+			message: 'Select remote to push to (set upstream)';
+			items: aModel remotes;
+			display: [ :aRemote | aRemote name ];
+			openModalWithParent: self window.
+		remote ifNil: [ ^ self ] ].
+
+	self scheduleJob: [	
+		(aModel newPushActionTo: remote)
+			onSuccess: [ self notifyRepositoryModified ];
+			executeWithContext: self ]
+]
+
+{ #category : 'private' }
+PulsarRepositoryActionContext >> notifyRepositoryModified: aModel [
+
+	self application resendAnnouncement: (PulsarRepositoryModified newValue: aModel)
+]

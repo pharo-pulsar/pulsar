@@ -78,6 +78,13 @@ PulsarRepositoryCommitsView >> initializeWindow: aWindowPresenter [
 	aWindowPresenter title: 'Commits'
 ]
 
+{ #category : 'private' }
+PulsarRepositoryCommitsView >> notifyRepositoryModified [
+
+	"inform to all windows, as all may have things to do"
+	self application resendAnnouncement: (PulsarRepositoryModified newValue: self model)
+]
+
 { #category : 'initialization' }
 PulsarRepositoryCommitsView >> registerToEvents [
 
@@ -86,13 +93,6 @@ PulsarRepositoryCommitsView >> registerToEvents [
 		when: PulsarRepositoryModified
 		send: #eventRepositoryModified: 
 		to: self
-]
-
-{ #category : 'private' }
-PulsarRepositoryCommitsView >> repositoryModified [
-
-	"inform to all windows, as all may have things to do"
-	self application resendAnnouncement: (PulsarRepositoryModified newValue: self model)
 ]
 
 { #category : 'initialization' }

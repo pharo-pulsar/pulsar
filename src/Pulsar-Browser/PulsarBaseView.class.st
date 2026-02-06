@@ -81,10 +81,7 @@ PulsarBaseView >> registerToEvents [
 PulsarBaseView >> scheduleJob: aBlock [
 	"schedule a task that will show the working spinner while it executes"
 
-	self application scheduleTask: [
-		self withWindowDo: #jobStart.
-		aBlock ensure: [ 
-			self withWindowDo: #jobEnd ] ]
+	self withWindowDo: [ :aWindow | aWindow scheduleJob: aBlock ]
 ]
 
 { #category : 'accessing' }

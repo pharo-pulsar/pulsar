@@ -18,6 +18,32 @@ PulsarRepositoryBrowser class >> defaultWindowSize [
 	^ 1100@950
 ]
 
+{ #category : 'private - definitions' }
+PulsarRepositoryBrowser >> defineGlobalActionsOn: aBuilder [
+	<dockActions>
+	
+	aBuilder addGroup: #gitGlobalActions with: [ :group | group 
+		beDisplayedAsGroup;
+		addActionWith: [ :action | action 
+			name: 'Commit';
+			iconName: 'commit';
+			description: 'Commit selected changes';
+			shortcutKey: $c actionModifier;
+			action: [ (PulsarRepositoryActionContext on: self) doCommit: self model ] ];
+		addActionWith: [ :action | action 
+			name: 'Push outgoing commits';
+			iconName: 'push';
+			shortcutKey: $p shift actionModifier;
+			description: 'Push current branch outgoing commits to remote';
+			action: [ (PulsarRepositoryActionContext on: self) doPush: self model ] ];
+		addActionWith: [ :action | action 
+			name: 'Pull incoming commits';
+			iconName: 'pull';
+			shortcutKey: $p actionModifier;
+			description: 'Pull incoming commits from remote into current branch';
+			action: [ (PulsarRepositoryActionContext on: self) doPull: self model ] ] ]
+]
+
 { #category : 'initialization' }
 PulsarRepositoryBrowser >> initializeDefaultWorkspace [
 			

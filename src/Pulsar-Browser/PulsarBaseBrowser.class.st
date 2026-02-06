@@ -451,6 +451,16 @@ PulsarBaseBrowser >> schedule: aBlock [
 	^ self scheduleTask: aBlock
 ]
 
+{ #category : 'private' }
+PulsarBaseBrowser >> scheduleJob: aBlock [
+	"schedule a task that will show the working spinner while it executes"
+
+	self application scheduleTask: [
+		self jobStart.
+		aBlock ensure: [ 
+			self jobEnd ] ]
+]
+
 { #category : 'private - schedulling' }
 PulsarBaseBrowser >> scheduleTask: aBlock [
 
