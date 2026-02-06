@@ -8,7 +8,7 @@ from pathlib import Path
 
 SCRIPT_DIR = Path(__file__).resolve().parent
 REPOSITORY_DIR = SCRIPT_DIR.parent.parent
-BUILD_IMAGE_VERSION = None
+BUILD_IMAGE_VERSION = buildenv.RELEASE_IMAGE_VERSION
 
 def run(cmd):
     """Run shell command safely."""
@@ -101,13 +101,15 @@ def main() -> None:
     args = parser.parse_args()
     if args.release:
         BUILD_IMAGE_VERSION = buildenv.RELEASE_IMAGE_VERSION
+    else:
+        BUILD_IMAGE_VERSION = None
 
     # Step. Download the Pulsar image  
     print("🌐 Downloading Pulsar image")
     pharoget.prepare_image(
         dest_dir=buildenv.DEST_DIR, 
         image_name=buildenv.DEST_IMAGE_NAME, 
-        build=BUILD_IMAGE_VERSION, 
+        build=BUILD_IMAGE_VERSION if BUILD_IMAGE_VERSION else None, 
         kill=True)
     # Step. Evaluate the pharo preparing scripts
     for script in [ "PreLoad.st", "Load.st", "PostLoad.st" ]:
