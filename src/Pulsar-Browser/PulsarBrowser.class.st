@@ -106,6 +106,12 @@ PulsarBrowser >> composeTitle [
 			'Pharo({1})' format: { FileLocator image base } ]
 ]
 
+{ #category : 'private' }
+PulsarBrowser >> defaultInitialExtent [
+
+	^ 1100@900
+]
+
 { #category : 'api - focus' }
 PulsarBrowser >> defaultKeyboardFocus [
 
