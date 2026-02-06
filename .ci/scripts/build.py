@@ -99,7 +99,6 @@ def main() -> None:
     parser.add_argument("-r", "--release", action="store_true", help="Prepare package as release")
 
     args = parser.parse_args()
-
     if args.release:
         BUILD_IMAGE_VERSION = buildenv.RELEASE_IMAGE_VERSION
 
@@ -108,7 +107,7 @@ def main() -> None:
     pharoget.prepare_image(
         dest_dir=buildenv.DEST_DIR, 
         image_name=buildenv.DEST_IMAGE_NAME, 
-        build=buildenv.BUILD_IMAGE_VERSION, 
+        build=BUILD_IMAGE_VERSION, 
         kill=True)
     # Step. Evaluate the pharo preparing scripts
     for script in [ "PreLoad.st", "Load.st", "PostLoad.st" ]:
