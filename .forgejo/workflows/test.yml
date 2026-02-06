@@ -1,0 +1,39 @@
+name: Test Pulsar
+
+on:
+  push:
+
+jobs:
+  test:
+    runs-on: docker
+    container:
+      image: forge.smallworks.eu/pharo/build-env:ubuntu-24.04
+
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4
+
+      - name: Setup SSH key
+        env:
+          CI_SSH_PRIVATE_KEY: ${{ secrets.CI_SSH_PRIVATE_KEY }}
+          CI_SSH_PUBLIC_KEY: ${{ secrets.CI_SSH_PUBLIC_KEY }}
+        run: |
+          mkdir -p /root/.ssh
+          chmod 700 /root/.ssh
+          printf "%s" "$CI_SSH_PRIVATE_KEY" > /root/.ssh/id_ed25519
+          printf "%s" "$CI_SSH_PUBLIC_KEY" > /root/.ssh/id_ed25519.pub
+          chmod 600 /root/.ssh/id_ed25519
+          chmod 600 /root/.ssh/id_ed25519.pub
+          ssh-keyscan forge.smallworks.eu >> /root/.ssh/known_hosts
+          ssh-keyscan github.com >> /root/.ssh/known_hosts
+
+      - name: Run build script
+        run: |
+          mkdir -p build && cd build
+          python -u ../.ci/scripts/build.py
+
+      - name: Upload built artifact
+        uses: actions/upload-artifact@v3
+        with:
+          name: built-image
+          path: build/dist/Pulsar.tar.gz
