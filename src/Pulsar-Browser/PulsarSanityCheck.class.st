@@ -15,8 +15,8 @@ PulsarSanityCheck >> checkLibrary: aClass [
 
 	logger trace: aClass name.
 	
-	self log: '📙 Verifying '; log: aClass name.
-	self log: '. Present: '.
+	self log: '📖 '; log: (aClass name padRightTo: 25).
+	self log: ': Found  '.
 	
 	[ name := aClass uniqueInstance libraryName ]
 	on: Error 
@@ -27,8 +27,8 @@ PulsarSanityCheck >> checkLibrary: aClass [
 		^ self ].
 	
 	self log: '✅'.
-	self log: ' (', name, ')'.
-	self log: '. Load: '.
+	self log: (' [', name, '] ' padRightTo: 50).
+	self log: 'load: '.
 	
 	(DynamicLoader loadLibrary: name) isNullOrNil 
 		ifTrue: [ 
@@ -74,13 +74,22 @@ PulsarSanityCheck >> run [
 	"verify threaded vm"
 	self checkThreadedVM.
 	"libraries"
-	GObjectLibrary withAllSubclasses 
+	self usingLibraries 
 		do: [ :each | self checkLibrary: each ].
-	self checkLibrary: LibResvg.
 	
 	error ifTrue: [
 		self log: '☠️ Sanity check do not pass. Exiting.'.
 		Exit signalFailure ].
 	
 	^ error
+]
+
+{ #category : 'private' }
+PulsarSanityCheck >> usingLibraries [
+
+	^ OrderedCollection new
+		addAll: GObjectLibrary withAllSubclasses;
+		add: GtkSourceViewLibrary;
+		add: LibResvg;
+		yourself
 ]
