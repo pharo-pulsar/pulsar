@@ -22,7 +22,7 @@ Class {
 { #category : 'accessing - defaults' }
 PulsarBaseBrowser class >> defaultWindowSize [
 
-	^ 1000@800
+	^ 1100@950
 ]
 
 { #category : 'private - definitions' }
