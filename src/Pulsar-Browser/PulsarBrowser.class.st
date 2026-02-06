@@ -10,6 +10,12 @@ Class {
 	#tag : 'View-Browser'
 }
 
+{ #category : 'accessing - defaults' }
+PulsarBrowser class >> defaultWindowSize [
+
+	^ 1200@950
+]
+
 { #category : 'private - definitions' }
 PulsarBrowser class >> defineImageActionsOn: aBuilder [
 	<dockActions>
@@ -104,12 +110,6 @@ PulsarBrowser >> composeTitle [
 				', ' join: (projectView openedProjects collect: #name) } ]
 		ifFalse: [ 
 			'Pharo({1})' format: { FileLocator image base } ]
-]
-
-{ #category : 'private' }
-PulsarBrowser >> defaultInitialExtent [
-
-	^ 1100@900
 ]
 
 { #category : 'api - focus' }
