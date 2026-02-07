@@ -43,10 +43,10 @@ jobs:
         run: |
           mv build/dist/Pulsar.tar.gz build/dist/Pulsar-${TAG_NAME}.tar.gz
 
-      - name: Generate checksum
-        run: |
-          cd build/dist
-          sha256sum Pulsar-${TAG_NAME}.tar.gz > Pulsar-${TAG_NAME}.tar.gz.sha256
+#      - name: Generate checksum
+#        run: |
+#          cd build/dist
+#          sha256sum Pulsar-${TAG_NAME}.tar.gz > Pulsar-${TAG_NAME}.tar.gz.sha256
 
       - name: Keep release artifact
         uses: actions/upload-artifact@v3
@@ -56,12 +56,8 @@ jobs:
 
       - name: Upload release artifacts to Packages
         run: |
-          for FILE in \
-            Pulsar-${TAG_NAME}.tar.gz \
-            Pulsar-${TAG_NAME}.tar.gz.sha256
-          do
-            curl -f -X PUT \
-              -H "Authorization: token $FORGEJO_TOKEN" \
-              --upload-file build/dist/$FILE \
-              "$FORGEJO_SERVER_URL/api/packages/$FORGEJO_REPOSITORY_OWNER/generic/builds/releases/${TAG_NAME}/$FILE"
-          done
+          FILE="Pulsar-${TAG_NAME}.tar.gz"
+          curl -f -X PUT \
+            -H "Authorization: token $FORGEJO_TOKEN" \
+            --upload-file build/dist/$FILE \
+            "$FORGEJO_SERVER_URL/api/packages/$FORGEJO_REPOSITORY_OWNER/generic/pulsar/${TAG_NAME}/$FILE"
