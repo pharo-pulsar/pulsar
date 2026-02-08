@@ -42,11 +42,12 @@ jobs:
 
       - name: Upload nightly-built artifact to Packages
         run: |
-          echo "Nightly date: $NIGHTLY_DATE"
+          NIGHTLY_DATE=$(date +%F)
+          
           echo "url=$FORGEJO_SERVER_URL"
           echo "owner=$FORGEJO_REPOSITORY_OWNER"
-          
-          FILE="Pulsar-${NIGHTLY_DATE}.tar.gz"
+
+          FILE="Pulsar.tar.gz"
           curl -f -X PUT \
             -H "Authorization: token $FORGEJO_TOKEN" \
             --upload-file build/dist/$FILE \
