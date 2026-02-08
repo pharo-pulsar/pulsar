@@ -39,3 +39,15 @@ jobs:
         with:
           name: built-image
           path: build/dist/Pulsar.tar.gz
+
+      - name: Upload nightly-built artifact to Packages
+        run: |
+          echo "Nightly date: $NIGHTLY_DATE"
+          echo "url=$FORGEJO_SERVER_URL"
+          echo "owner=$FORGEJO_REPOSITORY_OWNER"
+          
+          FILE="Pulsar-${NIGHTLY_DATE}.tar.gz"
+          curl -f -X PUT \
+            -H "Authorization: token $FORGEJO_TOKEN" \
+            --upload-file build/dist/$FILE \
+            "$FORGEJO_SERVER_URL/api/packages/$FORGEJO_REPOSITORY_OWNER/generic/pulsar-nightly-build/${NIGHTLY_DATE}/$FILE"
