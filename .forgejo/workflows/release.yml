@@ -54,10 +54,13 @@ jobs:
           name: stable-build
           path: build/dist/Pulsar-${{ env.TAG_NAME }}.tar.gz
 
-      - name: Upload release artifacts to Packages
+      - name: Upload nightly-built artifact to Packages
+        env:
+          CI_UPLOAD_TOKEN: ${{ secrets.CI_UPLOAD_TOKEN }}
         run: |
-          FILE="Pulsar-${TAG_NAME}.tar.gz"
+          FILE="Pulsar.tar.gz"
           curl -f -X PUT \
-            -H "Authorization: token $FORGEJO_TOKEN" \
+            -H "Authorization: token $CI_UPLOAD_TOKEN" \
             --upload-file build/dist/$FILE \
             "$FORGEJO_SERVER_URL/api/packages/$FORGEJO_REPOSITORY_OWNER/generic/pulsar/${TAG_NAME}/$FILE"
+

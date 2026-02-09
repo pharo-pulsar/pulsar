@@ -53,9 +53,6 @@ jobs:
         env:
           CI_UPLOAD_TOKEN: ${{ secrets.CI_UPLOAD_TOKEN }}
         run: |          
-          echo "url=$FORGEJO_SERVER_URL"
-          echo "owner=$FORGEJO_REPOSITORY_OWNER"
-
           FILE="Pulsar.tar.gz"
           curl -f -X PUT \
             -H "Authorization: token $CI_UPLOAD_TOKEN" \
