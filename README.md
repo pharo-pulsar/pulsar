@@ -17,6 +17,9 @@ E.g. in Ubuntu (And maybe other debian distros) you can do this:
 sudo apt install libadwaita-1-0 libgtksourceview-5-0 libpanel-1-1 librsvg2-2
 ``` 
 
+**WARNING** Do not use zeroconf as your Pharo VM! Zeroconf ships with libraries that will interfere with the ones Pulsar uses. 
+Instead, you should install a VM provided by [open build service (OBS)](https://software.opensuse.org//download.html?project=devel:languages:pharo:stable&package=pharo-ui).
+
 ### MacOS
 You can download a VM prepared with dependencies [here](https://forge.smallworks.eu/pharo/-/packages/generic/pharovm-full-macos-arm).  
 We currently do not support old macOS intel machines.
