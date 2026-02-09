@@ -56,6 +56,8 @@ PharoConsole.exe --worker --headless Pharo.image openPulsar
 ```
 
 # Build instructions
+**You do not need to build the pulsar image by yourself**, the CI does that job for you. Nevertheless this information is useful 
+in case, for any reason I cannot see, you still want to build the Pulsar image by yourself.
 
 ## 1. Download a usable image
 Right now we are using Pharo 14, download the latest image (knowing that also Pharo is in development, things may fail).
