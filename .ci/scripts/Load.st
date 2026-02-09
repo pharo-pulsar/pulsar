@@ -1,6 +1,6 @@
 MetaMetacello load: [ :spec | spec
 	baseline: 'Alexandrie' with: [ spec repository: 'github://pharo-graphics/Alexandrie:master' ]; 
-	baseline: 'LibRsvg' with: [ spec repository: 'github://pharo-cig/pharo-librsvg:main' ]; 
+	baseline: 'RSVG' with: [ spec repository: 'github://pharo-cig/pharo-librsvg:main' ]; 
 	baseline: 'Themes' with: [ spec 
 		repository: 'github://estebanlm/Themes:main';
 		loads: #('HighlightStyles') ]; 
