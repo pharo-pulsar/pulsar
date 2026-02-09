@@ -16,8 +16,11 @@ MetaMetacello load: [ :spec | spec
 	baseline: 'NewTools' with: [ spec 
 		repository: 'github://pharo-spec/NewTools:dev-2.0';
 		loads: #(default 'NewTools-Gtk') ];
+	baseline: 'Roassal' with: [ spec 
+		repository: 'git:git@forge.smallworks.eu:pharo/Roassal.git:main';
+		loads: #('Roassal-Spec-Gtk') ];
 	baseline: 'Stargate' with: [ spec repository: 'github://estebanlm/stargate:main' ];
-	baseline: 'Linden' with: [ spec repository: 'git:git@forge.smallworks.eu:estebanlm/linden.git:main' ];	
+	baseline: 'Linden' with: [ spec repository: 'git:git@forge.smallworks.eu:estebanlm/linden.git:main' ];
 	baseline: 'Adwaita' with: [ spec repository: 'github://estebanlm/Spec-LibAdwaita:main' ];
 	baseline: 'SourceEditor' with: [ spec repository: 'git:git@forge.smallworks.eu:pharo/SourceEditor.git:main' ];
 	baseline: 'Panel' with: [ spec repository: 'github://estebanlm/Spec-LibPanel:main' ];
