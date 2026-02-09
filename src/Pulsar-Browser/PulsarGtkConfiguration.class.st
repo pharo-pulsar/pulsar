@@ -123,20 +123,20 @@ PulsarGtkConfiguration >> darkPaletteStyle [
 
 	^ '
 /* testing */
-@define-color test-passed 			LightGreen;
-@define-color test-error 			Tomato;
-@define-color test-failure 			DarkOrange;
+@define-color test_passed 			LightGreen;
+@define-color test_error 			Tomato;
+@define-color test_failure 			DarkOrange;
 /* repositories */
-@define-color repository-modified 	LightGreen;
-@define-color repository-detached 	DarkOrange;
-@define-color repository-error 		Tomato;	
+@define-color repository_modified 	LightGreen;
+@define-color repository_detached 	DarkOrange;
+@define-color repository_error 		Tomato;	
 /* markers for editor */
-@define-color button-bg-cancel-mark 	#FF00006F;
-@define-color button-bg-accept-mark 	#00DF006F;
+@define-color button_bg_cancel_mark 	#FF00006F;
+@define-color button_bg_accept_mark 	#00DF006F;
 /* repository commit */
-@define-color commit-outgoing 		LightGreen;
-@define-color commit-incoming 		Yellow;
-@define-color package-notloaded 		DarkGray;
+@define-color commit_outgoing 		LightGreen;
+@define-color commit_incoming 		Yellow;
+@define-color package_notloaded 		DarkGray;
 '
 ]
 
@@ -224,20 +224,20 @@ PulsarGtkConfiguration >> lightPaletteStyle [
 
 	^ '
 /* testing */
-@define-color test-passed 				green;
-@define-color test-error 				red;
-@define-color test-failure 				orange;
+@define-color test_passed 				green;
+@define-color test_error 				red;
+@define-color test_failure 				orange;
 /* repositories */
-@define-color repository-modified 		green;
-@define-color repository-detached 		orange;
-@define-color repository-error 			red;
+@define-color repository_modified 		green;
+@define-color repository_detached 		orange;
+@define-color repository_error 			red;
 /* markers for editor */
-@define-color button-bg-cancel-mark 		#C000002F; 
-@define-color button-bg-accept-mark 		#00C0002F;
+@define-color button_bg_cancel_mark 		#C000002F; 
+@define-color button_bg_accept_mark 		#00C0002F;
 /* repository commit */
-@define-color commit-outgoing 			green;
-@define-color commit-incoming 			orange;
-@define-color package-notloaded 			#A0A0A0;
+@define-color commit_outgoing 			green;
+@define-color commit_incoming 			orange;
+@define-color package_notloaded 			#A0A0A0;
 '
 ]
 
@@ -329,17 +329,17 @@ panelframetabbar tabbar tabboxchild { border-radius: 0px; }
 panelframetabbar tabbar tabboxchild tab { min-height: 0px; padding: 2px; border: 1px; border-radius: 4px; box-shadow: none; }
 panelframetabbar tabbar tabboxchild tab:selected { background-color: alpha(@accent_bg_color, 0.85); color: @accent_fg_color; }
 panelframetabbar tabbar widget.end-action  { min-height: 0px; padding: 0px; margin: 0px; }
-paneldock listview { background-color: @window-bg-color; }
-paneldock box.pulsarToolbarPanel { background-color: @window-bg-color; }
-panelgrid listview { background-color: @view-bg-color; } /* reset central part so I can see clear */
-paneldock panelframe popover listview { background-color: @view-bg-color; }
+paneldock listview { background-color: @window_bg_color; }
+paneldock box.pulsarToolbarPanel { background-color: @window_bg_color; }
+panelgrid listview { background-color: @view_bg_color; } /* reset central part so I can see clear */
+paneldock panelframe popover listview { background-color: @view_bg_color; }
 paneldock panelframe popover box.pulsarToolbarPanel { background-color: unset; }
 
 .stList listview, .stTree listview { font-size: 0.9em; } 
 .stTree columnview listview row cell { margin: 0px; padding: 2px; }
 .stTree columnview listview row cell box { border-spacing: 5px; }
 .stRow { margin: 1px; border-spacing: 3px; }
-.tinyFont {font-size: 0.7em; font-weigth: normal; }
+.tinyFont {font-size: 0.7em; font-weight: normal; }
 .searchBox { background-color: @popover_bg_color; }
 .searchBox entry { margin: 2px; }
 .link { padding: 0px; }
@@ -357,8 +357,8 @@ tab .tab-title label { font-size: 0.9em; }
 /* Editors */
 .pulsarEditorLinked { border-width: 1px; border-style: solid; border-color: @accent_bg_color; }
 .pulsarDirtyMarker button { padding: 2px; }
-.pulsarDirtyMarker .cancel { background-color: @button-bg-cancel-mark; }
-.pulsarDirtyMarker .accept { background-color: @button-bg-accept-mark; }
+.pulsarDirtyMarker .cancel { background-color: @button_bg_cancel_mark; }
+.pulsarDirtyMarker .accept { background-color: @button_bg_accept_mark; }
 .pulsarEditorBreadcrumb { font-size: 9pt; }
 .pulsarEditorBreadcrumb label.separator { padding: 0px 5px 0px 5px; }
 popover .pulsarPreviewEditor { min-width: 680px; min-height: 340px; }
@@ -372,9 +372,9 @@ popover .pulsarPreviewEditor { min-width: 680px; min-height: 340px; }
 .pulsarHierarchyFlyingBrowser { min-width: 450px; min-height: 350px; }
 .pulsarVersionsFlyingBrowser { min-width: 680px; min-height: 440px; }
 .pulsarFlyingBrowser notebook tabs tab { padding: 2px; }
-.pulsarFlyingBrowser notebook tabs tab label { font-size: 0.9em }
+.pulsarFlyingBrowser notebook tabs tab label { font-size: 0.9em; }
 .pulsarPopoverControlToolbar { margin: 0px; padding: 0px 0px 0px 10px; }
-.pulsarDebuggerToolbar { background-color: @window-bg-color; }
+.pulsarDebuggerToolbar { background-color: @window_bg_color; }
 .pulsarDebuggerToolbar .stToolbar { padding: 1px; }
 .pulsarPlaygroundBindingsFlyingBrowser { min-width: 400px; min-height: 240px; }
 /***
@@ -391,21 +391,21 @@ popover .pulsarPreviewEditor { min-width: 680px; min-height: 340px; }
 .pulsarMethodRow .extension { 
 	font-style: italic; 
 	text-decoration-line: underline;
-	text-decoration-style: dotted;
+	/* text-decoration-style: dotted; */ /*Currently not supported by gtk */
 }
 /* .pulsarMethodRow .test-unknown { } */
-.pulsarMethodRow .test-passed { color: @test-passed; }
-.pulsarMethodRow .test-error { color: @test-error; }
-.pulsarMethodRow .test-failure { color: @test-failure; }
+.pulsarMethodRow .test-passed { color: @test_passed; }
+.pulsarMethodRow .test-error { color: @test_error; }
+.pulsarMethodRow .test-failure { color: @test_failure; }
 
 .pulsarMethodProtocol { border-spacing: 3px; }
 .pulsarMethodProtocol button { font-weight: normal; font-size: 9pt; }
 
 /* Repositories (I can also have .notLoaded and .upToDate) */
-.pulsarRepositories .pulsarRepositoryRow label.missing { color: @repository-error; }
-.pulsarRepositories .pulsarRepositoryRow label.detached { color: @repository-detached; } 
-.pulsarRepositories .pulsarRepositoryRow label.modified { color: @repository-modified; }
-.pulsarRepositories .pulsarRepositoryRow label.error { color: @repository-error; }
+.pulsarRepositories .pulsarRepositoryRow label.missing { color: @repository_error; }
+.pulsarRepositories .pulsarRepositoryRow label.detached { color: @repository_detached; } 
+.pulsarRepositories .pulsarRepositoryRow label.modified { color: @repository_modified; }
+.pulsarRepositories .pulsarRepositoryRow label.error { color: @repository_error; }
 
 /* search text */
 /* this is a hack because for now I do not want to lose time on this */
@@ -414,16 +414,16 @@ popover .pulsarPreviewEditor { min-width: 680px; min-height: 340px; }
 .pulsarSearchPanel .buttonToggleSearch { border-radius: 0px; padding: 2px; margin-left: 4px; }
 
 /* repository */
-.pulsarRepositoryPatch { margin: 5px; padding: 5px; background-color: @card-bg-color; border-radius: 4px; }
+.pulsarRepositoryPatch { margin: 5px; padding: 5px; background-color: @card_bg_color; border-radius: 4px; }
 .pulsarRepositoryPatch box.pulsarToolbarPanel { background-color: transparent; }
 .pulsarRepositoryPatch box.pulsarToolbarPanel box { font-size: 1.0em; margin: 2px 2px 6px 2px; }
 .pulsarRepositoryCommit label { margin-left: 5px; }
 .pulsarRepositoryBranchRow label.head { font-weight: bold; }
-.pulsarRepositoryRow .extra label.outgoing, .pulsarRepositoryBranchRow .extra label.outgoing { color: @commit-outgoing; }
-.pulsarRepositoryRow .extra label.incoming, .pulsarRepositoryBranchRow .extra label.incoming{ color: @commit-incoming; }
-.pulsarRepositoryCommit label.outgoing { color: @commit-outgoing; }
+.pulsarRepositoryRow .extra label.outgoing, .pulsarRepositoryBranchRow .extra label.outgoing { color: @commit_outgoing; }
+.pulsarRepositoryRow .extra label.incoming, .pulsarRepositoryBranchRow .extra label.incoming{ color: @commit_incoming; }
+.pulsarRepositoryCommit label.outgoing { color: @commit_outgoing; }
 /* .pulsarRepositoryPackageRow label.loaded { } */
-.pulsarRepositoryPackageRow label.notloaded { color: @package-notloaded; }
+.pulsarRepositoryPackageRow label.notloaded { color: @package_notloaded; }
 '
 ]
 
