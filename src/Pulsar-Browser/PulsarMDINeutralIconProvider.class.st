@@ -302,14 +302,18 @@ PulsarMDINeutralIconProvider >> loadIcon: svgReference tint: colorHexString [
 		each trimBoth ifNotEmpty: [ 
 			stream << each << '>' ] ] ].
 
-	^ LibResvg 
-		renderFormFromString: contents
-		scale: 1
+	^ GRunLoop defer: [ 
+		"Material design icons have 24x24 default size. 
+		 here I can multiply for the scale, but it feels better keeping them in default 
+		 size and let gtk4 do the scale work."
+		LibRsvg
+			renderFromString: contents
+			size: 24@24 ]
 ]
 
 { #category : 'utilities' }
 PulsarMDINeutralIconProvider >> loadIconNamed: aName [
-	| iconName cleanName color forceNeutral |
+	| iconName cleanName forceNeutral |
 
 	(aName endsWith: '.neutral') 
 		ifTrue: [

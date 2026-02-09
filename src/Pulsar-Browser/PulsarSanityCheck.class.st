@@ -90,6 +90,6 @@ PulsarSanityCheck >> usingLibraries [
 	^ OrderedCollection new
 		addAll: GObjectLibrary withAllSubclasses;
 		add: GtkSourceViewLibrary;
-		add: LibResvg;
+		add: LibRsvg;
 		yourself
 ]
