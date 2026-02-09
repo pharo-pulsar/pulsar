@@ -63,4 +63,3 @@ jobs:
             -H "Authorization: token $CI_UPLOAD_TOKEN" \
             --upload-file build/dist/$FILE \
             "$FORGEJO_SERVER_URL/api/packages/$FORGEJO_REPOSITORY_OWNER/generic/pulsar/${TAG_NAME}/$FILE"
-
