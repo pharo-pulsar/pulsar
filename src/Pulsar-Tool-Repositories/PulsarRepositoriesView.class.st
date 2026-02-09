@@ -66,7 +66,7 @@ PulsarRepositoriesView >> doAddRepository [
 	
 	dialog := presenter asModalWindow
 		owner: self window;
-		open.
+		open.	
 	dialog isOk ifFalse: [ ^ self ].
 	
 	self scheduleJob: [

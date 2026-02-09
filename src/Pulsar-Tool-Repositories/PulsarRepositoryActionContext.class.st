@@ -31,7 +31,7 @@ PulsarRepositoryActionContext >> doCommit: aModel [
 		aModel newCommitAction
 			message: commitPresenter message;
 			onSuccess: [ self notifyRepositoryModified: aModel ];
-			executeWithContext: self ]
+			executeWithContext: self owner ]
 ]
 
 { #category : 'actions' }
@@ -48,10 +48,10 @@ PulsarRepositoryActionContext >> doPush: aModel [
 			openModalWithParent: self window.
 		remote ifNil: [ ^ self ] ].
 
-	self scheduleJob: [	
+	self scheduleJob: [
 		(aModel newPushActionTo: remote)
-			onSuccess: [ self notifyRepositoryModified ];
-			executeWithContext: self ]
+			onSuccess: [ self notifyRepositoryModified: aModel ];
+			executeWithContext: self owner ]
 ]
 
 { #category : 'private' }
