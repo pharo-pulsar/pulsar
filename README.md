@@ -5,32 +5,62 @@ package dependencies:
 - gtksourceview5
 - libadwaita
 - libpanel
-- resvg
+- librsvg
 
 ## 1. Download VM
-they should be already in the system, otherwise you can install them using your favourite installer.
 
 ### Linux 
-You should be ok, but you may need `resvg`, `libpanel` and `gtksourceview5` from the list of dependencies. 
-If that is the case, install them using you favorite package manager.
+You should be ok about dependencies, but you may need `libpanel`, `librsvg` and `gtksourceview5` if you are running a tiny machine. 
+If that is the case, install them using you favorite package manager.  
+E.g. in Ubuntu (And maybe other debian distros) you can do this:
+```shell
+sudo apt install libadwaita-1-0 libgtksourceview-5-0 libpanel-1-1 librsvg2-2
+``` 
 
 ### MacOS
-You are a real programmer... why aren't you using linux?
-
-Download the prepared VM with dependencies **TODO**
+You can download a VM prepared with dependencies [here](https://forge.smallworks.eu/pharo/-/packages/generic/pharovm-full-macos-arm).  
+We currently do not support old macOS intel machines.
 
 ### Windows
-You are a real programmer... why aren't you using linux?
 
-Download the prepared VM with dependencies **TODO**
+**TODO**
 
-## 2. Download a usable image
-Right now we are using [Pharo14 build 482](https://files.pharo.org/image/140/https://files.pharo.org/image/140/Pharo14.0-SNAPSHOT.build.482.sha.3c5495cc6b.arch.64bit.zip)
-(We will validate new images time to time but since P14 is changing many underlying things, we prefer not to move so much, 
-we want to deal with our own bugs -already a lot- not others bugs).
+## 2. Download a Pulsar image
+You can download a bundle with the pre-built image: 
 
+- [Releases](https://forge.smallworks.eu/pharo/-/packages/generic/pulsar).
+- [Nightly buils](https://forge.smallworks.eu/pharo/-/packages/generic/pulsar-nightly-build).
 
-### 3. Install MetaMetacello
+## 3. Run it
+
+in Linux:
+```Shell
+pharo --worker Pharo.image openPulsar
+```
+
+**NOTE:** You may want to create an alias in your shell to easy the start. I use fishshell and I have defined this function in my `config.fish` : 
+```fish
+function psr
+    pharo --worker $argv[1] openPulsar $argv[2..-1]
+end
+```
+
+in MacOS:
+```Shell
+./Pharo.app/Contents/Pharo --worker --headless Pharo.image openPulsar
+```
+
+in Windows:
+```Shell
+PharoConsole.exe --worker --headless Pharo.image openPulsar
+```
+
+# Build instructions
+
+## 1. Download a usable image
+Right now we are using Pharo 14, download the latest image (knowing that also Pharo is in development, things may fail).
+
+## 2. Install MetaMetacello
 (this is not really *required* but it will make easier the next step ;)
 
 ```smalltalk
@@ -40,7 +70,9 @@ Metacello new
 	load.
 ```
 
-### 4. Install a lot of packages
+### 3. Install a lot of packages
+
+**IMPORTANT!!! For all this to work you need to add your keys to your account in the forge!** 
 
 ```smalltalk
 MetaMetacello load: [ :spec | spec
@@ -75,7 +107,11 @@ MetaMetacello load: [ :spec | spec
 	baseline: 'SourceEditor' with: [ spec repository: 'git:git@forge.smallworks.eu:pharo/SourceEditor.git:main' ];
 	baseline: 'Panel' with: [ spec repository: 'github://estebanlm/Spec-LibPanel:main' ];
 	baseline: 'Pulsar' with: [ spec repository: 'git:git@forge.smallworks.eu:pharo/Pulsar.git:main' ] ].
+```
 
+### 4. Prepare your environment
+
+```smalltalk
 (Smalltalk classNamed: #GEnumeration) allSubclassesDo: #initializeEnumeration.
 "We want to work with string interpolation, but for now do not install it as it 
  creates problems while saving changes (they become corrupt, digging why). 
@@ -89,8 +125,6 @@ ReMethodSourceContainsLinefeedsRule enabled: false.
 ReCompactSourceCodeRule enabled: false.
 ```
 
-**IMPORTANT!!! For all this to work you need to add your keys to your account in the forge!** 
-
 #### 4.1. In MacOS
 `Spec-Gtk` changes the default driver for the morphic world to `OSGtkDriver` but this is not 
 working properly for the moment, so better if we revert it or your image will not be working
@@ -99,27 +133,3 @@ when tryign to execute it in morphic.
 ```Smalltalk
 OSWindowDriver driverClass: OSSDL2Driver.
 ```  
-
-### 5. Run
-
-in Linux:
-```Shell
-pharo --worker Pharo.image openPulsar
-```
-
-**NOTE:** You may want to create an alias in your shell to easy the start. I use fishshell and I have defined this function in my `config.fish` : 
-```fish
-function psr
-    pharo --worker $argv[1] openPulsar $argv[2..-1]
-end
-```
-
-in MacOS:
-```Shell
-./Pharo.app/Contents/Pharo --worker --headless Pharo.image openPulsar
-```
-
-in Windows:
-```Shell
-PharoConsole.exe --worker --headless Pharo.image openPulsar
-```
