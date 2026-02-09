@@ -29,7 +29,7 @@ We currently do not support old macOS intel machines.
 You can download a bundle with the pre-built image: 
 
 - [Releases](https://forge.smallworks.eu/pharo/-/packages/generic/pulsar).
-- [Nightly buils](https://forge.smallworks.eu/pharo/-/packages/generic/pulsar-nightly-build).
+- [Nightly builds](https://forge.smallworks.eu/pharo/-/packages/generic/pulsar-nightly-build).
 
 ## 3. Run it
 
