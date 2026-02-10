@@ -68,15 +68,40 @@ jobs:
           KEEP_DAYS=10
           CUTOFF_DATE=$(date -u -d "-${KEEP_DAYS} days" +%F)
 
-          echo "🧹 Cleaning nightly builds older than $CUTOFF_DATE"
+          OWNER="$FORGEJO_REPOSITORY_OWNER"
+          PKG_NAME="pulsar-nightly-build"
 
-          curl -s \
-            -H "Authorization: token $CI_UPLOAD_TOKEN" \
-            "$FORGEJO_SERVER_URL/api/packages/$FORGEJO_REPOSITORY_OWNER/generic/pulsar-nightly-build" \
-          | jq -r '.[].version' \
+          echo "🧹 Cleaning nightly builds older than $CUTOFF_DATE (UTC)"
+          echo "📦 Owner: $OWNER, Package: $PKG_NAME"
+
+          # 1) List packages via API (it lists by owner, not by package)
+          LIST_URL="$FORGEJO_SERVER_URL/api/v1/packages/$OWNER?limit=500"
+          echo "🔎 Listing packages: $LIST_URL"
+
+          RESP_FILE="$(mktemp)"
+          HTTP_CODE="$(
+            curl -sS -o "$RESP_FILE" -w "%{http_code}" \
+              -H "Accept: application/json" \
+              -H "Authorization: token $CI_UPLOAD_TOKEN" \
+              "$LIST_URL" || true
+          )"
+
+          if [[ "$HTTP_CODE" != "200" ]]; then
+            echo "❌ Failed to list packages (HTTP $HTTP_CODE). Response:"
+            cat "$RESP_FILE" || true
+            exit 1
+          fi
+
+          # 2) Extract versions for this generic package, expecting YYYY-MM-DD
+          jq -r --arg name "$PKG_NAME" '
+            .[]
+            | select(.type == "generic" and .name == $name)
+            | .version
+          ' "$RESP_FILE" \
           | sort \
           | while read -r VERSION; do
-              # Seguridad: solo tocar versiones YYYY-MM-DD
+              [[ -z "$VERSION" ]] && continue
+
               if [[ ! "$VERSION" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
                 echo "⚠️  Skipping non-date version: $VERSION"
                 continue
@@ -84,9 +109,10 @@ jobs:
 
               if [[ "$VERSION" < "$CUTOFF_DATE" ]]; then
                 echo "❌ Deleting nightly build $VERSION"
-                curl -f -X DELETE \
+                curl -f -sS -X DELETE \
                   -H "Authorization: token $CI_UPLOAD_TOKEN" \
-                  "$FORGEJO_SERVER_URL/api/packages/$FORGEJO_REPOSITORY_OWNER/generic/pulsar-nightly-build/$VERSION"
+                  "$FORGEJO_SERVER_URL/api/packages/$OWNER/generic/$PKG_NAME/$VERSION" \
+                  >/dev/null
               else
                 echo "✅ Keeping nightly build $VERSION"
               fi
