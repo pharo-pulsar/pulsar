@@ -13,7 +13,11 @@ ReMethodSourceContainsLinefeedsRule enabled: false.
 ReCompactSourceCodeRule enabled: false.
 
 "Reset iceberg"
+'Resetting iceberg...' crTrace.
 IceCredentialsProvider useCustomSsh: false.
+IceCredentialsProvider sshCredentials
+	publicKey: nil;
+	privateKey: nil.
 IceRepository registry do:[ :each | each location: nil ].
 
 "cleaning agressively as a last step to ensure image will go down."
