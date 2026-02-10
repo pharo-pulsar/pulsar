@@ -78,8 +78,9 @@ PulsarSanityCheck >> run [
 		do: [ :each | self checkLibrary: each ].
 	
 	error ifTrue: [
-		self log: '☠️ Sanity check do not pass. Exiting.'.
+		self log: '💀 Sanity check do not pass. Terminating...'.
 		Exit signalFailure ].
+	self log: '⭐ Everything looks fine! Starting...'.
 	
 	^ error
 ]
