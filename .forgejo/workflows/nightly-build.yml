@@ -60,24 +60,34 @@ jobs:
             "$FORGEJO_SERVER_URL/api/packages/$FORGEJO_REPOSITORY_OWNER/generic/pulsar-nightly-build/${NIGHTLY_DATE}/$FILE"
 
       - name: Cleanup old nightly builds (keep last 10 days)
+        env:
+          CI_UPLOAD_TOKEN: ${{ secrets.CI_UPLOAD_TOKEN }}
         run: |
-          KEEP_DAYS=10
-          CUTOFF_DATE=$(date -d "-${KEEP_DAYS} days" +%F)
+          set -euo pipefail
 
-          echo "Keeping nightly builds >= $CUTOFF_DATE"
+          KEEP_DAYS=10
+          CUTOFF_DATE=$(date -u -d "-${KEEP_DAYS} days" +%F)
+
+          echo "🧹 Cleaning nightly builds older than $CUTOFF_DATE"
 
           curl -s \
-            -H "Authorization: token $FORGEJO_TOKEN" \
+            -H "Authorization: token $CI_UPLOAD_TOKEN" \
             "$FORGEJO_SERVER_URL/api/packages/$FORGEJO_REPOSITORY_OWNER/generic/pulsar-nightly-build" \
           | jq -r '.[].version' \
           | sort \
-          | while read VERSION; do
+          | while read -r VERSION; do
+              # Seguridad: solo tocar versiones YYYY-MM-DD
+              if [[ ! "$VERSION" =~ ^[0-9]{4}-[0-9]{2}-[0-9]{2}$ ]]; then
+                echo "⚠️  Skipping non-date version: $VERSION"
+                continue
+              fi
+
               if [[ "$VERSION" < "$CUTOFF_DATE" ]]; then
-                echo "Deleting nightly build $VERSION"
+                echo "❌ Deleting nightly build $VERSION"
                 curl -f -X DELETE \
-                  -H "Authorization: token $FORGEJO_TOKEN" \
+                  -H "Authorization: token $CI_UPLOAD_TOKEN" \
                   "$FORGEJO_SERVER_URL/api/packages/$FORGEJO_REPOSITORY_OWNER/generic/pulsar-nightly-build/$VERSION"
               else
-                echo "Keeping nightly build $VERSION"
+                echo "✅ Keeping nightly build $VERSION"
               fi
             done
