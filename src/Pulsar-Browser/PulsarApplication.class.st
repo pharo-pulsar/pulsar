@@ -101,6 +101,8 @@ PulsarApplication class >> startUp: resuming [
 { #category : 'private' }
 PulsarApplication >> checkForLostChanges [
 	| lostChangesDetector |
+	self flag: 'this is not working at the moment (that''s why is not called), but the idea is to execute 
+	it at start to check last execution status.'.
 
 	lostChangesDetector := EpLostChangesDetector new.
 	lostChangesDetector hasLostChanges ifFalse: [ ^ self ].
