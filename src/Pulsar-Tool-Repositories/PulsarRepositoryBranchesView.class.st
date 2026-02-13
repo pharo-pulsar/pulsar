@@ -7,8 +7,9 @@ Class {
 		'remotePresenter',
 		'tagPresenter'
 	],
-	#category : 'Pulsar-Tool-Repositories',
-	#package : 'Pulsar-Tool-Repositories'
+	#category : 'Pulsar-Tool-Repositories-Branches',
+	#package : 'Pulsar-Tool-Repositories',
+	#tag : 'Branches'
 }
 
 { #category : 'defaults' }

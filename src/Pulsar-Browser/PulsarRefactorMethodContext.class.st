@@ -10,11 +10,11 @@ Class {
 PulsarRefactorMethodContext >> doPullUpMethod: aMethodModel [
 
 	self scheduleTask: [
-			(RePullUpMethodDriver newApplication: self application)
-				model: (RBNamespace onEnvironment: RBBrowserEnvironment new)
+		(RePullUpMethodDriver newApplication: self application)
+			model: (RBNamespace onEnvironment: RBBrowserEnvironment new)
 				scopes: { RBBrowserEnvironment new }
 				pullUpMethods: { aMethodModel entity };
-				runRefactoring ]
+			runRefactoring ]
 ]
 
 { #category : 'refactoring' }
@@ -32,15 +32,15 @@ PulsarRefactorMethodContext >> doPushDownMethod: aMethodModel [
 PulsarRefactorMethodContext >> doRenameMethod: aMethodModel [
 
 	self scheduleTask: [
-			| rbClasses rbModel method |
-			method := aMethodModel entity.
-			rbClasses := RBClassEnvironment classes: method methodClass withAllSubclasses.
-			rbModel := RBNamespace onEnvironment: rbClasses.
+		| rbClasses rbModel method |
+		method := aMethodModel entity.
+		rbClasses := RBClassEnvironment classes: method methodClass withAllSubclasses.
+		rbModel := RBNamespace onEnvironment: rbClasses.
 
-			(ReRenameMethodDriver newApplication: self application)
-				scopes: { RBBrowserEnvironment new. rbClasses }
+		(ReRenameMethodDriver newApplication: self application)
+			scopes: { RBBrowserEnvironment new. rbClasses }
 				model: rbModel
 				renameMethodSignature: method
 				in: method methodClass;
-				runRefactoring ]
+			runRefactoring ]
 ]

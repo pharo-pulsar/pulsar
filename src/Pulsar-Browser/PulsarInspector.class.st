@@ -170,6 +170,12 @@ PulsarInspector >> registerToEvents [
 		when: PulsarSyntaxHighlightThemeChanged send: #eventSyntaxHighlightThemeChanged: to: self
 ]
 
+{ #category : 'accessing - snapshot' }
+PulsarInspector >> snapshot [
+
+	^ PulsarInspectorSnapshot on: self
+]
+
 { #category : 'initialization' }
 PulsarInspector >> updatePages [
 

@@ -63,7 +63,7 @@ PulsarSanityCheck >> log: aString [
 { #category : 'private' }
 PulsarSanityCheck >> newLine [
 
-	Stdio stdout << OSPlatform current lineEnding
+	Stdio stdout << OSPlatform current lineEnding; flush.
 ]
 
 { #category : 'running' }
@@ -79,8 +79,11 @@ PulsarSanityCheck >> run [
 	
 	error ifTrue: [
 		self log: '💀 Sanity check do not pass. Terminating...'.
+		self newLine.
 		Exit signalFailure ].
+		
 	self log: '⭐ Everything looks fine! Starting...'.
+	self newLine.
 	
 	^ error
 ]

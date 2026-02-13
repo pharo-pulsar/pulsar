@@ -50,6 +50,18 @@ PulsarMethodEditor >> activateWith: anActivationAnnouncement [
 		yourself)
 ]
 
+{ #category : 'initialization' }
+PulsarMethodEditor >> addPopoverControls [
+	| controlsPresenter |
+
+	controlsPresenter := self instantiate: PulsarPopoverControlBoxPresenter.
+	controlsPresenter onPulsar: [ 
+		self withPopoverDo: #dismiss.
+		self notifyActivateEntity: self model ].
+	
+	toolbarPresenter addPresenterAtEnd: controlsPresenter
+]
+
 { #category : 'private' }
 PulsarMethodEditor >> announceActivateClass [
 	
@@ -253,6 +265,17 @@ PulsarMethodEditor >> initialize [
 
 	linkedToSelection := false.
 	super initialize
+]
+
+{ #category : 'initialization' }
+PulsarMethodEditor >> initializePopover: aPopoverPresenter [
+
+	self addPopoverControls.
+	aPopoverPresenter addShortcutWith: [ :action | action 
+		shortcutKey: KeyboardKey down mod3;
+		action: [ 
+			self withPopoverDo: #dismiss.
+			self notifyActivateEntity: self model ] ]	
 ]
 
 { #category : 'initialization' }

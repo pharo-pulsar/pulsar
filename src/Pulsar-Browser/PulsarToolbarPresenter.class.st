@@ -53,6 +53,15 @@ PulsarToolbarPresenter >> addPresenter: aPresenter [
 ]
 
 { #category : 'api' }
+PulsarToolbarPresenter >> addPresenterAtEnd: aPresenter [
+	"used to add control boxes and that..."
+	
+	self layout 
+		add: aPresenter
+		expand: false
+]
+
+{ #category : 'api' }
 PulsarToolbarPresenter >> addPresenterCloseButton: aString action: aBlock [
 
 	^ self addPresenter: (self newButton 

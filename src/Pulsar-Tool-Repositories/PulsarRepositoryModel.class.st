@@ -36,6 +36,20 @@ PulsarRepositoryModel >> allPackagesAvailableToAdd [
 ]
 
 { #category : 'accessing' }
+PulsarRepositoryModel >> calculateDiffToHead [
+
+	^ self critical: [ 
+		self entity workingCopy diffTo: self entity headCommit ]
+]
+
+{ #category : 'accessing' }
+PulsarRepositoryModel >> calculateDiffToReferenceCommit [
+
+	^ self critical: [ 
+		self entity workingCopy diffToReferenceCommit ]
+]
+
+{ #category : 'accessing' }
 PulsarRepositoryModel >> commitsTo: aNumber [
 
 	self entity isValid ifFalse: [ ^ #() ].
@@ -73,8 +87,7 @@ PulsarRepositoryModel >> diffNode [
 PulsarRepositoryModel >> diffToReferenceCommit [
 
 	^ diff ifNil: [ 
-		diff := self critical: [ 
-			self entity workingCopy diffToReferenceCommit ] ]
+		diff := self calculateDiffToReferenceCommit ]
 ]
 
 { #category : 'actions' }
@@ -279,7 +292,9 @@ PulsarRepositoryModel >> remotes [
 { #category : 'accessing' }
 PulsarRepositoryModel >> repairActions [
 
-	^ PulsarRepositoryRepairAction allAvailableFor: self entity
+	^ (PulsarRepositoryRepairAction allAvailableFor: self entity)
+		do: [ :each | each repositoryModel: self ];
+		yourself
 ]
 
 { #category : 'accessing' }

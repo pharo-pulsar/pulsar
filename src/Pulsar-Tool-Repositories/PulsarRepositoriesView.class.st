@@ -69,8 +69,9 @@ PulsarRepositoriesView >> doAddRepository [
 		open.	
 	dialog isOk ifFalse: [ ^ self ].
 	
-	self scheduleJob: [
+	self scheduleJob: [ :statusbar |
 		| repository |
+		statusbar pushMessage: 'Registering repository...'.
 		repository := presenter repositoryCreator createRepository.
 		repository register.
 		self model resetRepositories.
@@ -94,17 +95,25 @@ PulsarRepositoriesView >> doOpenRepository: aRepositoryModel [
 
 { #category : 'private - actions' }
 PulsarRepositoriesView >> doRepairSelectedRepository [
-	| result |
+	| result repositoryModel repairActions |
+		
+	repositoryModel := self selectedRepository.
+	repairActions := repositoryModel repairActions.
+	repairActions do: [ :each | each context: self ].
 	
 	self flag: #TODO. "in fact, this should be a bit better (we have helps and that
 	we can use, just I'm lazy to create a new dialog right now)"
 	result := self application newSelect
 		title: 'Repository broken';
 		message: 'Select from available repair actions';
-		items: self selectedRepository repairActions;
+		items: repairActions;
 		display: [ :aRepaitAction | aRepaitAction title ];
 		openModalWithParent: self window.
-	result ifNil: [ ^ self ]
+	result ifNil: [ ^ self ].
+	
+	result 
+		onSuccess: [ self updatePresenter ];
+		execute
 ]
 
 { #category : 'private' }

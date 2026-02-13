@@ -92,7 +92,6 @@ PulsarRepositoryPackageModel >> installBaselineGroups: aCollection upgradePolicy
 	sourceDirectory ifEmpty: [ sourceDirectory := '.'].
 
 	packageDir := (self repository location / sourceDirectory) fullName.
-
 	Metacello new
 		repository: 'gitlocal://', packageDir;
 		baseline: self baselineName;

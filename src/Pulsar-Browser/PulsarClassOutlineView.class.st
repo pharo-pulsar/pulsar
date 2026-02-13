@@ -141,7 +141,7 @@ PulsarClassOutlineView >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter
 		title: 'Outline';
-		whenClosedDo: [ self stopTaskWorker ]
+		whenClosedDo: [ self windowClosed ]
 ]
 
 { #category : 'private' }
@@ -277,6 +277,12 @@ PulsarClassOutlineView >> visitMethodModel: aModel [
 PulsarClassOutlineView >> visitProjectModel: aModel [
 
 	self visitClassModel: aModel asClassModel
+]
+
+{ #category : 'private' }
+PulsarClassOutlineView >> windowClosed [
+
+	self purgeTaskWorker	
 ]
 
 { #category : 'private' }

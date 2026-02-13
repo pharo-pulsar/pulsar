@@ -348,9 +348,10 @@ PulsarBrowser >> registerToTestCaseEvents [
 ]
 
 { #category : 'private' }
-PulsarBrowser >> repositoryView [
+PulsarBrowser >> repositoriestView [
+	"answer the repositories view if present, nil if not"
 
-	^ repositoryView
+	^ self findPresenterClass: PulsarRepositoriesView		
 ]
 
 { #category : 'actions' }

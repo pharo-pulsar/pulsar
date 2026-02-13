@@ -1,23 +1,23 @@
 Class {
-	#name : 'PulsarMessageSnapshot',
+	#name : 'PulsarInspectorSnapshot',
 	#superclass : 'PulsarPanelSnapshot',
 	#instVars : [
 		'timestamp'
 	],
-	#category : 'Pulsar-Browser-Tool-Messages',
+	#category : 'Pulsar-Browser-Tool-Inspector',
 	#package : 'Pulsar-Browser',
-	#tag : 'Tool-Messages'
+	#tag : 'Tool-Inspector'
 }
 
 { #category : 'restoring' }
-PulsarMessageSnapshot >> restoreTo: aPresenter [
+PulsarInspectorSnapshot >> restoreTo: aPresenter [
 
 	super restoreTo: aPresenter.
 	aPresenter lastTimePresented: timestamp
 ]
 
 { #category : 'initialization' }
-PulsarMessageSnapshot >> snapshot: aPresenter [
+PulsarInspectorSnapshot >> snapshot: aPresenter [
 
 	super snapshot: aPresenter.
 	timestamp := aPresenter lastTimePresented
