@@ -142,17 +142,16 @@ PulsarBrowser >> eventManyModelDeactivated: anAnnouncement [
 
 { #category : 'events' }
 PulsarBrowser >> eventTestSuiteEnded: aTestSuiteEnded [
-
 	| message |
+	
 	self scheduleTask: [ self resendAnnouncement: aTestSuiteEnded ].
-
 	self scheduleTask: [
-			message := 'Passed'.
-			aTestSuiteEnded testResult hasFailures ifTrue: [ message := 'Has failures' ].
-			aTestSuiteEnded testResult hasErrors ifTrue: [ message := 'Has errors' ].
-			self inform: ('Test run: <span foreground="{1}">{2}.</span>' format: {
-						 (self application colorForTestResultAt: aTestSuiteEnded testResult status).
-						 message }) ]
+		message := 'Passed'.
+		aTestSuiteEnded testResult hasFailures ifTrue: [ message := 'Has failures' ].
+		aTestSuiteEnded testResult hasErrors ifTrue: [ message := 'Has errors' ].
+		self inform: ('Test run: <span foreground="{1}">{2}.</span>' format: {
+					 (self application colorForTestResultAt: aTestSuiteEnded testResult status).
+					 message }) ]
 ]
 
 { #category : 'private' }
