@@ -124,7 +124,7 @@ PulsarApplication >> cleanUp [
 		
 	"also clean processes that may have remained"
 	(Processor allProcesses 
-		select: [ :each | each name beginsWith: self className ])
+		select: [ :each | each name beginsWith: 'Pulsar' ])
 		do: [ :each | each terminate ]
 ]
 
