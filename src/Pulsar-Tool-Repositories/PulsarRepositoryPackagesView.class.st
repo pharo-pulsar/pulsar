@@ -64,7 +64,8 @@ PulsarRepositoryPackagesView >> doAddPackageCommand: anAction [
 		openModalWithParent: self window.
 	result ifNil: [ ^ self ].
 	
-	self scheduleJob: [
+	self scheduleJob: [ :statusbar |
+		statusbar pushMessage: ('Adding package {1}...' format: { result name }).
 		self model addPackage: result.
 		self updatePresenter. 
 		self application deferToNextCycle: [
@@ -84,7 +85,8 @@ PulsarRepositoryPackagesView >> doInstallBaseline: aPackageModel [
  		isOk)
  		ifFalse: [ ^ self ].
  
- 	self scheduleJob: [
+	self scheduleJob: [ :statusbar |
+		statusbar pushMessage: ('Installing {1}...' format: { aPackageModel baselineName }).
  		aPackageModel 
  			installBaselineGroups: presenter groups
  			upgradePolicy: presenter upgradePolicy
@@ -96,7 +98,8 @@ PulsarRepositoryPackagesView >> doInstallBaseline: aPackageModel [
 PulsarRepositoryPackagesView >> doLoadPackage: aPackageModel [
  	| presenter |
  	
- 	self scheduleJob: [
+	self scheduleJob: [ :statusbar |
+		statusbar pushMessage: ('Loading {1}...' format: { aPackageModel name }).
  		aPackageModel load.
  		self updatePresenter ]
 ]
@@ -156,6 +159,7 @@ PulsarRepositoryPackagesView >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	
-	self scheduleJob: [
+	self scheduleJob: [ :statusbar |
+		statusbar pushMessage: ('Retrieving packages of {1}...' format: { self model name }).
 		listPresenter items: (self maybeSort: self model packages) ]
 ]

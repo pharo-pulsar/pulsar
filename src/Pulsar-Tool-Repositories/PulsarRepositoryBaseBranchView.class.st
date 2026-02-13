@@ -5,8 +5,9 @@ Class {
 		'toolbarPresenter',
 		'toolbarActions'
 	],
-	#category : 'Pulsar-Tool-Repositories',
-	#package : 'Pulsar-Tool-Repositories'
+	#category : 'Pulsar-Tool-Repositories-Branches',
+	#package : 'Pulsar-Tool-Repositories',
+	#tag : 'Branches'
 }
 
 { #category : 'private' }
@@ -71,15 +72,12 @@ PulsarRepositoryBaseBranchView >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 
-	self withWindowDo: #jobStart.
-	self application scheduleTask: [
-		[
-			| branches |
-			branches := self maybeSort: self branches.
-			self application 
-				defer: [ listPresenter items: branches ] ] 
-		ensure: [ 
-			self withWindowDo: #jobEnd ] ]
+	self window scheduleJob: [
+		| branches |
+		branches := self maybeSort: self branches.
+		self application 
+			defer: [ listPresenter items: branches ] ] 
+
 ]
 
 { #category : 'private' }

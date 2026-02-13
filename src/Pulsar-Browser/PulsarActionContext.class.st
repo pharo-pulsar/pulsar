@@ -63,7 +63,7 @@ PulsarActionContext >> scheduleJob: aBlock [
 { #category : 'private' }
 PulsarActionContext >> scheduleTask: aBlock [
 
-	self application scheduleTask: aBlock
+	self window scheduleTask: aBlock
 ]
 
 { #category : 'accessing' }

@@ -8,8 +8,7 @@ Class {
 	#traits : 'SgaTApplication',
 	#classTraits : 'SgaTApplication classTrait',
 	#instVars : [
-		'standalone',
-		'scheduler'
+		'standalone'
 	],
 	#classInstVars : [
 		'lastSnapshot',
@@ -260,15 +259,6 @@ PulsarApplication >> newRequestText [
 		yourself
 ]
 
-{ #category : 'private - scheduling' }
-PulsarApplication >> newScheduler [ 
-
-	^ TKTWorkerPool new
-		name: self className;
-		poolMaxSize: 5;
-		start
-]
-
 { #category : 'ui - dialogs' }
 PulsarApplication >> newSelect [
 
@@ -331,17 +321,6 @@ PulsarApplication >> pulsarBrowser [
 	 	ifNone: [ nil ]
 ]
 
-{ #category : 'private - scheduling' }
-PulsarApplication >> queueTask: aBlock [
-	"queue task works on a single working, ensure tasks are queued 
-	 (they will happen in FIFO order)"
-
-	^ self scheduler schedule: [
-		aBlock 
-			on: Error 
-			fork: [ :e | e pass ] ]
-]
-
 { #category : 'initialization' }
 PulsarApplication >> registerToSystemEvents [
 
@@ -398,20 +377,6 @@ PulsarApplication >> schedule: aBlock [
 	^ self scheduleTask: aBlock
 ]
 
-{ #category : 'private - scheduling' }
-PulsarApplication >> scheduleTask: aBlock [
-	^ self scheduler schedule: [ 
-		aBlock 
-			on: Error 
-			fork: [ :e | e pass ] ]
-]
-
-{ #category : 'private - scheduling' }
-PulsarApplication >> scheduler [
-
-	^ scheduler ifNil: [ scheduler := self newScheduler ]
-]
-
 { #category : 'accessing' }
 PulsarApplication >> settings [
 
@@ -450,7 +415,7 @@ PulsarApplication >> start [
 		ifTrue: [ snapshot restoreTo: self ]
 		ifFalse: [ (PulsarBrowser newApplication: self) open ].
 
-	self scheduleTask: [ self checkForLostChanges ]
+	"self checkForLostChanges"
 ]
 
 { #category : 'settings' }

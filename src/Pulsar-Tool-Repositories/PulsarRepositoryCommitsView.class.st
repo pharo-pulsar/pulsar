@@ -16,6 +16,12 @@ PulsarRepositoryCommitsView class >> defaultPanelPosition [
 		yourself
 ]
 
+{ #category : 'initialization' }
+PulsarRepositoryCommitsView >> commitsToRetrieve [
+
+	^ 300
+]
+
 { #category : 'layout' }
 PulsarRepositoryCommitsView >> defaultLayout [
 
@@ -100,6 +106,11 @@ PulsarRepositoryCommitsView >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	
-	self scheduleJob: [
-		listPresenter items: (self model commitsTo: 300) ]
+	self scheduleJob: [ :statusbar |
+		| items |
+		statusbar pushMessage: ('Retrieving commits of {1}...' format: { self model name }).
+		items := self model commitsTo: self commitsToRetrieve.
+		self scheduleTask: [ 
+			self application defer: [ 
+				listPresenter items: items ] ] ]
 ]

@@ -84,6 +84,13 @@ PulsarBaseView >> scheduleJob: aBlock [
 	self withWindowDo: [ :aWindow | aWindow scheduleJob: aBlock ]
 ]
 
+{ #category : 'private' }
+PulsarBaseView >> scheduleTask: aBlock [
+	"schedule a task that will be executed on background"
+
+	self withWindowDo: [ :aWindow | aWindow scheduleTask: aBlock ]
+]
+
 { #category : 'accessing' }
 PulsarBaseView >> spotterTitle [
 	

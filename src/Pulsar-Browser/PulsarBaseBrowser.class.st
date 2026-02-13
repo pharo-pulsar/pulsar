@@ -4,8 +4,8 @@ A base for all dock browsers (there should not be a lot, but more than one)
 Class {
 	#name : 'PulsarBaseBrowser',
 	#superclass : 'SpPanelWindowPresenter',
-	#traits : 'SpTModel + PulsarTSnapshot + PulsarTGlobalActionContainer',
-	#classTraits : 'SpTModel classTrait + PulsarTSnapshot classTrait + PulsarTGlobalActionContainer classTrait',
+	#traits : 'SpTModel + PulsarTSnapshot + PulsarTGlobalActionContainer + PulsarTTaskScheduler',
+	#classTraits : 'SpTModel classTrait + PulsarTSnapshot classTrait + PulsarTGlobalActionContainer classTrait + PulsarTTaskScheduler classTrait',
 	#instVars : [
 		'actions',
 		'mutex',
@@ -455,16 +455,12 @@ PulsarBaseBrowser >> schedule: aBlock [
 PulsarBaseBrowser >> scheduleJob: aBlock [
 	"schedule a task that will show the working spinner while it executes"
 
-	self application scheduleTask: [
+	self scheduleTask: [
 		self jobStart.
-		aBlock ensure: [ 
+		[ aBlock cull: self statusbar ]
+		ensure: [ 
+			self statusbar clearMessage.
 			self jobEnd ] ]
-]
-
-{ #category : 'private - schedulling' }
-PulsarBaseBrowser >> scheduleTask: aBlock [
-
-	^ self application scheduleTask: aBlock
 ]
 
 { #category : 'private - actions' }
@@ -505,7 +501,8 @@ PulsarBaseBrowser >> togglePanelArea: aPanelArea [
 PulsarBaseBrowser >> windowClosed [
 
 	self presenters do: [ :each | each windowClosed ].
-	announcer stopTaskWorker.
+	announcer purgeTaskWorker.
+	self purgeTaskScheduler.
 	super windowClosed
 ]
 

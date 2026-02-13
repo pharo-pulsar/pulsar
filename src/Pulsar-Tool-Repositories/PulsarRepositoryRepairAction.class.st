@@ -107,15 +107,17 @@ PulsarRepositoryRepairAction >> executeWithContext: aContext model: aRepositoryM
 { #category : 'private' }
 PulsarRepositoryRepairAction >> fetchAllRemotes [
 	| remotes |
-	remotes := self repository remotes.
-	UIManager default informUserDuring: [ :bar | 
-		bar label: 'Fetching incoming commits'.
-		bar max: remotes size.
-		bar value: 1.
-		remotes withIndexDo: [ :each :index |
-			bar label: ('Fetching incoming commits of {1}' format: {each name}).
-			bar value: index + 1.
-			self repository fetchFrom: each ] ].	
+	
+	self context scheduleJob: [ :statusbar |
+		[ 
+			statusbar pushMessage: 'Fetching remotes...'.
+			remotes := self repository remotes.
+			remotes withIndexDo: [ :each :index |
+				statusbar popMessage.
+				statusbar pushMessage: ('Fetching incoming commits of {1}' format: { each name }).
+				self repository fetchFrom: each ] ] 
+		ensure: [ 
+			statusbar popMessage ] ]
 ]
 
 { #category : 'private' }

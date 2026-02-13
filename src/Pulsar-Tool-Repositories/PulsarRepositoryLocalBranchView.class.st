@@ -1,8 +1,9 @@
 Class {
 	#name : 'PulsarRepositoryLocalBranchView',
 	#superclass : 'PulsarRepositoryBaseBranchView',
-	#category : 'Pulsar-Tool-Repositories',
-	#package : 'Pulsar-Tool-Repositories'
+	#category : 'Pulsar-Tool-Repositories-Branches',
+	#package : 'Pulsar-Tool-Repositories',
+	#tag : 'Branches'
 }
 
 { #category : 'private' }
@@ -75,7 +76,8 @@ PulsarRepositoryLocalBranchView >> doCreateBranchCommand: anAction [
 { #category : 'private - actions' }
 PulsarRepositoryLocalBranchView >> doFetchRepositories [
 
-	self scheduleJob: [
+	self scheduleJob: [ :statusbar |
+		statusbar pushMessage: 'Fetching remotes...'.
 		self model newFetchAction
 			onSuccess: [ self notifyRepositoryModified ];
 			executeWithContext: self ]

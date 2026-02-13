@@ -219,7 +219,7 @@ PulsarFlagsConsole >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 
-	self application scheduleTask: [
+	self window scheduleTask: [
 		| flags |
 		"first calculate outside (in the task)"
 		flags := self model flags. 

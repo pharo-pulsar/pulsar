@@ -27,7 +27,8 @@ PulsarRepositoryActionContext >> doCommit: aModel [
 				openModalWithParent: self window)
 			ifFalse: [ ^ self ] ].
 	
-	self scheduleJob: [
+	self scheduleJob: [ :statusbar |
+		statusbar pushMessage: ('Commiting {1}...' format: { aModel name }).
 		aModel newCommitAction
 			message: commitPresenter message;
 			onSuccess: [ self notifyRepositoryModified: aModel ];
@@ -48,7 +49,8 @@ PulsarRepositoryActionContext >> doPush: aModel [
 			openModalWithParent: self window.
 		remote ifNil: [ ^ self ] ].
 
-	self scheduleJob: [
+	self scheduleJob: [ :statusbar |
+		statusbar pushMessage: ('Pushing {1}...' format: { aModel name }).
 		(aModel newPushActionTo: remote)
 			onSuccess: [ self notifyRepositoryModified: aModel ];
 			executeWithContext: self owner ]

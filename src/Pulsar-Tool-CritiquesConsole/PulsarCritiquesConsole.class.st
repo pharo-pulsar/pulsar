@@ -236,7 +236,7 @@ PulsarCritiquesConsole >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 
-	self application scheduleTask: [
+	self window scheduleTask: [
 		| critiques |
 		"first calculate outside (in the task)"
 		critiques := self model critiques. 

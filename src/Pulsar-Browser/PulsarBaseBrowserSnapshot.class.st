@@ -66,6 +66,7 @@ PulsarBaseBrowserSnapshot >> restoreTo: aPulsarBrowser [
 { #category : 'restoring' }
 PulsarBaseBrowserSnapshot >> selectLastActiveEditorOn: aPulsarBrowser [
 	| editors lastPresented |
+
 	editors := aPulsarBrowser editors.
 	editors ifEmpty: [ ^ self ].
 
@@ -74,7 +75,7 @@ PulsarBaseBrowserSnapshot >> selectLastActiveEditorOn: aPulsarBrowser [
 		first.
 
 	aPulsarBrowser whenOpenedDo: [
-		aPulsarBrowser application scheduleTask: [
+		aPulsarBrowser scheduleTask: [
 			"give time to redraw"
 			100 milliSeconds wait.
 			aPulsarBrowser application defer: [ lastPresented raiseAndTakeKeyboardFocus ] ] ]

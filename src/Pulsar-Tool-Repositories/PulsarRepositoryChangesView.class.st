@@ -134,14 +134,14 @@ PulsarRepositoryChangesView >> defineNodeActionsOn: aBuilder [
 { #category : 'private - actions' }
 PulsarRepositoryChangesView >> doCollapseAll [
 
-	self scheduleJob: [
+	self scheduleTask: [
 		listPresenter collapseAll ]
 ]
 
 { #category : 'private - actions' }
 PulsarRepositoryChangesView >> doCollapseToClasses [
 
-	self scheduleJob: [
+	self scheduleTask: [
 		self application defer: [
 			listPresenter collapseAll.
 			listPresenter roots withIndexDo: [ :each :rootIndex | 
@@ -171,7 +171,8 @@ PulsarRepositoryChangesView >> doDiscardSelectedChanges [
 	node := self selectedItem.
 	node ifNil: [ ^ self ].
 	
-	self scheduleJob: [
+	self scheduleJob: [ :statusbar |
+		statusbar pushMessage: ('Discarding {1}...' format: { node name }).
 		self model discardChangesOn: node.
 		self updatePresenter ]
 ]
@@ -193,7 +194,8 @@ PulsarRepositoryChangesView >> doOpenRepositoryLocation [
 { #category : 'private - actions' }
 PulsarRepositoryChangesView >> doRecalculateDirtyPackages [
 	
-	self scheduleJob: [
+	self scheduleJob: [ :statusbar |
+		statusbar pushMessage: ('Recalculating dirty packages of {1}...' format: { self model name }).
 		self model recalculateDirtyChanges.
 		self updatePresenter ]
 ]

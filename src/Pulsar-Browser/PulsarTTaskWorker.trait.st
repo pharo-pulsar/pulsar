@@ -1,5 +1,7 @@
 "
 Add a task worker to be used in instances that require to queue tasks to be executed in FIFO order.
+
+Presenters using this trait need to purge tasks when close (sending `purgeTaskWorker`).
 "
 Trait {
 	#name : 'PulsarTTaskWorker',
@@ -17,6 +19,19 @@ PulsarTTaskWorker >> newTaskWorker [
 	^ PulsarWorker new 
 		inTool: self class;
 		start
+]
+
+{ #category : 'private - scheduling' }
+PulsarTTaskWorker >> purgeTaskWorker [
+
+	taskWorker ifNil: [ ^ self ].
+	
+	taskWorker purge.
+	[ taskWorker currentTaskExecution ifNotNil: #cancel ]
+		on: Error
+		do: [ :e | logger info: 'Task was already cancelled but we do not care.' ].
+	taskWorker stop.
+	taskWorker := nil
 ]
 
 { #category : 'private - scheduling' }
@@ -64,7 +79,6 @@ PulsarTTaskWorker >> stopTaskWorker [
 
 	taskWorker ifNil: [ ^ self ].
 	taskWorker stop
-	
 ]
 
 { #category : 'private - scheduling' }
