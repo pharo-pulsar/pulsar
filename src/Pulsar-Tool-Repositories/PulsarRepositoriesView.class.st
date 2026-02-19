@@ -5,7 +5,9 @@ Class {
 	#name : 'PulsarRepositoriesView',
 	#superclass : 'PulsarCollectionView',
 	#instVars : [
-		'listToolbarPresenter'
+		'listToolbarPresenter',
+		'hideSystemProjects',
+		'toggleSystemProjectsButtonPresenter'
 	],
 	#category : 'Pulsar-Tool-Repositories-View-Repositories',
 	#package : 'Pulsar-Tool-Repositories',
@@ -18,6 +20,23 @@ PulsarRepositoriesView class >> defaultPanelPosition [
 	^ SpPanelPosition startArea
 		row: 3;
 		yourself
+]
+
+{ #category : 'initialization' }
+PulsarRepositoriesView >> addVisibilityToolbar [
+	
+	(toggleSystemProjectsButtonPresenter := self newToggleButton)
+		addStyle: 'flat';
+		icon: (self iconNamed: #systemRepository);
+		help: 'Toggle visibility (hide/show) of system projects';
+		state: self isHideSystemProjects;
+		whenChangedDo: [ :state | self toggleSystemProjects: state ];
+		yourself.
+	
+	listToolbarPresenter addPresenter: (self newToolbar
+		displayMode: self application toolbarDisplayMode;
+		add: toggleSystemProjectsButtonPresenter;
+		yourself)
 ]
 
 { #category : 'initialization' }
@@ -128,10 +147,37 @@ PulsarRepositoriesView >> eventRepositoryModified: ann [
 	self updatePresenter
 ]
 
+{ #category : 'private' }
+PulsarRepositoriesView >> filterRepositories: aCollection [
+
+	hideSystemProjects ifFalse: [ ^ aCollection ].
+
+	^ aCollection reject: [ :each | 
+		each isSystemRepository ]
+]
+
 { #category : 'private - testing' }
 PulsarRepositoriesView >> hasSelectedRepository [
 
 	^ self selectedRepository isNotNil
+]
+
+{ #category : 'private' }
+PulsarRepositoriesView >> hideSystemProjects: aBoolean [
+
+	hideSystemProjects = aBoolean ifTrue: [ ^ self ].
+	
+	hideSystemProjects := aBoolean.
+	"this will probablu trigger an update"
+	toggleSystemProjectsButtonPresenter 
+		ifNotNil: [ :aPresenter | aPresenter state: aBoolean ]
+]
+
+{ #category : 'initialization' }
+PulsarRepositoriesView >> initialize [
+
+	hideSystemProjects := false.
+	super initialize
 ]
 
 { #category : 'initialization' }
@@ -141,6 +187,9 @@ PulsarRepositoriesView >> initializePresenters [
 
 	listToolbarPresenter := self instantiate: PulsarToolbarPresenter.
 	listToolbarPresenter actions: (self actions actionsFor: #actions).
+	
+	self addVisibilityToolbar.
+	
 	listToolbarPresenter 
 		addPresenterCloseButton: 'Close repositories' 
 		action: [ self doClose ].
@@ -157,6 +206,12 @@ PulsarRepositoriesView >> initializePresenters [
 PulsarRepositoriesView >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter title: 'Repository'
+]
+
+{ #category : 'private - testing' }
+PulsarRepositoriesView >> isHideSystemProjects [
+
+	^ hideSystemProjects
 ]
 
 { #category : 'private' }
@@ -187,12 +242,21 @@ PulsarRepositoriesView >> snapshot [
 	^ PulsarRepositoriesSnapshot on: self
 ]
 
+{ #category : 'private' }
+PulsarRepositoriesView >> toggleSystemProjects: aBoolean [
+
+	hideSystemProjects = aBoolean ifTrue: [ ^ self ].
+
+	hideSystemProjects := aBoolean.
+	self updatePresenter
+]
+
 { #category : 'initialization' }
 PulsarRepositoriesView >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	
-	listPresenter updateItemsKeepingSelection: (self model repositories sorted: #name ascending)
+	listPresenter updateItemsKeepingSelection: (self filterRepositories: (self model repositories sorted: #name ascending))
 ]
 
 { #category : 'private' }

@@ -157,6 +157,12 @@ PulsarRepositoryModel >> isPackageLoaded: aPackageModel [
 	^ self entity workingCopy isLoadedPackageNamed: aPackageModel name
 ]
 
+{ #category : 'testing' }
+PulsarRepositoryModel >> isSystemRepository [
+
+	^ self entity project tags includes: #system
+]
+
 { #category : 'accessing' }
 PulsarRepositoryModel >> localBranches [
 	| branches |
