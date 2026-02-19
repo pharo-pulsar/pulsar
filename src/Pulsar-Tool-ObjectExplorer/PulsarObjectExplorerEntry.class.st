@@ -19,7 +19,7 @@ PulsarObjectExplorerEntry class >> newObject: anObject [
 { #category : 'accessing' }
 PulsarObjectExplorerEntry >> children [
 
-	^ self object class slots 
+	^ self object class allSlots 
 		collect: [ :eachSlot |
 			PulsarObjectExplorerSlot 
 				newObject: (eachSlot read: self object)

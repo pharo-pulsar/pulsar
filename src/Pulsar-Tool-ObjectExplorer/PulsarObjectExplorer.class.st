@@ -1,5 +1,13 @@
 "
-A micro tool to explore the complete tree of a an instance (it can be used to have a quick view of a complete structure) 
+A micro tool to explore the complete tree of a an instance (it can be used to have a quick view of a complete structure).
+
+Example: 
+```smalltalk
+app := SpApplication new useBackend: #Gtk.
+explorer := PulsarObjectExplorer newApplication: app model: (PulsarObjectExplorerInstance newObject: yourObject).
+explorer open.
+```
+
 "
 Class {
 	#name : 'PulsarObjectExplorer',
@@ -47,5 +55,5 @@ PulsarObjectExplorer >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	treePresenter roots: { self model }.
-	treePresenter expandAll
+	treePresenter expandRoots
 ]
