@@ -7,7 +7,8 @@ Class {
 	#instVars : [
 		'listToolbarPresenter',
 		'hideSystemProjects',
-		'toggleSystemProjectsButtonPresenter'
+		'toggleSystemProjectsButtonPresenter',
+		'updating'
 	],
 	#category : 'Pulsar-Tool-Repositories-View-Repositories',
 	#package : 'Pulsar-Tool-Repositories',
@@ -143,7 +144,8 @@ PulsarRepositoriesView >> entitySelected: aRepositoryModel [
 
 { #category : 'events' }
 PulsarRepositoriesView >> eventRepositoryModified: ann [
-
+	updating ifTrue: [ ^ self ].
+	
 	self updatePresenter
 ]
 
@@ -168,14 +170,17 @@ PulsarRepositoriesView >> hideSystemProjects: aBoolean [
 	hideSystemProjects = aBoolean ifTrue: [ ^ self ].
 	
 	hideSystemProjects := aBoolean.
-	"this will probablu trigger an update"
-	toggleSystemProjectsButtonPresenter 
-		ifNotNil: [ :aPresenter | aPresenter state: aBoolean ]
+	toggleSystemProjectsButtonPresenter ifNotNil: [ :aPresenter |
+		"prevent double update"
+		self updatingWhile: [
+			aPresenter state: aBoolean ].
+		self updatePresenter ]
 ]
 
 { #category : 'initialization' }
 PulsarRepositoriesView >> initialize [
 
+	updating := false.
 	hideSystemProjects := false.
 	super initialize
 ]
@@ -253,14 +258,28 @@ PulsarRepositoriesView >> toggleSystemProjects: aBoolean [
 
 { #category : 'initialization' }
 PulsarRepositoriesView >> updatePresenter [
+	| filteredRepositories |
 
 	self model ifNil: [ ^ self ].
 	
-	listPresenter updateItemsKeepingSelection: (self filterRepositories: (self model repositories sorted: #name ascending))
+	updating ifTrue: [ ^ self ].
+
+	filteredRepositories := (self filterRepositories: self model repositories) sorted: #name ascending.
+	listPresenter updateItemsKeepingSelection: filteredRepositories
 ]
 
 { #category : 'private' }
 PulsarRepositoriesView >> updateToolbar [
 
 	self actions allCommands do: [ :each | each updateEnableStatus ]
+]
+
+{ #category : 'private - updating' }
+PulsarRepositoriesView >> updatingWhile: aBlock [
+	| oldUpdating |
+
+	oldUpdating := updating.
+	updating := true.
+	aBlock 
+		ensure: [ updating := oldUpdating ]
 ]
