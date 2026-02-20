@@ -296,8 +296,7 @@ PulsarEditor >> initialize [
 
 	dirty := false. 
 	updating := false.
-	super initialize.
-	self registerToSystemEvents
+	super initialize
 ]
 
 { #category : 'initialization' }

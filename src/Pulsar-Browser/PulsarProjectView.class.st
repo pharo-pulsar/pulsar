@@ -436,9 +436,7 @@ PulsarProjectView >> hasSelectedEntity [
 PulsarProjectView >> initialize [
 
 	mutex := Mutex new.
-	super initialize.
-	self registerToEvents.
-	self registerToSystemEvents
+	super initialize
 ]
 
 { #category : 'initialization' }

@@ -21,6 +21,14 @@ PulsarBaseView >> colorNamed: aString [
 ]
 
 { #category : 'initialization' }
+PulsarBaseView >> initialize [
+
+	super initialize.
+	self registerToEvents.
+	self registerToSystemEvents
+]
+
+{ #category : 'initialization' }
 PulsarBaseView >> initializePanelWindow: aPanelwindowPresenter [
 
 	super initializePanelWindow: aPanelwindowPresenter.
@@ -68,13 +76,17 @@ PulsarBaseView >> panelTransferredFrom: fromWindow to: toWindow [
 PulsarBaseView >> registerToBrowser: aPulsarBrowser [
 
 	"take the announcer of the dock to broadcast what happens"
-	self notificationCenter: aPulsarBrowser announcer.
-	self registerToEvents
+	self notificationCenter: aPulsarBrowser announcer
 ]
 
 { #category : 'initialization' }
 PulsarBaseView >> registerToEvents [
 	"override this to subscribe to notifications"
+]
+
+{ #category : 'initialization' }
+PulsarBaseView >> registerToSystemEvents [
+	"override to register to system events."
 ]
 
 { #category : 'private' }

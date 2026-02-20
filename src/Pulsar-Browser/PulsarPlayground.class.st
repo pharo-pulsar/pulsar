@@ -180,8 +180,7 @@ PulsarPlayground >> eventThemeChanged: ann [
 PulsarPlayground >> initialize [
 
 	model := PulsarPlaygroundModel new.
-	super initialize.
-	self registerToSystemEvents
+	super initialize
 ]
 
 { #category : 'initialization' }

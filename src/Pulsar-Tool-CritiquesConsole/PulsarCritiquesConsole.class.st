@@ -132,14 +132,6 @@ PulsarCritiquesConsole >> eventMethodChanged: aMethodAnnouncement [
 ]
 
 { #category : 'initialization' }
-PulsarCritiquesConsole >> initialize [
-
-	super initialize.
-	self registerToEvents.
-	self registerToSystemEvents
-]
-
-{ #category : 'initialization' }
 PulsarCritiquesConsole >> initializePresenters [
 
 

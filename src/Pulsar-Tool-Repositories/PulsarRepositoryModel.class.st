@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'diff',
 		'diffNode',
-		'mutex'
+		'mutex',
+		'registeredStatus'
 	],
 	#category : 'Pulsar-Tool-Repositories-Model',
 	#package : 'Pulsar-Tool-Repositories',
@@ -33,6 +34,21 @@ PulsarRepositoryModel >> allPackagesAvailableToAdd [
 	packageNames := self entity workingCopy packages collect: #name.
 	^ self environmentModel allPackages 
 		reject: [ :each  | packageNames includes: each name ]
+]
+
+{ #category : 'private' }
+PulsarRepositoryModel >> basicStatus [
+	
+	[
+		self isMissing 						ifTrue: [ ^ #missing ].
+		self isDetached 						ifTrue: [ ^ #detached ].
+		self entity loadedPackages isEmpty 	ifTrue: [ ^ #notLoaded ].
+		self entity 	workingCopy isModified 	ifTrue: [ ^ #modified ].
+		^ #upToDate ]
+	on: Error 
+	do: [ :e | 
+		logger error: e.
+		^ #error ]
 ]
 
 { #category : 'accessing' }
@@ -269,6 +285,12 @@ PulsarRepositoryModel >> recalculateDirtyChanges [
 	self resetDiff
 ]
 
+{ #category : 'testing' }
+PulsarRepositoryModel >> registeredStatusChanged [
+
+	^ registeredStatus ~= self basicStatus
+]
+
 { #category : 'accessing' }
 PulsarRepositoryModel >> remoteBranches [
 	| branches |
@@ -324,17 +346,11 @@ PulsarRepositoryModel >> setUpstream: aRemote [
 
 { #category : 'accessing' }
 PulsarRepositoryModel >> status [
-	
-	[
-		self isMissing 						ifTrue: [ ^ #missing ].
-		self isDetached 						ifTrue: [ ^ #detached ].
-		self entity loadedPackages isEmpty 	ifTrue: [ ^ #notLoaded ].
-		self entity 	workingCopy isModified 	ifTrue: [ ^ #modified ].
-		^ #upToDate ]
-	on: Error 
-	do: [ :e | 
-		logger error: e.
-		^ #error ]
+
+	"I update status each time I ask because I need to know it to see if this changed in 
+	 #registeredStatusChanged. This is an optimisation to not trigger an update of the UI 
+	 each time (most of the times is not needed)"
+	^ registeredStatus := self basicStatus
 ]
 
 { #category : 'actions' }

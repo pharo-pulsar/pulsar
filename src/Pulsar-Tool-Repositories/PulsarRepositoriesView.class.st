@@ -143,7 +143,20 @@ PulsarRepositoriesView >> entitySelected: aRepositoryModel [
 ]
 
 { #category : 'events' }
+PulsarRepositoriesView >> eventMetaModelElementChanged: ann [
+
+	updating ifTrue: [ ^ self ].
+
+	(listPresenter items 
+		anySatisfy: [ :each | each registeredStatusChanged ])
+		ifFalse: [ ^ self ] .
+	
+	self updatePresenter
+]
+
+{ #category : 'events' }
 PulsarRepositoriesView >> eventRepositoryModified: ann [
+
 	updating ifTrue: [ ^ self ].
 	
 	self updatePresenter
@@ -232,6 +245,15 @@ PulsarRepositoriesView >> registerToEvents [
 	self announcer 
 		when: PulsarRepositoryModified
 		send: #eventRepositoryModified:
+		to: self
+]
+
+{ #category : 'initialization' }
+PulsarRepositoriesView >> registerToSystemEvents [
+
+	self announcer 
+		when: PackageAnnouncement, ClassAnnouncement, MethodAnnouncement 
+		send: #eventMetaModelElementChanged:
 		to: self
 ]
 

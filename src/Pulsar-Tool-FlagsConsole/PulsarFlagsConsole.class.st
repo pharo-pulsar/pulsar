@@ -124,14 +124,6 @@ PulsarFlagsConsole >> eventMethodChanged: aMethodAnnouncement [
 ]
 
 { #category : 'initialization' }
-PulsarFlagsConsole >> initialize [
-
-	super initialize.
-	self registerToEvents.
-	self registerToSystemEvents
-]
-
-{ #category : 'initialization' }
 PulsarFlagsConsole >> initializePresenters [
 
 
