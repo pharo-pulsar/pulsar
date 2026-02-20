@@ -147,6 +147,12 @@ PulsarDiffNode >> isRoot [
 ]
 
 { #category : 'accessing' }
+PulsarDiffNode >> name [
+
+	^ self description
+]
+
+{ #category : 'accessing' }
 PulsarDiffNode >> node [
 
 	^ self entity
