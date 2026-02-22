@@ -60,30 +60,10 @@ PulsarStackView >> addCountPresenter [
 
 { #category : 'initialization' }
 PulsarStackView >> addSortingToolbar [
-	| firstActivationTime lastActivationTime |
-	
-	firstActivationTime := self newToggleButton
-		addStyle: 'flat';
-		icon: (self iconNamed: #firstActivationTime);
-		help: 'Toggle sorting by first activation time';
-		state: (self isSortingBy: #firstActivationTime);
-		whenActivatedDo: [ self doSortBy: #firstActivationTime ];
-		yourself.
-	lastActivationTime := self newToggleButton
-		addStyle: 'flat';
-		icon: (self iconNamed: #lastActivationTime);
-		help: 'Toggle sorting by last activation time';
-		state: (self isSortingBy: #lastActivationTime);
-		whenActivatedDo: [ self doSortBy: #lastActivationTime ];
-		yourself.
-		
-	firstActivationTime associatedToggleButtons: { lastActivationTime }.
-	
-	toolbarPresenter addPresenter: (self newToolbar
-		displayMode: self application toolbarDisplayMode;
-		add: firstActivationTime;
-		add: lastActivationTime;
-		yourself)
+	| sortPresenter |
+
+	sortPresenter := self instantiate: PulsarStackSortPresenter on: self.
+	toolbarPresenter addPresenter: sortPresenter
 ]
 
 { #category : 'private - actions' }
