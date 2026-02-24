@@ -125,6 +125,13 @@ PulsarBrowser >> defineExtraActionsOn: aBuilder [
 	 already in the tool list"
 ]
 
+{ #category : 'private' }
+PulsarBrowser >> editorStackView [
+	"answer the editor stack view if present, nil if not"
+
+	^ self findPresenterClass: PulsarStackView
+]
+
 { #category : 'events' }
 PulsarBrowser >> eventManyModelDeactivated: anAnnouncement [
 	| editors |
