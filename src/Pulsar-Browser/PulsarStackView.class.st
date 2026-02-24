@@ -100,13 +100,13 @@ PulsarStackView >> defaultLayout [
 { #category : 'private - actions' }
 PulsarStackView >> doCloseEditors [
 	 
-	self closeEditors: listPresenter items copy
+	self closeEditors: (listPresenter items collect: #model)
 ]
 
 { #category : 'private - actions' }
 PulsarStackView >> doCloseSelectedEditors [
 	
-	self closeEditors: listPresenter selectedItems copy
+	self closeEditors: (listPresenter selectedItems collect: #model)
 ]
 
 { #category : 'private - actions' }
@@ -148,7 +148,7 @@ PulsarStackView >> eventEditorActivated: anAnnouncement [
 		activatedEditor withPanelWindowDo: [ :w | 
 			w isClosed 
 				ifTrue: [ ^ self ] ].
-		listPresenter selectItem: activatedEditor model ]
+		listPresenter selectItem: activatedEditor ]
 ]
 
 { #category : 'events' }
@@ -198,7 +198,7 @@ PulsarStackView >> initializePresenters [
 		addStyle: 'stList';
 		beMultipleSelection;
 		rowPresenterClass: PulsarStackRow;
-		display: [ :aContextModel | aContextModel fullName ];
+		display: [ :anEditor | anEditor model fullName ];
 		actions: (self actions actionsForAll: #(editorStack editorStackGeneral));
 		whenFilterChangedDo: [ self updateCount ];
 		yourself
@@ -231,11 +231,21 @@ PulsarStackView >> mutex [
 ]
 
 { #category : 'private - announcing' }
+PulsarStackView >> notifyActivateEntity: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+	super notifyActivateEntity: anEntity model
+]
+
+{ #category : 'private - announcing' }
 PulsarStackView >> notifySelectEntity: aCollection [
+	| editorPresenter |
 
 	aCollection ifEmpty: [ ^ self ].
-	self notificationCenter 
-		announce: aCollection first newSelectionAnnouncement
+	
+	editorPresenter := aCollection first.
+	self notificationCenter
+		announce: editorPresenter model newSelectionAnnouncement
 ]
 
 { #category : 'initialization' }
@@ -254,13 +264,33 @@ PulsarStackView >> shownEditors [
 	| editors |
 
 	editors := self sortEditors: (self window editors reject: [ :each | each isClosed ]).
-	^ editors collect: [ :each | each presenter model ]
+	^ editors collect: [ :each | each presenter ]
+]
+
+{ #category : 'accessing - snapshot' }
+PulsarStackView >> snapshot [
+
+	^ PulsarStackSnapshot on: self
 ]
 
 { #category : 'private' }
 PulsarStackView >> sortEditors: aCollection [
 
 	^ self perform: sortingSelector asMutator with: aCollection 
+]
+
+{ #category : 'accessing' }
+PulsarStackView >> sortingSelector [
+
+	^ sortingSelector
+]
+
+{ #category : 'accessing' }
+PulsarStackView >> sortingSelector: aSelector [
+ 
+ 	"in general, this is just used when restoring from snapshot"
+	sortingSelector := aSelector.
+	self updatePresenter
 ]
 
 { #category : 'initialization' }

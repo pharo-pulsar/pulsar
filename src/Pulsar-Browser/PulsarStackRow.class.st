@@ -19,6 +19,13 @@ PulsarStackRow >> defaultLayout [
 		yourself
 ]
 
+{ #category : 'private' }
+PulsarStackRow >> editorModel [
+
+	"a model is an editor presenter, it contains a model"
+	^ self model model
+]
+
 { #category : 'initialization' }
 PulsarStackRow >> initializePresenters [
 
@@ -34,6 +41,6 @@ PulsarStackRow >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	
-	iconPresenter image: (self iconNamed: self model iconName).
-	namePresenter label: self model fullName
+	iconPresenter image: (self iconNamed: self editorModel iconName).
+	namePresenter label: self editorModel fullName
 ]
