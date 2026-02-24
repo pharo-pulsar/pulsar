@@ -2,7 +2,8 @@ Trait {
 	#name : 'PulsarTPanelWindow',
 	#instVars : [
 		'lastTimePresented',
-		'panelPosition'
+		'panelPosition',
+		'pinned'
 	],
 	#traits : 'PulsarTPanelWindowWithPlacedIcon',
 	#classTraits : 'PulsarTPanelWindowWithPlacedIcon classTrait',
@@ -40,6 +41,12 @@ PulsarTPanelWindow >> initializeWindow: aWindowPresenter [
 		whenClosedDo: [ self notifyEditorClosed  ]
 ]
 
+{ #category : 'testing' }
+PulsarTPanelWindow >> isPinned [
+	
+	^ pinned ifNil: [ pinned := false ]
+]
+
 { #category : 'accessing' }
 PulsarTPanelWindow >> lastTimePresented [
 
@@ -74,6 +81,12 @@ PulsarTPanelWindow >> panelPosition [
 PulsarTPanelWindow >> panelPosition: aPanelPosition [
 
 	panelPosition := aPanelPosition
+]
+
+{ #category : 'accessing' }
+PulsarTPanelWindow >> pinned: aBoolean [
+
+	pinned := aBoolean
 ]
 
 { #category : 'accessing' }

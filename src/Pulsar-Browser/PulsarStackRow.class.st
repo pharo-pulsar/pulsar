@@ -3,7 +3,8 @@ Class {
 	#superclass : 'SpEasyAbstractRowPresenter',
 	#instVars : [
 		'iconPresenter',
-		'namePresenter'
+		'namePresenter',
+		'markPresenter'
 	],
 	#category : 'Pulsar-Browser-View-Stack',
 	#package : 'Pulsar-Browser',
@@ -14,6 +15,7 @@ Class {
 PulsarStackRow >> defaultLayout [
 
 	^ SpBoxLayout newHorizontal
+		add: markPresenter expand: false;
 		add: iconPresenter expand: false;
 		add: namePresenter;
 		yourself
@@ -32,14 +34,32 @@ PulsarStackRow >> initializePresenters [
 	self addStyle: 'stRow'.
 	self addStyle: 'pulsarStackRow'.
 	
+	markPresenter := self newImage.
+	markPresenter hide.
+	
 	iconPresenter := self newImage.
 	namePresenter := self newLabel
+]
+
+{ #category : 'private' }
+PulsarStackRow >> obtainMarkIcon [
+
+	self model isPinned ifTrue: [ ^ #pin ].
+	
+	^ nil
 ]
 
 { #category : 'initialization' }
 PulsarStackRow >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
+	
+	self obtainMarkIcon 
+		ifNotNil: [ :aName |
+			markPresenter image: (self iconNamed: aName).
+			markPresenter show ]
+		ifNil: [ 
+			markPresenter hide ].
 	
 	iconPresenter image: (self iconNamed: self editorModel iconName).
 	namePresenter label: self editorModel fullName

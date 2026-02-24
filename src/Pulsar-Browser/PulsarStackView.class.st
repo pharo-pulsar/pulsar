@@ -24,30 +24,6 @@ PulsarStackView class >> defaultPanelPosition [
 		yourself
 ]
 
-{ #category : 'accessing - actions' }
-PulsarStackView class >> defineActionsOn: aBuilder [
-	<dockActions>
-
-	aBuilder 
-		addGroup: #editorStack with: [ :group | group
-			priority: 10;
-			beDisplayedAsGroup;
-			addActionWith: [ :action | action
-				name: 'Close Selected Editors';
-				description: 'Close selected editors';
-				iconName: 'close';
-				shortcutKey: $x mod1;
-				action: [ :aContext | aContext doCloseSelectedEditors ] ] ];
-		addGroup: #editorStackGeneral with: [ :group | group
-			priority: 1000;
-			beDisplayedAsGroup;
-			addActionWith: [ :action | action
-				name: 'Close All';
-				description: 'Close all editors';
-				iconName: 'closeAll';
-				action: [ :aContext | aContext doCloseEditors ] ] ]
-]
-
 { #category : 'initialization' }
 PulsarStackView >> addCountPresenter [
 	
@@ -97,6 +73,36 @@ PulsarStackView >> defaultLayout [
 		yourself
 ]
 
+{ #category : 'private - definitions' }
+PulsarStackView >> defineActionsOn: aBuilder [
+	<dockActions>
+
+	aBuilder 
+		addGroup: #editorStack with: [ :group | group
+			priority: 10;
+			beDisplayedAsGroup;
+			addActionWith: [ :action | action 
+				dynamicName: [ '{1} editor' format: { self selectedItem isPinned ifTrue: [ 'Unpin' ] ifFalse: [ 'Pin' ] } ];
+				"state: false;"
+				description: 'Pin editor';
+				iconName: 'pin';
+				action: [ self doTogglePinSelectedEditor ] ];
+			addActionWith: [ :action | action
+				name: 'Close Selected Editors';
+				description: 'Close selected editors';
+				iconName: 'close';
+				shortcutKey: $x mod1;
+				action: [ :aContext | aContext doCloseSelectedEditors ] ] ];
+		addGroup: #editorStackGeneral with: [ :group | group
+			priority: 1000;
+			beDisplayedAsGroup;
+			addActionWith: [ :action | action
+				name: 'Close All';
+				description: 'Close all editors';
+				iconName: 'closeAll';
+				action: [ :aContext | aContext doCloseEditors ] ] ]
+]
+
 { #category : 'private - actions' }
 PulsarStackView >> doCloseEditors [
 	 
@@ -118,6 +124,16 @@ PulsarStackView >> doSortBy: aSelector [
 	self updatePresenter.
 	item ifNotNil: [
 		listPresenter selectItem: item ]
+]
+
+{ #category : 'private - actions' }
+PulsarStackView >> doTogglePinSelectedEditor [
+	| editor |
+
+ 	editor := self selectedItem. 
+ 	editor pinned: editor isPinned not.
+ 	
+ 	self updatePresenter
 ]
 
 { #category : 'private' }
@@ -174,7 +190,8 @@ PulsarStackView >> eventModelChanged: anAnnouncement [
 { #category : 'private' }
 PulsarStackView >> firstActivationTime: aCollection [ 
 
-	^ aCollection reversed
+	^ aCollection reversed sorted: (
+		[ :a | a presenter isPinned ] descending)
 ]
 
 { #category : 'initialization' }
@@ -221,7 +238,9 @@ PulsarStackView >> isSortingBy: aSelector [
 { #category : 'private' }
 PulsarStackView >> lastActivationTime: aCollection [ 
 
-	^ aCollection sorted: [ :a | a presenter lastTimePresented ] descending
+	^ aCollection sorted: (
+		[ :a | a presenter isPinned ] descending, 
+		[ :a | a presenter lastTimePresented ] descending)
 ]
 
 { #category : 'private' }
