@@ -82,7 +82,9 @@ PulsarStackView >> defineActionsOn: aBuilder [
 			priority: 10;
 			beDisplayedAsGroup;
 			addActionWith: [ :action | action 
-				dynamicName: [ '{1} editor' format: { self selectedItem isPinned ifTrue: [ 'Unpin' ] ifFalse: [ 'Pin' ] } ];
+				dynamicName: [ '{1} {2}' format: { 
+					self selectedItem isPinned ifTrue: [ 'Unpin' ] ifFalse: [ 'Pin' ].
+					self selectedItem model fullName } ];
 				"state: false;"
 				description: 'Pin editor';
 				iconName: 'pin';
@@ -173,6 +175,13 @@ PulsarStackView >> eventEditorClosed: anAnnouncement [
 	"this just has sense if this is the last one, because all the others will be 
 	 processed when autoselect the next editor"
 	"listPresenter items size > 1 ifTrue: [ ^ self ]."
+	self updatePresenter
+]
+
+{ #category : 'events' }
+PulsarStackView >> eventEditorModified: anAnnouncement [
+	
+	self flag: #TODO. "This can be optimised by updating just the editor modified!"
 	self updatePresenter
 ]
 
@@ -274,6 +283,7 @@ PulsarStackView >> registerToEvents [
 		when: PulsarEditorActivated send: #eventEditorActivated: to: self;
 		when: PulsarToolEditorActivated send: #eventEditorActivated: to: self;
 		when: PulsarEditorClosed send: #eventEditorClosed: to: self;
+		when: PulsarEditorModified send: #eventEditorModified: to: self;
 		when: PulsarModelChanged send: #eventModelChanged: to: self;
 		when: PulsarDebuggerContextChanged send: #eventContextChanged: to: self
 ]

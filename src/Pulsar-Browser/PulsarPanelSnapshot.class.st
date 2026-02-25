@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'dockPosition',
 		'presenterClass',
-		'model'
+		'model',
+		'pinned'
 	],
 	#category : 'Pulsar-Browser-Snapshot',
 	#package : 'Pulsar-Browser',
@@ -42,6 +43,7 @@ PulsarPanelSnapshot >> restoreTo: aPresenter [
 
 	"The model is in fact set on class creation"
 	"aPresenter model: self model"
+	aPresenter pinned: pinned
 ]
 
 { #category : 'initialization' }
@@ -49,6 +51,7 @@ PulsarPanelSnapshot >> snapshot: aPresenter [
 
 	presenterClass := aPresenter class.
 	dockPosition := aPresenter panelWindow panelPosition.
+	pinned := aPresenter isPinned.
 	self takeModelSnapshot: aPresenter
 ]
 

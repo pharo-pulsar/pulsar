@@ -1,8 +1,8 @@
 Class {
 	#name : 'PulsarBaseView',
 	#superclass : 'SpPresenter',
-	#traits : 'SpTModel + PulsarTActionContainer + PulsarTNotificationCenter + PulsarTSnapshot + PulsarTPanelWindowWithPlacedIcon',
-	#classTraits : 'SpTModel classTrait + PulsarTActionContainer classTrait + PulsarTNotificationCenter classTrait + PulsarTSnapshot classTrait + PulsarTPanelWindowWithPlacedIcon classTrait',
+	#traits : 'SpTModel + PulsarTActionContainer + PulsarTNotificationCenter + PulsarTSnapshot + PulsarTPanelWindowWithPlacedIcon + PulsarTPanelWindow',
+	#classTraits : 'SpTModel classTrait + PulsarTActionContainer classTrait + PulsarTNotificationCenter classTrait + PulsarTSnapshot classTrait + PulsarTPanelWindowWithPlacedIcon classTrait + PulsarTPanelWindow classTrait',
 	#category : 'Pulsar-Browser-View-Base',
 	#package : 'Pulsar-Browser',
 	#tag : 'View-Base'

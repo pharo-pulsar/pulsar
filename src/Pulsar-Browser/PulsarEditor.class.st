@@ -307,6 +307,7 @@ PulsarEditor >> initializePanelWindow: aWindowPresenter [
 		actions: self windowActions;
 		whenPresentedDo: [ self panelPresented ];
 		whenFocusReceivedDo: [ self panelFocused ];
+		whenModifiedChangedDo: [ self panelModifiedChanged ];
 		whenSaveDo: [ :ann | ann success: self saveContent ];
 		whenDiscardDo: [ :ann | 
 			"I don't know what to do with this... nothing feels right." ]
@@ -435,6 +436,12 @@ PulsarEditor >> panelFocused [
 
 	logger trace.
 	self notifyEditorActivated
+]
+
+{ #category : 'private' }
+PulsarEditor >> panelModifiedChanged [
+
+	self notificationCenter announce: (PulsarEditorModified newValue: self)
 ]
 
 { #category : 'private' }

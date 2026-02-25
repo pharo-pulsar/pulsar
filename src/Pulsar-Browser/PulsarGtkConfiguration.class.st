@@ -137,6 +137,8 @@ PulsarGtkConfiguration >> darkPaletteStyle [
 @define-color commit_outgoing 		LightGreen;
 @define-color commit_incoming 		Yellow;
 @define-color package_notloaded 		DarkGray;
+/* pin */
+@define-color pinned_bg_color		#1f232a;
 '
 ]
 
@@ -238,6 +240,8 @@ PulsarGtkConfiguration >> lightPaletteStyle [
 @define-color commit_outgoing 			green;
 @define-color commit_incoming 			orange;
 @define-color package_notloaded 			#A0A0A0;
+/* pin */
+@define-color pinned_bg_color			#f3f6fb;
 '
 ]
 
@@ -353,6 +357,7 @@ tab .tab-title label { font-size: 0.9em; }
 
 .pulsarProtocolRow label.unclassified { color: red; }
 .pulsarStack label.count { padding-right: 5px; }
+.pulsarStack .pulsarStackRowPinned { background-color: alpha(@accent_bg_color, 0.08); }
 .pulsarToolbar { margin: 0px; padding: 0px; }
 /* Editors */
 .pulsarEditorLinked { border-width: 1px; border-style: solid; border-color: @accent_bg_color; }

@@ -182,6 +182,7 @@ PulsarMDINeutralIconProvider >> createTable [
 		('lastActivationTime'     'account-eye-outline')
 		('sort'					  'sort')
 		('pin'					  'pin')
+		('dirty'					  'circle-medium')
 
 		"Panels / layout / windows"
 		('panel-left'             'dock-left')

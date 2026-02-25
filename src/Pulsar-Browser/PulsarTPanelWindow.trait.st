@@ -42,6 +42,12 @@ PulsarTPanelWindow >> initializeWindow: aWindowPresenter [
 ]
 
 { #category : 'testing' }
+PulsarTPanelWindow >> isDirty [
+	
+	^ false
+]
+
+{ #category : 'testing' }
 PulsarTPanelWindow >> isPinned [
 	
 	^ pinned ifNil: [ pinned := false ]

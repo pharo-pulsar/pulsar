@@ -45,7 +45,8 @@ PulsarStackRow >> initializePresenters [
 PulsarStackRow >> obtainMarkIcon [
 
 	self model isPinned ifTrue: [ ^ #pin ].
-	
+	self model isDirty ifTrue: [ ^ #dirty ].
+
 	^ nil
 ]
 
@@ -60,6 +61,10 @@ PulsarStackRow >> updatePresenter [
 			markPresenter show ]
 		ifNil: [ 
 			markPresenter hide ].
+			
+	"self model isPinned 
+		ifTrue: [ self addStyle: 'pulsarStackRowPinned' ]
+		ifFalse: [ self removeStyle: 'pulsarStackRowPinned' ] ."
 	
 	iconPresenter image: (self iconNamed: self editorModel iconName).
 	namePresenter label: self editorModel fullName
