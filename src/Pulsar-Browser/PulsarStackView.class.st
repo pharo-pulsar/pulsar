@@ -160,7 +160,8 @@ PulsarStackView >> eventContextChanged: anAnnouncement [
 PulsarStackView >> eventEditorActivated: anAnnouncement [
 	| currentItem activatedEditor |
 
-	activatedEditor := anAnnouncement value. 
+	activatedEditor := anAnnouncement value.
+	logger trace: activatedEditor.
 	self mutex critical: [
 		self updatePresenter.
 		activatedEditor withPanelWindowDo: [ :w | 
@@ -171,27 +172,39 @@ PulsarStackView >> eventEditorActivated: anAnnouncement [
 
 { #category : 'events' }
 PulsarStackView >> eventEditorClosed: anAnnouncement [
+	| closedEditor |
 	
 	"this just has sense if this is the last one, because all the others will be 
 	 processed when autoselect the next editor"
 	"listPresenter items size > 1 ifTrue: [ ^ self ]."
+	
+	closedEditor := anAnnouncement value.
+	logger trace: closedEditor.
 	self updatePresenter
 ]
 
 { #category : 'events' }
 PulsarStackView >> eventEditorModified: anAnnouncement [
+	| modifiedEditor |
 	
 	self flag: #TODO. "This can be optimised by updating just the editor modified!"
+	
+	modifiedEditor := anAnnouncement value.
+	logger trace: modifiedEditor.
 	self updatePresenter
 ]
 
 { #category : 'events' }
 PulsarStackView >> eventModelChanged: anAnnouncement [
+	| modelChanged |
 	
+	modelChanged := anAnnouncement value.
 	"if name changed, I will need to show the change"
 	(anAnnouncement oldEntity isNil 
-		or: [ anAnnouncement value fullName = anAnnouncement oldEntity fullName ]) 
+		or: [ modelChanged fullName = anAnnouncement oldEntity fullName ]) 
 		ifTrue: [ ^ self ].
+	
+	logger trace: modelChanged.
 	
 	self updatePresenter
 ]
