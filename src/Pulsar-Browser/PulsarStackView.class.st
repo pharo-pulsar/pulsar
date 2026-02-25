@@ -83,8 +83,8 @@ PulsarStackView >> defineActionsOn: aBuilder [
 			beDisplayedAsGroup;
 			addActionWith: [ :action | action 
 				dynamicName: [ '{1} {2}' format: { 
-					self selectedItem isPinned ifTrue: [ 'Unpin' ] ifFalse: [ 'Pin' ].
-					self selectedItem model fullName } ];
+					(self isPinned: self selectedItem) ifTrue: [ 'Unpin' ] ifFalse: [ 'Pin' ].
+					(self fullName: self selectedItem) } ];
 				"state: false;"
 				description: 'Pin editor';
 				iconName: 'pin';
@@ -216,6 +216,14 @@ PulsarStackView >> firstActivationTime: aCollection [
 		[ :a | a presenter isPinned ] descending)
 ]
 
+{ #category : 'private' }
+PulsarStackView >> fullName: anEditor [ 
+
+	anEditor ifNil: [ ^ 'NONAME' ].
+
+	^ anEditor model fullName
+]
+
 { #category : 'initialization' }
 PulsarStackView >> initialize [
 
@@ -249,6 +257,12 @@ PulsarStackView >> initializeWindow: aWindowPresenter [
 	aWindowPresenter 
 		title: 'Editor Stack'";
 		windowIcon: (self iconNamed: 'editorStack')"
+]
+
+{ #category : 'private - testing' }
+PulsarStackView >> isPinned: anEditor [
+
+	^ anEditor isNotNil and: [ anEditor isPinned ]
 ]
 
 { #category : 'private - testing' }
