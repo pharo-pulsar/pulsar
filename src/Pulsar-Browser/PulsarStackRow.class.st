@@ -4,7 +4,8 @@ Class {
 	#instVars : [
 		'iconPresenter',
 		'namePresenter',
-		'markPresenter'
+		'pinnedPresenter',
+		'dirtyPresenter'
 	],
 	#category : 'Pulsar-Browser-View-Stack',
 	#package : 'Pulsar-Browser',
@@ -15,7 +16,8 @@ Class {
 PulsarStackRow >> defaultLayout [
 
 	^ SpBoxLayout newHorizontal
-		add: markPresenter expand: false;
+		add: dirtyPresenter expand: false;
+		add: pinnedPresenter expand: false;
 		add: iconPresenter expand: false;
 		add: namePresenter;
 		yourself
@@ -32,10 +34,20 @@ PulsarStackRow >> editorModel [
 PulsarStackRow >> initializePresenters [
 
 	self addStyle: 'stRow'.
-	self addStyle: 'pulsarStackRow'.
+	self addStyle: 'pulsarStackRow'.	
 	
-	markPresenter := self newImage.
-	markPresenter hide.
+	pinnedPresenter := self newImage
+		addStyle: 'button';
+		image: (self iconNamed: #pin);
+		help: 'Unpin this editor';
+		yourself.
+	pinnedPresenter hide.
+	pinnedPresenter eventHandler whenMouseDownDo: [ :event | self unpin ].
+	
+	dirtyPresenter := self newImage
+		image: (self iconNamed: 'dirty');
+		yourself.
+	dirtyPresenter hide.	
 	
 	iconPresenter := self newImage.
 	namePresenter := self newLabel
@@ -50,22 +62,32 @@ PulsarStackRow >> obtainMarkIcon [
 	^ nil
 ]
 
+{ #category : 'private - actions' }
+PulsarStackRow >> unpin [
+
+	self listView announcer announce: (PulsarStackUnpinEditor newEditor: self model)
+]
+
 { #category : 'initialization' }
 PulsarStackRow >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	
-	self obtainMarkIcon 
-		ifNotNil: [ :aName |
-			markPresenter image: (self iconNamed: aName).
-			markPresenter show ]
-		ifNil: [ 
-			markPresenter hide ].
-			
-	"self model isPinned 
-		ifTrue: [ self addStyle: 'pulsarStackRowPinned' ]
-		ifFalse: [ self removeStyle: 'pulsarStackRowPinned' ] ."
+	self verifyPinnedStatus.
+	self verifyDirtyStatus.
 	
 	iconPresenter image: (self iconNamed: self editorModel iconName).
 	namePresenter label: self editorModel fullName
+]
+
+{ #category : 'initialization' }
+PulsarStackRow >> verifyDirtyStatus [
+
+	dirtyPresenter visible: self model isDirty
+]
+
+{ #category : 'initialization' }
+PulsarStackRow >> verifyPinnedStatus [
+
+	pinnedPresenter visible: self model isPinned
 ]

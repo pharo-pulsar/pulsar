@@ -357,7 +357,7 @@ tab .tab-title label { font-size: 0.9em; }
 
 .pulsarProtocolRow label.unclassified { color: red; }
 .pulsarStack label.count { padding-right: 5px; }
-.pulsarStack .pulsarStackRowPinned { background-color: alpha(@accent_bg_color, 0.08); }
+.pulsarStackRow image.button:hover { background-color: alpha(currentColor, 0.12); }
 .pulsarToolbar { margin: 0px; padding: 0px; }
 /* Editors */
 .pulsarEditorLinked { border-width: 1px; border-style: solid; border-color: @accent_bg_color; }

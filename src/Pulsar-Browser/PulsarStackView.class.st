@@ -88,6 +88,7 @@ PulsarStackView >> defineActionsOn: aBuilder [
 				"state: false;"
 				description: 'Pin editor';
 				iconName: 'pin';
+				actionEnabled: [ self hasSelectedItem ];
 				action: [ self doTogglePinSelectedEditor ] ];
 			addActionWith: [ :action | action
 				name: 'Close Selected Editors';
@@ -248,7 +249,12 @@ PulsarStackView >> initializePresenters [
 		display: [ :anEditor | anEditor model fullName ];
 		actions: (self actions actionsForAll: #(editorStack editorStackGeneral));
 		whenFilterChangedDo: [ self updateCount ];
-		yourself
+		yourself.
+	
+	listPresenter listPresenter announcer 
+		when: PulsarStackUnpinEditor
+		send: #unpin: 
+		to: self
 ]
 
 { #category : 'initialization' }
@@ -347,6 +353,16 @@ PulsarStackView >> sortingSelector: aSelector [
  	"in general, this is just used when restoring from snapshot"
 	sortingSelector := aSelector.
 	self updatePresenter
+]
+
+{ #category : 'private - actions' }
+PulsarStackView >> unpin: ann [
+	| editor |
+
+ 	editor := ann editor. 
+ 	editor pinned: false.
+ 	
+ 	self updatePresenter
 ]
 
 { #category : 'initialization' }
