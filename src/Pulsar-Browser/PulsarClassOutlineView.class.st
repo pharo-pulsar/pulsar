@@ -56,6 +56,15 @@ PulsarClassOutlineView >> defaultLayout [
 ]
 
 { #category : 'events' }
+PulsarClassOutlineView >> eventClassChanged: aClassAnnouncement [
+
+	(self model isSameClass: aClassAnnouncement classAffected) ifFalse: [ ^ self ].
+
+	logger trace: aClassAnnouncement.
+	self updatePresenter
+]
+
+{ #category : 'events' }
 PulsarClassOutlineView >> eventEditorActivated: anAnnounceement [
 	| editor |
 	
@@ -210,6 +219,7 @@ PulsarClassOutlineView >> registerToSystemEvents [
 	
 	self announcer
 		when: MethodAnnouncement send: #eventMethodChanged: to: self;
+		when: ClassModifiedClassDefinition send: #eventClassChanged: to: self;
 		when: TestSuiteEnded send: #eventTestSuiteEnded: to: self
 ]
 

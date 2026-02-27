@@ -6,6 +6,28 @@ Class {
 	#tag : 'Model'
 }
 
+{ #category : 'accessing - actions' }
+PvSlotModel >> actionsWithContextOn: aContextPresenter [
+
+	^ (self actions actionsFor: 'refactors') 
+		copyWithContext: (PulsarRefactorSlotContext on: aContextPresenter)
+]
+
+{ #category : 'private - definitions' }
+PvSlotModel >> defineRefactorActionsOn: aBuilder [
+	<dockActions>
+	
+	"this actions cannot be used directly in this context (the model 
+	 context), because execute them require interact with the UI"
+	aBuilder addGroup: #refactors with: [ :group | group 
+		name: 'Refactors';
+		beDisplayedAsSubMenu;
+		addActionWith: [ :action | action
+			name: ('Rename {1}' format: { self name });
+			description: 'Rename method';
+			action: [ :aContext | aContext doRenameVariable: self ] ] ]
+]
+
 { #category : 'accessing' }
 PvSlotModel >> iconName [
 
@@ -29,4 +51,10 @@ PvSlotModel >> slotName [
 
 	self entity class = InstanceVariableSlot ifTrue: [ ^ '' ].
 	^ self entity className
+]
+
+{ #category : 'accessing' }
+PvSlotModel >> variableClass [
+
+	^ self entity definingClass
 ]

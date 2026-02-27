@@ -123,6 +123,21 @@ PulsarClassEditor >> doToggleSelectionLinkCommand: anAction [
 ]
 
 { #category : 'events' }
+PulsarClassEditor >> eventClassChanged: aClassAnnouncement [
+	
+	(self model isSameClass: aClassAnnouncement classAffected) ifFalse: [ ^ self ].
+	
+	self isDirty 
+		ifTrue: [
+			self flag: #TODO. "Maybe mark dirty as a conflict?"
+			"updating should prevent to modify the edited content"
+			self updatingWhile: [
+				self updatePresenter ] ]
+		ifFalse: [
+			self updatePresenter ]
+]
+
+{ #category : 'events' }
 PulsarClassEditor >> eventModelChanged: ann [
 	
 	ann value = self model ifFalse: [ ^ self ].
@@ -234,7 +249,8 @@ PulsarClassEditor >> registerToSystemEvents [
 	super registerToSystemEvents.
 	
 	self announcer
-		when: TestSuiteEnded send: #eventTestSuiteEnded: to: self
+		when: TestSuiteEnded send: #eventTestSuiteEnded: to: self;
+		when: ClassModifiedClassDefinition send: #eventClassChanged: to: self
 ]
 
 { #category : 'initialization' }

@@ -363,6 +363,12 @@ PulsarClassOutlineSideView >> hasSelectedMethod [
 	^ self selectedMethod isNotNil
 ]
 
+{ #category : 'private - testing' }
+PulsarClassOutlineSideView >> hasSelectedVariable [
+
+	^ self selectedVariable isNotNil
+]
+
 { #category : 'layout' }
 PulsarClassOutlineSideView >> horizontalLayout [
 
@@ -473,7 +479,10 @@ PulsarClassOutlineSideView >> initializeVariables [
 		rowPresenterClass: PulsarSlotRow;
 		searchMatching: [ :aModel :aString | 
 			aModel name asLowercase beginsWith: aString asLowercase ];
-		actions: (self actions actionsForAll: #(variable variableCritical));
+		actions: (SpActionGroup new 
+			add: (self actions actionsForAll: #(variable variableCritical));
+			addDynamicGroup: #dynamic with: [ :group | group add: self variableRefactorActions ];
+			yourself);
 		yourself
 ]
 
@@ -601,6 +610,12 @@ PulsarClassOutlineSideView >> selectedMethodName [
 		ifNil: [ 'Unknown' ]
 ]
 
+{ #category : 'private - accessing' }
+PulsarClassOutlineSideView >> selectedVariable [
+
+	^ variablesListPresenter selectedItem
+]
+
 { #category : 'initialization' }
 PulsarClassOutlineSideView >> updateMethods [
 	
@@ -692,6 +707,14 @@ PulsarClassOutlineSideView >> useVerticalLayout [
 	
 	usingLayout := #vertical.
 	self layout: self verticalLayout
+]
+
+{ #category : 'initialization' }
+PulsarClassOutlineSideView >> variableRefactorActions [
+
+	self hasSelectedVariable ifFalse: [ ^ SpActionGroup new ].
+
+	^ self selectedVariable actionsWithContextOn: self
 ]
 
 { #category : 'layout' }

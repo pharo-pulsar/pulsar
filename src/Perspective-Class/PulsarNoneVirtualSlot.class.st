@@ -17,6 +17,12 @@ PulsarNoneVirtualSlot class >> newEntity: anObject [
 		yourself
 ]
 
+{ #category : 'accessing - actions' }
+PulsarNoneVirtualSlot >> actionsWithContextOn: aContextPresenter [
+
+	^ SpActionGroup new
+]
+
 { #category : 'accessing' }
 PulsarNoneVirtualSlot >> entity [
 
