@@ -37,8 +37,10 @@ PulsarTPanelWindow >> initializeWindow: aWindowPresenter [
 
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
-		title: self model fullName;
-		whenClosedDo: [ self notifyEditorClosed  ]
+		title: (self model 
+			ifNotNil: [ :aModel | aModel fullName ] 
+			ifNil: [ 'NONAME' ]);
+		whenClosedDo: [ self notifyEditorClosed ]
 ]
 
 { #category : 'testing' }
