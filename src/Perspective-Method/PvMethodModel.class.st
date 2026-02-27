@@ -140,7 +140,7 @@ PvMethodModel >> defineDecorationActionsOn: aBuilder [
 			
 		group addActionWith: [ :action | action 
 			name: 'Versions';
-			description: ('Browse versions of [self name]');
+			description: ('Browse versions of ', self name);
 			iconName: 'versions';
 			action: [ :aContext | aContext doBrowseVersionsCommand: action ] ].
 			
@@ -297,6 +297,12 @@ PvMethodModel >> isSameAs: aMethodModel [
 
 	^ self methodClass = aMethodModel methodClass 
 		and: [ self selector = aMethodModel selector ]
+]
+
+{ #category : 'testing' }
+PvMethodModel >> isSameClass: aClass [
+
+	^ self methodClass instanceSide = aClass instanceSide
 ]
 
 { #category : 'testing' }

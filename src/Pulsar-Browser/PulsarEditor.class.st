@@ -238,6 +238,23 @@ PulsarEditor >> editorToolbarActions [
 ]
 
 { #category : 'events' }
+PulsarEditor >> eventClassChanged: aClassAnnouncement [
+	
+	(self model isSameClass: aClassAnnouncement classAffected) ifFalse: [ ^ self ].
+	
+	"force a model change, because it is the one that will trigger dirty, etc."
+	self eventModelChanged: (PulsarModelChanged newValue: self model)
+]
+
+{ #category : 'events' }
+PulsarEditor >> eventClassRemoved: aClassAnnouncement [
+	
+	(self model isSameClass: aClassAnnouncement classAffected) ifFalse: [ ^ self ].
+	
+	self forceClose
+]
+
+{ #category : 'events' }
 PulsarEditor >> eventModelChanged: ann [
 	
 	ann value = self model ifFalse: [ ^ self ].
@@ -476,6 +493,8 @@ PulsarEditor >> registerToSystemEvents [
 		when: PulsarThemeChanged send: #eventThemeChanged: to: self;
 		when: PulsarSyntaxHighlightThemeChanged send: #eventSyntaxHighlightThemeChanged: to: self;
 		when: TestCaseEnded send: #eventTestCaseEnded: to: self;
+		when: ClassModifiedClassDefinition send: #eventClassChanged: to: self;
+		when: ClassRemoved send: #eventClassRemoved: to: self;
 		when: SpWindowWillClose send: #windowWillClose: to: self
 ]
 
