@@ -235,6 +235,18 @@ PulsarRepositoryModel >> newFetchAction [
 ]
 
 { #category : 'actions - command' }
+PulsarRepositoryModel >> newPullActionFrom: aRemote [
+	| remote |
+
+	remote := aRemote ifNil: [ self entity branch upstream remote ].
+	^ IceTipStandardAction new 
+		repository: self entity;
+		message: ('Pulling from {1}' format: { remote name });
+		action: [ self entity pullFrom: remote ];
+		yourself
+]
+
+{ #category : 'actions - command' }
 PulsarRepositoryModel >> newPushAction [
 
 	^ IceTipStandardAction new 

@@ -36,6 +36,27 @@ PulsarRepositoryActionContext >> doCommit: aModel [
 ]
 
 { #category : 'actions' }
+PulsarRepositoryActionContext >> doPull: aModel [
+	| remote |
+
+	remote := nil.
+	aModel hasUpstream ifFalse: [
+		remote := self application newSelect
+			title: 'Upstream missing';
+			message: 'Select remote to pull from (set upstream)';
+			items: aModel remotes;
+			display: [ :aRemote | aRemote name ];
+			openModalWithParent: self window.
+		remote ifNil: [ ^ self ] ].
+
+	self scheduleJob: [ :statusbar |
+		statusbar pushMessage: ('Pulling from {1}...' format: { aModel name }).
+		(aModel newPullActionFrom: remote)
+			onSuccess: [ self notifyRepositoryModified: aModel ];
+			executeWithContext: self owner ]
+]
+
+{ #category : 'actions' }
 PulsarRepositoryActionContext >> doPush: aModel [
 	| remote |
 
@@ -50,7 +71,7 @@ PulsarRepositoryActionContext >> doPush: aModel [
 		remote ifNil: [ ^ self ] ].
 
 	self scheduleJob: [ :statusbar |
-		statusbar pushMessage: ('Pushing {1}...' format: { aModel name }).
+		statusbar pushMessage: ('Pushing to {1}...' format: { aModel name }).
 		(aModel newPushActionTo: remote)
 			onSuccess: [ self notifyRepositoryModified: aModel ];
 			executeWithContext: self owner ]
