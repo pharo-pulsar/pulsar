@@ -124,19 +124,31 @@ PulsarContextEditor >> updateEditor [
 
 { #category : 'private - actions' }
 PulsarContextEditor >> updateModel: aString [
-	| force |
-
+	| force contextInteractionModel |
+	
+	"since the context editor presenter works with a debugger interaction model, 
+	 which is designed to operate with doit/printit/etc commands, we need to 
+	 change the interactionModel while triggering a recompile of the method, 
+	 that's why we temporarily change the interaction model."
+	contextInteractionModel := editorPresenter interactionModel.
+	editorPresenter interactionModel: self model newMethodInteractionModel.
+	
 	force := false.
-	^  [ 
-		self model 
-			updateWith: aString
-			notifying: editorPresenter interactionModel
-			force: force ]
-		on: DebugAttemptToRewindPostMortemError 
+	^ [
+		[ 
+			self model 
+				updateWith: aString
+				notifying: editorPresenter interactionModel
+				force: force  
+		]
+		on: DebugAttemptToRewindPostMortemError
 		do: [ :e | 
 			force := self confirm: 'Can not rewind post mortem context for new method. Accept anyway?'.
 			force ifTrue: [ e retry ].
-			false ]
+			false ] 
+	] 
+	ensure: [
+		editorPresenter interactionModel: contextInteractionModel ]
 ]
 
 { #category : 'initialization' }

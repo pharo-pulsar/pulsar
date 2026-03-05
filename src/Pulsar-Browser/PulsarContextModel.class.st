@@ -156,6 +156,12 @@ PulsarContextModel >> name [
 	^ name ifNil: [ name := self inOneLine ]
 ]
 
+{ #category : 'updating' }
+PulsarContextModel >> newMethodInteractionModel [
+
+	^ SpCodeMethodInteractionModel on: self method
+]
+
 { #category : 'accessing' }
 PulsarContextModel >> packageName [
 
@@ -256,12 +262,6 @@ PulsarContextModel >> updateEntityFromStack [
 
 	self entity: self session stack first.
 	name := nil
-]
-
-{ #category : 'updating' }
-PulsarContextModel >> updateWith: aString notifying: anInteractionModel [
-
-	^ self error: 'Should not arrive here.'
 ]
 
 { #category : 'updating' }
