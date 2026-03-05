@@ -203,6 +203,12 @@ PvClassModel >> fullName [
 	^ self name
 ]
 
+{ #category : 'private' }
+PvClassModel >> hierarchyPresenterClass [
+
+	^ PulsarClassHierarchyPresenter
+]
+
 { #category : 'accessing - navigating' }
 PvClassModel >> hierarchyTopModel [
 	| node prevNode |

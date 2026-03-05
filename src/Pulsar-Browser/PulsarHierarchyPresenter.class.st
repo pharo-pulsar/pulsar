@@ -1,3 +1,6 @@
+"
+A hierarchy presenter for metamodels (classes, methods)
+"
 Class {
 	#name : 'PulsarHierarchyPresenter',
 	#superclass : 'PvMethodHierarchyPresenter',

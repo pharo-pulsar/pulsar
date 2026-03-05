@@ -375,6 +375,7 @@ popover .pulsarPreviewEditor { min-width: 680px; min-height: 340px; }
 .pulsarMessageFlyingBrowser { min-width: 680px; min-height: 440px; }
 .pulsarInspectorFlyingBrowser { min-width: 680px; min-height: 440px; }
 .pulsarHierarchyFlyingBrowser { min-width: 450px; min-height: 350px; }
+.pulsarMethodHierarchyFlyingBrowser { min-width: 680px; min-height: 440px; }
 .pulsarVersionsFlyingBrowser { min-width: 680px; min-height: 440px; }
 .pulsarFlyingBrowser notebook tabs tab { padding: 2px; }
 .pulsarFlyingBrowser notebook tabs tab label { font-size: 0.9em; }

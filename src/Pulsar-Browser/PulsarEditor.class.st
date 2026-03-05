@@ -177,7 +177,7 @@ PulsarEditor >> doShowHierarchy: anAction [
 	
 	popover := self newPopover.
 	navigation := self 
-		instantiate: PulsarHierarchyPresenter 
+		instantiate: self hierarchyPresenterClass 
 		on: (PulsarHierarchyModel on: self model). 
 	
 	navigation notificationCenter: self notificationCenter.
@@ -306,6 +306,12 @@ PulsarEditor >> forceClose [
 	self withPanelWindowDo: [ :aWindow | aWindow forceClose ].
 	
 	self close
+]
+
+{ #category : 'private' }
+PulsarEditor >> hierarchyPresenterClass [ 
+
+	^ self model hierarchyPresenterClass
 ]
 
 { #category : 'initialization' }

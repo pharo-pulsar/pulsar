@@ -72,7 +72,7 @@ PulsarHierarchyModel >> parentModel: aModel [
 { #category : 'accessing' }
 PulsarHierarchyModel >> pulsarEditorClass [
 
-	^ PulsarHierarchyPresenter
+	^ self parentModel hierarchyPresenterClass
 ]
 
 { #category : 'accessing' }

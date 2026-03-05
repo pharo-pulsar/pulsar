@@ -213,6 +213,12 @@ PvMethodModel >> hasDefinedProtocol [
 	^ self protocol isNotNil and: [ self protocol isUnclassifiedProtocol not ] 
 ]
 
+{ #category : 'accessing' }
+PvMethodModel >> hierarchyPresenterClass [
+
+	^ PulsarMethodHierarchyPresenter
+]
+
 { #category : 'accessing - navigating' }
 PvMethodModel >> hierarchyTopModel [
 	| systemNavigation nodes |
