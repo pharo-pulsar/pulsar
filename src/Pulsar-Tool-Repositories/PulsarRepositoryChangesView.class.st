@@ -29,8 +29,8 @@ PulsarRepositoryChangesView >> connectPresenters [
 		dynamicName: [ 
 			listPresenter selectedItem 
 				ifNotNil: [ :aNode | 
-					'{1}elect {2}{3}' format: { 
-						aNode isActive ifTrue: [ 'Uns' ] ifFalse: [ 'S' ].
+					'{1} {2}{3}' format: { 
+						aNode isActive ifTrue: [ 'Unselect' ] ifFalse: [ 'Select' ].
 						aNode description.
 						aNode hasChildren ifTrue: [ ' branch' ] ifFalse: [ '' ] } ]
 				ifNil: [ 'Toggle selection' ] ];

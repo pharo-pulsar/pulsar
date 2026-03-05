@@ -9,6 +9,14 @@ Class {
 	#tag : 'View-Editor'
 }
 
+{ #category : 'instance creation' }
+PulsarEditorVisitor class >> on: anOwner [
+
+	^ self new 
+		owner: anOwner;
+		yourself
+]
+
 { #category : 'accessing' }
 PulsarEditorVisitor >> owner [
 

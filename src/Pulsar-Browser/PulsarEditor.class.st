@@ -63,6 +63,12 @@ PulsarEditor class >> defineWindowActionsOn: aBuilder [
 			action: [ :aContext | aContext doDetachWindow ] ] ]
 ]
 
+{ #category : 'visiting' }
+PulsarEditor >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitEditor: self
+]
+
 { #category : 'accessing - overlay' }
 PulsarEditor >> addOverlay: aPresenter [
 

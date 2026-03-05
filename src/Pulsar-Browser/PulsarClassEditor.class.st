@@ -41,6 +41,12 @@ PulsarClassEditor class >> defineActionsOn: aBuilder [
 				action: [ :aContext | aContext doToggleSelectionLinkCommand: action ] ] ]
 ]
 
+{ #category : 'visiting' }
+PulsarClassEditor >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitClassEditor: self
+]
+
 { #category : 'private - updating' }
 PulsarClassEditor >> commentChangedFrom: oldText to: newText [
 

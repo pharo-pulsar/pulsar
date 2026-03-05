@@ -339,7 +339,8 @@ PulsarBaseBrowser >> maybeDockView: aViewModel withActivation: anActivation [
 				addPresenter: editorPresenter 
 				at: (anActivation hasDesiredPosition 
 					ifTrue: [ anActivation desiredPosition ]
-					ifFalse:[ editorPresenter panelPosition ]) ].
+					ifFalse:[ editorPresenter panelPosition ]).
+			self viewDocked: editorPresenter ].
 	
 	editorPresenter activateWith: anActivation
 ]
@@ -439,7 +440,7 @@ PulsarBaseBrowser >> resendAnnouncement: anAnnouncement [
 		aWindowPresenter presenter announce: anAnnouncement ]
 ]
 
-{ #category : 'private - schedulling' }
+{ #category : 'private - scheduling' }
 PulsarBaseBrowser >> schedule: aBlock [
 
 	self 
@@ -495,6 +496,11 @@ PulsarBaseBrowser >> systemNavigation [
 PulsarBaseBrowser >> togglePanelArea: aPanelArea [
 
 	aPanelArea accept: (PulsarBrowserPanelAreaVisible on: self)
+]
+
+{ #category : 'private' }
+PulsarBaseBrowser >> viewDocked: aPresenter [
+	"override this if browser wants to act on a view docked to it"
 ]
 
 { #category : 'private' }

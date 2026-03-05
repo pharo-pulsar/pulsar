@@ -40,6 +40,12 @@ PulsarMethodEditor class >> defineActionsOn: aBuilder [
 				action: [ :aContext | aContext doToggleSelectionLinkCommand: action ] ] ]
 ]
 
+{ #category : 'visiting' }
+PulsarMethodEditor >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitMethodEditor: self
+]
+
 { #category : 'private - actions' }
 PulsarMethodEditor >> activateWith: anActivationAnnouncement [
 

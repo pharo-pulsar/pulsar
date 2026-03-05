@@ -118,6 +118,12 @@ PulsarContextModel >> isContextModel [
 	^ true
 ]
 
+{ #category : 'testing' }
+PulsarContextModel >> isSameClass: aClass [
+
+	^ self methodClass instanceSide = aClass instanceSide
+]
+
 { #category : 'accessing' }
 PulsarContextModel >> method [
 

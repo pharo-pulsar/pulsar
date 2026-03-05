@@ -9,6 +9,12 @@ Class {
 	#tag : 'Tool-Debugger'
 }
 
+{ #category : 'visiting' }
+PulsarContextEditor >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitContextEditor: self
+]
+
 { #category : 'layout' }
 PulsarContextEditor >> defaultLayout [
 

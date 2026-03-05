@@ -48,10 +48,15 @@ PulsarDebugger >> defineViewActionsOn: aBuilder [
 PulsarDebugger >> doOpenClassOutlineView [
 	| outlineView |
 
-	outlineView := (self findPresenterClass: PulsarClassOutlineView)
-		ifNil: [ self addPresenterClass: PulsarClassOutlineView ].
-		
+	outlineView := self ensureClassOutlineOverview.
 	outlineView takeKeyboardFocus
+]
+
+{ #category : 'private - actions' }
+PulsarDebugger >> ensureClassOutlineOverview [
+
+	^ (self findPresenterClass: PulsarClassOutlineView)
+		ifNil: [ self addPresenterClass: PulsarClassOutlineView ]
 ]
 
 { #category : 'events' }
@@ -185,6 +190,12 @@ PulsarDebugger >> updatePresenter [
 PulsarDebugger >> updateTitle [
 
 	self withWindowDo: [ :aWindow | aWindow title: self model name ]
+]
+
+{ #category : 'private' }
+PulsarDebugger >> viewDocked: aPresenter [
+
+	(PulsarDebuggerEnsureClassOverviewVisitor on: self) visit: aPresenter
 ]
 
 { #category : 'private' }
