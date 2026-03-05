@@ -69,7 +69,7 @@ PulsarBaseView >> panelPosition [
 { #category : 'private' }
 PulsarBaseView >> panelTransferredFrom: fromWindow to: toWindow [ 
 
-	self notificationCenter: toWindow announcer
+	self notificationCenter: toWindow notificationCenter
 ]
 
 { #category : 'initialization' }
