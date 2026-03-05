@@ -172,12 +172,6 @@ PulsarEditor >> doRunTestCommand: anAction [
 ]
 
 { #category : 'private - actions' }
-PulsarEditor >> doShowHierarchy [
-
-	self subclassResponsibility
-]
-
-{ #category : 'private - actions' }
 PulsarEditor >> doShowHierarchy: anAction [
 	| popover navigation |
 	
@@ -447,7 +441,7 @@ PulsarEditor >> notifyEntityChanged: anEntity [
 
 { #category : 'private - announcing' }
 PulsarEditor >> notifyModelChangedFrom: oldModel to: newModel [
-
+	
 	self notificationCenter announce: (PulsarModelChanged 
 		newValue: newModel
 		oldEntity: oldModel)

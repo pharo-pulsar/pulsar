@@ -37,3 +37,10 @@ PulsarMethodHierarchyPresenter >> initializePresenters [
 	
 	editorPresenter := self instantiate: PulsarMethodEditor
 ]
+
+{ #category : 'private' }
+PulsarMethodHierarchyPresenter >> notificationCenter: anAnnouncer [
+
+	super notificationCenter: anAnnouncer.
+	editorPresenter notificationCenter: anAnnouncer
+]
