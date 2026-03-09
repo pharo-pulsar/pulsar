@@ -21,21 +21,21 @@ PulsarSanityCheck >> checkLibrary: aClass [
 	[ name := aClass uniqueInstance libraryName ]
 	on: Error 
 	do: [ :e | 
-		self log: '❌'.
+		self log: 'No ❌'.
 		self newLine.
 		error := true.
 		^ self ].
 	
-	self log: '✅'.
+	self log: 'Yes ✅'.
 	self log: (' [', name, '] ' padRightTo: 50).
 	self log: 'load: '.
 	
 	(DynamicLoader loadLibrary: name) isNullOrNil 
 		ifTrue: [ 
-			self log: '❌'.
+			self log: 'No ❌'.
 			error := true ]
 		ifFalse: [ 
-			self log: '✅' ].
+			self log: 'Yes ✅' ].
 	
 	self newLine
 ]
@@ -48,8 +48,8 @@ PulsarSanityCheck >> checkThreadedVM [
 	result := Smalltalk vm isRunningInWorkerThread.
 
 	result 
-		ifTrue: [ self log: '✅' ]
-		ifFalse: [ self log: '❌'. error := true ].
+		ifTrue: [ self log: 'Yes ✅' ]
+		ifFalse: [ self log: 'No ❌'. error := true ].
 		
 	self newLine
 ]
@@ -73,7 +73,10 @@ PulsarSanityCheck >> run [
 
 	"verify threaded vm"
 	self checkThreadedVM.
-	"libraries"
+	"verify libraries.
+	 I need to make a pass for the settings schema support because 
+	 initialization of libraries will require settings"
+	GtkGSettingsSchemaSupport new start.
 	self usingLibraries 
 		do: [ :each | self checkLibrary: each ].
 	
