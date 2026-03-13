@@ -19,19 +19,24 @@ PulsarCLIApplication class >> commandSpecification [
 		  commandClass: self;
 		  addHelp;
 		  addFlag: #reset description: 'Reset pulsar IDE (cleaning up snapshot and living processes)';
-		  addFlag: #trace description: 'Enable trace log level TRACE';
-		  "addPositional: #applicationName description: 'the name of the application to run';"
+		  addFlag: #logLevel 
+				description: 'Enable trace log level (info, warn, debug, trace). Default = warn'
+				positionalSpec: [ :positional | positional defaultValue: [ :arg :app | 'warn' ] ];
 		  yourself
 ]
 
 { #category : 'execution' }
-PulsarCLIApplication >> enableTrace: aBoolean [ 
+PulsarCLIApplication >> enableTrace: aLevel [
+	| index |
 	
-	aBoolean ifFalse: [ 
-		logger disable.
-		^ self ].
+	index := #('info' 'warn' 'debug' 'trace') 
+		indexOf: aLevel 
+		ifAbsent: [ 
+			self error: 'Invalid parameter, it should be --logLevel=info|warn|debug|trace' ].
 	
-	logger enable sendToStdout	
+	logger enable 
+		logLevel: index;
+		sendToStdout	
 ]
 
 { #category : 'execution' }
@@ -39,7 +44,9 @@ PulsarCLIApplication >> execute [
 
 	"reset cleans up but it does not stop the execution of the IDE" 
 	(self hasFlag: #reset) ifTrue: [ self forceReset ].
-	self enableTrace: (self hasFlag: #trace).
+	(self hasFlag: #logLevel) 
+		ifTrue: [ self enableTrace: (self positional: #logLevel) ]
+		ifFalse: [ logger disable ].
 	
 	self runApplication
 ]
