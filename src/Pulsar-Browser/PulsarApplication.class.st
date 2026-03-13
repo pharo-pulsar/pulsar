@@ -410,7 +410,9 @@ PulsarApplication >> snapshot [
 
 { #category : 'running' }
 PulsarApplication >> start [
-	| snapshot browser |
+	| snapshot |
+	
+	logger trace.
 	
 	snapshot := self class lastSnapshot.
 	(snapshot isNotNil and: [ snapshot hasRecords ])
