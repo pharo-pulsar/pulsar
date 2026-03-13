@@ -24,10 +24,21 @@ PulsarCLIApplication class >> commandSpecification [
 ]
 
 { #category : 'execution' }
+PulsarCLIApplication >> enableTrace: aBoolean [ 
+	
+	aBoolean ifFalse: [ 
+		logger disable.
+		^ self ].
+	
+	logger enable sendToStdout	
+]
+
+{ #category : 'execution' }
 PulsarCLIApplication >> execute [
 
 	"reset cleans up but it does not stop the execution of the IDE" 
 	(self hasFlag: #reset) ifTrue: [ self forceReset ].
+	self enableTrace: (self hasFlag: #trace).
 	
 	self runApplication
 ]
