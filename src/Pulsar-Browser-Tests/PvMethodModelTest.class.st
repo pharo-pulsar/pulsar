@@ -19,6 +19,21 @@ PvMethodModelTest >> testActionDecoratorsIncludeTestIfTestMethod [
 ]
 
 { #category : 'tests' }
+PvMethodModelTest >> testHierarchyTopModelForClassSide [
+	| model topModel |
+
+	model := PvMethodModel 
+		newEnvironment: nil
+		entity: Collection class>>#newFromArray:.
+	
+	topModel := model hierarchyTopModel.
+	
+	self assert: topModel entity equals: Object class>>#newFromArray:.
+	self denyEmpty: topModel children.
+	self assert: topModel entity first equals: Collection class>>#newFromArray:
+]
+
+{ #category : 'tests' }
 PvMethodModelTest >> testRunTestUpdatesPropertyCache [
 	| model result resultTest c |
 
