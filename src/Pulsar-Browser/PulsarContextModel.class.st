@@ -3,7 +3,9 @@ Class {
 	#superclass : 'PvBaseModel',
 	#instVars : [
 		'name',
-		'debuggerModel'
+		'debuggerModel',
+		'topContext',
+		'contextPredicate'
 	],
 	#category : 'Pulsar-Browser-Tool-Debugger',
 	#package : 'Pulsar-Browser',
@@ -37,12 +39,31 @@ PulsarContextModel >> actionModel [
 	^ self debuggerModel actionModel
 ]
 
+{ #category : 'accessing - actions' }
+PulsarContextModel >> actionsWithContextOn: aContextPresenter [
+
+	^ (self actions actionsFor: 'operations') 
+		copyWithContext: aContextPresenter
+]
+
 { #category : 'converting' }
 PulsarContextModel >> asClassModel [
 
 	^ PvClassModel 
 		newEnvironment: self environmentModel 
 		entity: self methodClass
+]
+
+{ #category : 'testing' }
+PulsarContextModel >> canExecuteCreateMissingClassCommand [
+
+	^ false "self session isInterruptedContextMissingClassException"
+]
+
+{ #category : 'testing' }
+PulsarContextModel >> canExecuteCreateMissingMethodCommand [
+
+	^ self session isInterruptedContextDoesNotUnderstand
 ]
 
 { #category : 'debug - testing' }
@@ -64,11 +85,48 @@ PulsarContextModel >> canExecuteReturnCommand [
 	^ self actionModel isInterruptedContextDead not
 ]
 
+{ #category : 'private' }
+PulsarContextModel >> computeInitialTopContext [
+	| context |
+
+	context := self session exception signalContext.
+	context 
+		ifNil: [ ^ self entity ].
+		
+	(context hasContext: self entity) 
+		ifFalse: [ ^ self entity ].
+		
+	^ context
+]
+
 { #category : 'accessing' }
 PulsarContextModel >> context [
 
 	"a synonym for clarity"
 	^ self entity
+]
+
+{ #category : 'private - accessing' }
+PulsarContextModel >> contextPredicate [
+
+	^ contextPredicate ifNil: [ 
+		  contextPredicate := self updateContextPredicateFor: self topContext ]
+]
+
+{ #category : 'private' }
+PulsarContextModel >> contextPredicateFor: aContext [
+	| postMortem ex |
+	
+	postMortem := self isContextPostMortem: aContext.
+
+	(self contextSignalsAnException: aContext) ifFalse: [ 
+		^ self predicateFor: aContext postMortem: postMortem ].
+
+	ex := aContext receiver.
+	(ex isKindOf: TestFailure) ifTrue: [ 
+		^ self predicateFor: aContext failure: ex postMortem: postMortem ].
+
+	^ self predicateFor: aContext exception: ex postMortem: postMortem
 ]
 
 { #category : 'private - accessing' }
@@ -81,6 +139,26 @@ PulsarContextModel >> debuggerModel [
 PulsarContextModel >> debuggerModel: aDebuggerModel [
 
 	debuggerModel := aDebuggerModel
+]
+
+{ #category : 'private - definitions' }
+PulsarContextModel >> defineActionsOn: aBuilder [
+	<dockActions>
+	
+	aBuilder addGroup: #operations with: [ :group | 
+		"create class if needed"
+		self canExecuteCreateMissingClassCommand ifTrue: [
+			group addActionWith: [ :action | action 
+				name: 'Create Class'; 
+				iconName: 'add';
+				action: [ :aContext | aContext doImplementMissingClass ] ] ].
+		"create method if needed"
+		self canExecuteCreateMissingMethodCommand ifTrue: [
+			group addActionWith: [ :action | action 
+				name: 'Create Method'; 
+				iconName: 'add';
+				action: [ :aContext | aContext doImplementMissingMethod ] ] ] 
+	]
 ]
 
 { #category : 'accessing' }
@@ -254,6 +332,19 @@ PulsarContextModel >> stepThrough [
 
 	self actionModel stepThrough: self entity.
 	self updateEntityFromStack
+]
+
+{ #category : 'private - accessing' }
+PulsarContextModel >> topContext [
+
+	^ topContext ifNil: [ topContext := self computeInitialTopContext ]
+]
+
+{ #category : 'private' }
+PulsarContextModel >> updateContextPredicateFor: aContext [
+
+	contextPredicate := self contextPredicateFor: aContext.
+	^ contextPredicate
 ]
 
 { #category : 'private' }

@@ -7,7 +7,8 @@ Class {
 		'#toolbarActions',
 		'#toolbarPresenter',
 		'#debugger',
-		'#lastOwner => WeakSlot'
+		'#lastOwner => WeakSlot',
+		'#contextToolbarPresenter'
 	],
 	#category : 'Pulsar-Browser-Tool-Debugger',
 	#package : 'Pulsar-Browser',
@@ -69,8 +70,9 @@ PulsarDebuggerToolbarPresenter >> defaultLayout [
 
 	^ SpBoxLayout newHorizontal
 		hAlignStart;
-		vAlignStart;
+		vAlignCenter;
 		add: toolbarPresenter;
+		add: contextToolbarPresenter;
 		yourself
 ]
 
@@ -83,7 +85,14 @@ PulsarDebuggerToolbarPresenter >> initializePresenters [
 		addStyle: 'stToolbar';
 		addStyle: 'pulsarDebuggerActionsToolbar';
 		displayMode: self application toolbarDisplayMode;
-		fillWith: self toolbarActions
+		fillWith: self toolbarActions.
+		
+	contextToolbarPresenter := self newToolbar
+		addStyle: 'stToolbar';
+		addStyle: 'pulsarDebuggerActionsToolbar';
+		displayMode: self application toolbarDisplayMode;
+		yourself
+		
 ]
 
 { #category : 'accessing' }
@@ -192,5 +201,9 @@ PulsarDebuggerToolbarPresenter >> toolbarActions [
 PulsarDebuggerToolbarPresenter >> updatePresenter [
 
 	self toolbarActions allCommands 
-		do: [ :each | each updateEnableStatus ]
+		do: [ :each | each updateEnableStatus ].
+		
+	contextToolbarPresenter fillWith: (self model 
+		ifNotNil: [ :aModel | aModel actionsWithContext: self ]
+		ifNil: [ SpActionGroup new ])
 ]
