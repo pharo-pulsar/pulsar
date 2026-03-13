@@ -52,15 +52,17 @@ PulsarApplication class >> lastSnapshot: aSnapshot [
 { #category : 'private' }
 PulsarApplication class >> reset [
 	<script>
-	
+
+	running ifNotNil: [ 
+		running windows do: #windowClosed.
+		running := nil ].
 	PulsarUIManager reset.
 	OupsDebuggerSelectionStrategy debuggerSelectionStrategy: nil. 
 	"yes, there are better ways to do this, for for now..."
-	PulsarWorker allInstances do: #stop.
 	Transcript dependents copy
 		collect: [ :each | each isKindOf: PulsarTranscript ]
 		thenDo: [ :each | Transcript removeDependent: each ].
-	running := nil
+	
 ]
 
 { #category : 'private' }
