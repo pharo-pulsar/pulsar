@@ -297,6 +297,8 @@ PulsarApplication >> performSanityCheck [
 PulsarApplication >> prepareAsStandaloneApplication [
 	
 	standalone := true.
+	SpGtkConfiguration useApplicationEngine: true. 
+
 	self cleanUp.
 	self killUnusedProcesses.
 	self prepareSchedulerAsStandaloneApplication.
@@ -363,7 +365,7 @@ PulsarApplication >> run [
 
 	self class running ifNotNil: [ :anApplication | 
 		anApplication shutDown: false ].
-	self start.
+	self backend runOn: self.
 	self class running: self
 ]
 
