@@ -19,6 +19,7 @@ PulsarCLIApplication class >> commandSpecification [
 		  commandClass: self;
 		  addHelp;
 		  addFlag: #reset description: 'Reset pulsar IDE (cleaning up snapshot and living processes)';
+		  addFlag: #trace description: 'Enable trace log level TRACE';
 		  "addPositional: #applicationName description: 'the name of the application to run';"
 		  yourself
 ]
