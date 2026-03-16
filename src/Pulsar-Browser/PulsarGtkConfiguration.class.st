@@ -76,6 +76,7 @@ PulsarGtkConfiguration >> colorsForTestResult [
 { #category : 'configuring' }
 PulsarGtkConfiguration >> configure: anApplication [
 
+	self applicationClass: PanelApplication.
 	settings := anApplication settings.
 	super configure: anApplication
 ]
