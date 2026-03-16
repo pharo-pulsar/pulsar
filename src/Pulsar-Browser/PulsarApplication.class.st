@@ -303,6 +303,7 @@ PulsarApplication >> prepareAsStandaloneApplication [
 	
 	standalone := true.
 	SpGtkConfiguration useApplicationEngine: true. 
+	TFCallbackQueue pauseOnSave: true.
 
 	self cleanUp.
 	self killUnusedProcesses.
