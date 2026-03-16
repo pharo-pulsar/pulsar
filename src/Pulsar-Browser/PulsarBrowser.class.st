@@ -364,7 +364,10 @@ PulsarBrowser >> repositoriestView [
 { #category : 'actions' }
 PulsarBrowser >> saveImage [
 
-	[ Smalltalk snapshot: true andQuit: false ] fork.
+	"I need to fork because otherwise resume will try to start from here"
+	[ Smalltalk snapshot: true andQuit: false ] 
+	forkAt: Processor highestPriority.
+
 	self inform: 'Image saved'
 ]
 
