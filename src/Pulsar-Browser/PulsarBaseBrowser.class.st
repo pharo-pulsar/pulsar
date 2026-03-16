@@ -123,6 +123,14 @@ PulsarBaseBrowser >> addWindow: aWindow [
 		aWindow raise ]
 ]
 
+{ #category : 'private' }
+PulsarBaseBrowser >> cleanUpSchedulers [
+	
+	announcer ifNotNil: #purgeTaskWorker.
+	self purgeTaskScheduler
+
+]
+
 { #category : 'private - definitions' }
 PulsarBaseBrowser >> defineExtraActionsOn: aBuilder [
 	<dockActions>
@@ -507,8 +515,7 @@ PulsarBaseBrowser >> viewDocked: aPresenter [
 PulsarBaseBrowser >> windowClosed [
 
 	self presenters do: [ :each | each windowClosed ].
-	announcer purgeTaskWorker.
-	self purgeTaskScheduler.
+	self cleanUpSchedulers.
 	super windowClosed
 ]
 

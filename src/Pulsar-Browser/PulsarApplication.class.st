@@ -54,7 +54,10 @@ PulsarApplication class >> reset [
 	<script>
 
 	running ifNotNil: [ 
-		running windows do: #windowClosed.
+		running windows do: [ :each | 
+				[ each cleanUpSchedulers ]
+				on: Error 
+				do: [ :e | logger error: e ]  ].
 		running := nil ].
 	PulsarUIManager reset.
 	OupsDebuggerSelectionStrategy debuggerSelectionStrategy: nil. 
@@ -117,7 +120,7 @@ PulsarApplication >> checkForLostChanges [
 
 { #category : 'initialization' }
 PulsarApplication >> cleanUp [
-
+	
 	"weird things can happen when exiting the image in an unconventional way...  
 	 e.g. close the last window will not save the registry clean up hence letting a dockapplication 
 	 registered. We need to ensure this will be correct not just because of the leak, but also 
@@ -128,7 +131,7 @@ PulsarApplication >> cleanUp [
 		
 	"also clean processes that may have remained"
 	(Processor allProcesses 
-		select: [ :each | each name beginsWith: 'Pulsar' ])
+		select: [ :each | each name beginsWithAnyOf: #('Pulsar' 'PanelApplication' 'FFICallback') ])
 		do: [ :each | each terminate ]
 ]
 
