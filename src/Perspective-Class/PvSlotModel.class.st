@@ -21,11 +21,26 @@ PvSlotModel >> defineRefactorActionsOn: aBuilder [
 	 context), because execute them require interact with the UI"
 	aBuilder addGroup: #refactors with: [ :group | group 
 		name: 'Refactors';
-		beDisplayedAsSubMenu;
-		addActionWith: [ :action | action
+		beDisplayedAsSubMenu.
+		
+		group addActionWith: [ :action | action
 			name: ('Rename {1}' format: { self name });
 			description: 'Rename method';
-			action: [ :aContext | aContext doRenameVariable: self ] ] ]
+			action: [ :aContext | aContext doRenameVariable: self ] ].
+			
+		self isInstanceVariable ifTrue: [
+			group 
+				 
+				addActionWith: [ :action | action
+					name: ('Pull up {1}' format: { self name });
+					description: 'Pull up variable';
+					action: [ :aContext | aContext doPullUpVariable: self ] ];
+				addActionWith: [ :action | action
+					name: ('Push down {1}' format: { self name });
+					description: 'Push down variable';
+					action: [ :aContext | aContext doPushDownVariable: self ] ] 
+		] 
+	]
 ]
 
 { #category : 'accessing' }
@@ -38,6 +53,12 @@ PvSlotModel >> iconName [
 PvSlotModel >> isIncludedIn: aMethodModel [
 
 	^ aMethodModel entity variableNodes anySatisfy: [ :each | each name = self name ]
+]
+
+{ #category : 'testing' }
+PvSlotModel >> isInstanceVariable [
+
+	^ self entity definingClass isInstanceSide
 ]
 
 { #category : 'accessing' }
