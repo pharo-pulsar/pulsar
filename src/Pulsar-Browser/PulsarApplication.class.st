@@ -375,18 +375,6 @@ PulsarApplication >> run [
 	self class running: self
 ]
 
-{ #category : 'schedulling' }
-PulsarApplication >> schedule: aBlock [
-
-	self 
-		deprecated: 'This is confusing, use #scheduleTask:' 
-		transformWith: 
-			'`@receiver schedule: `@arg' -> 
-			'`@receiver scheduleTask: `@arg'.
-
-	^ self scheduleTask: aBlock
-]
-
 { #category : 'accessing' }
 PulsarApplication >> settings [
 
@@ -462,7 +450,6 @@ PulsarApplication >> themeChanged: ann [
 	
 	"reset icon provider because I will need to change them"
 	"iconProvider := nil."
-	
 	self resendAnnouncement: ann
 ]
 
