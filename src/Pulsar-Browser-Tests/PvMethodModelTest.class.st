@@ -30,7 +30,7 @@ PvMethodModelTest >> testHierarchyTopModelForClassSide [
 	
 	self assert: topModel entity equals: Object class>>#newFromArray:.
 	self denyEmpty: topModel children.
-	self assert: topModel entity first equals: Collection class>>#newFromArray:
+	self assert: topModel children first entity equals: Collection class>>#newFromArray:
 ]
 
 { #category : 'tests' }

@@ -228,9 +228,9 @@ PvMethodModel >> hierarchyTopModel [
 			| environment |
 			environment := SystemEnvironment new.
 			self entity origin allSuperclasses 
-				do: [ :each | environment at: each instanceSide name put: each ].
+				do: [ :each | environment at: each instanceSide name put: each instanceSide ].
 			self entity origin withAllSubclasses 
-				do: [ :each | environment at: each instanceSide name put: each ].
+				do: [ :each | environment at: each instanceSide name put: each instanceSide ].
 			systemNavigation environment: environment ].
 	
 	nodes := (systemNavigation allImplementorsOf: self entity selector)
