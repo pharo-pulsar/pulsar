@@ -45,6 +45,13 @@ PulsarDiffNode >> children [
 	^ children ifNil: [ children := self collectChildren ]
 ]
 
+{ #category : 'accessing' }
+PulsarDiffNode >> classNamed: aName [
+
+	self flag: #FIXME. "Demeters law"
+	^ self repository environmentModel classNamed: aName
+]
+
 { #category : 'private' }
 PulsarDiffNode >> collectChildren [
 
@@ -66,12 +73,16 @@ PulsarDiffNode >> countChildren [
 
 { #category : 'private' }
 PulsarDiffNode >> createPatch [
-	| operation from to |
+	| operation from to patch |
 	
 	operation := self node value.
-	^ SpPatchModel 
+	patch := SpPatchModel
 		newFrom: operation rightContents 
-		to: operation leftContents
+		to: operation leftContents.
+	operation leftDefinition isMethodDefinition
+		ifTrue: [ patch originBehavior: (self classNamed: operation leftDefinition className) ].
+		
+	^ patch
 ]
 
 { #category : 'accessing' }

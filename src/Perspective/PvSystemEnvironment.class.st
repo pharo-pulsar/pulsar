@@ -36,6 +36,12 @@ PvSystemEnvironment >> allPackages [
 	^ self organizer packages
 ]
 
+{ #category : 'accessing' }
+PvSystemEnvironment >> classNamed: aName [
+
+	^ Smalltalk classNamed: aName
+]
+
 { #category : 'testing' }
 PvSystemEnvironment >> hasPackageNamed: aString [
 

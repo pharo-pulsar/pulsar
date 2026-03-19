@@ -79,6 +79,12 @@ PvEnvironmentModel >> children [
 ]
 
 { #category : 'accessing' }
+PvEnvironmentModel >> classNamed: aName [
+
+	^ self entity classNamed: aName
+]
+
+{ #category : 'accessing' }
 PvEnvironmentModel >> compilerForClass: aClass [
 
 	^ aClass compilerClass new
