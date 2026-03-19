@@ -29,11 +29,11 @@ PulsarRefactorClassContext >> doInsertSuperclass: aClassModel [
 { #category : 'refactors' }
 PulsarRefactorClassContext >> doRemoveClass: aClassModel [
 
-   self flag: #TODO. "Verify which system events are triggered on this"
    self scheduleTask: [
+   		| removeScope |
+   		removeScope := RBBrowserEnvironment new.
 	   (ReRemoveClassDriver newApplication: self application)
-		   scopes: { RBBrowserEnvironment new } classes: { aClassModel entity };
-		   model: RBBrowserEnvironment new;
+		   scopes: { removeScope } classes: { aClassModel entity };
 		   runRefactoring ]
 ]
 
