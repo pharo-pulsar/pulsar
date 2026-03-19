@@ -15,3 +15,9 @@ PulsarRepositoryTagBranchView >> branches [
 
 	^ self model tags
 ]
+
+{ #category : 'accessing' }
+PulsarRepositoryTagBranchView >> label [
+
+	^ 'tags'
+]

@@ -95,6 +95,12 @@ PulsarRepositoryLocalBranchView >> doPush [
 	(PulsarRepositoryActionContext on: self) doPush: self model
 ]
 
+{ #category : 'accessing' }
+PulsarRepositoryLocalBranchView >> label [
+
+	^ 'local branches'
+]
+
 { #category : 'private' }
 PulsarRepositoryLocalBranchView >> maybeSort: aCollection [
 

@@ -6,8 +6,8 @@ Class {
 	#superclass : 'PulsarCollectionView',
 	#instVars : [
 		'toolbarPresenter',
-		'isDisplayed',
-		'toolbarActions'
+		'toolbarActions',
+		'isDisplayed'
 	],
 	#category : 'Pulsar-Tool-Repositories',
 	#package : 'Pulsar-Tool-Repositories'

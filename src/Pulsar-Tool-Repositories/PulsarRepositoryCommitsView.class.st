@@ -2,7 +2,8 @@ Class {
 	#name : 'PulsarRepositoryCommitsView',
 	#superclass : 'PulsarCollectionView',
 	#instVars : [
-		'toolbarPresenter'
+		'toolbarPresenter',
+		'isDisplayed'
 	],
 	#category : 'Pulsar-Tool-Repositories',
 	#package : 'Pulsar-Tool-Repositories'
@@ -44,6 +45,16 @@ PulsarRepositoryCommitsView >> eventRepositoryModified: ann [
 	ann value = self model ifFalse: [ ^ self ].
 	
 	self updatePresenter
+]
+
+{ #category : 'initialization' }
+PulsarRepositoryCommitsView >> initialize [ 
+	
+	isDisplayed := false.
+	super initialize.
+	self whenDisplayDo: [
+		isDisplayed := true.
+		self updatePresenter ]
 ]
 
 { #category : 'initialization' }
@@ -105,6 +116,8 @@ PulsarRepositoryCommitsView >> registerToEvents [
 PulsarRepositoryCommitsView >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
+	
+	isDisplayed ifFalse: [ ^ self ].
 	
 	self scheduleJob: [ :statusbar |
 		| items |

@@ -11,3 +11,9 @@ PulsarRepositoryRemoteBranchView >> branches [
 
 	^ self model remoteBranches
 ]
+
+{ #category : 'accessing' }
+PulsarRepositoryRemoteBranchView >> label [
+
+	^ 'remote branches'
+]

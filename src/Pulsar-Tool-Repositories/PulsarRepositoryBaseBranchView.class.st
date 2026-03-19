@@ -3,7 +3,8 @@ Class {
 	#superclass : 'PulsarCollectionView',
 	#instVars : [
 		'toolbarPresenter',
-		'toolbarActions'
+		'toolbarActions',
+		'isDisplayed'
 	],
 	#category : 'Pulsar-Tool-Repositories-Branches',
 	#package : 'Pulsar-Tool-Repositories',
@@ -33,6 +34,16 @@ PulsarRepositoryBaseBranchView >> entitySelected: anEntity [
 ]
 
 { #category : 'initialization' }
+PulsarRepositoryBaseBranchView >> initialize [
+
+	isDisplayed := false.
+	super initialize.
+	self whenDisplayDo: [
+		isDisplayed := true.
+		self updatePresenter ]
+]
+
+{ #category : 'initialization' }
 PulsarRepositoryBaseBranchView >> initializePresenters [
 
 	self addStyle: 'pulsarRepositoryBranch'.
@@ -45,6 +56,12 @@ PulsarRepositoryBaseBranchView >> initializePresenters [
 		rowPresenterClass: PulsarRepositoryBranchRow;
 		display: [ :aBranchModel | aBranchModel name ];
 		yourself
+]
+
+{ #category : 'private' }
+PulsarRepositoryBaseBranchView >> labels [
+
+	self subclassResponsibility
 ]
 
 { #category : 'private' }
@@ -71,13 +88,14 @@ PulsarRepositoryBaseBranchView >> toolbarActions [
 PulsarRepositoryBaseBranchView >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
+	isDisplayed ifFalse: [ ^ self ].
 
-	self window scheduleJob: [
+	self window scheduleJob: [ :statusbar |
 		| branches |
+		statusbar pushMessage: ('Retrieving {1}...' format: { self label }).
 		branches := self maybeSort: self branches.
 		self application 
-			defer: [ listPresenter items: branches ] ] 
-
+			defer: [ listPresenter items: branches ] ]
 ]
 
 { #category : 'private' }
