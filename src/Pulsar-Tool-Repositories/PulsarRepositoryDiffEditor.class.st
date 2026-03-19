@@ -55,6 +55,12 @@ PulsarRepositoryDiffEditor >> newScheduler [
 		start
 ]
 
+{ #category : 'initialization' }
+PulsarRepositoryDiffEditor >> patchPresenterClass [
+
+	^ PulsarRepositorySideBySidePresenter
+]
+
 { #category : 'private' }
 PulsarRepositoryDiffEditor >> purgeTask [
 
@@ -93,7 +99,7 @@ PulsarRepositoryDiffEditor >> updatePatchContents [
 				eachGroup do: [ :eachModel |
 					| patchPresenter |
 					patchPresenter := self 
-						instantiate: PulsarRepositoryPatchPresenter 
+						instantiate: self patchPresenterClass 
 						on: eachModel.
 					self application defer: [ 
 						contents add: patchPresenter ] ] ] 

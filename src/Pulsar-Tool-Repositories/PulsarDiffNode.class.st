@@ -198,7 +198,7 @@ PulsarDiffNode >> resetStateChangedAction [
 { #category : 'accessing' }
 PulsarDiffNode >> summary [ 
 
-	^ '+{1}/-{2}: {3}' format: { 
+	^ '<span foreground="green">+{1}</span>/<span foreground="red">-{2}</span>: {3}' format: { 
 		self patchInsertions. 
 		self patchDeletions.
 		self description }

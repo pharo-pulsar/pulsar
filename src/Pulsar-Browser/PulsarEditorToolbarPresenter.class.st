@@ -72,7 +72,11 @@ PulsarEditorToolbarPresenter >> resetContentActions [
 PulsarEditorToolbarPresenter >> title: aString [
 	"a convenience method to set simple titles"
 
-	self updateBreadcrumbWith: [ :aBreadcrumb | aBreadcrumb addSegment: aString ]
+	self updateBreadcrumbWith: [ :aBreadcrumb | 
+		aBreadcrumb addSegment: (self newLabel 
+			useMarkup;
+			label: aString;
+			yourself) ]
 ]
 
 { #category : 'accessing' }
