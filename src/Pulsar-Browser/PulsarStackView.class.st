@@ -6,11 +6,11 @@ Class {
 	#name : 'PulsarStackView',
 	#superclass : 'PulsarCollectionView',
 	#instVars : [
-		'toolbarPresenter',
-		'mutex',
-		'countPresenter',
-		'sortingSelector',
-		'lastActivatedEditor'
+		'#toolbarPresenter',
+		'#mutex',
+		'#countPresenter',
+		'#sortingSelector',
+		'#lastActivatedEditor => WeakSlot'
 	],
 	#category : 'Pulsar-Browser-View-Stack',
 	#package : 'Pulsar-Browser',
