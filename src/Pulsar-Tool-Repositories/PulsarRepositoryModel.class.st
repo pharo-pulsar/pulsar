@@ -100,7 +100,11 @@ PulsarRepositoryModel >> diffNode [
 	^ diffNode ifNil: [ 
 		diffNode := PulsarDiffNode 
 			newRepository: self
-			entity: self diffToReferenceCommit tree ]
+			entity: self diffToReferenceCommit tree.
+		diffNode 
+			from: self entity workingCopy referenceCommit 
+			to: self entity workingCopy.
+		diffNode ]
 ]
 
 { #category : 'accessing' }

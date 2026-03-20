@@ -13,6 +13,20 @@ Class {
 	#tag : 'View-Editor'
 }
 
+{ #category : 'initialization' }
+PulsarRepositoryDiffEditor >> commitToString: aCommitOrWorkingCopy [
+	| commitString |
+	
+	aCommitOrWorkingCopy isWorkingCopy ifTrue: [ ^ 'Working Copy' ].
+		
+	commitString := aCommitOrWorkingCopy shortId.
+	
+	(aCommitOrWorkingCopy repository headCommit = aCommitOrWorkingCopy) 
+		ifTrue: [ commitString := commitString, ' (HEAD)' ].
+		
+	^ commitString
+]
+
 { #category : 'layout' }
 PulsarRepositoryDiffEditor >> defaultLayout [
 
@@ -67,8 +81,8 @@ PulsarRepositoryDiffEditor >> newDiffHeader [
 	presenter addStyle: 'pulsarToolbarPanel'.
 	
 	presenter layout 
-		add: 'HEAD';
-		add: 'Working Copy' expand: false.
+		add: (self commitToString: self model root fromCommit);
+		add: (self commitToString: self model root toCommit) expand: false.
 		
 	^ presenter
 ]
@@ -114,7 +128,6 @@ PulsarRepositoryDiffEditor >> updatePatchContents [
 		self model withAllChildrenDo: [ :eachModel | 
 			eachModel hasChanges ifTrue: [ 
 				stream nextPut: eachModel ] ] ].
-
 	contents := SpBoxLayout newVertical vAlignStart. 
 	"40 is a magic number"
 	groups := nodes groupsOf: 40.

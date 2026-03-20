@@ -9,7 +9,9 @@ Class {
 		'children',
 		'activeAction',
 		'parent',
-		'patch'
+		'patch',
+		'fromCommit',
+		'toCommit'
 	],
 	#category : 'Pulsar-Tool-Repositories-Model',
 	#package : 'Pulsar-Tool-Repositories',
@@ -98,6 +100,20 @@ PulsarDiffNode >> description [
 				operation definition name } ]
 		ifFalse: [ 
 			operation definition name ]
+]
+
+{ #category : 'initialization' }
+PulsarDiffNode >> from: aFromCommit to: aToCommit [
+
+	fromCommit := aFromCommit.
+	toCommit := aToCommit
+]
+
+{ #category : 'accessing' }
+PulsarDiffNode >> fromCommit [
+	"this element has sense just in the root element. otherwise is nil"
+
+	^ fromCommit
 ]
 
 { #category : 'testing' }
@@ -209,6 +225,12 @@ PulsarDiffNode >> resetStateChangedAction [
 ]
 
 { #category : 'accessing' }
+PulsarDiffNode >> root [
+
+	self parent ifNotNil: [ ^ self parent root ]
+]
+
+{ #category : 'accessing' }
 PulsarDiffNode >> selectionAnnouncementClass [
 
 	^ PulsarDiffNodeModelSelected
@@ -221,6 +243,13 @@ PulsarDiffNode >> summary [
 		self patchInsertions. 
 		self patchDeletions.
 		self description }
+]
+
+{ #category : 'accessing' }
+PulsarDiffNode >> toCommit [
+	"this element has sense just in the root element. otherwise is nil"
+
+	^ toCommit
 ]
 
 { #category : 'accessing' }
