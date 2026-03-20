@@ -66,20 +66,24 @@ PulsarRepositoryModel >> calculateDiffToReferenceCommit [
 ]
 
 { #category : 'accessing' }
-PulsarRepositoryModel >> commitsTo: aNumber [
+PulsarRepositoryModel >> commitsUpTo: aNumber inBranch: aRepositoryBranchModel [
+	| branch |
 
 	self entity isValid ifFalse: [ ^ #() ].
 
+	branch := aRepositoryBranchModel 
+		ifNotNil: [ :aModel | aModel entity ]
+		ifNil: [ self entity branch ].
+
 	^ Array new: aNumber streamContents: [ :stream | 
-		| count |
-		count := 0.
 		self critical: [
-			self entity branch commitsDo: [ :aCommit | 
-				count < aNumber ifTrue: [ 
-					stream nextPut: (PulsarRepositoryCommitModel 
-						newRepository: self 
-						entity: aCommit).
-					count := count + 1 ] ] ] ]
+			branch withCommitWalkDo: [ :walk |
+		  		walk
+			  		maxNumber: aNumber;
+			  		commitsDo: [ :aCommit | 
+						stream nextPut: (PulsarRepositoryCommitModel 
+							newRepository: self 
+							entity: aCommit) ] ] ] ]
 ]
 
 { #category : 'private' }

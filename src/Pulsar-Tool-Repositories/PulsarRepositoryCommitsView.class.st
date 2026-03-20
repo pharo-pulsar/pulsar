@@ -2,11 +2,13 @@ Class {
 	#name : 'PulsarRepositoryCommitsView',
 	#superclass : 'PulsarCollectionView',
 	#instVars : [
-		'toolbarPresenter',
-		'isDisplayed'
+		'#toolbarPresenter',
+		'#isDisplayed',
+		'#lastBranchSelected => WeakSlot'
 	],
-	#category : 'Pulsar-Tool-Repositories',
-	#package : 'Pulsar-Tool-Repositories'
+	#category : 'Pulsar-Tool-Repositories-View-Commit',
+	#package : 'Pulsar-Tool-Repositories',
+	#tag : 'View-Commit'
 }
 
 { #category : 'defaults' }
@@ -15,12 +17,6 @@ PulsarRepositoryCommitsView class >> defaultPanelPosition [
 	^ SpPanelPosition startArea
 		row: 3;
 		yourself
-]
-
-{ #category : 'initialization' }
-PulsarRepositoryCommitsView >> commitsToRetrieve [
-
-	^ 300
 ]
 
 { #category : 'layout' }
@@ -37,6 +33,17 @@ PulsarRepositoryCommitsView >> defineActionsOn: aBuilder [
 	<dockActions>
 	
 	aBuilder addGroup: #gitActions with: [ :group | group  ]
+]
+
+{ #category : 'events' }
+PulsarRepositoryCommitsView >> eventBranchSelected: ann [
+	| branchSelected | 
+
+	branchSelected := ann value.
+	branchSelected = lastBranchSelected ifTrue: [ ^ self ].
+	lastBranchSelected := branchSelected.
+	
+	self updatePresenter
 ]
 
 { #category : 'events' }
@@ -103,13 +110,26 @@ PulsarRepositoryCommitsView >> notifyRepositoryModified [
 ]
 
 { #category : 'initialization' }
+PulsarRepositoryCommitsView >> numberOfCommitsToRetrieve [
+
+	^ 300
+]
+
+{ #category : 'initialization' }
 PulsarRepositoryCommitsView >> registerToEvents [
 
 	super registerToEvents.
 	self announcer 
-		when: PulsarRepositoryModified
-		send: #eventRepositoryModified: 
-		to: self
+		when: PulsarRepositoryModified send: #eventRepositoryModified: to: self;
+		when: PulsarRepositoryBranchSelected send: #eventBranchSelected: to: self
+]
+
+{ #category : 'private' }
+PulsarRepositoryCommitsView >> retrieveCommits [
+
+	^ self model 
+		commitsUpTo: self numberOfCommitsToRetrieve
+		inBranch: lastBranchSelected
 ]
 
 { #category : 'initialization' }
@@ -122,8 +142,20 @@ PulsarRepositoryCommitsView >> updatePresenter [
 	self scheduleJob: [ :statusbar |
 		| items |
 		statusbar pushMessage: ('Retrieving commits of {1}...' format: { self model name }).
-		items := self model commitsTo: self commitsToRetrieve.
+		items := self retrieveCommits.
 		self scheduleTask: [ 
 			self application defer: [ 
-				listPresenter items: items ] ] ]
+				listPresenter items: items.
+				self updateTitle ] ] ]
+]
+
+{ #category : 'initialization' }
+PulsarRepositoryCommitsView >> updateTitle [
+
+	self withPanelWindowDo: [ :aPanelWindow | 
+		aPanelWindow title: ('Commits ({1})' format: { 
+			(lastBranchSelected 
+					ifNotNil: [lastBranchSelected name ]
+					ifNil: [ self model headName ]) 
+				truncateWithElipsisTo: 30 }) ]
 ]
