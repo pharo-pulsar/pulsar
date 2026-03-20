@@ -8,8 +8,9 @@ Class {
 		'lastDiffNodeModel',
 		'mutex'
 	],
-	#category : 'Pulsar-Tool-Repositories',
-	#package : 'Pulsar-Tool-Repositories'
+	#category : 'Pulsar-Tool-Repositories-View-Editor',
+	#package : 'Pulsar-Tool-Repositories',
+	#tag : 'View-Editor'
 }
 
 { #category : 'layout' }
@@ -75,7 +76,7 @@ PulsarRepositoryDiffEditor >> registerToEvents [
 
 	super registerToEvents.
 	self announcer 
-		when: PulsarModelSelected
+		when: PulsarDiffNodeModelSelected
 		send: #eventModelSelected:
 		to: self	
 ]

@@ -30,7 +30,7 @@ PulsarRepositoryBaseBranchView >> defaultLayout [
 PulsarRepositoryBaseBranchView >> entitySelected: anEntity [
 
 	self updateToolbar.
-	"super entitySelected: anEntity."
+	super entitySelected: anEntity
 ]
 
 { #category : 'initialization' }

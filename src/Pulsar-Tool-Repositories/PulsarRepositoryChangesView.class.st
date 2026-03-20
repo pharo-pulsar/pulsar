@@ -210,8 +210,8 @@ PulsarRepositoryChangesView >> doRefresh [
 { #category : 'private' }
 PulsarRepositoryChangesView >> entitySelected: ann [
 
-	super entitySelected: ann.
-	self updateToolbar
+	self updateToolbar.
+	super entitySelected: ann	
 ]
 
 { #category : 'events' }

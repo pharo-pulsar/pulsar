@@ -62,6 +62,14 @@ PulsarRepositoryBranchesView >> model: aModel [
 	tagPresenter model: aModel
 ]
 
+{ #category : 'private' }
+PulsarRepositoryBranchesView >> notificationCenter: anAnnouncer [
+
+	super notificationCenter: anAnnouncer.
+	{ localPresenter. remotePresenter. tagPresenter }
+		do: [ :each | each notificationCenter: anAnnouncer ]
+]
+
 { #category : 'initialization' }
 PulsarRepositoryBranchesView >> registerToEvents [
 

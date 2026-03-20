@@ -207,6 +207,12 @@ PulsarDiffNode >> resetStateChangedAction [
 ]
 
 { #category : 'accessing' }
+PulsarDiffNode >> selectionAnnouncementClass [
+
+	^ PulsarDiffNodeModelSelected
+]
+
+{ #category : 'accessing' }
 PulsarDiffNode >> summary [ 
 
 	^ '<span foreground="green">+{1}</span>/<span foreground="red">-{2}</span>: {3}' format: { 
