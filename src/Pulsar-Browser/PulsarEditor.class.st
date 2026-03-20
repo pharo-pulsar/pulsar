@@ -482,6 +482,16 @@ PulsarEditor >> panelPresented [
 	self panelFocused
 ]
 
+{ #category : 'printing' }
+PulsarEditor >> printOn: stream [ 
+
+	super printOn: stream.
+	stream 
+		nextPut: $(; 
+		print: self model;
+		nextPut: $)
+]
+
 { #category : 'initialization' }
 PulsarEditor >> registerToEvents [
 
