@@ -45,9 +45,3 @@ PulsarRepositoryBaseModel >> repository: aRepositoryModel [
 
 	repository := aRepositoryModel
 ]
-
-{ #category : 'accessing' }
-PulsarRepositoryBaseModel >> selectionAnnouncementClass [
-
-	^ PulsarRepositoryBranchSelected
-]

@@ -105,6 +105,8 @@ PulsarDiffNode >> hasChanges [
 	| operation |
 
 	operation := self node value.
+	operation isNoModification ifTrue: [ ^ false ].
+	
 	^ operation rightContents ~= operation leftContents
 ]
 

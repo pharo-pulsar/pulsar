@@ -1,6 +1,9 @@
 Class {
 	#name : 'PulsarRepositoryCommitModel',
 	#superclass : 'PulsarRepositoryBaseModel',
+	#instVars : [
+		'diffNode'
+	],
 	#category : 'Pulsar-Tool-Repositories-Model',
 	#package : 'Pulsar-Tool-Repositories',
 	#tag : 'Model'
@@ -25,10 +28,37 @@ PulsarRepositoryCommitModel >> commit [
 	^ self entity
 ]
 
+{ #category : 'accessing' }
+PulsarRepositoryCommitModel >> diffNode [
+
+	^ diffNode ifNil: [ 
+		diffNode := PulsarDiffNode 
+			newRepository: self repository
+			entity: self entity diffToParent tree ]
+]
+
+{ #category : 'testing' }
+PulsarRepositoryCommitModel >> isBigChange [
+
+	^ false
+]
+
 { #category : 'testing' }
 PulsarRepositoryCommitModel >> isOutgoing [
 	
 	^ self repository isOutgoingCommit: self
+]
+
+{ #category : 'testing' }
+PulsarRepositoryCommitModel >> isRoot [
+
+	^ true
+]
+
+{ #category : 'accessing' }
+PulsarRepositoryCommitModel >> selectionAnnouncementClass [
+
+	^ PulsarRepositoryCommitModelSelected
 ]
 
 { #category : 'accessing' }

@@ -7,8 +7,9 @@ Class {
 		'headerPresenter',
 		'patchPresenter'
 	],
-	#category : 'Pulsar-Tool-Repositories',
-	#package : 'Pulsar-Tool-Repositories'
+	#category : 'Pulsar-Tool-Repositories-View-Editor',
+	#package : 'Pulsar-Tool-Repositories',
+	#tag : 'View-Editor'
 }
 
 { #category : 'layout' }

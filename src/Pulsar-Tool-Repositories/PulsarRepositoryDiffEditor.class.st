@@ -24,7 +24,17 @@ PulsarRepositoryDiffEditor >> defaultLayout [
 ]
 
 { #category : 'events' }
-PulsarRepositoryDiffEditor >> eventModelSelected: ann [
+PulsarRepositoryDiffEditor >> eventCommitModelSelected: ann [
+	| commitModel |
+	
+	commitModel := ann value.
+	lastDiffNodeModel := nil.
+	
+	self model: commitModel diffNode
+]
+
+{ #category : 'events' }
+PulsarRepositoryDiffEditor >> eventDiffModelSelected: ann [
 	| diffNodeModel |
 	
 	diffNodeModel := ann value.
@@ -45,6 +55,22 @@ PulsarRepositoryDiffEditor >> initializeWindow: aWindowPresenter [
 PulsarRepositoryDiffEditor >> mutex [
 
 	^ mutex ifNil: [ mutex := Mutex new ]
+]
+
+{ #category : 'initialization' }
+PulsarRepositoryDiffEditor >> newDiffHeader [
+	| presenter | 
+	
+	presenter := self newPresenter.
+	presenter layout: (SpBoxLayout newHorizontal vAlignCenter).
+	
+	presenter addStyle: 'pulsarToolbarPanel'.
+	
+	presenter layout 
+		add: 'HEAD';
+		add: 'Working Copy' expand: false.
+		
+	^ presenter
 ]
 
 { #category : 'private - scheduling' }
@@ -76,9 +102,8 @@ PulsarRepositoryDiffEditor >> registerToEvents [
 
 	super registerToEvents.
 	self announcer 
-		when: PulsarDiffNodeModelSelected
-		send: #eventModelSelected:
-		to: self	
+		when: PulsarDiffNodeModelSelected send: #eventDiffModelSelected: to: self;
+		when: PulsarRepositoryCommitModelSelected send: #eventCommitModelSelected: to: self
 ]
 
 { #category : 'initialization' }
@@ -94,6 +119,9 @@ PulsarRepositoryDiffEditor >> updatePatchContents [
 	"40 is a magic number"
 	groups := nodes groupsOf: 40.
 	self withWindowDo: #jobStart.
+	
+	contents add: self newDiffHeader.
+	
 	groups withIndexDo: [ :eachGroup :index  |
 		self queueTask: [
 			[

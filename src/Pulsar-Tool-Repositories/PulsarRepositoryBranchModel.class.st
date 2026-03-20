@@ -44,3 +44,9 @@ PulsarRepositoryBranchModel >> outgoingCommits [
  
 	^ #()
 ]
+
+{ #category : 'accessing' }
+PulsarRepositoryBranchModel >> selectionAnnouncementClass [
+
+	^ PulsarRepositoryBranchModelSelected
+]

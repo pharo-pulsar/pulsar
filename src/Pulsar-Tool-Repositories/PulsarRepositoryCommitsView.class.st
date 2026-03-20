@@ -121,7 +121,7 @@ PulsarRepositoryCommitsView >> registerToEvents [
 	super registerToEvents.
 	self announcer 
 		when: PulsarRepositoryModified send: #eventRepositoryModified: to: self;
-		when: PulsarRepositoryBranchSelected send: #eventBranchSelected: to: self
+		when: PulsarRepositoryBranchModelSelected send: #eventBranchSelected: to: self
 ]
 
 { #category : 'private' }
@@ -154,8 +154,5 @@ PulsarRepositoryCommitsView >> updateTitle [
 
 	self withPanelWindowDo: [ :aPanelWindow | 
 		aPanelWindow title: ('Commits ({1})' format: { 
-			(lastBranchSelected 
-					ifNotNil: [lastBranchSelected name ]
-					ifNil: [ self model headName ]) 
-				truncateWithElipsisTo: 30 }) ]
+			(lastBranchSelected ifNil: [ self model ]) name truncateWithElipsisTo: 20 }) ]
 ]
