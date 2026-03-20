@@ -9,7 +9,8 @@ Class {
 		'toolbarPresenter',
 		'mutex',
 		'countPresenter',
-		'sortingSelector'
+		'sortingSelector',
+		'lastActivatedEditor'
 	],
 	#category : 'Pulsar-Browser-View-Stack',
 	#package : 'Pulsar-Browser',
@@ -162,6 +163,12 @@ PulsarStackView >> eventEditorActivated: anAnnouncement [
 	| currentItem activatedEditor |
 
 	activatedEditor := anAnnouncement value.
+	self flag: #FIXME. "I am filtering if this is the same I activated last. 
+	For some reason, it is arriving twice. Probably the solution would be not 
+	to make it arrive twice, but for now the check is fine."
+	lastActivatedEditor = activatedEditor ifTrue: [ ^ self ].
+	lastActivatedEditor := activatedEditor. 	
+	
 	logger trace: activatedEditor.
 	self mutex critical: [
 		self updatePresenter.
@@ -375,6 +382,9 @@ PulsarStackView >> updateCount [
 PulsarStackView >> updatePresenter [
 
 	self window ifNil: [ ^ self ].
+	
+	logger trace.
+	
 	"it may be that the editor is being closed when the update is triggered.
 	 and several events may trigger a new update."
 	self mutex critical: [
