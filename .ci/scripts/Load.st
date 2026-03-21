@@ -25,4 +25,4 @@ MetaMetacello load: [ :spec | spec
 	baseline: 'SourceEditor' with: [ spec repository: 'git:git@forge.smallworks.eu:pharo/SourceEditor.git:main' ];
 	baseline: 'Panel' with: [ spec repository: 'github://estebanlm/Spec-LibPanel:main' ];
 	baseline: 'Pulsar' with: [ spec repository: 'git:git@forge.smallworks.eu:pharo/Pulsar.git:main' ];
-	baseline: 'LibGit' with: [ spec repository: 'github://pharo-vcs/libgi2-pharo-bindings.git:experimental/run-in-thread' ] ]
+	baseline: 'LibGit' with: [ spec repository: 'github://pharo-vcs/libgi2-pharo-bindings:experimental-run-in-thread' ] ]
