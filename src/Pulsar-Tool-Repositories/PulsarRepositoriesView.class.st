@@ -106,6 +106,9 @@ PulsarRepositoriesView >> doClose [
 
 { #category : 'private - actions' }
 PulsarRepositoriesView >> doOpenRepository: aRepositoryModel [
+	aRepositoryModel needsRepair ifTrue: [
+		self doRepairdRepository: aRepositoryModel.
+		^ self ]. 
 
 	(PulsarRepositoryBrowser 
 		newApplication: self application
@@ -115,10 +118,15 @@ PulsarRepositoriesView >> doOpenRepository: aRepositoryModel [
 
 { #category : 'private - actions' }
 PulsarRepositoriesView >> doRepairSelectedRepository [
-	| result repositoryModel repairActions |
+	
+	self doRepairdRepository: self selectedRepository
+]
+
+{ #category : 'private - actions' }
+PulsarRepositoriesView >> doRepairdRepository: aRepositoryModel [
+	| result repairActions |
 		
-	repositoryModel := self selectedRepository.
-	repairActions := repositoryModel repairActions.
+	repairActions := aRepositoryModel repairActions.
 	repairActions do: [ :each | each context: self ].
 	
 	self flag: #TODO. "in fact, this should be a bit better (we have helps and that
