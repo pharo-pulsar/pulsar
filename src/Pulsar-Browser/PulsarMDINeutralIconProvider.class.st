@@ -132,7 +132,7 @@ PulsarMDINeutralIconProvider >> createTable [
 		('merge'                  'source-merge'                  '#813d9c'  '#c061cb')
 		('pull'                   'tray-arrow-down'               '#813d9c'  '#c061cb')
 		('push'                   'tray-arrow-up'                 '#813d9c'  '#c061cb')
-		('fetch'                  'sync'                          '#1c71d8'  '#62a0ea')
+		('fetch'                  'archive-arrow-down-outline'    '#1c71d8'  '#62a0ea')
 		('checkout'               'check'                         '#26a269'  '#57e389')
 		('changeAdd'              'plus'                          '#26a269'  '#57e389')
 		('changeRemove'           'minus'                         '#c01c28'  '#f66151')
