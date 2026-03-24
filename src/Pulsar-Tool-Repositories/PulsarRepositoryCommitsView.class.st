@@ -112,7 +112,7 @@ PulsarRepositoryCommitsView >> notifyRepositoryModified [
 { #category : 'initialization' }
 PulsarRepositoryCommitsView >> numberOfCommitsToRetrieve [
 
-	^ 300
+	^ 150
 ]
 
 { #category : 'initialization' }

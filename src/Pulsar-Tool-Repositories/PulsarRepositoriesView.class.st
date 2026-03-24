@@ -78,6 +78,21 @@ PulsarRepositoriesView >> defineActionsOn: aBuilder [
 			action: [ self doRepairSelectedRepository ] ] ]
 ]
 
+{ #category : 'private - definitions' }
+PulsarRepositoriesView >> defineContextActionsOn: aBuilder [
+	<dockActions>
+
+	aBuilder addGroup: #contextActions with: [ :group | group 
+		addGroupWith: [ :dangerGroup | dangerGroup
+			name: 'DANGER ZONE';
+			beDisplayedAsGroup;
+			addActionWith: [ :action | action
+				priority: 1000;
+				dynamicName: [ 'Forget {1}' format: { self selectedRepositoryName } ];
+				description: 'Forget this repository';
+				action: [ self doForgetSelectedRepository ] ] ] ]
+]
+
 { #category : 'private - actions' }
 PulsarRepositoriesView >> doAddRepository [
 	| presenter dialog |
@@ -105,6 +120,33 @@ PulsarRepositoriesView >> doClose [
 ]
 
 { #category : 'private - actions' }
+PulsarRepositoriesView >> doForgetRepository: aRepositoryModel [
+	| shouldRemove |
+
+	shouldRemove := self application newConfirm
+		title: 'Forget repository';
+		message: ('Remove <b>{1}</b> from your repositories list.
+<i><span foreground="red">NOTICE:</span> Repository sources will remain in disk.</i>' format: { aRepositoryModel name });
+		acceptLabel: 'Forget';
+		openModal.
+	shouldRemove ifFalse: [ ^ self ].
+	
+	self scheduleJob: [ :statusbar |
+		statusbar pushMessage: ('Forgetting {1}...' format: { aRepositoryModel name }).
+		aRepositoryModel forgetAction 
+			onSuccess: [ 
+				self model resetRepositories.
+				self updatePresenter ];
+			executeWithContext: self ]
+]
+
+{ #category : 'private - actions' }
+PulsarRepositoriesView >> doForgetSelectedRepository [
+	
+	self doForgetRepository: self selectedRepository
+]
+
+{ #category : 'private - actions' }
 PulsarRepositoriesView >> doOpenRepository: aRepositoryModel [
 
 	"do not try to open if it is broken... instead, open repair window"
@@ -120,25 +162,24 @@ PulsarRepositoriesView >> doOpenRepository: aRepositoryModel [
 
 { #category : 'private - actions' }
 PulsarRepositoriesView >> doRepairRepository: aRepositoryModel [
-	| result repairActions |
+	| choosenRepairAction repairActions |
 		
+	repairActions := aRepositoryModel repairActions.
+	repairActions do: [ :each | each context: self ].
+	
+	self flag: #TODO. "in fact, this should be a bit better (we have helps and that
+	we can use, just I'm lazy to create a new dialog right now)"
+	choosenRepairAction := self application newSelect
+		title: 'Repository broken';
+		message: 'Select from available repair actions';
+		items: repairActions;
+		display: [ :aRepaitAction | aRepaitAction title ];
+		openModalWithParent: self window.
+	choosenRepairAction ifNil: [ ^ self ].
 	self scheduleTask: [
-		repairActions := aRepositoryModel repairActions.
-		repairActions do: [ :each | each context: self ].
-		
-		self flag: #TODO. "in fact, this should be a bit better (we have helps and that
-		we can use, just I'm lazy to create a new dialog right now)"
-		result := self application newSelect
-			title: 'Repository broken';
-			message: 'Select from available repair actions';
-			items: repairActions;
-			display: [ :aRepaitAction | aRepaitAction title ];
-			openModalWithParent: self window.
-		
-		result ifNotNil: [		
-			result 
-				onSuccess: [ self updatePresenter ];
-				execute ] ]
+		choosenRepairAction
+			onSuccess: [ self notifyRepositoryModified: aRepositoryModel ];
+			execute ]
 ]
 
 { #category : 'private - actions' }
@@ -227,6 +268,7 @@ PulsarRepositoriesView >> initializePresenters [
 		addStyle: 'stList';
 		rowPresenterClass: PulsarRepositoryRow;
 		display: [ :aRepositoryModel | aRepositoryModel name ];
+		actions: (self actions actionsFor: #contextActions);
 		enableSearch;
 		yourself
 ]
@@ -241,6 +283,14 @@ PulsarRepositoriesView >> initializeWindow: aWindowPresenter [
 PulsarRepositoriesView >> isHideSystemProjects [
 
 	^ hideSystemProjects
+]
+
+{ #category : 'private' }
+PulsarRepositoriesView >> notifyRepositoryModified: aModel [
+
+	logger trace: aModel. 
+
+	self application resendAnnouncement: (PulsarRepositoryModified newValue: aModel)
 ]
 
 { #category : 'private' }
@@ -272,6 +322,14 @@ PulsarRepositoriesView >> registerToSystemEvents [
 PulsarRepositoriesView >> selectedRepository [
 
 	^ listPresenter ifNotNil: #selectedItem
+]
+
+{ #category : 'private - accessing' }
+PulsarRepositoriesView >> selectedRepositoryName [
+
+	^ listPresenter selectedItem 
+		ifNotNil: [ :aModel | aModel name ]
+		ifNil: [ 'NONAME' ]
 ]
 
 { #category : 'accessing - snapshot' }

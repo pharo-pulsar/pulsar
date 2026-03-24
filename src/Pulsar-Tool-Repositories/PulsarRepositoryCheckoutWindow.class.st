@@ -31,7 +31,11 @@ PulsarRepositoryCheckoutWindow >> doCheckout [
 	strategy := checkoutStrategyPresenter selectedItem.
 	self scheduleJob: [
 		(self model newCheckoutActionWithStrategy: strategy) 
-			onSuccess: [ self withWindowDo: #close ];
+			onSuccess: [ 
+				"announce here because the iceberg announcer is kind of internal, and I do not want to hang on
+				 `Icebereg announcer`, which seems to me prone to leak."
+				self notifyRepositoryModified: self model.
+				self withWindowDo: #close ];
 			executeWithContext: self ]
 ]
 
@@ -56,6 +60,14 @@ PulsarRepositoryCheckoutWindow >> initializeWindow: aWindowPresenter [
 			icon: (self iconNamed: 'checkout');
 			action: [ self doCheckout ];
 			yourself)
+]
+
+{ #category : 'private' }
+PulsarRepositoryCheckoutWindow >> notifyRepositoryModified: aModel [
+	
+	logger trace: aModel.
+
+	self application resendAnnouncement: (PulsarRepositoryModified newValue: aModel)
 ]
 
 { #category : 'initialization' }

@@ -357,6 +357,9 @@ PulsarApplication >> reloadConfiguration [
 { #category : 'announcing' }
 PulsarApplication >> resendAnnouncement: anAnnouncement [
 	
+	self flag: #TODO. "Maybe I need to call this method something like `broadcast:`?"
+	logger trace: anAnnouncement.
+	
 	self windows do: [ :aWindowPresenter |
 		aWindowPresenter announce: anAnnouncement ]
 ]

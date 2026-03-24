@@ -127,6 +127,16 @@ PulsarRepositoryModel >> discardChangesOn: aNode [
 	self resetDiff
 ]
 
+{ #category : 'actions - command' }
+PulsarRepositoryModel >> forgetAction [
+
+	^ IceTipStandardAction new
+		repository: self entity;
+		message: ('Forgeting {1}' format: { self name });
+		action: [ self entity forget ];
+		yourself
+]
+
 { #category : 'testing' }
 PulsarRepositoryModel >> hasUpstream [
 

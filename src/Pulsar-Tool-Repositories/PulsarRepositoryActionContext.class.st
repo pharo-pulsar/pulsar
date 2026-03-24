@@ -80,6 +80,7 @@ PulsarRepositoryActionContext >> doPush: aModel [
 
 { #category : 'private' }
 PulsarRepositoryActionContext >> notifyRepositoryModified: aModel [
+	logger trace: aModel. 
 
 	self application resendAnnouncement: (PulsarRepositoryModified newValue: aModel)
 ]
