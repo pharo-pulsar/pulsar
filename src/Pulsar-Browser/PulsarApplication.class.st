@@ -310,6 +310,7 @@ PulsarApplication >> prepareAsStandaloneApplication [
 	standalone := true.
 	SpGtkConfiguration useApplicationEngine: true. 
 	TFCallbackQueue pauseOnSave: true.
+	Smalltalk vm maxExternalSemaphoresSilently: 1024.
 
 	self cleanUp.
 	self killUnusedProcesses.
