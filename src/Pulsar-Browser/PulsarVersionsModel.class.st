@@ -113,5 +113,5 @@ PulsarVersionsModel >> title [
 { #category : 'accessing' }
 PulsarVersionsModel >> versions [
 
-	^ self localVersions, self remoteVersions
+	^ (self localVersions, self remoteVersions) sorted: #timeStamp descending
 ]

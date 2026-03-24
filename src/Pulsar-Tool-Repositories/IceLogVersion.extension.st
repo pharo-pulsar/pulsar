@@ -4,7 +4,8 @@ Extension { #name : 'IceLogVersion' }
 IceLogVersion >> asRingDefinition [
 
 	^ self definition copy 
-		stamp: self timeStamp asString;
+		timeStamp: self timeStamp;
 		author: self author;
+		annotationNamed: #sourceOrigin put: #remote;
 		yourself
 ]
