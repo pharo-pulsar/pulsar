@@ -14,19 +14,6 @@ Class {
 	#tag : 'Tool-Versions'
 }
 
-{ #category : 'accessing - actions' }
-PulsarVersionsBrowser class >> defineActionsOn: aBuilder [
-	<dockActions>
-
-	aBuilder 
-		addGroup: #versionActions with: [ :group | group 
-			addActionWith: [ :action | action 
-				name: 'Revert';
-				description: 'Revert to this version';
-				iconName: 'accept';
-				action: [ :aContext | aContext doRevert ] ] ]
-]
-
 { #category : 'initialization' }
 PulsarVersionsBrowser >> addPopoverControls [
 	| controlsPresenter |
@@ -74,12 +61,73 @@ PulsarVersionsBrowser >> defaultLayout [
 		yourself
 ]
 
+{ #category : 'private - definitions' }
+PulsarVersionsBrowser >> defineActionsOn: aBuilder [
+	<dockActions>
+
+	aBuilder addGroup: #versionActions with: [ :group | 
+		group addActionWith: [ :action | action 
+			name: 'Revert';
+			description: 'Revert to this version';
+			iconName: 'accept';
+			action: [ self doRevert ] ] ]
+]
+
+{ #category : 'private - definitions' }
+PulsarVersionsBrowser >> defineExtraActionsOn: aBuilder [
+	<dockActions>
+
+	aBuilder addGroup: #extraActions with: [ :group | group 
+		addActionWith: [ :action | action 
+			name: 'Fetch remote versions';
+			description: 'Fetch remote versions';
+			iconName: 'fetch';
+			actionEnabled: [ self hasRemoteVersions ];
+			action: [ self doFetchRemoteVersionsCommand: action ] ] ]
+]
+
+{ #category : 'private - actions' }
+PulsarVersionsBrowser >> doFetchRemoteVersionsCommand: anAction [
+	| repositories popover |
+	
+	repositories := self model includingRepositories.
+	repositories size > 1 ifFalse: [
+		self doFetchRemoteVersionsOnRepository: repositories anyOne.
+		^ self ].
+
+	self flag: #TODO. "I need a choose popover (like the request popover)" 
+	popover := self newPopover.
+	popover presenter: ((self instantiate: PulsarSelectDialog)
+		items: repositories;
+		display: #name;
+		yourself).
+	popover relativeTo: anAction presenter.
+	popover popup
+]
+
+{ #category : 'private - actions' }
+PulsarVersionsBrowser >> doFetchRemoteVersionsOnRepository: aRepositoryModel [
+
+	self withWindowDo: [ :aWindow |
+		aWindow scheduleJob: [ 
+			self model fetchRemoteVersionsOn: aRepositoryModel.
+			self updatePresenter ] ]
+]
+
 { #category : 'actions' }
 PulsarVersionsBrowser >> doRevert [
 	"take selected version and apply it as current editor content"
 	
 	self  withPopoverDo: #dismiss.
 	self model revertTo: versionListPresenter selectedItem
+]
+
+{ #category : 'private - testing' }
+PulsarVersionsBrowser >> hasRemoteVersions [
+
+	self model ifNotNil: [ ^ self model hasValidRemote ].
+	
+	^ false
 ]
 
 { #category : 'initialization' }
@@ -176,5 +224,5 @@ PulsarVersionsBrowser >> updateSourceWith: aDefinition [
 { #category : 'initialization' }
 PulsarVersionsBrowser >> versionActions [
 
-	^ self actions actionsFor: #versionActions
+	^ self actions actionsForAll: #(versionActions extraActions)
 ]

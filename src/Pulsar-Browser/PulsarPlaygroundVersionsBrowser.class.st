@@ -20,6 +20,13 @@ PulsarPlaygroundVersionsBrowser >> activateWith: aVersion [
 	activationAction cull: aVersion
 ]
 
+{ #category : 'private - definitions' }
+PulsarPlaygroundVersionsBrowser >> defineExtraActionsOn: aBuilder [
+	<dockActions>
+	
+	"nothing for now, just overriding my parent."
+]
+
 { #category : 'actions' }
 PulsarPlaygroundVersionsBrowser >> doRevert [
 	| version |
