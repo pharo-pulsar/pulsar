@@ -5,8 +5,9 @@ Class {
 		'labelPresenter',
 		'extraPresenter'
 	],
-	#category : 'Pulsar-Tool-Repositories',
-	#package : 'Pulsar-Tool-Repositories'
+	#category : 'Pulsar-Tool-Repositories-View-Repositories',
+	#package : 'Pulsar-Tool-Repositories',
+	#tag : 'View-Repositories'
 }
 
 { #category : 'initialization' }

@@ -5,8 +5,9 @@ Class {
 		'textPresenter',
 		'placeholderPresenter'
 	],
-	#category : 'Pulsar-Tool-Repositories',
-	#package : 'Pulsar-Tool-Repositories'
+	#category : 'Pulsar-Tool-Repositories-View-Commit',
+	#package : 'Pulsar-Tool-Repositories',
+	#tag : 'View-Commit'
 }
 
 { #category : 'accessing' }

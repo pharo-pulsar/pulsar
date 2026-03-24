@@ -4,12 +4,11 @@ A base for all dock browsers (there should not be a lot, but more than one)
 Class {
 	#name : 'PulsarBaseBrowser',
 	#superclass : 'SpPanelWindowPresenter',
-	#traits : 'SpTModel + PulsarTSnapshot + PulsarTGlobalActionContainer + PulsarTTaskScheduler',
-	#classTraits : 'SpTModel classTrait + PulsarTSnapshot classTrait + PulsarTGlobalActionContainer classTrait + PulsarTTaskScheduler classTrait',
+	#traits : 'SpTModel + PulsarTSnapshot + PulsarTGlobalActionContainer + PulsarTTaskScheduler + PulsarTJobHandler',
+	#classTraits : 'SpTModel classTrait + PulsarTSnapshot classTrait + PulsarTGlobalActionContainer classTrait + PulsarTTaskScheduler classTrait + PulsarTJobHandler classTrait',
 	#instVars : [
 		'actions',
-		'mutex',
-		'job'
+		'mutex'
 	],
 	#classInstVars : [
 		'lastWindowSize'
@@ -106,6 +105,14 @@ PulsarBaseBrowser >> addPresenterClass: aClass position: aPulsarPosition [
 	self addPresenter: view at: aPulsarPosition.
 	
 	^ view
+]
+
+{ #category : 'private' }
+PulsarBaseBrowser >> addStatusbarPresenter: aPresenter [
+	"As the job will require to add a spinner, we need to implement this"
+
+	"override the trait. Yes, I know I can do it with semantics, but well..."
+	super addStatusbarPresenter: aPresenter
 ]
 
 { #category : 'private' }
@@ -309,20 +316,6 @@ PulsarBaseBrowser >> initializeWorkspace [
 
 ]
 
-{ #category : 'accessing - jobs' }
-PulsarBaseBrowser >> jobEnd [
-
-	job ifNil: [ ^ self ].
-	job end
-]
-
-{ #category : 'accessing - jobs' }
-PulsarBaseBrowser >> jobStart [
-
-	job ifNil: [ job := PulsarJobHandler on: self ].
-	job start
-]
-
 { #category : 'private' }
 PulsarBaseBrowser >> maybeDockView: aViewModel withActivation: anActivation [
 	"if the entity has an editor associated:
@@ -439,6 +432,13 @@ PulsarBaseBrowser >> remove: aPanelWindowPresenter [
 	aPanelWindowPresenter forceClose
 ]
 
+{ #category : 'private' }
+PulsarBaseBrowser >> removeStatusbarPresenter: aPresenter [
+	"As the job will require to add a spinner, we need to implement this"
+
+	self statusbar remove: aPresenter
+]
+
 { #category : 'announcing' }
 PulsarBaseBrowser >> resendAnnouncement: anAnnouncement [
 
@@ -446,18 +446,6 @@ PulsarBaseBrowser >> resendAnnouncement: anAnnouncement [
 	
 	self presentersDo: [ :aWindowPresenter |
 		aWindowPresenter presenter announce: anAnnouncement ]
-]
-
-{ #category : 'private - scheduling' }
-PulsarBaseBrowser >> schedule: aBlock [
-
-	self 
-		deprecated: 'This is confusing, use #scheduleTask:' 
-		transformWith: 
-			'`@receiver schedule: `@arg' -> 
-			'`@receiver scheduleTask: `@arg'.
-
-	^ self scheduleTask: aBlock
 ]
 
 { #category : 'private' }

@@ -155,6 +155,12 @@ PulsarApplication >> colorsForTestResult [
 	^ self configuration colorsForTestResult
 ]
 
+{ #category : 'showing' }
+PulsarApplication >> defaultWindowPresenterClass [
+
+	^ PulsarWindowPresenter
+]
+
 { #category : 'schedulling' }
 PulsarApplication >> deferToNextCycle: aBlock [
 	"I need to force a next cycle for certain functions"

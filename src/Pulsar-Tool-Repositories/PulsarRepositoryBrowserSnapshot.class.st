@@ -1,8 +1,9 @@
 Class {
 	#name : 'PulsarRepositoryBrowserSnapshot',
 	#superclass : 'PulsarBaseBrowserSnapshot',
-	#category : 'Pulsar-Tool-Repositories',
-	#package : 'Pulsar-Tool-Repositories'
+	#category : 'Pulsar-Tool-Repositories-View-Repositories',
+	#package : 'Pulsar-Tool-Repositories',
+	#tag : 'View-Repositories'
 }
 
 { #category : 'accessing' }

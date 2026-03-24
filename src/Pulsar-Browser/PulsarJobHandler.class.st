@@ -43,7 +43,7 @@ PulsarJobHandler >> end [
 		count := count - 1.
 		count = 0 ifTrue: [
 			spinnerPresenter ifNotNil: [
-				self browser statusbar remove: spinnerPresenter.
+				self browser removeStatusbarPresenter: spinnerPresenter.
 				spinnerPresenter := nil ] ] ]
 ]
 
@@ -65,5 +65,5 @@ PulsarJobHandler >> start [
 		count := count + 1.
 		count = 1 ifTrue: [ 
 			spinnerPresenter := self browser newSpinner.
-			self browser statusbar addPrefix: spinnerPresenter ] ]
+			self browser addStatusbarPresenter: spinnerPresenter ] ]
 ]

@@ -4,8 +4,9 @@ A context to perform repository actions (since the call can be in different plac
 Class {
 	#name : 'PulsarRepositoryActionContext',
 	#superclass : 'PulsarActionContext',
-	#category : 'Pulsar-Tool-Repositories',
-	#package : 'Pulsar-Tool-Repositories'
+	#category : 'Pulsar-Tool-Repositories-Model',
+	#package : 'Pulsar-Tool-Repositories',
+	#tag : 'Model'
 }
 
 { #category : 'actions' }

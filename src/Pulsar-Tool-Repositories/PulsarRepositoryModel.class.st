@@ -66,6 +66,12 @@ PulsarRepositoryModel >> calculateDiffToReferenceCommit [
 ]
 
 { #category : 'accessing' }
+PulsarRepositoryModel >> checkoutStrategies [
+
+	^ IceCheckoutStrategy allStrategies
+]
+
+{ #category : 'accessing' }
 PulsarRepositoryModel >> commitsUpTo: aNumber inBranch: aRepositoryBranchModel [
 	| branch |
 
@@ -220,6 +226,19 @@ PulsarRepositoryModel >> name [
 PulsarRepositoryModel >> needsRepair [
 
 	^ self isMissing or: [ self isDetached ]
+]
+
+{ #category : 'actions - command' }
+PulsarRepositoryModel >> newCheckoutActionWithStrategy: aCheckoutStrategy [
+	
+	^ IceTipStandardAction new 
+		repository: self entity;
+		onSuccessRepositoryModified;
+		action: [ 
+			aCheckoutStrategy committish: self entity head.
+			aCheckoutStrategy diff: self diffNode.
+			self entity checkout: aCheckoutStrategy ];
+		yourself
 ]
 
 { #category : 'actions - command' }

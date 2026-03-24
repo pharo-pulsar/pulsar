@@ -366,7 +366,7 @@ PulsarBrowser >> saveImage [
 
 	"I need to fork because otherwise resume will try to start from here"
 	[ Smalltalk snapshot: true andQuit: false ] 
-	forkAt: Processor highestPriority.
+	fork.
 
 	self inform: 'Image saved'
 ]

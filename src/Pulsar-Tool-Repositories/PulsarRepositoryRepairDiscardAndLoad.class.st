@@ -54,9 +54,10 @@ PulsarRepositoryRepairDiscardAndLoad class >> title [
 
 { #category : 'executing' }
 PulsarRepositoryRepairDiscardAndLoad >> basicExecute [
-			
-	(IceTipCheckoutPreviewBrowser onBranch: self repositoryModel branchModel) 
-		application: context application;
+	
+	(PulsarRepositoryCheckoutWindow 
+		newApplication: self application
+		model: self repositoryModel)
 		open
 ]
 

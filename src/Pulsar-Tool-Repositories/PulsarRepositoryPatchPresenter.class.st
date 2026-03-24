@@ -28,7 +28,10 @@ PulsarRepositoryPatchPresenter >> initializePresenters [
 	self addStyle: 'pulsarRepositoryPatch'.
 
 	headerPresenter := self instantiate: PulsarEditorToolbarPresenter.
-	patchPresenter := self instantiate: self patchPresenterClass
+	patchPresenter := (self instantiate: self patchPresenterClass)
+		styleScheme: self application styleScheme;
+		syntaxHighlightTheme: self application syntaxHighlightTheme;
+		yourself	
 ]
 
 { #category : 'initialization' }

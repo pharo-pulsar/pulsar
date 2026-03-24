@@ -106,8 +106,10 @@ PulsarRepositoriesView >> doClose [
 
 { #category : 'private - actions' }
 PulsarRepositoriesView >> doOpenRepository: aRepositoryModel [
+
+	"do not try to open if it is broken... instead, open repair window"
 	aRepositoryModel needsRepair ifTrue: [
-		self doRepairdRepository: aRepositoryModel.
+		self doRepairRepository: aRepositoryModel.
 		^ self ]. 
 
 	(PulsarRepositoryBrowser 
@@ -117,31 +119,32 @@ PulsarRepositoriesView >> doOpenRepository: aRepositoryModel [
 ]
 
 { #category : 'private - actions' }
-PulsarRepositoriesView >> doRepairSelectedRepository [
-	
-	self doRepairdRepository: self selectedRepository
+PulsarRepositoriesView >> doRepairRepository: aRepositoryModel [
+	| result repairActions |
+		
+	self scheduleTask: [
+		repairActions := aRepositoryModel repairActions.
+		repairActions do: [ :each | each context: self ].
+		
+		self flag: #TODO. "in fact, this should be a bit better (we have helps and that
+		we can use, just I'm lazy to create a new dialog right now)"
+		result := self application newSelect
+			title: 'Repository broken';
+			message: 'Select from available repair actions';
+			items: repairActions;
+			display: [ :aRepaitAction | aRepaitAction title ];
+			openModalWithParent: self window.
+		
+		result ifNotNil: [		
+			result 
+				onSuccess: [ self updatePresenter ];
+				execute ] ]
 ]
 
 { #category : 'private - actions' }
-PulsarRepositoriesView >> doRepairdRepository: aRepositoryModel [
-	| result repairActions |
-		
-	repairActions := aRepositoryModel repairActions.
-	repairActions do: [ :each | each context: self ].
+PulsarRepositoriesView >> doRepairSelectedRepository [
 	
-	self flag: #TODO. "in fact, this should be a bit better (we have helps and that
-	we can use, just I'm lazy to create a new dialog right now)"
-	result := self application newSelect
-		title: 'Repository broken';
-		message: 'Select from available repair actions';
-		items: repairActions;
-		display: [ :aRepaitAction | aRepaitAction title ];
-		openModalWithParent: self window.
-	result ifNil: [ ^ self ].
-	
-	result 
-		onSuccess: [ self updatePresenter ];
-		execute
+	self doRepairRepository: self selectedRepository
 ]
 
 { #category : 'private' }

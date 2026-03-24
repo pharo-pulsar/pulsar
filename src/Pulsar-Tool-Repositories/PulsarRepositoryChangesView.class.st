@@ -9,8 +9,9 @@ Class {
 		'toolbarActions',
 		'isDisplayed'
 	],
-	#category : 'Pulsar-Tool-Repositories',
-	#package : 'Pulsar-Tool-Repositories'
+	#category : 'Pulsar-Tool-Repositories-View-Changes',
+	#package : 'Pulsar-Tool-Repositories',
+	#tag : 'View-Changes'
 }
 
 { #category : 'defaults' }
