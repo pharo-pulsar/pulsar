@@ -53,6 +53,16 @@ PulsarMultiProjectModel >> children [
 	^ projectModels
 ]
 
+{ #category : 'updating' }
+PulsarMultiProjectModel >> filterWith: aString [
+	
+	^ (self environmentModel classesMatching: aString)
+		collect: [ :each | 
+			PvClassModel 
+				newEnvironment: self environmentModel
+				entity: each ]
+]
+
 { #category : 'accessing' }
 PulsarMultiProjectModel >> findPathForClass: aClass [
 	

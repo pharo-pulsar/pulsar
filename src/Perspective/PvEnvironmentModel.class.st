@@ -85,6 +85,15 @@ PvEnvironmentModel >> classNamed: aName [
 ]
 
 { #category : 'accessing' }
+PvEnvironmentModel >> classesMatching: aName [
+	
+	^ self entity allClassesAndTraits select: [ :each | 
+		each name 
+			includesSubstring: aName 
+			caseSensitive: false ]
+]
+
+{ #category : 'accessing' }
 PvEnvironmentModel >> compilerForClass: aClass [
 
 	^ aClass compilerClass new

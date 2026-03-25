@@ -9,7 +9,9 @@ Class {
 	#superclass : 'PulsarCollectionView',
 	#instVars : [
 		'toolbarPresenter',
-		'mutex'
+		'mutex',
+		'filterInputPresenter',
+		'filterListPresenter'
 	],
 	#category : 'Pulsar-Browser-View-Project',
 	#package : 'Pulsar-Browser',
@@ -83,6 +85,19 @@ PulsarProjectView >> closestPathInPathMatching: aBlock [
 	^ nil
 ]
 
+{ #category : 'initialization' }
+PulsarProjectView >> connectPresenters [
+
+	super connectPresenters.
+	
+	filterListPresenter outputSelectionPort 
+		transmitDo: [ :anEntity | self entitySelected: anEntity ].
+	filterListPresenter outputActivationPort 
+		transmitDo: [ :anEntity | self entityActivated: anEntity ].	
+	filterInputPresenter whenTextChangedDo: [ :aString | 
+		self updateFilterWith: aString ]
+]
+
 { #category : 'private' }
 PulsarProjectView >> deactivateContextPopover [
 
@@ -95,6 +110,8 @@ PulsarProjectView >> defaultLayout [
 	^ SpBoxLayout newVertical
 		add: toolbarPresenter expand: false;
 		add: listPresenter;
+		add: filterListPresenter;
+		add: filterInputPresenter expand: false;
 		yourself
 ]
 
@@ -418,6 +435,12 @@ PulsarProjectView >> eventPackageAdded: anAnnouncement [
 	logger trace: anAnnouncement package
 ]
 
+{ #category : 'private' }
+PulsarProjectView >> filterStartingSize [
+
+	^ 3
+]
+
 { #category : 'testing' }
 PulsarProjectView >> hasSelectedClass [
 
@@ -440,6 +463,35 @@ PulsarProjectView >> initialize [
 ]
 
 { #category : 'initialization' }
+PulsarProjectView >> initializeFilter [
+
+	filterListPresenter := self newEasyListView
+		addStyle: 'stList';
+		addStyle: 'pulsarProjectFilterList';
+		display: [ :aModel | aModel name ];
+		rowPresenterClass: PulsarProjectNodeRow;
+		actions: (SpActionGroup new
+			add: self actions;
+			addDynamicGroup: #dynamic with: [ :group | group add: self refactorActions ];
+			addShortcutWith: [ :action | action 
+				shortcutKey: KeyboardKey right asKeyCombination; 
+				action: [ self activateContextPopover ] ];	
+			addShortcutWith: [ :action | action 
+				shortcutKey: KeyboardKey left asKeyCombination | KeyboardKey escape asKeyCombination; 
+				action: [ self deactivateContextPopover ] ];	
+			yourself);
+		yourself.
+
+	"starts hidden"	
+	filterListPresenter hide.
+	
+	filterInputPresenter := self newTextInput
+		addStyle: 'flat';
+		placeholder: ('Filter (+{1} characters)...' format: { self filterStartingSize });
+		yourself
+]
+
+{ #category : 'initialization' }
 PulsarProjectView >> initializePresenters [
 
 	self addStyle: 'pulsarProjectView'.
@@ -451,6 +503,19 @@ PulsarProjectView >> initializePresenters [
 		icon: (self iconNamed: 'menu');
 		actions: (self actions actionsForAll: #(new extra));
 		yourself).
+
+	self intializeProjectTree.
+	self initializeFilter
+]
+
+{ #category : 'initialization' }
+PulsarProjectView >> initializeWindow: aWindowPresenter [
+
+	aWindowPresenter title: 'Project'
+]
+
+{ #category : 'initialization' }
+PulsarProjectView >> intializeProjectTree [
 
 	listPresenter := self newEasyTreeListView
 		addStyle: 'stTree';
@@ -468,13 +533,8 @@ PulsarProjectView >> initializePresenters [
 				shortcutKey: KeyboardKey left asKeyCombination | KeyboardKey escape asKeyCombination; 
 				action: [ self deactivateContextPopover ] ];	
 			yourself);
-		yourself
-]
+		yourself.
 
-{ #category : 'initialization' }
-PulsarProjectView >> initializeWindow: aWindowPresenter [
-
-	aWindowPresenter title: 'Project'
 ]
 
 { #category : 'private - actions' }
@@ -608,6 +668,25 @@ PulsarProjectView >> snapshot [
 PulsarProjectView >> toolbarPresenter [
 
 	^ toolbarPresenter
+]
+
+{ #category : 'private' }
+PulsarProjectView >> updateFilterWith: aString [
+
+	"just match after 3 for speed reasons"
+	(aString isEmptyOrNil or: [ aString size < self filterStartingSize ]) ifTrue: [ 
+		self application defer: [
+			listPresenter show.
+			filterListPresenter hide ].
+		^ self ].
+			
+	self scheduleTask: [
+		| items |
+		items := self model filterWith: aString.
+		self application defer: [
+			listPresenter hide.
+			filterListPresenter show.
+			filterListPresenter items: items ] ]
 ]
 
 { #category : 'initialization' }
