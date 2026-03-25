@@ -143,7 +143,8 @@ PulsarVersionsBrowser >> doFetchRemoteVersionsOnRepository: aRepositoryModel [
 	self scheduleJob: [ :statusbar |
 		statusbar pushMessage: ('Fetching versions on {1}...' format: { aRepositoryModel name }).
 		self model fetchRemoteVersionsOn: aRepositoryModel.
-		self updatePresenter ]
+		self updatePresenter.
+		versionListPresenter takeKeyboardFocus ]
 ]
 
 { #category : 'actions' }
