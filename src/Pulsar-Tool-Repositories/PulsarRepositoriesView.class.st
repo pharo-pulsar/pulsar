@@ -176,6 +176,7 @@ PulsarRepositoriesView >> doRepairRepository: aRepositoryModel [
 		display: [ :aRepaitAction | aRepaitAction title ];
 		openModalWithParent: self window.
 	choosenRepairAction ifNil: [ ^ self ].
+	
 	self scheduleTask: [
 		choosenRepairAction
 			onSuccess: [ self notifyRepositoryModified: aRepositoryModel ];

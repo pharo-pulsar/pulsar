@@ -78,5 +78,6 @@ PulsarRepositoryCheckoutWindow >> updatePresenter [
 	checkoutStrategyPresenter 
 		items: self model checkoutStrategies;
 		selectFirst.
+
 	diffPresenter model: self model
 ]

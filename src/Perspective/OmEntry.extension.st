@@ -1,6 +1,13 @@
 Extension { #name : 'OmEntry' }
 
 { #category : '*Perspective' }
+OmEntry >> isFromRemote [
+	"this is all on a remote, so yes"
+
+	^ true
+]
+
+{ #category : '*Perspective' }
 OmEntry >> sourceCode [
 
 	^ self content

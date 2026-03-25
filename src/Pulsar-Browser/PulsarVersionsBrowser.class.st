@@ -130,6 +130,14 @@ PulsarVersionsBrowser >> hasRemoteVersions [
 	^ false
 ]
 
+{ #category : 'defaults' }
+PulsarVersionsBrowser >> iconFor: aDefinition [
+
+	^ aDefinition isFromRemote
+		ifTrue: [ 'stored-code' ]
+		ifFalse: [ 'blank' ]
+]
+
 { #category : 'initialization' }
 PulsarVersionsBrowser >> initializePopover: aPopoverPresenter [
 	
@@ -151,6 +159,7 @@ PulsarVersionsBrowser >> initializePresenters [
 	versionListPresenter := self newEasyListView
 		addStyle: 'stList';
 		display: [ :aDefinition | aDefinition timeStamp epiceaBrowsersAsString ];
+		displayIcon: [ :aDefinition | self iconNamed: (self iconFor: aDefinition) ];
 		actions: self versionActions;
 		yourself.
 	patchPresenter := self instantiate: SpPatchPresenter.

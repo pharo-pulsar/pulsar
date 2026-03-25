@@ -119,7 +119,7 @@ PulsarMDINeutralIconProvider >> createTable [
 		('priority'               'fire'                          '#c01c28'  '#f66151')
 
 		"Destructive / confirm"
-		('add'                    'plus'                          '#26a269'  '#57e389')
+		('add'                    'plus'                          "'#26a269'  '#57e389'")
 		('accept'                 'check'                         '#26a269'  '#57e389')
 		('highlight-all'          'check-all'                     '#26a269'  '#57e389')
 		('smallDelete'            'trash-can-outline'             '#c01c28'  '#f66151')
@@ -132,11 +132,15 @@ PulsarMDINeutralIconProvider >> createTable [
 		('merge'                  'source-merge'                  '#813d9c'  '#c061cb')
 		('pull'                   'tray-arrow-down'               '#813d9c'  '#c061cb')
 		('push'                   'tray-arrow-up'                 '#813d9c'  '#c061cb')
-		('fetch'                  'archive-arrow-down-outline'    '#1c71d8'  '#62a0ea')
+		('fetch'                  'arrow-down-right'    			 '#1c71d8'  '#62a0ea')
 		('checkout'               'check'                         '#26a269'  '#57e389')
 		('changeAdd'              'plus'                          '#26a269'  '#57e389')
 		('changeRemove'           'minus'                         '#c01c28'  '#f66151')
 		('changeUpdate' 		      'plus-minus-variant'			 '#813d9c' '#c061cb')
+		('repository'			  'archive-outline')
+		('stored-code'			  'cube-outline'				 	 '#b0bec5'  '#78909c')
+		('git'					  'git')
+		
 
 		"Inspection / metamodel introspection"
 		('smallInspectIt'      	 'eye-outline'             		'#0f766e' '#67e8f9')
