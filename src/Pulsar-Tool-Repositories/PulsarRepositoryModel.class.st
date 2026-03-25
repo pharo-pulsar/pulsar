@@ -246,7 +246,7 @@ PulsarRepositoryModel >> newCheckoutActionWithStrategy: aCheckoutStrategy [
 		onSuccessRepositoryModified;
 		action: [ 
 			aCheckoutStrategy committish: self entity head.
-			aCheckoutStrategy diff: self diffNode.
+			aCheckoutStrategy diff: self diffNode entity.
 			self entity checkout: aCheckoutStrategy ];
 		yourself
 ]
