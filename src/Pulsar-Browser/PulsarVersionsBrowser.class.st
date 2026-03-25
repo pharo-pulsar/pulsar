@@ -301,7 +301,7 @@ PulsarVersionsBrowser >> updateSourceWith: aDefinition [
 		ifTrue: [
 			commitId label: aDefinition remoteCommit shortId asString.
 			authorPresenter label: (self normalizeAuthor: aDefinition author).
-			commitMessage text: aDefinition remoteCommit comment.
+			commitMessage text: aDefinition remoteCommit comment trimRight.
 			remoteInfoPresenter show ]
 		ifFalse: [
 			remoteInfoPresenter hide	]
