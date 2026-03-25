@@ -7,7 +7,11 @@ Class {
 		'headerPresenter',
 		'versionListPresenter',
 		'patchPresenter',
-		'sourcePresenter'
+		'sourcePresenter',
+		'remoteInfoPresenter',
+		'authorPresenter',
+		'commitMessage',
+		'commitId'
 	],
 	#category : 'Pulsar-Browser-Tool-Versions',
 	#package : 'Pulsar-Browser',
@@ -46,17 +50,20 @@ PulsarVersionsBrowser >> defaultLayout [
 
 	^ SpBoxLayout newVertical
 		add: headerPresenter expand: false;
-		add: (SpPanedLayout newHorizontal
-			positionOfSlider: 200;
-			add: versionListPresenter;
-			add: (SpTabLayout new 
-				add: (SpScrollableLayout new 
-						child: patchPresenter;
-						withoutHScrollbar;
-						yourself) 
-					label: 'Patch';
-				add: sourcePresenter label: 'Source';
+		add: (SpBoxLayout newVertical 
+			add: (SpPanedLayout newHorizontal
+				positionOfSlider: 200;
+				add: versionListPresenter;
+				add: (SpTabLayout new 
+					add: (SpScrollableLayout new 
+							child: patchPresenter;
+							withoutHScrollbar;
+							yourself) 
+						label: 'Patch';
+					add: sourcePresenter label: 'Source';
+					yourself);
 				yourself);
+			add: remoteInfoPresenter expand: false;
 			yourself);
 		yourself
 ]
@@ -81,9 +88,15 @@ PulsarVersionsBrowser >> defineExtraActionsOn: aBuilder [
 		addActionWith: [ :action | action 
 			name: 'Fetch remote versions';
 			description: 'Fetch remote versions';
-			iconName: 'fetch';
+			iconName: 'fetch.neutral';
 			actionEnabled: [ self hasRemoteVersions ];
 			action: [ self doFetchRemoteVersionsCommand: action ] ] ]
+]
+
+{ #category : 'actions' }
+PulsarVersionsBrowser >> doCopyCommitIdToClipboard [
+
+	self application copyToClipboard: versionListPresenter selectedItem remoteCommit id
 ]
 
 { #category : 'private - actions' }
@@ -133,9 +146,51 @@ PulsarVersionsBrowser >> hasRemoteVersions [
 { #category : 'defaults' }
 PulsarVersionsBrowser >> iconFor: aDefinition [
 
-	^ aDefinition isFromRemote
+	^ aDefinition isFromRemoteCommit
 		ifTrue: [ 'stored-code' ]
 		ifFalse: [ 'blank' ]
+]
+
+{ #category : 'initialization' }
+PulsarVersionsBrowser >> initializeInfo [
+
+	authorPresenter := self newLabel
+		addStyle: 'author';
+		yourself. 
+	commitId := self newLabel
+		addStyle: 'pill-commit';
+		yourself.
+	commitMessage := self newText
+		beWrapWord;
+		withoutScrollBars;
+		propagateNaturalHeight: true;
+		beNotEditable;
+		yourself.
+
+	remoteInfoPresenter := self newPresenter
+		addStyle: 'info';
+		layout: (SpBoxLayout newVertical
+			add: commitMessage;
+			add: (SpBoxLayout newHorizontal 
+				hAlignStart;
+				add: authorPresenter;
+				"add: self newSeparator;"
+				add: (SpBoxLayout newHorizontal 
+					hAlignStart;
+					add: commitId;
+					add: (self newButton
+						addStyle: 'flat';
+						addStyle: 'small';
+						addStyle: 'rows4';
+						icon: (self iconNamed: 'copy-to-clipboard');
+						help: 'Copy commit id to clipboard';
+						action: [ self doCopyCommitIdToClipboard ];
+						yourself);
+					yourself);
+				yourself);
+			yourself);
+		yourself.
+	remoteInfoPresenter hide
 ]
 
 { #category : 'initialization' }
@@ -167,7 +222,9 @@ PulsarVersionsBrowser >> initializePresenters [
 	
 	sourcePresenter := self newCode
 		editable: false;
-		yourself
+		yourself.
+
+	self initializeInfo
 ]
 
 { #category : 'initialization' }
@@ -177,6 +234,17 @@ PulsarVersionsBrowser >> initializeWindow: aWindowPresenter [
 	aWindowPresenter 
 		title: self model fullName;
 		whenClosedDo: [ self notifyEditorClosed ]
+]
+
+{ #category : 'private' }
+PulsarVersionsBrowser >> normalizeAuthor: aString [
+	| substrings |
+
+	substrings := aString substrings: ' -_'.
+	substrings size = 1 ifTrue: [ 
+		substrings := substrings splitCamelCase ].
+		
+	^ ' ' join: (substrings collect: [ :each | each capitalized ])
 ]
 
 { #category : 'private - announcing' }
@@ -227,7 +295,16 @@ PulsarVersionsBrowser >> updateSourceWith: aDefinition [
 	aDefinition ifNil: [ ^ self ].
 	
 	self updatePatchWith: aDefinition.
-	self updateSourceCodeWith: aDefinition
+	self updateSourceCodeWith: aDefinition.
+	
+	aDefinition isFromRemoteCommit
+		ifTrue: [
+			commitId label: aDefinition remoteCommit shortId asString.
+			authorPresenter label: (self normalizeAuthor: aDefinition author).
+			commitMessage text: aDefinition remoteCommit comment.
+			remoteInfoPresenter show ]
+		ifFalse: [
+			remoteInfoPresenter hide	]
 ]
 
 { #category : 'initialization' }

@@ -377,13 +377,31 @@ popover .pulsarPreviewEditor { min-width: 680px; min-height: 340px; }
 .pulsarInspectorFlyingBrowser { min-width: 680px; min-height: 440px; }
 .pulsarHierarchyFlyingBrowser { min-width: 450px; min-height: 350px; }
 .pulsarMethodHierarchyFlyingBrowser { min-width: 680px; min-height: 440px; }
-.pulsarVersionsFlyingBrowser { min-width: 680px; min-height: 440px; }
+
 .pulsarFlyingBrowser notebook tabs tab { padding: 2px; }
 .pulsarFlyingBrowser notebook tabs tab label { font-size: 0.9em; }
 .pulsarPopoverControlToolbar { margin: 0px; padding: 0px 0px 0px 10px; }
 .pulsarDebuggerToolbar { background-color: @window_bg_color; }
 .pulsarDebuggerToolbar .stToolbar { padding: 1px; }
 .pulsarPlaygroundBindingsFlyingBrowser { min-width: 400px; min-height: 240px; }
+/* Versions browser */
+box.pulsarVersionsFlyingBrowser { min-width: 680px; min-height: 400px; }
+box.pulsarVersionsFlyingBrowser box.info > * { margin-top: 5px; }
+box.pulsarVersionsFlyingBrowser box.info { margin: 0px; padding: 0px; border-spacing: 0px; } 
+box.pulsarVersionsFlyingBrowser box.info box.horizontal { border-spacing: 10px; }
+box.pulsarVersionsFlyingBrowser box.info box.horizontal box.horizontal { border-spacing: 0px; padding: 0px; margin: 0px; }
+box.pulsarVersionsFlyingBrowser box.info .author { font-weight: 500; letter-spacing: 0.01em; }
+box.pulsarVersionsFlyingBrowser box.info textview { background-color: transparent;  }
+box.pulsarVersionsFlyingBrowser box.info .separator { opacity: 0.8; }
+
+/* generic pills */
+.pill-commit {
+  background-color: alpha(currentColor, 0.08);
+  border-radius: 6px;
+  padding: 2px 6px;
+  font-size: 0.9em;
+}
+
 /***
  * METHOD DECORATIONS 
  */

@@ -1,10 +1,10 @@
 Extension { #name : 'OmEntry' }
 
 { #category : '*Perspective' }
-OmEntry >> isFromRemote [
-	"this is all on a remote, so yes"
+OmEntry >> isFromRemoteCommit [
+	"this is all on a remote, technocally... but not a repository"
 
-	^ true
+	^ false
 ]
 
 { #category : '*Perspective' }

@@ -155,6 +155,12 @@ PulsarApplication >> colorsForTestResult [
 	^ self configuration colorsForTestResult
 ]
 
+{ #category : 'ui - utilities' }
+PulsarApplication >> copyToClipboard: aString [
+
+	self backend copyToClipboard: aString
+]
+
 { #category : 'showing' }
 PulsarApplication >> defaultWindowPresenterClass [
 

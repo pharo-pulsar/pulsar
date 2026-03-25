@@ -138,7 +138,7 @@ PulsarMDINeutralIconProvider >> createTable [
 		('changeRemove'           'minus'                         '#c01c28'  '#f66151')
 		('changeUpdate' 		      'plus-minus-variant'			 '#813d9c' '#c061cb')
 		('repository'			  'archive-outline')
-		('stored-code'			  'cube-outline'				 	 '#b0bec5'  '#78909c')
+		('stored-code'			  'snowflake'				 	 '#b0bec5'  '#78909c')
 		('git'					  'git')
 		
 
@@ -170,6 +170,10 @@ PulsarMDINeutralIconProvider >> createTable [
 		('overview'               'map-outline')
 		('graph'                  'graph')
 		('versions'               'animation-outline')
+		('copy'					 'content-copy')
+		('paste'					 'content-paste')
+		('cut'					 'content-cut')
+		('copy-to-clipboard'		 'clipboard-check-outline')
 
 		"Navigation / menus / arrows"
 		('view-more-symbolic'     'dots-horizontal')
