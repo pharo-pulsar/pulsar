@@ -39,6 +39,16 @@ PulsarVersionsBrowser >> addStatusbarPresenter: aPresenter [
 ]
 
 { #category : 'initialization' }
+PulsarVersionsBrowser >> addWindowControls [
+	| controlsPresenter |
+
+	controlsPresenter := self newToolbar
+		beIcons;
+		fillWith: self versionActions.
+	headerPresenter addPresenter: controlsPresenter
+]
+
+{ #category : 'initialization' }
 PulsarVersionsBrowser >> connectPresenters [
 	
 	versionListPresenter 
@@ -246,7 +256,9 @@ PulsarVersionsBrowser >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
 		title: self model fullName;
-		whenClosedDo: [ self windowClosed ]
+		whenClosedDo: [ self windowClosed ].
+		
+	self addWindowControls
 ]
 
 { #category : 'private' }
