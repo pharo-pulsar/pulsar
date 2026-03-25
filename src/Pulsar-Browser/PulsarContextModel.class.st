@@ -54,6 +54,14 @@ PulsarContextModel >> asClassModel [
 		entity: self methodClass
 ]
 
+{ #category : 'converting' }
+PulsarContextModel >> asOutlineClassModel [
+	
+	^ PvOutlineClassModel 
+		newEnvironment: self environmentModel 
+		entity: self methodClass
+]
+
 { #category : 'testing' }
 PulsarContextModel >> canExecuteCreateMissingClassCommand [
 
@@ -194,6 +202,12 @@ PulsarContextModel >> inOneLine [
 PulsarContextModel >> isContextModel [
 
 	^ true
+]
+
+{ #category : 'testing' }
+PulsarContextModel >> isNew [
+
+	^ false
 ]
 
 { #category : 'testing' }
