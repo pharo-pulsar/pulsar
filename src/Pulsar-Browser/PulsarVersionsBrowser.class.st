@@ -1,8 +1,8 @@
 Class {
 	#name : 'PulsarVersionsBrowser',
 	#superclass : 'SpPresenter',
-	#traits : 'SpTModel + PulsarTNotificationCenter + PulsarTPanelWindow + PulsarTSnapshot + PulsarTActionContainer',
-	#classTraits : 'SpTModel classTrait + PulsarTNotificationCenter classTrait + PulsarTPanelWindow classTrait + PulsarTSnapshot classTrait + PulsarTActionContainer classTrait',
+	#traits : 'SpTModel + PulsarTNotificationCenter + PulsarTPanelWindow + PulsarTSnapshot + PulsarTActionContainer + PulsarTJobHandler + PulsarTTaskWorker',
+	#classTraits : 'SpTModel classTrait + PulsarTNotificationCenter classTrait + PulsarTPanelWindow classTrait + PulsarTSnapshot classTrait + PulsarTActionContainer classTrait + PulsarTJobHandler classTrait + PulsarTTaskWorker classTrait',
 	#instVars : [
 		'headerPresenter',
 		'versionListPresenter',
@@ -11,7 +11,8 @@ Class {
 		'remoteInfoPresenter',
 		'authorPresenter',
 		'commitMessage',
-		'commitId'
+		'commitId',
+		'statusbar'
 	],
 	#category : 'Pulsar-Browser-Tool-Versions',
 	#package : 'Pulsar-Browser',
@@ -28,6 +29,13 @@ PulsarVersionsBrowser >> addPopoverControls [
 		self notifyActivateEntity: self model ].
 	controlsPresenter popoverActions: self versionActions.
 	headerPresenter addPresenter: controlsPresenter
+]
+
+{ #category : 'adding' }
+PulsarVersionsBrowser >> addStatusbarPresenter: aPresenter [
+	"As the job will require to add a spinner, we need to implement this"
+
+	statusbar addPrefix: aPresenter
 ]
 
 { #category : 'initialization' }
@@ -65,6 +73,7 @@ PulsarVersionsBrowser >> defaultLayout [
 				yourself);
 			add: remoteInfoPresenter expand: false;
 			yourself);
+		add: statusbar expand: false;
 		yourself
 ]
 
@@ -121,10 +130,10 @@ PulsarVersionsBrowser >> doFetchRemoteVersionsCommand: anAction [
 { #category : 'private - actions' }
 PulsarVersionsBrowser >> doFetchRemoteVersionsOnRepository: aRepositoryModel [
 
-	self withWindowDo: [ :aWindow |
-		aWindow scheduleJob: [ 
-			self model fetchRemoteVersionsOn: aRepositoryModel.
-			self updatePresenter ] ]
+	self scheduleJob: [ :statusbar |
+		statusbar pushMessage: ('Fetching versions on {1}...' format: { aRepositoryModel name }).
+		self model fetchRemoteVersionsOn: aRepositoryModel.
+		self updatePresenter ]
 ]
 
 { #category : 'actions' }
@@ -143,7 +152,7 @@ PulsarVersionsBrowser >> hasRemoteVersions [
 	^ false
 ]
 
-{ #category : 'defaults' }
+{ #category : 'private' }
 PulsarVersionsBrowser >> iconFor: aDefinition [
 
 	^ aDefinition isFromRemoteCommit
@@ -197,11 +206,13 @@ PulsarVersionsBrowser >> initializeInfo [
 PulsarVersionsBrowser >> initializePopover: aPopoverPresenter [
 	
 	self addPopoverControls.
-	aPopoverPresenter addShortcutWith: [ :action | action 
-		shortcutKey: Character arrowDown mod3;
-		action: [ 
-			self withPopoverDo: #dismiss.
-			self notifyActivateEntity: self model ] ]
+	aPopoverPresenter 
+		whenClosedDo: [ self windowClosed ];
+		addShortcutWith: [ :action | action 
+			shortcutKey: Character arrowDown mod3;
+			action: [ 
+				self withPopoverDo: #dismiss.
+				self notifyActivateEntity: self model ] ]
 ]
 
 { #category : 'initialization' }
@@ -224,7 +235,9 @@ PulsarVersionsBrowser >> initializePresenters [
 		editable: false;
 		yourself.
 
-	self initializeInfo
+	self initializeInfo.
+	
+	statusbar := self instantiate: SpPanelStatusbarPresenter
 ]
 
 { #category : 'initialization' }
@@ -233,7 +246,7 @@ PulsarVersionsBrowser >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
 		title: self model fullName;
-		whenClosedDo: [ self notifyEditorClosed ]
+		whenClosedDo: [ self windowClosed ]
 ]
 
 { #category : 'private' }
@@ -242,7 +255,7 @@ PulsarVersionsBrowser >> normalizeAuthor: aString [
 
 	substrings := aString substrings: ' -_'.
 	substrings size = 1 ifTrue: [ 
-		substrings := substrings splitCamelCase ].
+		substrings := substrings anyOne splitCamelCase ].
 		
 	^ ' ' join: (substrings collect: [ :each | each capitalized ])
 ]
@@ -252,6 +265,25 @@ PulsarVersionsBrowser >> notifyActivateEntity: anEntity [
 
 	anEntity ifNil: [ ^ self ].
 	self notificationCenter announce: anEntity newActivationAnnouncement
+]
+
+{ #category : 'removing' }
+PulsarVersionsBrowser >> removeStatusbarPresenter: aPresenter [
+	"As the job will require to add a spinner, we need to implement this"
+
+	statusbar remove: aPresenter
+]
+
+{ #category : 'private' }
+PulsarVersionsBrowser >> scheduleJob: aBlock [
+	"schedule a task that will show the working spinner while it executes"
+
+	self queueTask: [
+		self jobStart.
+		[ aBlock cull: statusbar ]
+		ensure: [
+			statusbar clearMessage.
+			self jobEnd ] ]
 ]
 
 { #category : 'initialization' }
@@ -311,4 +343,13 @@ PulsarVersionsBrowser >> updateSourceWith: aDefinition [
 PulsarVersionsBrowser >> versionActions [
 
 	^ self actions actionsForAll: #(versionActions extraActions)
+]
+
+{ #category : 'private' }
+PulsarVersionsBrowser >> windowClosed [
+
+	logger trace.
+
+	self purgeTaskWorker.
+	self notifyEditorClosed
 ]

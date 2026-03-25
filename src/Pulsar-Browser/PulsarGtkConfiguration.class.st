@@ -385,7 +385,7 @@ popover .pulsarPreviewEditor { min-width: 680px; min-height: 340px; }
 .pulsarDebuggerToolbar .stToolbar { padding: 1px; }
 .pulsarPlaygroundBindingsFlyingBrowser { min-width: 400px; min-height: 240px; }
 /* Versions browser */
-box.pulsarVersionsFlyingBrowser { min-width: 680px; min-height: 400px; }
+box.pulsarVersionsFlyingBrowser { min-width: 680px; min-height: 420px; }
 box.pulsarVersionsFlyingBrowser box.info > * { margin-top: 5px; }
 box.pulsarVersionsFlyingBrowser box.info { margin: 0px; padding: 0px; border-spacing: 0px; } 
 box.pulsarVersionsFlyingBrowser box.info box.horizontal { border-spacing: 10px; }
@@ -393,6 +393,7 @@ box.pulsarVersionsFlyingBrowser box.info box.horizontal box.horizontal { border-
 box.pulsarVersionsFlyingBrowser box.info .author { font-weight: 500; letter-spacing: 0.01em; }
 box.pulsarVersionsFlyingBrowser box.info textview { background-color: transparent;  }
 box.pulsarVersionsFlyingBrowser box.info .separator { opacity: 0.8; }
+box.pulsarVersionsFlyingBrowser panelstatusbar { background-color: transparent; } 
 
 /* generic pills */
 .pill-commit {
