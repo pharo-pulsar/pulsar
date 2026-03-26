@@ -121,8 +121,8 @@ PulsarVersionsBrowser >> defineExtraActionsOn: aBuilder [
 					action: [ self doFetchRemoteVersionsCommand: action ] ] ].
 			
 			repositories size > 1 
-				ifTrue: [ fetchRepositoryGroup beDisplayedAsSubMenu ]
-				ifFalse: [ fetchRepositoryGroup beDisplayedAsGroup ] ] ]
+				ifTrue: [ fetchRepositoryGroup beToolbarMenuButton ]
+				ifFalse: [ fetchRepositoryGroup beToolbarGroup ] ] ]
 ]
 
 { #category : 'actions' }
