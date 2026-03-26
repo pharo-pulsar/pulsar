@@ -53,6 +53,7 @@ PulsarApplication class >> lastSnapshot: aSnapshot [
 PulsarApplication class >> reset [
 	<script>
 
+	GQueueIdle uniqueInstance reset.
 	running ifNotNil: [ 
 		running windows do: [ :each | 
 				[ each cleanUpSchedulers ]
