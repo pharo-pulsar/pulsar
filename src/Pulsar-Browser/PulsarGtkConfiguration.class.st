@@ -140,6 +140,8 @@ PulsarGtkConfiguration >> darkPaletteStyle [
 @define-color package_notloaded 		DarkGray;
 /* pin */
 @define-color pinned_bg_color		#1f232a;
+/* commit */
+@define-color commit_active_bg 		rgba(220, 130, 40, 0.26)
 '
 ]
 
@@ -243,6 +245,8 @@ PulsarGtkConfiguration >> lightPaletteStyle [
 @define-color package_notloaded 			#A0A0A0;
 /* pin */
 @define-color pinned_bg_color			#f3f6fb;
+/* commit */
+@define-color commit_active_bg 			rgba(255, 165, 80, 0.30);
 '
 ]
 
@@ -401,6 +405,15 @@ box.pulsarVersionsFlyingBrowser panelstatusbar { background-color: transparent; 
   border-radius: 6px;
   padding: 2px 6px;
   font-size: 0.9em;
+  transition: background-color 120ms ease, border-color 120ms ease;
+}
+
+.pill-commit-active {
+  background-color: @commit_active_bg;
+  border: 1px solid rgba(255, 140, 60, 0.35);
+  border-radius: 6px;
+  padding: 2px 6px;
+  font-size: 0.9em;
 }
 
 /***
@@ -450,6 +463,7 @@ box.pulsarVersionsFlyingBrowser panelstatusbar { background-color: transparent; 
 .pulsarRepositoryCommit label.outgoing { color: @commit_outgoing; }
 /* .pulsarRepositoryPackageRow label.loaded { } */
 .pulsarRepositoryPackageRow label.notloaded { color: @package_notloaded; }
+.diffEditor .pulsarToolbarPanel { padding: 5px; }
 '
 ]
 

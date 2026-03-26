@@ -35,7 +35,7 @@ PulsarRepositoryCommitModel >> diffNode [
 		diffNode := PulsarDiffNode 
 			newRepository: self repository
 			entity: self entity diffToParent tree.
-		diffNode from: self entity to: self entity parent.
+		diffNode from: self entity parent to: self entity.
 		diffNode ]
 ]
 

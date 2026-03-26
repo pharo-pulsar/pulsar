@@ -103,13 +103,27 @@ PulsarVersionsBrowser >> defineActionsOn: aBuilder [
 PulsarVersionsBrowser >> defineExtraActionsOn: aBuilder [
 	<dockActions>
 
-	aBuilder addGroup: #extraActions with: [ :group | group 
-		addActionWith: [ :action | action 
+	aBuilder addGroup: #extraActions with: [ :group | 
+		| repositories fetchRepositoryGroup |
+		
+		repositories := self model includingRepositories.
+		
+		fetchRepositoryGroup := SpActionGroup new
+			beDisplayedAsSubMenu;
 			name: 'Fetch remote versions';
 			description: 'Fetch remote versions';
-			iconName: 'fetch.neutral';
-			actionEnabled: [ self hasRemoteVersions ];
-			action: [ self doFetchRemoteVersionsCommand: action ] ] ]
+			iconName: 'add';
+			yourself.
+		
+		repositories do: [ :each | 
+			fetchRepositoryGroup addActionWith: [ :action | action 
+				name: ('Fetch {1}' format: { each name });
+				description: ('Fetch remote versions on {1}' format: { each name });
+				iconName: 'fetch.neutral';
+				actionEnabled: [ self hasRemoteVersions ];
+				action: [ self doFetchRemoteVersionsCommand: action ] ] ].
+		
+		group add: fetchRepositoryGroup ]
 ]
 
 { #category : 'actions' }

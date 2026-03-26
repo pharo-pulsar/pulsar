@@ -17,12 +17,12 @@ Class {
 PulsarRepositoryDiffEditor >> commitToString: aCommitOrWorkingCopy [
 	| commitString |
 	
-	aCommitOrWorkingCopy isWorkingCopy ifTrue: [ ^ 'Working Copy' ].
+	aCommitOrWorkingCopy isWorkingCopy ifTrue: [ ^ '<b>Working Copy</b>' ].
 		
 	commitString := aCommitOrWorkingCopy shortId.
 	
 	(aCommitOrWorkingCopy repository headCommit = aCommitOrWorkingCopy) 
-		ifTrue: [ commitString := commitString, ' (HEAD)' ].
+		ifTrue: [ commitString := commitString, ' <b>HEAD</b>' ].
 		
 	^ commitString
 ]
@@ -57,6 +57,13 @@ PulsarRepositoryDiffEditor >> eventDiffModelSelected: ann [
 	self model: diffNodeModel
 ]
 
+{ #category : 'as yet unclassified' }
+PulsarRepositoryDiffEditor >> initializePresenters [
+
+	super initializePresenters.
+	self addStyle: 'diffEditor'
+]
+
 { #category : 'initialization' }
 PulsarRepositoryDiffEditor >> initializeWindow: aWindowPresenter [
 
@@ -73,16 +80,27 @@ PulsarRepositoryDiffEditor >> mutex [
 
 { #category : 'initialization' }
 PulsarRepositoryDiffEditor >> newDiffHeader [
-	| presenter | 
+	| presenter leftLabelPresenter rightLabelPresenter | 
 	
 	presenter := self newPresenter.
 	presenter layout: (SpBoxLayout newHorizontal vAlignCenter).
 	
 	presenter addStyle: 'pulsarToolbarPanel'.
 	
+	leftLabelPresenter := self newLabel
+		addStyle: 'pill-commit';
+		useMarkup;
+		label: (self commitToString: self model root fromCommit);
+		yourself.
+	rightLabelPresenter := self newLabel
+		addStyle: 'pill-commit-active';
+		useMarkup;
+		label: (self commitToString: self model root toCommit);
+		yourself.
+	
 	presenter layout 
-		add: (self commitToString: self model root fromCommit);
-		add: (self commitToString: self model root toCommit) expand: false.
+		add: leftLabelPresenter;
+		add: rightLabelPresenter expand: false.
 		
 	^ presenter
 ]
@@ -128,13 +146,12 @@ PulsarRepositoryDiffEditor >> updatePatchContents [
 		self model withAllChildrenDo: [ :eachModel | 
 			eachModel hasChanges ifTrue: [ 
 				stream nextPut: eachModel ] ] ].
+				
 	contents := SpBoxLayout newVertical vAlignStart. 
 	"40 is a magic number"
 	groups := nodes groupsOf: 40.
 	self withWindowDo: #jobStart.
-	
 	contents add: self newDiffHeader.
-	
 	groups withIndexDo: [ :eachGroup :index  |
 		self queueTask: [
 			[
