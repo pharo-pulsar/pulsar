@@ -36,6 +36,12 @@ PulsarNoneVirtualSlot >> entity: aClass [
 ]
 
 { #category : 'testing' }
+PulsarNoneVirtualSlot >> isFromTrait [
+
+	^ false
+]
+
+{ #category : 'testing' }
 PulsarNoneVirtualSlot >> isIncludedIn: aMethodModel [
 
 	^ true

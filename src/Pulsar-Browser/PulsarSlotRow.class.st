@@ -40,5 +40,9 @@ PulsarSlotRow >> updatePresenter [
 	self model ifNil: [ ^ self ].
 	
 	namePresenter label: self model name.
+	namePresenter removeAllStyles.
+	self model isFromTrait
+		ifTrue: [ namePresenter addStyle: 'trait' ].
+	
 	slotPresenter label: self model slotName.
 ]

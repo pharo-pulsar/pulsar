@@ -419,11 +419,11 @@ box.pulsarVersionsFlyingBrowser panelstatusbar { background-color: transparent; 
 /***
  * METHOD DECORATIONS 
  */
-.pulsarMethodRow .trait { 
+.pulsarMethodRow .trait, .pulsarSlotRow .trait { 
 	font-style: italic;  
 	text-decoration-line: underline;
 }
-.pulsarMethodRow .abstract { 
+.pulsarMethodRow .abstract {
 	text-decoration-line: underline;
 	text-decoration-style: double;
 }
@@ -432,6 +432,11 @@ box.pulsarVersionsFlyingBrowser panelstatusbar { background-color: transparent; 
 	text-decoration-line: underline;
 	/* text-decoration-style: dotted; */ /*Currently not supported by gtk */
 }
+
+.pulsarMethodRow .deprecated { 
+	text-decoration-line: line-through;
+}
+
 /* .pulsarMethodRow .test-unknown { } */
 .pulsarMethodRow .test-passed { color: @test_passed; }
 .pulsarMethodRow .test-error { color: @test_error; }

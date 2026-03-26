@@ -50,6 +50,12 @@ PvSlotModel >> iconName [
 ]
 
 { #category : 'testing' }
+PvSlotModel >> isFromTrait [
+
+	^ self entity definingClass isTrait
+]
+
+{ #category : 'testing' }
 PvSlotModel >> isIncludedIn: aMethodModel [
 
 	^ aMethodModel entity variableNodes anySatisfy: [ :each | each name = self name ]
