@@ -67,16 +67,20 @@ PulsarBaseView >> panelPosition [
 ]
 
 { #category : 'private' }
-PulsarBaseView >> panelTransferredFrom: fromWindow to: toWindow [ 
+PulsarBaseView >> panelTransferredFrom: fromWindow to: toWindow [
 
-	self notificationCenter: toWindow notificationCenter
+	toWindow 
+		moveWindow: self panelWindow
+		from: fromWindow
 ]
 
 { #category : 'initialization' }
 PulsarBaseView >> registerToBrowser: aPulsarBrowser [
+	
+	logger trace: aPulsarBrowser.
 
 	"take the announcer of the dock to broadcast what happens"
-	self notificationCenter: aPulsarBrowser announcer
+	self notificationCenter: aPulsarBrowser announcer.
 ]
 
 { #category : 'initialization' }
