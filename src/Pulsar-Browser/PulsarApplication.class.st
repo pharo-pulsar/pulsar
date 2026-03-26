@@ -53,6 +53,8 @@ PulsarApplication class >> lastSnapshot: aSnapshot [
 PulsarApplication class >> reset [
 	<script>
 
+	GQueueIdle uniqueInstance reset.
+
 	running ifNotNil: [ 
 		running windows do: [ :each | 
 				[ each cleanUpSchedulers ]
@@ -66,6 +68,7 @@ PulsarApplication class >> reset [
 		collect: [ :each | each isKindOf: PulsarTranscript ]
 		thenDo: [ :each | Transcript removeDependent: each ].
 	
+	PulsarApplication basicNew cleanUp
 ]
 
 { #category : 'private' }
