@@ -30,7 +30,7 @@ PulsarEditor class >> defineNavigationActionsOn: aBuilder [
 	aBuilder addGroup: #navigation with: [ :group | group 
 		priority: 100;
 		name: 'Navigation';
-		beDisplayedAsSubMenu;
+		beDisplayedAsGroup;
 		addActionWith: [ :action | action 
 			name: 'Show hierarchy';
 			description: 'Show hierarchy';
