@@ -351,9 +351,7 @@ PulsarEditor >> initializePresenters [
 		withEditionContextMenu;
 		actions: self editorContextMenuActions;
 		lineNumbers: self application isShowingLineNumbers;
-		systemNavigation: (self systemNavigation
-			responderPresenter: editorPresenter;
-			yourself).
+		systemNavigation: (self systemNavigationWithResponder: editorPresenter).
 			
 	searchBarPresenter := self instantiate: PulsarSearchBarPresenter on: editorPresenter
 ]
@@ -424,6 +422,14 @@ PulsarEditor >> newDirtyMarkerPresenter [
 			help: 'Cancel changes';
 			yourself);
 		yourself
+]
+
+{ #category : 'private' }
+PulsarEditor >> notificationCenter: anAnnouncer [
+
+	super notificationCenter: anAnnouncer.
+	editorPresenter ifNotNil: [ 
+		editorPresenter systemNavigation: (self systemNavigationWithResponder: editorPresenter) ]
 ]
 
 { #category : 'private - announcing' }
@@ -547,6 +553,14 @@ PulsarEditor >> systemNavigation [
 	self withWindowDo: [ :window | ^ window systemNavigation ].
 	
 	^ super systemNavigation
+]
+
+{ #category : 'private' }
+PulsarEditor >> systemNavigationWithResponder: aPresenter [
+
+	^ self systemNavigation
+		responderPresenter: aPresenter;
+		yourself
 ]
 
 { #category : 'private - updating' }
