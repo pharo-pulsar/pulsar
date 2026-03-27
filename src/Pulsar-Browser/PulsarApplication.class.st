@@ -371,7 +371,9 @@ PulsarApplication >> resendAnnouncement: anAnnouncement [
 	logger trace: anAnnouncement.
 	
 	self windows do: [ :aWindowPresenter |
-		aWindowPresenter announce: anAnnouncement ]
+		[ aWindowPresenter announce: anAnnouncement ]
+		on: Error
+		fork: [ :e | e pass ] ]
 ]
 
 { #category : 'private - factory' }

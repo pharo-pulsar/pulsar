@@ -137,10 +137,13 @@ PulsarMethodEditor >> doRunScriptCommand: anAction [
 
 { #category : 'private - actions' }
 PulsarMethodEditor >> doSubmit: aString [
+	| result |
 
 	self updatingWhile: [
-		super doSubmit: aString.
-		self updateContentActions ]
+		result := super doSubmit: aString.
+		self updateContentActions ].
+		
+	^ result
 ]
 
 { #category : 'private - actions' }
