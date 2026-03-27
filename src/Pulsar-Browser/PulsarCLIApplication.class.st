@@ -41,12 +41,13 @@ PulsarCLIApplication >> enableTrace: aLevel [
 
 { #category : 'execution' }
 PulsarCLIApplication >> execute [
-
+	"always disable logger (in case I let one open)"
+	logger disable.
+	
 	"reset cleans up but it does not stop the execution of the IDE" 
 	(self hasFlag: #reset) ifTrue: [ self forceReset ].
 	(self hasFlag: #logLevel) 
-		ifTrue: [ self enableTrace: (self positional: #logLevel) ]
-		ifFalse: [ logger disable ].
+		ifTrue: [ self enableTrace: (self positional: #logLevel) ].
 	
 	self runApplication
 ]
