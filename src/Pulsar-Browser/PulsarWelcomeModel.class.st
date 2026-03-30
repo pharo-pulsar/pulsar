@@ -43,6 +43,12 @@ PulsarWelcomeModel >> includesClassModel [
 	^ false
 ]
 
+{ #category : 'testing' }
+PulsarWelcomeModel >> isSameClass: aClassModel [
+
+	^ false
+]
+
 { #category : 'accessing' }
 PulsarWelcomeModel >> name [
 
