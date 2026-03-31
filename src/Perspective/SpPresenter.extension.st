@@ -5,7 +5,7 @@ SpPresenter >> insertPopover: aPresenter [
 
 	aPresenter asPopover
 		relativeTo: self;
-		popup
+		popupModal
 ]
 
 { #category : '*Perspective' }
