@@ -53,13 +53,21 @@ PulsarRepositoryRepairMergeWithBranch class >> title [
 
 { #category : 'executing' }
 PulsarRepositoryRepairMergeWithBranch >> basicExecute [
+	| branchModel |
 
 	self fetchAllRemotes.
-	((IceTipMergeBranchDialogPresenter 
-		newApplication: context application 
-		model: self repositoryModel) 
-		beSwitchAndMerge;
-		asDialogWindow)
-			centeredRelativeTo: context window;
-			open
+	branchModel := self application newSelect
+		title: 'Merge branch';
+		message: 'Select a branch to merge into the image';
+		items: ((self repositoryModel localBranches reject: #isHead) , self repositoryModel remoteBranches);
+		display: [ :each | each name ];
+		openModalWithParent: context window.
+	branchModel ifNil: [ ^ self ].
+
+	(PulsarRepositoryMergeWindow
+		newApplication: self application
+		model: (PulsarRepositoryMergePreviewModel
+			repositoryModel: self repositoryModel
+			branchModel: branchModel))
+		open
 ]

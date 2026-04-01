@@ -9,7 +9,10 @@ Class {
 		'locateRepositoryPresenter',
 		'cloneRepositoryPresenter',
 		'lastSelectedPresenter',
-		'repositoryCreator'
+		'repositoryCreator',
+		'repository',
+		'acceptBlock',
+		'selectedTabIndex'
 	],
 	#category : 'Pulsar-Tool-Repositories-View-Repositories',
 	#package : 'Pulsar-Tool-Repositories',
@@ -40,6 +43,8 @@ PulsarRegisterRepositoryDialog >> initializeDialogWindow: aDialogWindowPresenter
 		 	"I need to take the real value before closing (which will reset the tab, as 
 		 	 it will call tab selected when removing)"
 			repositoryCreator := lastSelectedPresenter repositoryCreator.
+			repository ifNotNil: [ repositoryCreator repository: repository ].
+			acceptBlock ifNotNil: [ acceptBlock value: self ].
 			aPresenter
 				beOk; 
 				close ]
@@ -67,8 +72,23 @@ PulsarRegisterRepositoryDialog >> repositoryCreator [
 	^ repositoryCreator
 ]
 
+{ #category : 'accessing' }
+PulsarRegisterRepositoryDialog >> onAccept: aBlock [
+
+	acceptBlock := aBlock.
+	^ self
+]
+
+{ #category : 'accessing' }
+PulsarRegisterRepositoryDialog >> beForCloneOfRepository: anIceRepository [
+
+	repository := anIceRepository.
+	selectedTabIndex := 1.
+	^ self
+]
+
 { #category : 'initialization' }
 PulsarRegisterRepositoryDialog >> updatePresenter [
 
-	self layout selectIndex: 1
+	self layout selectIndex: (selectedTabIndex ifNil: [ 1 ])
 ]

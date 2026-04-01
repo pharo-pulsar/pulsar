@@ -64,10 +64,15 @@ PulsarRepositoryCheckoutWindow >> initializeWindow: aWindowPresenter [
 
 { #category : 'private' }
 PulsarRepositoryCheckoutWindow >> notifyRepositoryModified: aModel [
+	| announcementModel |
 	
-	logger trace: aModel.
+	announcementModel := (aModel respondsTo: #repositoryModel)
+		ifTrue: [ aModel repositoryModel ]
+		ifFalse: [ aModel ].
 
-	self application resendAnnouncement: (PulsarRepositoryModified newValue: aModel)
+	logger trace: announcementModel.
+
+	self application resendAnnouncement: (PulsarRepositoryModified newValue: announcementModel)
 ]
 
 { #category : 'initialization' }

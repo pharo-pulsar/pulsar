@@ -49,12 +49,17 @@ PulsarRepositoryRepairCloneRepository class >> title [
 
 { #category : 'executing' }
 PulsarRepositoryRepairCloneRepository >> basicExecute [
+	| presenter dialog |
 
-	((IceTipRegisterRepositoryDialogPresenter newApplication: context application) 
+	presenter := (PulsarRegisterRepositoryDialog newApplication: context application)
 		beForCloneOfRepository: self repositoryModel entity;
-		onAccept: [ 
-			Iceberg announcer announce: (IceRepositoryModified for: self repositoryModel entity) ];
-		asDialogWindow)
-			centeredRelativeTo: context window;
-			open
+		yourself.
+
+	dialog := presenter asModalWindow
+		owner: context window;
+		open.
+	dialog isOk ifFalse: [ ^ self ].
+
+	presenter repositoryCreator createRepository.
+	Iceberg announcer announce: (IceRepositoryModified for: self repositoryModel entity)
 ]

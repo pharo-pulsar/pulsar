@@ -52,13 +52,21 @@ PulsarRepositoryRepairCheckoutBranch class >> title [
 
 { #category : 'executing' }
 PulsarRepositoryRepairCheckoutBranch >> basicExecute [
+	| branchModel |
 
 	self fetchAllRemotes.
-	((IceTipCheckoutBranchDialog 
-		newApplication: context application 
-		model: self repositoryModel)
-		withoutNewBranch;
-		asDialogWindow)
-			centeredRelativeTo: context window;
-			open
+	branchModel := self application newSelect
+		title: 'Checkout branch';
+		message: 'Select a branch to checkout';
+		items: self repositoryModel localBranches , self repositoryModel remoteBranches;
+		display: [ :each | each name ];
+		openModalWithParent: context window.
+	branchModel ifNil: [ ^ self ].
+
+	(PulsarRepositoryCheckoutWindow
+		newApplication: self application
+		model: (PulsarRepositoryCheckoutPreviewModel
+			repositoryModel: self repositoryModel
+			commitish: branchModel entity))
+		open
 ]

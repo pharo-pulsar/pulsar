@@ -51,16 +51,15 @@ PulsarRepositoryRepairLocateRepository class >> title [
 PulsarRepositoryRepairLocateRepository >> basicExecute [
 	| dialog |
 	
-	dialog := (IceTipLocalRepositoryPanel newApplication: context application)
+	dialog := (PulsarRepositoryLocateDialog newApplication: context application)
 		location: (self repository location ifNil: [ self defaultLocation ]);
 		yourself.
-	
-	dialog asDialogWindow 
-		okAction: [ 
-			dialog validate.
-			self repositoryModel updateLocation: dialog location.
-			true ];
-		open.
+
+	(dialog asModalWindow
+		owner: context window;
+		open) isOk ifFalse: [ ^ self ].
+
+	self repositoryModel updateLocation: dialog location
 ]
 
 { #category : 'private' }

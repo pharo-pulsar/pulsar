@@ -54,7 +54,5 @@ PulsarRepositoryRepairPullRemoteBranch >> basicExecute [
 	"Fetching remotes is necessary in case the current image commit is not in the repository.
 	Could be optimized"
 	self fetchAllRemotes.
-	(IceTipPullBrowser onRepositoryModel: self repositoryModel) 
-		application: context application;
-		open
+	(PulsarRepositoryActionContext on: context) doPull: self repositoryModel
 ]
