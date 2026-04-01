@@ -93,7 +93,7 @@ PulsarRepositoryBaseBranchView >> updatePresenter [
 	self window scheduleJob: [ :statusbar |
 		| branches |
 		statusbar pushMessage: ('Retrieving {1}...' format: { self label }).
-		branches := self maybeSort: self branches.
+		branches := self maybeSort: (self branches ifNil: [ #() ]).
 		self application 
 			defer: [ listPresenter items: branches ] ]
 ]
