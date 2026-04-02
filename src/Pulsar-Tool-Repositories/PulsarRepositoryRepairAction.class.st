@@ -136,6 +136,12 @@ PulsarRepositoryRepairAction >> icon [
 	^ self class icon
 ]
 
+{ #category : 'private' }
+PulsarRepositoryRepairAction >> notifyRepositoryModified [
+
+	self application resendAnnouncement: (PulsarRepositoryModified newValue: self repositoryModel)
+]
+
 { #category : 'accessing' }
 PulsarRepositoryRepairAction >> onSuccess: aBlock [ 
 	"Some actions need to execute something right after finish. Like a refresh of panels, etc.
@@ -143,12 +149,6 @@ PulsarRepositoryRepairAction >> onSuccess: aBlock [
 	 there are no exceptions."
 	
 	successBlock := aBlock
-]
-
-{ #category : 'private' }
-PulsarRepositoryRepairAction >> notifyRepositoryModified [
-
-	self application resendAnnouncement: (PulsarRepositoryModified newValue: self repositoryModel)
 ]
 
 { #category : 'accessing' }

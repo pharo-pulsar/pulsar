@@ -49,17 +49,18 @@ PulsarRepositoryRepairLocateRepository class >> title [
 
 { #category : 'executing' }
 PulsarRepositoryRepairLocateRepository >> basicExecute [
-	| dialog |
+	| locatePresenter dialog |
 	
-	dialog := (PulsarRepositoryLocateDialog newApplication: context application)
+	locatePresenter := (PulsarRepositoryLocateDialog newApplication: context application)
 		location: (self repository location ifNil: [ self defaultLocation ]);
 		yourself.
 
-	(dialog asModalWindow
+	(dialog := locatePresenter asModalWindow)
 		owner: context window;
-		open) isOk ifFalse: [ ^ self ].
+		open.
+	dialog isOk ifFalse: [ ^ self ].
 
-	self repositoryModel updateLocation: dialog location
+	self repositoryModel updateLocation: locatePresenter location
 ]
 
 { #category : 'private' }

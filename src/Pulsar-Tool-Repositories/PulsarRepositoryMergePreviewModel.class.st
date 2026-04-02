@@ -58,13 +58,13 @@ PulsarRepositoryMergePreviewModel >> newMergeAction [
 ]
 
 { #category : 'accessing' }
-PulsarRepositoryMergePreviewModel >> repositoryModel: aRepositoryModel [
-
-	repositoryModel := aRepositoryModel
-]
-
-{ #category : 'accessing' }
 PulsarRepositoryMergePreviewModel >> repositoryModel [
 
 	^ repositoryModel
+]
+
+{ #category : 'accessing' }
+PulsarRepositoryMergePreviewModel >> repositoryModel: aRepositoryModel [
+
+	repositoryModel := aRepositoryModel
 ]

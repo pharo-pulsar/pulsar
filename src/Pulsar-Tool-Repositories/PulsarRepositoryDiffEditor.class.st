@@ -17,6 +17,8 @@ Class {
 PulsarRepositoryDiffEditor >> commitToString: aCommitOrWorkingCopy [
 	| commitString |
 	
+	aCommitOrWorkingCopy ifNil: [ ^ '<b>UNKNOWN</b>' ].
+	
 	aCommitOrWorkingCopy isWorkingCopy ifTrue: [ ^ '<b>Working Copy</b>' ].
 		
 	commitString := aCommitOrWorkingCopy shortId.

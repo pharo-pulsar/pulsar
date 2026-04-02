@@ -19,6 +19,14 @@ Class {
 	#tag : 'View-Repositories'
 }
 
+{ #category : 'accessing' }
+PulsarRegisterRepositoryDialog >> beForCloneOfRepository: anIceRepository [
+
+	repository := anIceRepository.
+	selectedTabIndex := 1.
+	^ self
+]
+
 { #category : 'layout' }
 PulsarRegisterRepositoryDialog >> defaultLayout [
 
@@ -67,12 +75,6 @@ PulsarRegisterRepositoryDialog >> initializeWindow: aWindowPresenter [
 ]
 
 { #category : 'accessing' }
-PulsarRegisterRepositoryDialog >> repositoryCreator [
-
-	^ repositoryCreator
-]
-
-{ #category : 'accessing' }
 PulsarRegisterRepositoryDialog >> onAccept: aBlock [
 
 	acceptBlock := aBlock.
@@ -80,11 +82,9 @@ PulsarRegisterRepositoryDialog >> onAccept: aBlock [
 ]
 
 { #category : 'accessing' }
-PulsarRegisterRepositoryDialog >> beForCloneOfRepository: anIceRepository [
+PulsarRegisterRepositoryDialog >> repositoryCreator [
 
-	repository := anIceRepository.
-	selectedTabIndex := 1.
-	^ self
+	^ repositoryCreator
 ]
 
 { #category : 'initialization' }

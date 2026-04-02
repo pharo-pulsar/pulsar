@@ -51,8 +51,8 @@ PulsarRepositoryRepairFetchRemoteBranch class >> title [
 
 { #category : 'executing' }
 PulsarRepositoryRepairFetchRemoteBranch >> basicExecute [
-	"Fetching remotes is necessary in case the current image commit is not in the repository.
-	Could be optimized"
+	"Fetching remotes is necessary in case the current image commit is not 
+	 in the repository. Could be optimized"
 	self fetchAllRemotes
 ]
 

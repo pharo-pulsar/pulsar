@@ -52,13 +52,13 @@ PulsarRepositoryCheckoutPreviewModel >> newCheckoutActionWithStrategy: aCheckout
 ]
 
 { #category : 'accessing' }
-PulsarRepositoryCheckoutPreviewModel >> repositoryModel: aRepositoryModel [
-
-	repositoryModel := aRepositoryModel
-]
-
-{ #category : 'accessing' }
 PulsarRepositoryCheckoutPreviewModel >> repositoryModel [
 
 	^ repositoryModel
+]
+
+{ #category : 'accessing' }
+PulsarRepositoryCheckoutPreviewModel >> repositoryModel: aRepositoryModel [
+
+	repositoryModel := aRepositoryModel
 ]
