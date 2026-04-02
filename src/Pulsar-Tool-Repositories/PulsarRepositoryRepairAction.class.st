@@ -36,7 +36,7 @@ PulsarRepositoryRepairAction class >> icon [
 { #category : 'testing' }
 PulsarRepositoryRepairAction class >> isAbstract [
 
-	^ self == IceTipRepairAction
+	^ self == PulsarRepositoryRepairAction
 ]
 
 { #category : 'testing' }
@@ -143,6 +143,12 @@ PulsarRepositoryRepairAction >> onSuccess: aBlock [
 	 there are no exceptions."
 	
 	successBlock := aBlock
+]
+
+{ #category : 'private' }
+PulsarRepositoryRepairAction >> notifyRepositoryModified [
+
+	self application resendAnnouncement: (PulsarRepositoryModified newValue: self repositoryModel)
 ]
 
 { #category : 'accessing' }

@@ -59,5 +59,5 @@ PulsarRepositoryRepairFetchRemoteBranch >> basicExecute [
 { #category : 'executing' }
 PulsarRepositoryRepairFetchRemoteBranch >> finishSuccess [
 	super finishSuccess.
-	Iceberg announcer announce: (IceRepositoryModified for: self repository)
+	self notifyRepositoryModified
 ]

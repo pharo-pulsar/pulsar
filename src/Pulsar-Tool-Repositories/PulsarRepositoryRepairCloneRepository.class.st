@@ -61,5 +61,5 @@ PulsarRepositoryRepairCloneRepository >> basicExecute [
 	dialog isOk ifFalse: [ ^ self ].
 
 	presenter repositoryCreator createRepository.
-	Iceberg announcer announce: (IceRepositoryModified for: self repositoryModel entity)
+	self notifyRepositoryModified
 ]

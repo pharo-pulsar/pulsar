@@ -47,10 +47,11 @@ PulsarRepositoryRepairProject class >> title [
 { #category : 'executing' }
 PulsarRepositoryRepairProject >> basicExecute [
 
-	((IceTipEditProjectDialogPresenter 
-		newApplication: context application 
-		model: (IceBasicProject onRepository: self repositoryModel entity)) 
-		asDialogWindow)
-			centeredRelativeTo: context window;
-			open
+	((PulsarRepositoryProjectDialog
+		newApplication: context application
+		model: (IceBasicProject onRepository: self repositoryModel entity))
+			onAccept: [ :dialog | self notifyRepositoryModified ];
+			asModalWindow)
+				owner: context window;
+				open
 ]

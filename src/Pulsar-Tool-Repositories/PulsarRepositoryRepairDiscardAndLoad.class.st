@@ -64,5 +64,5 @@ PulsarRepositoryRepairDiscardAndLoad >> basicExecute [
 { #category : 'private' }
 PulsarRepositoryRepairDiscardAndLoad >> finishSuccess [
 	super finishSuccess.
-	Iceberg announcer announce: (IceRepositoryModified for: self repository)
+	self notifyRepositoryModified
 ]
