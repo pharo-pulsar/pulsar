@@ -21,12 +21,17 @@ PulsarRepositoryDiffEditor >> commitToString: aCommitOrWorkingCopy [
 	
 	aCommitOrWorkingCopy isWorkingCopy ifTrue: [ ^ '<b>Working Copy</b>' ].
 		
-	commitString := aCommitOrWorkingCopy shortId.
+	^ String streamContents: [ :stream | 
+		stream << aCommitOrWorkingCopy shortId.
 	
-	(aCommitOrWorkingCopy repository headCommit = aCommitOrWorkingCopy) 
-		ifTrue: [ commitString := commitString, ' <b>HEAD</b>' ].
+		(aCommitOrWorkingCopy repository headCommit = aCommitOrWorkingCopy) 
+			ifTrue: [ stream << ' <b>HEAD</b>' ].
 		
-	^ commitString
+		aCommitOrWorkingCopy tags ifNotEmpty: [ :tags | 
+			stream << ' '.
+			tags 
+				do: [ :each | stream << '<i>' << each name << '</i>' ]
+				separatedBy: [ stream << ', ' ] ] ]
 ]
 
 { #category : 'layout' }
@@ -59,7 +64,7 @@ PulsarRepositoryDiffEditor >> eventDiffModelSelected: ann [
 	self model: diffNodeModel
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'initialization' }
 PulsarRepositoryDiffEditor >> initializePresenters [
 
 	super initializePresenters.

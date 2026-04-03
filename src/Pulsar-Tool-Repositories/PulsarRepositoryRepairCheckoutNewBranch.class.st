@@ -54,11 +54,12 @@ PulsarRepositoryRepairCheckoutNewBranch class >> title [
 
 { #category : 'executing' }
 PulsarRepositoryRepairCheckoutNewBranch >> basicExecute [
-
 	| branchName |
 	"Fetching remotes is necessary in case the current image commit is not 
 	 in the repository. Could be optimized"
+	
 	self fetchAllRemotes.
+	
 	branchName := self application newRequest
 		title: 'Create branch';
 		message: 'Branch name';
@@ -74,10 +75,13 @@ PulsarRepositoryRepairCheckoutNewBranch >> basicExecute [
 			openModalWithParent: context window.
 		^ self ].
 
-	(IceTipStandardAction new
-		 repository: self repository;
-		 message: ('Checking out new branch {1}' format: { branchName });
-		 onSuccessRepositoryModified;
-		 action: [ self repository createBranch: branchName inCommit: self repository workingCopy referenceCommit ];
-		 yourself) executeWithContext: context
+	IceTipStandardAction new
+		repository: self repository;
+		message: ('Checking out new branch {1}' format: { branchName });
+		onSuccessRepositoryModified;
+		action: [ 
+			self repository 
+				createBranch: branchName 
+				inCommit: self repository workingCopy referenceCommit ];
+		executeWithContext: context
 ]

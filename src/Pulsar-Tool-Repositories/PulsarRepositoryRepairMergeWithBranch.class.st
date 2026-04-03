@@ -56,6 +56,7 @@ PulsarRepositoryRepairMergeWithBranch >> basicExecute [
 	| branchModel |
 
 	self fetchAllRemotes.
+
 	branchModel := self application newSelect
 		title: 'Merge branch';
 		message: 'Select a branch to merge into the image';
