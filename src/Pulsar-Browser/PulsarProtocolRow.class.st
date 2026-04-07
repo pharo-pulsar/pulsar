@@ -43,9 +43,15 @@ PulsarProtocolRow >> updatePresenter [
 	
 	iconPresenter image: (self iconNamed: self model iconName).
 	namePresenter label: self model name.
+	namePresenter removeAllStyles.
+		
 	self model isUnclassified
-		ifTrue: [ namePresenter addStyle: 'unclassified' ]
-		ifFalse: [ namePresenter removeStyle: 'unclassified' ].
+		ifTrue: [ namePresenter addStyle: 'unclassified' ].
+	
+	self model isVirtual ifTrue: [
+		self model cssStyle ifNotNil: [ :aStyle | 
+			namePresenter addStyle: aStyle ] ].
+
 	countPresenter label: (self model numberOfMethods 
 		ifNotNil: [ :aNumber | aNumber asString ]
 		ifNil: [ '' ]).

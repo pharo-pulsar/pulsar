@@ -344,7 +344,10 @@ panelgrid listview { background-color: @view_bg_color; } /* reset central part s
 paneldock panelframe popover listview { background-color: @view_bg_color; }
 paneldock panelframe popover box.pulsarToolbarPanel { background-color: unset; }
 
-.stList listview, .stTree listview { font-size: 0.9em; } 
+.stList listview, 
+.stTree listview { 
+	font-size: 0.9em; 
+} 
 .stTree columnview listview row cell { margin: 0px; padding: 2px; }
 .stTree columnview listview row cell box { border-spacing: 5px; }
 .stRow { margin: 1px; border-spacing: 3px; }
@@ -419,7 +422,9 @@ box.pulsarVersionsFlyingBrowser panelstatusbar { background-color: transparent; 
 /***
  * METHOD DECORATIONS 
  */
-.pulsarMethodRow .trait, .pulsarSlotRow .trait { 
+.pulsarMethodRow .trait, 
+.pulsarProtocolRow .trait,
+.pulsarSlotRow .trait { 
 	font-style: italic;  
 	text-decoration-line: underline;
 }

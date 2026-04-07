@@ -37,10 +37,18 @@ PvOutlineClassModel >> collectClassMethodsForProtocol: aProtocol [
 { #category : 'accessing - collecting' }
 PvOutlineClassModel >> collectClassProtocols [
 	
-	^ ((self entity classSide protocols 
-		collect: [ :each | PvProtocolModel newEnvironment: self environmentModel entity: each ])
-		sorted: #name ascending)
-		copyWithFirst: (PulsarAllMethodsVirtualProtocol newEntity: self entity classSide)
+	^ Array streamContents: [ :stream |
+		"all methods"
+		stream nextPut: (PulsarAllMethodsVirtualProtocol newEntity: self entity classSide).
+		"trait methods"
+		self entity traits do: [ :each |
+			stream nextPut: (PulsarTraitMethodsVirtualProtocol 
+				newEntity: self entity classSide
+				trait: each classSide) ].
+		"protocol methods"
+		stream nextPutAll: ((self entity instanceSide protocols 
+			collect: [ :each | PvProtocolModel newEnvironment: self environmentModel entity: each ])
+			sorted: #name ascending) ]
 ]
 
 { #category : 'accessing - collecting' }
@@ -84,10 +92,18 @@ PvOutlineClassModel >> collectMethodsForProtocol: aProtocol [
 { #category : 'accessing - collecting' }
 PvOutlineClassModel >> collectProtocols [
 	
-	^ ((self entity instanceSide protocols 
-		collect: [ :each | PvProtocolModel newEnvironment: self environmentModel entity: each ])
-		sorted: #name ascending)
-		copyWithFirst: (PulsarAllMethodsVirtualProtocol newEntity: self entity instanceSide)
+	^ Array streamContents: [ :stream |
+		"all methods"
+		stream nextPut: (PulsarAllMethodsVirtualProtocol newEntity: self entity instanceSide).
+		"trait methods"
+		self entity traits do: [ :each |
+			stream nextPut: (PulsarTraitMethodsVirtualProtocol 
+				newEntity: self entity instanceSide 
+				trait: each) ].
+		"protocol methods"
+		stream nextPutAll: ((self entity instanceSide protocols 
+			collect: [ :each | PvProtocolModel newEnvironment: self environmentModel entity: each ])
+			sorted: #name ascending) ]
 ]
 
 { #category : 'accessing - collecting' }

@@ -18,6 +18,12 @@ PulsarVirtualProtocol class >> newEntity: anObject [
 ]
 
 { #category : 'accessing' }
+PulsarVirtualProtocol >> cssStyle [
+
+	^ nil
+]
+
+{ #category : 'accessing' }
 PulsarVirtualProtocol >> entity [
 
 	^ entity
@@ -47,6 +53,12 @@ PulsarVirtualProtocol >> iconName [
 PulsarVirtualProtocol >> isExtension [
 	
 	^ true
+]
+
+{ #category : 'testing' }
+PulsarVirtualProtocol >> isPrivate [
+	
+	^ false
 ]
 
 { #category : 'testing' }
