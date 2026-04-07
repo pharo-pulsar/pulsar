@@ -92,6 +92,12 @@ PulsarVirtualProtocol >> numberOfMethods [
 ]
 
 { #category : 'accessing' }
+PulsarVirtualProtocol >> order [
+
+	^ 0
+]
+
+{ #category : 'accessing' }
 PulsarVirtualProtocol >> selectors [
 
 	^ self subclassResponsibility

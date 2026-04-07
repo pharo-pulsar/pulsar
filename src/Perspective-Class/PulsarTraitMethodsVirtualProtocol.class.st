@@ -26,13 +26,19 @@ PulsarTraitMethodsVirtualProtocol >> cssStyle [
 { #category : 'accessing' }
 PulsarTraitMethodsVirtualProtocol >> iconName [
 
-	^ nil
+	^ 'trait'
 ]
 
 { #category : 'accessing' }
 PulsarTraitMethodsVirtualProtocol >> name [
 
 	^ self trait instanceSide name
+]
+
+{ #category : 'accessing' }
+PulsarTraitMethodsVirtualProtocol >> order [
+
+	^ 1000
 ]
 
 { #category : 'accessing' }

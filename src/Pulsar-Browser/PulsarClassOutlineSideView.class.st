@@ -616,6 +616,17 @@ PulsarClassOutlineSideView >> selectedVariable [
 	^ variablesListPresenter selectedItem
 ]
 
+{ #category : 'private' }
+PulsarClassOutlineSideView >> sortProtocols: aCollection [
+
+	^ aCollection sorted:
+		#order ascending,
+		#isVirtual descending,
+		#isExtension ascending,
+		#isPrivate ascending,
+		#name ascending
+]
+
 { #category : 'initialization' }
 PulsarClassOutlineSideView >> updateMethods [
 	
@@ -660,11 +671,7 @@ PulsarClassOutlineSideView >> updateProtocols [
 
 	logger trace.
 	
-	protocolListPresenter updateItemsKeepingSelection: (self collectProtocols sorted: 
-		#isVirtual descending,
-		#isExtension ascending,
-		#isPrivate ascending,
-		#name ascending).
+	protocolListPresenter updateItemsKeepingSelection: (self sortProtocols: self collectProtocols).
 	protocolListPresenter selectedItems
 		ifEmpty: [ protocolListPresenter selectFirst ].
 	activeProtocols := protocolListPresenter selectedItems

@@ -78,6 +78,12 @@ PvProtocolModel >> numberOfMethods [
 	^ self selectors size
 ]
 
+{ #category : 'accessing' }
+PvProtocolModel >> order [
+
+	^ 100
+]
+
 { #category : 'actions' }
 PvProtocolModel >> renameProtocolTo: aName [
 
