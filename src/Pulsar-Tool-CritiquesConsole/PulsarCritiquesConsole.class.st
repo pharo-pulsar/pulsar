@@ -7,9 +7,9 @@ Class {
 	#name : 'PulsarCritiquesConsole',
 	#superclass : 'PulsarBaseView',
 	#instVars : [
-		'toolbarPresenter',
-		'listPresenter',
-		'lastIncomingModel'
+		'#toolbarPresenter',
+		'#listPresenter',
+		'#lastIncomingModel => WeakSlot'
 	],
 	#category : 'Pulsar-Tool-CritiquesConsole',
 	#package : 'Pulsar-Tool-CritiquesConsole'
@@ -42,7 +42,7 @@ PulsarCritiquesConsole >> checkIncomingModel: aModel [
 { #category : 'private' }
 PulsarCritiquesConsole >> checkIncomingModel: aModel forceUpdate: forceBoolean [ 
 
-	lastIncomingModel = aModel ifTrue: [ ^ self ].
+	((lastIncomingModel = aModel) and: [ forceBoolean not ]) ifTrue: [ ^ self ].
 	lastIncomingModel := aModel.
 
 	((self model updateWith: aModel) or: [ forceBoolean ])
@@ -112,7 +112,7 @@ PulsarCritiquesConsole >> eventEditorActivated: ann [
 	editorModel includesClassModel ifFalse: [ ^ self ].
 	
 	self 
-		checkIncomingModel: ann value model 
+		checkIncomingModel: editorModel
 		forceUpdate: false
 ]
 
@@ -125,10 +125,8 @@ PulsarCritiquesConsole >> eventMethodChanged: aMethodAnnouncement [
 		newEnvironment: self model environmentModel
 		entity: method.
 	
-	"reset to force updating... maybe not the best way?"
-	lastIncomingModel = methodModel 
-		ifTrue: [ lastIncomingModel := nil ].
-	self checkIncomingModel: methodModel forceUpdate: true
+	methodModel = lastIncomingModel
+		ifTrue: [ self checkIncomingModel: methodModel forceUpdate: true ]
 ]
 
 { #category : 'initialization' }
