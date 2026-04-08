@@ -209,6 +209,14 @@ PulsarRepositoryChangesView >> doRefresh [
 ]
 
 { #category : 'private' }
+PulsarRepositoryChangesView >> entityActivated: aNode [
+
+	aNode canBeActivated ifFalse: [ ^ self ].
+	
+	super entityActivated: aNode newEntityModel
+]
+
+{ #category : 'private' }
 PulsarRepositoryChangesView >> entitySelected: ann [
 
 	self updateToolbar.
@@ -222,6 +230,12 @@ PulsarRepositoryChangesView >> eventRepositoryModified: ann [
 	
 	self model resetDiff.
 	self updatePresenter
+]
+
+{ #category : 'testing' }
+PulsarRepositoryChangesView >> hasSelectedNode [
+
+	^ self selectedNode isNotNil
 ]
 
 { #category : 'initialization' }
@@ -249,7 +263,10 @@ PulsarRepositoryChangesView >> initializePresenters [
 		rowPresenterClass: PulsarRepositoryChangeRow;
 		display: [ :aNode | aNode description ];
 		children: [ :aNode | aNode children ];
-		actions: (self actions actionsFor: #nodeActions);
+		actions: (SpActionGroup new  
+			add: (self actions actionsFor: #nodeActions);
+			addDynamicGroup: #dynamic with: [ :group | group add: self nodeActions ];
+			yourself);
 		yourself
 ]
 
@@ -257,6 +274,14 @@ PulsarRepositoryChangesView >> initializePresenters [
 PulsarRepositoryChangesView >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter title: 'Changes'
+]
+
+{ #category : 'private' }
+PulsarRepositoryChangesView >> nodeActions [
+
+	self hasSelectedNode ifFalse: [  ^ SpActionGroup new ].
+	
+	^ self selectedNode actionsWithContextOn: self
 ]
 
 { #category : 'initialization' }
@@ -267,6 +292,12 @@ PulsarRepositoryChangesView >> registerToEvents [
 		when: PulsarRepositoryModified
 		send: #eventRepositoryModified:
 		to: self
+]
+
+{ #category : 'testing' }
+PulsarRepositoryChangesView >> selectedNode [
+
+	^ listPresenter selectedItem
 ]
 
 { #category : 'private' }

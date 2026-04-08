@@ -26,11 +26,36 @@ PulsarDiffNode class >> on: aNode [
 		yourself
 ]
 
+{ #category : 'accessing - actions' }
+PulsarDiffNode >> actionsWithContextOn: aContextPresenter [
+
+	^ (self actions actionsFor: 'operations') 
+		copyWithContext: aContextPresenter
+]
+
 { #category : 'accessing' }
 PulsarDiffNode >> active: aBoolean [
 
 	active := aBoolean.
 	activeAction ifNotNil: [ activeAction cull: aBoolean ]
+]
+
+{ #category : 'private - definitions' }
+PulsarDiffNode >> addClassActionsTo: group [
+
+	group addActionWith: [ :action | action 
+		name: ('Open editor for {1}' format: { self name });
+		actionEnabled: [ self canBeActivated ];
+		action: [ :aContext | aContext notifyActivateEntity: self newClassModel ] ]
+]
+
+{ #category : 'private - definitions' }
+PulsarDiffNode >> addMethodActionsTo: group [
+
+	group addActionWith: [ :action | action 
+		name: ('Open editor for {1}' format: { self name });
+		actionEnabled: [ self canBeActivated ];
+		action: [ :aContext | aContext notifyActivateEntity: self newMethodModel ] ]
 ]
 
 { #category : 'accessing' }
@@ -39,6 +64,12 @@ PulsarDiffNode >> allChildren [
 	^ Array streamContents: [ :stream | 
 		self withAllChildrenDo: [ :aNode | 
 			stream nextPut: aNode ] ]
+]
+
+{ #category : 'testing' }
+PulsarDiffNode >> canBeActivated [
+
+	^ self nodeDefinition canBeBrowsed
 ]
 
 { #category : 'accessing' }
@@ -85,6 +116,17 @@ PulsarDiffNode >> createPatch [
 		ifTrue: [ patch originBehavior: (self classNamed: operation leftDefinition className) ].
 		
 	^ patch
+]
+
+{ #category : 'private - definitions' }
+PulsarDiffNode >> defineActionsOn: aBuilder [
+	<dockActions>
+	
+	aBuilder addGroup: #operations with: [ :group | 
+		self nodeDefinition isMethodDefinition
+			ifTrue: [ self addMethodActionsTo: group ].
+		self nodeDefinition isClassDefinition
+			ifTrue: [ self addClassActionsTo: group ] ]
 ]
 
 { #category : 'accessing' }
@@ -138,6 +180,12 @@ PulsarDiffNode >> hasParent [
 	^ parent isNotNil
 ]
 
+{ #category : 'testing' }
+PulsarDiffNode >> hasPulsarEditor [
+
+	^ false
+]
+
 { #category : 'accessing' }
 PulsarDiffNode >> iconName [
 
@@ -181,10 +229,45 @@ PulsarDiffNode >> name [
 	^ self description
 ]
 
+{ #category : 'private - factory' }
+PulsarDiffNode >> newClassModel [
+	| definition |
+
+	definition := self nodeDefinition.
+	^ PvClassModel 
+		newEnvironment: self repository environmentModel
+		entity: definition actualClass
+]
+
+{ #category : 'private - factory' }
+PulsarDiffNode >> newEntityModel [
+	
+	self nodeDefinition isMethodDefinition ifTrue: [ ^ self newMethodModel ].
+	self nodeDefinition isClassDefinition ifTrue: [ ^ self newClassModel ].
+	
+	self error: 'Should not arrive here' 
+]
+
+{ #category : 'private - factory' }
+PulsarDiffNode >> newMethodModel [
+	| definition |
+
+	definition := self nodeDefinition.
+	^ PvMethodModel 
+		newEnvironment: self repository environmentModel
+		entity: definition contextClass >> definition name asSymbol
+]
+
 { #category : 'accessing' }
 PulsarDiffNode >> node [
 
 	^ self entity
+]
+
+{ #category : 'accessing' }
+PulsarDiffNode >> nodeDefinition [
+
+	^ self node definition
 ]
 
 { #category : 'accessing' }

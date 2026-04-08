@@ -129,12 +129,6 @@ PulsarRepositoryRepairDialog >> model: anObject [
 	model := anObject
 ]
 
-{ #category : 'initialization' }
-PulsarRepositoryRepairDialog >> setModelBeforeInitialization: anObject [
-
-	model := anObject
-]
-
 { #category : 'private' }
 PulsarRepositoryRepairDialog >> selectionChanged: anOption [
 
@@ -142,4 +136,10 @@ PulsarRepositoryRepairDialog >> selectionChanged: anOption [
 	detailPresenter text: (selectedOption
 		ifNil: [ '' ]
 		ifNotNil: [ selectedOption help ])
+]
+
+{ #category : 'initialization' }
+PulsarRepositoryRepairDialog >> setModelBeforeInitialization: anObject [
+
+	model := anObject
 ]
