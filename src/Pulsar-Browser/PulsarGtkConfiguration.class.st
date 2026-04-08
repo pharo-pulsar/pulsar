@@ -363,7 +363,9 @@ button.pvProtocol { font-weight: normal; }
 tab .tab-title label { font-size: 0.9em; }
 .pulsarProjectView .modified { color: green; }
 
+.pulsarProtocolRow label.virtual { font-style: italic; }
 .pulsarProtocolRow label.unclassified { color: red; }
+.pulsarProtocolRow label.undeclared { color: red; font-style: italic; }
 .pulsarStack label.count { padding-right: 5px; }
 .pulsarStackRow image.button:hover { background-color: alpha(currentColor, 0.12); }
 .pulsarToolbar { margin: 0px; padding: 0px; }
