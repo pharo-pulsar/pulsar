@@ -52,13 +52,6 @@ PulsarDebugger >> doOpenClassOutlineView [
 	outlineView takeKeyboardFocus
 ]
 
-{ #category : 'private - actions' }
-PulsarDebugger >> ensureClassOutlineOverview [
-
-	^ (self findPresenterClass: PulsarClassOutlineView)
-		ifNil: [ self addPresenterClass: PulsarClassOutlineView ]
-]
-
 { #category : 'events' }
 PulsarDebugger >> eventContextChanged: anAnnouncement [
 	
@@ -195,7 +188,7 @@ PulsarDebugger >> updateTitle [
 { #category : 'private' }
 PulsarDebugger >> viewDocked: aPresenter [
 
-	(PulsarDebuggerEnsureClassOverviewVisitor on: self) visit: aPresenter
+	(PulsarBrowserEnsureClassOverviewVisitor on: self) visit: aPresenter
 ]
 
 { #category : 'private' }

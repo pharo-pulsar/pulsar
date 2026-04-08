@@ -75,3 +75,9 @@ PulsarDetachedBrowser >> updateTitle [
 	logger trace: newTitle.
 	self title: newTitle
 ]
+
+{ #category : 'private' }
+PulsarDetachedBrowser >> viewDocked: aPresenter [
+
+	(PulsarBrowserEnsureClassOverviewVisitor on: self) visit: aPresenter
+]

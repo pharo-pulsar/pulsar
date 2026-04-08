@@ -185,6 +185,13 @@ PulsarBaseBrowser >> editors [
 		super presenters select: [ :each | each panelArea = SpPanelArea center ] ]
 ]
 
+{ #category : 'private - actions' }
+PulsarBaseBrowser >> ensureClassOutlineOverview [
+
+	^ (self findPresenterClass: PulsarClassOutlineView)
+		ifNil: [ self addPresenterClass: PulsarClassOutlineView ]
+]
+
 { #category : 'events' }
 PulsarBaseBrowser >> eventJobEnd: ann [
 

@@ -1,5 +1,5 @@
 Class {
-	#name : 'PulsarDebuggerEnsureClassOverviewVisitor',
+	#name : 'PulsarBrowserEnsureClassOverviewVisitor',
 	#superclass : 'PulsarEditorVisitor',
 	#category : 'Pulsar-Browser-Tool-Debugger',
 	#package : 'Pulsar-Browser',
@@ -7,13 +7,13 @@ Class {
 }
 
 { #category : 'visiting' }
-PulsarDebuggerEnsureClassOverviewVisitor >> visitClassEditor: aPresenter [
+PulsarBrowserEnsureClassOverviewVisitor >> visitClassEditor: aPresenter [
 
 	self owner ensureClassOutlineOverview
 ]
 
 { #category : 'visiting' }
-PulsarDebuggerEnsureClassOverviewVisitor >> visitMethodEditor: aPresenter [
+PulsarBrowserEnsureClassOverviewVisitor >> visitMethodEditor: aPresenter [
 
 	self owner ensureClassOutlineOverview
 ]

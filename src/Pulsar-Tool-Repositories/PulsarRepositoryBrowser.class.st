@@ -86,6 +86,12 @@ PulsarRepositoryBrowser >> snapshot [
 ]
 
 { #category : 'private' }
+PulsarRepositoryBrowser >> viewDocked: aPresenter [
+
+	(PulsarBrowserEnsureClassOverviewVisitor on: self) visit: aPresenter
+]
+
+{ #category : 'private' }
 PulsarRepositoryBrowser >> windowClosed [
 
 	super windowClosed.
