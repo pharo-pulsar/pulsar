@@ -30,6 +30,8 @@ PulsarRepositoryMergeWindow >> doMerge [
 
 { #category : 'initialization' }
 PulsarRepositoryMergeWindow >> initializePresenters [
+	self addStyle: 'pulsarRepositoryRepairWindow'.
+	self addStyle: 'pulsarRepositoryMerge'.
 
 	diffPresenter := self instantiate: PulsarRepositoryDiffPresenter
 ]

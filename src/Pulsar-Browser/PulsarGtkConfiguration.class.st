@@ -141,7 +141,7 @@ PulsarGtkConfiguration >> darkPaletteStyle [
 /* pin */
 @define-color pinned_bg_color		#1f232a;
 /* commit */
-@define-color commit_active_bg 		rgba(220, 130, 40, 0.26)
+@define-color commit_active_bg 		rgba(220, 130, 40, 0.26);
 '
 ]
 
@@ -347,7 +347,7 @@ paneldock panelframe popover box.pulsarToolbarPanel { background-color: unset; }
 .stList listview, 
 .stTree listview { 
 	font-size: 0.9em; 
-} 
+}
 .stTree columnview listview row cell { margin: 0px; padding: 2px; }
 .stTree columnview listview row cell box { border-spacing: 5px; }
 .stRow { margin: 1px; border-spacing: 3px; }
@@ -476,6 +476,11 @@ box.pulsarVersionsFlyingBrowser panelstatusbar { background-color: transparent; 
 /* .pulsarRepositoryPackageRow label.loaded { } */
 .pulsarRepositoryPackageRow label.notloaded { color: @package_notloaded; }
 .diffEditor .pulsarToolbarPanel { padding: 5px; }
+
+box.pulsarRepositoryCheckout box.checkoutStrategy {
+	border-spacing: 10px;
+	padding: 5px 10px;
+}
 '
 ]
 

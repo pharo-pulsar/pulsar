@@ -15,9 +15,12 @@ Class {
 PulsarRepositoryCheckoutWindow >> defaultLayout [
 
 	^ SpBoxLayout newVertical
-		add: (SpBoxLayout newHorizontal
-				add: 'How to checkout:' expand: false;
-				add: checkoutStrategyPresenter;
+		add: (self newPresenter 
+				addStyle: 'checkoutStrategy';
+				layout: (SpBoxLayout newHorizontal
+					add: 'How to checkout:' expand: false;
+					add: checkoutStrategyPresenter;
+					yourself);
 				yourself)
 			expand: false;
 		add: diffPresenter;
@@ -41,6 +44,9 @@ PulsarRepositoryCheckoutWindow >> doCheckout [
 
 { #category : 'initialization' }
 PulsarRepositoryCheckoutWindow >> initializePresenters [
+
+	self addStyle: 'pulsarRepositoryRepairWindow'.
+	self addStyle: 'pulsarRepositoryCheckout'.
 
 	checkoutStrategyPresenter := self newDropList
 		display: [ :aStrategyClass | aStrategyClass description ];
