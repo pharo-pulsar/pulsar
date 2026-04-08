@@ -20,7 +20,7 @@ PulsarVirtualProtocol class >> newEntity: anObject [
 { #category : 'accessing' }
 PulsarVirtualProtocol >> cssStyle [
 
-	^ nil
+	^ 'virtual'
 ]
 
 { #category : 'accessing' }
@@ -101,4 +101,10 @@ PulsarVirtualProtocol >> order [
 PulsarVirtualProtocol >> selectors [
 
 	^ self subclassResponsibility
+]
+
+{ #category : 'testing' }
+PulsarVirtualProtocol >> shouldBeDisplayed [
+
+	^ true
 ]
