@@ -320,12 +320,11 @@ PulsarDiffNode >> selectionAnnouncementClass [
 ]
 
 { #category : 'accessing' }
-PulsarDiffNode >> summary [ 
+PulsarDiffNode >> summary [
 
-	^ '<span foreground="green">+{1}</span>/<span foreground="red">-{2}</span>: {3}' format: { 
+	^ '<b><span foreground="green">+{1}</span> <span foreground="red">-{2}</span></b>' format: { 
 		self patchInsertions. 
-		self patchDeletions.
-		self description }
+		self patchDeletions }
 ]
 
 { #category : 'accessing' }

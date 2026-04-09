@@ -5,7 +5,8 @@ Class {
 	#classTraits : 'SpTModel classTrait',
 	#instVars : [
 		'headerPresenter',
-		'patchPresenter'
+		'patchPresenter',
+		'summaryPresenter'
 	],
 	#category : 'Pulsar-Tool-Repositories-View-Editor',
 	#package : 'Pulsar-Tool-Repositories',
@@ -28,6 +29,11 @@ PulsarRepositoryPatchPresenter >> initializePresenters [
 	self addStyle: 'pulsarRepositoryPatch'.
 
 	headerPresenter := self instantiate: PulsarEditorToolbarPresenter.
+	summaryPresenter := self newLabel 
+		addStyle: 'summary';
+		useMarkup.
+	headerPresenter addPresenter: summaryPresenter.
+	
 	patchPresenter := (self instantiate: self patchPresenterClass)
 		styleScheme: self application styleScheme;
 		syntaxHighlightTheme: self application syntaxHighlightTheme;
@@ -45,6 +51,8 @@ PulsarRepositoryPatchPresenter >> updatePresenter [
 				
 	self model ifNil: [ ^ self ].	
 				
-	headerPresenter title: self model summary.
+	headerPresenter title: self model description.
+	summaryPresenter label: self model summary.
+	
 	patchPresenter patch: self model patch
 ]
