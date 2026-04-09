@@ -15,6 +15,12 @@ PulsarContextEditor >> acceptVisitor: aVisitor [
 	^ aVisitor visitContextEditor: self
 ]
 
+{ #category : 'private' }
+PulsarContextEditor >> announceActivateMethod [
+
+	self notifyActivateEntity: self model asMethodModel
+]
+
 { #category : 'layout' }
 PulsarContextEditor >> defaultLayout [
 

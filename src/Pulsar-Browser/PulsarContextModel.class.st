@@ -55,6 +55,14 @@ PulsarContextModel >> asClassModel [
 ]
 
 { #category : 'converting' }
+PulsarContextModel >> asMethodModel [
+
+	^ PvMethodModel 
+		newEnvironment: self environmentModel 
+		entity: self method
+]
+
+{ #category : 'converting' }
 PulsarContextModel >> asOutlineClassModel [
 	
 	^ PvOutlineClassModel 
