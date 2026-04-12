@@ -32,35 +32,6 @@ PulsarBrowser class >> defineImageActionsOn: aBuilder [
 ]
 
 { #category : 'private - definitions' }
-PulsarBrowser class >> defineSpotterActionsOn: aBuilder [
-	<dockActions>
-
-	self flag: #TODO. "Move this to superclass, but for that I first need to define 
-	what a spotter for a debugger will be, for example (and other possible root-level 
-	browsers)" 
-	aBuilder addGroup: #spotter with: [ :group | group 
-		name: 'Spotter';
-		priority: 900;
-		beDisplayedAsGroup;
-		addActionWith: [ :action | action 
-			name: 'Spotter';
-			description: 'Show spotter for Environment';
-			shortcutKey: KeyboardKey enter shift;
-			action: [ :aContext | aContext doShowSpotterForEnvironment ] ]";
-		addActionWith: [ :action | action 
-			name: 'Spotter for Windows';
-			description: 'Show spotter for Windows';
-			shortcutKey: KeyboardKey enter shift mod1;
-			action: [ :aContext | aContext doShowSpotterForWindows ] ];		
-		addActionWith: [ :action | action 
-			name: 'Spotter for Commands';
-			description: 'Show spotter for Commands';
-			shortcutKey: KeyboardKey enter shift;
-			action: [ :aContext | aContext doShowSpotterForCommands ] ]" 
-		]
-]
-
-{ #category : 'private - definitions' }
 PulsarBrowser class >> defineToolActionsOn: aBuilder [
 	<dockActions>
 
