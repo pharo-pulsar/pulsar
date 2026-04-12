@@ -24,10 +24,10 @@ PulsarTPanelWindow >> activateWith: anActivation [
 ]
 
 { #category : 'initialization' }
-PulsarTPanelWindow >> initializePanelWindow: aWindowPresenter [
+PulsarTPanelWindow >> initializePanelWidget: aPanelWidgetPresenter [
 
-	super initializePanelWindow: aWindowPresenter.
-	aWindowPresenter 
+	super initializePanelWidget: aPanelWidgetPresenter.
+	aPanelWidgetPresenter
 		whenPresentedDo: [ self recordLastPresented ];
 		whenFocusReceivedDo: [ self notifyEditorActivated ]
 ]

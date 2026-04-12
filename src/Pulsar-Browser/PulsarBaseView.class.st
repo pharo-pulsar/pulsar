@@ -29,11 +29,11 @@ PulsarBaseView >> initialize [
 ]
 
 { #category : 'initialization' }
-PulsarBaseView >> initializePanelWindow: aPanelwindowPresenter [
+PulsarBaseView >> initializePanelWidget: aPanelWidgetPresenter [
 
-	super initializePanelWindow: aPanelwindowPresenter.
-	aPanelwindowPresenter 
-		whenPlacedDo: [ self panelPlaced: aPanelwindowPresenter ];
+	super initializePanelWidget: aPanelWidgetPresenter.
+	aPanelWidgetPresenter 
+		whenPlacedDo: [ self panelPlaced: aPanelWidgetPresenter ];
 		whenTransferredDo: [ :ann | self panelTransferredFrom: ann fromWindow to: ann toWindow ]
 ]
 

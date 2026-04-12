@@ -69,11 +69,11 @@ PulsarDebuggerInspector >> initialize [
 ]
 
 { #category : 'initialization' }
-PulsarDebuggerInspector >> initializePanelWindow: aPanelWindowPresenter [
+PulsarDebuggerInspector >> initializePanelWidget: aPanelWidgetPresenter [
  
-	super initializePanelWindow: aPanelWindowPresenter.
-	aPanelWindowPresenter 
-		whenPlacedDo: [ self panelPlaced: aPanelWindowPresenter ];
+	super initializePanelWidget: aPanelWidgetPresenter.
+	aPanelWidgetPresenter 
+		whenPlacedDo: [ self panelPlaced: aPanelWidgetPresenter ];
 		whenTransferredDo: [ :ann | self panelTransferredFrom: ann fromWindow to: ann toWindow ];
 		whenPresentedDo: [ self recordLastPresented ];
 		whenFocusReceivedDo: [ self notifyEditorActivated ]

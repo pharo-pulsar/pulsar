@@ -327,10 +327,10 @@ PulsarEditor >> initialize [
 ]
 
 { #category : 'initialization' }
-PulsarEditor >> initializePanelWindow: aWindowPresenter [
+PulsarEditor >> initializePanelWidget: aPanelWidgetPresenter [
 
-	super initializePanelWindow: aWindowPresenter.
-	aWindowPresenter
+	super initializePanelWidget: aPanelWidgetPresenter.
+	aPanelWidgetPresenter
 		actions: self windowActions;
 		whenPresentedDo: [ self panelPresented ];
 		whenFocusReceivedDo: [ self panelFocused ];
