@@ -91,7 +91,8 @@ PulsarClassOutlineView >> eventEditorActivated: anAnnounceement [
 
 { #category : 'events' }
 PulsarClassOutlineView >> eventMethodChanged: aMethodAnnouncement [
-
+	
+	self model ifNil: [ ^ self ].
 	(self model isSameClass: aMethodAnnouncement method methodClass) ifFalse: [ ^ self ].
 
 	logger trace: aMethodAnnouncement.
