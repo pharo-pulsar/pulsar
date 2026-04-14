@@ -107,7 +107,7 @@ PulsarClassOutlineSideView class >> defineVariableActionsOn: aBuilder [
 				name: 'Remove slot';
 				description: 'Remove this slot';
 				shortcutKey: $x mod1;
-				action: [ :aContext | aContext doRemoveVariable ] ] ]
+				action: [ :aContext | aContext doForceRemoveSlot ] ] ]
 ]
 
 { #category : 'accessing' }
@@ -253,7 +253,7 @@ PulsarClassOutlineSideView >> doAddVariableCommand: aCommand [
 
 { #category : 'private - actions' }
 PulsarClassOutlineSideView >> doForceRemoveMethod [
-	"Fordcefully remove a method (without passing through the refactor remove implementation
+	"Forcefully remove a method (without passing through the refactor remove implementation
 	 that will check all usages, etc.)"
 	| okToRemove selectedMethodModel |
 	
@@ -269,6 +269,26 @@ PulsarClassOutlineSideView >> doForceRemoveMethod [
 
 	selectedMethodModel removeMethod.
 	self owner notifyEntityRemoved: selectedMethodModel.
+	self updatePresenter
+]
+
+{ #category : 'private - actions' }
+PulsarClassOutlineSideView >> doForceRemoveSlot [
+ 	"Forcefully remove a variable  (without passing through the refactor remove implementation
+	 that will check all usages, etc.)"
+	| okToRemove selectedVariableModel |
+	
+	selectedVariableModel := variablesListPresenter selectedItem.
+	selectedVariableModel ifNil: [ ^ self ].
+
+	okToRemove := self application newConfirm
+		title: 'Remove slot';
+		message: ('Do you want to remove  {1}?' format: { selectedVariableModel name });
+		acceptLabel: 'Remove';
+		openModalWithParent: self window.
+	okToRemove ifFalse: [ ^ self ].
+
+	selectedVariableModel removeSlot.
 	self updatePresenter
 ]
 
