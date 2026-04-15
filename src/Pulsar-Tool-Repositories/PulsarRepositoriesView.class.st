@@ -74,7 +74,7 @@ PulsarRepositoriesView >> defineActionsOn: aBuilder [
 			name: 'Repair repository';
 			description: 'Repair repository';
 			iconName: 'repair';
-			actionEnabled: [ self hasSelectedRepository and: [ self selectedRepository needsRepair ] ];
+			actionEnabled: [ self hasSelectedRepository and: [ self selectedRepositoryNeedsRepair ] ];
 			action: [ self doRepairSelectedRepository ] ] ]
 ]
 
@@ -83,6 +83,19 @@ PulsarRepositoriesView >> defineContextActionsOn: aBuilder [
 	<dockActions>
 
 	aBuilder addGroup: #contextActions with: [ :group | group 
+		addGroupWith: [ :aGroup | aGroup 
+			name: 'Repoisitory actions';
+			beDisplayedAsGroup;
+			addActionWith: [ :action | action 
+				dynamicName: [ 'Open {1}' format: { self selectedRepositoryName } ];
+				description: 'Open selected repository';
+				actionEnabled: [ self hasSelectedRepository ];
+				action: [ self doOpenSelectedRepository ] ];
+			addActionWith: [ :action | action 
+				dynamicName: [ 'Repair {1}' format: { self selectedRepositoryName } ];
+				description: 'Open repair actions for selected repository';
+				actionEnabled: [ self hasSelectedRepository and: [ self selectedRepositoryNeedsRepair ] ];
+				action: [ self doRepairSelectedRepository ] ] ];
 		addGroupWith: [ :dangerGroup | dangerGroup
 			name: 'DANGER ZONE';
 			beDisplayedAsGroup;
@@ -90,6 +103,8 @@ PulsarRepositoriesView >> defineContextActionsOn: aBuilder [
 				priority: 1000;
 				dynamicName: [ 'Forget {1}' format: { self selectedRepositoryName } ];
 				description: 'Forget this repository';
+				shortcutKey: $x actionModifier;
+				actionEnabled: [ self hasSelectedRepository ];
 				action: [ self doForgetSelectedRepository ] ] ] ]
 ]
 
@@ -158,6 +173,12 @@ PulsarRepositoriesView >> doOpenRepository: aRepositoryModel [
 		newApplication: self application
 		model: aRepositoryModel)
 		open
+]
+
+{ #category : 'private - actions' }
+PulsarRepositoriesView >> doOpenSelectedRepository [
+	
+	self doOpenRepository: self selectedRepository
 ]
 
 { #category : 'private - actions' }
@@ -331,6 +352,12 @@ PulsarRepositoriesView >> selectedRepositoryName [
 	^ listPresenter selectedItem 
 		ifNotNil: [ :aModel | aModel name ]
 		ifNil: [ 'NONAME' ]
+]
+
+{ #category : 'private - testing' }
+PulsarRepositoriesView >> selectedRepositoryNeedsRepair [
+
+	^ self selectedRepository needsRepair
 ]
 
 { #category : 'accessing - snapshot' }
