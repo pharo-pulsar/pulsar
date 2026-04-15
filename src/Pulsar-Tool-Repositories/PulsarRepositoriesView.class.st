@@ -268,7 +268,7 @@ PulsarRepositoriesView >> hideSystemProjects: aBoolean [
 PulsarRepositoriesView >> initialize [
 
 	updating := false.
-	hideSystemProjects := false.
+	hideSystemProjects := true.
 	super initialize
 ]
 
