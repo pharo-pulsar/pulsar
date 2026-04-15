@@ -58,7 +58,7 @@ PulsarTPanelWindow >> isPinned [
 { #category : 'accessing' }
 PulsarTPanelWindow >> lastTimePresented [
 
-	^ lastTimePresented
+	^ lastTimePresented ifNil: [ lastTimePresented := DateAndTime now ]
 ]
 
 { #category : 'private' }
