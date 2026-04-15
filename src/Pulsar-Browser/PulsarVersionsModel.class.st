@@ -16,7 +16,10 @@ Class {
 PulsarVersionsModel >> fetchRemoteVersionsOn: aRepositoryModel [
 
 	remoteVersions := (aRepositoryModel entity log historyOfMethod: self entity)
-		collect: [ :each | each asRingDefinition ]
+		collect: [ :each | 
+			each asRingDefinition
+				annotationNamed: #repositoryModel put: aRepositoryModel;
+				yourself ]
 ]
 
 { #category : 'accessing' }
@@ -67,6 +70,14 @@ PulsarVersionsModel >> localVersions [
 PulsarVersionsModel >> name [
 
 	^ 'History of ', self ringDefinition fullName
+]
+
+{ #category : 'instance creation' }
+PulsarVersionsModel >> newDiffModelFor: aDefinition [
+
+	^ PulsarRepositoryCommitDiffModel 
+		newRepositoryModel: (aDefinition annotationNamed: #repositoryModel)
+		entity: aDefinition remoteCommit
 ]
 
 { #category : 'accessing' }

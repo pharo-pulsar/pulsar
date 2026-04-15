@@ -31,7 +31,7 @@ PulsarVersionsBrowser >> addPopoverControls [
 	headerPresenter addPresenter: controlsPresenter
 ]
 
-{ #category : 'adding' }
+{ #category : 'initialization' }
 PulsarVersionsBrowser >> addStatusbarPresenter: aPresenter [
 	"As the job will require to add a spinner, we need to implement this"
 
@@ -161,6 +161,19 @@ PulsarVersionsBrowser >> doFetchRemoteVersionsOnRepository: aRepositoryModel [
 ]
 
 { #category : 'actions' }
+PulsarVersionsBrowser >> doOpenCommitDiff [
+	| versionDefinition |
+
+	versionDefinition := versionListPresenter selectedItem.
+	versionDefinition ifNil: [ ^ self ].
+	
+	(PulsarRepositoryCommitDiffWindow
+		newApplication: self application
+		model: (self model newDiffModelFor: versionDefinition))
+		open
+]
+
+{ #category : 'actions' }
 PulsarVersionsBrowser >> doRevert [
 	"take selected version and apply it as current editor content"
 	
@@ -214,10 +227,16 @@ PulsarVersionsBrowser >> initializeInfo [
 					add: (self newButton
 						addStyle: 'flat';
 						addStyle: 'small';
-						addStyle: 'rows4';
 						icon: (self iconNamed: 'copy-to-clipboard');
 						help: 'Copy commit id to clipboard';
 						action: [ self doCopyCommitIdToClipboard ];
+						yourself);
+					add: (self newButton
+						addStyle: 'flat';
+						addStyle: 'small';
+						icon: (self iconNamed: 'open');
+						help: 'Open diff for this commit';
+						action: [ self doOpenCommitDiff ];
 						yourself);
 					yourself);
 				yourself);
