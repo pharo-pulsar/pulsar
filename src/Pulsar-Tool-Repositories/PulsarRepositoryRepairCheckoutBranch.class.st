@@ -52,17 +52,20 @@ PulsarRepositoryRepairCheckoutBranch class >> title [
 
 { #category : 'executing' }
 PulsarRepositoryRepairCheckoutBranch >> basicExecute [
-	| branchModel |
+	| selectPresenter branchModel |
 
 	self fetchAllRemotes.
-	branchModel := self application newSelect
+	
+	selectPresenter := (self context 
+			instantiate: PulsarRepositorySelectBranchPresenter 
+			on: self repositoryModel)
 		title: 'Checkout branch';
 		message: 'Select a branch to checkout';
-		items: self repositoryModel localBranches , self repositoryModel remoteBranches;
-		display: [ :each | each name ];
-		openModalWithParent: context window.
-	branchModel ifNil: [ ^ self ].
-
+		yourself.
+	(selectPresenter openModalWithParent: self context window) isOk 
+		ifFalse: [ ^ self ].
+	
+	branchModel := selectPresenter selectedModel.
 	(PulsarRepositoryCheckoutWindow
 		newApplication: self application
 		model: (PulsarRepositoryCheckoutPreviewModel
