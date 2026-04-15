@@ -1,6 +1,11 @@
 "Initialize enumerations"
 (Smalltalk classNamed: #GEnumeration) allSubclassesDo: #initializeEnumeration.
 
+"Mark all installed repositories as 'system' (because people do not need to see them)"
+IceRepository registry 
+	reject: [ :each | each project tags includes: #system ]
+	thenDo: [ :each | each project addTag: #system ].
+
 "We want to work with string interpolation, but for now do not install it as it 
  creates problems while saving changes (they become corrupt, digging why). 
  Also current implementation is not backward compatible so we need to think how to  
