@@ -25,28 +25,20 @@ PulsarRepositoryChangesView >> connectPresenters [
 
 	super connectPresenters.
 	
-	listPresenter addActionWith: [ :action | action
-		priority: 0;
-		dynamicName: [ 
-			listPresenter selectedItem 
-				ifNotNil: [ :aNode | 
-					'{1} {2}{3}' format: { 
-						aNode isActive ifTrue: [ 'Unselect' ] ifFalse: [ 'Select' ].
-						aNode description.
-						aNode hasChildren ifTrue: [ ' branch' ] ifFalse: [ '' ] } ]
-				ifNil: [ 'Toggle selection' ] ];
-		shortcutKey: Character space asKeyCombination;
-		actionEnabled: [ listPresenter selectedItem isNotNil ];
-		action: [ self toggleActiveInBranch ] ].
-		
-	"since the list of gtk captures the space, I cannot use the shortcut added through the 
-	 action, I am forced to add it like that."
-	self flag: #TODO. "Consider putting support for space in Spec-Gtk, hacking it in the same 
-	way we do with maybeInstallCROn:..."
-	listPresenter eventHandler whenKeyDownDo: [ :anEvent | 
-		(anEvent keyCharacter = Character space)
-			ifTrue: [ self toggleActiveInBranch ].
-		anEvent wasHandled: false ]
+	listPresenter 
+		addActionWith: [ :action | action
+			priority: 0;
+			dynamicName: [ 
+				listPresenter selectedItem 
+					ifNotNil: [ :aNode | 
+						'{1} {2}{3}' format: { 
+							aNode isActive ifTrue: [ 'Unselect' ] ifFalse: [ 'Select' ].
+							aNode description.
+							aNode hasChildren ifTrue: [ ' branch' ] ifFalse: [ '' ] } ]
+					ifNil: [ 'Toggle selection' ] ];
+			shortcutKey: Character space asKeyCombination;
+			actionEnabled: [ listPresenter selectedItem isNotNil ];
+			action: [ self toggleActiveInBranch ] ]
 ]
 
 { #category : 'layout' }
