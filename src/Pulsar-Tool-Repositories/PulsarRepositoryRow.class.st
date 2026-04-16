@@ -36,6 +36,16 @@ PulsarRepositoryRow >> addOutgoingCommits: outgoingCommits [
 			yourself)
 ]
 
+{ #category : 'initialization' }
+PulsarRepositoryRow >> addTags: tags [
+
+	extraPresenter layout
+		add: (self newLabel 
+			addStyle: 'tags';
+			label: (', ' join: (tags collect: #name));
+			yourself)
+]
+
 { #category : 'layout' }
 PulsarRepositoryRow >> defaultLayout [
 
@@ -56,6 +66,7 @@ PulsarRepositoryRow >> initializePresenters [
 		addStyle: 'extra';
 		layout: (SpBoxLayout newHorizontal
 			hAlignStart;
+			vAlignEnd;
 			yourself);
 		yourself
 ]
@@ -70,6 +81,8 @@ PulsarRepositoryRow >> updatePresenter [
 	labelPresenter addStyle: self model status asString.
 	
 	extraPresenter layout removeAll.
+	self model headTags 
+		ifNotEmpty: [ :tags | self addTags: tags ].
 	self model outgoingCommits
 		ifNotEmpty: [ :outgoingCommits | self addOutgoingCommits: outgoingCommits ].
 	self model incomingCommits

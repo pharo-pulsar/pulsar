@@ -472,6 +472,7 @@ box.pulsarVersionsFlyingBrowser panelstatusbar { background-color: transparent; 
 .pulsarRepositoryBranchRow label.head { font-weight: bold; }
 .pulsarRepositoryRow .extra label.outgoing, .pulsarRepositoryBranchRow .extra label.outgoing { color: @commit_outgoing; }
 .pulsarRepositoryRow .extra label.incoming, .pulsarRepositoryBranchRow .extra label.incoming{ color: @commit_incoming; }
+.pulsarRepositoryRow .extra label.tags { font-style: italic; font-size: 0.8em; }
 .pulsarRepositoryCommit label.outgoing { color: @commit_outgoing; }
 /* .pulsarRepositoryPackageRow label.loaded { } */
 .pulsarRepositoryPackageRow label.notloaded { color: @package_notloaded; }

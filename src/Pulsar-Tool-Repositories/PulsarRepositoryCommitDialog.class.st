@@ -23,9 +23,9 @@ PulsarRepositoryCommitDialog class >> ghostText [
 Why did it change?
 Anything someone reading this in 6 months should know?
 
-(Keep the first line short; add details below.)
+(Keep the first line short; add details below)
 
-WARNING: Hitting enter will trigger the commit. Use shft+enter to add a new line.  
+WARNING: Hitting enter will trigger the commit. Use <meta+enter> to add a new line.  
 '
 ]
 

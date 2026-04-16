@@ -51,6 +51,17 @@ PulsarRepositoryModel >> basicStatus [
 		^ #error ]
 ]
 
+{ #category : 'private' }
+PulsarRepositoryModel >> branchOrTag [
+
+	^ [ self entity branch ]
+	on: IceNotInBranch 
+	do: [ :e | 
+		self entity head tags
+			ifNotEmpty: [ :aCollection | aCollection first ]
+			ifEmpty: [ e pass ] ]
+]
+
 { #category : 'accessing' }
 PulsarRepositoryModel >> calculateDiffToHead [
 
@@ -79,7 +90,7 @@ PulsarRepositoryModel >> commitsUpTo: aNumber inBranch: aRepositoryBranchModel [
 
 	branch := aRepositoryBranchModel 
 		ifNotNil: [ :aModel | aModel entity ]
-		ifNil: [ self entity branch ].
+		ifNil: [ self branchOrTag ].
 
 	^ Array new: aNumber streamContents: [ :stream | 
 		self critical: [
@@ -150,6 +161,15 @@ PulsarRepositoryModel >> headName [
 ]
 
 { #category : 'accessing' }
+PulsarRepositoryModel >> headTags [
+
+	self entity isValid ifFalse: [ ^ #() ].
+
+	^ self entity head tags collect: [ :each | 
+		PulsarRepositoryTagModel newRepository: self entity: each ]
+]
+
+{ #category : 'accessing' }
 PulsarRepositoryModel >> incomingCommits [
 
 	(self entity isValid and: [ self entity canPush ]) ifFalse: [ ^ #() ].
@@ -174,6 +194,12 @@ PulsarRepositoryModel >> isHeadInBranch [
 ]
 
 { #category : 'testing' }
+PulsarRepositoryModel >> isHeadInTag [
+
+	^ self critical: [ self entity head tags isNotEmpty ]
+]
+
+{ #category : 'testing' }
 PulsarRepositoryModel >> isMissing [
 
 	^ self entity isMissing
@@ -183,6 +209,7 @@ PulsarRepositoryModel >> isMissing [
 PulsarRepositoryModel >> isOutgoingCommit: aCommitModel [
 
 	self entity isValid ifFalse: [ ^ false ].
+	(self entity isBranch or: [ self entity isTag ]) ifFalse: [ ^ false ].
 
 	self entity outgoingCommits ifNotEmpty: [ :aCollection | 
 		^ aCollection anySatisfy: [ :each |
@@ -235,7 +262,11 @@ PulsarRepositoryModel >> name [
 { #category : 'testing' }
 PulsarRepositoryModel >> needsRepair [
 
-	^ self isMissing or: [ self isDetached ]
+	^ self isMissing 
+		or: [ 
+			self isDetached 
+			and: [ self isHeadInBranch not
+			and: [ self isHeadInTag not ] ] ]
 ]
 
 { #category : 'actions - command' }

@@ -8,7 +8,7 @@ Class {
 
 { #category : 'testing' }
 PulsarRepositoryTagModel >> isHead [
-	"tags are not head"
+	"tags are not head, but they may be placed on head"
 	
-	^ false
+	^ self entity repository headCommit = self entity commit
 ]
