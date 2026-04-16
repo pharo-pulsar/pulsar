@@ -29,87 +29,6 @@ Class {
 	#tag : 'View-Outline'
 }
 
-{ #category : 'accessing - actions' }
-PulsarClassOutlineSideView class >> defineMethodActionsOn: aBuilder [
-	<dockActions>
-	
-	aBuilder 
-		addGroup: #method with: [ :group | group
-			priority: 10;
-			name: 'Method';
-			beDisplayedAsGroup;
-			addActionWith: [ :action | action 
-				name: 'New method';
-				description: 'Add a new method to this class';
-				iconName: 'add';
-				action: [ :aContext | aContext doRequestNewMethod ] ] ];
-		addGroup: #methodCritical with: [ :group | group 
-			priority: 1000;
-			name: 'DANGER ZONE';
-			beDisplayedAsGroup;
-			addActionWith: [ :action | action 
-				name: 'Force remove method';
-				description: 'Remove this method (without cheching for usages)';
-				shortcutKey: $x mod1 shift;
-				action: [ :aContext | aContext doForceRemoveMethod ] ] ]
-]
-
-{ #category : 'accessing - actions' }
-PulsarClassOutlineSideView class >> defineProtocolActionsOn: aBuilder [
-	<dockActions>
-	
-	aBuilder 
-		addGroup: #protocol with: [ :group | group 
-			priority: 10;
-			name: 'Protocol';
-			beDisplayedAsGroup;
-			addActionWith: [ :action | action 
-				name: 'New protocol';
-				description: 'Add a new protocol to this class';
-				iconName: 'add';
-				shortcutKey: $n mod1;
-				action: [ :aContext | aContext doAddProtocolCommand: action ] ];
-			addActionWith: [ :action | action 
-				name: 'Rename';
-				shortcutKey: $r mod1;
-				description: 'Rename protocol';
-				action: [ :aContext | aContext doRenameProtocolCommand: action ] ] ];
-		addGroup: #protocolCritical with: [ :group | group
-			priority: 1000;
-			name: 'DANGER ZONE';
-			beDisplayedAsGroup;
-			addActionWith: [ :action | action 
-				name: 'Remove protocol';
-				description: 'Remove this protocol and all its methods?';
-				shortcutKey: $x mod1;
-				action: [ :aContext | aContext doRemoveSelectedProtocol ] ] ]
-]
-
-{ #category : 'accessing - actions' }
-PulsarClassOutlineSideView class >> defineVariableActionsOn: aBuilder [
-	<dockActions>
-	
-	aBuilder 
-		addGroup: #variable with: [ :group | group
-			priority: 10;
-			name: 'Variables';
-			beDisplayedAsGroup;
-			addActionWith: [ :action | action 
-				name: 'New slot';
-				description: 'Add a new slot to this class';
-				iconName: 'add';
-				action: [ :aContext | aContext doAddVariableCommand: action ] ] ];
-		addGroup: #variableCritical with: [ :group | group
-			priority: 1000;
-			name: 'DANGER ZONE';
-			beDisplayedAsGroup;
-			addActionWith: [ :action | action 
-				name: 'Remove slot';
-				description: 'Remove this slot';
-				shortcutKey: $x mod1;
-				action: [ :aContext | aContext doForceRemoveSlot ] ] ]
-]
-
 { #category : 'accessing' }
 PulsarClassOutlineSideView >> actions [
 
@@ -177,6 +96,31 @@ PulsarClassOutlineSideView >> defaultLayout [
 ]
 
 { #category : 'private - definitions' }
+PulsarClassOutlineSideView >> defineMethodActionsOn: aBuilder [
+	<dockActions>
+	
+	aBuilder 
+		addGroup: #method with: [ :group | group
+			priority: 10;
+			name: 'Method';
+			beDisplayedAsGroup;
+			addActionWith: [ :action | action 
+				name: 'New method';
+				description: 'Add a new method to this class';
+				iconName: 'add';
+				action: [ self doRequestNewMethod ] ] ];
+		addGroup: #methodCritical with: [ :group | group 
+			priority: 1000;
+			name: 'DANGER ZONE';
+			beDisplayedAsGroup;
+			addActionWith: [ :action | action 
+				name: 'Force remove method';
+				description: 'Remove this method (without cheching for usages)';
+				shortcutKey: $x mod1 shift;
+				action: [ self doForceRemoveMethod ] ] ]
+]
+
+{ #category : 'private - definitions' }
 PulsarClassOutlineSideView >> defineMethodRefactorActionsOn: aBuilder [
 	<dockActions>
 
@@ -198,6 +142,62 @@ PulsarClassOutlineSideView >> defineMethodRefactorActionsOn: aBuilder [
 			description: [ 'Push down method' ];
 			actionEnabled: [ self hasSelectedMethod ];
 			action: [ self doPushUpMethod ] ] ]
+]
+
+{ #category : 'private - definitions' }
+PulsarClassOutlineSideView >> defineProtocolActionsOn: aBuilder [
+	<dockActions>
+	
+	aBuilder 
+		addGroup: #protocol with: [ :group | group 
+			priority: 10;
+			name: 'Protocol';
+			beDisplayedAsGroup;
+			addActionWith: [ :action | action 
+				name: 'New protocol';
+				description: 'Add a new protocol to this class';
+				iconName: 'add';
+				shortcutKey: $n mod1;
+				action: [ self doAddProtocolCommand: action ] ];
+			addActionWith: [ :action | action 
+				name: 'Rename';
+				shortcutKey: $r mod1;
+				description: 'Rename protocol';
+				action: [ self doRenameProtocolCommand: action ] ] ];
+		addGroup: #protocolCritical with: [ :group | group
+			priority: 1000;
+			name: 'DANGER ZONE';
+			beDisplayedAsGroup;
+			addActionWith: [ :action | action 
+				name: 'Remove protocol';
+				description: 'Remove this protocol and all its methods?';
+				shortcutKey: $x mod1;
+				action: [ self doRemoveSelectedProtocol ] ] ]
+]
+
+{ #category : 'private - definitions' }
+PulsarClassOutlineSideView >> defineVariableActionsOn: aBuilder [
+	<dockActions>
+	
+	aBuilder 
+		addGroup: #variable with: [ :group | group
+			priority: 10;
+			name: 'Variables';
+			beDisplayedAsGroup;
+			addActionWith: [ :action | action 
+				name: 'New slot';
+				description: 'Add a new slot to this class';
+				iconName: 'add';
+				action: [ self doAddVariableCommand: action ] ] ];
+		addGroup: #variableCritical with: [ :group | group
+			priority: 1000;
+			name: 'DANGER ZONE';
+			beDisplayedAsGroup;
+			addActionWith: [ :action | action 
+				dynamicName: [ 'Remove {1}' format: { self selectedVariableName }  ];
+				description: 'Remove this slot';
+				shortcutKey: $x mod1 shift;
+				action: [ self doForceRemoveSlot ] ] ]
 ]
 
 { #category : 'private - preview' }
@@ -634,6 +634,14 @@ PulsarClassOutlineSideView >> selectedMethodName [
 PulsarClassOutlineSideView >> selectedVariable [
 
 	^ variablesListPresenter selectedItem
+]
+
+{ #category : 'private - accessing' }
+PulsarClassOutlineSideView >> selectedVariableName [
+
+	^ self selectedVariable 
+		ifNotNil: [ :aModel | aModel name ]
+		ifNil: [ 'Unknown' ]
 ]
 
 { #category : 'private' }
