@@ -140,6 +140,7 @@ PulsarMDINeutralIconProvider >> createTable [
 		('repository'			  'archive-outline')
 		('stored-code'			  'snowflake'				 	 '#b0bec5'  '#78909c')
 		('git'					  'git')
+		('compare-branch'		  'compare')	
 		
 
 		"Inspection / metamodel introspection"
