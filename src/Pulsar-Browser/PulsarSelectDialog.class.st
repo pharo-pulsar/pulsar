@@ -26,9 +26,9 @@ PulsarSelectDialog >> defaultLayout [
 
 	^ SpBoxLayout newVertical
 		add: (SpBoxLayout newHorizontal
-			hAlignCenter;
-			add: titlePresenter;
-			yourself)
+				hAlignCenter;
+				add: titlePresenter;
+				yourself)
 			expand: false;
 		add: label expand: false;
 		add: list;

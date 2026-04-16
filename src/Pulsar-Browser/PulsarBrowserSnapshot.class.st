@@ -16,5 +16,5 @@ PulsarBrowserSnapshot >> browserClass [
 PulsarBrowserSnapshot >> restorePriority [
 	"restore first"
 	
-^ 1
+	^ 1
 ]

@@ -7,8 +7,8 @@ It includes a scheduler, is posible to schedule tasks.
 Class {
 	#name : 'PulsarWindowPresenter',
 	#superclass : 'SpWindowPresenter',
-	#traits : 'PulsarTTaskScheduler + PulsarTJobHandler',
-	#classTraits : 'PulsarTTaskScheduler classTrait + PulsarTJobHandler classTrait',
+	#traits : 'PulsarTTaskScheduler + PulsarTJobHandler + PulsarTSnapshot',
+	#classTraits : 'PulsarTTaskScheduler classTrait + PulsarTJobHandler classTrait + PulsarTSnapshot classTrait',
 	#instVars : [
 		'controls'
 	],
@@ -57,4 +57,10 @@ PulsarWindowPresenter >> scheduleJob: aBlock [
 		ensure: [ 
 			self statusbar clearMessage.
 			self jobEnd ] ]
+]
+
+{ #category : 'accessing - snapshot' }
+PulsarWindowPresenter >> snapshot [
+
+	^ PulsarWindowSnapshot on: self
 ]
