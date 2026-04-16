@@ -13,10 +13,11 @@ PulsarRepositoryLocalBranchView >> branches [
 ]
 
 { #category : 'accessing - actions' }
-PulsarRepositoryLocalBranchView >> defineActionsOn: aBuilder [
+PulsarRepositoryLocalBranchView >> defineGitActionsOn: aBuilder [
 	<dockActions>
 	
 	aBuilder addGroup: #gitActions with: [ :group | group 
+		priority: 1;
 		addActionWith: [ :action | action 
 			name: 'Fetch remotes';
 			description: 'Fetch remote repositories';

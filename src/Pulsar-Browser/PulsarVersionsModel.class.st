@@ -77,7 +77,7 @@ PulsarVersionsModel >> newDiffModelFor: aDefinition [
 
 	^ PulsarRepositoryCommitDiffModel 
 		newRepositoryModel: (aDefinition annotationNamed: #repositoryModel)
-		entity: aDefinition remoteCommit
+		from: aDefinition remoteCommit
 ]
 
 { #category : 'accessing' }

@@ -39,6 +39,24 @@ PulsarRepositoryBranchModel >> name [
 	^ self branch name
 ]
 
+{ #category : 'instance creation' }
+PulsarRepositoryBranchModel >> newDiffModelToCommitishModel: aCommitishModel [
+
+	^ PulsarRepositoryCommitDiffModel 
+		newRepositoryModel: self repository
+		from: self entity
+		to: aCommitishModel entity
+]
+
+{ #category : 'instance creation' }
+PulsarRepositoryBranchModel >> newDiffModelToWorkingCopy [
+
+	^ PulsarRepositoryCommitDiffModel 
+		newRepositoryModel: self repository
+		from: self entity
+		to: self repository entity workingCopy referenceCommit
+]
+
 { #category : 'accessing' }
 PulsarRepositoryBranchModel >> outgoingCommits [
  

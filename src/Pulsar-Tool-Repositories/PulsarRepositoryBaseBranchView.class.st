@@ -26,6 +26,59 @@ PulsarRepositoryBaseBranchView >> defaultLayout [
 		yourself
 ]
 
+{ #category : 'accessing - actions' }
+PulsarRepositoryBaseBranchView >> defineActionsOn: aBuilder [
+	<dockActions>
+	
+	aBuilder addGroup: #actions with: [ :group | group 
+		priority: 100;
+		addActionWith: [ :action | action 
+			dynamicName: [ 'Compare {1} with Working Copy' format: { self selectedItemName }];
+			description: 'Compare this branch with current Working Copy';
+			action: [ :aContext | aContext doCompareSelectedBranchWithWorkingCopy ] ];
+		addActionWith: [ :action | action 
+			dynamicName: [ 'Compare {1} with branch' format: { self selectedItemName }];
+			description: 'Compare this branch with another branch';
+			action: [ :aContext | aContext doCompareSelectedBranchWithAnother ] ] ]
+]
+
+{ #category : 'private - actions' }
+PulsarRepositoryBaseBranchView >> doCompareSelectedBranchWithAnother [
+	| selectPresenter branchModel selectedBranch |
+
+	selectedBranch := listPresenter selectedItem.
+	selectedBranch ifNil: [ ^ self ].
+
+	selectPresenter := (self context 
+			instantiate: PulsarRepositorySelectBranchPresenter 
+			on: self repositoryModel)
+		title: 'Branch to compare';
+		message: 'Select a branch to compare this one';
+		yourself.
+	(selectPresenter openModalWithParent: self context window) isOk 
+		ifFalse: [ ^ self ].
+	
+	branchModel := selectPresenter selectedModel.
+	
+	(self 
+		instantiate: PulsarRepositoryCommitDiffWindow 
+		on: (selectedBranch newDiffModelToCommitishModel: branchModel))
+		open
+]
+
+{ #category : 'private - actions' }
+PulsarRepositoryBaseBranchView >> doCompareSelectedBranchWithWorkingCopy [
+	| selectedBranch |
+
+	selectedBranch := listPresenter selectedItem.
+	selectedBranch ifNil: [ ^ self ].
+
+	(self 
+		instantiate: PulsarRepositoryCommitDiffWindow 
+		on: selectedBranch newDiffModelToWorkingCopy)
+		open
+]
+
 { #category : 'private' }
 PulsarRepositoryBaseBranchView >> entitySelected: anEntity [
 
@@ -55,6 +108,7 @@ PulsarRepositoryBaseBranchView >> initializePresenters [
 		addStyle: 'stList';
 		rowPresenterClass: PulsarRepositoryBranchRow;
 		display: [ :aBranchModel | aBranchModel name ];
+		actions: self actions;
 		yourself
 ]
 
