@@ -17,7 +17,7 @@ Class {
 	#tag : 'View-Base'
 }
 
-{ #category : 'adding' }
+{ #category : 'accessing' }
 PulsarWindowPresenter >> addControl: aPresenter [
 
 	controls ifNil: [ controls := #() ].
@@ -32,6 +32,13 @@ PulsarWindowPresenter >> addControl: aPresenter [
 PulsarWindowPresenter >> addStatusbarPresenter: aPresenter [
 	
 	self statusbar addPrefix: aPresenter
+]
+
+{ #category : 'accessing' }
+PulsarWindowPresenter >> controlsEnabled: aBoolean [
+
+	controls ifNil: [ ^ self ].
+	controls do: [ :each | each enabled: aBoolean ]
 ]
 
 { #category : 'initialization' }
@@ -53,9 +60,11 @@ PulsarWindowPresenter >> scheduleJob: aBlock [
 
 	self scheduleTask: [
 		self jobStart.
+		self controlsEnabled: false.
 		[ aBlock cull: self statusbar ]
 		ensure: [ 
 			self statusbar clearMessage.
+			self controlsEnabled: true.
 			self jobEnd ] ]
 ]
 
