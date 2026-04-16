@@ -35,11 +35,13 @@ PulsarRepositoryBaseBranchView >> defineActionsOn: aBuilder [
 		addActionWith: [ :action | action 
 			dynamicName: [ 'Compare {1} with Working Copy' format: { self selectedItemName }];
 			description: 'Compare this branch with current Working Copy';
-			action: [ :aContext | aContext doCompareSelectedBranchWithWorkingCopy ] ];
+			actionEnabled: [ self hasSelectedItem ];
+			action: [ self doCompareSelectedBranchWithWorkingCopy ] ];
 		addActionWith: [ :action | action 
 			dynamicName: [ 'Compare {1} with branch' format: { self selectedItemName }];
 			description: 'Compare this branch with another branch';
-			action: [ :aContext | aContext doCompareSelectedBranchWithAnother ] ] ]
+			actionEnabled: [ self hasSelectedItem ];
+			action: [ self doCompareSelectedBranchWithAnother ] ] ]
 ]
 
 { #category : 'private - actions' }

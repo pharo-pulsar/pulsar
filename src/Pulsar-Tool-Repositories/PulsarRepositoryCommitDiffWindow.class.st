@@ -1,6 +1,8 @@
 Class {
 	#name : 'PulsarRepositoryCommitDiffWindow',
 	#superclass : 'PulsarBaseWindow',
+	#traits : 'PulsarTSnapshot',
+	#classTraits : 'PulsarTSnapshot classTrait',
 	#instVars : [
 		'diffPresenter'
 	],
@@ -45,6 +47,12 @@ PulsarRepositoryCommitDiffWindow >> notifyRepositoryModified: aModel [
 	logger trace: announcementModel.
 
 	self application resendAnnouncement: (PulsarRepositoryModified newValue: announcementModel)
+]
+
+{ #category : 'accessing - snapshot' }
+PulsarRepositoryCommitDiffWindow >> snapshot [
+
+	^ PulsarPresenterWithModelSnapshot on: self
 ]
 
 { #category : 'initialization' }

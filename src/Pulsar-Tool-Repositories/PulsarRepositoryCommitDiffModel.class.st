@@ -1,6 +1,8 @@
 Class {
 	#name : 'PulsarRepositoryCommitDiffModel',
 	#superclass : 'Object',
+	#traits : 'PulsarTModelSnapshot',
+	#classTraits : 'PulsarTModelSnapshot classTrait',
 	#instVars : [
 		'repositoryModel',
 		'diffNode',
