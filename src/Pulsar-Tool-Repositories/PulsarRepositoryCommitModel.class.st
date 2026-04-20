@@ -29,6 +29,12 @@ PulsarRepositoryCommitModel >> commit [
 ]
 
 { #category : 'accessing' }
+PulsarRepositoryCommitModel >> commitAuthor [
+
+	^ self commit author
+]
+
+{ #category : 'accessing' }
 PulsarRepositoryCommitModel >> diffNode [
 
 	^ diffNode ifNil: [ 
@@ -58,6 +64,12 @@ PulsarRepositoryCommitModel >> isRoot [
 ]
 
 { #category : 'accessing' }
+PulsarRepositoryCommitModel >> normalizedCommitAuthor [
+
+	^ self commit normalizedAuthor
+]
+
+{ #category : 'accessing' }
 PulsarRepositoryCommitModel >> selectionAnnouncementClass [
 
 	^ PulsarRepositoryCommitModelSelected
@@ -66,7 +78,7 @@ PulsarRepositoryCommitModel >> selectionAnnouncementClass [
 { #category : 'accessing' }
 PulsarRepositoryCommitModel >> shortCommitAuthor [
 
-	^ self authorInitialsOf: self commit author
+	^ self authorInitialsOf: self commitAuthor
 ]
 
 { #category : 'accessing' }

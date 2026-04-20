@@ -294,17 +294,6 @@ PulsarVersionsBrowser >> initializeWindow: aWindowPresenter [
 	self addWindowControls
 ]
 
-{ #category : 'private' }
-PulsarVersionsBrowser >> normalizeAuthor: aString [
-	| substrings |
-
-	substrings := aString substrings: ' -_'.
-	substrings size = 1 ifTrue: [ 
-		substrings := substrings anyOne splitCamelCase ].
-		
-	^ ' ' join: (substrings collect: [ :each | each capitalized ])
-]
-
 { #category : 'private - announcing' }
 PulsarVersionsBrowser >> notifyActivateEntity: anEntity [
 
@@ -377,7 +366,7 @@ PulsarVersionsBrowser >> updateSourceWith: aDefinition [
 	aDefinition isFromRemoteCommit
 		ifTrue: [
 			commitId label: aDefinition remoteCommit shortId asString.
-			authorPresenter label: (self normalizeAuthor: aDefinition author).
+			authorPresenter label: aDefinition remoteCommit normalizedAuthor.
 			commitMessage text: aDefinition remoteCommit comment trimRight.
 			remoteInfoPresenter show ]
 		ifFalse: [

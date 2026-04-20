@@ -86,7 +86,10 @@ PulsarRepositoryCommitsView >> initializePresenters [
 		addColumn: (SpColumnViewColumn new 
 			title: 'Au';
 			setup: [ :aPresenter | aPresenter newLabel addStyle: 'commitAuthor'; yourself ];
-			bind: [ :aPresenter :aCommitModel | aPresenter label: aCommitModel shortCommitAuthor ];
+			bind: [ :aPresenter :aCommitModel | 
+				aPresenter 
+					label: aCommitModel shortCommitAuthor;
+					help: aCommitModel normalizedCommitAuthor ];
 			yourself);
 		addColumn: (SpColumnViewColumn new 
 			title: 'Message';
