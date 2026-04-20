@@ -29,6 +29,7 @@ PulsarRepositoryBrowser >> defineGlobalActionsOn: aBuilder [
 			iconName: 'commit';
 			description: 'Commit selected changes';
 			shortcutKey: $c actionModifier;
+			actionEnabled: [ self model canCommit ];
 			action: [ (PulsarRepositoryActionContext on: self) doCommit: self model ] ];
 		addActionWith: [ :action | action 
 			name: 'Push outgoing commits';

@@ -61,6 +61,7 @@ PulsarRepositoryChangesView >> defineActionsOn: aBuilder [
 			iconName: 'commit';
 			description: 'Commit selected changes';
 			shortcutKey: $c actionModifier;
+			actionEnabled: [ self model canCommit ];
 			action: [ self doCommit ] ];
 		addActionWith: [ :action | action 
 			name: 'Refresh';
@@ -326,10 +327,11 @@ PulsarRepositoryChangesView >> updatePresenter [
 		self application defer: [
 			listPresenter 
 				roots: diff children;
-				expandAll ] ]
+				expandAll.
+			self updateToolbar ] ]
 ]
 
-{ #category : 'private' }
+{ #category : 'initialization' }
 PulsarRepositoryChangesView >> updateToolbar [
 
 	self toolbarActions allCommands do: [ :each | each updateEnableStatus ]

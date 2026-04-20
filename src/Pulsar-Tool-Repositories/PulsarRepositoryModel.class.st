@@ -12,6 +12,15 @@ Class {
 	#tag : 'Model'
 }
 
+{ #category : 'testing' }
+PulsarRepositoryModel >> acceptsRepair [
+	"indicates whenever the repository can accept a repair action regardless if 
+	 it can be opened (you can open some 'broken' repositories)"
+
+	^ self isMissing 
+		or: [ self isDetached  ]
+]
+
 { #category : 'private' }
 PulsarRepositoryModel >> activeNodes [
 
@@ -74,6 +83,14 @@ PulsarRepositoryModel >> calculateDiffToReferenceCommit [
 
 	^ self critical: [ 
 		self entity workingCopy diffToReferenceCommit ]
+]
+
+{ #category : 'testing' }
+PulsarRepositoryModel >> canCommit [
+	"indicates whenever the repository can commit"
+
+	^ self isMissing not 
+		and: [ self isDetached not ]
 ]
 
 { #category : 'accessing' }
@@ -261,6 +278,7 @@ PulsarRepositoryModel >> name [
 
 { #category : 'testing' }
 PulsarRepositoryModel >> needsRepair [
+	"indicates whenever the repository REQUIRES a repair action (it cannot be opened at all)"
 
 	^ self isMissing 
 		or: [ 

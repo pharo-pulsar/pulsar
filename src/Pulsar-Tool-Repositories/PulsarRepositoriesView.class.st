@@ -74,7 +74,7 @@ PulsarRepositoriesView >> defineActionsOn: aBuilder [
 			name: 'Repair repository';
 			description: 'Repair repository';
 			iconName: 'repair';
-			actionEnabled: [ self hasSelectedRepository and: [ self selectedRepositoryNeedsRepair ] ];
+			actionEnabled: [ self hasSelectedRepository and: [ self selectedRepositoryAcceptsRepair ] ];
 			action: [ self doRepairSelectedRepository ] ] ]
 ]
 
@@ -94,7 +94,7 @@ PulsarRepositoriesView >> defineContextActionsOn: aBuilder [
 			addActionWith: [ :action | action 
 				dynamicName: [ 'Repair {1}' format: { self selectedRepositoryName } ];
 				description: 'Open repair actions for selected repository';
-				actionEnabled: [ self hasSelectedRepository and: [ self selectedRepositoryNeedsRepair ] ];
+				actionEnabled: [ self hasSelectedRepository and: [ self selectedRepositoryAcceptsRepair ] ];
 				action: [ self doRepairSelectedRepository ] ] ];
 		addGroupWith: [ :dangerGroup | dangerGroup
 			name: 'DANGER ZONE';
@@ -346,18 +346,18 @@ PulsarRepositoriesView >> selectedRepository [
 	^ listPresenter ifNotNil: #selectedItem
 ]
 
+{ #category : 'private - testing' }
+PulsarRepositoriesView >> selectedRepositoryAcceptsRepair [
+
+	^ self selectedRepository acceptsRepair
+]
+
 { #category : 'private - accessing' }
 PulsarRepositoriesView >> selectedRepositoryName [
 
 	^ listPresenter selectedItem 
 		ifNotNil: [ :aModel | aModel name ]
 		ifNil: [ 'NONAME' ]
-]
-
-{ #category : 'private - testing' }
-PulsarRepositoriesView >> selectedRepositoryNeedsRepair [
-
-	^ self selectedRepository needsRepair
 ]
 
 { #category : 'accessing - snapshot' }
