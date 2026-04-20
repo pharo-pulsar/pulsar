@@ -110,7 +110,7 @@ PulsarPlayground >> doBrowseBindingsCommand: anAction [
 		
 	bindingsPresenter asPopover
 		relativeTo: anAction presenter;
-		popup
+		popupModal
 ]
 
 { #category : 'private - actions' }
