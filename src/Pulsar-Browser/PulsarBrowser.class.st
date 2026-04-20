@@ -17,21 +17,6 @@ PulsarBrowser class >> defaultWindowSize [
 ]
 
 { #category : 'private - definitions' }
-PulsarBrowser class >> defineImageActionsOn: aBuilder [
-	<dockActions>
-
-	aBuilder addGroup: #image with: [ :group | group 
-		name: 'Image';
-		priority: 2000;
-		beDisplayedAsGroup;
-		addActionWith: [ :action | action
-			name: 'Save';
-			description: 'Save image';
-			shortcutKey: $s shift mod1;
-			action: [ :aContext | aContext saveImage ] ] ]
-]
-
-{ #category : 'private - definitions' }
 PulsarBrowser class >> defineToolActionsOn: aBuilder [
 	<dockActions>
 
@@ -330,16 +315,6 @@ PulsarBrowser >> repositoriestView [
 	"answer the repositories view if present, nil if not"
 
 	^ self findPresenterClass: PulsarRepositoriesView		
-]
-
-{ #category : 'actions' }
-PulsarBrowser >> saveImage [
-
-	"I need to fork because otherwise resume will try to start from here"
-	[ Smalltalk snapshot: true andQuit: false ] 
-	fork.
-
-	self inform: 'Image saved'
 ]
 
 { #category : 'accessing - snapshot' }

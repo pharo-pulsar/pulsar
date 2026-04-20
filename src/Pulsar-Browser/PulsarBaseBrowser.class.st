@@ -25,6 +25,21 @@ PulsarBaseBrowser class >> defaultWindowSize [
 ]
 
 { #category : 'private - definitions' }
+PulsarBaseBrowser class >> defineImageActionsOn: aBuilder [
+	<dockActions>
+
+	aBuilder addGroup: #image with: [ :group | group 
+		name: 'Image';
+		priority: 2000;
+		beDisplayedAsGroup;
+		addActionWith: [ :action | action
+			name: 'Save';
+			description: 'Save image';
+			shortcutKey: $s shift mod1;
+			action: [ :aContext | aContext saveImage ] ] ]
+]
+
+{ #category : 'private - definitions' }
 PulsarBaseBrowser class >> definePanelActionsOn: aBuilder [
 	<dockActions>
 
@@ -482,6 +497,16 @@ PulsarBaseBrowser >> resendAnnouncement: anAnnouncement [
 	
 	self presentersDo: [ :aWindowPresenter |
 		aWindowPresenter presenter announce: anAnnouncement ]
+]
+
+{ #category : 'private - actions' }
+PulsarBaseBrowser >> saveImage [
+
+	"I need to fork because otherwise resume will try to start from here"
+	[ Smalltalk snapshot: true andQuit: false ] 
+	fork.
+
+	self inform: 'Image saved'
 ]
 
 { #category : 'private' }
