@@ -83,9 +83,11 @@ PulsarBaseWindow >> scheduleJob: aBlock [
 
 	self scheduleTask: [
 		self jobStart.
+		self window controlsEnabled: false.
 		[ aBlock cull: self window statusbar ]
 		ensure: [
 			self window statusbar clearMessage.
+			self window controlsEnabled: true.
 			self jobEnd ] ]
 ]
 
