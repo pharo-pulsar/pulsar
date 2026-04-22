@@ -226,7 +226,7 @@ PulsarRepositoryModel >> isMissing [
 PulsarRepositoryModel >> isOutgoingCommit: aCommitModel [
 
 	self entity isValid ifFalse: [ ^ false ].
-	(self entity isBranch or: [ self entity isTag ]) ifFalse: [ ^ false ].
+	self entity head isBranch ifFalse: [ ^ false ]. 
 
 	self entity outgoingCommits ifNotEmpty: [ :aCollection | 
 		^ aCollection anySatisfy: [ :each |
