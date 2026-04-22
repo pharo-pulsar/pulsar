@@ -58,6 +58,27 @@ PulsarRepositoryActionContext >> doPull: aModel [
 ]
 
 { #category : 'actions' }
+PulsarRepositoryActionContext >> doPull: aModel intoBranch: aLocalBranchModel [
+	| remote |
+
+	remote := nil.
+	aModel hasUpstream ifFalse: [
+		remote := self application newSelect
+			title: 'Upstream missing';
+			message: 'Select remote to pull from (set upstream)';
+			items: aModel remotes;
+			display: [ :aRemote | aRemote name ];
+			openModalWithParent: self window.
+		remote ifNil: [ ^ self ] ].
+
+	self scheduleJob: [ :statusbar |
+		statusbar pushMessage: ('Pulling from {1}...' format: { aModel name }).
+		(aLocalBranchModel newPullActionFrom: remote)
+			onSuccess: [ self notifyRepositoryModified: aModel ];
+			executeWithContext: self owner ]
+]
+
+{ #category : 'actions' }
 PulsarRepositoryActionContext >> doPush: aModel [
 	| remote |
 

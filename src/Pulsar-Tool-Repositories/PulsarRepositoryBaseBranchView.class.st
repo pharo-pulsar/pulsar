@@ -27,10 +27,10 @@ PulsarRepositoryBaseBranchView >> defaultLayout [
 ]
 
 { #category : 'accessing - actions' }
-PulsarRepositoryBaseBranchView >> defineActionsOn: aBuilder [
+PulsarRepositoryBaseBranchView >> defineCompareActionsOn: aBuilder [
 	<dockActions>
 	
-	aBuilder addGroup: #actions with: [ :group | group 
+	aBuilder addGroup: #compareActions with: [ :group | group 
 		priority: 100;
 		addActionWith: [ :action | action 
 			dynamicName: [ 'Compare {1} with Working Copy' format: { self selectedItemName }];
@@ -81,6 +81,29 @@ PulsarRepositoryBaseBranchView >> doCompareSelectedBranchWithWorkingCopy [
 		open
 ]
 
+{ #category : 'private - actions' }
+PulsarRepositoryBaseBranchView >> doFetchRepositories [
+
+	self scheduleJob: [ :statusbar |
+		statusbar pushMessage: 'Fetching remotes...'.
+		self model newFetchAction
+			onSuccess: [ self notifyRepositoryModified ];
+			executeWithContext: self ]
+]
+
+{ #category : 'private - actions' }
+PulsarRepositoryBaseBranchView >> doMergeSelectedBranchIntoHead [
+
+	self hasSelectedItem ifFalse: [ ^ self ].
+	
+	(PulsarRepositoryMergeWindow
+		newApplication: self application
+		model: (PulsarRepositoryMergePreviewModel
+			repositoryModel: self model
+			branchModel: self selectedItem))
+		open
+]
+
 { #category : 'private' }
 PulsarRepositoryBaseBranchView >> entitySelected: anEntity [
 
@@ -124,6 +147,13 @@ PulsarRepositoryBaseBranchView >> labels [
 PulsarRepositoryBaseBranchView >> maybeSort: aCollection [
 
 	^ aCollection
+]
+
+{ #category : 'private' }
+PulsarRepositoryBaseBranchView >> notifyRepositoryModified [
+
+	"inform to all windows, as all may have things to do"
+	self application resendAnnouncement: (PulsarRepositoryModified newValue: self model)
 ]
 
 { #category : 'private' }

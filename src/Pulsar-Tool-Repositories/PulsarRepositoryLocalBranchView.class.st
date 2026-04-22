@@ -38,7 +38,7 @@ PulsarRepositoryLocalBranchView >> defineGitActionsOn: aBuilder [
 				self model isHeadInBranch 
 					and: [ self hasSelectedItem
 					and: [ self selectedItem isHead not ] ] ] ;
-			action: [ self doMergeIntoHead ] ];
+			action: [ self doMergeSelectedBranchIntoHead ] ];
 		addActionWith: [ :action | action 
 			name: 'Push outgoing commits';
 			iconName: 'push';
@@ -50,7 +50,12 @@ PulsarRepositoryLocalBranchView >> defineGitActionsOn: aBuilder [
 			iconName: 'pull';
 			shortcutKey: $p actionModifier;
 			description: 'Pull incoming commits from remote into current branch';
-			action: [ self doPull ] ] ]
+			action: [ self doPull ] ]";
+		addActionWith: [ :action | action 
+			dynamicName: [ 'Pull incoming commits into {1}' format: { self selectedItemName } ];
+			description: 'Pull incoming commits from remote into selected branch';
+			actionEnabled: [ self hasSelectedItem ];
+			action: [ self doPullIntoSelectedBranch ] ]" ]
 ]
 
 { #category : 'private - actions' }
@@ -72,16 +77,6 @@ PulsarRepositoryLocalBranchView >> doCreateBranchCommand: anAction [
 	
 	self model switchToBranchNamed: branchName.
 	self notifyRepositoryModified
-]
-
-{ #category : 'private - actions' }
-PulsarRepositoryLocalBranchView >> doFetchRepositories [
-
-	self scheduleJob: [ :statusbar |
-		statusbar pushMessage: 'Fetching remotes...'.
-		self model newFetchAction
-			onSuccess: [ self notifyRepositoryModified ];
-			executeWithContext: self ]
 ]
 
 { #category : 'actions' }
@@ -106,11 +101,4 @@ PulsarRepositoryLocalBranchView >> label [
 PulsarRepositoryLocalBranchView >> maybeSort: aCollection [
 
 	^ aCollection sort: #isHead descending, #name ascending
-]
-
-{ #category : 'private' }
-PulsarRepositoryLocalBranchView >> notifyRepositoryModified [
-
-	"inform to all windows, as all may have things to do"
-	self application resendAnnouncement: (PulsarRepositoryModified newValue: self model)
 ]
