@@ -86,6 +86,14 @@ PulsarRepositoryLocalBranchView >> doPull [
 ]
 
 { #category : 'actions' }
+PulsarRepositoryLocalBranchView >> doPullIntoSelectedBranch [
+
+	(PulsarRepositoryActionContext on: self) 
+		doPull: self model
+		intoBranch: self selectedItem
+]
+
+{ #category : 'actions' }
 PulsarRepositoryLocalBranchView >> doPush [
 
 	(PulsarRepositoryActionContext on: self) doPush: self model
