@@ -51,13 +51,13 @@ PulsarRepositoryBaseBranchView >> doCompareSelectedBranchWithAnother [
 	selectedBranch := listPresenter selectedItem.
 	selectedBranch ifNil: [ ^ self ].
 
-	selectPresenter := (self context 
+	selectPresenter := (self 
 			instantiate: PulsarRepositorySelectBranchPresenter 
-			on: self repositoryModel)
+			on: self model)
 		title: 'Branch to compare';
 		message: 'Select a branch to compare this one';
 		yourself.
-	(selectPresenter openModalWithParent: self context window) isOk 
+	(selectPresenter openModalWithParent: self window) isOk 
 		ifFalse: [ ^ self ].
 	
 	branchModel := selectPresenter selectedModel.
