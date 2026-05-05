@@ -118,7 +118,7 @@ PulsarVersionsBrowser >> defineExtraActionsOn: aBuilder [
 					description: ('Fetch remote versions on {1}' format: { each name });
 					iconName: 'fetch.neutral';
 					actionEnabled: [ self hasRemoteVersions ];
-					action: [ self doFetchRemoteVersionsCommand: action ] ] ].
+					action: [ self doFetchRemoteVersionsOnRepository: each ] ] ].
 			
 			repositories size > 1 
 				ifTrue: [ fetchRepositoryGroup beToolbarMenuButton ]
@@ -134,6 +134,8 @@ PulsarVersionsBrowser >> doCopyCommitIdToClipboard [
 { #category : 'private - actions' }
 PulsarVersionsBrowser >> doFetchRemoteVersionsCommand: anAction [
 	| repositories popover |
+	
+	self halt.
 	
 	repositories := self model includingRepositories.
 	repositories size > 1 ifFalse: [
