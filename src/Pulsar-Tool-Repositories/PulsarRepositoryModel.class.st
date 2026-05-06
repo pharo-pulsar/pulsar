@@ -467,3 +467,11 @@ PulsarRepositoryModel >> tags [
 	^ self entity tags collect: [ :each | 
 		PulsarRepositoryTagModel newRepository: self entity: each ]
 ]
+
+{ #category : 'operations' }
+PulsarRepositoryModel >> updateLocation: aReference [
+	
+	"change location"
+	self entity location: aReference.
+	self entity postFetch
+]
