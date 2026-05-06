@@ -474,7 +474,9 @@ PulsarBaseBrowser >> registerToSystemEvents [
 	self announcer 
 		when: JobStart send: #eventJobStart: to: self;
 		when: JobEnd send: #eventJobEnd: to: self;
-		when: SystemAnnouncement send: #resendAnnouncement: to: self
+		when: SystemAnnouncement, MetacelloExecutionAnnouncement 
+			send: #resendAnnouncement: 
+			to: self
 ]
 
 { #category : 'private' }

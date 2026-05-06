@@ -8,7 +8,8 @@ Class {
 	#traits : 'SgaTApplication',
 	#classTraits : 'SgaTApplication classTrait',
 	#instVars : [
-		'standalone'
+		'standalone',
+		'suspendAnnouncements'
 	],
 	#classInstVars : [
 		'lastSnapshot',
@@ -178,6 +179,26 @@ PulsarApplication >> deferToNextCycle: aBlock [
 		Processor yield.
 		self defer: aBlock 
 	] fork
+]
+
+{ #category : 'private - events' }
+PulsarApplication >> eventMetacelloExecutionEnd: ann [ 
+
+	logger trace.
+
+	self suspendAnnouncements: false.
+	"and now resend"
+	self resendAnnouncement: ann
+]
+
+{ #category : 'private - events' }
+PulsarApplication >> eventMetacelloExecutionStart: ann [ 
+
+	logger trace.
+
+	self resendAnnouncement: ann.
+	"from now on, suspend"
+	self suspendAnnouncements: true
 ]
 
 { #category : 'finalization' }
@@ -353,9 +374,9 @@ PulsarApplication >> registerToSystemEvents [
 	"this way I have just one subscription for each application, that will be broadcasted to 
 	 all applications windows"
 	self class codeChangeAnnouncer weak
-		when: SystemAnnouncement 
-		send: #resendAnnouncement: 
-		to: self
+		when: MetacelloExecutionStartAnnouncement send: #eventMetacelloExecutionStart: to: self;
+		when: MetacelloExecutionEndAnnouncement send: #eventMetacelloExecutionEnd: to: self;		
+		when: SystemAnnouncement send: #resendAnnouncement: to: self
 ]
 
 { #category : 'initialization' }
@@ -369,6 +390,10 @@ PulsarApplication >> resendAnnouncement: anAnnouncement [
 	
 	self flag: #TODO. "Maybe I need to call this method something like `broadcast:`?"
 	logger trace: anAnnouncement.
+	
+	(suspendAnnouncements == true) ifTrue: [
+		logger debug: 'skipping'.
+		^ self ].
 	
 	self windows do: [ :aWindowPresenter |
 		[ aWindowPresenter announce: anAnnouncement ]
@@ -442,6 +467,24 @@ PulsarApplication >> start [
 { #category : 'settings' }
 PulsarApplication >> subscribeToSettingsAnnouncements [
 	"do nothing, this thing will not work with morphic"
+]
+
+{ #category : 'private' }
+PulsarApplication >> suspendAnnouncements: aBoolean [
+
+	suspendAnnouncements := aBoolean
+]
+
+{ #category : 'announcing' }
+PulsarApplication >> suspendAnnouncementsDuring: aBlock [
+	| oldSuspendAnnouncements |
+	
+	logger trace.
+	
+	oldSuspendAnnouncements := suspendAnnouncements.
+	suspendAnnouncements := true.
+	aBlock ensure: [
+		suspendAnnouncements := oldSuspendAnnouncements ]
 ]
 
 { #category : 'private - events' }

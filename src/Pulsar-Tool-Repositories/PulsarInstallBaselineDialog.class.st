@@ -9,9 +9,9 @@ Class {
 		'conflictUseIncomingPresenter',
 		'packageModel'
 	],
-	#category : 'Pulsar-Tool-Repositories-View-Packages',
+	#category : 'Pulsar-Tool-Repositories-View',
 	#package : 'Pulsar-Tool-Repositories',
-	#tag : 'View-Packages'
+	#tag : 'View'
 }
 
 { #category : 'accessing' }

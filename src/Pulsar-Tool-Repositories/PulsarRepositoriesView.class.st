@@ -119,11 +119,12 @@ PulsarRepositoriesView >> doAddRepository [
 		open.	
 	dialog isOk ifFalse: [ ^ self ].
 	
-	self scheduleJob: [ :statusbar |
-		| repository |
+	self scheduleJob: [ :statusbar |		
 		statusbar pushMessage: 'Registering repository...'.
-		repository := presenter repositoryCreator createRepository.
-		repository register.
+		self application suspendAnnouncementsDuring: [
+			| repository |
+			repository := presenter repositoryCreator createRepository.
+			repository register ].
 		self model resetRepositories.
 		self updatePresenter ]
 ]
@@ -225,6 +226,13 @@ PulsarRepositoriesView >> eventMetaModelElementChanged: ann [
 		anySatisfy: [ :each | each registeredStatusChanged ])
 		ifFalse: [ ^ self ] .
 	
+	self updatePresenter
+]
+
+{ #category : 'events' }
+PulsarRepositoriesView >> eventMetacelloExecutionEnd: ann [
+
+	self model resetRepositories.
 	self updatePresenter
 ]
 
@@ -336,8 +344,11 @@ PulsarRepositoriesView >> registerToSystemEvents [
 
 	self announcer 
 		when: PackageAnnouncement, ClassAnnouncement, MethodAnnouncement 
-		send: #eventMetaModelElementChanged:
-		to: self
+			send: #eventMetaModelElementChanged:
+			to: self;
+		when: MetacelloExecutionEndAnnouncement
+			send: #eventMetacelloExecutionEnd:
+			to: self
 ]
 
 { #category : 'private - accessing' }
