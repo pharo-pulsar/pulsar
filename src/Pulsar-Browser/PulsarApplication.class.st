@@ -201,6 +201,14 @@ PulsarApplication >> eventMetacelloExecutionStart: ann [
 	self suspendAnnouncements: true
 ]
 
+{ #category : 'private' }
+PulsarApplication >> exitApplication [
+
+	Smalltalk 
+		snapshot: false 
+		andQuit: true
+]
+
 { #category : 'finalization' }
 PulsarApplication >> finalize [
 
