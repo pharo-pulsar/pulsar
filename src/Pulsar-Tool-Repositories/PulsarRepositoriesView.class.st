@@ -200,6 +200,7 @@ PulsarRepositoriesView >> doRepairRepository: aRepositoryModel [
 	choosenRepairAction ifNil: [ ^ self ].
 	
 	self scheduleTask: [
+		aRepositoryModel resetDiff.
 		choosenRepairAction
 			onSuccess: [ self notifyRepositoryModified: aRepositoryModel ];
 			execute ]
