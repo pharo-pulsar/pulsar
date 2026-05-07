@@ -129,7 +129,7 @@ PulsarRepositoryBaseBranchView >> initializePresenters [
 	toolbarPresenter := self instantiate: PulsarToolbarPresenter. 
 	toolbarPresenter actions: self toolbarActions.
 
-	listPresenter := self newEasyListView
+	listPresenter := self newFilteringList
 		addStyle: 'stList';
 		rowPresenterClass: PulsarRepositoryBranchRow;
 		display: [ :aBranchModel | aBranchModel name ];
