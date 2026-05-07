@@ -6,6 +6,12 @@ Class {
 	#tag : 'Model'
 }
 
+{ #category : 'accessing' }
+PulsarRepositoryTagModel >> datetime [
+
+	^ self entity commit datetime
+]
+
 { #category : 'testing' }
 PulsarRepositoryTagModel >> isHead [
 	"tags are not head, but they may be placed on head"

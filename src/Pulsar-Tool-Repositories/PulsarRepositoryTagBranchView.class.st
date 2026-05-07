@@ -25,5 +25,5 @@ PulsarRepositoryTagBranchView >> label [
 { #category : 'private' }
 PulsarRepositoryTagBranchView >> maybeSort: aCollection [
 
-	^ aCollection sort: #isHead descending, #name ascending
+	^ aCollection sort: #isHead descending,  #datetime descending
 ]
