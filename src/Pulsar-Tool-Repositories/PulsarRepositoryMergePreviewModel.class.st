@@ -55,7 +55,7 @@ PulsarRepositoryMergePreviewModel >> newMergeAction [
 		repository: repositoryModel entity;
 		message: ('Merging branch {1} from {2}' format: { branchModel name. repositoryModel name });
 		onSuccessRepositoryModified;
-		action: [ branchModel entity switchAndMergeWorkingCopy ];
+		action: [ branchModel entity merge ];
 		yourself
 ]
 
