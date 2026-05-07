@@ -232,7 +232,7 @@ PulsarRepositoriesView >> eventMetaModelElementChanged: ann [
 
 { #category : 'events' }
 PulsarRepositoriesView >> eventMetacelloExecutionEnd: ann [
-
+	"when metacello was executed, there may be projects changed, we need to reset them."
 	self model resetRepositories.
 	self updatePresenter
 ]
