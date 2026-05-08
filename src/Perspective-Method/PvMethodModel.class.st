@@ -515,17 +515,30 @@ PvMethodModel >> spotterTitle [
 
 { #category : 'updating' }
 PvMethodModel >> updateWith: aString notifying: anInteractionModel [
- 	| newMethod newSelector selectedClass protocol |
+ 	| compiler newMethod newSelector selectedClass protocol installer |
 	
  	selectedClass := self entity methodClass.
  	protocol := self entity protocol.
 
 	[
-		newMethod := selectedClass compiler 
+		compiler := selectedClass compiler 
 			source: aString;
 			requestor: anInteractionModel;
 			permitUndeclared: true;
-			install ]
+			yourself.
+			
+		newMethod := compiler compileOrFail.
+			
+		installer := selectedClass methodInstaller
+		   logged: selectedClass shouldLogSource;
+		   changeStamp: DateAndTime now;
+		   protocol: protocol.
+		   
+		installer 
+			install: newMethod 
+			into: selectedClass 
+			compiler: compiler 
+	]
 	on: OCUndeclaredVariableWarning 
 	do: [ :w | w resume ].
 	
