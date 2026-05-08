@@ -67,7 +67,12 @@ PulsarRepositoryChangesView >> defineActionsOn: aBuilder [
 			name: 'Refresh';
 			iconName: 'refresh';
 			description: 'Refresh repository changes';
-			action: [ self doRefresh ] ] ]
+			action: [ self doRefresh ] ];
+		addActionWith: [ :action | action 
+			name: 'Toggle Lock';
+			iconName: self model lockIconName;
+			description: ('Toggle lock of {1}' format: { self model name }) ;
+			action: [ self doToggleLockProject: action ] ] ]
 ]
 
 { #category : 'private - definitions' }
@@ -199,6 +204,14 @@ PulsarRepositoryChangesView >> doRefresh [
 
 	self model resetDiff.
 	self updatePresenter
+]
+
+{ #category : 'private - actions' }
+PulsarRepositoryChangesView >> doToggleLockProject: anAction [
+
+	self scheduleJob: [
+		self model toggleLock.
+		anAction presenter icon: (self iconNamed: self model lockIconName) ]
 ]
 
 { #category : 'private' }

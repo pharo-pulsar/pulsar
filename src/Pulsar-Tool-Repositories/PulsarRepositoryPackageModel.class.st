@@ -127,6 +127,19 @@ PulsarRepositoryPackageModel >> load [
 	self entity load
 ]
 
+{ #category : 'actions' }
+PulsarRepositoryPackageModel >> lockBaseline: aBoolean [
+	| metacello |
+
+	metacello := Metacello new 
+		baseline: self baselineName;
+		yourself.
+		
+	aBoolean
+		ifTrue: [ metacello lock ]
+		ifFalse: [ metacello unlock ]
+]
+
 { #category : 'accessing' }
 PulsarRepositoryPackageModel >> name [
 

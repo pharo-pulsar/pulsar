@@ -74,6 +74,7 @@ PulsarMDINeutralIconProvider >> colorFor: iconName themePosition: aNumber forceN
 PulsarMDINeutralIconProvider >> createTable [
 	"a list of arrays internal-name, material-name, light-color, dark-color. 
 	 light and dark colors can be missing (because neutral colors are taken elsewhere)"
+	 <script: 'self syncIconTable'>
 
 	^ #(
 		"Metamodel / code structure"
@@ -140,7 +141,9 @@ PulsarMDINeutralIconProvider >> createTable [
 		('repository'			  'archive-outline')
 		('stored-code'			  'snowflake'				 	 '#b0bec5'  '#78909c')
 		('git'					  'git')
-		('compare-branch'		  'compare')	
+		('compare-branch'		  'compare')
+		('lock'					  'lock')
+		('unlock'				  'lock-open-variant')
 		
 
 		"Inspection / metamodel introspection"

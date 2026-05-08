@@ -45,6 +45,13 @@ PulsarRepositoryModel >> allPackagesAvailableToAdd [
 		reject: [ :each  | packageNames includes: each name ]
 ]
 
+{ #category : 'accessing' }
+PulsarRepositoryModel >> baselines [
+
+	^ self packages 
+		select: [ :each | each isBaseline ]
+]
+
 { #category : 'private' }
 PulsarRepositoryModel >> basicStatus [
 	
@@ -217,6 +224,16 @@ PulsarRepositoryModel >> isHeadInTag [
 ]
 
 { #category : 'testing' }
+PulsarRepositoryModel >> isLocked [
+	| baselines |
+	
+	baselines := self baselines.
+	baselines ifEmpty: [ ^ false ].
+
+	^ baselines allSatisfy: [ :each | each isBaselineLocked ]
+]
+
+{ #category : 'testing' }
 PulsarRepositoryModel >> isMissing [
 
 	^ self entity isMissing
@@ -262,6 +279,14 @@ PulsarRepositoryModel >> localBranches [
 PulsarRepositoryModel >> location [
 
 	^ self entity location
+]
+
+{ #category : 'accessing' }
+PulsarRepositoryModel >> lockIconName [
+
+	^ self isLocked 
+		ifTrue: [ 'lock' ]
+		ifFalse: [ 'unlock' ]
 ]
 
 { #category : 'private' }
@@ -468,7 +493,16 @@ PulsarRepositoryModel >> tags [
 		PulsarRepositoryTagModel newRepository: self entity: each ]
 ]
 
-{ #category : 'operations' }
+{ #category : 'actions' }
+PulsarRepositoryModel >> toggleLock [
+	| currentLock |
+
+	currentLock := self isLocked.
+	self baselines 
+		do: [ :each | each lockBaseline: currentLock not ]
+]
+
+{ #category : 'actions' }
 PulsarRepositoryModel >> updateLocation: aReference [
 	
 	"change location"
