@@ -57,7 +57,9 @@ PulsarWelcomeView >> initializePresenters [
 { #category : 'initialization' }
 PulsarWelcomeView >> initializeWindow: aWindowPresenter [
 
-	aWindowPresenter title: self model name
+	aWindowPresenter 
+		title: self model name;
+		whenClosedDo: [ self notifyEditorClosed ]
 ]
 
 { #category : 'accessing - snapshot' }
