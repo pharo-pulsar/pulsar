@@ -24,8 +24,9 @@ IceCredentialsProvider sshCredentials
 	publicKey: nil;
 	privateKey: nil.
 IceRepository registry do:[ :each | each location: nil ].
-"2026-05007: This is temporal, hopefully"
-{ LGitFetchOptions. LGitCloneOptions } do: #compileFields.
+
+"Force platform reset for the case where we run on linux (as we are building in linux, this is healthy)"
+FFIStructure resetLastCompilationPlatform.
 
 "cleaning agressively as a last step to ensure image will go down."
 Smalltalk cleanUp: true
