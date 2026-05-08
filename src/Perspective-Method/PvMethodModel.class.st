@@ -91,12 +91,6 @@ PvMethodModel >> classifyMethodAs: aString [
 ]
 
 { #category : 'private' }
-PvMethodModel >> collectActionDecorators [
-
-	^ PvMethodActionDecorator allApplyingTo: self
-]
-
-{ #category : 'private' }
 PvMethodModel >> collectDecorators [
 
 	^ PvMethodDecorator allApplyingTo: self
