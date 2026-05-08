@@ -25,8 +25,9 @@ IceCredentialsProvider sshCredentials
 	privateKey: nil.
 IceRepository registry do:[ :each | each location: nil ].
 
+"cleaning agressively as a last step to ensure image will go down."
+Smalltalk cleanUp: true.
+
 "Force platform reset for the case where we run on linux (as we are building in linux, this is healthy)"
 FFIStructure resetLastCompilationPlatform.
 
-"cleaning agressively as a last step to ensure image will go down."
-Smalltalk cleanUp: true
