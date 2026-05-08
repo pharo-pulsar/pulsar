@@ -10,27 +10,29 @@ SCRIPT_DIR = Path(__file__).resolve().parent
 REPOSITORY_DIR = SCRIPT_DIR.parent.parent
 BUILD_IMAGE_VERSION = buildenv.RELEASE_IMAGE_VERSION
 
-def run(cmd):
+def run(cmd, stdin=None):
     """Run shell command safely."""
-    
+
     print(f"+ {' '.join(cmd)}")
-    subprocess.run(cmd, check=True)
+    subprocess.run(cmd, stdin=stdin, check=True)
 
 def evaluate_pharo_script(filename):
-    """Run a Pharo command safely."""
+    """Run a Pharo script safely through stdin."""
 
     print("🏃‍➡️ Evaluating: ", filename)
 
-    script = f"OpalCompiler new source: ('{filename}' asFileReference contents); evaluate."
-
-    run([
-        "pharo", 
-        "--headless", 
-        f"{buildenv.DEST_DIR}/{buildenv.DEST_IMAGE_NAME}.image", 
+    cmd = [
+        "pharo",
+        f"{buildenv.DEST_DIR}/{buildenv.DEST_IMAGE_NAME}.image",
         "--no-default-preferences",
         "eval",
-        "--save",           
-        script ])
+        "--save",
+    ]
+
+    print(f"+ cat {filename} | {' '.join(cmd)}")
+
+    with open(filename, "rb") as script_file:
+        run(cmd, stdin=script_file)
 
     print("✅ Done.")
 
