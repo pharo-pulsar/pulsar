@@ -491,7 +491,7 @@ PulsarGtkConfiguration >> styleManager [
 	styleManager isNullOrNil 
 		ifTrue: [ styleManager := AdwStyleManager default ].
 	
-^ styleManager
+	^ styleManager
 ]
 
 { #category : 'accessing - style' }
