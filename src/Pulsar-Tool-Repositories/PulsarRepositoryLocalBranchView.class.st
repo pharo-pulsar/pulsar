@@ -16,13 +16,9 @@ PulsarRepositoryLocalBranchView >> branches [
 PulsarRepositoryLocalBranchView >> defineGitActionsOn: aBuilder [
 	<dockActions>
 	
+
 	aBuilder addGroup: #gitActions with: [ :group | group 
 		priority: 1;
-		addActionWith: [ :action | action 
-			name: 'Fetch remotes';
-			description: 'Fetch remote repositories';
-			iconName: 'fetch';
-			action: [ :aContext | aContext doFetchRepositories ] ];
 		addActionWith: [ :action | action 
 			dynamicName: [ 'Create branch from {1}' format: { self selectedItemName } ];
 			iconName: 'branch';

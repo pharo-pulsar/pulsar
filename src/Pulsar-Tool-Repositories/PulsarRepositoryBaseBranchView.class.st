@@ -26,7 +26,7 @@ PulsarRepositoryBaseBranchView >> defaultLayout [
 		yourself
 ]
 
-{ #category : 'accessing - actions' }
+{ #category : 'private - definitions' }
 PulsarRepositoryBaseBranchView >> defineCompareActionsOn: aBuilder [
 	<dockActions>
 	
@@ -42,6 +42,42 @@ PulsarRepositoryBaseBranchView >> defineCompareActionsOn: aBuilder [
 			description: 'Compare this branch with another branch';
 			actionEnabled: [ self hasSelectedItem ];
 			action: [ self doCompareSelectedBranchWithAnother ] ] ]
+]
+
+{ #category : 'private - definitions' }
+PulsarRepositoryBaseBranchView >> defineGitCommonActionsOn: aBuilder [
+	<dockActions>
+
+	aBuilder addGroup: #gitActions with: [ :group | group 
+		priority: 1;
+		addActionWith: [ :action | action
+			priority: -10; "at the begining"
+			name: 'Fetch remotes';
+			description: 'Fetch remote repositories';
+			iconName: 'fetch';
+			action: [ self doFetchRepositories ] ];
+		addActionWith: [ :action | action 
+			priority: -9;
+			dynamicName: [ 'Checkout {1}' format: {  self selectedItemName } ];
+			iconName: 'checkout-branch';
+			description: 'Checkout branch';
+			actionEnabled: [ self hasSelectedItem ];
+			action: [ self doCheckoutSelectedBranchOrTag ] ] 
+ 
+		]
+]
+
+{ #category : 'private - actions' }
+PulsarRepositoryBaseBranchView >> doCheckoutSelectedBranchOrTag [ 
+	| branchModel |
+
+	branchModel := self selectedItem.
+	(PulsarRepositoryCheckoutWindow
+		newApplication: self application
+		model: (PulsarRepositoryCheckoutPreviewModel
+			repositoryModel: self model
+			commitish: branchModel entity))
+		open
 ]
 
 { #category : 'private - actions' }

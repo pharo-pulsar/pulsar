@@ -129,6 +129,7 @@ PulsarMDINeutralIconProvider >> createTable [
 		"VCS"
 		('repositories'           'source-repository'             '#813d9c'  '#c061cb')
 		('commit'                 'check'                         '#26a269'  '#57e389')
+		('checkout-branch'        'source-branch-sync'            '#813d9c'  '#c061cb')
 		('branch'                 'source-fork'                   '#813d9c'  '#c061cb')
 		('merge'                  'source-merge'                  '#813d9c'  '#c061cb')
 		('pull'                   'tray-arrow-down'               '#813d9c'  '#c061cb')
