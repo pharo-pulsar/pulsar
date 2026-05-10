@@ -317,6 +317,12 @@ PulsarRepositoriesView >> isHideSystemProjects [
 ]
 
 { #category : 'private' }
+PulsarRepositoriesView >> maybeSort: aCollection [ 
+
+	^ aCollection sorted: #name ascending
+]
+
+{ #category : 'private' }
 PulsarRepositoriesView >> notifyRepositoryModified: aModel [
 
 	logger trace: aModel. 
@@ -389,14 +395,14 @@ PulsarRepositoriesView >> toggleSystemProjects: aBoolean [
 
 { #category : 'initialization' }
 PulsarRepositoriesView >> updatePresenter [
-	| filteredRepositories |
 
 	self model ifNil: [ ^ self ].
 	
-	updating ifTrue: [ ^ self ].
-
-	filteredRepositories := (self filterRepositories: self model repositories) sorted: #name ascending.
-	listPresenter updateItemsKeepingSelection: filteredRepositories
+	self scheduleJob: [
+		| filteredRepositories |
+		updating ifFalse: [
+			filteredRepositories := self maybeSort: (self filterRepositories: self model repositories).
+			listPresenter updateItemsKeepingSelection: filteredRepositories ] ]
 ]
 
 { #category : 'private' }
