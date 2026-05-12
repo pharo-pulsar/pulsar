@@ -36,11 +36,11 @@ PulsarRepositoryCheckoutPreviewModel >> commitish: anIceCommitish [
 PulsarRepositoryCheckoutPreviewModel >> diffNode [
 
 	^ diffNode ifNil: [
-		diffNode := PulsarDiffNode
+		diffNode := PulsarDiffRoot
 			newRepository: repositoryModel
-			entity: (commitish diffTo: repositoryModel entity workingCopy) tree.
-		diffNode from: self repositoryModel entity workingCopy to: commitish.
-		diffNode ]
+			from: self repositoryModel entity workingCopy 
+			to: commitish 
+			tree: (commitish diffTo: repositoryModel entity workingCopy) tree  ]
 ]
 
 { #category : 'actions - command' }

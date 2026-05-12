@@ -5,9 +5,9 @@ Class {
 		'namePresenter',
 		'extraPresenter'
 	],
-	#category : 'Pulsar-Tool-Repositories-Branches',
+	#category : 'Pulsar-Tool-Repositories-View-Branches',
 	#package : 'Pulsar-Tool-Repositories',
-	#tag : 'Branches'
+	#tag : 'View-Branches'
 }
 
 { #category : 'initialization' }

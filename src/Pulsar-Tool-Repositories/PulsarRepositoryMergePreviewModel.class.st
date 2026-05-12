@@ -31,11 +31,11 @@ PulsarRepositoryMergePreviewModel >> branchModel: aBranchModel [
 PulsarRepositoryMergePreviewModel >> diffNode [
 
 	^ diffNode ifNil: [
-		diffNode := PulsarDiffNode
+		diffNode := PulsarDiffRoot
 			newRepository: repositoryModel
-			entity: self mergeAction treeToShow.
-		diffNode from: branchModel entity commit to: self workingCopyCommit.
-		diffNode ]
+			from: branchModel entity commit 
+			to: self workingCopyCommit
+			tree: self mergeAction treeToShow ]
 ]
 
 { #category : 'private' }

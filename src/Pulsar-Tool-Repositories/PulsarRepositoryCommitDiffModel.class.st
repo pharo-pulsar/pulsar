@@ -47,11 +47,11 @@ PulsarRepositoryCommitDiffModel >> calculateTreeToShow [
 PulsarRepositoryCommitDiffModel >> diffNode [
 
 	^ diffNode ifNil: [
-		diffNode := PulsarDiffNode
+		diffNode := PulsarDiffRoot
 			newRepository: repositoryModel
-			entity: self calculateTreeToShow.
-		diffNode from: self toEntity to: self fromEntity.
-		diffNode ]
+			from: self toEntity 
+			to: self fromEntity
+			tree: self calculateTreeToShow ]
 ]
 
 { #category : 'instance creation' }

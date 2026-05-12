@@ -74,12 +74,6 @@ PulsarRepositoryBrowser >> initializeWorkspace [
 	self startWidth: 400
 ]
 
-{ #category : 'initialization' }
-PulsarRepositoryBrowser >> registerToEvents [
-
-	super registerToEvents
-]
-
 { #category : 'accessing - snapshot' }
 PulsarRepositoryBrowser >> snapshot [
 

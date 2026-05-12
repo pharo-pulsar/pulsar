@@ -9,9 +9,7 @@ Class {
 		'children',
 		'activeAction',
 		'parent',
-		'patch',
-		'fromCommit',
-		'toCommit'
+		'patch'
 	],
 	#category : 'Pulsar-Tool-Repositories-Model',
 	#package : 'Pulsar-Tool-Repositories',
@@ -142,20 +140,6 @@ PulsarDiffNode >> description [
 				operation definition name } ]
 		ifFalse: [ 
 			operation definition name ]
-]
-
-{ #category : 'initialization' }
-PulsarDiffNode >> from: aFromCommit to: aToCommit [
-
-	fromCommit := aFromCommit.
-	toCommit := aToCommit
-]
-
-{ #category : 'accessing' }
-PulsarDiffNode >> fromCommit [
-	"this element has sense just in the root element. otherwise is nil"
-
-	^ fromCommit
 ]
 
 { #category : 'testing' }
@@ -325,13 +309,6 @@ PulsarDiffNode >> summary [
 	^ '<b><span foreground="green">+{1}</span> <span foreground="red">-{2}</span></b>' format: { 
 		self patchInsertions. 
 		self patchDeletions }
-]
-
-{ #category : 'accessing' }
-PulsarDiffNode >> toCommit [
-	"this element has sense just in the root element. otherwise is nil"
-
-	^ toCommit
 ]
 
 { #category : 'accessing' }

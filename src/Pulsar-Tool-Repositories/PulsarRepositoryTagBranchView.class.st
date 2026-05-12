@@ -5,9 +5,9 @@ but they behave en many ways like one...
 Class {
 	#name : 'PulsarRepositoryTagBranchView',
 	#superclass : 'PulsarRepositoryBaseBranchView',
-	#category : 'Pulsar-Tool-Repositories-Branches',
+	#category : 'Pulsar-Tool-Repositories-View-Branches',
 	#package : 'Pulsar-Tool-Repositories',
-	#tag : 'Branches'
+	#tag : 'View-Branches'
 }
 
 { #category : 'private' }

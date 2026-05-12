@@ -6,9 +6,9 @@ Class {
 		'toolbarActions',
 		'isDisplayed'
 	],
-	#category : 'Pulsar-Tool-Repositories-Branches',
+	#category : 'Pulsar-Tool-Repositories-View-Branches',
 	#package : 'Pulsar-Tool-Repositories',
-	#tag : 'Branches'
+	#tag : 'View-Branches'
 }
 
 { #category : 'private' }
@@ -68,16 +68,23 @@ PulsarRepositoryBaseBranchView >> defineGitCommonActionsOn: aBuilder [
 ]
 
 { #category : 'private - actions' }
-PulsarRepositoryBaseBranchView >> doCheckoutSelectedBranchOrTag [ 
-	| branchModel |
-
-	branchModel := self selectedItem.
+PulsarRepositoryBaseBranchView >> doCheckout: aBranchOrTagModel [ 
 	(PulsarRepositoryCheckoutWindow
 		newApplication: self application
 		model: (PulsarRepositoryCheckoutPreviewModel
 			repositoryModel: self model
-			commitish: branchModel entity))
+			commitish: aBranchOrTagModel entity))
 		open
+]
+
+{ #category : 'private - actions' }
+PulsarRepositoryBaseBranchView >> doCheckoutSelectedBranchOrTag [ 
+	| branchOrTagModel |
+
+	branchOrTagModel := self selectedItem.
+	branchOrTagModel ifNil: [ ^ self ].	
+
+	self doCheckout: branchOrTagModel
 ]
 
 { #category : 'private - actions' }
@@ -128,16 +135,28 @@ PulsarRepositoryBaseBranchView >> doFetchRepositories [
 ]
 
 { #category : 'private - actions' }
-PulsarRepositoryBaseBranchView >> doMergeSelectedBranchIntoHead [
+PulsarRepositoryBaseBranchView >> doMergeBranchIntoHead: aBranchModel [
 
-	self hasSelectedItem ifFalse: [ ^ self ].
-	
 	(PulsarRepositoryMergeWindow
 		newApplication: self application
 		model: (PulsarRepositoryMergePreviewModel
 			repositoryModel: self model
-			branchModel: self selectedItem))
+			branchModel: aBranchModel))
 		open
+]
+
+{ #category : 'private - actions' }
+PulsarRepositoryBaseBranchView >> doMergeSelectedBranchIntoHead [
+
+	self hasSelectedItem ifFalse: [ ^ self ].
+	
+	self doMergeBranchIntoHead: self selectedItem
+]
+
+{ #category : 'private' }
+PulsarRepositoryBaseBranchView >> entityActivated: anEntityModel [
+
+	self doCheckout: anEntityModel
 ]
 
 { #category : 'private' }

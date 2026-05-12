@@ -38,11 +38,11 @@ PulsarRepositoryCommitModel >> commitAuthor [
 PulsarRepositoryCommitModel >> diffNode [
 
 	^ diffNode ifNil: [ 
-		diffNode := PulsarDiffNode 
+		diffNode := PulsarDiffRoot
 			newRepository: self repository
-			entity: self entity diffToParent tree.
-		diffNode from: self entity parent to: self entity.
-		diffNode ]
+			from: self entity parent 
+			to: self entity
+			tree: self entity diffToParent tree ]
 ]
 
 { #category : 'testing' }

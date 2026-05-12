@@ -139,13 +139,11 @@ PulsarRepositoryModel >> diffNode [
 	self entity isValid ifFalse: [ ^ PulsarDiffNode newRepository: self entity: IceNode new ].
 
 	^ diffNode ifNil: [ 
-		diffNode := PulsarDiffNode 
+		diffNode := PulsarDiffRoot
 			newRepository: self
-			entity: self diffToReferenceCommit tree.
-		diffNode 
 			from: self entity workingCopy referenceCommit 
-			to: self entity workingCopy.
-		diffNode ]
+			to: self entity workingCopy
+			tree: self diffToReferenceCommit tree ]
 ]
 
 { #category : 'accessing' }
