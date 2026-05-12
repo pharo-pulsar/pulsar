@@ -358,6 +358,33 @@ PulsarRepositoriesView >> panelPlacedIconName [
 	^ 'repositories'
 ]
 
+{ #category : 'private' }
+PulsarRepositoriesView >> postRestoreSnapshot: aSnapshot [
+	| oldHideSystemProjects oldHideNonDirtyProjects |
+
+
+	oldHideSystemProjects := hideSystemProjects. 
+	oldHideNonDirtyProjects := hideNonDirtyProjects.
+	hideSystemProjects := aSnapshot isHideSystemProjects.
+	hideSystemProjects = oldHideSystemProjects ifFalse: [
+		toggleSystemProjectsButtonPresenter ifNotNil: [ :aPresenter |
+			"prevent double update"
+			self updatingWhile: [
+				aPresenter state: hideSystemProjects ] ] ].
+			
+	hideNonDirtyProjects := aSnapshot isHideNonDirtyProjects.
+	hideNonDirtyProjects = oldHideNonDirtyProjects ifFalse: [
+		toggleDirtyProjectsButtonPresenter ifNotNil: [ :aPresenter |
+			"prevent double update"
+			self updatingWhile: [
+				aPresenter state: hideNonDirtyProjects ] ] ].
+								
+	"update if any changed"
+	{ oldHideSystemProjects. oldHideNonDirtyProjects } = { hideSystemProjects. hideNonDirtyProjects}
+		ifFalse: [ self updatePresenter ]
+	
+]
+
 { #category : 'initialization' }
 PulsarRepositoriesView >> registerToEvents [
 

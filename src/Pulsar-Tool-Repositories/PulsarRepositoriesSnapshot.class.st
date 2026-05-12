@@ -2,23 +2,37 @@ Class {
 	#name : 'PulsarRepositoriesSnapshot',
 	#superclass : 'PulsarPanelSnapshot',
 	#instVars : [
-		'hideSystemProjects'
+		'hideSystemProjects',
+		'hideNonDirtyProjects'
 	],
 	#category : 'Pulsar-Tool-Repositories-View-Repositories',
 	#package : 'Pulsar-Tool-Repositories',
 	#tag : 'View-Repositories'
 }
 
+{ #category : 'testing' }
+PulsarRepositoriesSnapshot >> isHideNonDirtyProjects [
+
+	^ hideNonDirtyProjects
+]
+
+{ #category : 'testing' }
+PulsarRepositoriesSnapshot >> isHideSystemProjects [
+
+	^ hideSystemProjects
+]
+
 { #category : 'restoring' }
 PulsarRepositoriesSnapshot >> restoreTo: aPresenter [
 
 	super restoreTo: aPresenter.
-	aPresenter hideSystemProjects: hideSystemProjects
+	aPresenter postRestoreSnapshot: self
 ]
 
 { #category : 'initialization' }
 PulsarRepositoriesSnapshot >> snapshot: aPresenter [
 
 	super snapshot: aPresenter.
-	hideSystemProjects := aPresenter isHideSystemProjects
+	hideSystemProjects := aPresenter isHideSystemProjects.
+	hideNonDirtyProjects := aPresenter isHideNonDirtyProjects
 ]
