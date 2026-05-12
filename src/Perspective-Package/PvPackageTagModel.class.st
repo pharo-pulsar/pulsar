@@ -18,6 +18,13 @@ PvPackageTagModel >> accept: aVisitor [
 	^ aVisitor visitPackageTagModel: self
 ]
 
+{ #category : 'accessing - actions' }
+PvPackageTagModel >> actionsWithContextOn: aContextPresenter [
+
+	^ (self actions actionsFor: 'refactors') 
+		copyWithContext: (PulsarRefactorPackageContext on: aContextPresenter)
+]
+
 { #category : 'accessing' }
 PvPackageTagModel >> children [
 
@@ -41,6 +48,21 @@ PvPackageTagModel >> classes [
 		collect: [ :each | PvClassModel newEnvironment: self environmentModel entity: each ]
 		as: OrderedCollection)
 		sorted: #name ascending
+]
+
+{ #category : 'private - definitions' }
+PvPackageTagModel >> defineRefactorActionsOn: aBuilder [
+	<dockActions>
+	
+	"this actions cannot be used directly in this context (the model 
+	 context), because execute them require interact with the UI"
+	aBuilder addGroup: #refactors with: [ :group | group
+		name: 'Refactors';
+		beDisplayedAsSubMenu;
+		addActionWith: [ :action | action
+			name: ('Rename {1}' format: { self name });
+			description: 'Rename package tag';
+			action: [ :aContext | aContext doRenamePackageTag: self ] ] ]
 ]
 
 { #category : 'accessing' }
@@ -88,6 +110,12 @@ PvPackageTagModel >> order [
 PvPackageTagModel >> package [
 
 	^ self entity package
+]
+
+{ #category : 'actions' }
+PvPackageTagModel >> renameTo: aNewName [
+
+	self entity renameTo: aNewName
 ]
 
 { #category : 'accessing' }
