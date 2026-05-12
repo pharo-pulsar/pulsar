@@ -392,7 +392,6 @@ PvClassModel >> updateWith: aString notifying: anInteractionModel [
 		fluidDefinition := (self environmentModel compilerForClass: self entity)
 			source: aString;
 			requestor: anInteractionModel;
-			failBlock: [ ^ false ];
 			logged: true;
 			evaluate ]
 	on: Error do: [ :e | 
