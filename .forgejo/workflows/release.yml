@@ -5,6 +5,8 @@ on:
     tags:
       - 'v*'
 
+enable-email-notifications: true
+
 jobs:
   release:
     runs-on: docker

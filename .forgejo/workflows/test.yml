@@ -5,6 +5,8 @@ on:
     branches:
       - main
 
+enable-email-notifications: true
+
 jobs:
   test:
     runs-on: docker
