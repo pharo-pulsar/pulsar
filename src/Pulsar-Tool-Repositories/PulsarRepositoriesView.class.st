@@ -8,7 +8,9 @@ Class {
 		'listToolbarPresenter',
 		'hideSystemProjects',
 		'toggleSystemProjectsButtonPresenter',
-		'updating'
+		'updating',
+		'toggleDirtyProjectsButtonPresenter',
+		'hideNonDirtyProjects'
 	],
 	#category : 'Pulsar-Tool-Repositories-View-Repositories',
 	#package : 'Pulsar-Tool-Repositories',
@@ -26,6 +28,14 @@ PulsarRepositoriesView class >> defaultPanelPosition [
 { #category : 'initialization' }
 PulsarRepositoriesView >> addVisibilityToolbar [
 	
+	(toggleDirtyProjectsButtonPresenter := self newToggleButton)
+		addStyle: 'flat';
+		icon: (self iconNamed: #dirtyProject);
+		help: 'Toggle visibility (hide/show) of dirty projects';
+		state: self isHideNonDirtyProjects;
+		whenChangedDo: [ :state | self toggleDirtyProjects: state ];
+		yourself.
+	
 	(toggleSystemProjectsButtonPresenter := self newToggleButton)
 		addStyle: 'flat';
 		icon: (self iconNamed: #systemRepository);
@@ -36,6 +46,7 @@ PulsarRepositoriesView >> addVisibilityToolbar [
 	
 	listToolbarPresenter addPresenter: (self newToolbar
 		displayMode: self application toolbarDisplayMode;
+		add: toggleDirtyProjectsButtonPresenter;
 		add: toggleSystemProjectsButtonPresenter;
 		yourself)
 ]
@@ -247,11 +258,15 @@ PulsarRepositoriesView >> eventRepositoryModified: ann [
 
 { #category : 'private' }
 PulsarRepositoriesView >> filterRepositories: aCollection [
+	| filteredCollection |
 
-	hideSystemProjects ifFalse: [ ^ aCollection ].
+	filteredCollection := aCollection.
+	hideSystemProjects ifTrue: [ 
+		filteredCollection := filteredCollection reject: [ :each | each isSystemRepository ] ].
+	hideNonDirtyProjects ifTrue: [ 
+		filteredCollection := filteredCollection select: [ :each | each isDirty ] ].
 
-	^ aCollection reject: [ :each | 
-		each isSystemRepository ]
+	^ filteredCollection
 ]
 
 { #category : 'private - testing' }
@@ -278,6 +293,7 @@ PulsarRepositoriesView >> initialize [
 
 	updating := false.
 	hideSystemProjects := true.
+	hideNonDirtyProjects := false.
 	super initialize
 ]
 
@@ -308,6 +324,12 @@ PulsarRepositoriesView >> initializePresenters [
 PulsarRepositoriesView >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter title: 'Repository'
+]
+
+{ #category : 'testing' }
+PulsarRepositoriesView >> isHideNonDirtyProjects [
+
+	^ hideNonDirtyProjects
 ]
 
 { #category : 'private - testing' }
@@ -384,7 +406,16 @@ PulsarRepositoriesView >> snapshot [
 	^ PulsarRepositoriesSnapshot on: self
 ]
 
-{ #category : 'private' }
+{ #category : 'private - actions' }
+PulsarRepositoriesView >> toggleDirtyProjects: aBoolean [
+
+	hideNonDirtyProjects = aBoolean ifTrue: [ ^ self ].
+
+	hideNonDirtyProjects := aBoolean.
+	self updatePresenter
+]
+
+{ #category : 'private - actions' }
 PulsarRepositoriesView >> toggleSystemProjects: aBoolean [
 
 	hideSystemProjects = aBoolean ifTrue: [ ^ self ].

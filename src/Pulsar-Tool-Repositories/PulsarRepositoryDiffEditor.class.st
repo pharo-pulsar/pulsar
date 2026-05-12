@@ -23,10 +23,10 @@ PulsarRepositoryDiffEditor >> commitToString: aCommitOrWorkingCopy [
 		
 	^ String streamContents: [ :stream | 
 		stream << aCommitOrWorkingCopy shortId.
-	
+		
 		(aCommitOrWorkingCopy repository headCommit = aCommitOrWorkingCopy) 
 			ifTrue: [ stream << ' <b>HEAD</b>' ].
-		
+
 		aCommitOrWorkingCopy tags ifNotEmpty: [ :tags | 
 			stream << ' '.
 			tags 

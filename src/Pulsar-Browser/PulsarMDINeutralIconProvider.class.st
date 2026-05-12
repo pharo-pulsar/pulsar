@@ -145,6 +145,7 @@ PulsarMDINeutralIconProvider >> createTable [
 		('compare-branch'		  'compare')
 		('lock'					  'lock')
 		('unlock'				  'lock-open-variant')
+		('dirtyProject'			  'source-commit-local')
 		
 
 		"Inspection / metamodel introspection"

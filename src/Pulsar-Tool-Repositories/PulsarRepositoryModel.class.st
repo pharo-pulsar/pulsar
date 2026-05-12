@@ -210,6 +210,12 @@ PulsarRepositoryModel >> isDetached [
 ]
 
 { #category : 'testing' }
+PulsarRepositoryModel >> isDirty [
+
+	^ self entity workingCopy isModified
+]
+
+{ #category : 'testing' }
 PulsarRepositoryModel >> isHeadInBranch [
 
 	^ self critical: [ self entity head isBranch ]
