@@ -211,14 +211,6 @@ PulsarRepositoryBaseBranchView >> notifyRepositoryModified [
 	self application resendAnnouncement: (PulsarRepositoryModified newValue: self model)
 ]
 
-{ #category : 'private' }
-PulsarRepositoryBaseBranchView >> selectedItemName [
-
-	^ self selectedItem 
-		ifNotNil: [ :each | each name ]
-		ifNil: [ 'Unknown' ]
-]
-
 { #category : 'initialization' }
 PulsarRepositoryBaseBranchView >> toolbarActions [
 

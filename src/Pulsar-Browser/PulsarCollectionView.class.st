@@ -75,3 +75,11 @@ PulsarCollectionView >> selectedItem [
 
 	^ listPresenter ifNotNil: #selectedItem
 ]
+
+{ #category : 'private - accessing' }
+PulsarCollectionView >> selectedItemName [
+
+	^ self selectedItem 
+		ifNotNil: [ :aModel | aModel name ]
+		ifNil: [ 'Unknown' ]
+]
