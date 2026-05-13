@@ -36,6 +36,12 @@ PulsarRepositoryModel >> addPackage: aPackage [
 	self entity workingCopy addPackageNamed: aPackage name
 ]
 
+{ #category : 'actions' }
+PulsarRepositoryModel >> addRemote: aName url: anUrl [
+
+	self entity addRemote: (IceGitRemote name: aName url: anUrl)
+]
+
 { #category : 'accessing' }
 PulsarRepositoryModel >> allPackagesAvailableToAdd [
 	| packageNames |
@@ -378,6 +384,17 @@ PulsarRepositoryModel >> newPushActionTo: aRemote [
 		repository: self entity;
 		message: ('Pushing to {1}' format: { self entity branch name }) ;
 		action: [ self entity pushTo: (aRemote ifNil: [ self entity branch upstream remote ]) ];
+		yourself
+]
+
+{ #category : 'actions - command' }
+PulsarRepositoryModel >> newRemoveRemoteActionFor: aRemote [
+	
+	^ IceTipStandardAction new
+		repository: self entity;
+		message: ('Removing remote {1}' format: { aRemote name });
+		onSuccessRepositoryModified;
+		action: [ self entity removeRemote: aRemote ];
 		yourself
 ]
 
