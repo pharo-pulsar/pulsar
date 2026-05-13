@@ -162,7 +162,13 @@ PulsarBaseBrowser >> addStatusbarPresenter: aPresenter [
 { #category : 'private' }
 PulsarBaseBrowser >> addTool: ann [
 
-	self addPresenterClass: ann toolClass
+	ann isUnique ifTrue: [
+		(self findPresenterClass: ann toolClass) ifNotNil: [ :aPresenter |
+			aPresenter withPanelWidgetDo: [ :aPanelWidget | 
+				aPanelWidget raiseAndTakeKeyboardFocus ].
+			^ self ] ].
+
+	self addPresenterClass: ann toolClass model: ann model
 ]
 
 { #category : 'private' }
