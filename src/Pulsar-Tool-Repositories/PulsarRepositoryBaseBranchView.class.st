@@ -61,14 +61,15 @@ PulsarRepositoryBaseBranchView >> defineGitCommonActionsOn: aBuilder [
 			dynamicName: [ 'Checkout {1}' format: {  self selectedItemName } ];
 			iconName: 'checkout-branch';
 			description: 'Checkout branch';
-			actionEnabled: [ self hasSelectedItem ];
+			actionEnabled: [ self hasSelectedItem and: [ self selectedItem isHead not ] ];
 			action: [ self doCheckoutSelectedBranchOrTag ] ] 
  
 		]
 ]
 
 { #category : 'private - actions' }
-PulsarRepositoryBaseBranchView >> doCheckout: aBranchOrTagModel [ 
+PulsarRepositoryBaseBranchView >> doCheckout: aBranchOrTagModel [
+
 	(PulsarRepositoryCheckoutWindow
 		newApplication: self application
 		model: (PulsarRepositoryCheckoutPreviewModel
