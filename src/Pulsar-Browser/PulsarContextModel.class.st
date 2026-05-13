@@ -56,10 +56,9 @@ PulsarContextModel >> asClassModel [
 
 { #category : 'converting' }
 PulsarContextModel >> asMethodModel [
-
 	^ PvMethodModel 
 		newEnvironment: self environmentModel 
-		entity: self method
+		entity: self realMethod
 ]
 
 { #category : 'converting' }
