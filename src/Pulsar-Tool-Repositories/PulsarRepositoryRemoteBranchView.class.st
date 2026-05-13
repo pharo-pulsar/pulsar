@@ -6,13 +6,25 @@ Class {
 	#tag : 'View-Branches'
 }
 
-{ #category : 'nil' }
+{ #category : 'private' }
 PulsarRepositoryRemoteBranchView >> branches [ 
 
 	^ self model remoteBranches
 ]
 
-{ #category : 'accessing - actions' }
+{ #category : 'private - definitions' }
+PulsarRepositoryRemoteBranchView >> defineExtraActionsOn: aBuilder [
+	<dockActions>
+	
+	aBuilder addGroup: #extraActions with: [ :group | group 
+		addActionWith: [ :action | action 
+			dynamicName: [ 'Open remotes' ];
+			iconName: #remotes;
+			description: 'Open remotes view';
+			action: [ self doOpenRemotes ] ] ]
+]
+
+{ #category : 'private - definitions' }
 PulsarRepositoryRemoteBranchView >> defineGitActionsOn: aBuilder [
 	<dockActions>
 	
@@ -27,6 +39,22 @@ PulsarRepositoryRemoteBranchView >> defineGitActionsOn: aBuilder [
 					and: [ self hasSelectedItem
 					and: [ self selectedItem isHead not ] ] ] ;
 			action: [ self doMergeSelectedBranchIntoHead ] ] ]
+]
+
+{ #category : 'private - actions' }
+PulsarRepositoryRemoteBranchView >> doOpenRemotes [
+
+	self notificationCenter announce: (PulsarRequestRepositoryRemotes on: self model)
+]
+
+{ #category : 'initialization' }
+PulsarRepositoryRemoteBranchView >> initializePresenters [
+
+	super initializePresenters.
+
+	toolbarPresenter addPresenter: (self newToolbar
+		displayMode: self application toolbarDisplayMode;
+		fillWith: (self actions actionsFor: #extraActions))
 ]
 
 { #category : 'accessing' }

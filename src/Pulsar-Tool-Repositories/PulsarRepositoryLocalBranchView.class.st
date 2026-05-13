@@ -12,7 +12,7 @@ PulsarRepositoryLocalBranchView >> branches [
 	^ self model localBranches
 ]
 
-{ #category : 'accessing - actions' }
+{ #category : 'private - definitions' }
 PulsarRepositoryLocalBranchView >> defineGitActionsOn: aBuilder [
 	<dockActions>
 	

@@ -9,6 +9,14 @@ Class {
 	#tag : 'Announcement'
 }
 
+{ #category : 'instance creation' }
+PulsarRequestToolAnnouncement class >> on: anObject [
+
+	^ self new 
+		model: anObject;
+		yourself
+]
+
 { #category : 'testing' }
 PulsarRequestToolAnnouncement >> isUnique [
 	"override is there can not be multiple versions of requested tool"

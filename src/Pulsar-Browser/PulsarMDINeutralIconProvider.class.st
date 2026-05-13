@@ -146,6 +146,7 @@ PulsarMDINeutralIconProvider >> createTable [
 		('lock'					  'lock')
 		('unlock'				  'lock-open-variant')
 		('dirtyProject'			  'source-commit-local')
+		('remotes'			  	  'cloud-outline')
 		
 
 		"Inspection / metamodel introspection"
