@@ -206,7 +206,7 @@ PulsarBrowser >> openCritiquesConsole [
 			(self 
 				addPresenterClass: PulsarCritiquesConsole 
 				model: (PulsarCritiquesModel on: self model))
-			panelWindow ].
+			panelWidget ].
 
 	critiquesConsole raiseAndTakeKeyboardFocus
 ]
@@ -221,7 +221,7 @@ PulsarBrowser >> openFlagsConsole [
 			(self 
 				addPresenterClass: PulsarFlagsConsole 
 				model: (PulsarFlagsModel on: self model))
-			panelWindow ].
+			panelWidget ].
 
 	flagsConsole raiseAndTakeKeyboardFocus
 ]

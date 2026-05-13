@@ -55,7 +55,7 @@ PulsarEditor class >> defineWindowActionsOn: aBuilder [
 		addActionWith: [ :action | action
 			name: 'Maximize';
 			description: 'Maximize current window';
-			action: [ :aContext | aContext withPanelWindowDo: #maximize ] ];		
+			action: [ :aContext | aContext withPanelWidgetDo: #maximize ] ];		
 		addActionWith: [ :action | action
 			name: 'Detach';
 			shortcutKey: Character arrowUp alt shift;
@@ -148,7 +148,7 @@ PulsarEditor >> doDetachWindow [
 	newBrowser := PulsarDetachedBrowser 
 		newApplication: self application 
 		model: self window model.
-	panelWindow := self panelWindow.
+	panelWindow := self panelWidget.
 	
 	"it seems to look better if I open it first (the visualisation effect is nicer)"
 	newBrowser open.
@@ -307,7 +307,7 @@ PulsarEditor >> extraContentActions [
 { #category : 'private - actions' }
 PulsarEditor >> forceClose [
 
-	self withPanelWindowDo: [ :aWindow | aWindow forceClose ].
+	self withPanelWidgetDo: [ :aPanelWindow | aPanelWindow forceClose ].
 	
 	self close
 ]
@@ -395,7 +395,7 @@ PulsarEditor >> markDirty [
 	
 	dirty ifTrue: [ ^ self ].
 	dirty := true.
-	self withPanelWindowDo: [ :w | w modified: true ].
+	self withPanelWidgetDo: [ :w | w modified: true ].
 	self 
 		addOverlay: self dirtyMarkerPresenter 
 		withConstraints: [ :c | c hAlignEnd; vAlignStart ]
@@ -591,7 +591,7 @@ PulsarEditor >> unmarkDirty [
 
 	dirty ifFalse: [ ^ self ].
 	dirty := false.
-	self withPanelWindowDo: [ :w | w modified: false ].
+	self withPanelWidgetDo: [ :w | w modified: false ].
 	self removeOverlay: self dirtyMarkerPresenter
 ]
 
@@ -623,7 +623,7 @@ PulsarEditor >> updateModel: aString [
 { #category : 'initialization' }
 PulsarEditor >> updatePanelWindowTitle [
 
-	self withPanelWindowDo: [ :w | 
+	self withPanelWidgetDo: [ :w | 
 		w title: self model name.
 		"it may have an icon, but is the panelPlacedIconName which needs to give it to me"
 		self panelPlacedIconName ifNotNil: [ :aName | 

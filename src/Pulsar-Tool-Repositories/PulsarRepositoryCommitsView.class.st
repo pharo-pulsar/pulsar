@@ -155,7 +155,7 @@ PulsarRepositoryCommitsView >> updatePresenter [
 { #category : 'initialization' }
 PulsarRepositoryCommitsView >> updateTitle [
 
-	self withPanelWindowDo: [ :aPanelWindow | 
+	self withPanelWidgetDo: [ :aPanelWindow | 
 		aPanelWindow title: ('Commits ({1})' format: { 
 			(lastBranchSelected ifNil: [ self model ]) name truncateWithElipsisTo: 20 }) ]
 ]

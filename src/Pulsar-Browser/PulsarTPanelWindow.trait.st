@@ -100,7 +100,7 @@ PulsarTPanelWindow >> pinned: aBoolean [
 { #category : 'accessing' }
 PulsarTPanelWindow >> raise [
 
-	self withPanelWindowDo: [ :aWindow | 
+	self withPanelWidgetDo: [ :aWindow | 
 		aWindow raiseAndTakeKeyboardFocus ]
 ]
 

@@ -106,7 +106,7 @@ PulsarHierarchyPresenter >> notifyActivateEntity: anEntity [
 	"if I am in a panel window, I want to show the activation in the next column. 
 	 it it is the first column (at the left, the most usual case), I put it next, 
 	 if is in another column, I put it previous"
-	self withPanelWindowDo: [ :aPanelWindow |
+	self withPanelWidgetDo: [ :aPanelWindow |
 		"just if I am inside a panel window and I am not e.g. a popover"
 		self nearWindowLike = aPanelWindow ifTrue: [
 			announcement desiredPosition: (aPanelWindow panelPosition copy

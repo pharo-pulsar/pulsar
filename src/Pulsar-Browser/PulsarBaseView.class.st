@@ -70,7 +70,7 @@ PulsarBaseView >> panelPosition [
 PulsarBaseView >> panelTransferredFrom: fromWindow to: toWindow [
 
 	toWindow 
-		moveWindow: self panelWindow
+		moveWindow: self panelWidget
 		from: fromWindow
 ]
 
@@ -110,7 +110,7 @@ PulsarBaseView >> scheduleTask: aBlock [
 { #category : 'accessing' }
 PulsarBaseView >> spotterTitle [
 	
-	self withPanelWindowDo: [ :aWindow | ^ aWindow title ].
+	self withPanelWidgetDo: [ :aPanelWindow | ^ aPanelWindow title ].
 	
 	^ 'Unnamed'
 ]

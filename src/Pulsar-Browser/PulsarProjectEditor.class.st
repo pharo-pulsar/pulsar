@@ -164,7 +164,7 @@ PulsarProjectEditor >> updatePresenter [
 	dependentListPresenter 
 		items: self model dependencyModels.
 		
-	self withPanelWindowDo: [ :aWindow | 
+	self withPanelWidgetDo: [ :aWindow | 
 		aWindow title: self model name ]
 ]
 

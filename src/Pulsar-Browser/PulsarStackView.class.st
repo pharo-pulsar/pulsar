@@ -172,7 +172,7 @@ PulsarStackView >> eventEditorActivated: anAnnouncement [
 	logger trace: activatedEditor.
 	self mutex critical: [
 		self updatePresenter.
-		activatedEditor withPanelWindowDo: [ :w | 
+		activatedEditor withPanelWidgetDo: [ :w | 
 			w isClosed 
 				ifTrue: [ ^ self ] ].
 		listPresenter selectItem: activatedEditor ]

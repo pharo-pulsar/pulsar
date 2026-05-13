@@ -50,7 +50,7 @@ PulsarPanelSnapshot >> restoreTo: aPresenter [
 PulsarPanelSnapshot >> snapshot: aPresenter [
 
 	presenterClass := aPresenter class.
-	dockPosition := aPresenter panelWindow panelPosition.
+	dockPosition := aPresenter panelWidget panelPosition.
 	pinned := aPresenter isPinned.
 	self takeModelSnapshot: aPresenter
 ]

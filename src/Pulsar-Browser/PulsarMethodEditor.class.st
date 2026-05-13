@@ -246,7 +246,7 @@ PulsarMethodEditor >> eventModelRemoved: anAnnouncememnt [
 
 	anAnnouncememnt value = self model ifFalse: [ ^ self ].
 
-	self withPanelWindowDo: [ :aWindow | aWindow close ]
+	self withPanelWidgetDo: [ :aPanelWindow | aPanelWindow close ]
 ]
 
 { #category : 'events' }

@@ -260,7 +260,7 @@ PulsarClassOutlineView >> updatePresenter [
 { #category : 'initialization' }
 PulsarClassOutlineView >> updateTitle [
 
-	self withPanelWindowDo: [ :w | 
+	self withPanelWidgetDo: [ :w | 
 		w title: self model name ]
 ]
 
