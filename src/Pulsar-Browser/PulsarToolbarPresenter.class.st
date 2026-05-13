@@ -20,8 +20,10 @@ PulsarToolbarPresenter >> actions: anActionGroup [
 PulsarToolbarPresenter >> actionsFirstLayout [
 
 	^ SpBoxLayout newHorizontal
+		vAlignCenter;
 		add: (SpBoxLayout newHorizontal
 				hAlignStart;
+				vAlignCenter;
 				add: actionToolbarPresenter;
 				yourself)
 			expand: false;
