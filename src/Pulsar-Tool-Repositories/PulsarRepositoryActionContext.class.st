@@ -51,7 +51,9 @@ PulsarRepositoryActionContext >> doPull: aModel [
 		remote ifNil: [ ^ self ] ].
 
 	self scheduleJob: [ :statusbar |
-		statusbar pushMessage: ('Pulling from {1}/{2}...' format: { remote name. aModel name }).
+		statusbar pushMessage: ('Pulling from {1}{2}...' format: { 
+			remote ifNotNil: [ remote name, '/' ] ifNil: [ '' ]. 
+			aModel name }).
 		(aModel newPullActionFrom: remote)
 			onSuccess: [ self notifyRepositoryModified: aModel ];
 			executeWithContext: self owner ]
@@ -81,8 +83,6 @@ PulsarRepositoryActionContext >> doPull: aModel intoBranch: aLocalBranchModel [
 PulsarRepositoryActionContext >> doPush: aModel [
 	| remote |
 
-	aModel isRemoteUpstream: aModel remotes second.
-
 	remote := nil.
 	(aModel hasUpstream not or: [ aModel remotes size > 1 ]) ifTrue: [
 		remote := self application newSelect
@@ -94,7 +94,9 @@ PulsarRepositoryActionContext >> doPush: aModel [
 		remote ifNil: [ ^ self ] ].
 
 	self scheduleJob: [ :statusbar |
-		statusbar pushMessage: ('Pushing to {1}/{2}...' format: { remote name. aModel name }).
+		statusbar pushMessage: ('Pushing to {1}{2}...' format: { 
+			remote ifNotNil: [ remote name, '/' ] ifNil: [ '' ]. 
+			aModel name }).
 		(aModel newPushActionTo: remote)
 			onSuccess: [ self notifyRepositoryModified: aModel ];
 			executeWithContext: self owner ]
