@@ -391,7 +391,13 @@ PulsarRepositoryModel >> newPushActionTo: aRemote [
 	^ IceTipStandardAction new 
 		repository: self entity;
 		message: ('Pushing to {1}' format: { self entity branch name }) ;
-		action: [ self entity pushTo: (aRemote ifNil: [ self entity branch upstream remote ]) ];
+		action: [ 
+			| remote |
+			"if this is not the default branch, se it (for the future)"
+			remote := self entity branch upstream remote.
+			aRemote = remote 
+				ifFalse: [ self entity branch setUpstreamRemote: aRemote ].
+			self entity pushTo: aRemote ];
 		yourself
 ]
 
