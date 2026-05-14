@@ -45,7 +45,12 @@ PulsarRepositoryRemotesView >> defineActionsOn: aBuilder [
 			description: 'Add a remote';
 			action: [ self doAddRemote ] ] ].
 			
-	aBuilder addGroup: #contextActions with: [ :group | group 
+	aBuilder addGroup: #contextActions with: [ :group | group
+		addActionWith: [ :action | action 
+			name: 'Open remote location';
+			description: 'Open the remote location';
+			actionEnabled: [ self hasSelectedItem ];
+			action: [ self doOpenLocation ] ];
 		addGroup: #critical with: [ :dangerGroup | dangerGroup
 			beDisplayedAsGroup;
 			addActionWith: [ :action | action 
@@ -79,6 +84,19 @@ PulsarRepositoryRemotesView >> doAddRemote [
 PulsarRepositoryRemotesView >> doClose [
 	
 	self withNearWindowLikeDo: [ :aWindow | aWindow close ]
+]
+
+{ #category : 'private - actions' }
+PulsarRepositoryRemotesView >> doOpenLocation [
+	| url |
+	
+	url := self selectedItem url.
+	url := url copyReplaceAll: '.git' with: ''.
+	(url beginsWith: 'git@') ifTrue: [
+		url := url copyReplaceAll: ':' with: '/'.
+		url := url copyReplaceAll: 'git@' with: 'https://' ].
+	
+	WebBrowser openOn: url
 ]
 
 { #category : 'private - actions' }
