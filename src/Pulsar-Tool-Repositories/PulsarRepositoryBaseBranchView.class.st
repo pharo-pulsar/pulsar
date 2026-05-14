@@ -68,8 +68,8 @@ PulsarRepositoryBaseBranchView >> defineGitCommonActionsOn: aBuilder [
 ]
 
 { #category : 'private - actions' }
-PulsarRepositoryBaseBranchView >> doCheckout: aBranchOrTagModel [
-
+PulsarRepositoryBaseBranchView >> doCheckout: aBranchOrTagModel [ 
+	
 	(PulsarRepositoryCheckoutWindow
 		newApplication: self application
 		model: (PulsarRepositoryCheckoutPreviewModel
