@@ -269,6 +269,14 @@ PulsarRepositoryModel >> isPackageLoaded: aPackageModel [
 ]
 
 { #category : 'testing' }
+PulsarRepositoryModel >> isRemoteUpstream: aRemote [
+	
+	self isHeadInBranch ifFalse: [ ^ false ].
+	
+	^ self entity branch upstream remote = aRemote
+]
+
+{ #category : 'testing' }
 PulsarRepositoryModel >> isSystemRepository [
 
 	^ self entity project tags includes: #system

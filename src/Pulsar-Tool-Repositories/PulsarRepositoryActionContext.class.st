@@ -41,17 +41,17 @@ PulsarRepositoryActionContext >> doPull: aModel [
 	| remote |
 
 	remote := nil.
-	aModel hasUpstream ifFalse: [
+	(aModel hasUpstream not or: [ aModel remotes size > 1 ]) ifFalse: [	
 		remote := self application newSelect
-			title: 'Upstream missing';
+			title: 'Select remote';
 			message: 'Select remote to pull from (set upstream)';
-			items: aModel remotes;
+			items: (aModel remotes sorted: [ :a | aModel isRemoteUpstream: a ] descending, #name ascending );
 			display: [ :aRemote | aRemote name ];
 			openModalWithParent: self window.
 		remote ifNil: [ ^ self ] ].
 
 	self scheduleJob: [ :statusbar |
-		statusbar pushMessage: ('Pulling from {1}...' format: { aModel name }).
+		statusbar pushMessage: ('Pulling from {1}/{2}...' format: { remote name. aModel name }).
 		(aModel newPullActionFrom: remote)
 			onSuccess: [ self notifyRepositoryModified: aModel ];
 			executeWithContext: self owner ]
@@ -66,7 +66,6 @@ PulsarRepositoryActionContext >> doPull: aModel intoBranch: aLocalBranchModel [
 		remote := self application newSelect
 			title: 'Upstream missing';
 			message: 'Select remote to pull from (set upstream)';
-			items: aModel remotes;
 			display: [ :aRemote | aRemote name ];
 			openModalWithParent: self window.
 		remote ifNil: [ ^ self ] ].
@@ -82,18 +81,20 @@ PulsarRepositoryActionContext >> doPull: aModel intoBranch: aLocalBranchModel [
 PulsarRepositoryActionContext >> doPush: aModel [
 	| remote |
 
+	aModel isRemoteUpstream: aModel remotes second.
+
 	remote := nil.
-	aModel hasUpstream ifFalse: [
+	(aModel hasUpstream not or: [ aModel remotes size > 1 ]) ifTrue: [
 		remote := self application newSelect
-			title: 'Upstream missing';
+			title: 'Select remote';
 			message: 'Select remote to push to (set upstream)';
-			items: aModel remotes;
+			items: (aModel remotes sorted: [ :a | aModel isRemoteUpstream: a ] descending, #name ascending );
 			display: [ :aRemote | aRemote name ];
 			openModalWithParent: self window.
 		remote ifNil: [ ^ self ] ].
 
 	self scheduleJob: [ :statusbar |
-		statusbar pushMessage: ('Pushing to {1}...' format: { aModel name }).
+		statusbar pushMessage: ('Pushing to {1}/{2}...' format: { remote name. aModel name }).
 		(aModel newPushActionTo: remote)
 			onSuccess: [ self notifyRepositoryModified: aModel ];
 			executeWithContext: self owner ]
