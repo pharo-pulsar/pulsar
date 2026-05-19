@@ -23,7 +23,7 @@ BaselineOfPulsar >> baseline: spec [
 		self mcp: spec.
 		
 		spec package: 'Perspective-Spotter' 			with: [ spec requires: 'Linden' ]. 
-		spec package: 'Perspective' 					with: [ spec requires: #('Linden' 'Perspective-Spotter') ]. 
+		spec package: 'Perspective' 					with: [ spec requires: #('Adwaita' 'Linden' 'Perspective-Spotter') ]. 
 		spec package: 'Perspective-Project' 			with: [ spec requires: 'Perspective' ].
 		spec package: 'Perspective-Package' 			with: [ spec requires: 'Perspective' ].
 		spec package: 'Perspective-Class' 			with: [ spec requires: 'Perspective' ].
