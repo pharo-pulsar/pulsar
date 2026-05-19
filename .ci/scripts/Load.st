@@ -13,6 +13,7 @@ MetaMetacello load: [ :spec | spec
 	baseline: 'SpecGtk' with: [ spec 
 		repository: 'github://pharo-spec/Spec-Gtk:main';
 		loads: #(default) ];
+	baseline: 'Vte' with: [ spec repository: 'github://estebanlm/Spec-VTE:main' ];
 	baseline: 'NewTools' with: [ spec 
 		repository: 'github://pharo-spec/NewTools:dev-2.0';
 		loads: #(default 'NewTools-Gtk') ];
@@ -25,4 +26,12 @@ MetaMetacello load: [ :spec | spec
 	baseline: 'SourceEditor' with: [ spec repository: 'git:git@forge.smallworks.eu:pharo/SourceEditor.git:main' ];
 	baseline: 'Panel' with: [ spec repository: 'github://estebanlm/Spec-LibPanel:main' ];
 	baseline: 'Pulsar' with: [ spec repository: 'git:git@forge.smallworks.eu:pharo/Pulsar.git:main' ];
-	baseline: 'LibGit' with: [ spec repository: 'github://pharo-vcs/libgit2-pharo-bindings:experimental-run-in-thread' ] ]
+	"threaded iceberg"
+	baseline: 'LibGit' with: [ spec repository: 'github://pharo-vcs/libgit2-pharo-bindings:experimental-run-in-thread' ];
+	"LLM (should be optional)"
+	baseline: 'JRPC' with: [ spec 
+		repository: 'github://juliendelplanque/JRPC:v3.2.1'; 
+		loads: 'Deployment' ];
+	"using mine for now to have better control"
+	baseline: 'MCP' with: [ spec repository: 'github://estebanlm/MCP:main' ] 
+]
