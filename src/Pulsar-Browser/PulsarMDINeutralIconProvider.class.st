@@ -250,7 +250,11 @@ PulsarMDINeutralIconProvider >> createTable [
 		('smallSave'              'content-save')
 
 		"Transcript"
-		('transcript'             'console')
+		('transcript'             	'console')
+		
+		"LLM"
+		('chat'			 			'chat-outline')
+		('chat-connect'			 	'cloud-outline')
 	)
 ]
 
