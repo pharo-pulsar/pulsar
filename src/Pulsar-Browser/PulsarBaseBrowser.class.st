@@ -172,6 +172,25 @@ PulsarBaseBrowser >> addTool: ann [
 ]
 
 { #category : 'private' }
+PulsarBaseBrowser >> addUniquePresenterClass: aPresenterClass [
+	
+self 
+		addUniquePresenterClass: aPresenterClass 
+		model: nil
+]
+
+{ #category : 'private' }
+PulsarBaseBrowser >> addUniquePresenterClass: aPresenterClass model: anObject [
+
+	(self findPresenterClass: aPresenterClass) ifNotNil: [ :aPresenter |
+		aPresenter withPanelWidgetDo: [ :aPanelWidget | 
+			aPanelWidget raiseAndTakeKeyboardFocus ].
+		^ self ].
+
+	self addPresenterClass: aPresenterClass model: anObject
+]
+
+{ #category : 'private' }
 PulsarBaseBrowser >> addWindow: aWindow [
 
 	self mutex critical: [ 
