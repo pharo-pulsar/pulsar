@@ -20,12 +20,6 @@ MetaMetacello load: [ :spec | spec
 	baseline: 'Roassal' with: [ spec 
 		repository: 'git:git@forge.smallworks.eu:pharo/Roassal.git:main';
 		loads: #('Roassal-Spec-Gtk') ];
-	baseline: 'Stargate' with: [ spec repository: 'github://estebanlm/stargate:main' ];
-	baseline: 'Linden' with: [ spec repository: 'git:git@forge.smallworks.eu:estebanlm/linden.git:main' ];
-	baseline: 'Adwaita' with: [ spec repository: 'github://estebanlm/Spec-LibAdwaita:main' ];
-	baseline: 'SourceEditor' with: [ spec repository: 'git:git@forge.smallworks.eu:pharo/SourceEditor.git:main' ];
-	baseline: 'Panel' with: [ spec repository: 'github://estebanlm/Spec-LibPanel:main' ];
-	baseline: 'Pulsar' with: [ spec repository: 'git:git@forge.smallworks.eu:pharo/Pulsar.git:main' ];
 	"threaded iceberg"
 	baseline: 'LibGit' with: [ spec repository: 'github://pharo-vcs/libgit2-pharo-bindings:experimental-run-in-thread' ];
 	"LLM (should be optional)"
@@ -33,5 +27,10 @@ MetaMetacello load: [ :spec | spec
 		repository: 'github://juliendelplanque/JRPC:v3.2.1'; 
 		loads: #('Deployment') ];
 	"using mine for now to have better control"
-	baseline: 'MCP' with: [ spec repository: 'github://estebanlm/MCP:main' ] 
-]
+	baseline: 'MCP' with: [ spec repository: 'github://estebanlm/MCP:main' ];
+	baseline: 'Stargate' with: [ spec repository: 'github://estebanlm/stargate:main' ];
+	baseline: 'Linden' with: [ spec repository: 'git:git@forge.smallworks.eu:estebanlm/linden.git:main' ];
+	baseline: 'Adwaita' with: [ spec repository: 'github://estebanlm/Spec-LibAdwaita:main' ];
+	baseline: 'SourceEditor' with: [ spec repository: 'git:git@forge.smallworks.eu:pharo/SourceEditor.git:main' ];
+	baseline: 'Panel' with: [ spec repository: 'github://estebanlm/Spec-LibPanel:main' ];
+	baseline: 'Pulsar' with: [ spec repository: 'git:git@forge.smallworks.eu:pharo/Pulsar.git:main' ] ]
