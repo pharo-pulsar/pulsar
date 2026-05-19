@@ -293,5 +293,5 @@ PulsarPlayground >> updatePresenter [
 PulsarPlayground >> updateTitle [
 
 	toolbarPresenter updateBreadcrumbWith: [ :aBreadcrumb |
-		aBreadcrumb addSegment: 'Playground' ]
+		aBreadcrumb addSegment: self class defaultTitle ]
 ]
