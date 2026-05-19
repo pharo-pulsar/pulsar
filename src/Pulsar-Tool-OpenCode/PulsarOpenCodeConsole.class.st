@@ -43,8 +43,6 @@ Remember that the Pharo image must be save when we finish to implement some code
 PulsarOpenCodeConsole class >> defaultPanelPosition [
 
 	^ SpPanelPosition bottomArea
-		column: 2;
-		yourself
 ]
 
 { #category : 'accessing' }
@@ -57,6 +55,21 @@ PulsarOpenCodeConsole class >> defaultTitle [
 PulsarOpenCodeConsole class >> mcpPort [
 
 	^ 4000
+]
+
+{ #category : 'private' }
+PulsarOpenCodeConsole class >> opencodeJsonDefinition [
+
+	^ '{
+  "mcp": {
+    "pharo": {
+      "type": "remote",
+      "url": "http://127.0.0.1:4000",
+      "enabled": true
+    }
+  }
+}
+'
 ]
 
 { #category : 'layout' }
@@ -82,6 +95,7 @@ PulsarOpenCodeConsole >> doConnect [
 	
 [ 
 		self ensureAgent.
+		self ensureOpenCodeJson.
 		self ensureMCP.
 		self ensureConnect.
 		
@@ -148,6 +162,19 @@ PulsarOpenCodeConsole >> ensureMCP [
 	mcp := MCP new.
 	mcp server port: self class mcpPort.
 	mcp start
+]
+
+{ #category : 'private' }
+PulsarOpenCodeConsole >> ensureOpenCodeJson [
+	| reference |
+
+	reference := FileLocator imageDirectory / 'opencode.json'.
+	reference exists ifTrue: [
+		logger debug: 'opencode.json exists, skipping'.
+		^ self ].
+		
+	reference writeStreamDo: [ :stream | 
+		stream << self class opencodeJsonDefinition ]
 ]
 
 { #category : 'initialization' }
@@ -234,7 +261,11 @@ PulsarOpenCodeConsole >> updatePresenter [
 { #category : 'initialization' }
 PulsarOpenCodeConsole >> updateStatus [
 
-	toggleConnectButtonPresenter state: self isConnected
+	toggleConnectButtonPresenter 
+		help: ('Toggle chat connect (current: {1}CONNECTED)' format: { self isConnected 
+			ifTrue: [ '' ] 
+			ifFalse: [ 'DIS' ]});
+		state: self isConnected not
 ]
 
 { #category : 'initialization' }
