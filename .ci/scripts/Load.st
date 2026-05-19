@@ -31,7 +31,7 @@ MetaMetacello load: [ :spec | spec
 	"LLM (should be optional)"
 	baseline: 'JRPC' with: [ spec 
 		repository: 'github://juliendelplanque/JRPC:v3.2.1'; 
-		loads: 'Deployment' ];
+		loads: #('Deployment') ];
 	"using mine for now to have better control"
 	baseline: 'MCP' with: [ spec repository: 'github://estebanlm/MCP:main' ] 
 ]
