@@ -6,8 +6,6 @@ Class {
 	#instVars : [
 		'toolbarPresenter',
 		'terminalPresenter',
-		'mcp',
-		'connected',
 		'toggleConnectButtonPresenter'
 	],
 	#category : 'Pulsar-Tool-LLM',
@@ -84,7 +82,7 @@ PulsarLLMChatConsole >> defaultLayout [
 { #category : 'actions' }
 PulsarLLMChatConsole >> doClose [
 
-	self ensureDisconnect.
+	self doDisconnect.
 	self withNearWindowLikeDo: [ :aWindow | aWindow close ]	
 ]
 
@@ -93,14 +91,13 @@ PulsarLLMChatConsole >> doConnect [
 
 	self isConnected ifTrue: [ ^ self ].
 	
-[ 
-		self ensureAgent.
-		self ensureOpenCodeJson.
-		self ensureMCP.
-		self ensureConnect.
-		
-		connected := true.
-		"if will trigger a status, but the connected flag will prevent a re-execution" 
+	[ 
+		self model 
+			prepare;
+			"connecting will trigger a status change, but the connected flag 
+		 	will prevent a re-execution" 
+			connectTo: terminalPresenter.
+	
 		self updateStatus.
 	]
 	on: Error 
@@ -112,9 +109,9 @@ PulsarLLMChatConsole >> doDisconnect [
 
 	self isConnected ifFalse: [ ^ self ].
 	
-	self ensureDisconnect.
-	connected := false.
-	"if will trigger a status, but the connected flag will prevent a re-execution" 
+	self model disconnect.
+	"disconnecting will also trigger a status change, but the connected flag 
+	 will prevent a re-execution" 
 	self updateStatus
 
 ]
@@ -148,23 +145,6 @@ PulsarLLMChatConsole >> ensureConnect [
 ]
 
 { #category : 'private' }
-PulsarLLMChatConsole >> ensureDisconnect [
-
-	(mcp isNotNil and: [ mcp isRunning ]) 
-		ifTrue: [ mcp stop ]
-]
-
-{ #category : 'private' }
-PulsarLLMChatConsole >> ensureMCP [
-
-	(mcp isNotNil and: [ mcp isRunning ]) ifTrue: [ ^ self ].
-	
-	mcp := MCP new.
-	mcp server port: self class mcpPort.
-	mcp start
-]
-
-{ #category : 'private' }
 PulsarLLMChatConsole >> ensureOpenCodeJson [
 	| reference |
 
@@ -180,7 +160,7 @@ PulsarLLMChatConsole >> ensureOpenCodeJson [
 { #category : 'initialization' }
 PulsarLLMChatConsole >> initialize [
 
-	connected := false.
+	self setModelBeforeInitialization: PulsarLLMOpenCodeModel new.
 	super initialize
 ]
 
@@ -232,7 +212,7 @@ PulsarLLMChatConsole >> initializeWindow: aWindowPresenter [
 { #category : 'testing' }
 PulsarLLMChatConsole >> isConnected [
 
-	^ connected
+	^ self model isConnected
 ]
 
 { #category : 'private' }
