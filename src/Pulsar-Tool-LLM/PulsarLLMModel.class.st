@@ -89,6 +89,12 @@ PulsarLLMModel >> isConnected [
 	^ connected
 ]
 
+{ #category : 'accessing' }
+PulsarLLMModel >> name [
+	
+	^ self subclassResponsibility
+]
+
 { #category : 'actions' }
 PulsarLLMModel >> prepare [
 

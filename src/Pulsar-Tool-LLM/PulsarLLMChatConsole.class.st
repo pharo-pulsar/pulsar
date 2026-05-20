@@ -251,6 +251,7 @@ PulsarLLMChatConsole >> updateStatus [
 { #category : 'initialization' }
 PulsarLLMChatConsole >> updateTitle [
 
-	toolbarPresenter updateBreadcrumbWith: [ :aBreadcrumb |
-		aBreadcrumb addSegment: self class defaultTitle ]
+	toolbarPresenter title: ('{1}: {2}' format: { 
+		self class defaultTitle. 
+		self model name })
 ]

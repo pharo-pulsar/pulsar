@@ -66,6 +66,12 @@ PulsarLLMOpenCodeModel >> ensureConfig [
 		ref writeStreamDo: [ :stream | stream << self class opencodeJsonDefinition ] ]
 ]
 
+{ #category : 'accessing' }
+PulsarLLMOpenCodeModel >> name [
+
+	^ 'OpenCode'
+]
+
 { #category : 'actions' }
 PulsarLLMOpenCodeModel >> prepare [
 
