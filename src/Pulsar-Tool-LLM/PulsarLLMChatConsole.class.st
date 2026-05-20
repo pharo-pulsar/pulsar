@@ -109,52 +109,12 @@ PulsarLLMChatConsole >> doDisconnect [
 
 	self isConnected ifFalse: [ ^ self ].
 	
+	terminalPresenter terminateAllSpawns.
 	self model disconnect.
 	"disconnecting will also trigger a status change, but the connected flag 
 	 will prevent a re-execution" 
 	self updateStatus
 
-]
-
-{ #category : 'private' }
-PulsarLLMChatConsole >> ensureAgent [
-	| reference |
-
-	reference := FileLocator imageDirectory / 'AGENTS.md'.
-	reference exists ifTrue: [
-		logger debug: 'AGENTS.md exists, skipping'.
-		^ self ].
-		
-	reference writeStreamDo: [ :stream | 
-		stream << self class agentsDefinition ]
-]
-
-{ #category : 'private' }
-PulsarLLMChatConsole >> ensureConnect [
-	| command |
-	
-	self flag: #TODO. "Make this more robust"
-	command := (LibC resultOfCommand: 'which opencode').
-	command ifEmpty: [
-		self error: 'OpenCode not found. Please install it and make sure it can be found in the PATH.' ].
-
-	terminalPresenter
-		spawnAsync: command trimBoth 
-		workingDirectory: FileLocator imageDirectory fullName
-		arguments: #()
-]
-
-{ #category : 'private' }
-PulsarLLMChatConsole >> ensureOpenCodeJson [
-	| reference |
-
-	reference := FileLocator imageDirectory / 'opencode.json'.
-	reference exists ifTrue: [
-		logger debug: 'opencode.json exists, skipping'.
-		^ self ].
-		
-	reference writeStreamDo: [ :stream | 
-		stream << self class opencodeJsonDefinition ]
 ]
 
 { #category : 'initialization' }

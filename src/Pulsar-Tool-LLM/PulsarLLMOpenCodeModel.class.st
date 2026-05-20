@@ -35,6 +35,7 @@ PulsarLLMOpenCodeModel >> connectTo: aTerminalPresenter [
 	
 	self startMCP.
 	
+	self flag: #TODO. "Make this more solid"
 	command := LibC resultOfCommand: 'which opencode'.
 	command ifEmpty: [ 
 		self error: 'OpenCode not found. Please install it and make sure it can be found in the PATH.' ].
