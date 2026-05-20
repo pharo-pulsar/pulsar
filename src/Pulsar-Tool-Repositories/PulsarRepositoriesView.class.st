@@ -262,7 +262,7 @@ PulsarRepositoriesView >> filterRepositories: aCollection [
 
 	filteredCollection := aCollection.
 	hideSystemProjects ifTrue: [ 
-		filteredCollection := filteredCollection reject: [ :each | each isSystemRepository ] ].
+		filteredCollection := filteredCollection reject: [ :each | self application isProjectInternal: each  ] ].
 	hideNonDirtyProjects ifTrue: [ 
 		filteredCollection := filteredCollection select: [ :each | each isDirty ] ].
 

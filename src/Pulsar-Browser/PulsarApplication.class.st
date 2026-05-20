@@ -11,6 +11,9 @@ Class {
 		'standalone',
 		'suspendAnnouncements'
 	],
+	#classVars : [
+		'InternalProjects'
+	],
 	#classInstVars : [
 		'lastSnapshot',
 		'running'
@@ -38,6 +41,18 @@ PulsarApplication class >> initialize [
 	SessionManager default registerGuiClassNamed: self name
 ]
 
+{ #category : 'private' }
+PulsarApplication class >> internalProjects [
+
+	^ InternalProjects ifNil: [ InternalProjects := #() ]
+]
+
+{ #category : 'private' }
+PulsarApplication class >> isProjectInternal: aRepository [
+
+	^ self internalProjects includes: aRepository name
+]
+
 { #category : 'accessing' }
 PulsarApplication class >> lastSnapshot [
 
@@ -48,6 +63,15 @@ PulsarApplication class >> lastSnapshot [
 PulsarApplication class >> lastSnapshot: aSnapshot [
 
 	lastSnapshot := aSnapshot
+]
+
+{ #category : 'private' }
+PulsarApplication class >> markProjectAsInternal: aRepository [
+	"Adds the repository to the internal list"
+
+	(self internalProjects includes: aRepository name) ifTrue: [ ^ self ].
+
+	InternalProjects := InternalProjects copyWith: aRepository name
 ]
 
 { #category : 'private' }
@@ -244,6 +268,13 @@ PulsarApplication >> initializeConfiguration [
 	self 
 		useBackend: #Gtk 
 		with: self newConfiguration
+]
+
+{ #category : 'testing' }
+PulsarApplication >> isProjectInternal: aRepository [
+	"Answer if current repository (iceberg) is marked as internal" 
+
+	^ self class isProjectInternal: aRepository
 ]
 
 { #category : 'settings' }
