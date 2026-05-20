@@ -1,5 +1,5 @@
 Class {
-	#name : 'PulsarOpenCodeConsole',
+	#name : 'PulsarLLMChatConsole',
 	#superclass : 'PulsarBaseView',
 	#traits : 'PulsarTSnapshot',
 	#classTraits : 'PulsarTSnapshot classTrait',
@@ -15,7 +15,7 @@ Class {
 }
 
 { #category : 'private' }
-PulsarOpenCodeConsole class >> agentsDefinition [
+PulsarLLMChatConsole class >> agentsDefinition [
 
 	^ '# Pharo MCP Guidance
 
@@ -40,25 +40,25 @@ Remember that the Pharo image must be save when we finish to implement some code
 ]
 
 { #category : 'defaults' }
-PulsarOpenCodeConsole class >> defaultPanelPosition [
+PulsarLLMChatConsole class >> defaultPanelPosition [
 
 	^ SpPanelPosition bottomArea
 ]
 
 { #category : 'accessing' }
-PulsarOpenCodeConsole class >> defaultTitle [
+PulsarLLMChatConsole class >> defaultTitle [
 
-	^ 'Playground'
+	^ 'Chat'
 ]
 
 { #category : 'private' }
-PulsarOpenCodeConsole class >> mcpPort [
+PulsarLLMChatConsole class >> mcpPort [
 
 	^ 4000
 ]
 
 { #category : 'private' }
-PulsarOpenCodeConsole class >> opencodeJsonDefinition [
+PulsarLLMChatConsole class >> opencodeJsonDefinition [
 
 	^ '{
   "mcp": {
@@ -73,7 +73,7 @@ PulsarOpenCodeConsole class >> opencodeJsonDefinition [
 ]
 
 { #category : 'layout' }
-PulsarOpenCodeConsole >> defaultLayout [
+PulsarLLMChatConsole >> defaultLayout [
 
 	^ SpBoxLayout newVertical
 		add: toolbarPresenter expand: false;
@@ -82,14 +82,14 @@ PulsarOpenCodeConsole >> defaultLayout [
 ]
 
 { #category : 'actions' }
-PulsarOpenCodeConsole >> doClose [
+PulsarLLMChatConsole >> doClose [
 
 	self ensureDisconnect.
 	self withNearWindowLikeDo: [ :aWindow | aWindow close ]	
 ]
 
 { #category : 'actions' }
-PulsarOpenCodeConsole >> doConnect [
+PulsarLLMChatConsole >> doConnect [
 
 	self isConnected ifTrue: [ ^ self ].
 	
@@ -108,7 +108,7 @@ PulsarOpenCodeConsole >> doConnect [
 ]
 
 { #category : 'actions' }
-PulsarOpenCodeConsole >> doDisconnect [
+PulsarLLMChatConsole >> doDisconnect [
 
 	self isConnected ifFalse: [ ^ self ].
 	
@@ -120,7 +120,7 @@ PulsarOpenCodeConsole >> doDisconnect [
 ]
 
 { #category : 'private' }
-PulsarOpenCodeConsole >> ensureAgent [
+PulsarLLMChatConsole >> ensureAgent [
 	| reference |
 
 	reference := FileLocator imageDirectory / 'AGENTS.md'.
@@ -133,7 +133,7 @@ PulsarOpenCodeConsole >> ensureAgent [
 ]
 
 { #category : 'private' }
-PulsarOpenCodeConsole >> ensureConnect [
+PulsarLLMChatConsole >> ensureConnect [
 	| command |
 	
 	self flag: #TODO. "Make this more robust"
@@ -148,14 +148,14 @@ PulsarOpenCodeConsole >> ensureConnect [
 ]
 
 { #category : 'private' }
-PulsarOpenCodeConsole >> ensureDisconnect [
+PulsarLLMChatConsole >> ensureDisconnect [
 
 	(mcp isNotNil and: [ mcp isRunning ]) 
 		ifTrue: [ mcp stop ]
 ]
 
 { #category : 'private' }
-PulsarOpenCodeConsole >> ensureMCP [
+PulsarLLMChatConsole >> ensureMCP [
 
 	(mcp isNotNil and: [ mcp isRunning ]) ifTrue: [ ^ self ].
 	
@@ -165,7 +165,7 @@ PulsarOpenCodeConsole >> ensureMCP [
 ]
 
 { #category : 'private' }
-PulsarOpenCodeConsole >> ensureOpenCodeJson [
+PulsarLLMChatConsole >> ensureOpenCodeJson [
 	| reference |
 
 	reference := FileLocator imageDirectory / 'opencode.json'.
@@ -178,14 +178,14 @@ PulsarOpenCodeConsole >> ensureOpenCodeJson [
 ]
 
 { #category : 'initialization' }
-PulsarOpenCodeConsole >> initialize [
+PulsarLLMChatConsole >> initialize [
 
 	connected := false.
 	super initialize
 ]
 
 { #category : 'initialization' }
-PulsarOpenCodeConsole >> initializePresenters [
+PulsarLLMChatConsole >> initializePresenters [
 
 	toolbarPresenter := self instantiate: PulsarEditorToolbarPresenter.
 
@@ -220,7 +220,7 @@ PulsarOpenCodeConsole >> initializePresenters [
 ]
 
 { #category : 'initialization' }
-PulsarOpenCodeConsole >> initializeWindow: aWindowPresenter [
+PulsarLLMChatConsole >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter
 		title: self class defaultTitle;
@@ -230,19 +230,19 @@ PulsarOpenCodeConsole >> initializeWindow: aWindowPresenter [
 ]
 
 { #category : 'testing' }
-PulsarOpenCodeConsole >> isConnected [
+PulsarLLMChatConsole >> isConnected [
 
 	^ connected
 ]
 
 { #category : 'private' }
-PulsarOpenCodeConsole >> panelPlacedIconName [
+PulsarLLMChatConsole >> panelPlacedIconName [
 
 	^ 'chat'
 ]
 
 { #category : 'private - actions' }
-PulsarOpenCodeConsole >> toggleConnection: aState [
+PulsarLLMChatConsole >> toggleConnection: aState [
 
 	aState 
 		ifTrue: [ self doConnect ]
@@ -250,7 +250,7 @@ PulsarOpenCodeConsole >> toggleConnection: aState [
 ]
 
 { #category : 'initialization' }
-PulsarOpenCodeConsole >> updatePresenter [ 
+PulsarLLMChatConsole >> updatePresenter [ 
 
 	super updatePresenter. 
 	
@@ -259,7 +259,7 @@ PulsarOpenCodeConsole >> updatePresenter [
 ]
 
 { #category : 'initialization' }
-PulsarOpenCodeConsole >> updateStatus [
+PulsarLLMChatConsole >> updateStatus [
 
 	toggleConnectButtonPresenter 
 		help: ('Toggle chat connect (current: {1}CONNECTED)' format: { self isConnected 
@@ -269,7 +269,7 @@ PulsarOpenCodeConsole >> updateStatus [
 ]
 
 { #category : 'initialization' }
-PulsarOpenCodeConsole >> updateTitle [
+PulsarLLMChatConsole >> updateTitle [
 
 	toolbarPresenter updateBreadcrumbWith: [ :aBreadcrumb |
 		aBreadcrumb addSegment: self class defaultTitle ]

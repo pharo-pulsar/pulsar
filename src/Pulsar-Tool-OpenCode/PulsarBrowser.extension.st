@@ -4,12 +4,12 @@ Extension { #name : 'PulsarBrowser' }
 PulsarBrowser >> defineOpenCodeExtraActionsOn: aBuilder [
 	<dockActions>
 
-	aBuilder addGroup: #extra with: [ :group | group 
+	aBuilder addGroup: #tools with: [ :group | group 
 		addActionWith: [ :action | action 
-			priority: 100;
-			name: 'Open Code Console';
-			description: 'Open an OpenCode console';
-			action: [ self addUniquePresenterClass: PulsarOpenCodeConsole  ] 
+			priority: 1000;
+			name: 'Open LLM Chat Console';
+			description: 'Open a LLM chat console';
+			action: [ self addUniquePresenterClass: PulsarLLMChatConsole  ] 
 		]
 	]
 ]
