@@ -218,7 +218,8 @@ PulsarRepositoryModel >> isDetached [
 { #category : 'testing' }
 PulsarRepositoryModel >> isDirty [
 
-	^ self entity workingCopy isModified
+	^ self isMissing not 
+		and: [ self entity workingCopy isModified ]
 ]
 
 { #category : 'testing' }
