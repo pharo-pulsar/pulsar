@@ -254,7 +254,7 @@ PulsarMDINeutralIconProvider >> createTable [
 		
 		"LLM"
 		('chat'			 			'chat-outline')
-		('chat-connect'			 	'cloud-outline')
+		('chat-connect'			 	'server-network-outline')
 	)
 ]
 
