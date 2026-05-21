@@ -99,6 +99,7 @@ PulsarSanityCheck >> usingLibraries [
 		addAll: GObjectLibrary withAllSubclasses;
 		add: GtkSourceViewLibrary;
 		add: LibRsvg;
+		add: VteLibrary;
 		yourself
 ]
 
