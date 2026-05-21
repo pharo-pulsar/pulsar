@@ -15,7 +15,7 @@ Class {
 }
 
 { #category : 'accessing' }
-PulsarLLMOpenCodeModel class >> opencodeJsonDefinition [
+PulsarLLMOpenCodeModel class >> configDefinition [
 
 	^ '{
   "mcp": {
@@ -29,11 +29,24 @@ PulsarLLMOpenCodeModel class >> opencodeJsonDefinition [
 '
 ]
 
-{ #category : 'actions' }
-PulsarLLMOpenCodeModel >> connectTo: aTerminalPresenter [
+{ #category : 'private' }
+PulsarLLMOpenCodeModel >> ensureConfig [
+	| ref |
+
+	ref := FileLocator imageDirectory / 'opencode.json'.
+	ref exists ifFalse: [ 
+		ref writeStreamDo: [ :stream | stream << self class configDefinition ] ]
+]
+
+{ #category : 'accessing' }
+PulsarLLMOpenCodeModel >> name [
+
+	^ 'OpenCode'
+]
+
+{ #category : 'private' }
+PulsarLLMOpenCodeModel >> performConnectTo: aTerminalPresenter [
 	| command |
-	
-	self startMCP.
 	
 	self flag: #TODO. "Make this more solid"
 	command := LibC resultOfCommand: 'which opencode'.
@@ -45,37 +58,11 @@ PulsarLLMOpenCodeModel >> connectTo: aTerminalPresenter [
 		workingDirectory: FileLocator imageDirectory fullName 
 		arguments: #().
 
-	self connected: true
-]
-
-{ #category : 'actions' }
-PulsarLLMOpenCodeModel >> disconnect [
-
-	self stopMCP.
-
-	self flag: #TODO. "Missing disconnect from terminal"
-
-	self connected: false
-]
-
-{ #category : 'private' }
-PulsarLLMOpenCodeModel >> ensureConfig [
-	| ref |
-
-	ref := FileLocator imageDirectory / 'opencode.json'.
-	ref exists ifFalse: [ 
-		ref writeStreamDo: [ :stream | stream << self class opencodeJsonDefinition ] ]
-]
-
-{ #category : 'accessing' }
-PulsarLLMOpenCodeModel >> name [
-
-	^ 'OpenCode'
 ]
 
 { #category : 'actions' }
 PulsarLLMOpenCodeModel >> prepare [
 
-	self ensureAgent.
+	super prepare.
 	self ensureConfig
 ]

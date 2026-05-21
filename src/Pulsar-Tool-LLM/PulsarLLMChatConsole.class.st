@@ -8,34 +8,12 @@ Class {
 		'terminalPresenter',
 		'toggleConnectButtonPresenter'
 	],
+	#classVars : [
+		'LLMModelClass'
+	],
 	#category : 'Pulsar-Tool-LLM',
 	#package : 'Pulsar-Tool-LLM'
 }
-
-{ #category : 'private' }
-PulsarLLMChatConsole class >> agentsDefinition [
-
-	^ '# Pharo MCP Guidance
-
-Use the `pharo` MCP server for Pharo and Smalltalk tasks in this workspace.
-
-When a request involves Pharo, prefer MCP tool calls over guessing from memory or inspecting unrelated local files.
-
-Use the `pharo` MCP tools first for:
-
-- counting or listing packages
-- browsing classes, methods, and protocols
-- reading Pharo-side state that only exists in the running image
-- triggering Pharo-side actions that the MCP server already exposes
-
-If a needed answer should come from Pharo, explicitly say you are using the `pharo` MCP server.
-
-If a `pharo` MCP tool fails or returns incomplete data, report the failure clearly instead of inventing the answer.
-
-## How to use me
-
-Remember that the Pharo image must be save when we finish to implement some code or execute heavy script.'
-]
 
 { #category : 'defaults' }
 PulsarLLMChatConsole class >> defaultPanelPosition [
@@ -49,25 +27,16 @@ PulsarLLMChatConsole class >> defaultTitle [
 	^ 'Chat'
 ]
 
-{ #category : 'private' }
-PulsarLLMChatConsole class >> mcpPort [
+{ #category : 'accessing' }
+PulsarLLMChatConsole class >> usingLLM [
 
-	^ 4000
+	^ LLMModelClass ifNil: [ PulsarLLMOpenCodeModel ]
 ]
 
-{ #category : 'private' }
-PulsarLLMChatConsole class >> opencodeJsonDefinition [
+{ #category : 'accessing' }
+PulsarLLMChatConsole class >> usingLLM: aLLMModelClass [
 
-	^ '{
-  "mcp": {
-    "pharo": {
-      "type": "remote",
-      "url": "http://127.0.0.1:4000",
-      "enabled": true
-    }
-  }
-}
-'
+	LLMModelClass := aLLMModelClass
 ]
 
 { #category : 'layout' }
@@ -120,7 +89,7 @@ PulsarLLMChatConsole >> doDisconnect [
 { #category : 'initialization' }
 PulsarLLMChatConsole >> initialize [
 
-	self setModelBeforeInitialization: PulsarLLMOpenCodeModel new.
+	self setModelBeforeInitialization: self class usingLLM new.
 	super initialize
 ]
 

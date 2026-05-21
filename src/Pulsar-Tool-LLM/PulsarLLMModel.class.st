@@ -51,8 +51,10 @@ PulsarLLMModel class >> mcpPort [
 
 { #category : 'actions' }
 PulsarLLMModel >> connectTo: aTerminalPresenter [
-
-	self subclassResponsibility
+	
+	self startMCP.
+	self performConnectTo: aTerminalPresenter.
+	self connected: true
 ]
 
 { #category : 'private' }
@@ -64,7 +66,8 @@ PulsarLLMModel >> connected: anObject [
 { #category : 'actions' }
 PulsarLLMModel >> disconnect [
 
-	self subclassResponsibility
+	self stopMCP.
+	self connected: false
 ]
 
 { #category : 'private' }
@@ -95,10 +98,16 @@ PulsarLLMModel >> name [
 	^ self subclassResponsibility
 ]
 
+{ #category : 'private' }
+PulsarLLMModel >> performConnectTo: aTerminalPresenter [
+
+	self subclassResponsibility
+]
+
 { #category : 'actions' }
 PulsarLLMModel >> prepare [
 
-	self subclassResponsibility
+	self ensureAgent
 ]
 
 { #category : 'private' }
