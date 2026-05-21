@@ -6,7 +6,8 @@ Class {
 	#instVars : [
 		'toolbarPresenter',
 		'terminalPresenter',
-		'toggleConnectButtonPresenter'
+		'toggleConnectButtonPresenter',
+		'modelSelectorPresenter'
 	],
 	#classVars : [
 		'LLMModelClass'
@@ -37,6 +38,13 @@ PulsarLLMChatConsole class >> usingLLM [
 PulsarLLMChatConsole class >> usingLLM: aLLMModelClass [
 
 	LLMModelClass := aLLMModelClass
+]
+
+{ #category : 'initialization' }
+PulsarLLMChatConsole >> connectPresenters [
+
+	modelSelectorPresenter whenSelectedItemChangedDo: [ :selectedClass |
+		self switchLLMModel: selectedClass ]
 ]
 
 { #category : 'layout' }
@@ -106,12 +114,23 @@ PulsarLLMChatConsole >> initializePresenters [
 		whenChangedDo: [ :state | self toggleConnection: state ];
 		yourself.
 
-	toolbarPresenter 
+	modelSelectorPresenter := self newDropDown
+		addStyle: 'flat';
+		display: [ :each | each label ];
+		yourself.
+
+	toolbarPresenter
+		addPresenter: (self newPresenter 
+			layout: (SpBoxLayout newVertical 
+				vAlignCenter;
+				add: modelSelectorPresenter;
+				yourself);
+			yourself);
 		addPresenter: (self newToolbar
 			displayMode: self application toolbarDisplayMode;
 			add: toggleConnectButtonPresenter;
 			yourself);
-		addPresenter: (self newToolbar 
+		addPresenter: (self newToolbar
 			beIcons;
 			add: (self newButton
 				addStyle: 'flat';
@@ -120,12 +139,11 @@ PulsarLLMChatConsole >> initializePresenters [
 				action: [ self doClose ];
 				yourself);
 			yourself).
-	
+
 	terminalPresenter := self instantiate: VteTerminalPresenter.
 	terminalPresenter whenChildExitedDo: [ :ann |
-		logger debug: 'Exit with code: ', ann status asString.
-		self doClose ].
-
+			logger debug: 'Exit with code: ' , ann status asString.
+			self doClose ]
 ]
 
 { #category : 'initialization' }
@@ -151,6 +169,19 @@ PulsarLLMChatConsole >> panelPlacedIconName [
 ]
 
 { #category : 'private - actions' }
+PulsarLLMChatConsole >> switchLLMModel: aModelClass [
+	| wasConnected |
+	
+	aModelClass = self class usingLLM ifTrue: [ ^ self ].
+	
+	wasConnected := self isConnected.
+	wasConnected ifTrue: [ self doDisconnect ].
+	self class usingLLM: aModelClass.
+	self model: aModelClass new.
+	wasConnected ifTrue: [ self doConnect ]
+]
+
+{ #category : 'private - actions' }
 PulsarLLMChatConsole >> toggleConnection: aState [
 
 	aState 
@@ -161,9 +192,10 @@ PulsarLLMChatConsole >> toggleConnection: aState [
 { #category : 'initialization' }
 PulsarLLMChatConsole >> updatePresenter [ 
 
-	super updatePresenter. 
-	
 	self updateTitle.
+	modelSelectorPresenter 
+		items: PulsarLLMModel allModels;
+		selectItem: self class usingLLM.
 	self updateStatus
 ]
 

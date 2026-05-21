@@ -44,6 +44,18 @@ Remember that the Pharo image must be save when we finish to implement some code
 ]
 
 { #category : 'accessing' }
+PulsarLLMModel class >> allModels [
+
+	^ self allSubclasses sorted: #label ascending
+]
+
+{ #category : 'accessing' }
+PulsarLLMModel class >> label [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'accessing' }
 PulsarLLMModel class >> mcpPort [
 
 	^ 4000
@@ -94,8 +106,8 @@ PulsarLLMModel >> isConnected [
 
 { #category : 'accessing' }
 PulsarLLMModel >> name [
-	
-	^ self subclassResponsibility
+
+	^ self class label
 ]
 
 { #category : 'private' }
@@ -116,7 +128,9 @@ PulsarLLMModel >> startMCP [
 	(mcp isNotNil and: [ mcp isRunning ]) ifTrue: [ ^ self ].
 
 	mcp := MCP new.
-	mcp server port: self class mcpPort.
+	mcp server 
+		loggingOff;
+		port: self class mcpPort.
 	mcp start
 ]
 

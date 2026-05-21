@@ -29,6 +29,12 @@ PulsarLLMOpenCodeModel class >> configDefinition [
 '
 ]
 
+{ #category : 'accessing' }
+PulsarLLMOpenCodeModel class >> label [
+
+	^ 'OpenCode'
+]
+
 { #category : 'private' }
 PulsarLLMOpenCodeModel >> ensureConfig [
 	| ref |
@@ -36,12 +42,6 @@ PulsarLLMOpenCodeModel >> ensureConfig [
 	ref := FileLocator imageDirectory / 'opencode.json'.
 	ref exists ifFalse: [ 
 		ref writeStreamDo: [ :stream | stream << self class configDefinition ] ]
-]
-
-{ #category : 'accessing' }
-PulsarLLMOpenCodeModel >> name [
-
-	^ 'OpenCode'
 ]
 
 { #category : 'private' }

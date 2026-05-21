@@ -43,6 +43,12 @@ approval_mode = "approve"
 '
 ]
 
+{ #category : 'accessing' }
+PulsarLLMCodexModel class >> label [
+
+	^ 'Codex'
+]
+
 { #category : 'private' }
 PulsarLLMCodexModel >> ensureConfig [
 	| dir ref |
@@ -55,12 +61,6 @@ PulsarLLMCodexModel >> ensureConfig [
 	ref := dir / 'config.toml'.
 	ref exists ifFalse: [ 
 		ref writeStreamDo: [ :stream | stream << self class configDefinition ] ]
-]
-
-{ #category : 'accessing' }
-PulsarLLMCodexModel >> name [
-
-	^ 'Codex'
 ]
 
 { #category : 'private' }
