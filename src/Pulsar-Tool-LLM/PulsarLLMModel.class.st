@@ -123,6 +123,19 @@ PulsarLLMModel >> prepare [
 ]
 
 { #category : 'private' }
+PulsarLLMModel >> prepareForSnapshot [
+
+	^ self copy reset
+]
+
+{ #category : 'private' }
+PulsarLLMModel >> reset [
+
+	mcp := nil.
+	connected := false
+]
+
+{ #category : 'private' }
 PulsarLLMModel >> startMCP [
 
 	(mcp isNotNil and: [ mcp isRunning ]) ifTrue: [ ^ self ].

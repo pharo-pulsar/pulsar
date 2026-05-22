@@ -4,11 +4,12 @@ A panel to show registered repositories.
 Class {
 	#name : 'PulsarRepositoriesView',
 	#superclass : 'PulsarCollectionView',
+	#traits : 'PulsarTControlUpdate',
+	#classTraits : 'PulsarTControlUpdate classTrait',
 	#instVars : [
 		'listToolbarPresenter',
 		'hideSystemProjects',
 		'toggleSystemProjectsButtonPresenter',
-		'updating',
 		'toggleDirtyProjectsButtonPresenter',
 		'hideNonDirtyProjects'
 	],
@@ -232,7 +233,7 @@ PulsarRepositoriesView >> entitySelected: aRepositoryModel [
 { #category : 'events' }
 PulsarRepositoriesView >> eventMetaModelElementChanged: ann [
 
-	updating ifTrue: [ ^ self ].
+	self isUpdating ifTrue: [ ^ self ].
 
 	(listPresenter items 
 		anySatisfy: [ :each | each registeredStatusChanged ])
@@ -251,7 +252,7 @@ PulsarRepositoriesView >> eventMetacelloExecutionEnd: ann [
 { #category : 'events' }
 PulsarRepositoriesView >> eventRepositoryModified: ann [
 
-	updating ifTrue: [ ^ self ].
+	self isUpdating ifTrue: [ ^ self ].
 	
 	self updatePresenter
 ]
@@ -467,14 +468,4 @@ PulsarRepositoriesView >> updatePresenter [
 PulsarRepositoriesView >> updateToolbar [
 
 	self actions allCommands do: [ :each | each updateEnableStatus ]
-]
-
-{ #category : 'private - updating' }
-PulsarRepositoriesView >> updatingWhile: aBlock [
-	| oldUpdating |
-
-	oldUpdating := updating.
-	updating := true.
-	aBlock 
-		ensure: [ updating := oldUpdating ]
 ]

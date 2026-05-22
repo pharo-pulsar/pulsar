@@ -7,10 +7,9 @@ Its default position in the dock browser is center.
 Class {
 	#name : 'PulsarEditor',
 	#superclass : 'PulsarBaseView',
-	#traits : 'PulsarTPanelWindow',
-	#classTraits : 'PulsarTPanelWindow classTrait',
+	#traits : 'PulsarTPanelWindow + PulsarTControlUpdate',
+	#classTraits : 'PulsarTPanelWindow classTrait + PulsarTControlUpdate classTrait',
 	#instVars : [
-		'updating',
 		'toolbarPresenter',
 		'editorPresenter',
 		'dirty',
@@ -385,12 +384,6 @@ PulsarEditor >> isEditor [
 ]
 
 { #category : 'private - updating' }
-PulsarEditor >> isUpdating [
-
-	^ updating
-]
-
-{ #category : 'private - updating' }
 PulsarEditor >> markDirty [
 	
 	dirty ifTrue: [ ^ self ].
@@ -653,16 +646,6 @@ PulsarEditor >> updateTitle [
 	self nearWindowLike ifNotNil: [ :aWindow |
 		logger trace: aWindow.
 		(PulsarEditorUpdateVisitor on: self) visit: aWindow ]
-]
-
-{ #category : 'private - updating' }
-PulsarEditor >> updatingWhile: aBlock [ 
-	| oldUpdating |
-
-	oldUpdating := updating.
-	updating := true.
-	^ aBlock ensure: [ 
-		updating := oldUpdating ]
 ]
 
 { #category : 'initialization' }

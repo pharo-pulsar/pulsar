@@ -5,11 +5,10 @@ Being an editor a key component of a perspective (since editing methods and defi
 Class {
 	#name : 'PvEditorView',
 	#superclass : 'PvPresenter',
-	#traits : 'SpTModel + PvTActionHolder',
-	#classTraits : 'SpTModel classTrait + PvTActionHolder classTrait',
+	#traits : 'SpTModel + PvTActionHolder + PulsarTControlUpdate',
+	#classTraits : 'SpTModel classTrait + PvTActionHolder classTrait + PulsarTControlUpdate classTrait',
 	#instVars : [
 		'#dirty => ObservableSlot',
-		'#updating',
 		'#editorPresenter',
 		'#headerPresenter',
 		'#footerPresenter'
@@ -248,12 +247,6 @@ PvEditorView >> isShowingLineNumbers [
 	^ self class isShowingLineNumbers
 ]
 
-{ #category : 'private - testing' }
-PvEditorView >> isUpdating [
-
-	^ updating ifNil: [ updating := false ]
-]
-
 { #category : 'accessing' }
 PvEditorView >> markDirty [
 
@@ -374,16 +367,6 @@ PvEditorView >> updatePresenter [
 
 	self updateHeader.
 	self updateFooter
-]
-
-{ #category : 'private' }
-PvEditorView >> updatingWhile: aBlock [ 
-	| oldUpdating |
-
-	oldUpdating := updating.
-	updating := true.
-	^ aBlock ensure: [ 
-		updating := oldUpdating ]
 ]
 
 { #category : 'events' }
