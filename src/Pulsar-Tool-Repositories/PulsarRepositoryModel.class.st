@@ -407,6 +407,17 @@ PulsarRepositoryModel >> newPushActionTo: aRemote [
 ]
 
 { #category : 'actions - command' }
+PulsarRepositoryModel >> newRecalculateDirtyPackagesAction [
+
+	^ IceTipStandardAction new
+		repository: self entity;
+		message: 'Recalculating The Dirty Package';
+		onSuccessRepositoryModified;
+		action: [ self entity workingCopy forceCalculateDirtyPackages ];
+		yourself
+]
+
+{ #category : 'actions - command' }
 PulsarRepositoryModel >> newRemoveRemoteActionFor: aRemote [
 	
 	^ IceTipStandardAction new

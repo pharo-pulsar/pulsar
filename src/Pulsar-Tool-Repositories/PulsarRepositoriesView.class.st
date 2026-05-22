@@ -108,6 +108,14 @@ PulsarRepositoriesView >> defineContextActionsOn: aBuilder [
 				description: 'Open repair actions for selected repository';
 				actionEnabled: [ self hasSelectedRepository and: [ self selectedRepositoryAcceptsRepair ] ];
 				action: [ self doRepairSelectedRepository ] ] ];
+		addGroupWith: [ :extraGroup | extraGroup 
+			name: 'Extra';
+			beDisplayedAsSubMenu; 
+			addActionWith: [ :action | action
+				dynamicName: [ 'Recalculate dirty packages for {1}' format: { self selectedRepositoryName } ];
+				description: 'Recalculate dirty packages for selected repository';
+				actionEnabled: [ self hasSelectedRepository ];
+				action: [ self doRecalculateDirtyPackagesOfSelectedRepository ] ] ];
 		addGroupWith: [ :dangerGroup | dangerGroup
 			name: 'DANGER ZONE';
 			beDisplayedAsGroup;
@@ -192,6 +200,24 @@ PulsarRepositoriesView >> doOpenRepository: aRepositoryModel [
 PulsarRepositoriesView >> doOpenSelectedRepository [
 	
 	self doOpenRepository: self selectedRepository
+]
+
+{ #category : 'private - actions' }
+PulsarRepositoriesView >> doRecalculateDirtyPackagesOf: aRepositoryModel [
+	
+	self scheduleJob: [ :statusbar |
+		statusbar pushMessage: ('Recalculating dirty packages of {1}...' format: { aRepositoryModel name }).
+		aRepositoryModel newRecalculateDirtyPackagesAction 
+			onSuccess: [ 
+				self model resetRepositories.
+				self updatePresenter ];
+			executeWithContext: self ]
+]
+
+{ #category : 'private - actions' }
+PulsarRepositoriesView >> doRecalculateDirtyPackagesOfSelectedRepository [
+	
+	self doRecalculateDirtyPackagesOf: self selectedRepository
 ]
 
 { #category : 'private - actions' }
