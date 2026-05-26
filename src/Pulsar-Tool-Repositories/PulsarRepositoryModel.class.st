@@ -12,6 +12,14 @@ Class {
 	#tag : 'Model'
 }
 
+{ #category : 'comparing' }
+PulsarRepositoryModel >> = other [
+
+	^ self species = other species
+		and: [ self entity species = other entity species 
+		and: [ self entity name = other entity name ] ]
+]
+
 { #category : 'testing' }
 PulsarRepositoryModel >> acceptsRepair [
 	"indicates whenever the repository can accept a repair action regardless if 
@@ -180,6 +188,14 @@ PulsarRepositoryModel >> forgetAction [
 PulsarRepositoryModel >> hasUpstream [
 
 	^ self entity branch hasUpstream
+]
+
+{ #category : 'comparing' }
+PulsarRepositoryModel >> hash [ 
+
+	^ (self species hash
+		bitXor: self entity species hash)
+		bitXor: self entity name hash
 ]
 
 { #category : 'accessing' }
