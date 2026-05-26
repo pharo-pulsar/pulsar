@@ -19,10 +19,12 @@ PulsarGtkConfiguration >> announceSyntaxHighlightThemeChanged [
 		yourself)
 ]
 
-{ #category : 'private' }
+{ #category : 'events' }
 PulsarGtkConfiguration >> announceThemeChanged [
 
-	self announcer announce: PulsarThemeChanged new
+	self announcer announce: (PulsarThemeChanged new 
+		isDark: self isDarkTheme;
+		yourself)
 ]
 
 { #category : 'private' }
