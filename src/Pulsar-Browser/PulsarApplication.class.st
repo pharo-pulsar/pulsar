@@ -93,6 +93,8 @@ PulsarApplication class >> reset [
 		collect: [ :each | each isKindOf: PulsarTranscript ]
 		thenDo: [ :each | Transcript removeDependent: each ].
 	
+	PulsarBaseBrowser resetAllPanelLayouts.
+	
 	PulsarApplication basicNew cleanUp
 ]
 

@@ -11,12 +11,26 @@ Class {
 		'mutex'
 	],
 	#classInstVars : [
-		'lastWindowSize'
+		'lastWindowSize',
+		'browserPanelLayouts'
 	],
 	#category : 'Pulsar-Browser-View-Base',
 	#package : 'Pulsar-Browser',
 	#tag : 'View-Base'
 }
+
+{ #category : 'accessing' }
+PulsarBaseBrowser class >> browserPanelLayouts [
+
+	^ browserPanelLayouts ifNil: [ 
+		browserPanelLayouts := OrderedCollection with: PulsarBrowserPanelLayout new ]
+]
+
+{ #category : 'private - panel layout' }
+PulsarBaseBrowser class >> defaultPanelLayout [
+
+	^ self browserPanelLayouts first
+]
 
 { #category : 'accessing - defaults' }
 PulsarBaseBrowser class >> defaultWindowSize [
@@ -114,6 +128,31 @@ PulsarBaseBrowser class >> newApplication: anApplication model: aModel snapshot:
 		yourself
 ]
 
+{ #category : 'private - panel layout' }
+PulsarBaseBrowser class >> resetAllPanelLayouts [
+	<script>
+
+	self withAllSubclassesDo: #resetPanelLayouts
+]
+
+{ #category : 'private - panel layout' }
+PulsarBaseBrowser class >> resetPanelLayouts [
+
+	browserPanelLayouts := nil
+]
+
+{ #category : 'private - panel layout' }
+PulsarBaseBrowser class >> savePanelPosition: aSpPanelPosition forViewClass: aClass [
+
+	self defaultPanelLayout savePanelPosition: aSpPanelPosition forViewClass: aClass
+]
+
+{ #category : 'private - panel layout' }
+PulsarBaseBrowser class >> savedPositionForViewClass: aClass ifAbsent: absentBlock [
+
+	^ self defaultPanelLayout savedPositionForViewClass: aClass ifAbsent: absentBlock
+]
+
 { #category : 'private' }
 PulsarBaseBrowser >> addGlobalActionsTo: aWindowPresenter [
 
@@ -121,23 +160,29 @@ PulsarBaseBrowser >> addGlobalActionsTo: aWindowPresenter [
 		ifNotNil: [ :aGroup | aWindowPresenter actions: aGroup ]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'view' }
 PulsarBaseBrowser >> addPresenterClass: aClass [
-	| view |
-
-	view := self instantiate: aClass.
-	self addPresenter: view at: view panelPosition.
+	| view position |
 	
+	view := self instantiate: aClass.
+	position := self class 
+		savedPositionForViewClass: aClass 
+		ifAbsent: [ view panelPosition ].
+	self addPresenter: view at: position.
+
 	^ view
 ]
 
-{ #category : 'accessing' }
+{ #category : 'view' }
 PulsarBaseBrowser >> addPresenterClass: aClass model: aModel [
-	| view |
-
-	view := self instantiate: aClass on: aModel.
-	self addPresenter: view at: view panelPosition.
+	| view position |
 	
+	view := self instantiate: aClass on: aModel.
+	position := self class 
+		savedPositionForViewClass: aClass 
+		ifAbsent: [ view panelPosition ].
+	self addPresenter: view at: position.
+
 	^ view
 ]
 
@@ -190,12 +235,19 @@ PulsarBaseBrowser >> addUniquePresenterClass: aPresenterClass model: anObject [
 	self addPresenterClass: aPresenterClass model: anObject
 ]
 
-{ #category : 'private' }
+{ #category : 'view' }
 PulsarBaseBrowser >> addWindow: aWindow [
 
-	self mutex critical: [ 
+	self mutex critical: [
 		aWindow presenter registerToBrowser: self.
 		super addWindow: aWindow.
+		self flag: #TODO. "This could be better refactored by sending a message (an announcement?)
+		to the panels?"
+		aWindow presenter isEditor ifFalse: [
+			aWindow whenPanelPositionChangedDo: [ :newPosition |
+				self class 
+					savePanelPosition: newPosition 
+					forViewClass: aWindow presenter class ] ].
 		aWindow raise ]
 ]
 
