@@ -48,7 +48,7 @@ PulsarLLMChatConsole >> connectPresenters [
 		
 	terminalPresenter whenChildExitedDo: [ :ann |
 		logger debug: 'Exit with code: ' , ann status asString.
-		self doDisconnectClosing: false ]
+		self doDisconnectClosing: self isUpdating not ]
 ]
 
 { #category : 'layout' }
