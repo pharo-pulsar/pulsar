@@ -103,7 +103,8 @@ PulsarVersionsModel >> revertTo: aRGMethodDefinition [
 		compile: aRGMethodDefinition sourceCode
 		classified: aRGMethodDefinition category
 		withStamp: aRGMethodDefinition stamp
-		notifying: nil.
+		notifying: nil
+		logSource: realClass shouldLogSource.
 		
 	"update entity"
 	self entity: realClass >> newSelector
