@@ -36,14 +36,15 @@ PulsarRepositoryCheckoutPreviewModel >> commitish: anIceCommitish [
 PulsarRepositoryCheckoutPreviewModel >> diffNode [
 
 	^ diffNode ifNil: [
-		  | fromRef toRef |
-		  toRef := commitish.
-		  fromRef := self repositoryModel entity workingCopy.
-		  diffNode := PulsarDiffRoot
-	          newRepository: repositoryModel
-	          from: fromRef
-	          to: toRef
-	          tree: ((fromRef ifNil: [ toRef ]) diffTo: toRef) tree ]
+			  | fromRef toRef tree |
+			  toRef := commitish.
+			  fromRef := self repositoryModel entity workingCopy.
+			  tree := (fromRef ifNil: [ toRef diffTo: nil ] ifNotNil: [ fromRef diffTo: toRef ]) tree.
+			  diffNode := PulsarDiffRoot
+	              newRepository: repositoryModel
+	              from: fromRef
+	              to: toRef
+	              tree: tree ]
 ]
 
 { #category : 'actions - command' }
@@ -53,9 +54,9 @@ PulsarRepositoryCheckoutPreviewModel >> newCheckoutActionWithStrategy: aCheckout
 		  repository: self repositoryModel entity;
 		  onSuccessRepositoryModified;
 		  action: [
-			  aCheckoutStrategy committish: self repositoryModel entity head.
-				  aCheckoutStrategy diff: self diffNode entity.
-				  self repositoryModel entity checkout: aCheckoutStrategy ];
+			  aCheckoutStrategy committish: commitish.
+			  aCheckoutStrategy diff: self diffNode entity.
+			  self repositoryModel entity checkout: aCheckoutStrategy ];
 		  yourself
 ]
 
