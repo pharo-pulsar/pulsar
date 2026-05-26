@@ -173,6 +173,7 @@ PulsarPlayground >> eventSyntaxHighlightThemeChanged: ann [
 { #category : 'events' }
 PulsarPlayground >> eventThemeChanged: ann [
 
+	super eventThemeChanged: ann.
 	codePresenter styleScheme: self application styleScheme
 ]
 
@@ -252,11 +253,13 @@ PulsarPlayground >> postRestoreSnapshot: aSnapshot [
 ]
 
 { #category : 'initialization' }
-PulsarPlayground >> registerToSystemEvents [
+PulsarPlayground >> registerToEvents [
 
+	super registerToEvents.
 	self announcer
-		when: PulsarThemeChanged send: #eventThemeChanged: to: self;
-		when: PulsarSyntaxHighlightThemeChanged send: #eventSyntaxHighlightThemeChanged: to: self
+		when: PulsarSyntaxHighlightThemeChanged 
+		send: #eventSyntaxHighlightThemeChanged: 
+		to: self
 ]
 
 { #category : 'accessing - snapshot' }

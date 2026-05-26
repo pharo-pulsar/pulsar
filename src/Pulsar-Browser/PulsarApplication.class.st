@@ -249,6 +249,12 @@ PulsarApplication >> iconCache [
 		ifAbsentPut: [ PvCompositeIconCache new ]
 ]
 
+{ #category : 'icon' }
+PulsarApplication >> iconNamed: aString [
+
+	^ PulsarIconProxy name: aString provider: self iconProvider
+]
+
 { #category : 'ui - requests' }
 PulsarApplication >> inform: aString [
 
@@ -554,7 +560,8 @@ PulsarApplication >> takeSnapshot [
 PulsarApplication >> themeChanged: ann [
 	
 	"reset icon provider because I will need to change them"
-	"iconProvider := nil."
+	self propertyAt: #gtkPaintablesByForm put: nil.
+	self iconProvider reset.
 	self resendAnnouncement: ann
 ]
 

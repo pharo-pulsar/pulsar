@@ -7,5 +7,12 @@ SpPresenter >> panelPosition [
 ]
 
 { #category : '*Pulsar-Browser' }
+SpPresenter >> pulsarThemeChanged [
+	"Called when the theme changes. Subclasses override to refresh icons."
+
+	
+]
+
+{ #category : '*Pulsar-Browser' }
 SpPresenter >> registerToBrowser: aPulsarBrowser [
 ]

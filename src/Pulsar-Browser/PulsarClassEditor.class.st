@@ -226,8 +226,6 @@ PulsarClassEditor >> originalContent [
 PulsarClassEditor >> registerToEvents [
 	
 	super registerToEvents.
-	
-		
 	self announcer 
 		when: PulsarClassModelSelected 
 		send: #eventModelSelected: 

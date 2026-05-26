@@ -34,7 +34,8 @@ PulsarWelcomeView >> eventSyntaxHighlightThemeChanged: ann [
 { #category : 'events' }
 PulsarWelcomeView >> eventThemeChanged: ann [
 
-	contentPresenter styleScheme: self application styleScheme
+	contentPresenter styleScheme: self application styleScheme.
+	self refreshIcons
 ]
 
 { #category : 'initialization' }

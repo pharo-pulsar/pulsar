@@ -67,7 +67,8 @@ PulsarInspector >> eventThemeChanged: ann [
 
 	self allPresenters
 		select: [ :each | each isKindOf: SpCodePresenter ]
-		thenDo: [ :each | each styleScheme: self application styleScheme ]
+		thenDo: [ :each | each styleScheme: self application styleScheme ].
+	self refreshIcons
 ]
 
 { #category : 'initialization' }

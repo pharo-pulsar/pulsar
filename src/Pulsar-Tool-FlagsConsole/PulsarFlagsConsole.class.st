@@ -190,7 +190,8 @@ PulsarFlagsConsole >> panelPlacedIconName [
 
 { #category : 'initialization' }
 PulsarFlagsConsole >> registerToEvents [
-
+	
+	super registerToEvents.
 	self announcer
 		when: PulsarEditorActivated 
 		send: #eventEditorActivated: 

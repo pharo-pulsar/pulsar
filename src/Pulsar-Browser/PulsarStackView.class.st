@@ -319,7 +319,8 @@ PulsarStackView >> notifySelectEntity: aCollection [
 { #category : 'initialization' }
 PulsarStackView >> registerToEvents [
 
-	self announcer 
+	super registerToEvents.
+	self announcer
 		when: PulsarEditorActivated send: #eventEditorActivated: to: self;
 		when: PulsarToolEditorActivated send: #eventEditorActivated: to: self;
 		when: PulsarEditorClosed send: #eventEditorClosed: to: self;

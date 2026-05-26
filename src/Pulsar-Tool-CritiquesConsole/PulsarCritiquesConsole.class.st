@@ -209,6 +209,7 @@ PulsarCritiquesConsole >> panelPlacedIconName [
 { #category : 'initialization' }
 PulsarCritiquesConsole >> registerToEvents [
 
+	super registerToEvents.
 	self announcer
 		"when: PulsarModelActivated send: #eventModelActivated: to: self;"
 		when: PulsarEditorActivated send: #eventEditorActivated: to: self

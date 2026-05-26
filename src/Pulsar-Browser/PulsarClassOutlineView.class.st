@@ -212,6 +212,7 @@ PulsarClassOutlineView >> panelPlacedIconName [
 { #category : 'initialization' }
 PulsarClassOutlineView >> registerToEvents [
 	
+	super registerToEvents.
 	self announcer 
 		when: PulsarEditorActivated send: #eventEditorActivated: to: self;
 		when: PulsarModelChanged send: #eventModelChanged: to: self

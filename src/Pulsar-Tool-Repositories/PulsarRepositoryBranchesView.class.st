@@ -74,7 +74,6 @@ PulsarRepositoryBranchesView >> notificationCenter: anAnnouncer [
 PulsarRepositoryBranchesView >> registerToEvents [
 
 	super registerToEvents.
-	
 	self announcer 
 		when: PulsarRepositoryModified
 		send: #eventRepositoryModified:

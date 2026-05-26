@@ -288,7 +288,8 @@ PulsarEditor >> eventTestCaseEnded: aTestCaseEnded [
 PulsarEditor >> eventThemeChanged: ann [
 
 	editorPresenter styleScheme: self application styleScheme.
-	self updateContentActions
+	self updateContentActions.
+	super eventThemeChanged: ann
 ]
 
 { #category : 'private' }
@@ -499,7 +500,8 @@ PulsarEditor >> printOn: stream [
 PulsarEditor >> registerToEvents [
 
 	super registerToEvents.
-	self announcer 
+	self announcer
+		when: PulsarSyntaxHighlightThemeChanged send: #eventSyntaxHighlightThemeChanged: to: self;
 		when: PulsarModelChanged send: #eventModelChanged: to: self;
 		when: PulsarModelRemoved send: #eventModelRemoved: to: self
 ]
@@ -509,8 +511,6 @@ PulsarEditor >> registerToSystemEvents [
 	"subclasses can fill this"
 	
 	self announcer
-		when: PulsarThemeChanged send: #eventThemeChanged: to: self;
-		when: PulsarSyntaxHighlightThemeChanged send: #eventSyntaxHighlightThemeChanged: to: self;
 		when: TestCaseEnded send: #eventTestCaseEnded: to: self;
 		when: ClassModifiedClassDefinition, ClassRenamed send: #eventClassChanged: to: self;
 		when: ClassRemoved send: #eventClassRemoved: to: self;

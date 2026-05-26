@@ -107,10 +107,11 @@ PulsarLLMChatConsole >> doDisconnectClosing: aBoolean [
 
 { #category : 'events' }
 PulsarLLMChatConsole >> eventThemeChanged: ann [
-
+	super eventThemeChanged: ann.
 	ann isDark
 		ifTrue: [ terminalPresenter beDarkTheme ]
-		ifFalse: [ terminalPresenter beLightTheme ]
+		ifFalse: [ terminalPresenter beLightTheme ].
+
 ]
 
 { #category : 'initialization' }
@@ -182,13 +183,6 @@ PulsarLLMChatConsole >> isConnected [
 PulsarLLMChatConsole >> panelPlacedIconName [
 
 	^ 'chat'
-]
-
-{ #category : 'registration' }
-PulsarLLMChatConsole >> registerToSystemEvents [
-
-	self announcer
-		when: PulsarThemeChanged send: #eventThemeChanged: to: self
 ]
 
 { #category : 'private - actions' }

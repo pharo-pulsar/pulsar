@@ -322,7 +322,6 @@ PulsarMethodEditor >> originalContent [
 PulsarMethodEditor >> registerToEvents [
 
 	super registerToEvents.
-	
 	self announcer 
 		when: PulsarMethodModelSelected 
 		send: #eventModelSelected: 

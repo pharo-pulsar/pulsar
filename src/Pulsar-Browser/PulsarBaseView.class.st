@@ -20,6 +20,12 @@ PulsarBaseView >> colorNamed: aString [
 	^ self application colorNamed: aString
 ]
 
+{ #category : 'events' }
+PulsarBaseView >> eventThemeChanged: ann [
+
+	self refreshIcons
+]
+
 { #category : 'initialization' }
 PulsarBaseView >> initialize [
 
@@ -74,6 +80,12 @@ PulsarBaseView >> panelTransferredFrom: fromWindow to: toWindow [
 		from: fromWindow
 ]
 
+{ #category : 'theme' }
+PulsarBaseView >> refreshIcons [
+
+	self traversePresentersDo: [ :each | each pulsarThemeChanged ]
+]
+
 { #category : 'initialization' }
 PulsarBaseView >> registerToBrowser: aPulsarBrowser [
 	
@@ -86,11 +98,16 @@ PulsarBaseView >> registerToBrowser: aPulsarBrowser [
 { #category : 'initialization' }
 PulsarBaseView >> registerToEvents [
 	"override this to subscribe to notifications"
+	
+	self announcer
+		when: PulsarThemeChanged 
+		send: #eventThemeChanged: 
+		to: self
 ]
 
 { #category : 'initialization' }
 PulsarBaseView >> registerToSystemEvents [
-	"override to register to system events."
+	"subclasses can fill this"
 ]
 
 { #category : 'private' }
