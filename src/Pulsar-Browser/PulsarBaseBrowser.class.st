@@ -138,7 +138,9 @@ PulsarBaseBrowser class >> resetAllPanelLayouts [
 { #category : 'private - panel layout' }
 PulsarBaseBrowser class >> resetPanelLayouts [
 
-	browserPanelLayouts := nil
+	"we reset just the default, so if we saved some, we still 
+	 have them"
+	self defaultPanelLayout reset
 ]
 
 { #category : 'private - panel layout' }

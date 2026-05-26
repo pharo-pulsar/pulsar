@@ -46,6 +46,12 @@ PulsarBrowserPanelLayout >> positions [
 	^ positions ifNil: [ positions := IdentityDictionary new ]
 ]
 
+{ #category : 'initialization' }
+PulsarBrowserPanelLayout >> reset [
+
+	positions := nil
+]
+
 { #category : 'panel positions' }
 PulsarBrowserPanelLayout >> savePanelPosition: aSpPanelPosition forViewClass: aClass [
 
