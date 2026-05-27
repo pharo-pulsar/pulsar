@@ -573,8 +573,6 @@ PulsarBaseBrowser >> removeStatusbarPresenter: aPresenter [
 
 { #category : 'announcing' }
 PulsarBaseBrowser >> resendAnnouncement: anAnnouncement [
-
-	logger trace: anAnnouncement.
 	
 	self presentersDo: [ :aWindowPresenter |
 		aWindowPresenter presenter announce: anAnnouncement ]
