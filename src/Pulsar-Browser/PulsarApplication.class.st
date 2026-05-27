@@ -161,7 +161,11 @@ PulsarApplication >> cleanUp [
 		
 	"also clean processes that may have remained"
 	(Processor allProcesses 
-		select: [ :each | each name beginsWithAnyOf: #('Pulsar' 'PanelApplication' 'FFICallback') ])
+		select: [ :each | 
+			"ZnManagingMultiThreadedServer is because if I save pulsar when I have an LLM console running, 
+			 it may let it open and we do not want that. This is too radical, and maybe the me of the future 
+			 will regret this decision. Please forgive me."
+			each name beginsWithAnyOf: #('Pulsar' 'PanelApplication' 'FFICallback' 'ZnManagingMultiThreadedServer') ])
 		do: [ :each | each terminate ]
 ]
 
