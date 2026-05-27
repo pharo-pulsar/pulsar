@@ -81,17 +81,7 @@ PulsarBrowser >> defineDevelopmentToolsActionsOn: aBuilder [
 	"this actions are just possible in linux"
 	OSPlatform current isLinux ifFalse: [ ^ self ].
 	
-	aBuilder addGroup: #developmentLinux with: [ :group | group 
-		name: 'Development (Linux)';
-		beDisplayedAsSubMenu;
-		priority: 1200; 
-		addActionWith: [ :action | action 
-			name: 'Toggle Morphic World';
-			state: false;
-			description: 'Activate/Deactivate the Morphic World';
-			action: [ 
-				PulsarMorphicWorldActivator uniqueInstance toggleActivate.
-				action state: PulsarMorphicWorldActivator uniqueInstance isActive ] ] ]
+	aBuilder addAll: (PulsarMorphicWorldActivator uniqueInstance actions entries)
 ]
 
 { #category : 'private - definitions' }
