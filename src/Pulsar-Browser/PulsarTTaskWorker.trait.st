@@ -43,38 +43,6 @@ PulsarTTaskWorker >> queueTask: aBlock [
 ]
 
 { #category : 'private - scheduling' }
-PulsarTTaskWorker >> schedule: aBlock [
-
-	self 
-		deprecated: 'This is confusing, use #queueTask:' 
-		transformWith: 
-			'`@receiver schedule: `@arg' -> 
-			'`@receiver queueTask: `@arg'.
-
-	^ self queueTask: aBlock
-]
-
-{ #category : 'private - scheduling' }
-PulsarTTaskWorker >> scheduler [
-
-	self 
-		deprecated: 'Using the more clear taskWorker' 
-		transformWith: '`@receiver scheduler' -> '`@receiver taskWorker'.
-
-	^ self taskWorker
-]
-
-{ #category : 'private - scheduling' }
-PulsarTTaskWorker >> stopScheduler [
-
-	self 
-		deprecated: 'Using the more clear taskWorker' 
-		transformWith: '`@receiver stopScheduler' -> '`@receiver stopTaskWorker'.
-
-	self stopTaskWorker
-]
-
-{ #category : 'private - scheduling' }
 PulsarTTaskWorker >> stopTaskWorker [
 
 	taskWorker ifNil: [ ^ self ].
