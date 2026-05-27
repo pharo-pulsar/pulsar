@@ -149,6 +149,7 @@ PulsarRepositoryCommitsView >> updatePresenter [
 		items := self retrieveCommits.
 		self scheduleTask: [ 
 			self application defer: [ 
+				self halt.
 				listPresenter items: items.
 				self updateTitle ] ] ]
 ]
