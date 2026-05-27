@@ -1,11 +1,10 @@
 Class {
 	#name : 'PulsarTranscript',
 	#superclass : 'PulsarBaseView',
-	#traits : 'PulsarTSnapshot',
-	#classTraits : 'PulsarTSnapshot classTrait',
+	#traits : 'PulsarTSnapshot + PulsarTTaskWorker',
+	#classTraits : 'PulsarTSnapshot classTrait + PulsarTTaskWorker classTrait',
 	#instVars : [
-		'terminalPresenter',
-		'runner'
+		'terminalPresenter'
 	],
 	#category : 'Pulsar-Browser-Tool-Transcript',
 	#package : 'Pulsar-Browser',
@@ -24,8 +23,16 @@ PulsarTranscript class >> defaultTitle [
 	^ 'Transcript'
 ]
 
-{ #category : 'accessing - actions' }
-PulsarTranscript class >> defineActionsOn: aBuilder [
+{ #category : 'layout' }
+PulsarTranscript >> defaultLayout [
+
+	^ SpBoxLayout newVertical
+		add: terminalPresenter;
+		yourself
+]
+
+{ #category : 'private - definitions' }
+PulsarTranscript >> defineActionsOn: aBuilder [
 	<dockActions>
 
 	aBuilder addGroup: #transcript with: [ :group | group 
@@ -33,14 +40,6 @@ PulsarTranscript class >> defineActionsOn: aBuilder [
 			name: 'Clear';
 			description: 'Clear transcript';
 			action: [ :aContext | aContext doClearTranscript ] ] ]
-]
-
-{ #category : 'layout' }
-PulsarTranscript >> defaultLayout [
-
-	^ SpBoxLayout newVertical
-		add: terminalPresenter;
-		yourself
 ]
 
 { #category : 'private - actions' }
@@ -74,29 +73,19 @@ PulsarTranscript >> initializeWindow: aWindowPresenter [
 	aWindowPresenter 
 		title: self class defaultTitle;
 		windowIcon: (self iconNamed: 'transcript');
-		whenOpenedDo: [ self subscribe ];
-		whenClosedDo: [ self unsubscribe ]
-]
-
-{ #category : 'private' }
-PulsarTranscript >> subscribe [
-		
-	runner := PulsarWorker new 
-		inTool: self class;
-		start	
-
-]
-
-{ #category : 'private' }
-PulsarTranscript >> unsubscribe [
-	
-	runner stop
+		whenClosedDo: [ self windowClosed ]
 ]
 
 { #category : 'updating' }
 PulsarTranscript >> update: aSymbol [
 
 	aSymbol = #appendEntry ifTrue: [ 
-		runner schedule: [ 
+		self queueTask: [ 
 			terminalPresenter feed: Transcript contents withUnixLineEndings ] ]
+]
+
+{ #category : 'private' }
+PulsarTranscript >> windowClosed [
+
+	self purgeTaskWorker
 ]
