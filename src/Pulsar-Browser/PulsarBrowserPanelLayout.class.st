@@ -18,8 +18,9 @@ Class {
 		'name',
 		'positions'
 	],
-	#category : 'Pulsar-Browser',
-	#package : 'Pulsar-Browser'
+	#category : 'Pulsar-Browser-Base',
+	#package : 'Pulsar-Browser',
+	#tag : 'Base'
 }
 
 { #category : 'testing' }

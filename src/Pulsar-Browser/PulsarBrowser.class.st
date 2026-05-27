@@ -75,6 +75,26 @@ PulsarBrowser >> defaultKeyboardFocus [
 ]
 
 { #category : 'private - definitions' }
+PulsarBrowser >> defineDevelopmentToolsActionsOn: aBuilder [
+	<dockActions>
+
+	"this actions are just possible in linux"
+	OSPlatform current isLinux ifFalse: [ ^ self ].
+	
+	aBuilder addGroup: #developmentLinux with: [ :group | group 
+		name: 'Development (Linux)';
+		beDisplayedAsSubMenu;
+		priority: 1200; 
+		addActionWith: [ :action | action 
+			name: 'Toggle Morphic World';
+			state: false;
+			description: 'Activate/Deactivate the Morphic World';
+			action: [ 
+				PulsarMorphicWorldActivator uniqueInstance toggleActivate.
+				action state: PulsarMorphicWorldActivator uniqueInstance isActive ] ] ]
+]
+
+{ #category : 'private - definitions' }
 PulsarBrowser >> defineExtraActionsOn: aBuilder [
 	<dockActions>
 	"nothing here for now, but we override because the playground is 
@@ -339,51 +359,6 @@ PulsarBrowser >> spawnNewProcessBrowser [
 PulsarBrowser >> spawnRecentChanges [
 
 	(PulsarChangesBrowser newApplication: self application) open
-]
-
-{ #category : 'actions' }
-PulsarBrowser >> startMorphicWorld [
-	"Start the Morphic World using SDL2/OSWorldRenderer.
-	 This allows using the classic Morphic environment alongside Pulsar."
-	| renderer |
-	
-	renderer := World worldState worldRenderer.
-	"abort if we are already running the morphic world"
-	renderer class = NullWorldRenderer ifFalse: [ ^ self ].	
-
-	"Restart morphic UI process, or spawn fresh if none"
-	MorphicUIManager uiProcess 
-		ifNotNil: [ MorphicUIManager restartMethods ] 
-		ifNil: [ MorphicUIManager new spawnNewProcess ]. 
-	"Create and activate the OSWorldRenderer.
-	 The setter worldRenderer: calls activate for us, which:
-	 - Picks the SDL2 driver
-	 - Creates an OSWindow with MorphicEventHandler
-	 - Starts the SDL2 event loop"
-	 
-	World worldState worldRenderer: (OSWorldRenderer forWorld: World)
-]
-
-{ #category : 'actions' }
-PulsarBrowser >> stopMorphicWorld [
-	"Stop the Morphic World (OSWindow/SDL2) and return to headless Pulsar state.
-	 This leaves no UI process, no SDL2 event loop, and no OSWindow."
-	| renderer process |
-	
-	renderer := World worldState worldRenderer.
-	"abort if we are not running the morphic world"
-	renderer class = NullWorldRenderer ifTrue: [ ^ self ].
-	
-	"Destroy the OSWindow (closes the window) and release the SDL2 display"
-	renderer deactivate. 
-	"Kill the SDL2 event loop process"
-	renderer driver ifNotNil: [ :d | d shutdownEventLoop ]. 
-	"Replace with no-op renderer (same state as before start)"
-	World worldState worldRenderer: (NullWorldRenderer forWorld: World). 
-	"Terminate uiProcess without nilling (so restartMethods works on next start)"
-	process := MorphicUIManager uiProcess.
-	process ifNotNil: [
-		process suspend; terminate ]
 ]
 
 { #category : 'initialization' }
