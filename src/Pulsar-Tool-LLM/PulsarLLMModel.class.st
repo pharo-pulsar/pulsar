@@ -72,8 +72,13 @@ PulsarLLMModel class >> mcpPort [
 
 { #category : 'accessing' }
 PulsarLLMModel class >> pharoFormattingSkillDefinition [
+	^ '---
+name: pharo-formatting
+description: Pharo Smalltalk code formatting rules and conventions for Pulsar
+version: 1.0
+---
 
-	^ '# Pharo code format guidance
+# Pharo code format guidance
 
 ### General rules
 
@@ -117,6 +122,20 @@ myMethod
     "Brief description of what this does."
 
     self doSomething.
+```
+
+### Class comments
+
+Every class must have a descriptive class comment. When using `pharo_edit-class` with `operation=create`, always provide the `classComment` parameter. A good comment describes:
+
+- The class''s single responsibility.
+- Its key collaborators and role in the architecture.
+
+```
+"This method is a model representing a repository commit in Pulsar.
+
+It wraps an IceCommit entity and provides access to author, diff, 
+and repository information for the Pulsar browser UI."
 ```
 
 ### Variable naming
