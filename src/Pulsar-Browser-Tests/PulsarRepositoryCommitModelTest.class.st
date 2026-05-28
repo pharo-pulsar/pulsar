@@ -1,8 +1,9 @@
 Class {
 	#name : 'PulsarRepositoryCommitModelTest',
 	#superclass : 'TestCase',
-	#category : 'Pulsar-Browser-Tests',
-	#package : 'Pulsar-Browser-Tests'
+	#category : 'Pulsar-Browser-Tests-Model',
+	#package : 'Pulsar-Browser-Tests',
+	#tag : 'Model'
 }
 
 { #category : 'tests' }
@@ -18,4 +19,14 @@ PulsarRepositoryCommitModelTest >> testAuthorInitialsOf [
 	self assert: (model authorInitialsOf: 'Estebanlorenzano') equals: 'Es'.
 	self assert: (model authorInitialsOf: 'e') equals: 'E'.
 	self assert: (model authorInitialsOf: 'EstebanLorenzano') equals: 'EL'.
+]
+
+{ #category : 'tests' }
+PulsarRepositoryCommitModelTest >> testAuthorInitialsOfSingleName [
+	| model |
+
+	model := PulsarRepositoryCommitModel new.
+
+	self assert: (model authorInitialsOf: 'Esteban') equals: 'Es'.
+	self assert: (model authorInitialsOf: 'a') equals: 'A'
 ]

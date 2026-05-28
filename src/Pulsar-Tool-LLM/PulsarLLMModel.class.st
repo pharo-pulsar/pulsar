@@ -20,7 +20,6 @@ Class {
 
 { #category : 'accessing' }
 PulsarLLMModel class >> agentsDefinition [
-
     ^ '# Pharo MCP Guidance
 
 Use the `pharo` MCP server for Pharo and Smalltalk tasks in this workspace.
@@ -48,17 +47,44 @@ Remember that the Pharo image must be saved when we finish implementing code or 
 
 - Prefer smaller, meaningful methods over large nested control blocks.
 - Use Tab of size 4 for indentation.
-- **One line break after the variable declaration line**, before the first statement.
+- **One blank line separates the method preamble (comment + variables) from the body.**
 
-### Variable declaration
+### Method structure
 
-Declare all variables in the first line of the method, separated by one space from the opening pipe.
+Every method body is separated from its preamble by one blank line. The preamble consists of an optional comment followed by optional variable declarations.
 
+**Only add a comment when the method is non-trivial** (simple setters/getters do not need one). The comment should describe **what** the method does, not how. Keep it brief.
+
+**No variables, no comment:**
 ```
 myMethod
-    | variable otherVariable |
 
-    self inform: ''The rest of the method''.
+    self doSomething.
+```
+
+**With variables, no comment:**
+```
+myMethod
+    | variable |
+
+    self doSomething.
+```
+
+**With variables and comment:**
+```
+myMethod
+    "Brief description of what this does."
+    | variable |
+
+    self doSomething.
+```
+
+**With comment, no variables:**
+```
+myMethod
+    "Brief description of what this does."
+
+    self doSomething.
 ```
 
 ### Variable naming
@@ -68,7 +94,7 @@ myMethod
 | Context | Naming | Example |
 |---|---|---|
 | Meaning is clear from method name | Meaningful word | `position`, `size` |
-| Iterator blocks (e.g., `do:`, `collect:`) | `each` | `each | each model do:` |
+| Iterator blocks (e.g., `do:`, `collect:`) | `each` | `collection do: [ :each | each model ]` |
 | Iterator disambiguation needed | `each` + meaning suffix | `eachName`, `eachSize` |
 | `to:do:` numeric iteration | `index` | `1 to: 10 do: [ :index | ... ]` |
 
@@ -97,13 +123,6 @@ Follow this decision tree:
 
 **Always use `ifTrue:ifFalse:` order**, never `ifFalse:ifTrue:`.
 
-**Single statement, short enough (inline):**
-```
-someBooleanStatement
-    ifTrue: [ self trueStatement ]
-    ifFalse: [ self falseStatement ]
-```
-
 **Multi-statement in one block (new-line both):**
 ```
 someBooleanStatement
@@ -123,9 +142,6 @@ someBooleanStatement
 | Multiple statements | New line |
 
 ```
-"Single statement, short:"
-condition ifTrue: [ self doSomething ]
-
 "Multiple statements:"
 condition
     ifTrue: [
@@ -141,10 +157,6 @@ condition
 | Multiple chains or total line ≥ 60 chars | One chain per line |
 
 ```
-"Single chain, short:"
-(self size > 0) and: [ self name notEmpty ]
-
-"Multiple chains:"
 someBooleanCheck
     and: [ otherBooleanCheck
     and: [ anotherBooleanCheck ] ]
@@ -160,14 +172,6 @@ someBooleanCheck
 | Multiple error-handling statements | New line for each |
 
 ```
-"Single statement:"
-[
-    self someStatement.
-    self otherStatement ]
-on: Error
-do: [ :e | self handleError ]
-
-"Multiple statements:"
 [
     self someStatement.
     self otherStatement ]
@@ -188,10 +192,6 @@ Same formatting rules as single control blocks:
 | Multiple statements | New line |
 
 ```
-"Single statement:"
-[ index > 0 ] whileTrue: [ self decrement ]
-
-"Multiple statements:"
 [ queue isNotEmpty ]
     whileTrue: [
         self processNext.

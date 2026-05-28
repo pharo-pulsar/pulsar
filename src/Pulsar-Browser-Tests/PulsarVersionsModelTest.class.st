@@ -1,8 +1,9 @@
 Class {
 	#name : 'PulsarVersionsModelTest',
 	#superclass : 'PvBaseModelTest',
-	#category : 'Pulsar-Browser-Tests',
-	#package : 'Pulsar-Browser-Tests'
+	#category : 'Pulsar-Browser-Tests-Model',
+	#package : 'Pulsar-Browser-Tests',
+	#tag : 'Model'
 }
 
 { #category : 'instance creation' }

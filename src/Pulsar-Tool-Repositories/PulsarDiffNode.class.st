@@ -207,6 +207,19 @@ PulsarDiffNode >> isRoot [
 	^ self node value definition isDirectoryDefinition
 ]
 
+{ #category : 'private' }
+PulsarDiffNode >> modelForClassOf: aDefinition [
+	| className |
+
+	className := aDefinition isMethodDefinition 
+		ifTrue: [ aDefinition className ]
+		ifFalse: [ aDefinition name ].
+		
+	^ (self environmentModel classNamed: className)
+		ifNotNil: [ :aClass | PvClassModel newEnvironment: self environmentModel entity: aClass ]
+		ifNil: [ className ]
+]
+
 { #category : 'accessing' }
 PulsarDiffNode >> name [
 
@@ -283,6 +296,21 @@ PulsarDiffNode >> patchDeletions [
 PulsarDiffNode >> patchInsertions [
 
 	^ (self patch patch elements select: #isInsert) size
+]
+
+{ #category : 'accessing' }
+PulsarDiffNode >> path [
+	| operation definition |
+	
+	operation := self node value.
+	definition := operation definition.
+	^ definition isMethodDefinition 
+		ifTrue: [ 
+			{ 
+				self modelForClassOf: definition. 
+				self modelForMethodOf: definition } ]
+		ifFalse: [ 
+			{ self modelForClassOf: definition } ]
 ]
 
 { #category : 'events' }
