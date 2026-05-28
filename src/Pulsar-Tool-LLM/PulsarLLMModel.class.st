@@ -20,7 +20,8 @@ Class {
 
 { #category : 'accessing' }
 PulsarLLMModel class >> agentsDefinition [
-    ^ '# Pharo MCP Guidance
+
+	^ '# Pharo MCP Guidance
 
 Use the `pharo` MCP server for Pharo and Smalltalk tasks in this workspace.
 
@@ -42,6 +43,35 @@ If a `pharo` MCP tool fails or returns incomplete data, report the failure clear
 Remember that the Pharo image must be saved when we finish implementing code or executing heavy scripts.
 
 ## Pharo code format guidance
+
+See the `pharo-formatting` skill for formatting rules and conventions.
+
+To load the skill, use `skill:name:pharo-formatting`.
+'
+]
+
+{ #category : 'accessing' }
+PulsarLLMModel class >> allModels [
+
+	^ self allSubclasses sorted: #label ascending
+]
+
+{ #category : 'accessing' }
+PulsarLLMModel class >> label [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'accessing' }
+PulsarLLMModel class >> mcpPort [
+
+	^ 4000
+]
+
+{ #category : 'accessing' }
+PulsarLLMModel class >> pharoFormattingSkillDefinition [
+
+	^ '# Pharo code format guidance
 
 ### General rules
 
@@ -209,24 +239,6 @@ Same formatting rules as single control blocks:
 '
 ]
 
-{ #category : 'accessing' }
-PulsarLLMModel class >> allModels [
-
-	^ self allSubclasses sorted: #label ascending
-]
-
-{ #category : 'accessing' }
-PulsarLLMModel class >> label [
-
-	^ self subclassResponsibility
-]
-
-{ #category : 'accessing' }
-PulsarLLMModel class >> mcpPort [
-
-	^ 4000
-]
-
 { #category : 'actions' }
 PulsarLLMModel >> connectTo: aTerminalPresenter [
 	
@@ -257,6 +269,25 @@ PulsarLLMModel >> ensureAgent [
 		ref writeStreamDo: [ :stream | stream << self class agentsDefinition ] ]
 ]
 
+{ #category : 'private' }
+PulsarLLMModel >> ensureSkill: aName with: aDefinition [
+	| skillDir ref |
+	
+	skillDir := FileLocator imageDirectory / '.agents' / 'skills' / aName.
+	skillDir ensureCreateDirectory.
+
+	ref := skillDir / 'SKILL.md'.
+	ref exists ifFalse: [ 
+		ref writeStreamDo: [ :stream | stream << aDefinition ] ]
+
+]
+
+{ #category : 'private' }
+PulsarLLMModel >> ensureSkills [
+	
+	self ensureSkill: 'pharo-formatting' with: self class pharoFormattingSkillDefinition
+]
+
 { #category : 'initialization' }
 PulsarLLMModel >> initialize [
 
@@ -285,7 +316,8 @@ PulsarLLMModel >> performConnectTo: aTerminalPresenter [
 { #category : 'actions' }
 PulsarLLMModel >> prepare [
 
-	self ensureAgent
+	self ensureAgent.
+	self ensureSkills
 ]
 
 { #category : 'private' }
