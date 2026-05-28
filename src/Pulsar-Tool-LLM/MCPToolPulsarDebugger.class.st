@@ -35,12 +35,10 @@ MCPToolPulsarDebugger >> defaultInputSchema [
 	^ MCPStructureInputSchema new
 		  type: 'object';
 		  properties: {
-				  ((self
-					    stringEnumSchemaPropertyNamed: 'operation'
-					    description: 'The debugger operation to perform.'
-					    values: #( 'list' 'inspect' 'step' 'evaluate' ))
-					   required: true;
-					   yourself).
+				  (self
+					   stringEnumSchemaPropertyNamed: 'operation'
+					   description: 'The debugger operation to perform.'
+					   values: #( 'list' 'inspect' 'step' 'evaluate' )).
 				  (self integerSchemaPropertyNamed: 'windowIndex' description: 'The 1-based index of the debugger window to operate on.').
 				  (self
 					   integerSchemaPropertyNamed: 'contextIndex'

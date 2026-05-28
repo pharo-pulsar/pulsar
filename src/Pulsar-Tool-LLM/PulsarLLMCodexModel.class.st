@@ -24,22 +24,37 @@ enabled = true
 required = true
 url = "http://127.0.0.1:4000"
 
-[mcp_servers.pharo.tools.pharo-eval]
+[mcp_servers.pharo.tools.evaluate]
 approval_mode = "approve"
 
-[mcp_servers.pharo.tools.pharo-read-class]
+[mcp_servers.pharo.tools.inspect-class]
 approval_mode = "approve"
 
-[mcp_servers.pharo.tools.get-packages]
+[mcp_servers.pharo.tools.inspect-method]
 approval_mode = "approve"
 
-[mcp_servers.pharo.tools.get-package-class]
+[mcp_servers.pharo.tools.find-packages]
 approval_mode = "approve"
 
-[mcp_servers.pharo.tools.pharo-execute-class-test]
+[mcp_servers.pharo.tools.find-classes]
 approval_mode = "approve"
 
-[mcp_servers.pharo.tools.pharo-execute-all-class-test]
+[mcp_servers.pharo.tools.find-methods]
+approval_mode = "approve"
+
+[mcp_servers.pharo.tools.find-repositories]
+approval_mode = "approve"
+
+[mcp_servers.pharo.tools.edit-repository]
+approval_mode = "approve"
+
+[mcp_servers.pharo.tools.edit-method]
+approval_mode = "approve"
+
+[mcp_servers.pharo.tools.run-tests]
+approval_mode = "approve"
+
+[mcp_servers.pharo.tools.pulsar-debugger]
 approval_mode = "approve"
 '
 ]
