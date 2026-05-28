@@ -273,6 +273,7 @@ PulsarRepositoryModel >> isPackageLoaded: aPackageModel [
 PulsarRepositoryModel >> isRemoteUpstream: aRemote [
 	
 	self isHeadInBranch ifFalse: [ ^ false ].
+	self entity branch hasUpstream ifFalse: [ ^ false ].
 	
 	^ self entity branch upstream remote = aRemote
 ]
@@ -393,16 +394,17 @@ PulsarRepositoryModel >> newPushActionTo: aRemote [
 		repository: self entity;
 		message: ('Pushing to {1}' format: { self entity branch name }) ;
 		action: [
-			| remote |
-			remote := self entity branch upstream remote.
+			| upstream remote |
+			
+			upstream := self entity branch upstreamIfNone: [ nil ].
+			remote := upstream ifNotNil: [ upstream remote ].
 			"if this is not the default branch, se it (for the future). 
 			 This is maybe wrong in certain cases, but I think most of the cases is a good choice. 
 			 And we follow the criteria 'make 90% of cases easy while make possible the other 10%'"
-			(aRemote isNotNil and: [ aRemote ~= remote]) ifTrue: [
-				self entity branch setUpstreamRemote: aRemote.
-				remote := aRemote ].
-			"we always push to upstream now"
-			self entity push ];
+			(aRemote isNotNil and: [ aRemote ~= remote]) 
+				ifTrue: [ remote := aRemote ].
+			self entity pushTo: remote.
+			self entity branch setUpstreamRemote: remote ];
 		yourself
 ]
 

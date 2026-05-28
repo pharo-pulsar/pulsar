@@ -85,7 +85,7 @@ PulsarMorphicWorldActivator >> defineActionsOn: aBuilder [
 		beDisplayedAsSubMenu;
 		priority: 1200;
 		addActionWith: [ :action | action 
-			name: 'Morphic World';
+			name: 'Open Morphic World';
 			state: false;
 			description: 'Activate/Deactivate the Morphic World';
 			action: [ 
