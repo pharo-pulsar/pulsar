@@ -19,7 +19,7 @@ PvBaseModelTest >> testAcceptVisitsModel [
 	env := self environmentModel.
 	model := PvBaseModelForTest newEnvironment: env.
 	visitor := PulsarModelVisitor new. 
-"accept: delegates to visitModel: which does not set owner; it is a no-op by default"
+	"accept: delegates to visitModel: which does not set owner; it is a no-op by default"
 	model accept: visitor.
 	self assert: visitor class equals: PulsarModelVisitor
 ]
