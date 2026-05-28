@@ -21,7 +21,7 @@ Class {
 { #category : 'accessing' }
 PulsarLLMModel class >> agentsDefinition [
 
-	^ '# Pharo MCP Guidance
+    ^ '# Pharo MCP Guidance
 
 Use the `pharo` MCP server for Pharo and Smalltalk tasks in this workspace.
 
@@ -40,7 +40,173 @@ If a `pharo` MCP tool fails or returns incomplete data, report the failure clear
 
 ## How to use me
 
-Remember that the Pharo image must be save when we finish to implement some code or execute heavy script.'
+Remember that the Pharo image must be saved when we finish implementing code or executing heavy scripts.
+
+## Pharo code format guidance
+
+### General rules
+
+- Prefer smaller, meaningful methods over large nested control blocks.
+- Use Tab of size 4 for indentation.
+- **One line break after the variable declaration line**, before the first statement.
+
+### Variable declaration
+
+Declare all variables in the first line of the method, separated by one space from the opening pipe.
+
+```
+myMethod
+    | variable otherVariable |
+
+    self inform: ''The rest of the method''.
+```
+
+### Variable naming
+
+**Use descriptive names.** Never single letters unless the domain meaning is universally known (e.g., `x`, `y`, `z` for 3D coordinates).
+
+| Context | Naming | Example |
+|---|---|---|
+| Meaning is clear from method name | Meaningful word | `position`, `size` |
+| Iterator blocks (e.g., `do:`, `collect:`) | `each` | `each | each model do:` |
+| Iterator disambiguation needed | `each` + meaning suffix | `eachName`, `eachSize` |
+| `to:do:` numeric iteration | `index` | `1 to: 10 do: [ :index | ... ]` |
+
+### Argument naming
+
+Follow this decision tree:
+
+1. **Short method** (≤ 5 lines) **and** ≤ 2 arguments → Hungarian-style prefix with `a`:
+   - `aString`, `aPoint`, `aCollection`
+
+2. **Long method** (> 5 lines) **or** > 2 arguments → meaning + type compound:
+   - `nameString`, `sizePoint`, `modelCollection`
+
+3. **Type is unknown or can be multiple types** → just meaning with `a` prefix:
+   - `aName`, `aSize`, `aCollectionOfModels`
+
+### Control blocks: `ifTrue:ifFalse:`
+
+**Decision rule:**
+
+| Condition | Format |
+|---|---|
+| Single statement in both blocks, total line < 60 chars | Inline |
+| Single statement in both blocks, total line ≥ 60 chars | New line for `ifTrue:` and `ifFalse:` |
+| Any block has multiple statements | New line for `ifTrue:` and `ifFalse:`, even if the other block has only one statement |
+
+**Always use `ifTrue:ifFalse:` order**, never `ifFalse:ifTrue:`.
+
+**Single statement, short enough (inline):**
+```
+someBooleanStatement
+    ifTrue: [ self trueStatement ]
+    ifFalse: [ self falseStatement ]
+```
+
+**Multi-statement in one block (new-line both):**
+```
+someBooleanStatement
+    ifTrue: [
+        self trueStatement1.
+        self trueStatement2 ]
+    ifFalse: [
+        self falseStatement ]
+```
+
+**Single control block only (`ifTrue:` or `ifFalse:` without the other):**
+
+| Condition | Format |
+|---|---|
+| Single statement, total line < 60 chars | Inline: `condition ifTrue: [ ... ]` |
+| Single statement, ≥ 60 chars | New line |
+| Multiple statements | New line |
+
+```
+"Single statement, short:"
+condition ifTrue: [ self doSomething ]
+
+"Multiple statements:"
+condition
+    ifTrue: [
+        self doStepOne.
+        self doStepTwo ]
+```
+
+### Chained boolean statements (`and:` / `or:`)
+
+| Condition | Format |
+|---|---|
+| Single `and:` or `or:`, total line < 60 chars | All on one line |
+| Multiple chains or total line ≥ 60 chars | One chain per line |
+
+```
+"Single chain, short:"
+(self size > 0) and: [ self name notEmpty ]
+
+"Multiple chains:"
+someBooleanCheck
+    and: [ otherBooleanCheck
+    and: [ anotherBooleanCheck ] ]
+```
+
+### Error handling blocks (`on:do:`)
+
+**Variable naming:** Use `e` for errors, `w` for warnings, `n` for notifications.
+
+| Condition | Format |
+|---|---|
+| Single error-handling statement | Same line as `do:` |
+| Multiple error-handling statements | New line for each |
+
+```
+"Single statement:"
+[
+    self someStatement.
+    self otherStatement ]
+on: Error
+do: [ :e | self handleError ]
+
+"Multiple statements:"
+[
+    self someStatement.
+    self otherStatement ]
+on: Error
+do: [ :e |
+    self logError: e.
+    self notifyUser ]
+```
+
+### Iteration blocks (`whileTrue:`, `whileFalse:`, `timesRepeat:`)
+
+Same formatting rules as single control blocks:
+
+| Condition | Format |
+|---|---|
+| Single statement, total line < 60 chars | Inline |
+| Single statement, ≥ 60 chars | New line |
+| Multiple statements | New line |
+
+```
+"Single statement:"
+[ index > 0 ] whileTrue: [ self decrement ]
+
+"Multiple statements:"
+[ queue isNotEmpty ]
+    whileTrue: [
+        self processNext.
+        self updateMetrics ]
+```
+
+---
+
+## Summary of decision thresholds
+
+| Rule | Threshold |
+|---|---|
+| Inline vs. new-line control block | 60 chars |
+| Short vs. long method (for argument naming) | 5 lines, 2 arguments |
+'
 ]
 
 { #category : 'accessing' }
