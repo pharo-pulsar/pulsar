@@ -12,8 +12,9 @@ Class {
 	#classVars : [
 		'LLMModelClass'
 	],
-	#category : 'Pulsar-Tool-LLM',
-	#package : 'Pulsar-Tool-LLM'
+	#category : 'Pulsar-Tool-LLM-View',
+	#package : 'Pulsar-Tool-LLM',
+	#tag : 'View'
 }
 
 { #category : 'defaults' }

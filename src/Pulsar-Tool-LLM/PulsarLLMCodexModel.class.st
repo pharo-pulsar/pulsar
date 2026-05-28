@@ -10,8 +10,9 @@ On #disconnect I stop the MCP server and mark the session as ended.
 Class {
 	#name : 'PulsarLLMCodexModel',
 	#superclass : 'PulsarLLMModel',
-	#category : 'Pulsar-Tool-LLM',
-	#package : 'Pulsar-Tool-LLM'
+	#category : 'Pulsar-Tool-LLM-Model',
+	#package : 'Pulsar-Tool-LLM',
+	#tag : 'Model'
 }
 
 { #category : 'accessing' }

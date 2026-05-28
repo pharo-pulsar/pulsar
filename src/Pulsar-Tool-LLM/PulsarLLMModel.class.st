@@ -14,8 +14,9 @@ Class {
 		'mcp',
 		'connected'
 	],
-	#category : 'Pulsar-Tool-LLM',
-	#package : 'Pulsar-Tool-LLM'
+	#category : 'Pulsar-Tool-LLM-Model',
+	#package : 'Pulsar-Tool-LLM',
+	#tag : 'Model'
 }
 
 { #category : 'accessing' }
@@ -44,9 +45,10 @@ Remember that the Pharo image must be saved when we finish implementing code or 
 
 ## Pharo code format guidance
 
-See the `pharo-formatting` skill for formatting rules and conventions.
+Before writing any Pharo Smalltalk code, always load the pharo-formatting skill:
+  skill:name:pharo-formatting
 
-To load the skill, use `skill:name:pharo-formatting`.
+The skill provides formatting rules and conventions for this project.
 '
 ]
 
