@@ -68,17 +68,17 @@ PulsarLLMChatConsole >> doClose [
 
 { #category : 'actions' }
 PulsarLLMChatConsole >> doConnect [
-
 	self isConnected ifTrue: [ ^ self ].
 	
 	[ 
-		self model 
-			prepare;
-			"connecting will trigger a status change, but the connected flag 
-		 	will prevent a re-execution" 
-			connectTo: terminalPresenter.
-	
-		self updateStatus.
+		self updatingWhile: [
+			self model 
+				prepare;
+				"connecting will trigger a status change, but the connected flag 
+			 	will prevent a re-execution" 
+				connectTo: terminalPresenter.
+		
+			self updateStatus ].
 	]
 	on: Error 
 	do: [ :e | terminalPresenter feedLine: 'Error: ', e messageText ]
@@ -89,11 +89,12 @@ PulsarLLMChatConsole >> doDisconnect [
 
 	self isConnected ifFalse: [ ^ self ].
 	
-	terminalPresenter terminateAllSpawns.
-	self model disconnect.
-	"disconnecting will also trigger a status change, but the connected flag 
-	 will prevent a re-execution" 
-	self updateStatus
+	self updatingWhile: [ 
+		terminalPresenter terminateAllSpawns.
+		self model disconnect.
+		"disconnecting will also trigger a status change, but the connected flag 
+		 will prevent a re-execution" 
+		self updateStatus ]
 ]
 
 { #category : 'actions' }
@@ -203,6 +204,7 @@ PulsarLLMChatConsole >> switchLLMModel: aModelClass [
 
 { #category : 'private - actions' }
 PulsarLLMChatConsole >> toggleConnection: aState [
+	self isUpdating ifTrue: [ ^ self ].
 
 	aState 
 		ifTrue: [ self doConnect ]
