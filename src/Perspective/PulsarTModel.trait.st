@@ -25,6 +25,12 @@ PulsarTModel >> activationAnnouncementClass [
 	^ PulsarModelActivated
 ]
 
+{ #category : 'testing' }
+PulsarTModel >> canBeActivated [
+
+	^ self activationAnnouncementClass isNotNil
+]
+
 { #category : 'accessing' }
 PulsarTModel >> fullName [
 
