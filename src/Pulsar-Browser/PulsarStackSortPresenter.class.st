@@ -29,13 +29,13 @@ PulsarStackSortPresenter >> defineSortActionsOn: aBuilder [
 	aBuilder addGroup: #group with: [ :group | group
 		addActionWith: [ :action | action
 			name: 'Sort by open time';
-			state: (self model isSortingBy: #firstActivationTime);
+			actionState: [ self model isSortingBy: #firstActivationTime ];
 			action: [
 				self toggleAction: action inGroup: group.
 				self model doSortBy: #firstActivationTime ] ];
 		addActionWith: [ :action | action 
 			name: 'Sort by last focus time';
-			state: (self model isSortingBy: #lastActivationTime);
+			actionState: [ self model isSortingBy: #lastActivationTime ];
 			action: [ 
 				self toggleAction: action inGroup: group.
 				self model doSortBy: #lastActivationTime ] ] ]
