@@ -74,27 +74,36 @@ PulsarApplication class >> markProjectAsInternal: aRepository [
 	InternalProjects := InternalProjects copyWith: aRepository name
 ]
 
-{ #category : 'private' }
+{ #category : 'running' }
 PulsarApplication class >> reset [
 	<script>
+	
+	self reset: false
+]
 
+{ #category : 'running' }
+PulsarApplication class >> reset: deepCleanUp [
+	
 	GQueueIdle uniqueInstance reset.
 
-	running ifNotNil: [ 
-		running windows do: [ :each | 
-				[ each cleanUpSchedulers ]
-				on: Error 
-				do: [ :e | logger error: e ]  ].
+	running ifNotNil: [
+		running windows do: [ :each |
+			[ each cleanUpSchedulers ]
+				on: Error
+				do: [ :e | logger error: e ] ].
 		running := nil ].
 	PulsarUIManager reset.
 	OupsDebuggerSelectionStrategy debuggerSelectionStrategy: nil. 
-	"yes, there are better ways to do this, for for now..."
+	
+	self flag: #TODO. "yes, there are better ways to do this, but for for now..."
 	Transcript dependents copy
 		collect: [ :each | each isKindOf: PulsarTranscript ]
 		thenDo: [ :each | Transcript removeDependent: each ].
-	
-	PulsarBaseBrowser resetAllPanelLayouts.
-	
+	deepCleanUp ifTrue: [
+		"this is a kind of clean up we do not want all the time, just in a forced reset. 
+		 More things will come here in the future"
+		PulsarBaseBrowser resetAllPanelLayouts ].
+
 	PulsarApplication basicNew cleanUp
 ]
 

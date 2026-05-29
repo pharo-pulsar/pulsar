@@ -57,7 +57,7 @@ PulsarCLIApplication >> forceReset [
 	"runs a reset of the application before restart."
 	
 	PulsarApplication resetLastSnapshot.
-	PulsarApplication reset.
+	PulsarApplication reset: true.
 	Deprecation reset.
 	
 	"also clean processes that may have remained"
