@@ -36,11 +36,9 @@ PulsarGtkConfiguration >> announcer [
 { #category : 'private - settings' }
 PulsarGtkConfiguration >> applySettings [
 
-	self 
-		settingAt: #theme ifPresent: [ :aValue | self applyTheme: aValue ];
-		settingAt: #syntaxHighlightTheme ifPresent: [ :aValue | self applySyntaxHighlightTheme: aValue ];
-		settingAt: #styleScheme ifPresent: [ :aValue | self appplyStyleScheme: aValue ]
-		
+	self settings theme ifNotNil: [ :aValue | self applyTheme: aValue ].
+	self settings syntaxHighlightTheme ifNotNil: [ :aValue | self applySyntaxHighlightTheme: aValue ].
+	self settings styleScheme ifNotNil: [ :aValue | self appplyStyleScheme: aValue ]		
 ]
 
 { #category : 'private - settings' }
@@ -193,7 +191,7 @@ PulsarGtkConfiguration >> forceDark [
 	self reset.
 	GRunLoop defer: [ self styleManager forceDark ].
 	self resetTheme.
-	self settingAt: #theme put: #dark
+	self settings theme: #dark
 ]
 
 { #category : 'accessing' }
@@ -202,13 +200,7 @@ PulsarGtkConfiguration >> forceLight [
 	self reset.
 	GRunLoop defer: [ self styleManager forceLight ].
 	self resetTheme.
-	self settingAt: #theme put: #light
-]
-
-{ #category : 'initialization' }
-PulsarGtkConfiguration >> initialize [
-
-	super initialize
+	self settings theme: #light
 ]
 
 { #category : 'testing' }
@@ -266,7 +258,7 @@ PulsarGtkConfiguration >> preferSystem [
 	self reset.
 	GRunLoop defer: [ self styleManager preferSystem ].
 	self resetTheme.
-	self settingAt: #theme put: #system
+	self settings theme: #system
 ]
 
 { #category : 'configuring' }
@@ -291,36 +283,6 @@ PulsarGtkConfiguration >> resetTheme [
 ]
 
 { #category : 'private - settings' }
-PulsarGtkConfiguration >> settingAt: aKey [
-
-	^ self settings settingAt: #aKey
-]
-
-{ #category : 'private - settings' }
-PulsarGtkConfiguration >> settingAt: aKey ifAbsent: aBlock [
-
-	^ self settings 
-		settingAt: #aKey
-		ifAbsent: aBlock
-]
-
-{ #category : 'private - settings' }
-PulsarGtkConfiguration >> settingAt: aKey ifPresent: aBlock [
-
-	^ self settings 
-		settingAt: aKey
-		ifPresent: aBlock
-]
-
-{ #category : 'private - settings' }
-PulsarGtkConfiguration >> settingAt: aKey put: aValue [
-
-	^ self settings 
-		settingAt: aKey
-		put: aValue
-]
-
-{ #category : 'private' }
 PulsarGtkConfiguration >> settings [
 
 	^ settings
@@ -500,7 +462,7 @@ PulsarGtkConfiguration >> styleManager [
 PulsarGtkConfiguration >> styleScheme: aString [
 
 	super styleScheme: aString.
-	self settingAt: #styleScheme put: aString.
+	self settings styleScheme: aString.
 	self announceThemeChanged
 ]
 
@@ -508,16 +470,15 @@ PulsarGtkConfiguration >> styleScheme: aString [
 PulsarGtkConfiguration >> syntaxHighlightTheme [
 
 	^ syntaxHighlightThemeName ifNil: [ 
-		syntaxHighlightThemeName := self 
-			settingAt: #syntaxHighlightTheme
-			ifAbsent: [ self defaultSyntaxHighlightThemeName ] ]
+		syntaxHighlightThemeName := self settings syntaxHighlightTheme
+			ifNil: [ self defaultSyntaxHighlightThemeName ] ]
 ]
 
 { #category : 'accessing - style' }
 PulsarGtkConfiguration >> syntaxHighlightTheme: aName [
 
 	super syntaxHighlightTheme: aName.
-	self settingAt: #syntaxHighlightTheme put: aName. 
+	self settings syntaxHighlightTheme: aName. 
 	self announceSyntaxHighlightThemeChanged
 ]
 

@@ -8,23 +8,162 @@ Class {
 	#superclass : 'Object',
 	#instVars : [
 		'settings',
-		'mutex'
+		'mutex',
+		'defaults'
 	],
 	#category : 'Pulsar-Browser-Application',
 	#package : 'Pulsar-Browser',
 	#tag : 'Application'
 }
 
+{ #category : 'private - defaults' }
+PulsarSettings class >> defaultSettings [
+
+	^ STON fromString: self defaultSettingsDefinition
+]
+
+{ #category : 'private - defaults' }
+PulsarSettings class >> defaultSettingsDefinition [
+
+	^ '{
+	#ui: { 
+		#theme: #dark 
+	},
+	#features : {
+		#experimental: false,
+		#llm: false
+	}
+}
+'
+]
+
 { #category : 'private' }
 PulsarSettings class >> settingsFileName [
 
-	^ 'dockbrowser.ston'
+	^ 'pulsar-settings.ston'
 ]
 
 { #category : 'private' }
 PulsarSettings class >> settingsFileReference [
 
 	^ FileLocator localDirectory / self settingsFileName
+]
+
+{ #category : 'private - accessing' }
+PulsarSettings >> at: aKey [
+
+	^ self at: aKey ifAbsent: [ nil ]
+]
+
+{ #category : 'private - accessing' }
+PulsarSettings >> at: aKey ifAbsent: aBlock [
+
+	^ self settings 
+		at: aKey 
+		ifAbsent: [ self default at: aKey ifAbsent: aBlock ]
+]
+
+{ #category : 'private - accessing' }
+PulsarSettings >> at: aKey put: aValue [
+	"no need to re-write if already the same"
+	(self at: aKey) = aValue ifTrue: [ ^ self ].
+
+	self settings 
+		at: aKey
+		put: aValue.
+	
+	self store.
+	
+	^ aValue
+]
+
+{ #category : 'accessing' }
+PulsarSettings >> defaults [
+
+	^ defaults
+]
+
+{ #category : 'private - accessing' }
+PulsarSettings >> ensureGroup: aSymbol [
+
+	self settings 
+		at: aSymbol
+		ifAbsentPut: [ Dictionary new ].
+		
+	self defaults 
+		at: aSymbol
+		ifAbsentPut: [ Dictionary new ]
+]
+
+{ #category : 'accessing - features' }
+PulsarSettings >> feature: aSymbol beEnabled: aBoolean [
+
+	^ self 
+		groupAt: #features
+		at: aSymbol
+		put: aBoolean
+]
+
+{ #category : 'accessing - features' }
+PulsarSettings >> features [
+
+	^ self settings 
+		at: #features
+		ifAbsentPut: [ Dictionary new ]
+]
+
+{ #category : 'private - accessing' }
+PulsarSettings >> groupAt: groupKey at: aKey [
+	^ self 
+		groupAt: groupKey 
+		at: aKey 
+		ifAbsent: [ nil ]
+]
+
+{ #category : 'private - accessing' }
+PulsarSettings >> groupAt: groupKey at: aKey ifAbsent: aBlock [
+	self ensureGroup: groupKey.
+
+	^ self settings 
+		at: groupKey
+		at: aKey 
+		ifAbsent: [ 
+			self defaults 
+				at: groupKey 
+				at: aKey 
+				ifAbsent: aBlock ]
+]
+
+{ #category : 'private - accessing' }
+PulsarSettings >> groupAt: groupKey at: aKey put: aValue [
+
+	"no need to re-write if already the same"
+	(self groupAt: groupKey at: aKey) = aValue ifTrue: [ ^ self ].
+	
+	self ensureGroup: groupKey.
+
+	self settings 
+		at: groupKey
+		at: aKey
+		put: aValue.
+	
+	self store.
+	
+	^ aValue
+]
+
+{ #category : 'initialization' }
+PulsarSettings >> initialize [
+
+	super initialize.
+	defaults := self class defaultSettings
+]
+
+{ #category : 'testing' }
+PulsarSettings >> isFeatureEnabled: featureSymbol [
+	"by default, features are enabled"
+	
+	^ self groupAt: #features at: featureSymbol ifAbsent: [ true ]
 ]
 
 { #category : 'private' }
@@ -43,52 +182,7 @@ PulsarSettings >> retrieveSettingsIfPresent [
 		ifFalse: [ Dictionary new ]
 ]
 
-{ #category : 'accessing' }
-PulsarSettings >> settingAt: aKey [
-
-	^ self 
-		settingAt: aKey 
-		ifAbsent: [ nil ]
-]
-
-{ #category : 'accessing' }
-PulsarSettings >> settingAt: aKey ifAbsent: aBlock [
-
-	^ self settings 
-		at: aKey 
-		ifAbsent: aBlock
-]
-
-{ #category : 'accessing' }
-PulsarSettings >> settingAt: aKey ifAbsentPut: aBlock [
-	
-	^ self settings 
-		at: aKey 
-		ifAbsent: [ 
-			self settingAt: aKey put: aBlock ]
-]
-
-{ #category : 'accessing' }
-PulsarSettings >> settingAt: aKey ifPresent: aBlock [
-
-	^ self settings 
-		at: aKey 
-		ifPresent: aBlock
-]
-
-{ #category : 'accessing' }
-PulsarSettings >> settingAt: aKey put: aValue [
-
-	self settings 
-		at: aKey
-		put: aValue.
-	
-	self store.
-	
-	^ aValue
-]
-
-{ #category : 'accessing' }
+{ #category : 'private - accessing' }
 PulsarSettings >> settings [
 
 	^ settings ifNil: [ settings := self retrieveSettingsIfPresent ]
@@ -115,4 +209,48 @@ PulsarSettings >> store [
 			STON 
 				put: settings 
 				onStreamPretty: stream ] ]
+]
+
+{ #category : 'accessing - ui' }
+PulsarSettings >> styleScheme [
+
+	^ self groupAt: #ui at: #styleScheme
+]
+
+{ #category : 'accessing - ui' }
+PulsarSettings >> styleScheme: aString [
+
+	^ self groupAt: #ui at: #styleScheme put: aString
+]
+
+{ #category : 'accessing - ui' }
+PulsarSettings >> syntaxHighlightTheme [
+
+	^ self groupAt: #ui at: #syntaxHighlightTheme
+]
+
+{ #category : 'accessing - ui' }
+PulsarSettings >> syntaxHighlightTheme: aString [
+
+	^ self groupAt: #ui at: #syntaxHighlightTheme put: aString
+]
+
+{ #category : 'accessing - ui' }
+PulsarSettings >> theme [
+
+	^ self groupAt: #ui at: #theme
+]
+
+{ #category : 'accessing - ui' }
+PulsarSettings >> theme: aSymbol [
+
+	self atGroup: #ui at: aSymbol put: aSymbol
+]
+
+{ #category : 'accessing - ui' }
+PulsarSettings >> ui [
+
+	^ self settings 
+		at: #ui 
+		ifAbsentPut: [ Dictionary new ]
 ]

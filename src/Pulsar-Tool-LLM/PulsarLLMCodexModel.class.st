@@ -56,6 +56,9 @@ approval_mode = "approve"
 
 [mcp_servers.pharo.tools.pulsar-debugger]
 approval_mode = "approve"
+
+[mcp_servers.pharo.tools.validate-code]
+approval_mode = "approve"
 '
 ]
 
