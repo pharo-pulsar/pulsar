@@ -119,6 +119,12 @@ PulsarRepositoryCommitsView >> numberOfCommitsToRetrieve [
 	^ 150
 ]
 
+{ #category : 'private' }
+PulsarRepositoryCommitsView >> panelPlacedIconName [
+
+	^ 'commits'
+]
+
 { #category : 'initialization' }
 PulsarRepositoryCommitsView >> registerToEvents [
 

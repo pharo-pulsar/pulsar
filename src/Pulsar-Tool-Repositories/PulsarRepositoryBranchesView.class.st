@@ -70,6 +70,12 @@ PulsarRepositoryBranchesView >> notificationCenter: anAnnouncer [
 		do: [ :each | each notificationCenter: anAnnouncer ]
 ]
 
+{ #category : 'private' }
+PulsarRepositoryBranchesView >> panelPlacedIconName [
+
+	^ 'branches'
+]
+
 { #category : 'initialization' }
 PulsarRepositoryBranchesView >> registerToEvents [
 

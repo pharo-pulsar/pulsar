@@ -290,6 +290,12 @@ PulsarRepositoryChangesView >> nodeActions [
 	^ self selectedNode actionsWithContextOn: self
 ]
 
+{ #category : 'private' }
+PulsarRepositoryChangesView >> panelPlacedIconName [
+
+	^ 'changes'
+]
+
 { #category : 'initialization' }
 PulsarRepositoryChangesView >> registerToEvents [
 

@@ -147,6 +147,10 @@ PulsarMDINeutralIconProvider >> createTable [
 		('unlock'				  'lock-open-variant')
 		('dirtyProject'			  'source-commit-local')
 		('remotes'			  	  'cloud-outline')
+		('branches'				  'source-branch')
+		('commits'				  'source-commit')
+		('packages'				  'cube-outline')
+		('changes'				  'file-code-outline')
 		
 
 		"Inspection / metamodel introspection"

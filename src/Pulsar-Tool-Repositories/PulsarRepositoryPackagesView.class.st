@@ -148,6 +148,12 @@ PulsarRepositoryPackagesView >> packageActions [
 	^ self selectedPackage actionsWithContextOn: self
 ]
 
+{ #category : 'private' }
+PulsarRepositoryPackagesView >> panelPlacedIconName [
+
+	^ 'packages'
+]
+
 { #category : 'accessing' }
 PulsarRepositoryPackagesView >> selectedPackage [
 
