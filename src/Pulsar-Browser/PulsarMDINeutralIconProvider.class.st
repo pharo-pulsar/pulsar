@@ -93,6 +93,7 @@ PulsarMDINeutralIconProvider >> createTable [
 		('announcement'           'message-outline'  				'#0891b2' 	'#cffafe')
 		('project'                'folder-outline'				'#3b4a77' 	'#b8c6ee')
 		('systemEnvironment'      'library-outline' 				'#3446a3' 	'#aebcff')
+		('projects'                'folder-outline')
 
 		"Run / debug"
 		('glamorousGo'            'play-outline'                  '#26a269'  '#57e389')

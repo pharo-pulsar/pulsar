@@ -563,6 +563,12 @@ PulsarProjectView >> openedProjects [
 	^ self model children
 ]
 
+{ #category : 'private' }
+PulsarProjectView >> panelPlacedIconName [
+
+	^ 'projects'
+]
+
 { #category : 'initialization' }
 PulsarProjectView >> refactorActions [
 

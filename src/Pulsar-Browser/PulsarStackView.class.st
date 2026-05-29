@@ -316,6 +316,12 @@ PulsarStackView >> notifySelectEntity: aCollection [
 		announce: editorPresenter model newSelectionAnnouncement
 ]
 
+{ #category : 'private' }
+PulsarStackView >> panelPlacedIconName [
+ 
+	^ 'editorStack'
+]
+
 { #category : 'initialization' }
 PulsarStackView >> registerToEvents [
 
