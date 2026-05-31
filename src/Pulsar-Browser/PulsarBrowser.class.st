@@ -163,10 +163,12 @@ PulsarBrowser >> initializeDefaultWorkspace [
 	"here, the list of components that are part of the 'sides' but we access 
 	 just while interacting."
 	self addPresenterClass: PulsarStackView.
+	self addPresenterClass: PulsarRepositoriesView model: (PulsarRepositoriesModel on: self model).
 	self addPresenterClass: PulsarCritiquesConsole model: (PulsarCritiquesModel on: self model). 	
 	self addPresenterClass: PulsarFlagsConsole model: (PulsarFlagsModel on: self model). 	
 	self addPresenterClass: PulsarPlayground.
 	
+	"add welcome editor"
 	self addPresenterClass: PulsarWelcomeView.
 	
 	self updateTitle
@@ -264,10 +266,7 @@ PulsarBrowser >> openRepositories [
 	repositoryView ifNil: [ 
 		repositoryView := self 
 			addPresenterClass: PulsarRepositoriesView 
-			model: (PulsarRepositoriesModel 
-				newEnvironment: self model
-				parent: self model
-				entity: nil) ].
+			model: (PulsarRepositoriesModel on: self model) ].
 	repositoryView takeKeyboardFocus
 ]
 

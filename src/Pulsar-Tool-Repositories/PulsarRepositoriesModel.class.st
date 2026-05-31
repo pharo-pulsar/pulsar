@@ -9,6 +9,15 @@ Class {
 	#tag : 'Model'
 }
 
+{ #category : 'instance creation' }
+PulsarRepositoriesModel class >> on: aSystemEnvironmentModel [
+
+	^ self 
+		newEnvironment: aSystemEnvironmentModel
+		parent: aSystemEnvironmentModel
+		entity: nil
+]
+
 { #category : 'private' }
 PulsarRepositoriesModel >> collectRepositories [
 
