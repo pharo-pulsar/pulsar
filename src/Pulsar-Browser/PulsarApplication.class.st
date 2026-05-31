@@ -142,6 +142,16 @@ PulsarApplication class >> startUp: resuming [
 	self reset
 ]
 
+{ #category : 'initialization' }
+PulsarApplication >> applicationId [
+
+	"this is an easy way to know if I am running a flatpak"
+	(GtkLibrary uniqueInstance libraryName beginsWith: '/app/')
+		ifTrue: [ ^ 'org.pharo.Pharo.Pulsar' ].
+
+	^ 'org.pharo.Pulsar'
+]
+
 { #category : 'private' }
 PulsarApplication >> checkForLostChanges [
 	| lostChangesDetector |
@@ -314,7 +324,7 @@ PulsarApplication >> isStandalone [
 PulsarApplication >> newConfiguration [
 
 	^ PulsarGtkConfiguration new
-		applicationId: 'org.pharo.Pulsar';
+		applicationId: self applicationId;
 		applicationClass: PanelApplication;
 		yourself
 ]
