@@ -188,29 +188,44 @@ PulsarSettingsTest >> testStoreUsesMutex [
 ]
 
 { #category : 'tests' }
-PulsarSettingsTest >> testStyleScheme [
+PulsarSettingsTest >> testStyleSchemeForDark [
 
-	self assert: settings styleScheme isNil
+	settings styleSchemeDark: 'monokai-dark'.
+	self assert: (settings styleSchemeFor: true) equals: 'monokai-dark'
 ]
 
 { #category : 'tests' }
-PulsarSettingsTest >> testStyleSchemeStore [
+PulsarSettingsTest >> testStyleSchemeForDefaultsFromDefinition [
 
-	settings styleScheme: 'monokai'.
-	self assert: settings styleScheme equals: 'monokai'
+	 self assert: (settings styleSchemeFor: true) equals: 'Adwaita-dark'.
+	 self assert: (settings styleSchemeFor: false) equals: 'Adwaita'
 ]
 
 { #category : 'tests' }
-PulsarSettingsTest >> testSyntaxHighlightTheme [
+PulsarSettingsTest >> testStyleSchemeForLight [
 
-	self assert: settings syntaxHighlightTheme isNil
+	settings styleSchemeLight: 'monokai-light'.
+	self assert: (settings styleSchemeFor: false) equals: 'monokai-light'
 ]
 
 { #category : 'tests' }
-PulsarSettingsTest >> testSyntaxHighlightThemeStore [
+PulsarSettingsTest >> testSyntaxHighlightThemeForDark [
 
-	settings syntaxHighlightTheme: 'solarized'.
-	self assert: settings syntaxHighlightTheme equals: 'solarized'
+	settings syntaxHighlightThemeDark: 'solarized-dark'.
+	self assert: (settings syntaxHighlightThemeFor: true) equals: 'solarized-dark'
+]
+
+{ #category : 'tests' }
+PulsarSettingsTest >> testSyntaxHighlightThemeForDefaultsFromDefinition [
+
+	self assert: (settiamp: '2026-06-01T17:09:19.502182+02:00' prior: 18588279
+]
+
+{ #category : 'tests' }
+PulsarSettingsTest >> testSyntaxHighlightThemeForLight [
+
+	settings syntaxHighlightThemeLight: 'solarized-light'.
+	 self assert: (settings syntaxHighlightThemeFor: false) equals: 'solarized-light'
 ]
 
 { #category : 'tests' }

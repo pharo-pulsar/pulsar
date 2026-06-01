@@ -23,12 +23,16 @@ PulsarSettings class >> defaultSettings [
 	^ STON fromString: self defaultSettingsDefinition
 ]
 
-{ #category : 'private - defaults' }
+{ #category : 'defaults' }
 PulsarSettings class >> defaultSettingsDefinition [
 
-	^ '{
+	  ^ '{
 	#ui: { 
-		#theme: #system 
+		#theme: #system,
+		#styleSchemeLight: "Adwaita",
+		#styleSchemeDark: "Adwaita-dark",
+		#syntaxHighlightThemeLight: "CodeLight",
+		#syntaxHighlightThemeDark: "CodeDark"
 	},
 	#features : {
 		#experimental: false,
@@ -224,27 +228,43 @@ PulsarSettings >> store [
 ]
 
 { #category : 'accessing - ui' }
-PulsarSettings >> styleScheme [
+PulsarSettings >> styleSchemeDark: aString [
 
-	^ self groupAt: #ui at: #styleScheme
+	^ self groupAt: #ui at: #styleSchemeDark put: aString
 ]
 
 { #category : 'accessing - ui' }
-PulsarSettings >> styleScheme: aString [
+PulsarSettings >> styleSchemeFor: isDarkTheme [
 
-	^ self groupAt: #ui at: #styleScheme put: aString
+	^ self groupAt: #ui at: (isDarkTheme
+		ifTrue: [ #styleSchemeDark ]
+		ifFalse: [ #styleSchemeLight ])
 ]
 
 { #category : 'accessing - ui' }
-PulsarSettings >> syntaxHighlightTheme [
+PulsarSettings >> styleSchemeLight: aString [
 
-	^ self groupAt: #ui at: #syntaxHighlightTheme
+	^ self groupAt: #ui at: #styleSchemeLight put: aString
 ]
 
 { #category : 'accessing - ui' }
-PulsarSettings >> syntaxHighlightTheme: aString [
+PulsarSettings >> syntaxHighlightThemeDark: aString [
 
-	^ self groupAt: #ui at: #syntaxHighlightTheme put: aString
+	^ self groupAt: #ui at: #syntaxHighlightThemeDark put: aString
+]
+
+{ #category : 'accessing - ui' }
+PulsarSettings >> syntaxHighlightThemeFor: isDarkTheme [
+
+	^ self groupAt: #ui at: (isDarkTheme
+		ifTrue: [ #syntaxHighlightThemeDark ]
+		ifFalse: [ #syntaxHighlightThemeLight ])
+]
+
+{ #category : 'accessing - ui' }
+PulsarSettings >> syntaxHighlightThemeLight: aString [
+
+	^ self groupAt: #ui at: #syntaxHighlightThemeLight put: aString
 ]
 
 { #category : 'accessing - ui' }

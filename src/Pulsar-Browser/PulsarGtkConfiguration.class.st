@@ -36,9 +36,12 @@ PulsarGtkConfiguration >> announcer [
 { #category : 'private - settings' }
 PulsarGtkConfiguration >> applySettings [
 
-	self settings theme ifNotNil: [ :aValue | self applyTheme: aValue ].
-	self settings syntaxHighlightTheme ifNotNil: [ :aValue | self applySyntaxHighlightTheme: aValue ].
-	self settings styleScheme ifNotNil: [ :aValue | self appplyStyleScheme: aValue ]		
+	self settings theme 
+		ifNotNil: [ :aValue | self applyTheme: aValue ].
+	(self settings syntaxHighlightThemeFor: self isDarkTheme) 
+		ifNotNil: [ :aValue | self applySyntaxHighlightTheme: aValue ].
+	(self settings styleSchemeFor: self isDarkTheme) 
+		ifNotNil: [ :aValue | self appplyStyleScheme: aValue ]		
 ]
 
 { #category : 'private - settings' }
@@ -462,23 +465,28 @@ PulsarGtkConfiguration >> styleManager [
 PulsarGtkConfiguration >> styleScheme: aString [
 
 	super styleScheme: aString.
-	self settings styleScheme: aString.
+	self isDarkTheme
+		ifTrue: [ self settings styleSchemeDark: aString ]
+		ifFalse: [ self settings styleSchemeLight: aString ].
 	self announceThemeChanged
 ]
 
 { #category : 'accessing' }
 PulsarGtkConfiguration >> syntaxHighlightTheme [
 
-	^ syntaxHighlightThemeName ifNil: [ 
-		syntaxHighlightThemeName := self settings syntaxHighlightTheme
-			ifNil: [ self defaultSyntaxHighlightThemeName ] ]
+	^ syntaxHighlightThemeName ifNil: [
+			  syntaxHighlightThemeName := self settings
+				                              syntaxHighlightThemeFor: self isDarkTheme
+				                              ifNil: [ self defaultSyntaxHighlightThemeName ] ]
 ]
 
 { #category : 'accessing - style' }
 PulsarGtkConfiguration >> syntaxHighlightTheme: aName [
 
 	super syntaxHighlightTheme: aName.
-	self settings syntaxHighlightTheme: aName. 
+	self isDarkTheme
+		ifTrue: [ self settings syntaxHighlightThemeDark: aName ]
+		ifFalse: [ self settings syntaxHighlightThemeLight: aName ].
 	self announceSyntaxHighlightThemeChanged
 ]
 
