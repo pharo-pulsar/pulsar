@@ -30,7 +30,7 @@ PulsarRepositoryModifiedPushReason >> affectsCommits [
 { #category : 'query' }
 PulsarRepositoryModifiedPushReason >> affectsRemoteBranches [
 
-	^ true
+	^ false
 ]
 
 { #category : 'query' }
