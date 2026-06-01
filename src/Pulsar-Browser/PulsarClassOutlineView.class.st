@@ -135,6 +135,15 @@ PulsarClassOutlineView >> eventTestSuiteEnded: aTestSuiteEnded [
 ]
 
 { #category : 'initialization' }
+PulsarClassOutlineView >> initializePanelWidget: aPanelWidgetPresenter [
+
+	super initializePanelWidget: aPanelWidgetPresenter.
+	
+	aPanelWidgetPresenter whenPanelPositionChangedDo: [ :newPosition |
+		self panelPositioned: aPanelWidgetPresenter to: newPosition ]
+]
+
+{ #category : 'initialization' }
 PulsarClassOutlineView >> initializePresenters [
 
 	toolbarPresenter := self newPulsarToolbar.
@@ -191,22 +200,22 @@ PulsarClassOutlineView >> notifySelectEntity: anEntity [
 ]
 
 { #category : 'private' }
-PulsarClassOutlineView >> panelPlaced: aPanelWidgetPresenter [
+PulsarClassOutlineView >> panelPlacedIconName [
+
+	^ #overview
+]
+
+{ #category : 'private' }
+PulsarClassOutlineView >> panelPositioned: aPanelWidgetPresenter to: aPanelPosition [ 
 	| inHorizontalArea |
 
-	super panelPlaced: aPanelWidgetPresenter.
+	inHorizontalArea := { SpPanelArea top. SpPanelArea bottom } includes: aPanelPosition area.
+	logger trace: inHorizontalArea.
 
-	inHorizontalArea := { SpPanelArea top. SpPanelArea bottom } includes: aPanelWidgetPresenter panelArea.
 	self withSidesDo: [ :each | 
 		inHorizontalArea 
 			ifTrue: [ each useHorizontalLayout ]
 			ifFalse: [ each useVerticalLayout ] ]
-]
-
-{ #category : 'private' }
-PulsarClassOutlineView >> panelPlacedIconName [
-
-	^ #overview
 ]
 
 { #category : 'initialization' }
