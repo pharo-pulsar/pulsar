@@ -93,6 +93,12 @@ PulsarRepositoryModifiedReason >> affectsCommits [
 ]
 
 { #category : 'query' }
+PulsarRepositoryModifiedReason >> affectsRemoteBranches [
+
+	^ self subclassResponsibility
+]
+
+{ #category : 'query' }
 PulsarRepositoryModifiedReason >> affectsRepositoryList [
 
 	^ self subclassResponsibility

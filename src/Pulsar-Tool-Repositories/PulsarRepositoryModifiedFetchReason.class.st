@@ -28,6 +28,12 @@ PulsarRepositoryModifiedFetchReason >> affectsCommits [
 ]
 
 { #category : 'query' }
+PulsarRepositoryModifiedFetchReason >> affectsRemoteBranches [
+
+	^ true
+]
+
+{ #category : 'query' }
 PulsarRepositoryModifiedFetchReason >> affectsRepositoryList [
 
 	^ true

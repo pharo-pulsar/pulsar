@@ -100,6 +100,12 @@ PulsarRepositoryModified >> affectsCommits [
 ]
 
 { #category : 'query' }
+PulsarRepositoryModified >> affectsRemoteBranches [
+
+	^ self reason affectsRemoteBranches
+]
+
+{ #category : 'query' }
 PulsarRepositoryModified >> affectsRepositoryList [
 
 	^ self reason affectsRepositoryList

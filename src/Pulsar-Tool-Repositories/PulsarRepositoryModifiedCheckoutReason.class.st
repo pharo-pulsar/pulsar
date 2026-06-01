@@ -28,6 +28,12 @@ PulsarRepositoryModifiedCheckoutReason >> affectsCommits [
 ]
 
 { #category : 'query' }
+PulsarRepositoryModifiedCheckoutReason >> affectsRemoteBranches [
+
+	^ false
+]
+
+{ #category : 'query' }
 PulsarRepositoryModifiedCheckoutReason >> affectsRepositoryList [
 
 	^ true

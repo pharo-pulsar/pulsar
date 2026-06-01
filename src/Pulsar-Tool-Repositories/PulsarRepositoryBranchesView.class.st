@@ -36,10 +36,9 @@ PulsarRepositoryBranchesView >> eventRepositoryModified: ann [
 	ann value = self model ifFalse: [ ^ self ].
 	ann affectsBranches ifFalse: [ ^ self ].
 
-	{
-		localPresenter.
-		remotePresenter.
-		tagPresenter } do: [ :each | each updatePresenter ]
+	localPresenter updatePresenter.
+	ann affectsRemoteBranches ifTrue: [ remotePresenter updatePresenter ].
+	ann affectsTags ifTrue: [ tagPresenter updatePresenter ]
 ]
 
 { #category : 'initialization' }

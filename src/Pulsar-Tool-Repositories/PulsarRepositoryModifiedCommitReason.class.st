@@ -12,7 +12,7 @@ Class {
 { #category : 'query' }
 PulsarRepositoryModifiedCommitReason >> affectsBranches [
 
-	^ false
+	^ true
 ]
 
 { #category : 'query' }
@@ -25,6 +25,12 @@ PulsarRepositoryModifiedCommitReason >> affectsChanges [
 PulsarRepositoryModifiedCommitReason >> affectsCommits [
 
 	^ true
+]
+
+{ #category : 'query' }
+PulsarRepositoryModifiedCommitReason >> affectsRemoteBranches [
+
+	^ false
 ]
 
 { #category : 'query' }
