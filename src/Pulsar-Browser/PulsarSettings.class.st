@@ -9,7 +9,8 @@ Class {
 	#instVars : [
 		'settings',
 		'mutex',
-		'defaults'
+		'defaults',
+		'settingsFileReference'
 	],
 	#category : 'Pulsar-Browser-Application',
 	#package : 'Pulsar-Browser',
@@ -43,7 +44,7 @@ PulsarSettings class >> settingsFileName [
 	^ 'pulsar-settings.ston'
 ]
 
-{ #category : 'private' }
+{ #category : 'accessing' }
 PulsarSettings class >> settingsFileReference [
 
 	^ FileLocator localDirectory / self settingsFileName
@@ -58,9 +59,7 @@ PulsarSettings >> at: aKey [
 { #category : 'private - accessing' }
 PulsarSettings >> at: aKey ifAbsent: aBlock [
 
-	^ self settings 
-		at: aKey 
-		ifAbsent: [ self default at: aKey ifAbsent: aBlock ]
+	^ self settings at: aKey ifAbsent: [ self defaults at: aKey ifAbsent: aBlock ]
 ]
 
 { #category : 'private - accessing' }
@@ -96,7 +95,8 @@ PulsarSettings >> ensureGroup: aSymbol [
 ]
 
 { #category : 'accessing - features' }
-PulsarSettings >> feature: aSymbol beEnabled: aBoolean [
+PulsarSettings >> feature: aSymbol enable: aBoolean [
+	"toggle enable/disable of a feature"
 
 	^ self 
 		groupAt: #features
@@ -191,7 +191,14 @@ PulsarSettings >> settings [
 { #category : 'private' }
 PulsarSettings >> settingsFileReference [
 
-	^ self class settingsFileReference
+	^ settingsFileReference ifNil: [ self class settingsFileReference ]
+]
+
+{ #category : 'private' }
+PulsarSettings >> settingsFileReference: aFileReference [
+	"used for testing"
+
+	settingsFileReference := aFileReference
 ]
 
 { #category : 'private' }
@@ -244,7 +251,7 @@ PulsarSettings >> theme [
 { #category : 'accessing - ui' }
 PulsarSettings >> theme: aSymbol [
 
-	self atGroup: #ui at: aSymbol put: aSymbol
+	self groupAt: #ui at: #theme put: aSymbol
 ]
 
 { #category : 'accessing - ui' }
