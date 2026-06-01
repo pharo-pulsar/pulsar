@@ -125,14 +125,14 @@ PulsarRepositoryBaseBranchView >> doCompareSelectedBranchWithWorkingCopy [
 		open
 ]
 
-{ #category : 'private - actions' }
+{ #category : 'actions' }
 PulsarRepositoryBaseBranchView >> doFetchRepositories [
 
 	self scheduleJob: [ :statusbar |
-		statusbar pushMessage: 'Fetching remotes...'.
-		self model newFetchAction
-			onSuccess: [ self notifyRepositoryModified ];
-			executeWithContext: self ]
+			statusbar pushMessage: 'Fetching remotes...'.
+			self model newFetchAction
+				onSuccess: [ self notifyRepositoryModified: PulsarRepositoryModifiedReason fetch ];
+				executeWithContext: self ]
 ]
 
 { #category : 'private - actions' }
@@ -206,10 +206,9 @@ PulsarRepositoryBaseBranchView >> maybeSort: aCollection [
 ]
 
 { #category : 'private' }
-PulsarRepositoryBaseBranchView >> notifyRepositoryModified [
+PulsarRepositoryBaseBranchView >> notifyRepositoryModified: aReason [
 
-	"inform to all windows, as all may have things to do"
-	self application resendAnnouncement: (PulsarRepositoryModified newValue: self model)
+	self application resendAnnouncement: (PulsarRepositoryModified newValue: self model reason: aReason)
 ]
 
 { #category : 'initialization' }

@@ -21,11 +21,11 @@ PulsarRepositoryMergeWindow >> defaultLayout [
 PulsarRepositoryMergeWindow >> doMerge [
 
 	self scheduleJob: [
-		self model newMergeAction
-			onSuccess: [
-				self notifyRepositoryModified: self model.
-				self withWindowDo: #close ];
-			executeWithContext: self ]
+			self model newMergeAction
+				onSuccess: [
+						self notifyRepositoryModified: self model reason: PulsarRepositoryModifiedReason merge.
+						self withWindowDo: #close ];
+				executeWithContext: self ]
 ]
 
 { #category : 'initialization' }
@@ -51,16 +51,16 @@ PulsarRepositoryMergeWindow >> initializeWindow: aWindowPresenter [
 ]
 
 { #category : 'private' }
-PulsarRepositoryMergeWindow >> notifyRepositoryModified: aModel [
-	| announcementModel |
+PulsarRepositoryMergeWindow >> notifyRepositoryModified: aModel reason: aReason [
 
+	| announcementModel |
 	announcementModel := (aModel respondsTo: #repositoryModel)
-		ifTrue: [ aModel repositoryModel ]
-		ifFalse: [ aModel ].
+		                     ifTrue: [ aModel repositoryModel ]
+		                     ifFalse: [ aModel ].
 
 	logger trace: announcementModel.
 
-	self application resendAnnouncement: (PulsarRepositoryModified newValue: announcementModel)
+	self application resendAnnouncement: (PulsarRepositoryModified newValue: announcementModel reason: aReason)
 ]
 
 { #category : 'initialization' }

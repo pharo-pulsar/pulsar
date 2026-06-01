@@ -54,25 +54,25 @@ PulsarRepositoryLocalBranchView >> defineGitActionsOn: aBuilder [
 			action: [ self doPullIntoSelectedBranch ] ]" ]
 ]
 
-{ #category : 'private - actions' }
+{ #category : 'actions' }
 PulsarRepositoryLocalBranchView >> doCreateBranchCommand: anAction [
-	| dialog branchName |
 
+	| dialog branchName |
 	dialog := self instantiate: PulsarRequestPresenter.
-	dialog 
+	dialog
 		label: 'Branch Name';
 		text: ''.
 	dialog acceptLabel: 'Create'.
-	
+
 	dialog asPopover
 		relativeTo: anAction presenter;
 		popupModalAndWait.
 	dialog isOk ifFalse: [ ^ self ].
-	
+
 	branchName := dialog text.
-	
+
 	self model switchToBranchNamed: branchName.
-	self notifyRepositoryModified
+	self notifyRepositoryModified: PulsarRepositoryModifiedReason branchCreated
 ]
 
 { #category : 'actions' }

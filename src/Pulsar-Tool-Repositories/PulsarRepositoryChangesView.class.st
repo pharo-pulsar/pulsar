@@ -233,7 +233,8 @@ PulsarRepositoryChangesView >> entitySelected: ann [
 PulsarRepositoryChangesView >> eventRepositoryModified: ann [
 
 	ann value = self model ifFalse: [ ^ self ].
-	
+	ann affectsChanges ifFalse: [ ^ self ].
+
 	self model resetDiff.
 	self updatePresenter
 ]

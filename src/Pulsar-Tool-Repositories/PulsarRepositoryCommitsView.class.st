@@ -50,7 +50,8 @@ PulsarRepositoryCommitsView >> eventBranchSelected: ann [
 PulsarRepositoryCommitsView >> eventRepositoryModified: ann [
 
 	ann value = self model ifFalse: [ ^ self ].
-	
+	ann affectsCommits ifFalse: [ ^ self ].
+
 	self updatePresenter
 ]
 

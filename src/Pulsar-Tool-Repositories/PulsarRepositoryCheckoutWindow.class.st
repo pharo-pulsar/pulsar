@@ -29,17 +29,15 @@ PulsarRepositoryCheckoutWindow >> defaultLayout [
 
 { #category : 'actions' }
 PulsarRepositoryCheckoutWindow >> doCheckout [
+
 	| strategy |
-	
 	strategy := checkoutStrategyPresenter selectedItem.
 	self scheduleJob: [
-		(self model newCheckoutActionWithStrategy: strategy) 
-			onSuccess: [ 
-				"announce here because the iceberg announcer is kind of internal, and I do not want to hang on
-				 `Icebereg announcer`, which seems to me prone to leak."
-				self notifyRepositoryModified: self model.
-				self withWindowDo: #close ];
-			executeWithContext: self ]
+			(self model newCheckoutActionWithStrategy: strategy)
+				onSuccess: [
+						self notifyRepositoryModified: self model reason: PulsarRepositoryModifiedReason checkout.
+						self withWindowDo: #close ];
+				executeWithContext: self ]
 ]
 
 { #category : 'initialization' }
@@ -69,16 +67,16 @@ PulsarRepositoryCheckoutWindow >> initializeWindow: aWindowPresenter [
 ]
 
 { #category : 'private' }
-PulsarRepositoryCheckoutWindow >> notifyRepositoryModified: aModel [
+PulsarRepositoryCheckoutWindow >> notifyRepositoryModified: aModel reason: aReason [
+
 	| announcementModel |
-	
 	announcementModel := (aModel respondsTo: #repositoryModel)
-		ifTrue: [ aModel repositoryModel ]
-		ifFalse: [ aModel ].
+		                     ifTrue: [ aModel repositoryModel ]
+		                     ifFalse: [ aModel ].
 
 	logger trace: announcementModel.
 
-	self application resendAnnouncement: (PulsarRepositoryModified newValue: announcementModel)
+	self application resendAnnouncement: (PulsarRepositoryModified newValue: announcementModel reason: aReason)
 ]
 
 { #category : 'initialization' }

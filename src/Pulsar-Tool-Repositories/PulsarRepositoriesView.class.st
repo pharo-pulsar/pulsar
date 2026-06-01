@@ -220,28 +220,28 @@ PulsarRepositoriesView >> doRecalculateDirtyPackagesOfSelectedRepository [
 	self doRecalculateDirtyPackagesOf: self selectedRepository
 ]
 
-{ #category : 'private - actions' }
+{ #category : 'actions' }
 PulsarRepositoriesView >> doRepairRepository: aRepositoryModel [
+
 	| choosenRepairAction repairActions |
-		
 	repairActions := aRepositoryModel repairActions.
 	repairActions do: [ :each | each context: self ].
-	
+
 	self flag: #TODO. "in fact, this should be a bit better (we have helps and that
-	we can use, just I'm lazy to create a new dialog right now)"
+    we can use, just I'm lazy to create a new dialog right now)"
 	choosenRepairAction := self application newSelect
-		title: 'Repository broken';
-		message: 'Select from available repair actions';
-		items: repairActions;
-		display: [ :aRepaitAction | aRepaitAction title ];
-		openModalWithParent: self window.
+		                       title: 'Repository broken';
+		                       message: 'Select from available repair actions';
+		                       items: repairActions;
+		                       display: [ :aRepaitAction | aRepaitAction title ];
+		                       openModalWithParent: self window.
 	choosenRepairAction ifNil: [ ^ self ].
-	
+
 	self scheduleTask: [
-		aRepositoryModel resetDiff.
-		choosenRepairAction
-			onSuccess: [ self notifyRepositoryModified: aRepositoryModel ];
-			execute ]
+			aRepositoryModel resetDiff.
+			choosenRepairAction
+				onSuccess: [ self notifyRepositoryModified: aRepositoryModel reason: PulsarRepositoryModifiedReason repair ];
+				execute ]
 ]
 
 { #category : 'private - actions' }
@@ -279,7 +279,8 @@ PulsarRepositoriesView >> eventMetacelloExecutionEnd: ann [
 PulsarRepositoriesView >> eventRepositoryModified: ann [
 
 	self isUpdating ifTrue: [ ^ self ].
-	
+	ann affectsRepositoryList ifFalse: [ ^ self ].
+
 	self updatePresenter
 ]
 
@@ -372,11 +373,11 @@ PulsarRepositoriesView >> maybeSort: aCollection [
 ]
 
 { #category : 'private' }
-PulsarRepositoriesView >> notifyRepositoryModified: aModel [
+PulsarRepositoriesView >> notifyRepositoryModified: aModel reason: aReason [
 
-	logger trace: aModel. 
+	logger trace: aModel.
 
-	self application resendAnnouncement: (PulsarRepositoryModified newValue: aModel)
+	self application resendAnnouncement: (PulsarRepositoryModified newValue: aModel reason: aReason)
 ]
 
 { #category : 'private' }

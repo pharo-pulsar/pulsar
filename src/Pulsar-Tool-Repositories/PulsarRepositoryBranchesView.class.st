@@ -34,9 +34,12 @@ PulsarRepositoryBranchesView >> defaultLayout [
 PulsarRepositoryBranchesView >> eventRepositoryModified: ann [
 
 	ann value = self model ifFalse: [ ^ self ].
-	
-	{ localPresenter. remotePresenter. tagPresenter } 
-		do: [ :each | each updatePresenter ]
+	ann affectsBranches ifFalse: [ ^ self ].
+
+	{
+		localPresenter.
+		remotePresenter.
+		tagPresenter } do: [ :each | each updatePresenter ]
 ]
 
 { #category : 'initialization' }

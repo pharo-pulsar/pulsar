@@ -139,7 +139,7 @@ PulsarRepositoryRepairAction >> icon [
 { #category : 'private' }
 PulsarRepositoryRepairAction >> notifyRepositoryModified [
 
-	self application resendAnnouncement: (PulsarRepositoryModified newValue: self repositoryModel)
+	self application resendAnnouncement: (PulsarRepositoryModified repair: self repositoryModel)
 ]
 
 { #category : 'accessing' }
