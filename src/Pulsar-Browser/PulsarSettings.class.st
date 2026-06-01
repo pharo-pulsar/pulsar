@@ -27,7 +27,7 @@ PulsarSettings class >> defaultSettingsDefinition [
 
 	^ '{
 	#ui: { 
-		#theme: #dark 
+		#theme: #system 
 	},
 	#features : {
 		#experimental: false,
