@@ -86,7 +86,7 @@ PulsarLLMCodexModel >> ensureConfig [
 PulsarLLMCodexModel >> performConnectTo: aTerminalPresenter [
 	| command |
 	
-	command := PulsarWhich pathForProgram: 'codex'.
+	command := PulsarWhich pathOfProgram: 'codex'.
 	command ifEmpty: [ 
 		self error: 'Codex not found. Please install it and make sure it can be found in the PATH.' ].
 

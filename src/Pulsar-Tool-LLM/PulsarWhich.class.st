@@ -23,9 +23,9 @@ PulsarWhich class >> new [
 ]
 
 { #category : 'utilities' }
-PulsarWhich class >> pathForProgram: aString [
+PulsarWhich class >> pathOfProgram: aString [
 
-	^ self uniqueInstance pathForProgram: aString
+	^ self uniqueInstance pathOfProgram: aString
 ]
 
 { #category : 'instance creation' }
@@ -69,7 +69,7 @@ PulsarWhich >> pathAsList [
 ]
 
 { #category : 'utilities' }
-PulsarWhich >> pathForProgram: aString [
+PulsarWhich >> pathOfProgram: aString [
 	
 	"First look for it in the regular PATH."
 	(self lookForProgram: aString atAnyOf: self pathAsList) ifNotNil: [ :aFullPath | ^ aFullPath ]. 

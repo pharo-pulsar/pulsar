@@ -49,7 +49,7 @@ PulsarLLMOpenCodeModel >> ensureConfig [
 PulsarLLMOpenCodeModel >> performConnectTo: aTerminalPresenter [
 	| command |
 	
-	command := PulsarWhich pathForProgram:  'opencode'.
+	command := PulsarWhich pathOfProgram:  'opencode'.
 	command ifEmpty: [ 
 		self error: 'OpenCode not found. Please install it and make sure it can be found in the PATH.' ].
 
