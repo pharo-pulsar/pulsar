@@ -260,11 +260,9 @@ PulsarRepositoriesView >> entitySelected: aRepositoryModel [
 PulsarRepositoriesView >> eventMetaModelElementChanged: ann [
 
 	self isUpdating ifTrue: [ ^ self ].
+	(self model repositories anySatisfy: [ :each | each registeredStatusChanged ]) 
+		ifFalse: [ ^ self ].
 
-	(listPresenter items 
-		anySatisfy: [ :each | each registeredStatusChanged ])
-		ifFalse: [ ^ self ] .
-	
 	self updatePresenter
 ]
 
