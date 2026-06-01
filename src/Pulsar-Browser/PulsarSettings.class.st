@@ -59,7 +59,12 @@ PulsarSettings >> at: aKey [
 { #category : 'private - accessing' }
 PulsarSettings >> at: aKey ifAbsent: aBlock [
 
-	^ self settings at: aKey ifAbsent: [ self defaults at: aKey ifAbsent: aBlock ]
+	^ self settings 
+		at: aKey 
+		ifAbsent: [ 
+			self defaults 
+				at: aKey 
+				ifAbsent: aBlock ]
 ]
 
 { #category : 'private - accessing' }
