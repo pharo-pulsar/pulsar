@@ -475,9 +475,8 @@ PulsarGtkConfiguration >> styleScheme: aString [
 PulsarGtkConfiguration >> syntaxHighlightTheme [
 
 	^ syntaxHighlightThemeName ifNil: [
-			  syntaxHighlightThemeName := self settings
-				                              syntaxHighlightThemeFor: self isDarkTheme
-				                              ifNil: [ self defaultSyntaxHighlightThemeName ] ]
+		syntaxHighlightThemeName := (self settings syntaxHighlightThemeFor: self isDarkTheme)
+				ifNil: [ self defaultSyntaxHighlightThemeName ] ]
 ]
 
 { #category : 'accessing - style' }
