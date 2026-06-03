@@ -47,7 +47,7 @@ PulsarEditor class >> defineNavigationActionsOn: aBuilder [
 PulsarEditor class >> defineWindowActionsOn: aBuilder [
 	<dockActions>
 
-	aBuilder addGroup: #extraWindow with: [ :group | group
+	aBuilder addGroup: #panelWidget with: [ :group | group
 		priority: 1010;
 		name: 'Window';
 		beDisplayedAsSubMenu;
@@ -206,7 +206,7 @@ PulsarEditor >> doSubmit: aString [
 { #category : 'initialization' }
 PulsarEditor >> editorActions [
 		
-	^ self actions actionsForAll: #(navigation extraWindow)
+	^ self actions actionsForAll: #(navigation panelWidget)
 ]
 
 { #category : 'private - actions' }
@@ -651,7 +651,7 @@ PulsarEditor >> updateTitle [
 { #category : 'initialization' }
 PulsarEditor >> windowActions [
 		
-	^ self actions actionsFor: #extraWindow
+	^ self actions actionsFor: #panelWidget
 ]
 
 { #category : 'accessing' }
