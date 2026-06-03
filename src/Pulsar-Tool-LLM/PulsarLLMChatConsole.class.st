@@ -125,6 +125,7 @@ PulsarLLMChatConsole >> initialize [
 
 { #category : 'initialization' }
 PulsarLLMChatConsole >> initializePresenters [
+	self addStyle: 'pulsarChatConsole'.
 
 	toolbarPresenter := self instantiate: PulsarEditorToolbarPresenter.
 
@@ -162,7 +163,8 @@ PulsarLLMChatConsole >> initializePresenters [
 				yourself);
 			yourself).
 
-	terminalPresenter := self instantiate: VteTerminalPresenter
+	terminalPresenter := self instantiate: VteTerminalPresenter.
+	terminalPresenter addStyle: 'terminal'
 ]
 
 { #category : 'initialization' }

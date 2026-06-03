@@ -449,6 +449,9 @@ box.pulsarRepositoryCheckout box.checkoutStrategy {
 	border-spacing: 10px;
 	padding: 5px 10px;
 }
+
+/* llm */
+.pulsarChatConsole vte-terminal { min-width: 200px; }
 '
 ]
 
