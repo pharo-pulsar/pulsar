@@ -37,6 +37,7 @@ BaselineOfPulsar >> baseline: spec [
 		spec package: 'Pulsar-Tool-FlagsConsole' 		with: [ spec requires: 'Pulsar-Browser' ].
 		spec package: 'Pulsar-Tool-CritiquesConsole'	with: [ spec requires: 'Pulsar-Browser' ].
 		spec package: 'Pulsar-Tool-Roassal' 			with: [ spec requires: 'Pulsar-Browser' ].
+		spec package: 'Pulsar-Tool-FileEditor'		with: [ spec requires: 'Pulsar-Browser' ].
 		spec package: 'Pulsar-Tool-LLM' 				with: [ spec requires: #('Pulsar-Browser' 'Vte' 'MCP') ].
 		"tests"
 		spec package: 'Pulsar-Browser-Tests' 		with: [ spec requires: 'Pulsar-Browser' ] 
