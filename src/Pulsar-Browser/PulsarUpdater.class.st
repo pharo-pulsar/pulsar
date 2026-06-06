@@ -33,16 +33,23 @@ PulsarUpdater >> loadScriptUrl [
 { #category : 'updating' }
 PulsarUpdater >> update [
 
-	OpalCompiler evaluate: self updateContent.
+	OpalCompiler evaluate: self updateScript.
 	
 	self saveImage
 ]
 
 { #category : 'private' }
 PulsarUpdater >> updateScript [ 
+	| downloadedContents |
 
+	
+	downloadedContents := self downloadUpdateFile.
+	"fail fast because if the script is not correct, update will not work anyway"
+	(downloadedContents beginsWith: 'MetaMetacello load:') 
+		ifFalse: [ self error: 'Bad update script format.' ].
+	
 	"this is just a hack so I do not have in two different places the same content"
-	^ self downloadUpdateFile
-			copyReplaceAll: 'MetaMetacello load:' 
+	^ downloadedContents
+		copyReplaceAll: 'MetaMetacello load:' 
 			with: 'MetaMetacello update:'
 ]
