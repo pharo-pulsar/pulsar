@@ -90,7 +90,7 @@ PulsarCLIApplication >> execute [
 ]
 
 { #category : 'execution' }
-PulsarCLIApplication >> executeOpenFlow [
+PulsarCLIApplication >> executeOpen [
 	"reset cleans up but it does not stop the execution of the IDE"
 
 	(self hasFlag: #reset) ifTrue: [ self forceReset ].
@@ -103,13 +103,13 @@ PulsarCLIApplication >> executeOpenFlow [
 PulsarCLIApplication >> executeSubcommand [
 
 	self isUpdateSubcommand ifTrue: [ ^ self executeUpdate ].
-	self executeOpenFlow
+	self executeOpen
 ]
 
 { #category : 'execution' }
 PulsarCLIApplication >> executeUpdate [
 
-	self inform: 'Update not yet implemented'.
+	PulsarUpdater update.
 	self exitSuccess
 ]
 

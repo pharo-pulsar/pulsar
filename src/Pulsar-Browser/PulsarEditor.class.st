@@ -327,6 +327,19 @@ PulsarEditor >> initialize [
 ]
 
 { #category : 'initialization' }
+PulsarEditor >> initializeEditor [
+
+	(editorPresenter := self newCode)
+		addStyle: 'stCode';
+		addScrollBarStyle: 'stCodeScrollBar';
+		overridingContextMenu;
+		withEditionContextMenu;
+		actions: self editorContextMenuActions;
+		lineNumbers: self application isShowingLineNumbers;
+		systemNavigation: (self systemNavigationWithResponder: editorPresenter)
+]
+
+{ #category : 'initialization' }
 PulsarEditor >> initializePanelWidget: aPanelWidgetPresenter [
 
 	super initializePanelWidget: aPanelWidgetPresenter.
@@ -348,15 +361,8 @@ PulsarEditor >> initializePresenters [
 	toolbarPresenter := self instantiate: PulsarEditorToolbarPresenter.
 	toolbarPresenter actions: self editorToolbarActions.
 
-	(editorPresenter := self newCode)
-		addStyle: 'stCode';
-		addScrollBarStyle: 'stCodeScrollBar';
-		overridingContextMenu;
-		withEditionContextMenu;
-		actions: self editorContextMenuActions;
-		lineNumbers: self application isShowingLineNumbers;
-		systemNavigation: (self systemNavigationWithResponder: editorPresenter).
-			
+	self initializeEditor.
+
 	searchBarPresenter := self instantiate: PulsarSearchBarPresenter on: editorPresenter
 ]
 
