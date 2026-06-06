@@ -135,8 +135,6 @@ PulsarVersionsBrowser >> doCopyCommitIdToClipboard [
 PulsarVersionsBrowser >> doFetchRemoteVersionsCommand: anAction [
 	| repositories popover |
 	
-	self halt.
-	
 	repositories := self model includingRepositories.
 	repositories size > 1 ifFalse: [
 		self doFetchRemoteVersionsOnRepository: repositories anyOne.
