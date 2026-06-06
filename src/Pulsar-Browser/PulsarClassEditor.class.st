@@ -212,6 +212,7 @@ PulsarClassEditor >> initializePresenters [
 	
 	commentPresenter := (self instantiate: SeEditorPresenter)
 		addStyle: 'stCode';
+		withoutLineNumbers;
 		withHyperlinks;
 		yourself
 ]
