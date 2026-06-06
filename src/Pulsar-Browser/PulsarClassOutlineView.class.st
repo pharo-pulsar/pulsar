@@ -108,6 +108,7 @@ PulsarClassOutlineView >> eventModelChanged: anAnnouncement [
 	| changedModel  outlineClassModel |
 	
 	changedModel := anAnnouncement value.
+	changedModel includesClassModel ifFalse: [ ^ self ].
 	
 	logger trace: changedModel.
 	
