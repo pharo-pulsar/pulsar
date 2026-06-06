@@ -23,27 +23,6 @@ Class {
 }
 
 { #category : 'accessing - actions' }
-PulsarEditor class >> defineNavigationActionsOn: aBuilder [
-	<dockActions>
-
-	aBuilder addGroup: #navigation with: [ :group | group 
-		priority: 100;
-		name: 'Navigation';
-		beDisplayedAsGroup;
-		addActionWith: [ :action | action 
-			name: 'Show hierarchy';
-			description: 'Show hierarchy';
-			iconName: 'hierarchy.neutral';
-			shortcutKey: $h mod1; 
-			action: [ :aContext | aContext doShowHierarchy: action ] ];
-		addActionWith: [ :action | action 
-			name: 'Show senders';
-			description: 'Show senders';
-			iconName: 'senders.neutral';
-			action: [ :aContext | aContext doBrowseSendersCommand: action ] ] ]
-]
-
-{ #category : 'accessing - actions' }
 PulsarEditor class >> defineWindowActionsOn: aBuilder [
 	<dockActions>
 
@@ -125,6 +104,27 @@ PulsarEditor >> defaultLayout [
 			yourself);
 		add: searchBarPresenter expand: false;
 		yourself
+]
+
+{ #category : 'private - definitions' }
+PulsarEditor >> defineNavigationActionsOn: aBuilder [
+	<dockActions>
+
+	aBuilder addGroup: #navigation with: [ :group | group 
+		priority: 100;
+		name: 'Navigation';
+		beDisplayedAsGroup;
+		addActionWith: [ :action | action 
+			name: 'Show hierarchy';
+			description: 'Show hierarchy';
+			iconName: 'hierarchy.neutral';
+			shortcutKey: $h mod1; 
+			action: [ :aContext | aContext doShowHierarchy: action ] ];
+		addActionWith: [ :action | action 
+			name: 'Show senders';
+			description: 'Show senders';
+			iconName: 'senders.neutral';
+			action: [ :aContext | aContext doBrowseSendersCommand: action ] ] ]
 ]
 
 { #category : 'private' }
