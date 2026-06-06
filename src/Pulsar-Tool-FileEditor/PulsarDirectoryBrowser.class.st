@@ -29,10 +29,10 @@ PulsarDirectoryBrowser >> acceptFile: aFileModel [
 { #category : 'initialization' }
 PulsarDirectoryBrowser >> connectPresenters [
 
-	directoryTreePresenter outputSelectionPort 
+	"directoryTreePresenter outputSelectionPort 
 		transmitDo: [ :aModel | 
 			(aModel isNotNil and: [ aModel isDirectory not ]) 
-				ifTrue: [ editorPresenter model: aModel ] ].
+				ifTrue: [ editorPresenter model: aModel ] ]."
 				
 	directoryTreePresenter outputActivationPort
 		transmitDo: [ :aFileModel | self acceptFile: aFileModel ]
@@ -51,7 +51,7 @@ PulsarDirectoryBrowser >> defaultLayout [
 		  add: headerPresenter expand: false;
 		  add: (SpPanedLayout newHorizontal
 				   add: directoryTreePresenter;
-				   add: editorPresenter;
+				   "add: editorPresenter;"
 				   yourself);
 		  yourself
 ]
