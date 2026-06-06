@@ -537,12 +537,6 @@ PulsarProjectView >> intializeProjectTree [
 
 ]
 
-{ #category : 'private - actions' }
-PulsarProjectView >> maybeOpenFlyView [
-
-	self halt
-]
-
 { #category : 'private - announcing' }
 PulsarProjectView >> notifyActivateEntity: anEntity [
 
