@@ -497,6 +497,16 @@ PulsarBaseBrowser >> notificationCenter [
 	^ self announcer
 ]
 
+{ #category : 'accessing' }
+PulsarBaseBrowser >> panels [
+	"from my list of presenters, answer those who are NOT containing an editor.
+	 Notice that the answer will be a list os SpPanelWidgetPresenter, containing 
+	 the editor presenter, no the presenter itself."
+
+	^ self mutex critical: [ 
+		super presenters reject: [ :each | each panelArea = SpPanelArea center ] ]
+]
+
 { #category : 'accessing - snapshot' }
 PulsarBaseBrowser >> postRestoreSnapshot: aSnapshot [
 ]
