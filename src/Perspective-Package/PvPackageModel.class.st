@@ -18,6 +18,13 @@ PvPackageModel class >> newEnvironment: anEnvironmentModel project: projectModel
 ]
 
 { #category : 'accessing - actions' }
+PvPackageModel >> actionDecorators [
+	"answer the actions associated with this package."
+	
+	^ self actions actionsFor: #decoration
+]
+
+{ #category : 'accessing - actions' }
 PvPackageModel >> actionsWithContextOn: aContextPresenter [
 
 	^ (self actions actionsFor: 'refactors') 
@@ -64,6 +71,24 @@ PvPackageModel >> classes [
 		as: OrderedCollection
 ]
 
+{ #category : 'accessing' }
+PvPackageModel >> comment [
+
+	^ self manifestClass ifNotNil: [ :mc | mc comment ] ifNil: [ '' ]
+]
+
+{ #category : 'accessing' }
+PvPackageModel >> commentOrTemplate [
+
+	^ self comment ifEmpty: [ self commentTemplate ]
+]
+
+{ #category : 'accessing' }
+PvPackageModel >> commentTemplate [
+
+	^ 'No description for this package available. Please add a description for this package here'
+]
+
 { #category : 'private - definitions' }
 PvPackageModel >> defineRefactorActionsOn: aBuilder [
 	<dockActions>
@@ -77,6 +102,12 @@ PvPackageModel >> defineRefactorActionsOn: aBuilder [
 			name: ('Rename {1}' format: { self name });
 			description: 'Rename package';
 			action: [ :aContext | aContext doRenamePackage: self ] ] ]
+]
+
+{ #category : 'accessing' }
+PvPackageModel >> editorClass [
+
+	^ PvPackageEditorView
 ]
 
 { #category : 'accessing' }
@@ -104,6 +135,12 @@ PvPackageModel >> isPackage [
 ]
 
 { #category : 'accessing' }
+PvPackageModel >> manifestClass [
+
+	^ self entity packageManifestOrNil
+]
+
+{ #category : 'accessing' }
 PvPackageModel >> name [
 
 	^ self entity name
@@ -127,10 +164,24 @@ PvPackageModel >> project: aProjectModel [
 	projectModel := aProjectModel
 ]
 
+{ #category : 'accessing' }
+PvPackageModel >> pulsarEditorClass [
+
+	^ PulsarPackageEditor
+]
+
 { #category : 'actions' }
 PvPackageModel >> renameTo: aNewName [
 
 	self entity renameTo: aNewName
+]
+
+{ #category : 'updating' }
+PvPackageModel >> saveComment: aString [
+
+	| manifestClass |
+	manifestClass := self manifestClass ifNil: [ self entity packageManifest ].
+	manifestClass comment: aString
 ]
 
 { #category : 'helpers' }
