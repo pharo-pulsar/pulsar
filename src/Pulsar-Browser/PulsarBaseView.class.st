@@ -43,6 +43,17 @@ PulsarBaseView >> initializePanelWidget: aPanelWidgetPresenter [
 		whenTransferredDo: [ :ann | self panelTransferredFrom: ann fromWindow to: ann toWindow ]
 ]
 
+{ #category : 'initialization' }
+PulsarBaseView >> initializeWindow: aWindowPresenter [
+
+	super initializeWindow: aWindowPresenter.
+	aWindowPresenter 
+		title: (self model 
+			ifNotNil: [ :aModel | aModel title ] 
+			ifNil: [ 'NONAME' ]);
+		whenClosedDo: [ self notifyEditorClosed ]
+]
+
 { #category : 'scripting' }
 PulsarBaseView >> newEntityTree [
 

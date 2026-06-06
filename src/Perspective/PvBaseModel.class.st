@@ -258,7 +258,13 @@ PvBaseModel >> shortName [
 { #category : 'accessing' }
 PvBaseModel >> spotterTitle [
 
-	^ self windowTitle
+	^ self title
+]
+
+{ #category : 'accessing' }
+PvBaseModel >> title [
+
+	^ self fullName
 ]
 
 { #category : 'accessing - ui' }
