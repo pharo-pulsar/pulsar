@@ -153,6 +153,16 @@ PulsarApplication >> applicationId [
 ]
 
 { #category : 'private' }
+PulsarApplication >> baseIconProvider [
+
+	^ (PulsarMDINeutralIconProvider new
+		application: self;
+		addLocation: self resourcesDir / 'MaterialDesign' / 'extras';
+		addLocation: self resourcesDir / 'MaterialDesign' / 'svg';
+		yourself)
+]
+
+{ #category : 'private' }
 PulsarApplication >> checkForLostChanges [
 	| lostChangesDetector |
 	self flag: 'this is not working at the moment (that''s why is not called), but the idea is to execute 
@@ -339,13 +349,14 @@ PulsarApplication >> newConfirm [
 
 { #category : 'private - factory' }
 PulsarApplication >> newIconProvider [
-
-	^ (PulsarMDINeutralIconProvider new
-		application: self;
-		addLocation: self resourcesDir / 'MaterialDesign' / 'extras';
-		addLocation: self resourcesDir / 'MaterialDesign' / 'svg';
-		yourself),
-	  PvDefaultIconProvider new
+	
+	^ SpCompositeIconProvider new 
+		addProvider: self baseIconProvider;
+		in: [ :aProvider | 
+			(PulsarPragmaCollector collectPragma: #iconProvider in: self) 
+				do: [ :eachProvider | aProvider addProvider: eachProvider ] ];
+		addProvider: PvDefaultIconProvider new;
+		yourself
 ]
 
 { #category : 'ui - dialogs' }
