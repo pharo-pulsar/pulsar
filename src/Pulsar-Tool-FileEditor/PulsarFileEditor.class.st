@@ -38,16 +38,28 @@ PulsarFileEditor >> editorContextMenuActions [
 	^ SpActionGroup new
 ]
 
+{ #category : 'events' }
+PulsarFileEditor >> eventModelRemoved: anAnnouncememnt [ 
+
+	anAnnouncememnt value = self model ifFalse: [ ^ self ].
+
+	self withPanelWidgetDo: [ :aPanelWindow | aPanelWindow close ]
+]
+
 { #category : 'initialization' }
 PulsarFileEditor >> initializeEditor [
-	| language |
 	
 	editorPresenter := self instantiate: SeEditorPresenter.
 	editorPresenter
 		addStyle: 'editor';
-		withEditionContextMenu.
-	language := self model sourceCodeLanguage.
-	language ifNotNil: [ editorPresenter language: language ]
+		withEditionContextMenu;
+		systemNavigation: (self systemNavigationWithResponder: editorPresenter)
+]
+
+{ #category : 'private - updating' }
+PulsarFileEditor >> markDirty [
+	
+	^ super markDirty
 ]
 
 { #category : 'private' }
@@ -77,9 +89,20 @@ PulsarFileEditor >> updateBreadcrumbs [
 	toolbarPresenter updateBreadcrumbWith: [ :aBreadcrumb | aBreadcrumb addSegment: fullPath ]
 ]
 
+{ #category : 'private - actions' }
+PulsarFileEditor >> updateModel: aString [
+
+	^ self model updateWith: aString
+]
+
 { #category : 'initialization' }
 PulsarFileEditor >> updatePresenter [
 
-	editorPresenter text: self model sourceCode.
+	self model ifNil: [ ^ self ].
+
+	self updatingWhile: [
+		self model sourceCodeLanguage
+			ifNotNil: [ :language | editorPresenter language: language ].
+		editorPresenter text: self model sourceCode ].
 	self updateBreadcrumbs
 ]
