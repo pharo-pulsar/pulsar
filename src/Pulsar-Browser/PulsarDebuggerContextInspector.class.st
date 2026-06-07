@@ -14,10 +14,10 @@ PulsarDebuggerContextInspector class >> defaultPanelPosition [
 		yourself
 ]
 
-{ #category : 'private' }
+{ #category : 'accessing' }
 PulsarDebuggerContextInspector >> inspectorModelOf: aContextModel [
 
-	^ aContextModel entity
+	^ PulsarDebuggerContextInspectorModel on: aContextModel entity
 ]
 
 { #category : 'initialization' }
