@@ -446,6 +446,10 @@ PulsarClassOutlineSideView >> initializeMethods [
 		addStyle: 'stList';
 		addStyle: 'pulsarMethodList';
 		rowPresenterClass: PulsarMethodRow;
+		whenRowPresenterInstantiatedDo: [ :aRowPresenter | 
+			aRowPresenter action: [ 
+				listPresenter selectItem: aRowPresenter model.
+				self activateMethodPreviewPopover ] ]; 
 		display: [ :aModel | aModel name ];
 		searchMatching: [ :aModel :aString | 
 			aModel name asLowercase beginsWith: aString asLowercase ];
@@ -535,8 +539,8 @@ PulsarClassOutlineSideView >> listToolbarActions [
 
 { #category : 'private - preview' }
 PulsarClassOutlineSideView >> maybePopupPreview [
-
 	| active |
+	
 	active := self isPreviewPopoverActive.
 	logger trace: active.
 
@@ -566,6 +570,27 @@ PulsarClassOutlineSideView >> newMethodModelForNewMethod [
 PulsarClassOutlineSideView >> notifyEntityRemoved: anEntity [
 
 	self owner notifyEntityRemoved: anEntity
+]
+
+{ #category : 'private' }
+PulsarClassOutlineSideView >> panelPlaced: aPanelWidgetPresenter [
+	| inHorizontalArea |
+
+	logger trace.
+
+	inHorizontalArea := { SpPanelArea top. SpPanelArea bottom } includes: aPanelWidgetPresenter panelArea.
+	inHorizontalArea 
+		ifTrue: [ self useHorizontalLayout ]
+		ifFalse: [ self useVerticalLayout ].
+	
+	"this is a bit ugly, but I need to skip the first time (because this is going to go through 
+	 the regular update process, and I prefer to consume an extra variable than to do a double 
+	 refresh :)"
+	firstTimePlaced ifTrue: [ 
+		firstTimePlaced := false. 
+		^ self ].
+	
+	self updateMethods
 ]
 
 { #category : 'private - preview' }

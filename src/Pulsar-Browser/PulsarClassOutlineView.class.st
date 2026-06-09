@@ -128,7 +128,9 @@ PulsarClassOutlineView >> eventModelChanged: anAnnouncement [
 { #category : 'events' }
 PulsarClassOutlineView >> eventTestSuiteEnded: aTestSuiteEnded [
 
-	(self model isTestCase and: [ aTestSuiteEnded testResult classesTested includes: self model entity ]) ifFalse: [ ^ self ].
+	(self model isTestCase 
+		and: [ aTestSuiteEnded testResult classesTested includes: self model entity ]) 
+		ifFalse: [ ^ self ].
 
 	logger trace: aTestSuiteEnded.
 
@@ -194,15 +196,11 @@ PulsarClassOutlineView >> notifySelectEntity: anEntity [
 
 { #category : 'private' }
 PulsarClassOutlineView >> panelPlaced: aPanelWidgetPresenter [
-	| inHorizontalArea |
 
 	super panelPlaced: aPanelWidgetPresenter.
-
-	inHorizontalArea := { SpPanelArea top. SpPanelArea bottom } includes: aPanelWidgetPresenter panelArea.
+	
 	self withSidesDo: [ :each | 
-		inHorizontalArea 
-			ifTrue: [ each useHorizontalLayout ]
-			ifFalse: [ each useVerticalLayout ] ]
+		each panelPlaced: aPanelWidgetPresenter ]
 ]
 
 { #category : 'private' }

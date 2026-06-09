@@ -86,6 +86,8 @@ PulsarBaseView >> panelPosition [
 { #category : 'private' }
 PulsarBaseView >> panelTransferredFrom: fromWindow to: toWindow [
 
+	logger trace.
+	
 	toWindow 
 		moveWindow: self panelWidget
 		from: fromWindow

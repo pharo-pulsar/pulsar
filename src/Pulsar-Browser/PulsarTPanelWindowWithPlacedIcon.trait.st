@@ -26,7 +26,8 @@ PulsarTPanelWindowWithPlacedIcon >> maybeActivateIconOnPanel: aPanelWidgetPresen
 
 { #category : 'private' }
 PulsarTPanelWindowWithPlacedIcon >> panelPlaced: aPanelWidgetPresenter [
-
+	
+	logger trace.
 	self maybeActivateIconOnPanel: aPanelWidgetPresenter
 ]
 
