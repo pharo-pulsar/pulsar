@@ -22,7 +22,8 @@ Class {
 		'activeVariables',
 		'previewPopoverActive',
 		'previewPopover',
-		'usingLayout'
+		'usingLayout',
+		'firstTimePlaced'
 	],
 	#category : 'Pulsar-Browser-View-Outline',
 	#package : 'Pulsar-Browser',
@@ -427,9 +428,12 @@ PulsarClassOutlineSideView >> includesModelSuchAs: aBlock [
 { #category : 'initialization' }
 PulsarClassOutlineSideView >> initialize [
 
-	super initialize.
+	firstTimePlaced := true.
+	activeProtocols := #().
+	activeVariables := #().
 	previewPopoverActive := false.
-	updating := false
+	updating := false.
+	super initialize
 ]
 
 { #category : 'initialization' }

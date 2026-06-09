@@ -8,11 +8,16 @@ Class {
 		'versionListPresenter',
 		'patchPresenter',
 		'sourcePresenter',
-		'remoteInfoPresenter',
-		'authorPresenter',
-		'commitMessage',
-		'commitId',
-		'statusbar'
+		'commitInfoPresenter',
+		'statusbar',
+		'model',
+		'notificationCenter',
+		'lastTimePresented',
+		'panelPosition',
+		'pinned',
+		'actions',
+		'job',
+		'taskWorker'
 	],
 	#category : 'Pulsar-Browser-Tool-Versions',
 	#package : 'Pulsar-Browser',
@@ -63,28 +68,28 @@ PulsarVersionsBrowser >> defaultKeyboardFocus [
 	^ versionListPresenter
 ]
 
-{ #category : 'layout' }
+{ #category : 'private' }
 PulsarVersionsBrowser >> defaultLayout [
 
 	^ SpBoxLayout newVertical
-		add: headerPresenter expand: false;
-		add: (SpBoxLayout newVertical 
-			add: (SpPanedLayout newHorizontal
-				positionOfSlider: 200;
-				add: versionListPresenter;
-				add: (SpTabLayout new 
-					add: (SpScrollableLayout new 
-							child: patchPresenter;
-							withoutHScrollbar;
-							yourself) 
-						label: 'Patch';
-					add: sourcePresenter label: 'Source';
-					yourself);
-				yourself);
-			add: remoteInfoPresenter expand: false;
-			yourself);
-		add: statusbar expand: false;
-		yourself
+		  add: headerPresenter expand: false;
+		  add: (SpBoxLayout newVertical
+				   add: (SpPanedLayout newHorizontal
+						    positionOfSlider: 200;
+						    add: versionListPresenter;
+						    add: (SpTabLayout new
+								     add: (SpScrollableLayout new
+										      child: patchPresenter;
+										      withoutHScrollbar;
+										      yourself)
+								     label: 'Patch';
+								     add: sourcePresenter label: 'Source';
+								     yourself);
+						    yourself);
+				   add: commitInfoPresenter expand: false;
+				   yourself);
+		  add: statusbar expand: false;
+		  yourself
 ]
 
 { #category : 'private - definitions' }
@@ -123,12 +128,6 @@ PulsarVersionsBrowser >> defineExtraActionsOn: aBuilder [
 			repositories size > 1 
 				ifTrue: [ fetchRepositoryGroup beToolbarMenuButton ]
 				ifFalse: [ fetchRepositoryGroup beToolbarGroup ] ] ]
-]
-
-{ #category : 'actions' }
-PulsarVersionsBrowser >> doCopyCommitIdToClipboard [
-
-	self application copyToClipboard: versionListPresenter selectedItem remoteCommit id
 ]
 
 { #category : 'private - actions' }
@@ -198,54 +197,6 @@ PulsarVersionsBrowser >> iconFor: aDefinition [
 ]
 
 { #category : 'initialization' }
-PulsarVersionsBrowser >> initializeInfo [
-
-	authorPresenter := self newLabel
-		addStyle: 'author';
-		yourself. 
-	commitId := self newLabel
-		addStyle: 'pill-commit';
-		yourself.
-	commitMessage := self newText
-		beWrapWord;
-		withoutScrollBars;
-		propagateNaturalHeight: true;
-		beNotEditable;
-		yourself.
-
-	remoteInfoPresenter := self newPresenter
-		addStyle: 'info';
-		layout: (SpBoxLayout newVertical
-			add: commitMessage;
-			add: (SpBoxLayout newHorizontal 
-				hAlignStart;
-				add: authorPresenter;
-				"add: self newSeparator;"
-				add: (SpBoxLayout newHorizontal 
-					hAlignStart;
-					add: commitId;
-					add: (self newButton
-						addStyle: 'flat';
-						addStyle: 'small';
-						icon: (self iconNamed: 'copy-to-clipboard');
-						help: 'Copy commit id to clipboard';
-						action: [ self doCopyCommitIdToClipboard ];
-						yourself);
-					add: (self newButton
-						addStyle: 'flat';
-						addStyle: 'small';
-						icon: (self iconNamed: 'open');
-						help: 'Open diff for this commit';
-						action: [ self doOpenCommitDiff ];
-						yourself);
-					yourself);
-				yourself);
-			yourself);
-		yourself.
-	remoteInfoPresenter hide
-]
-
-{ #category : 'initialization' }
 PulsarVersionsBrowser >> initializePopover: aPopoverPresenter [
 	
 	self addPopoverControls.
@@ -263,7 +214,7 @@ PulsarVersionsBrowser >> initializePresenters [
 
 	self addStyle: 'pulsarFlyingBrowser'.
 	self addStyle: 'pulsarVersionsFlyingBrowser'.
-	
+
 	headerPresenter := self instantiate: PulsarEditorToolbarPresenter.
 	versionListPresenter := self newEasyListView
 		addStyle: 'stList';
@@ -273,13 +224,15 @@ PulsarVersionsBrowser >> initializePresenters [
 		yourself.
 	patchPresenter := self instantiate: SpPatchPresenter.
 	patchPresenter addStyle: 'stCode'.
-	
-	sourcePresenter := self newCode
-		editable: false;
-		yourself.
 
-	self initializeInfo.
-	
+	sourcePresenter := self newCode
+       editable: false;
+       yourself.
+
+	commitInfoPresenter := self instantiate: PulsarCommitInfoPresenter.
+	commitInfoPresenter useVersionLayout.
+	commitInfoPresenter whenOpenDiffDo: [ self doOpenCommitDiff ].
+
 	statusbar := self instantiate: SpPanelStatusbarPresenter
 ]
 
@@ -355,22 +308,20 @@ PulsarVersionsBrowser >> updateSourceCodeWith: aDefinition [
 		text: aDefinition sourceCode
 ]
 
-{ #category : 'initialization' }
+{ #category : 'private' }
 PulsarVersionsBrowser >> updateSourceWith: aDefinition [
-	
+
 	aDefinition ifNil: [ ^ self ].
-	
+
 	self updatePatchWith: aDefinition.
 	self updateSourceCodeWith: aDefinition.
-	
+
 	aDefinition isFromRemoteCommit
 		ifTrue: [
-			commitId label: aDefinition remoteCommit shortId asString.
-			authorPresenter label: aDefinition remoteCommit normalizedAuthor.
-			commitMessage text: aDefinition remoteCommit comment trimRight.
-			remoteInfoPresenter show ]
-		ifFalse: [
-			remoteInfoPresenter hide	]
+				commitInfoPresenter
+					model: aDefinition remoteCommit;
+					show ]
+		ifFalse: [ commitInfoPresenter hide ]
 ]
 
 { #category : 'initialization' }

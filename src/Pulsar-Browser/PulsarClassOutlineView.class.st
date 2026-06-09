@@ -15,7 +15,8 @@ Class {
 		'classSidePresenter',
 		'tabLayout',
 		'currentActiveSidePresenter',
-		'traitSidePresenter'
+		'traitSidePresenter',
+		'firstTimePlaced'
 	],
 	#category : 'Pulsar-Browser-View-Outline',
 	#package : 'Pulsar-Browser',

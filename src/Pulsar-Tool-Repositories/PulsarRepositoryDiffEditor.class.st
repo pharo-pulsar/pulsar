@@ -6,12 +6,33 @@ Class {
 	#instVars : [
 		'toolbarPresenter',
 		'lastDiffNodeModel',
-		'mutex'
+		'mutex',
+		'taskWorker',
+		'commitInfoPresenter',
+		'scrollableLayoutForContent'
 	],
 	#category : 'Pulsar-Tool-Repositories-View-Editor',
 	#package : 'Pulsar-Tool-Repositories',
 	#tag : 'View-Editor'
 }
+
+{ #category : 'private' }
+PulsarRepositoryDiffEditor >> commitForInfo [
+	| root commit |
+	
+	root := self model root.
+	root ifNil: [ ^ nil ].
+
+	commit := root toCommitish.
+	commit isWorkingCopy ifTrue: [ ^ nil ].
+	"yeah, this can happen... and I do not want the branch, I want the branch
+	 head commit."
+	commit isBranch ifTrue: [ commit := commit commit ].
+	
+	^ (commit isNotNil and: [ commit isWorkingCopy not ])
+		ifTrue: [ commit ]
+		ifFalse: [ nil ]
+]
 
 { #category : 'initialization' }
 PulsarRepositoryDiffEditor >> commitToString: aCommitOrWorkingCopy [
@@ -37,11 +58,10 @@ PulsarRepositoryDiffEditor >> commitToString: aCommitOrWorkingCopy [
 { #category : 'layout' }
 PulsarRepositoryDiffEditor >> defaultLayout [
 
-	^ SpScrollableLayout new 
-		child: SpBoxLayout newVertical;
-		withoutHScrollbar;
-		propagateNaturalHeight: true;
-		yourself
+	^ SpBoxLayout newVertical
+		  add: self scrollableLayoutForContent;
+		  add: commitInfoPresenter expand: false;
+		  yourself
 ]
 
 { #category : 'events' }
@@ -65,10 +85,24 @@ PulsarRepositoryDiffEditor >> eventDiffModelSelected: ann [
 ]
 
 { #category : 'initialization' }
+PulsarRepositoryDiffEditor >> initializePanelWidget: aPanelWidgetPresenter [
+
+	super initializePanelWidget: aPanelWidgetPresenter.
+	aPanelWidgetPresenter
+		pinned: true;
+		whenPresentedDo: [ self recordLastPresented ];
+		whenFocusReceivedDo: [ self notifyEditorActivated ].
+]
+
+{ #category : 'initialization' }
 PulsarRepositoryDiffEditor >> initializePresenters [
 
 	super initializePresenters.
-	self addStyle: 'diffEditor'
+	
+	self addStyle: 'diffEditor'.
+	
+	commitInfoPresenter := self instantiate: PulsarCommitInfoPresenter.
+	commitInfoPresenter hide
 ]
 
 { #category : 'initialization' }
@@ -102,7 +136,7 @@ PulsarRepositoryDiffEditor >> newDiffHeader [
 	rightLabelPresenter := self newLabel
 		addStyle: 'pill-commit-active';
 		useMarkup;
-		label: (self commitToString: self model root toCommit);
+		label: (self commitToString: self model root toCommitish);
 		yourself.
 	
 	presenter layout 
@@ -145,10 +179,36 @@ PulsarRepositoryDiffEditor >> registerToEvents [
 		when: PulsarRepositoryCommitModelSelected send: #eventCommitModelSelected: to: self
 ]
 
-{ #category : 'initialization' }
+{ #category : 'layout' }
+PulsarRepositoryDiffEditor >> scrollableLayoutForContent [
+
+	^ scrollableLayoutForContent ifNil: [ 
+		scrollableLayoutForContent := SpScrollableLayout new
+			child: SpBoxLayout newVertical;
+			withoutHScrollbar;
+			propagateNaturalHeight: true;
+			yourself ]
+]
+
+{ #category : 'private' }
+PulsarRepositoryDiffEditor >> updateCommitInfo [
+	| commit |
+	
+	commit := self commitForInfo.
+
+	commit ifNil: [
+			commitInfoPresenter hide.
+			^ self ].
+
+	commitInfoPresenter
+		model: commit;
+		show
+]
+
+{ #category : 'private' }
 PulsarRepositoryDiffEditor >> updatePatchContents [
 	| contents nodes groups |
-	
+
 	nodes := Array streamContents: [ :stream |
 		self model withAllChildrenDo: [ :eachModel | 
 			eachModel hasChanges ifTrue: [ 
@@ -174,9 +234,10 @@ PulsarRepositoryDiffEditor >> updatePatchContents [
 					ifTrue: [ self withWindowDo: #jobEnd ] ] ] ].
 
 	self application defer: [
-		self layout child: (self newPresenter
+		self scrollableLayoutForContent child: (self newPresenter
 			 layout: contents;
-			 yourself) ]
+			 yourself) ].
+	self updateCommitInfo
 ]
 
 { #category : 'initialization' }
@@ -194,21 +255,22 @@ PulsarRepositoryDiffEditor >> updatePresenter [
 	 	 lot of time without giving real value to the user."
 		(self model isRoot and: [ self model isBigChange ]) ifTrue: [ ^ self updateRootContents ].
 		self queueTask: [ 
-			self updatePatchContents ] ]
+			self updatePatchContents.
+			self updateCommitInfo ] ]
 ]
 
-{ #category : 'initialization' }
+{ #category : 'private' }
 PulsarRepositoryDiffEditor >> updateRootContents [
 
-	self layout child: (self newPresenter 
-		layout: (SpBoxLayout newVertical 
-			vAlignStart;
-			add: (self newLabel 
-				label: 'I can''t display the changes (changeset is too big). Please select a node of the diff tree';
-				yourself);
-			yourself);
-		yourself)
-	
+	scrollableLayoutForContent child: (self newPresenter
+			 layout: (SpBoxLayout newVertical
+					  vAlignStart;
+					  add: (self newLabel
+							   label: 'I can''t display the changes (changeset is too big). Please select a node of the diff tree';
+							   yourself);
+					  yourself);
+			 yourself).
+	commitInfoPresenter model: self commitForInfo
 ]
 
 { #category : 'private' }

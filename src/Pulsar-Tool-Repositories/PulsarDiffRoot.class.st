@@ -3,7 +3,7 @@ Class {
 	#superclass : 'PulsarDiffNode',
 	#instVars : [
 		'fromCommit',
-		'toCommit'
+		'toCommitish'
 	],
 	#category : 'Pulsar-Tool-Repositories-Model',
 	#package : 'Pulsar-Tool-Repositories',
@@ -25,7 +25,7 @@ PulsarDiffRoot class >> newRepository: aRepositoryModel
 PulsarDiffRoot >> from: aFromCommit to: aToCommit [
 
 	fromCommit := aFromCommit.
-	toCommit := aToCommit
+	toCommitish := aToCommit
 ]
 
 { #category : 'accessing' }
@@ -36,8 +36,8 @@ PulsarDiffRoot >> fromCommit [
 ]
 
 { #category : 'accessing' }
-PulsarDiffRoot >> toCommit [
+PulsarDiffRoot >> toCommitish [
 	"this element has sense just in the root element. otherwise is nil"
 
-	^ toCommit
+	^ toCommitish
 ]

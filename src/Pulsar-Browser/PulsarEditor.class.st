@@ -141,6 +141,14 @@ PulsarEditor >> doBrowseSendersCommand: anAction [
 ]
 
 { #category : 'private - actions' }
+PulsarEditor >> doCopyToClipboard [
+
+	self model ifNil: [ ^ self ].
+	self application copyToClipboard: self model fullName.
+	self withWindowDo: [ :w | w  inform: 'Copied to clipboard' ]
+]
+
+{ #category : 'private - actions' }
 PulsarEditor >> doDetachWindow [
 	| newBrowser panelWindow |
 

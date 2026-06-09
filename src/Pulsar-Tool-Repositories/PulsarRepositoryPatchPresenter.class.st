@@ -6,7 +6,9 @@ Class {
 	#instVars : [
 		'headerPresenter',
 		'patchPresenter',
-		'summaryPresenter'
+		'summaryPresenter',
+		'model',
+		'notificationCenter'
 	],
 	#category : 'Pulsar-Tool-Repositories-View-Editor',
 	#package : 'Pulsar-Tool-Repositories',
@@ -40,6 +42,26 @@ PulsarRepositoryPatchPresenter >> initializePresenters [
 		yourself	
 ]
 
+{ #category : 'accessing' }
+PulsarRepositoryPatchPresenter >> notificationCenter [
+
+	^ notificationCenter
+]
+
+{ #category : 'accessing' }
+PulsarRepositoryPatchPresenter >> notificationCenter: anAnnouncer [
+
+	notificationCenter := anAnnouncer.
+	self model ifNotNil: [ self updatePresenter ]
+]
+
+{ #category : 'actions' }
+PulsarRepositoryPatchPresenter >> notifyActivateEntity: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+	self notificationCenter announce: anEntity newActivationAnnouncement
+]
+
 { #category : 'initialization' }
 PulsarRepositoryPatchPresenter >> patchPresenterClass [
 
@@ -47,12 +69,27 @@ PulsarRepositoryPatchPresenter >> patchPresenterClass [
 ]
 
 { #category : 'initialization' }
+PulsarRepositoryPatchPresenter >> registerToBrowser: aPulsarBrowser [
+	 
+	logger trace: aPulsarBrowser.
+
+	"take the announcer of the dock to broadcast what happens"
+	self notificationCenter: aPulsarBrowser announcer.
+]
+
+{ #category : 'initialization' }
 PulsarRepositoryPatchPresenter >> updatePresenter [
-				
-	self model ifNil: [ ^ self ].	
-				
-	headerPresenter title: self model description.
+
+	self model ifNil: [ ^ self ].
+
+	headerPresenter updateBreadcrumbWith: [ :aBreadcrumb |
+		PulsarDiffBreadcrumbBuilder new
+			breadcrumb: aBreadcrumb;
+			diffNode: self model;
+			notificationCenter: self notificationCenter;
+			buildFrom: self model nodeDefinition ].
+
 	summaryPresenter label: self model summary.
-	
+
 	patchPresenter patch: self model patch
 ]

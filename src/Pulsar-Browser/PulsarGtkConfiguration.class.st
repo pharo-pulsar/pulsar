@@ -362,14 +362,18 @@ popover .pulsarPreviewEditor { min-width: 680px; min-height: 340px; }
 .pulsarPlaygroundBindingsFlyingBrowser { min-width: 400px; min-height: 240px; }
 /* Versions browser */
 box.pulsarVersionsFlyingBrowser { min-width: 680px; min-height: 420px; }
-box.pulsarVersionsFlyingBrowser box.info > * { margin-top: 5px; }
-box.pulsarVersionsFlyingBrowser box.info { margin: 0px; padding: 0px; border-spacing: 0px; } 
-box.pulsarVersionsFlyingBrowser box.info box.horizontal { border-spacing: 10px; }
-box.pulsarVersionsFlyingBrowser box.info box.horizontal box.horizontal { border-spacing: 0px; padding: 0px; margin: 0px; }
-box.pulsarVersionsFlyingBrowser box.info .author { font-weight: 500; letter-spacing: 0.01em; }
-box.pulsarVersionsFlyingBrowser box.info textview { background-color: transparent;  }
-box.pulsarVersionsFlyingBrowser box.info .separator { opacity: 0.8; }
 box.pulsarVersionsFlyingBrowser panelstatusbar { background-color: transparent; } 
+/* commit info */
+box.commitInfo > * { margin-top: 5px; }
+box.commitInfo { margin: 0px; padding: 0px; border-spacing: 0px; } 
+box.commitInfo box.horizontal { border-spacing: 10px; }
+box.commitInfo box.horizontal box.horizontal { border-spacing: 0px; padding: 0px; margin: 0px; }
+box.commitInfo .author { font-weight: 500; letter-spacing: 0.01em; }
+box.commitInfo textview { background-color: transparent;  }
+box.commitInfo .separator { opacity: 0.8; }
+
+.diffEditor box.commitInfo { padding: 10px;	}
+.diffEditor box.commitInfo box { padding: 0px; }
 
 /* generic pills */
 .pill-commit {
@@ -406,6 +410,15 @@ box.pulsarVersionsFlyingBrowser panelstatusbar { background-color: transparent; 
 	text-decoration-line: underline;
 	/* text-decoration-style: dotted; */ /*Currently not supported by gtk */
 }
+.pulsarMethodRow button.action {
+	margin: 0px;
+	padding: 0px;
+	min-height: 16px;
+	opacity: 0;
+}
+.pulsarMethodRow:hover button.action {
+	opacity: 1;
+}
 
 .pulsarMethodRow .deprecated { 
 	text-decoration-line: line-through;
@@ -434,7 +447,7 @@ box.pulsarVersionsFlyingBrowser panelstatusbar { background-color: transparent; 
 /* repository */
 .pulsarRepositoryPatch { margin: 5px; padding: 5px; background-color: @card_bg_color; border-radius: 4px; }
 .pulsarRepositoryPatch box.pulsarToolbarPanel { background-color: transparent; }
-.pulsarRepositoryPatch box.pulsarToolbarPanel box { font-size: 1.0em; margin: 2px 2px 6px 2px; }
+.pulsarRepositoryPatch box.pulsarToolbarPanel box { font-size: 0.9em; margin: 0px; }
 .pulsarRepositoryCommit label { margin-left: 5px; }
 .pulsarRepositoryBranchRow label.head { font-weight: bold; }
 .pulsarRepositoryRow .extra label.outgoing, .pulsarRepositoryBranchRow .extra label.outgoing { color: @commit_outgoing; }

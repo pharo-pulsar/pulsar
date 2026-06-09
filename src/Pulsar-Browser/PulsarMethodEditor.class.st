@@ -110,6 +110,14 @@ PulsarMethodEditor >> doBrowseVersionsCommand: anAction [
 ]
 
 { #category : 'private - actions' }
+PulsarMethodEditor >> doCopyToClipboard [
+
+	self model ifNil: [ ^ self ].
+	self application copyToClipboard: self model fullName.
+	self withWindowDo: [ :w | w  inform: 'Copied to clipboard' ]
+]
+
+{ #category : 'private - actions' }
 PulsarMethodEditor >> doRequestChangeProtocol [
 
 	protocolPresenter popupProtocol
@@ -348,7 +356,14 @@ PulsarMethodEditor >> updateBreadcrumbs [
 	toolbarPresenter updateBreadcrumbWith: [ :aBreadcrumb |
 		aBreadcrumb 
 			addLinkSegment: className action: [ self announceActivateClass ];
-			addSegment: methodName ]
+			addSegment: methodName;
+			addDirectSegment: (self newButton 
+				addStyle: 'flat';
+				addStyle: 'small';
+				icon: (self iconNamed: 'copy-to-clipboard');
+				help: ('Copy {1} to the clipboard' format: { self model fullName });
+				action: [ self doCopyToClipboard ];
+				yourself) ]
 ]
 
 { #category : 'initialization' }

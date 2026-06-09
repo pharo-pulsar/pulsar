@@ -89,7 +89,8 @@ PulsarDebugger >> eventModelSelected: anAnnouncement [
 	selectedModel isContextModel ifFalse: [ ^ self ].
 
 	contextEditor ifNil: [
-		contextEditor := self addPresenterClass: PulsarContextEditor ].
+		contextEditor := self addPresenterClass: PulsarContextEditor.
+		contextEditor pinned: true ].
 	logger trace: selectedModel.
 	contextEditor model: selectedModel.
 	debugToolbarPresenter updatePresenter
