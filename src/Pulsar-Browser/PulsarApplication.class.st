@@ -592,9 +592,9 @@ PulsarApplication >> takeSnapshot [
 
 { #category : 'private - events' }
 PulsarApplication >> themeChanged: ann [
-	
 	"reset icon provider because I will need to change them"
-	self propertyAt: #gtkPaintablesByForm put: nil.
+
+	self properties removeKey: #gtkPaintablesByForm ifAbsent: [ ].
 	self iconProvider reset.
 	self resendAnnouncement: ann
 ]
