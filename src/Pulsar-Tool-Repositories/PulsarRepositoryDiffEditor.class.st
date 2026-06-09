@@ -90,6 +90,7 @@ PulsarRepositoryDiffEditor >> initializePanelWidget: aPanelWidgetPresenter [
 	super initializePanelWidget: aPanelWidgetPresenter.
 	aPanelWidgetPresenter
 		pinned: true;
+		windowIcon: (self iconNamed: 'diff');
 		whenPresentedDo: [ self recordLastPresented ];
 		whenFocusReceivedDo: [ self notifyEditorActivated ].
 ]
@@ -207,36 +208,29 @@ PulsarRepositoryDiffEditor >> updateCommitInfo [
 
 { #category : 'private' }
 PulsarRepositoryDiffEditor >> updatePatchContents [
-	| contents nodes groups |
 
+	| contents nodes groups |
 	nodes := Array streamContents: [ :stream |
-		self model withAllChildrenDo: [ :eachModel | 
-			eachModel hasChanges ifTrue: [ 
-				stream nextPut: eachModel ] ] ].
-				
-	contents := SpBoxLayout newVertical vAlignStart. 
-	"40 is a magic number"
+		         self model withAllChildrenDo: [ :eachModel | eachModel hasChanges ifTrue: [ stream nextPut: eachModel ] ] ].
+
+	contents := SpBoxLayout newVertical vAlignStart. "40 is a magic number"
 	groups := nodes groupsOf: 40.
 	self withWindowDo: #jobStart.
 	contents add: self newDiffHeader.
-	groups withIndexDo: [ :eachGroup :index  |
-		self queueTask: [
-			[
-				eachGroup do: [ :eachModel |
-					| patchPresenter |
-					patchPresenter := self 
-						instantiate: self patchPresenterClass 
-						on: eachModel.
-					self application defer: [ 
-						contents add: patchPresenter ] ] ] 
-			ensure: [ 
-				index = groups size 
-					ifTrue: [ self withWindowDo: #jobEnd ] ] ] ].
+	groups withIndexDo: [ :eachGroup :index |
+			self queueTask: [
+					[
+						eachGroup do: [ :eachModel |
+								| patchPresenter |
+								patchPresenter := self instantiate: self patchPresenterClass on: eachModel.
+								patchPresenter notificationCenter: self notificationCenter.
+								self application defer: [ contents add: patchPresenter ] ] ] ensure: [
+						index = groups size ifTrue: [ self withWindowDo: #jobEnd ] ] ] ].
 
 	self application defer: [
-		self scrollableLayoutForContent child: (self newPresenter
-			 layout: contents;
-			 yourself) ].
+			self scrollableLayoutForContent child: (self newPresenter
+					 layout: contents;
+					 yourself) ].
 	self updateCommitInfo
 ]
 

@@ -1,3 +1,10 @@
+"
+A presenter displaying commit information (author, date, comment, commit id) with a copy-to-clipboard action.
+
+Its model is an IceCommit. When the model is nil, the presenter hides itself; when set to a commit, it populates and shows the panel.
+
+This presenter is reused by PulsarRepositoryDiffEditor and other commit-browsing tools.
+"
 Class {
 	#name : 'PulsarCommitInfoPresenter',
 	#superclass : 'SpPresenter',

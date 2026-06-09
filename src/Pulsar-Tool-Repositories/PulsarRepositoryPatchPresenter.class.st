@@ -86,7 +86,7 @@ PulsarRepositoryPatchPresenter >> updatePresenter [
 		PulsarDiffBreadcrumbBuilder new
 			breadcrumb: aBreadcrumb;
 			diffNode: self model;
-			notificationCenter: self notificationCenter;
+			whenActivatedDo: [ :entityModel | self notifyActivateEntity: entityModel ];
 			buildFrom: self model nodeDefinition ].
 
 	summaryPresenter label: self model summary.

@@ -7,7 +7,7 @@ Class {
 	#instVars : [
 		'breadcrumb',
 		'diffNode',
-		'notificationCenter'
+		'whenActivatedDo'
 	],
 	#category : 'Pulsar-Tool-Repositories-View-Editor',
 	#package : 'Pulsar-Tool-Repositories',
@@ -15,40 +15,49 @@ Class {
 }
 
 { #category : 'private' }
+PulsarDiffBreadcrumbBuilder >> activateClass [
+
+	whenActivatedDo value: diffNode newClassModel
+]
+
+{ #category : 'private' }
+PulsarDiffBreadcrumbBuilder >> activateMethod [
+
+	whenActivatedDo value: diffNode newMethodModel
+]
+
+{ #category : 'private' }
 PulsarDiffBreadcrumbBuilder >> addClassLinkNamed: aClassName [
 
-	(diffNode canBeActivated and: [ notificationCenter isNotNil ]) ifTrue: [
-			breadcrumb addLinkSegment: aClassName action: [ notificationCenter announce: diffNode newClassModel newActivationAnnouncement ].
-			^ self ].
+	diffNode canBeActivated ifTrue: [
+		breadcrumb addLinkSegment: aClassName action: [ self activateClass ].
+		^ self ].
 
 	breadcrumb addSegment: (breadcrumb newLabel
-			 label: aClassName;
-			 yourself)
+		label: aClassName;
+		yourself)
 ]
 
 { #category : 'private' }
 PulsarDiffBreadcrumbBuilder >> addMethodLinkForSelector: aSelector [
 
-	logger debug: diffNode canBeActivated.
-	logger debug: notificationCenter.
-
-	(diffNode canBeActivated and: [ notificationCenter isNotNil ]) ifTrue: [
+	diffNode canBeActivated ifTrue: [
 		breadcrumb 
 			addLinkSegment: aSelector 
-			action: [ notificationCenter announce: diffNode newMethodModel newActivationAnnouncement ].
+			action: [ self activateMethod ].
 		^ self ].
 
 	breadcrumb addSegment: (breadcrumb newLabel
-		 label: aSelector;
-		 yourself)
+		label: aSelector;
+		yourself)
 ]
 
 { #category : 'private' }
 PulsarDiffBreadcrumbBuilder >> addSegmentNamed: aString [
 
 	breadcrumb addSegment: (breadcrumb newLabel
-			 label: aString;
-			 yourself)
+		label: aString;
+		yourself)
 ]
 
 { #category : 'accessing' }
@@ -79,18 +88,6 @@ PulsarDiffBreadcrumbBuilder >> diffNode [
 PulsarDiffBreadcrumbBuilder >> diffNode: aPulsarDiffNode [
 
 	diffNode := aPulsarDiffNode
-]
-
-{ #category : 'accessing' }
-PulsarDiffBreadcrumbBuilder >> notificationCenter [
-
-	^ notificationCenter
-]
-
-{ #category : 'accessing' }
-PulsarDiffBreadcrumbBuilder >> notificationCenter: anAnnouncer [
-
-	notificationCenter := anAnnouncer
 ]
 
 { #category : 'visiting' }
@@ -154,4 +151,10 @@ PulsarDiffBreadcrumbBuilder >> visitTraitDefinition: aDefinition [
 PulsarDiffBreadcrumbBuilder >> visitTreeNode: aNode [
 
 	aNode definition ifNotNil: [ :def | def accept: self ]
+]
+
+{ #category : 'events' }
+PulsarDiffBreadcrumbBuilder >> whenActivatedDo: aBlock [
+
+	whenActivatedDo := aBlock
 ]
