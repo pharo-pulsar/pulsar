@@ -250,13 +250,9 @@ PulsarClassEditor >> updateBreadcrumbs [
 	toolbarPresenter updateBreadcrumbWith: [ :aBreadcrumb | 
 		aBreadcrumb 
 			addSegment: name;
-			addDirectSegment: (self newButton 
-				addStyle: 'flat';
-				addStyle: 'small';
-				icon: (self iconNamed: 'copy-to-clipboard');
-				help: ('Copy {1} to the clipboard' format: { self model fullName });
-				action: [ self doCopyToClipboard ];
-				yourself) ]
+			addButtonSegment: 'copy-to-clipboard'
+				help: ('Copy {1} to the clipboard' format: { self model fullName })
+				action: [ self doCopyToClipboard ] ]
 ]
 
 { #category : 'initialization' }

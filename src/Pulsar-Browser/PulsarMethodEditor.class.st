@@ -357,13 +357,9 @@ PulsarMethodEditor >> updateBreadcrumbs [
 		aBreadcrumb 
 			addLinkSegment: className action: [ self announceActivateClass ];
 			addSegment: methodName;
-			addDirectSegment: (self newButton 
-				addStyle: 'flat';
-				addStyle: 'small';
-				icon: (self iconNamed: 'copy-to-clipboard');
-				help: ('Copy {1} to the clipboard' format: { self model fullName });
-				action: [ self doCopyToClipboard ];
-				yourself) ]
+			addButtonSegment: 'copy-to-clipboard'
+				help: ('Copy {1} to the clipboard' format: { self model fullName })
+				action: [ self doCopyToClipboard ] ]
 ]
 
 { #category : 'initialization' }

@@ -15,7 +15,19 @@ PvEditorPathPresenter class >> defaultSeparatorString [
 	^ '/'
 ]
 
-{ #category : 'adding' }
+{ #category : 'accessing' }
+PvEditorPathPresenter >> addButtonSegment: iconName help: description action: aBlock [
+
+	^ self addDirectSegment: (self newButton 
+		addStyle: 'flat';
+		addStyle: 'small';
+		icon: (self iconNamed: iconName);
+		help: description;
+		action: aBlock;
+		yourself)
+]
+
+{ #category : 'accessing' }
 PvEditorPathPresenter >> addDirectSegment: aPresenter [
 	"Add a presenter without a separator (useful to add icons at the end, for example)"
 	
