@@ -1,13 +1,13 @@
 "
-A combined directory browser showing a tree list of directories and files on the left, with a file editor on the right.
+A combined directory browser showing a tree list of directories and files on the left, with an inspector on the right.
 
 It follows the same pattern as PulsarMessageBrowser: a header toolbar, a list/tree, and a content editor. Clicking a file in the tree opens it in the embedded PulsarFileEditor. The model is a PulsarDirectoryModel wrapping a root directory FileReference.
 "
 Class {
 	#name : 'PulsarDirectoryBrowser',
 	#superclass : 'SpPresenter',
-	#traits : 'SpTModel + PulsarTNotificationCenter + PulsarTPanelWindow + PulsarTSnapshot',
-	#classTraits : 'SpTModel classTrait + PulsarTNotificationCenter classTrait + PulsarTPanelWindow classTrait + PulsarTSnapshot classTrait',
+	#traits : 'SpTModel + PulsarTNotificationCenter + PulsarTPanelWindow + PulsarTSnapshot + PulsarTActionContainer',
+	#classTraits : 'SpTModel classTrait + PulsarTNotificationCenter classTrait + PulsarTPanelWindow classTrait + PulsarTSnapshot classTrait + PulsarTActionContainer classTrait',
 	#instVars : [
 		'directoryTreePresenter',
 		'editorPresenter',
@@ -56,21 +56,50 @@ PulsarDirectoryBrowser >> defaultLayout [
 		  yourself
 ]
 
+{ #category : 'private - definitions' }
+PulsarDirectoryBrowser >> defineActionsOn: aBuilder [
+	<dockActions>
+	
+	aBuilder addGroup: #actions with: [ :group | group 
+		beDisplayedAsGroup;
+		addActionWith: [ :action | action 
+			name: 'Open file location';
+			iconName: 'open';
+			description: 'Open current file location on the external file manager';
+			action: [ self doOpenCurrentFolder ] ] ]
+]
+
+{ #category : 'private - actions' }
+PulsarDirectoryBrowser >> doCopyToClipboard [
+
+	self model ifNil: [ ^ self ].
+	self application copyToClipboard: self model fullName.
+	self withWindowDo: [ :w | w inform: 'Copied to clipboard' ]
+]
+
+{ #category : 'private - actions' }
+PulsarDirectoryBrowser >> doOpenCurrentFolder [
+
+	self model entity openInOSFileBrowser
+
+]
+
 { #category : 'initialization' }
 PulsarDirectoryBrowser >> initializePresenters [
 
 	self addStyle: 'pulsarDirectoryBrowser'.
 
 	headerPresenter := self instantiate: PulsarEditorToolbarPresenter.
+	headerPresenter actions: self actions.
 
 	directoryTreePresenter := self newEasyTreeListView
-		                          addStyle: 'stTree';
-		                          children: [ :aModel | aModel children ];
-		                          display: [ :aModel | aModel name ];
-		                          displayIcon: [ :aModel | self iconNamed: aModel iconName ];
-		                          yourself.
+		addStyle: 'stTree';
+		children: [ :aModel | aModel children ];
+		display: [ :aModel | aModel name ];
+		displayIcon: [ :aModel | self iconNamed: aModel iconName ];
+		yourself.
 
-	editorPresenter := self instantiate: PulsarFileEditor
+	"editorPresenter := self instantiate: PulsarFileEditor"
 ]
 
 { #category : 'testing' }
@@ -119,17 +148,16 @@ PulsarDirectoryBrowser >> setModelBeforeInitialization: aModel [
 	model := aModel
 ]
 
-{ #category : 'accessing - snapshot' }
-PulsarDirectoryBrowser >> snapshot [
-
-	^ PulsarPresenterWithModelSnapshot on: self
-]
-
 { #category : 'initialization' }
 PulsarDirectoryBrowser >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 
-	headerPresenter updateBreadcrumbWith: [ :aBreadcrumb | aBreadcrumb addSegment: self model fullName ].
+	headerPresenter updateBreadcrumbWith: [ :aBreadcrumb | 
+		aBreadcrumb 
+			addSegment: self model fullName;
+			addButtonSegment: 'copy-to-clipboard'
+				help: ('Copy {1} to the clipboard' format: { self model fullName })
+				action: [ self doCopyToClipboard ] ].
 	directoryTreePresenter roots: self model children
 ]
