@@ -84,6 +84,15 @@ PulsarContextEditor >> grabDebugToolbar [
 ]
 
 { #category : 'initialization' }
+PulsarContextEditor >> initializePanelWidget: aPanelWidgetPresenter [
+
+	super initializePanelWidget: aPanelWidgetPresenter.
+	aPanelWidgetPresenter 
+		pinned: true;
+		windowIcon: (self iconNamed: 'context')
+]
+
+{ #category : 'initialization' }
 PulsarContextEditor >> initializePresenters [
 
 	super initializePresenters.

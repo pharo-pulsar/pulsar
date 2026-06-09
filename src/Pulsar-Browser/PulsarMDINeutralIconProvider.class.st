@@ -109,6 +109,7 @@ PulsarMDINeutralIconProvider >> createTable [
 		('debuggerStepThrough'    'debug-step-through'            '#1c71d8'  '#62a0ea')
 		('debuggerReturn'         'debug-step-out'                '#1c71d8'  '#62a0ea')
 		('debuggerRunToSelection' 'debug-step-into'               '#1c71d8'  '#62a0ea')
+		('context'				  'layers-triple-outline')
 
 		"Tests"
 		('run-test'               'play'                          '#26a269'  '#57e389')
@@ -152,6 +153,7 @@ PulsarMDINeutralIconProvider >> createTable [
 		('commits'				  'source-commit')
 		('packages'				  'cube-outline')
 		('changes'				  'file-code-outline')
+		('diff'					  'file-compare')
 		
 
 		"Inspection / metamodel introspection"
@@ -196,6 +198,8 @@ PulsarMDINeutralIconProvider >> createTable [
 		('up'                     'arrow-up')
 		('down'                   'arrow-down')
 		('chevron-right'          'chevron-right')
+		('chevron-left'           'chevron-left')
+		('chevron-up'          	  'chevron-up')
 		('chevron-down'           'chevron-down')
 		('search-forward'         'arrow-down')
 		('search-backward'        'arrow-up')
