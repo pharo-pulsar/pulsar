@@ -6,16 +6,45 @@ Unlike PulsarMethodEditor or PulsarClassEditor, this editor is not coupled to th
 Class {
 	#name : 'PulsarFileEditor',
 	#superclass : 'PulsarEditor',
+	#traits : 'PulsarTSnapshot',
+	#classTraits : 'PulsarTSnapshot classTrait',
 	#category : 'Pulsar-Tool-FileEditor-View',
 	#package : 'Pulsar-Tool-FileEditor',
 	#tag : 'View'
 }
+
+{ #category : 'private - definitions' }
+PulsarFileEditor >> defineActionsOn: aBuilder [
+	<dockActions>
+
+	aBuilder addGroup: #navigation with: [ :group | group 
+		priority: 100;
+		name: 'Actions';
+		beDisplayedAsGroup;
+		addActionWith: [ :action | action
+			name: 'Open file location';
+			iconName: 'open';
+			description: 'Open current file location on the external file manager';
+			action: [ self doOpenCurrentFolder ] ] ]
+]
+
+{ #category : 'private - definitions' }
+PulsarFileEditor >> defineNavigationActionsOn: aBuilder [
+	<dockActions>
+
+]
 
 { #category : 'private - actions' }
 PulsarFileEditor >> doBrowseSendersCommand: aCommand [
 	"Not applicable for a file editor."
 
 	
+]
+
+{ #category : 'private - actions' }
+PulsarFileEditor >> doOpenCurrentFolder [
+
+	self model entity openInOSFileBrowser
 ]
 
 { #category : 'private - actions' }
@@ -86,7 +115,12 @@ PulsarFileEditor >> updateBreadcrumbs [
 
 	| fullPath |
 	fullPath := self model entity fullName.
-	toolbarPresenter updateBreadcrumbWith: [ :aBreadcrumb | aBreadcrumb addSegment: fullPath ]
+	toolbarPresenter updateBreadcrumbWith: [ :aBreadcrumb | 
+		aBreadcrumb 
+			addSegment: fullPath;
+			addButtonSegment: 'copy-to-clipboard'
+				help: ('Copy {1} to the clipboard' format: { self model fullName })
+				action: [ self doCopyToClipboard ] ]
 ]
 
 { #category : 'private - actions' }

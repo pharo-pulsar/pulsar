@@ -6,6 +6,8 @@ It shows directories and files in a tree, allowing navigation through the file s
 Class {
 	#name : 'PulsarDirectoryView',
 	#superclass : 'PulsarCollectionView',
+	#traits : 'PulsarTActionContainer',
+	#classTraits : 'PulsarTActionContainer classTrait',
 	#instVars : [
 		'toolbarPresenter'
 	],
@@ -31,10 +33,29 @@ PulsarDirectoryView >> defaultLayout [
 		yourself
 ]
 
+{ #category : 'private - definitions' }
+PulsarDirectoryView >> defineActionsOn: aBuilder [
+	<dockActions>
+	
+	aBuilder addGroup: #actions with: [ :group | group 
+		beDisplayedAsGroup;
+		addActionWith: [ :action | action 
+			name: 'Open file location';
+			iconName: 'open';
+			description: 'Open current file location on the external file manager';
+			action: [ self doOpenCurrentFolder ] ] ]
+]
+
 { #category : 'private - actions' }
 PulsarDirectoryView >> doClose [
 
 	self withNearWindowLikeDo: [ :aWindow | aWindow close ]
+]
+
+{ #category : 'private - actions' }
+PulsarDirectoryView >> doOpenCurrentFolder [
+
+	self model entity openInOSFileBrowser
 ]
 
 { #category : 'initialization' }
@@ -43,6 +64,7 @@ PulsarDirectoryView >> initializePresenters [
 	self addStyle: 'pulsarDirectoryView'.
 	
 	toolbarPresenter := self instantiate: PulsarEditorToolbarPresenter.
+	toolbarPresenter actions: self actions.
 	toolbarPresenter addPresenter: (self newToolbar 
 		beIcons; 
 		add: (self newButton
