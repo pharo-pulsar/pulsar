@@ -8,7 +8,8 @@ Class {
 	#superclass : 'PulsarEditor',
 	#instVars : [
 		'commentPresenter',
-		'commentOverlayLayout'
+		'commentOverlayLayout',
+		'dependenciesPresenter'
 	],
 	#category : 'Pulsar-Browser-View-Editor',
 	#package : 'Pulsar-Browser',
@@ -44,11 +45,14 @@ PulsarPackageEditor >> connectPresenters [
 PulsarPackageEditor >> defaultLayout [
 
 	^ SpBoxLayout newVertical
-		  add: toolbarPresenter expand: false;
-		  add: ((commentOverlayLayout := SpOverlayLayout new)
-				   child: commentPresenter;
-				   yourself);
-		  yourself
+		add: toolbarPresenter expand: false;
+		add: (SpPanedLayout newVertical
+			add: ((commentOverlayLayout := SpOverlayLayout new)
+				child: commentPresenter;
+				yourself);
+			add: dependenciesPresenter;
+			yourself);
+		yourself
 ]
 
 { #category : 'private - comment' }
@@ -84,10 +88,12 @@ PulsarPackageEditor >> initializePresenters [
 	self addStyle: 'pulsarPackageEditor'.
 
 	commentPresenter := (self instantiate: SeEditorPresenter)
-		                    addStyle: 'stCode';
-		                    withoutLineNumbers;
-		                    withHyperlinks;
-		                    yourself
+		addStyle: 'stCode';
+		withoutLineNumbers;
+		withHyperlinks;
+		yourself.
+
+	dependenciesPresenter := self instantiate: PulsarPackageDependenciesPresenter
 ]
 
 { #category : 'updating' }
@@ -106,9 +112,8 @@ PulsarPackageEditor >> updateComment [
 
 { #category : 'updating' }
 PulsarPackageEditor >> updateEditor [
-	"Package editor currently only edits the comment."
 
-	
+	dependenciesPresenter model: self model newDependencyModel
 ]
 
 { #category : 'updating' }

@@ -147,6 +147,14 @@ PvPackageModel >> name [
 ]
 
 { #category : 'accessing' }
+PvPackageModel >> newDependencyModel [
+
+	^ PulsarPackageDependencyModel new
+		  packageName: self name;
+		  yourself
+]
+
+{ #category : 'accessing' }
 PvPackageModel >> package [
 
 	^ self entity

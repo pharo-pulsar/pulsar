@@ -155,7 +155,6 @@ PulsarMDINeutralIconProvider >> createTable [
 		('changes'				  'file-code-outline')
 		('diff'					  'file-compare')
 		
-
 		"Inspection / metamodel introspection"
 		('smallInspectIt'      	 'eye-outline'             		'#0f766e' '#67e8f9')
 		('inspector'           	 'eye-outline'             		'#0f766e' '#67e8f9')
@@ -208,6 +207,7 @@ PulsarMDINeutralIconProvider >> createTable [
 		('sort'					  'sort')
 		('pin'					  'pin')
 		('dirty'					  'circle-medium')
+		('flip-side'				  'swap-horizontal')
 
 		"Panels / layout / windows"
 		('panel-left'             'dock-left')
