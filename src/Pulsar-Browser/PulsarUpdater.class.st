@@ -30,6 +30,12 @@ PulsarUpdater >> loadScriptUrl [
 	^ 'https://forge.smallworks.eu/pharo/Pulsar/raw/branch/main/.ci/scripts/Load.st'
 ]
 
+{ #category : 'private' }
+PulsarUpdater >> saveImage [
+
+	Smalltalk snapshot: true andQuit: false
+]
+
 { #category : 'updating' }
 PulsarUpdater >> update [
 
