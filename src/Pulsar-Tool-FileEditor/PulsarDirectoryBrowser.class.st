@@ -148,6 +148,12 @@ PulsarDirectoryBrowser >> setModelBeforeInitialization: aModel [
 	model := aModel
 ]
 
+{ #category : 'accessing - snapshot' }
+PulsarDirectoryBrowser >> snapshot [
+
+	^ PulsarDirectorySnapshot on: self
+]
+
 { #category : 'initialization' }
 PulsarDirectoryBrowser >> updatePresenter [
 
