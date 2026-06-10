@@ -373,7 +373,9 @@ PulsarRepositoryModel >> newFetchAction [
 	
 	^ IceTipStandardAction new
 		repository: self entity;
-		action: [ self entity fetch ];
+		action: [ 
+			self entity fetch.
+			self resetDiff ];
 		yourself
 ]
 
@@ -385,7 +387,9 @@ PulsarRepositoryModel >> newPullActionFrom: aRemote [
 	^ IceTipStandardAction new 
 		repository: self entity;
 		message: ('Pulling from {1}' format: { remote name });
-		action: [ self entity pullFrom: remote ];
+		action: [ 
+			self entity pullFrom: remote.
+			self resetDiff ];
 		yourself
 ]
 
