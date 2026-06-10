@@ -5,7 +5,9 @@ Class {
 		'diff',
 		'diffNode',
 		'mutex',
-		'registeredStatus'
+		'registeredStatus',
+		'outgoingCommits',
+		'incomingCommits'
 	],
 	#category : 'Pulsar-Tool-Repositories-Model',
 	#package : 'Pulsar-Tool-Repositories',
@@ -177,6 +179,15 @@ PulsarRepositoryModel >> forgetAction [
 ]
 
 { #category : 'testing' }
+PulsarRepositoryModel >> hasPendingRemoteOperation [
+
+	self entity isValid ifFalse: [ ^ false ].
+	self entity head isBranch ifFalse: [ ^ false ]. 
+
+	^ self outgoingCommits isNotEmpty or: [ self incomingCommits isNotEmpty ]
+]
+
+{ #category : 'testing' }
 PulsarRepositoryModel >> hasUpstream [
 
 	^ self entity branch hasUpstream
@@ -203,9 +214,10 @@ PulsarRepositoryModel >> incomingCommits [
 	(self entity isValid and: [ self entity canPush ]) ifFalse: [ ^ #() ].
 
 	^ self critical: [  
-		self entity branch 
-			ifNotNil: [ :aBranch | aBranch incomingCommits ]
-			ifNil: [ #() ] ]
+		incomingCommits ifNil: [ 
+			incomingCommits := self entity branch 
+				ifNotNil: [ :aBranch | aBranch incomingCommits ]
+				ifNil: [ #() ] ] ]
 ]
 
 { #category : 'testing' }
@@ -383,7 +395,9 @@ PulsarRepositoryModel >> newPushAction [
 	^ IceTipStandardAction new 
 		repository: self entity;
 		message: ('Pushing to {1}' format: { self entity branch name }) ;
-		action: [ self entity pushTo: self remoteToPush ];
+		action: [ 
+			self entity pushTo: self remoteToPush.
+			self resetDiff ];
 		yourself
 ]
 
@@ -404,7 +418,8 @@ PulsarRepositoryModel >> newPushActionTo: aRemote [
 			(aRemote isNotNil and: [ aRemote ~= remote]) 
 				ifTrue: [ remote := aRemote ].
 			self entity pushTo: remote.
-			self entity branch setUpstreamRemote: remote ];
+			self entity branch setUpstreamRemote: remote.
+			self resetDiff ];
 		yourself
 ]
 
@@ -436,9 +451,10 @@ PulsarRepositoryModel >> outgoingCommits [
 	(self entity isValid and: [ self entity canPush ]) ifFalse: [ ^ #() ].
 
 	^ self critical: [ 
-		self entity branch 
-			ifNotNil: [ : aBranch | aBranch outgoingCommits ]
-			ifNil: [ #() ] ]
+		outgoingCommits ifNil: [ 
+			outgoingCommits := self entity branch 
+				ifNotNil: [ : aBranch | aBranch outgoingCommits ]
+				ifNil: [ #() ] ] ]
 ]
 
 { #category : 'accessing' }
@@ -511,7 +527,9 @@ PulsarRepositoryModel >> repositoryLocation [
 PulsarRepositoryModel >> resetDiff [
 
 	diff := nil.
-	diffNode := nil
+	diffNode := nil.
+	outgoingCommits := nil.
+	incomingCommits := nil
 ]
 
 { #category : 'actions' }

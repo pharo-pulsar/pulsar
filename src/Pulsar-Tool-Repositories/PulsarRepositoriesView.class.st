@@ -278,7 +278,7 @@ PulsarRepositoriesView >> eventRepositoryModified: ann [
 
 	self isUpdating ifTrue: [ ^ self ].
 	ann affectsRepositoryList ifFalse: [ ^ self ].
-
+	logger trace: ann.
 	self updatePresenter
 ]
 
@@ -290,7 +290,9 @@ PulsarRepositoriesView >> filterRepositories: aCollection [
 	hideSystemProjects ifTrue: [ 
 		filteredCollection := filteredCollection reject: [ :each | self application isProjectInternal: each  ] ].
 	hideNonDirtyProjects ifTrue: [ 
-		filteredCollection := filteredCollection select: [ :each | each isDirty ] ].
+		filteredCollection := filteredCollection select: [ :each | 
+			each isDirty 
+				or: [ each hasPendingRemoteOperation ] ] ].
 
 	^ filteredCollection
 ]
