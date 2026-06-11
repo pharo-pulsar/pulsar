@@ -11,7 +11,9 @@ Class {
 		'commentOverlayLayout',
 		'linkedToSelection',
 		'editorPanelPresenter',
-		'refactorPresenter'
+		'refactorPresenter',
+		'commentDirty',
+		'commentDirtyMarkerPresenter'
 	],
 	#category : 'Pulsar-Browser-View-Editor',
 	#package : 'Pulsar-Browser',
@@ -51,13 +53,44 @@ PulsarClassEditor >> acceptVisitor: aVisitor [
 PulsarClassEditor >> commentChangedFrom: oldText to: newText [
 
 	self isUpdating ifTrue: [ ^ self ].
-	
+
 	oldText = newText ifTrue: [ ^ self ].
-	"(self isDirty 
-		and: [ newText = self originalContent ])
-		ifTrue: [ ^ self unmarkDirty ].
-	
-	self markDirty"
+	(commentDirty and: [ newText = self model commentOrTemplate ]) ifTrue: [ ^ self commentUnmarkDirty ].
+
+	self commentMarkDirty
+]
+
+{ #category : 'private' }
+PulsarClassEditor >> commentDirtyMarkerPresenter [
+
+	^ commentDirtyMarkerPresenter ifNil: [ commentDirtyMarkerPresenter := self newCommentDirtyMarkerPresenter ]
+]
+
+{ #category : 'private - updating' }
+PulsarClassEditor >> commentMarkDirty [
+
+	commentDirty ifTrue: [ ^ self ].
+	commentDirty := true.
+	self withPanelWidgetDo: [ :w | w modified: true ].
+	self commentOverlayLayout addOverlay: self commentDirtyMarkerPresenter withConstraints: [ :c |
+			c
+				hAlignEnd;
+				vAlignStart ]
+]
+
+{ #category : 'private - overlay' }
+PulsarClassEditor >> commentOverlayLayout [
+
+	^ commentOverlayLayout ifNil: [ commentOverlayLayout := SpOverlayLayout new ]
+]
+
+{ #category : 'private - updating' }
+PulsarClassEditor >> commentUnmarkDirty [
+
+	commentDirty ifFalse: [ ^ self ].
+	commentDirty := false.
+	self commentOverlayLayout removeOverlay: self commentDirtyMarkerPresenter.
+	self isDirty ifFalse: [ self withPanelWidgetDo: [ :w | w modified: false ] ]
 ]
 
 { #category : 'initialization' }
@@ -103,13 +136,15 @@ PulsarClassEditor >> doBrowseSendersCommand: anAction [
 { #category : 'private - actions' }
 PulsarClassEditor >> doResetComment [
 
-	self updateComment
+	self updateComment.
+	self commentUnmarkDirty
 ]
 
 { #category : 'private - actions' }
 PulsarClassEditor >> doSaveComment: aString [
 
-	self model saveComment: aString
+	self model saveComment: aString.
+	self commentUnmarkDirty
 ]
 
 { #category : 'private - actions' }
@@ -193,6 +228,7 @@ PulsarClassEditor >> eventThemeChanged: ann [
 PulsarClassEditor >> initialize [
 
 	linkedToSelection := false.
+	commentDirty := false.
 	super initialize
 ]
 
@@ -215,6 +251,33 @@ PulsarClassEditor >> initializePresenters [
 		withoutLineNumbers;
 		withHyperlinks;
 		yourself
+]
+
+{ #category : 'testing' }
+PulsarClassEditor >> isDirty [
+
+	^ dirty or: [ commentDirty ]
+]
+
+{ #category : 'private' }
+PulsarClassEditor >> newCommentDirtyMarkerPresenter [
+
+	^ self newToolbar
+		  addStyle: 'pulsarDirtyMarker';
+		  beIcons;
+		  add: (self newToolbarButton
+				   addStyle: 'accept';
+				   icon: (self iconNamed: #accept);
+				   action: [ self doSaveComment: commentPresenter text ];
+				   help: 'Accept changes';
+				   yourself);
+		  add: (self newToolbarButton
+				   addStyle: 'cancel';
+				   icon: (self iconNamed: #cancel);
+				   action: [ self doResetComment ];
+				   help: 'Cancel changes';
+				   yourself);
+		  yourself
 ]
 
 { #category : 'private' }
@@ -240,6 +303,25 @@ PulsarClassEditor >> registerToSystemEvents [
 	
 	self announcer
 		when: TestSuiteEnded send: #eventTestSuiteEnded: to: self
+]
+
+{ #category : 'private - actions' }
+PulsarClassEditor >> saveContent [
+
+	| result |
+	result := super saveContent.
+	commentDirty ifTrue: [ self doSaveComment: commentPresenter text ].
+
+	^ result
+]
+
+{ #category : 'private - updating' }
+PulsarClassEditor >> unmarkDirty [
+
+	dirty ifFalse: [ ^ self ].
+	dirty := false.
+	self removeOverlay: self dirtyMarkerPresenter.
+	self isDirty ifFalse: [ self withPanelWidgetDo: [ :w | w modified: false ] ]
 ]
 
 { #category : 'initialization' }
