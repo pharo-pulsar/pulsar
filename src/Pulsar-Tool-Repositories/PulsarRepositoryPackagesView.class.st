@@ -90,7 +90,8 @@ PulsarRepositoryPackagesView >> doInstallBaseline: aPackageModel [
  		aPackageModel 
  			installBaselineGroups: presenter groups
  			upgradePolicy: presenter upgradePolicy
- 			conflictPolicy: presenter conflictPolicy.
+ 			conflictPolicy: presenter conflictPolicy
+ 			ignoreImage: presenter isIgnoreImage.
  		self updatePresenter ]
 ]
 

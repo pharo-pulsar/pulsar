@@ -85,7 +85,7 @@ PulsarRepositoryPackageModel >> definePackageActionsOn: aBuilder [
 ]
 
 { #category : 'actions' }
-PulsarRepositoryPackageModel >> installBaselineGroups: aCollection upgradePolicy: upgradePolicy conflictPolicy: conflictPolicy [
+PulsarRepositoryPackageModel >> installBaselineGroups: aCollection upgradePolicy: upgradePolicy conflictPolicy: conflictPolicy ignoreImage: ignoreBoolean [
 	| packageDir sourceDirectory |
 	
 	sourceDirectory := self repository project sourceDirectory.
@@ -97,6 +97,7 @@ PulsarRepositoryPackageModel >> installBaselineGroups: aCollection upgradePolicy
 		baseline: self baselineName;
 		onUpgrade: [ :e |e perform: upgradePolicy ];
 		onConflict: [ :e | e perform: conflictPolicy ];
+		in: [ :this | ignoreBoolean ifTrue: [ this ignoreImage ] ];
 		load: aCollection
 ]
 

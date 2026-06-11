@@ -7,7 +7,8 @@ Class {
 		'upgradeUseIncomingPresenter',
 		'conflictUseLoadedPresenter',
 		'conflictUseIncomingPresenter',
-		'packageModel'
+		'packageModel',
+		'ignoreImagePresenter'
 	],
 	#category : 'Pulsar-Tool-Repositories-View',
 	#package : 'Pulsar-Tool-Repositories',
@@ -50,6 +51,7 @@ PulsarInstallBaselineDialog >> defaultLayout [
 						yourself);
 				yourself);
 			yourself);
+		add: ignoreImagePresenter expand: false;
 		yourself
 ]
 
@@ -57,6 +59,12 @@ PulsarInstallBaselineDialog >> defaultLayout [
 PulsarInstallBaselineDialog >> groups [
 
 	^ (groupsTextPresenter text substrings: ',') collect: [ :each | each trimBoth ]
+]
+
+{ #category : 'accessing' }
+PulsarInstallBaselineDialog >> ignoreImage [
+
+	^ ignoreImagePresenter state
 ]
 
 { #category : 'initialization' }
@@ -93,7 +101,11 @@ PulsarInstallBaselineDialog >> initializePresenters [
 	conflictUseIncomingPresenter := self newRadioButton
 		label: 'Use incoming';
 		yourself.	
-	conflictUseLoadedPresenter associatedRadioButtons: { conflictUseIncomingPresenter }
+	conflictUseLoadedPresenter associatedRadioButtons: { conflictUseIncomingPresenter }.
+	
+	ignoreImagePresenter := self newCheckBox
+		label: 'Ignore image';
+		yourself
 ]
 
 { #category : 'initialization' }
@@ -103,7 +115,13 @@ PulsarInstallBaselineDialog >> initializeWindow: aWindowPresenter [
 		title: ('Install Baseline', (self packageModel
 			ifNotNil: [ :aModel | ': ', aModel baselineName ]
 			ifNil: [ '' ]));
-		initialExtent: 500@300
+		initialExtent: 500@320
+]
+
+{ #category : 'testing' }
+PulsarInstallBaselineDialog >> isIgnoreImage [
+
+	^ ignoreImagePresenter state
 ]
 
 { #category : 'accessing' }
