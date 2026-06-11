@@ -22,12 +22,37 @@ PulsarPackageEditor >> acceptVisitor: aVisitor [
 	^ aVisitor visitPackageEditor: self
 ]
 
-{ #category : 'private - comment' }
+{ #category : 'accessing - overlay' }
+PulsarPackageEditor >> addOverlay: aPresenter [
+
+	self commentOverlayLayout addOverlay: aPresenter
+]
+
+{ #category : 'accessing - overlay' }
+PulsarPackageEditor >> addOverlay: aPresenter withConstraints: aBlock [
+
+	self commentOverlayLayout 
+		addOverlay: aPresenter 
+		withConstraints: aBlock
+]
+
+{ #category : 'private - updating' }
 PulsarPackageEditor >> commentChangedFrom: oldText to: newText [
 
 	self isUpdating ifTrue: [ ^ self ].
 
-	oldText = newText ifTrue: [ ^ self ]
+	oldText = newText ifTrue: [ ^ self ].
+	
+	(self isDirty and: [ newText = self originalContent ]) 
+		ifTrue: [ ^ self unmarkDirty ].
+
+	self markDirty
+]
+
+{ #category : 'private - overlay' }
+PulsarPackageEditor >> commentOverlayLayout [
+
+	^ commentOverlayLayout
 ]
 
 { #category : 'initialization' }
@@ -55,10 +80,19 @@ PulsarPackageEditor >> defaultLayout [
 		yourself
 ]
 
+{ #category : 'private - actions' }
+PulsarPackageEditor >> doReset [
+
+	self updatingWhile: [
+		commentPresenter text: self originalContent.
+		self unmarkDirty ]
+]
+
 { #category : 'private - comment' }
 PulsarPackageEditor >> doResetComment [
 
-	self updateComment
+	self updateComment.
+	self unmarkDirty
 ]
 
 { #category : 'private - comment' }
@@ -67,17 +101,18 @@ PulsarPackageEditor >> doSaveComment: aString [
 	self model saveComment: aString
 ]
 
+{ #category : 'private - actions' }
+PulsarPackageEditor >> doSubmit: aString [
+
+	self doSaveComment: aString.
+	self unmarkDirty
+]
+
 { #category : 'events' }
 PulsarPackageEditor >> eventThemeChanged: ann [
 
 	super eventThemeChanged: ann.
 	commentPresenter styleScheme: self application styleScheme
-]
-
-{ #category : 'initialization' }
-PulsarPackageEditor >> initialize [
-
-	super initialize
 ]
 
 { #category : 'initialization' }
@@ -96,18 +131,59 @@ PulsarPackageEditor >> initializePresenters [
 	dependenciesPresenter := self instantiate: PulsarPackageDependenciesPresenter
 ]
 
+{ #category : 'private' }
+PulsarPackageEditor >> newDirtyMarkerPresenter [
+
+	^ self newToolbar
+	  addStyle: 'pulsarDirtyMarker';
+	  beIcons;
+	  add: (self newToolbarButton
+		addStyle: 'accept';
+		icon: (self iconNamed: #accept);
+		action: [ self doSubmit: commentPresenter text ];
+		help: 'Accept changes';
+		yourself);
+	  add: (self newToolbarButton
+		addStyle: 'cancel';
+		icon: (self iconNamed: #cancel);
+		action: [ self doReset ];
+		help: 'Cancel changes';
+		yourself);
+	  yourself
+]
+
+{ #category : 'private' }
+PulsarPackageEditor >> originalContent [
+
+	^ self model commentOrTemplate
+]
+
+{ #category : 'accessing - overlay' }
+PulsarPackageEditor >> removeOverlay: aPresenter [
+
+	self commentOverlayLayout removeOverlay: aPresenter
+]
+
+{ #category : 'private - actions' }
+PulsarPackageEditor >> saveContent [
+
+	^ self doSaveComment: commentPresenter text
+]
+
 { #category : 'updating' }
 PulsarPackageEditor >> updateBreadcrumbs [
-
 	| name |
+	
 	name := self model name.
-	toolbarPresenter updateBreadcrumbWith: [ :aBreadcrumb | aBreadcrumb addSegment: name ]
+	toolbarPresenter updateBreadcrumbWith: [ :aBreadcrumb | 
+		aBreadcrumb addSegment: name ]
 ]
 
 { #category : 'updating' }
 PulsarPackageEditor >> updateComment [
 
-	self updatingWhile: [ commentPresenter text: self model commentOrTemplate ]
+	self updatingWhile: [ 
+		commentPresenter text: self model commentOrTemplate ]
 ]
 
 { #category : 'updating' }

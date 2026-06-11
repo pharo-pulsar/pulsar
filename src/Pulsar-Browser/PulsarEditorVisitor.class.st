@@ -60,6 +60,12 @@ PulsarEditorVisitor >> visitMethodEditor: aPresenter [
 ]
 
 { #category : 'visiting' }
+PulsarEditorVisitor >> visitPackageEditor: aPresenter [
+
+	^ self visitEditor: aPresenter
+]
+
+{ #category : 'visiting' }
 PulsarEditorVisitor >> visitPresenter: aPresenter [
 
 ]
