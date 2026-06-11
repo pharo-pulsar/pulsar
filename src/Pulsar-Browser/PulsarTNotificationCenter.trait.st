@@ -10,7 +10,8 @@ Trait {
 
 { #category : 'private' }
 PulsarTNotificationCenter >> basicNotificationCenter: anAnnouncer [
-
+	
+	"this is super hacky, but for now works"
 	(anAnnouncer isKindOf: PulsarNotificationCenterDelegate) 
 		ifTrue: [ notificationCenter := anAnnouncer ] 
 		ifFalse: [
