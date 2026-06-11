@@ -55,9 +55,12 @@ PvMethodHierarchyPresenter >> outputActivationPort [
 
 { #category : 'initialization' }
 PvMethodHierarchyPresenter >> updatePresenter [
-
+	self flag: #TODO. "hierarchyTopModel can be nil if we are in a trait, and traits have no hierarchy. 
+	we may consider change the hierarchy button on the class editor if showing a trait?"
 	treePresenter 
-		roots: { self model hierarchyTopModel };
+		roots: (self model hierarchyTopModel
+			ifNotNil: [ :aTopModel | { aTopModel } ]
+			ifNil: [ #() ]);
 		selectItem: self itemToSelect.
 		
 	"Exclude huge hierarchies from the expandAll to avoid huge and unnecesary 
