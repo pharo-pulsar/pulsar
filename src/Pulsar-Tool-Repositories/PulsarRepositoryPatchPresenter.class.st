@@ -1,8 +1,8 @@
 Class {
 	#name : 'PulsarRepositoryPatchPresenter',
 	#superclass : 'SpPresenter',
-	#traits : 'SpTModel',
-	#classTraits : 'SpTModel classTrait',
+	#traits : 'SpTModel + PulsarTNotificationCenter',
+	#classTraits : 'SpTModel classTrait + PulsarTNotificationCenter classTrait',
 	#instVars : [
 		'headerPresenter',
 		'patchPresenter',
@@ -51,7 +51,7 @@ PulsarRepositoryPatchPresenter >> notificationCenter [
 { #category : 'accessing' }
 PulsarRepositoryPatchPresenter >> notificationCenter: anAnnouncer [
 
-	notificationCenter := anAnnouncer.
+	self basicNotificationCenter: anAnnouncer.
 	self model ifNotNil: [ self updatePresenter ]
 ]
 

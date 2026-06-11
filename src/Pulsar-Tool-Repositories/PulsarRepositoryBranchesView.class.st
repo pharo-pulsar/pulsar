@@ -69,7 +69,7 @@ PulsarRepositoryBranchesView >> notificationCenter: anAnnouncer [
 
 	super notificationCenter: anAnnouncer.
 	{ localPresenter. remotePresenter. tagPresenter }
-		do: [ :each | each notificationCenter: anAnnouncer ]
+		do: [ :each | each notificationCenter: self notificationCenter ]
 ]
 
 { #category : 'private' }

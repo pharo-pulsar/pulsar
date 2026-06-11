@@ -9,6 +9,17 @@ Trait {
 }
 
 { #category : 'private' }
+PulsarTNotificationCenter >> basicNotificationCenter: anAnnouncer [
+
+	(anAnnouncer isKindOf: PulsarNotificationCenterDelegate) 
+		ifTrue: [ notificationCenter := anAnnouncer ] 
+		ifFalse: [
+			(notificationCenter isKindOf: PulsarNotificationCenterDelegate)
+				ifTrue: [ notificationCenter target: anAnnouncer ]
+				ifFalse: [ notificationCenter := PulsarNotificationCenterDelegate on: anAnnouncer ] ]
+]
+
+{ #category : 'private' }
 PulsarTNotificationCenter >> notificationCenter [
 
 	^ notificationCenter
@@ -16,8 +27,9 @@ PulsarTNotificationCenter >> notificationCenter [
 
 { #category : 'private' }
 PulsarTNotificationCenter >> notificationCenter: anAnnouncer [
-
-	notificationCenter := anAnnouncer
+	"made the delegation go a basic because some classes may override this but keep 
+	 the behavior"
+	self basicNotificationCenter: anAnnouncer
 ]
 
 { #category : 'initialization' }

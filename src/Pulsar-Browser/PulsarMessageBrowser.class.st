@@ -121,8 +121,9 @@ PulsarMessageBrowser >> messageCount [
 { #category : 'private' }
 PulsarMessageBrowser >> notificationCenter: anAnnouncer [
 
-	notificationCenter := anAnnouncer.
-	editorPresenter notificationCenter: anAnnouncer
+	self basicNotificationCenter: anAnnouncer.
+	"as notificationCenter may be other thing than anAnnouncer"
+	editorPresenter notificationCenter: self notificationCenter
 ]
 
 { #category : 'private - announcing' }

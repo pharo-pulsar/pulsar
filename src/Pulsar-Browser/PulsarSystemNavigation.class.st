@@ -34,7 +34,7 @@ PulsarSystemNavigation >> browse: anObject [
 	modelClass := anObject isCompiledMethod 
 		ifTrue: [ PvMethodModel ]
 		ifFalse: [ PvClassModel ].
-
+	self window title printToStdout.
 	self window announce: (PulsarModelActivated newValue: (modelClass 
 		newEnvironment: self window model environmentModel 
 		entity: anObject))

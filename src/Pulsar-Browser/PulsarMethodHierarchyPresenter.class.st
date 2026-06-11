@@ -42,5 +42,6 @@ PulsarMethodHierarchyPresenter >> initializePresenters [
 PulsarMethodHierarchyPresenter >> notificationCenter: anAnnouncer [
 
 	super notificationCenter: anAnnouncer.
-	editorPresenter notificationCenter: anAnnouncer
+	"as notificationCenter may be other thing than anAnnouncer"
+	editorPresenter notificationCenter: self notificationCenter
 ]
