@@ -104,6 +104,12 @@ PulsarFileEditor >> registerToSystemEvents [
 	
 ]
 
+{ #category : 'accessing - snapshot' }
+PulsarFileEditor >> snapshot [
+
+	^ PulsarDirectorySnapshot on: self
+]
+
 { #category : 'accessing' }
 PulsarFileEditor >> spotterTitle [
 

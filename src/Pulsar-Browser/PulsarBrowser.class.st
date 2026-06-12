@@ -26,33 +26,36 @@ PulsarBrowser class >> defineToolActionsOn: aBuilder [
 		beDisplayedAsGroup;
 		addActionWith: [ :action | action
 			priority: 100;
-			name: 'New Playground';
+			name: 'Playground';
 			description: 'Open a new playground in your browser';
 			action: [ :aContext | aContext openPlayground ] ];
 		addActionWith: [ :action | action 
 			priority: 200;
-			name: 'Open Process Browser';
+			name: 'Process Browser';
 			description: 'Open the Process Browser';
 			action: [ :aContext | aContext spawnNewProcessBrowser ] ];
 		addActionWith: [ :action | action 
 			priority: 910;
-			name: 'Open Recent Changes';
+			name: 'Recent Changes';
 			description: 'Open Recent Changes log';
 			action: [ :aContext | aContext spawnRecentChanges ] ];
 		addActionWith: [ :action | action
 			priority: 920;
-			name: 'Open Repositories';
+			name: 'Repositories';
 			description: 'Open git repositories';
+			actionState: [ :aContext | aContext hasPresenterClass: PulsarRepositoriesView ];
 			action: [ :aContext | aContext openRepositories ] ];
 		addActionWith: [ :anAction | anAction
 			priority: 930;
-			name: 'Open Flag Console';
+			name: 'Flag Console';
 			description: 'Open flags console';
+			actionState: [ :aContext | aContext hasPresenterClass: PulsarFlagsConsole ];
 			action: [ :aContext | aContext openFlagsConsole ] ];
 		addActionWith: [ :anAction | anAction
 			priority: 940;
-			name: 'Open Critiques Console';
+			name: 'Critiques Console';
 			description: 'Open critiques console';
+			actionState: [ :aContext | aContext  hasPresenterClass: PulsarCritiquesConsole ];
 			action: [ :aContext | aContext openCritiquesConsole ] ] ]
 ]
 

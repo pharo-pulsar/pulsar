@@ -519,28 +519,31 @@ PvMethodModel >> updateWith: aString notifying: anInteractionModel [
 	
  	selectedClass := self entity methodClass.
  	protocol := self entity protocol.
-
 	[
-		compiler := selectedClass compiler 
-			source: aString;
-			requestor: anInteractionModel;
-			permitUndeclared: true;
-			yourself.
-			
-		newMethod := compiler compileOrFail.
-			
-		installer := selectedClass methodInstaller
-		   logged: selectedClass shouldLogSource;
-		   changeStamp: DateAndTime now;
-		   protocol: protocol.
-		   
-		installer 
-			install: newMethod 
-			into: selectedClass 
-			compiler: compiler 
+		[
+			compiler := selectedClass compiler 
+				source: aString;
+				requestor: anInteractionModel;
+				permitUndeclared: true;
+				yourself.
+				
+			newMethod := compiler compileOrFail.
+				
+			installer := selectedClass methodInstaller
+			   logged: selectedClass shouldLogSource;
+			   changeStamp: DateAndTime now;
+			   protocol: protocol.
+			   
+			installer 
+				install: newMethod 
+				into: selectedClass 
+				compiler: compiler 
+		]
+		on: OCUndeclaredVariableWarning  
+		do: [ :w | w resume ]
 	]
-	on: OCUndeclaredVariableWarning 
-	do: [ :w | w resume ].
+	on: OCCompilationError
+	do: [ :e | anInteractionModel informError: e ].
 	
  	newMethod ifNil: [ ^ false ].
  	newSelector := newMethod selector.

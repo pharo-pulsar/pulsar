@@ -25,9 +25,13 @@ PulsarDetachedBrowser >> defineViewActionsOn: aBuilder [
 	aBuilder addGroup: #view with: [ :group | group 
 		beDisplayedAsGroup;
 		addActionWith: [ :action | action 
-			name: 'Open Class Outline';
+			name: 'Class Outline';
 			description: 'Open a class outline panel';
-			action: [ self doOpenClassOutlineView ] ] ]
+			action: [ self doOpenClassOutlineView ] ];
+		addActionWith: [ :action | action 
+			name: 'Editor Stack';
+			description: 'Open the editor stack panel';
+			action: [ self doOpenEditorStackView ] ] ]
 ]
 
 { #category : 'private - actions' }

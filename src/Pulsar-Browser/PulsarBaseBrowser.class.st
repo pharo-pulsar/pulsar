@@ -268,7 +268,7 @@ PulsarBaseBrowser >> defineExtraActionsOn: aBuilder [
 	aBuilder addGroup: #extra with: [ :group | group 
 		beDisplayedAsGroup;
 		addActionWith: [ :action | action 
-			name: 'New Payground';
+			name: 'Payground';
 			description: 'Open a new playground';
 			action: [ self doNewPlayground ] ] ]
 ]
@@ -372,6 +372,12 @@ PulsarBaseBrowser >> findPresenterClass: aClass [
 		detect: [ :each | each presenter class = aClass ]
 		ifFound: [ :each | each presenter ]
 		ifNone: [ nil ]
+]
+
+{ #category : 'testing' }
+PulsarBaseBrowser >> hasPresenterClass: aClass [
+
+	^ (self findPresenterClass: aClass) isNotNil
 ]
 
 { #category : 'simple dialog helpers' }

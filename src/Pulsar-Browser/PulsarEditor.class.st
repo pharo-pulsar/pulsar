@@ -205,6 +205,7 @@ PulsarEditor >> doSubmit: aString [
 	oldModel := self model copy.
 	result := self updateModel: aString.
 	result ifTrue: [
+		editorPresenter removeAllTextSegmentDecorations.
 		self unmarkDirty.
 		self notifyModelChangedFrom: oldModel to: self model ].
 

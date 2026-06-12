@@ -94,6 +94,9 @@ PulsarMDINeutralIconProvider >> createTable [
 		('project'                'folder-outline'				'#3b4a77' 	'#b8c6ee')
 		('systemEnvironment'      'library-outline' 				'#3446a3' 	'#aebcff')
 		('projects'                'folder-outline')
+		('error' 				  'alert-circle-outline' 		'#cf222e' 	'#f85149')
+		('warning'				  'alert-outline' 				'#b86e00' 	'#d9902f')
+		('info'				  	  'information-outline' 			'#0969da' 	'#58a6ff')
 
 		"Run / debug"
 		('glamorousGo'            'play-outline'                  '#26a269'  '#57e389')
@@ -208,6 +211,7 @@ PulsarMDINeutralIconProvider >> createTable [
 		('pin'					  'pin')
 		('dirty'					  'circle-medium')
 		('flip-side'				  'swap-horizontal')
+		('fileManager'			  'folder-outline')
 
 		"Panels / layout / windows"
 		('panel-left'             'dock-left')

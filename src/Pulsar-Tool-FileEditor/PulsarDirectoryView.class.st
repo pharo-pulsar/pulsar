@@ -83,6 +83,12 @@ PulsarDirectoryView >> initializePresenters [
 		yourself
 ]
 
+{ #category : 'private' }
+PulsarDirectoryView >> panelPlacedIconName [
+
+	^ 'fileManager'
+]
+
 { #category : 'initialization' }
 PulsarDirectoryView >> updatePresenter [
 
