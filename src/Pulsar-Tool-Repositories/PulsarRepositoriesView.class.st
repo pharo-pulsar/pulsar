@@ -114,7 +114,7 @@ PulsarRepositoriesView >> defineContextActionsOn: aBuilder [
 			addActionWith: [ :action | action
 				dynamicName: [ 'Recalculate dirty packages for {1}' format: { self selectedRepositoryName } ];
 				description: 'Recalculate dirty packages for selected repository';
-				actionEnabled: [ self hasSelectedRepository and: [ self selectedRepository isMissing not ] ];
+				actionEnabled: [ self hasSelectedRepository ];
 				action: [ self doRecalculateDirtyPackagesOfSelectedRepository ] ];
 			addActionWith: [ :action | action
 				dynamicName: [ 'Open {1} location' format: { self selectedRepositoryName } ];
@@ -124,7 +124,7 @@ PulsarRepositoriesView >> defineContextActionsOn: aBuilder [
 			addActionWith: [ :action | action
 				dynamicName: [ 'Open {1} location (external)' format: { self selectedRepositoryName } ];
 				description: 'Open repository location in external file manager';
-				actionEnabled: [ self hasSelectedRepository ];
+				actionEnabled: [ self hasSelectedRepository and: [ self selectedRepository isMissing not ] ];
 				action: [ self doOpenExternalLocationOfSelectedRepository ] ] ];
 		addGroupWith: [ :dangerGroup | dangerGroup
 			name: 'DANGER ZONE';
