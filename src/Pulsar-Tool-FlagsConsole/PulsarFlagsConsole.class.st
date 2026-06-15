@@ -185,7 +185,7 @@ PulsarFlagsConsole >> initializeWindow: aWindowPresenter [
 { #category : 'private' }
 PulsarFlagsConsole >> panelPlacedIconName [
 
-	^ 'flag'
+	^ 'flag.neutral'
 ]
 
 { #category : 'initialization' }

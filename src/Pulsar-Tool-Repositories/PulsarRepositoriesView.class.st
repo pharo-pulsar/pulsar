@@ -383,7 +383,7 @@ PulsarRepositoriesView >> notifyRepositoryModified: aModel reason: aReason [
 { #category : 'private' }
 PulsarRepositoriesView >> panelPlacedIconName [
 
-	^ 'repositories'
+	^ 'repositories.neutral'
 ]
 
 { #category : 'private' }
