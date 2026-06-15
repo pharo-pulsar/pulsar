@@ -122,30 +122,6 @@ PulsarClassOutlineSideView >> defineMethodActionsOn: aBuilder [
 ]
 
 { #category : 'private - definitions' }
-PulsarClassOutlineSideView >> defineMethodRefactorActionsOn: aBuilder [
-	<dockActions>
-
-	aBuilder addGroup: #methodRefactors with: [ :group | group 
-		name: 'Refactors';
-		beDisplayedAsSubMenu;
-		addActionWith: [ :action | action
-			dynamicName: [ 'Rename {1}' format: { self selectedMethodName } ];
-			description: [ 'Rename method' ];
-			actionEnabled: [ self hasSelectedMethod ];
-			action: [ self doRenameMethod ] ];
-		addActionWith: [ :action | action
-			dynamicName: [ 'Pull up {1}' format: { self selectedMethodName } ];
-			description: [ 'Pullup method' ];
-			actionEnabled: [ self hasSelectedMethod ];
-			action: [ self doPullUpMethod ] ];
-		addActionWith: [ :action | action
-			dynamicName: [ 'Push down {1}' format: { self selectedMethodName } ];
-			description: [ 'Push down method' ];
-			actionEnabled: [ self hasSelectedMethod ];
-			action: [ self doPushUpMethod ] ] ]
-]
-
-{ #category : 'private - definitions' }
 PulsarClassOutlineSideView >> defineProtocolActionsOn: aBuilder [
 	<dockActions>
 	
@@ -172,7 +148,7 @@ PulsarClassOutlineSideView >> defineProtocolActionsOn: aBuilder [
 			addActionWith: [ :action | action 
 				name: 'Remove protocol';
 				description: 'Remove this protocol and all its methods?';
-				shortcutKey: $x mod1;
+				shortcutKey: $x mod1 shift;
 				action: [ self doRemoveSelectedProtocol ] ] ]
 ]
 

@@ -11,7 +11,10 @@ PulsarBrowser >> defineOpenCodeExtraActionsOn: aBuilder [
 			description: 'Open a LLM chat console';
 			actionVisible: [ self application settings isFeatureEnabled: #llm ];
 			actionState: [ self hasPresenterClass: PulsarLLMChatConsole ];
-			action: [ self addUniquePresenterClass: PulsarLLMChatConsole  ] 
+			action: [ 
+				self 
+					doToggleTool: PulsarLLMChatConsole 
+					state: action state ] 
 		]
 	]
 ]

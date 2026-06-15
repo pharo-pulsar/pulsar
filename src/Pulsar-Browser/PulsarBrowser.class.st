@@ -40,23 +40,35 @@ PulsarBrowser class >> defineToolActionsOn: aBuilder [
 			description: 'Open Recent Changes log';
 			action: [ :aContext | aContext spawnRecentChanges ] ];
 		addActionWith: [ :action | action
+			priority: 915;
+			name: 'Editor Stack';
+			description: 'Open editor stack';
+			actionState: [ :aContext | aContext hasPresenterClass: PulsarStackView ];
+			action: [ :aContext | aContext doOpenEditorStack: action state ] ];
+		addActionWith: [ :action | action
 			priority: 920;
 			name: 'Repositories';
 			description: 'Open git repositories';
 			actionState: [ :aContext | aContext hasPresenterClass: PulsarRepositoriesView ];
-			action: [ :aContext | aContext openRepositories ] ];
-		addActionWith: [ :anAction | anAction
+			action: [ :aContext | aContext doOpenRepositories: action state ] ];
+		addActionWith: [ :action| action
 			priority: 930;
 			name: 'Flag Console';
 			description: 'Open flags console';
 			actionState: [ :aContext | aContext hasPresenterClass: PulsarFlagsConsole ];
-			action: [ :aContext | aContext openFlagsConsole ] ];
-		addActionWith: [ :anAction | anAction
+			action: [ :aContext | aContext doOpenFlagsConsole: action state ] ];
+		addActionWith: [ :action | action
 			priority: 940;
 			name: 'Critiques Console';
 			description: 'Open critiques console';
-			actionState: [ :aContext | aContext  hasPresenterClass: PulsarCritiquesConsole ];
-			action: [ :aContext | aContext openCritiquesConsole ] ] ]
+			actionState: [ :aContext | aContext hasPresenterClass: PulsarCritiquesConsole ];
+			action: [ :aContext | aContext doOpenCritiquesConsole: action state ] ];
+		addActionWith: [ :action | action
+			priority: 950;
+			name: 'File Manager';
+			description: 'Open file manager on image location';
+			actionState: [ :aContext | aContext hasPresenterClass: PulsarDirectoryView ];
+			action: [ :aContext | aContext doOpenFileManager: action state ] ] ]
 ]
 
 { #category : 'private' }
