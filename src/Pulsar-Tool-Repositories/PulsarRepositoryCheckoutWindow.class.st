@@ -81,12 +81,12 @@ PulsarRepositoryCheckoutWindow >> notifyRepositoryModified: aModel reason: aReas
 
 { #category : 'initialization' }
 PulsarRepositoryCheckoutWindow >> updatePresenter [
-	
+
 	self model ifNil: [ ^ self ].
-	
-	checkoutStrategyPresenter 
+
+	checkoutStrategyPresenter
 		items: self model checkoutStrategies;
 		selectFirst.
 
-	diffPresenter model: self model
+	diffPresenter model: (PulsarRepositoryCheckoutDiffModel on: self model)
 ]

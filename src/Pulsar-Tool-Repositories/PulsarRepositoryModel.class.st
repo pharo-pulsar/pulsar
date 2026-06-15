@@ -109,6 +109,19 @@ PulsarRepositoryModel >> canCommit [
 ]
 
 { #category : 'accessing' }
+PulsarRepositoryModel >> checkoutDiffNode [
+
+	| headCommit diff |
+	headCommit := self entity head commit.
+	diff := headCommit diffTo: self entity workingCopy.
+	^ PulsarDiffRoot
+		  newRepository: self
+		  from: self entity workingCopy
+		  to: headCommit
+		  tree: diff tree
+]
+
+{ #category : 'accessing' }
 PulsarRepositoryModel >> checkoutStrategies [
 
 	^ IceCheckoutStrategy allStrategies
@@ -346,15 +359,14 @@ PulsarRepositoryModel >> needsRepair [
 
 { #category : 'actions - command' }
 PulsarRepositoryModel >> newCheckoutActionWithStrategy: aCheckoutStrategy [
-	
-	^ IceTipStandardAction new 
-		repository: self entity;
-		onSuccessRepositoryModified;
-		action: [ 
-			aCheckoutStrategy committish: self entity head.
-			aCheckoutStrategy diff: self diffNode entity.
-			self entity checkout: aCheckoutStrategy ];
-		yourself
+
+	^ IceTipStandardAction new
+		  repository: self entity;
+		  onSuccessRepositoryModified;
+		  action: [
+				  aCheckoutStrategy committish: self entity head.
+				  self entity checkout: aCheckoutStrategy ];
+		  yourself
 ]
 
 { #category : 'actions - command' }
