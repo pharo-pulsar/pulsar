@@ -222,26 +222,29 @@ PulsarRepositoriesView >> doRecalculateDirtyPackagesOfSelectedRepository [
 
 { #category : 'actions' }
 PulsarRepositoriesView >> doRepairRepository: aRepositoryModel [
-
 	| choosenRepairAction repairActions |
+	
 	repairActions := aRepositoryModel repairActions.
 	repairActions do: [ :each | each context: self ].
 
 	self flag: #TODO. "in fact, this should be a bit better (we have helps and that
     we can use, just I'm lazy to create a new dialog right now)"
 	choosenRepairAction := self application newSelect
-		                       title: 'Repository broken';
-		                       message: 'Select from available repair actions';
-		                       items: repairActions;
-		                       display: [ :aRepaitAction | aRepaitAction title ];
-		                       openModalWithParent: self window.
+		title: 'Repository broken';
+		message: 'Select from available repair actions';
+		items: repairActions;
+		display: [ :aRepaitAction | aRepaitAction title ];
+		openModalWithParent: self window.
 	choosenRepairAction ifNil: [ ^ self ].
 
 	self scheduleTask: [
-			aRepositoryModel resetDiff.
-			choosenRepairAction
-				onSuccess: [ self notifyRepositoryModified: aRepositoryModel reason: PulsarRepositoryModifiedReason repair ];
-				execute ]
+		aRepositoryModel resetDiff.
+		choosenRepairAction
+			onSuccess: [ 
+				self 
+					notifyRepositoryModified: aRepositoryModel 
+					reason: PulsarRepositoryModifiedReason repair ];
+			execute ]
 ]
 
 { #category : 'private - actions' }
