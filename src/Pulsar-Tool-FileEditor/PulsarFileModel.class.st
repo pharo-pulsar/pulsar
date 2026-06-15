@@ -330,6 +330,12 @@ PulsarFileModel >> name [
 	^ self entity basename
 ]
 
+{ #category : 'actions' }
+PulsarFileModel >> openInOSFileBrowser [
+
+	^ self entity openInOSFileBrowser
+]
+
 { #category : 'accessing' }
 PulsarFileModel >> pageTitle [
 

@@ -114,8 +114,18 @@ PulsarRepositoriesView >> defineContextActionsOn: aBuilder [
 			addActionWith: [ :action | action
 				dynamicName: [ 'Recalculate dirty packages for {1}' format: { self selectedRepositoryName } ];
 				description: 'Recalculate dirty packages for selected repository';
+				actionEnabled: [ self hasSelectedRepository and: [ self selectedRepository isMissing not ] ];
+				action: [ self doRecalculateDirtyPackagesOfSelectedRepository ] ];
+			addActionWith: [ :action | action
+				dynamicName: [ 'Open {1} location' format: { self selectedRepositoryName } ];
+				description: 'Open repository location';
+				actionEnabled: [ self hasSelectedRepository and: [ self selectedRepository isMissing not ] ];
+				action: [ self doOpenLocationOfSelectedRepository ] ];
+			addActionWith: [ :action | action
+				dynamicName: [ 'Open {1} location (external)' format: { self selectedRepositoryName } ];
+				description: 'Open repository location in external file manager';
 				actionEnabled: [ self hasSelectedRepository ];
-				action: [ self doRecalculateDirtyPackagesOfSelectedRepository ] ] ];
+				action: [ self doOpenExternalLocationOfSelectedRepository ] ] ];
 		addGroupWith: [ :dangerGroup | dangerGroup
 			name: 'DANGER ZONE';
 			beDisplayedAsGroup;
@@ -180,6 +190,18 @@ PulsarRepositoriesView >> doForgetRepository: aRepositoryModel [
 PulsarRepositoriesView >> doForgetSelectedRepository [
 	
 	self doForgetRepository: self selectedRepository
+]
+
+{ #category : 'private - actions' }
+PulsarRepositoriesView >> doOpenExternalLocationOfSelectedRepository [
+	
+	self selectedRepository openInOSFileBrowser
+]
+
+{ #category : 'private - actions' }
+PulsarRepositoriesView >> doOpenLocationOfSelectedRepository [
+	
+	self notifyActivateEntity: self selectedRepository newDirectoryModel
 ]
 
 { #category : 'private - actions' }

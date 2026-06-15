@@ -380,6 +380,14 @@ PulsarRepositoryModel >> newCommitAction [
 		yourself
 ]
 
+{ #category : 'instance creation' }
+PulsarRepositoryModel >> newDirectoryModel [
+
+	^ PulsarDirectoryModel 
+		newEnvironment: self environmentModel
+		entity: self entity location
+]
+
 { #category : 'actions - command' }
 PulsarRepositoryModel >> newFetchAction [
 	
@@ -459,6 +467,12 @@ PulsarRepositoryModel >> newRemoveRemoteActionFor: aRemote [
 		onSuccessRepositoryModified;
 		action: [ self entity removeRemote: aRemote ];
 		yourself
+]
+
+{ #category : 'actions' }
+PulsarRepositoryModel >> openInOSFileBrowser [
+
+	^ self entity location openInOSFileBrowser
 ]
 
 { #category : 'accessing' }

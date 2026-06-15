@@ -44,7 +44,7 @@ PulsarFileEditor >> doBrowseSendersCommand: aCommand [
 { #category : 'private - actions' }
 PulsarFileEditor >> doOpenCurrentFolder [
 
-	self model entity openInOSFileBrowser
+	self model openInOSFileBrowser
 ]
 
 { #category : 'private - actions' }

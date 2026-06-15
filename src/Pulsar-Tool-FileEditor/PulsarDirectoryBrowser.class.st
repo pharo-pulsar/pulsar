@@ -80,7 +80,7 @@ PulsarDirectoryBrowser >> doCopyToClipboard [
 { #category : 'private - actions' }
 PulsarDirectoryBrowser >> doOpenCurrentFolder [
 
-	self model entity openInOSFileBrowser
+	self model openInOSFileBrowser
 
 ]
 

@@ -74,6 +74,12 @@ PulsarDirectoryModel >> name [
 	^ self entity basename
 ]
 
+{ #category : 'actions' }
+PulsarDirectoryModel >> openInOSFileBrowser [
+
+	^ self entity openInOSFileBrowser
+]
+
 { #category : 'accessing - ui' }
 PulsarDirectoryModel >> pulsarEditorClass [
 
