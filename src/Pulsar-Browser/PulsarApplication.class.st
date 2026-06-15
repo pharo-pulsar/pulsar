@@ -468,8 +468,10 @@ PulsarApplication >> reloadConfiguration [
 
 { #category : 'announcing' }
 PulsarApplication >> resendAnnouncement: anAnnouncement [
+	"Resends the announcement to all opened windows.
+	 Maybe I needed to call this method something like `broadcast:`, but this is more 
+	 'intention revealing' :)"
 	
-	self flag: #TODO. "Maybe I need to call this method something like `broadcast:`?"
 	logger trace: anAnnouncement.
 	
 	(suspendAnnouncements == true) ifTrue: [
