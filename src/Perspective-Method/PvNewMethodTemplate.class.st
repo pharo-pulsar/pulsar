@@ -22,6 +22,12 @@ PvNewMethodTemplate class >> newEnvironmentModel: anEnvironmentModel parent: aCl
 ]
 
 { #category : 'accessing' }
+PvNewMethodTemplate >> ast [
+
+	^ nil
+]
+
+{ #category : 'accessing' }
 PvNewMethodTemplate >> beForClassSide [
 
 	isClassSide := true

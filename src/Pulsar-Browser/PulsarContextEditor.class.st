@@ -127,10 +127,10 @@ PulsarContextEditor >> updateBreadcrumbs [
 			addLinkSegment: self model methodName action: [ self announceActivateMethod ] ]
 ]
 
-{ #category : 'initialization' }
+{ #category : 'private - updating' }
 PulsarContextEditor >> updateEditor [
-	| context source selectedCodeRange |
 
+	| context source selectedCodeRange |
 	context := self model context.
 	source := self model sourceCode.
 	selectedCodeRange := self model selectedCodeRange.
@@ -138,9 +138,10 @@ PulsarContextEditor >> updateEditor [
 		beForContext: context;
 		text: source;
 		addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight
-			interval: selectedCodeRange;
-			yourself);
-		scrollValue: 0@(source lineNumberCorrespondingToIndex: selectedCodeRange first)
+				 interval: selectedCodeRange;
+				 yourself);
+		scrollValue: 0 @ (source lineNumberCorrespondingToIndex: selectedCodeRange first).
+	self installIconStyler
 ]
 
 { #category : 'private - actions' }

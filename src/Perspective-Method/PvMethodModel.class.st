@@ -255,6 +255,21 @@ PvMethodModel >> includesClassModel [
 	^ true
 ]
 
+{ #category : 'actions' }
+PvMethodModel >> installIconStylerOn: aPresenter [
+	| method |
+	
+	self isNew ifTrue: [ ^ self ].
+	
+	method := self entity.
+	method ifNil: [ ^ self ].
+	
+	method ast ifNotNil: [ :anAST |	
+		IconStyler withSpecStaticStyler
+			styleText: aPresenter 
+			withAst: anAST ]
+]
+
 { #category : 'testing' }
 PvMethodModel >> isExampleMethod [
 

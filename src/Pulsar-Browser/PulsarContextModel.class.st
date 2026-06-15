@@ -205,6 +205,18 @@ PulsarContextModel >> inOneLine [
 	^ string
 ]
 
+{ #category : 'actions' }
+PulsarContextModel >> installIconStylerOn: aPresenter [
+	| method |
+	
+	method := self realMethod.
+	method ifNil: [ ^ self ].
+	
+	IconStyler withSpecStaticStyler
+		styleText: aPresenter 
+		withAst: method ast
+]
+
 { #category : 'testing' }
 PulsarContextModel >> isContextModel [
 

@@ -70,11 +70,11 @@ PulsarProjectEditor >> doAddPackage [
 	
 	result := self application newSelect
 		title: 'Add package';
-		label: 'Select package';
+		message: 'Select package';
 		items: (PackageOrganizer default packages sorted: #name ascending);
 		display: [ :aPackage | aPackage name ];
 		openModalWithParent: self window.
-		
+
 	result ifNil: [ ^ self ].
 	self halt
 ]

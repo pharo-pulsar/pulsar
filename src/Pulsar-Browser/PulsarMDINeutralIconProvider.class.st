@@ -92,6 +92,7 @@ PulsarMDINeutralIconProvider >> createTable [
 		('exception'              'lightning-bolt-outline'      	'#e5a50a'  	'#f8e45c')
 		('announcement'           'message-outline'  				'#0891b2' 	'#cffafe')
 		('project'                'folder-outline'				'#3b4a77' 	'#b8c6ee')
+		('project-volatile' 	  	  'folder-outline'				'#9db7e8' 	'#c6a0f6')
 		('systemEnvironment'      'library-outline' 				'#3446a3' 	'#aebcff')
 		('projects'                'folder-outline')
 		('error' 				  'alert-circle-outline' 		'#cf222e' 	'#f85149')
@@ -111,7 +112,8 @@ PulsarMDINeutralIconProvider >> createTable [
 		('debuggerStepOver'       'debug-step-over'               '#1c71d8'  '#62a0ea')
 		('debuggerStepThrough'    'debug-step-through'            '#1c71d8'  '#62a0ea')
 		('debuggerReturn'         'debug-step-out'                '#1c71d8'  '#62a0ea')
-		('debuggerRunToSelection' 'debug-step-into'               '#1c71d8'  '#62a0ea')
+		('debuggerRunToSelection' 'debug-step-into'               '#1c71d8'  	'#62a0ea')
+		('breakpoint' 			  'record-circle-outline' 		 '#b42318'	'#c75f5f')
 		('context'				  'layers-triple-outline')
 
 		"Tests"
@@ -245,7 +247,7 @@ PulsarMDINeutralIconProvider >> createTable [
 		('protocolAll'            'pulse')
 		('protocolVirtual'        'pulse')
 		('flagIcon'               'bookmark-outline')
-		('flag'                   'bookmark-outline')
+		('flag'                   'bookmark-outline' 				'#9a6700' '#f0b429')
 		('critiques'              'bell-outline')
 		('closeAll'               'close-box-multiple-outline')
 		('close'                  'close')

@@ -123,6 +123,13 @@ PulsarMethodEditor >> doRequestChangeProtocol [
 	protocolPresenter popupProtocol
 ]
 
+{ #category : 'actions' }
+PulsarMethodEditor >> doReset [
+
+	super doReset.
+	self installIconStyler
+]
+
 { #category : 'private - actions' }
 PulsarMethodEditor >> doRunSampleInstanceCommand: anAction [
 	| result inspector |
@@ -143,14 +150,13 @@ PulsarMethodEditor >> doRunScriptCommand: anAction [
 	self model runScript
 ]
 
-{ #category : 'private - actions' }
+{ #category : 'actions' }
 PulsarMethodEditor >> doSubmit: aString [
 	| result |
-
 	self updatingWhile: [
 		result := super doSubmit: aString.
 		self updateContentActions ].
-		
+	self installIconStyler.
 	^ result
 ]
 
@@ -313,6 +319,12 @@ PulsarMethodEditor >> initializePresenters [
 	self addStyle: 'pulsarMethodEditor'
 ]
 
+{ #category : 'private - updating' }
+PulsarMethodEditor >> installIconStyler [
+	
+	self model installIconStylerOn: editorPresenter
+]
+
 { #category : 'private - announcing' }
 PulsarMethodEditor >> notifyActivateEntity: anEntity [
 
@@ -369,12 +381,13 @@ PulsarMethodEditor >> updateContentActions [
 	refactorPresenter actions: (self model actionsWithContextOn: self) beDisplayedAsGroup
 ]
 
-{ #category : 'initialization' }
+{ #category : 'private - updating' }
 PulsarMethodEditor >> updateEditor [
 
-	editorPresenter 
+	editorPresenter
 		beForMethod: self model entity;
-		text: self model sourceCode
+		text: self model sourceCode.
+	self installIconStyler
 ]
 
 { #category : 'initialization' }

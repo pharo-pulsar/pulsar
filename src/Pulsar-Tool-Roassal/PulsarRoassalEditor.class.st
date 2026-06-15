@@ -70,13 +70,21 @@ PulsarRoassalEditor >> defineActionsOn: aBuilder [
 			action: [ self doToggleScriptCommand: action ] ] ]
 ]
 
-{ #category : 'private - actions' }
+{ #category : 'actions' }
+PulsarRoassalEditor >> doReset [
+
+	super doReset.
+	self installIconStyler
+]
+
+{ #category : 'actions' }
 PulsarRoassalEditor >> doSubmit: aString [
 
 	self updatingWhile: [
-		super doSubmit: aString.
-		self basicUpdateCanvas.
-		self updateContentActions ]
+			super doSubmit: aString.
+			self basicUpdateCanvas.
+			self updateContentActions ].
+	self installIconStyler
 ]
 
 { #category : 'private - actions' }
@@ -109,6 +117,15 @@ PulsarRoassalEditor >> initializePresenters [
 	roassalPresenter := self newRoassal
 ]
 
+{ #category : 'private - updating' }
+PulsarRoassalEditor >> installIconStyler [
+
+	| method |
+	method := self model entity.
+	method ifNil: [ ^ self ].
+	IconStyler withSpecStaticStyler styleText: editorPresenter withAst: method ast
+]
+
 { #category : 'private - announcing' }
 PulsarRoassalEditor >> notifyModelChangedFrom: oldModel to: newModel [
 
@@ -121,12 +138,13 @@ PulsarRoassalEditor >> originalContent [
 	^ self model sourceCode
 ]
 
-{ #category : 'initialization' }
+{ #category : 'private - updating' }
 PulsarRoassalEditor >> updateEditor [
 
-	editorPresenter 
+	editorPresenter
 		interactionModel: self model interactionModel;
-		text: self model sourceCode
+		text: self model sourceCode.
+	self installIconStyler
 ]
 
 { #category : 'initialization' }

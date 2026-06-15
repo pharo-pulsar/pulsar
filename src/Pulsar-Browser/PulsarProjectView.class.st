@@ -265,7 +265,9 @@ PulsarProjectView >> doNewProject [
 
 	project := self model ensureVolatileProjectNamed: projectName.
 	self updatePresenter.
-	listPresenter selectPathByItems: { project } scrollToSelection: true
+	listPresenter 
+		selectPathByItems: { project } 
+		scrollToSelection: true
 ]
 
 { #category : 'private - actions' }
