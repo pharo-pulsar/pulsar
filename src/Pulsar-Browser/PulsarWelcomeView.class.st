@@ -26,6 +26,11 @@ PulsarWelcomeView >> defaultLayout [
 ]
 
 { #category : 'events' }
+PulsarWelcomeView >> eventModelRemoved: ann [
+
+]
+
+{ #category : 'events' }
 PulsarWelcomeView >> eventSyntaxHighlightThemeChanged: ann [
 
 	"contentPresenter syntaxHighlightTheme: self application syntaxHighlightTheme"

@@ -75,3 +75,9 @@ PvSystemEnvironment >> packages [
 	
 	^ self allPackages
 ]
+
+{ #category : 'accessing' }
+PvSystemEnvironment >> removePackageNamed: aName [
+
+	self organizer removePackage: (self packageNamed: aName)
+]

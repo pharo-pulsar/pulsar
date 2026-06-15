@@ -53,6 +53,29 @@ PulsarMultiProjectModel >> children [
 	^ projectModels
 ]
 
+{ #category : 'actions' }
+PulsarMultiProjectModel >> ensureVolatileProjectNamed: aString [
+	| projectModel packageName |
+	
+	projectModel := PulsarVolatileProjectModel 
+		newEnvironment: self environmentModel 
+		entity: aString.
+	
+	projectModels 
+		detect: [ :each | each = projectModel ] 
+		ifFound: [ :existing | ^ existing ].
+	
+	PulsarVolatileProjectSpec 
+		registerProjectNamed: aString 
+		packageNames: #().
+	
+	projectModels := projectModels copyWith: projectModel.
+	
+	packageName := aString capitalized.
+	
+	projectModel addPackageNamed: packageName
+]
+
 { #category : 'updating' }
 PulsarMultiProjectModel >> filterWith: aString [
 	
@@ -118,9 +141,30 @@ PulsarMultiProjectModel >> findRecursivelyPathForClassModel: aClassModel inNode:
 
 { #category : 'initialization' }
 PulsarMultiProjectModel >> initialize [
-
+	projectModels := #().
 	super initialize.
-	projectModels := #()
+	self initializeVolatileProjects
+]
+
+{ #category : 'initialization' }
+PulsarMultiProjectModel >> initializeVolatileProjects [
+
+	PulsarVolatileProjectSpec specs do: [ :spec |
+		| projectModel |
+		projectModel := PulsarVolatileProjectModel newEnvironment: self environmentModel entity: spec name.
+		spec packageNames do: [ :eachPackageName |
+			(self environmentModel hasPackageNamed: eachPackageName) ifTrue: [
+				| packageModel |
+				packageModel := PvPackageModel
+		            newEnvironment: self environmentModel
+		            project: projectModel
+		            entity: (self environmentModel packageNamed: eachPackageName).
+				projectModel packageModels add: packageModel ] ].
+		projectModels := projectModels copyWith: projectModel ].
+	
+	"I want one Sandbox project always, so people can start to work right now"
+	projectModels ifEmpty: [ 
+		self ensureVolatileProjectNamed: 'Sandbox' ]
 ]
 
 { #category : 'accessing' }
@@ -168,5 +212,14 @@ PulsarMultiProjectModel >> pathTo: aPath in: aCollection [
 { #category : 'actions' }
 PulsarMultiProjectModel >> removeProjectModel: aModel [
 
+	aModel isVolatileProject ifTrue: [
+			| packageName package |
+			packageName := aModel name capitalized.
+			(self environmentModel hasPackageNamed: packageName) ifTrue: [
+					package := self environmentModel packageNamed: packageName.
+					package definedClasses isEmpty ifTrue: [
+							self environmentModel removePackageNamed: packageName.
+							aModel packageModels removeAll ] ].
+			PulsarVolatileProjectSpec unregisterProjectNamed: aModel name ].
 	projectModels := projectModels copyWithout: aModel
 ]

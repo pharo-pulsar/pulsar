@@ -255,23 +255,17 @@ PulsarProjectView >> doNewPackageTag [
 
 { #category : 'private - actions' }
 PulsarProjectView >> doNewProject [
-	| projectName project package |
-		
-	self application newInform
-		title: 'Work in progress';
-		message: 'Not implemented yet. You can create a baseline for it :)';
-		openModalWithParent: self window.
-	true ifTrue: [ ^ self ].
+	| projectName project |
 	
 	projectName := self application newRequest
-       title: 'New project';
-       message: 'Project name';
-       openModalWithParent: self window.
+		title: 'New project';
+		message: 'Project name';
+		openModalWithParent: self window.
 	projectName ifNil: [ ^ self ].
 
-	project := self model newProjectNamed: projectName.
-	self addProject: project.
-	self notifyActivateEntity: (self listPresenter roots detect: [ :each | each entity = project ])
+	project := self model ensureVolatileProjectNamed: projectName.
+	self updatePresenter.
+	listPresenter selectPathByItems: { project } scrollToSelection: true
 ]
 
 { #category : 'private - actions' }
@@ -664,6 +658,12 @@ PulsarProjectView >> snapshot [
 	^ PulsarProjectSnapshot on: self
 ]
 
+{ #category : 'initialization' }
+PulsarProjectView >> sortProjects: aCollection [
+
+	^ aCollection sorted: [ :each | each isProject and: [ each isVolatileProject ] ] descending
+]
+
 { #category : 'private' }
 PulsarProjectView >> toolbarPresenter [
 
@@ -693,7 +693,7 @@ PulsarProjectView >> updateFilterWith: aString [
 PulsarProjectView >> updateListPresenterExpanding: aPath [
 	
 	mutex critical: [
-		listPresenter roots: self model allChildren.
+		listPresenter roots: (self sortProjects: self model allChildren).
 		aPath ifNotNil: [
 			listPresenter expandPath: aPath ] ]
 ]

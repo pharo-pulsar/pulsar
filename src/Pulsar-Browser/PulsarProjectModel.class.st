@@ -1,6 +1,6 @@
 Class {
 	#name : 'PulsarProjectModel',
-	#superclass : 'PvBaseModel',
+	#superclass : 'PulsarBaseProjectModel',
 	#instVars : [
 		'baselineClass',
 		'repositoryModel'
@@ -24,24 +24,6 @@ PulsarProjectModel class >> newEntity: anObject environment: anEnvironmentModel 
 PulsarProjectModel >> accept: aVisitor [
 
 	^ aVisitor visitProjectModel: self
-]
-
-{ #category : 'accessing - actions' }
-PulsarProjectModel >> actionsWithContextOn: aContextPresenter [
-
-	^ (self actions actionsFor: 'operations') 
-		copyWithContext: aContextPresenter
-]
-
-{ #category : 'accessing' }
-PulsarProjectModel >> addPackageNamed: aName [
-
-	self flag: #TODO. "What to do here? Throw an error?"
-	(self environmentModel hasPackageNamed: aName) 
-		ifTrue: [ ^ self ].
-		
-	self environmentModel addPackageNamed: aName.
-	self flag: #TODO. "I need to add it to the project! (the baseline)"
 ]
 
 { #category : 'converting' }
@@ -105,19 +87,6 @@ PulsarProjectModel >> collectPackageModelsOn: aBaselineClass [
 		sorted: #name ascending
 ]
 
-{ #category : 'private - definitions' }
-PulsarProjectModel >> defineActionsOn: aBuilder [
-	<dockActions>
-	
-	aBuilder addGroup: 'operations' with: [ :group | group 
-		name: 'Operations';
-		beDisplayedAsGroup;
-		addActionWith: [ :actions | actions 
-			name: ('Close project {1}' format: { self name });
-			description: 'Remove project from projects list';
-			action: [ :aContext | aContext doCloseProject: self ] ] ]
-]
-
 { #category : 'accessing' }
 PulsarProjectModel >> dependencesEnvironment [
 	| dict |
@@ -151,12 +120,6 @@ PulsarProjectModel >> detectRepository [
 ]
 
 { #category : 'accessing' }
-PulsarProjectModel >> editorClass [
-
-	^ PvProjectEditorView
-]
-
-{ #category : 'accessing' }
 PulsarProjectModel >> fullName [
 	
 	^  self name
@@ -175,12 +138,6 @@ PulsarProjectModel >> isManagedAndModified [
 	^ self repositoryModel
 		ifNotNil: [ :aRepository | aRepository workingCopy isModified ]
 		ifNil: [ false ]
-]
-
-{ #category : 'testing' }
-PulsarProjectModel >> isProject [
-
-	^ true
 ]
 
 { #category : 'accessing' }
@@ -211,12 +168,6 @@ PulsarProjectModel >> projectEnvironment [
 		do: [ :eachPackage | 
 			eachPackage definedClasses do: [ :each | dict at: each name put: each ] ].
 	^ dict
-]
-
-{ #category : 'accessing' }
-PulsarProjectModel >> pulsarEditorClass [
-
-	^ PulsarProjectEditor
 ]
 
 { #category : 'accessing' }

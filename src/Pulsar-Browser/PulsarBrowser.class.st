@@ -94,6 +94,78 @@ PulsarBrowser >> defineExtraActionsOn: aBuilder [
 	 already in the tool list"
 ]
 
+{ #category : 'actions' }
+PulsarBrowser >> doOpenCritiquesConsole: stateBoolean [
+	
+	self 
+		doToggleTool: PulsarCritiquesConsole
+		model: (PulsarCritiquesModel on: self model) 
+		state: stateBoolean
+]
+
+{ #category : 'actions' }
+PulsarBrowser >> doOpenEditorStack: stateBoolean [
+	
+	self 
+		doToggleTool: PulsarStackView
+		state: stateBoolean
+]
+
+{ #category : 'actions' }
+PulsarBrowser >> doOpenFileManager: stateBoolean [
+	
+	self 
+		doToggleTool: PulsarDirectoryView
+		model: (PulsarDirectoryModel 
+			newEnvironment: self model 
+			entity: FileLocator imageDirectory) 
+		state: stateBoolean
+]
+
+{ #category : 'actions' }
+PulsarBrowser >> doOpenFlagsConsole: stateBoolean [
+	self 
+		doToggleTool: PulsarFlagsConsole
+		model: (PulsarFlagsModel on: self model) 
+		state: stateBoolean
+]
+
+{ #category : 'actions' }
+PulsarBrowser >> doOpenRepositories: stateBoolean [
+
+	self 
+		doToggleTool: PulsarRepositoriesView
+		model: (PulsarRepositoriesModel on: self model) 
+		state: stateBoolean
+]
+
+{ #category : 'private - actions' }
+PulsarBrowser >> doToggleTool: aToolClass model: aModel state: aBoolean [ 
+	"state would be the current state, toggle the tool"
+	| toolView |
+
+	toolView := self findPresenterClass: aToolClass.
+	(aBoolean and: [ toolView isNotNil ]) 
+		ifTrue: [ 
+			toolView withNearWindowLikeDo: #close.
+			^ self ].
+
+	toolView ifNil: [ 
+		toolView  := self 
+			addPresenterClass: aToolClass 
+			model: aModel ].
+	toolView panelWidget raiseAndTakeKeyboardFocus
+]
+
+{ #category : 'private - actions' }
+PulsarBrowser >> doToggleTool: aToolClass state: aBoolean [
+	
+	^ self 
+		doToggleTool: aToolClass 
+		model: nil 
+		state: aBoolean
+]
+
 { #category : 'private' }
 PulsarBrowser >> editorStackView [
 	"answer the editor stack view if present, nil if not"
@@ -170,6 +242,9 @@ PulsarBrowser >> initializeDefaultWorkspace [
 	self addPresenterClass: PulsarCritiquesConsole model: (PulsarCritiquesModel on: self model). 	
 	self addPresenterClass: PulsarFlagsConsole model: (PulsarFlagsModel on: self model). 	
 	self addPresenterClass: PulsarPlayground.
+	self 
+		addPresenterClass: PulsarDirectoryView 
+		model: (PulsarDirectoryModel newEnvironment: self model entity: FileLocator imageDirectory).
 	
 	"add welcome editor"
 	self addPresenterClass: PulsarWelcomeView.
@@ -212,36 +287,6 @@ PulsarBrowser >> openClass: aClass [
 ]
 
 { #category : 'actions' }
-PulsarBrowser >> openCritiquesConsole [
-	| critiquesConsole |
-	
-	critiquesConsole := self presenters 
-		detect: [ :each | each presenter isKindOf: PulsarCritiquesConsole ]
-		ifNone: [ 
-			(self 
-				addPresenterClass: PulsarCritiquesConsole 
-				model: (PulsarCritiquesModel on: self model))
-			panelWidget ].
-
-	critiquesConsole raiseAndTakeKeyboardFocus
-]
-
-{ #category : 'actions' }
-PulsarBrowser >> openFlagsConsole [
-	| flagsConsole |
-	
-	flagsConsole := self presenters 
-		detect: [ :each | each presenter isKindOf: PulsarFlagsConsole ]
-		ifNone: [ 
-			(self 
-				addPresenterClass: PulsarFlagsConsole 
-				model: (PulsarFlagsModel on: self model))
-			panelWidget ].
-
-	flagsConsole raiseAndTakeKeyboardFocus
-]
-
-{ #category : 'actions' }
 PulsarBrowser >> openMethod: aMethod [ 
 
 	self projectView notifyActivateEntity: (PvMethodModel 
@@ -259,18 +304,6 @@ PulsarBrowser >> openPlayground [
 PulsarBrowser >> openProject: aBaselineClass [ 
 
 	projectView addProject: aBaselineClass
-]
-
-{ #category : 'actions' }
-PulsarBrowser >> openRepositories [
-	| repositoryView |
-
-	repositoryView := self findPresenterClass: PulsarRepositoriesView.
-	repositoryView ifNil: [ 
-		repositoryView := self 
-			addPresenterClass: PulsarRepositoriesView 
-			model: (PulsarRepositoriesModel on: self model) ].
-	repositoryView takeKeyboardFocus
 ]
 
 { #category : 'private' }

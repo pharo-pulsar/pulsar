@@ -135,3 +135,9 @@ PvEnvironmentModel >> packageNamed: aString [
 	
 	^ self entity packageNamed: aString
 ]
+
+{ #category : 'accessing' }
+PvEnvironmentModel >> removePackageNamed: aString [
+
+	^ self entity removePackageNamed: aString
+]
