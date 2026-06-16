@@ -23,7 +23,9 @@ PulsarTaskAnnouncer >> announce: anAnnouncement [
 		ifTrue: [ ^ super announce: anAnnouncement ].
 
 	self queueTask: [ 
-		super announce: anAnnouncement ]
+		[ super announce: anAnnouncement ]
+		on: Error 
+		fork: [ :e | e pass ] ]
 ]
 
 { #category : 'testing' }
