@@ -15,7 +15,6 @@ PulsarBaseProjectModel >> defineTestRunnerActionOn: aBuilder [
 			shortcutKey: $t shift actionModifier;
 			action: [ :aContext |
 				aContext scheduleTask: [
-					self halt.
 					(PulsarTestRunnerBrowser
 						newApplication: aContext application
 						model: (PulsarTestRunnerModel 

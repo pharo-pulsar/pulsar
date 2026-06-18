@@ -15,31 +15,27 @@ Class {
 
 { #category : 'private - definitions' }
 PulsarTestRunnerBrowser >> defineTestRunnerGlobalActionsOn: aBuilder [
-
 	<dockActions>
-	aBuilder addGroup: #testRunnerGlobal with: [ :group |
-			group
-				beDisplayedAsGroup;
-				addActionWith: [ :action |
-						action
-							name: 'Run Selected';
-							iconName: 'testGreen';
-							description: 'Run selected tests';
-							shortcutKey: $r actionModifier;
-							action: [ self doRunSelected ] ];
-				addActionWith: [ :action |
-						action
-							name: 'Run All';
-							iconName: 'testNotRun';
-							description: 'Run all tests';
-							shortcutKey: $r shift actionModifier;
-							action: [ self doRunAll ] ];
-				addActionWith: [ :action |
-						action
-							name: 'Refresh';
-							iconName: 'refresh';
-							description: 'Refresh test tree';
-							action: [ self doRefresh ] ] ]
+	
+	aBuilder addGroup: #testRunnerGlobal with: [ :group | group
+		beDisplayedAsGroup;
+		addActionWith: [ :action | action
+			name: 'Run Selected';
+			iconName: 'testGreen';
+			description: 'Run selected tests';
+			shortcutKey: $r actionModifier;
+			action: [ self doRunSelected ] ];
+		addActionWith: [ :action | action
+			name: 'Run All';
+			iconName: 'testNotRun';
+			description: 'Run all tests';
+			shortcutKey: $r shift actionModifier;
+			action: [ self doRunAll ] ];
+		addActionWith: [ :action | action
+			name: 'Refresh';
+			iconName: 'refresh';
+			description: 'Refresh test tree';
+			action: [ self doRefresh ] ] ]
 ]
 
 { #category : 'private - actions' }
