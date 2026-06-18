@@ -125,6 +125,23 @@ PvClassModel >> classDepth [
 	^ self entity classDepth
 ]
 
+{ #category : 'accessing - navigating' }
+PvClassModel >> classHierarchyTopModel [
+	| node prevNode |
+
+	prevNode := PvClassHierarchyNodeModel 
+		newEnvironment: self environmentModel 
+		entity: self entity.
+	prevNode childrenNodeProvider: [ :anEntity | anEntity subclasses ].
+
+	self entity allSuperclasses do: [ :each |
+		node := PvClassHierarchyNodeModel newEnvironment: self environmentModel entity: each.
+		node child: prevNode.
+		prevNode := node ].
+
+	^ node
+]
+
 { #category : 'accessing - parallel hierarchy' }
 PvClassModel >> classSide [
 
@@ -221,21 +238,10 @@ PvClassModel >> hierarchyPresenterClass [
 
 { #category : 'accessing - navigating' }
 PvClassModel >> hierarchyTopModel [
-	| node prevNode |
 
-	prevNode := PvClassHierarchyNodeModel 
-		newEnvironment: self environmentModel 
-		entity: self entity.
-	prevNode childrenNodeProvider: [ :anEntity | anEntity subclasses ].
-
-	self entity allSuperclasses do: [ :each |
-		node := PvClassHierarchyNodeModel
-			newEnvironment: self environmentModel 
-			entity: each.
-		node child: prevNode.
-		prevNode := node ].
-	
-	^ node
+	^ self isTrait 
+		ifTrue: [ self traitHierarchyTopModel ]
+		ifFalse: [ self classHierarchyTopModel ]
 ]
 
 { #category : 'accessing - ui' }
@@ -292,7 +298,11 @@ PvClassModel >> isClassModel [
 { #category : 'accessing - navigating' }
 PvClassModel >> isLargeHierarchy [
 
-	^ { Object. ProtoObject } includes: self entity
+	self isTrait ifTrue: [ ^ false ].
+
+	^ {
+		  Object.
+		  ProtoObject } includes: self entity
 ]
 
 { #category : 'testing' }
@@ -387,6 +397,19 @@ PvClassModel >> selectionAnnouncementClass [
 PvClassModel >> shortName [
 	
 	^ self name contractTo: self class shortSize
+]
+
+{ #category : 'accessing - navigating' }
+PvClassModel >> traitHierarchyTopModel [
+	| node |
+	
+	node := PvClassHierarchyNodeModel 
+		newEnvironment: self environmentModel 
+		entity: self entity.
+	
+	node childrenNodeProvider: [ :anEntity | anEntity traitUsers ].
+	
+	^ node
 ]
 
 { #category : 'accessing' }

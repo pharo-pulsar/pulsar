@@ -19,7 +19,8 @@ PvOutlineClassModel >> children [
 { #category : 'accessing - collecting' }
 PvOutlineClassModel >> collectClassMethods [
 	
-	^ (self entity classSide methods 
+	"I need to use visibleMethods here because otherwise it will show TraitedClass methods"
+	^ (self entity classSide visibleMethods 
 		collect: [ :each | PvMethodModel newEnvironment: self environmentModel entity: each ])
 		sorted: #name ascending
 ]
@@ -27,11 +28,12 @@ PvOutlineClassModel >> collectClassMethods [
 { #category : 'accessing - collecting' }
 PvOutlineClassModel >> collectClassMethodsForProtocol: aProtocol [
 
-	^ aProtocol selectors sorted 
+	^ (aProtocol methods
 		collect: [ :each |
 			PvMethodModel 
 				newEnvironment: self environmentModel 
-				entity: (self entity classSide methodDict at: each) ]
+				entity: each ])
+		sorted: [ :a | a selector ] ascending
 ]
 
 { #category : 'accessing - collecting' }
@@ -70,12 +72,12 @@ PvOutlineClassModel >> collectMethods [
 { #category : 'accessing - collecting' }
 PvOutlineClassModel >> collectMethodsForProtocol: aProtocol [
 
-	^ aProtocol selectors sorted
-		select: [ :each | (self entity instanceSide methodDict includesKey: each) ] 
+	^ aProtocol methods
+		select: [ :each | (self entity instanceSide methodDict includesKey: each selector) ] 
 		thenCollect: [ :each | 
 			PvMethodModel 
 				newEnvironment: self environmentModel 
-				entity: (self entity instanceSide methodDict at: each) ]
+				entity: each ]
 ]
 
 { #category : 'accessing - collecting' }
@@ -90,9 +92,8 @@ PvOutlineClassModel >> collectProtocolsOn: aClassOrMetaclass [
 	^ Array streamContents: [ :stream |
 		"all methods"
 		stream nextPut: (PulsarAllMethodsVirtualProtocol newEntity: aClassOrMetaclass).
-		"extra protocols (add listing ghere"
-		{ PulsarUndeclaredMethodsVirtualProtocol } 
-		do: [ :eachClass | 
+		"virtual protocols (add listing here)"
+		self virtualProtocolClasses do: [ :eachClass | 
 			| virtualProtocol |
 			virtualProtocol := eachClass newEntity: aClassOrMetaclass.
 			virtualProtocol shouldBeDisplayed
@@ -103,8 +104,9 @@ PvOutlineClassModel >> collectProtocolsOn: aClassOrMetaclass [
 				newEntity: aClassOrMetaclass 
 				trait: each) ].
 		"protocol methods"
-		stream nextPutAll: ((aClassOrMetaclass protocols 
+		stream nextPutAll: (((aClassOrMetaclass protocols 
 			collect: [ :each | PvProtocolModel newEnvironment: self environmentModel entity: each ])
+			reject: #isEmpty)
 			sorted: #name ascending) ]
 ]
 
@@ -149,4 +151,10 @@ PvOutlineClassModel >> species [
 PvOutlineClassModel >> toggleFilterByProtocol: aProtocol [
 
 	self halt
+]
+
+{ #category : 'private' }
+PvOutlineClassModel >> virtualProtocolClasses [
+
+	^ { PulsarUndeclaredMethodsVirtualProtocol }
 ]

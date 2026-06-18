@@ -7,13 +7,13 @@ Class {
 }
 
 { #category : 'accessing' }
-PulsarAllMethodsVirtualProtocol >> name [
+PulsarAllMethodsVirtualProtocol >> methods [
 
-	^ '(All)'
+	^ self entity methods reject: [ :each | each origin = TraitedClass ]
 ]
 
 { #category : 'accessing' }
-PulsarAllMethodsVirtualProtocol >> selectors [
-	
-	^ self entity selectors
+PulsarAllMethodsVirtualProtocol >> name [
+
+	^ '(All)'
 ]

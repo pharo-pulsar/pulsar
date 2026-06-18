@@ -2,8 +2,7 @@ Class {
 	#name : 'PulsarTraitMethodsVirtualProtocol',
 	#superclass : 'PulsarVirtualProtocol',
 	#instVars : [
-		'trait',
-		'selectors'
+		'trait'
 	],
 	#category : 'Perspective-Class-Model',
 	#package : 'Perspective-Class',
@@ -31,6 +30,13 @@ PulsarTraitMethodsVirtualProtocol >> iconName [
 ]
 
 { #category : 'accessing' }
+PulsarTraitMethodsVirtualProtocol >> methods [
+
+	^ self entity methods 
+		select: [ :each | each origin = self trait ]
+]
+
+{ #category : 'accessing' }
 PulsarTraitMethodsVirtualProtocol >> name [
 
 	^ self trait instanceSide name
@@ -40,15 +46,6 @@ PulsarTraitMethodsVirtualProtocol >> name [
 PulsarTraitMethodsVirtualProtocol >> order [
 
 	^ 1000
-]
-
-{ #category : 'accessing' }
-PulsarTraitMethodsVirtualProtocol >> selectors [
-
-	^ selectors ifNil: [ 
-		selectors := self entity methods 
-			select: [ :each | each origin = self trait ]
-			thenCollect: [ :each | each selector ] ]
 ]
 
 { #category : 'accessing' }

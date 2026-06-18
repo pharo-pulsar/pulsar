@@ -1,9 +1,6 @@
 Class {
 	#name : 'PulsarUndeclaredMethodsVirtualProtocol',
 	#superclass : 'PulsarVirtualProtocol',
-	#instVars : [
-		'selectors'
-	],
 	#category : 'Perspective-Class-Command',
 	#package : 'Perspective-Class',
 	#tag : 'Command'
@@ -30,6 +27,12 @@ PulsarUndeclaredMethodsVirtualProtocol >> iconName [
 ]
 
 { #category : 'accessing' }
+PulsarUndeclaredMethodsVirtualProtocol >> methods [
+
+	^ self entity methods select: [ :each | each usesUndeclareds ]
+]
+
+{ #category : 'accessing' }
 PulsarUndeclaredMethodsVirtualProtocol >> name [
 
 	^ 'Undeclared'
@@ -39,15 +42,6 @@ PulsarUndeclaredMethodsVirtualProtocol >> name [
 PulsarUndeclaredMethodsVirtualProtocol >> order [
 
 	^ 0
-]
-
-{ #category : 'accessing' }
-PulsarUndeclaredMethodsVirtualProtocol >> selectors [
-
-	^ selectors ifNil: [ 
-		selectors := self entity methods 
-			select: [ :each | each usesUndeclareds ]
-			thenCollect: [ :each | each selector ] ]
 ]
 
 { #category : 'testing' }

@@ -80,6 +80,12 @@ PulsarVirtualProtocol >> methodSelectors [
 ]
 
 { #category : 'accessing' }
+PulsarVirtualProtocol >> methods [
+
+	self subclassResponsibility
+]
+
+{ #category : 'accessing' }
 PulsarVirtualProtocol >> name [
 
 	self subclassResponsibility
@@ -88,7 +94,7 @@ PulsarVirtualProtocol >> name [
 { #category : 'accessing' }
 PulsarVirtualProtocol >> numberOfMethods [
 	
-	^ self selectors size
+	^ self methods size
 ]
 
 { #category : 'accessing' }
@@ -99,8 +105,8 @@ PulsarVirtualProtocol >> order [
 
 { #category : 'accessing' }
 PulsarVirtualProtocol >> selectors [
-
-	^ self subclassResponsibility
+	
+	^ self methods collect: #selector
 ]
 
 { #category : 'testing' }

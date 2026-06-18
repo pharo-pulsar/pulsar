@@ -31,6 +31,12 @@ PvProtocolModel >> iconName [
 ]
 
 { #category : 'testing' }
+PvProtocolModel >> isEmpty [
+
+	^ self numberOfMethods = 0
+]
+
+{ #category : 'testing' }
 PvProtocolModel >> isExtension [
 
 	^ self basicName first = $*
@@ -64,6 +70,13 @@ PvProtocolModel >> isVirtual [
 ]
 
 { #category : 'accessing' }
+PvProtocolModel >> methods [
+	
+	^ self entity methods 
+		reject: [ :each | each origin = TraitedClass ]
+]
+
+{ #category : 'accessing' }
 PvProtocolModel >> name [
 
 	self isExtension 
@@ -75,7 +88,7 @@ PvProtocolModel >> name [
 { #category : 'accessing' }
 PvProtocolModel >> numberOfMethods [
 
-	^ self selectors size
+	^ self methods size
 ]
 
 { #category : 'accessing' }
@@ -95,5 +108,5 @@ PvProtocolModel >> renameProtocolTo: aName [
 { #category : 'accessing' }
 PvProtocolModel >> selectors [
 	
-	^ self entity methodSelectors
+	^ self methods collect: #selector
 ]
