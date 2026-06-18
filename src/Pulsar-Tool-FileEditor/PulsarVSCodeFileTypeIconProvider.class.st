@@ -190,6 +190,7 @@ PulsarVSCodeFileTypeIconProvider >> createTable [
 		('file-extension-yml' 'file_type_yaml')
 		('file-extension-yy' 'file_type_yacc')
 		('file-extension-zig' 'file_type_zig')
+		('file-extension-st' 'file_type_st')
 	)
 ]
 

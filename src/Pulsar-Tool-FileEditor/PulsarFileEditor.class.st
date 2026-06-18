@@ -55,13 +55,6 @@ PulsarFileEditor >> doRunTestCommand: aCommand [
 ]
 
 { #category : 'private - actions' }
-PulsarFileEditor >> doShowHierarchy: aCommand [
-	"Not applicable for a file editor."
-
-	
-]
-
-{ #category : 'private - actions' }
 PulsarFileEditor >> editorContextMenuActions [
 
 	^ SpActionGroup new
@@ -78,7 +71,10 @@ PulsarFileEditor >> eventModelRemoved: anAnnouncememnt [
 { #category : 'initialization' }
 PulsarFileEditor >> initializeEditor [
 	
-	editorPresenter := self instantiate: SeEditorPresenter.
+	editorPresenter := (self model isNotNil and: [ self model isSmalltalk ])
+		ifTrue: [ self newCode beForScripting ]
+		ifFalse: [ self instantiate: SeEditorPresenter ].
+	
 	editorPresenter
 		addStyle: 'editor';
 		withEditionContextMenu;
@@ -143,8 +139,9 @@ PulsarFileEditor >> updatePresenter [
 	self scheduleJob: [
 		source := self model sourceCode.	
 		self updatingWhile: [
-			self model sourceCodeLanguage
-				ifNotNil: [ :language | editorPresenter language: language ].
+			self model isSmalltalk ifFalse: [ 
+				self model sourceCodeLanguage
+					ifNotNil: [ :language | editorPresenter language: language ] ].
 			editorPresenter text: source ].
 		self updateBreadcrumbs ]
 ]
