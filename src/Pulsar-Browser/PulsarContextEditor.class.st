@@ -44,7 +44,7 @@ PulsarContextEditor >> eventContextChanged: anAnnouncement [
 	logger trace: contextModel.
 	
 	self model = contextModel ifFalse: [ ^ self ].
-	self updatePresenter
+	self model: contextModel
 ]
 
 { #category : 'private' }
@@ -129,8 +129,8 @@ PulsarContextEditor >> updateBreadcrumbs [
 
 { #category : 'private - updating' }
 PulsarContextEditor >> updateEditor [
-
 	| context source selectedCodeRange |
+	
 	context := self model context.
 	source := self model sourceCode.
 	selectedCodeRange := self model selectedCodeRange.
@@ -138,9 +138,10 @@ PulsarContextEditor >> updateEditor [
 		beForContext: context;
 		text: source;
 		addTextSegmentDecoration: (SpTextPresenterDecorator forHighlight
-				 interval: selectedCodeRange;
-				 yourself);
+			interval: (selectedCodeRange first to: selectedCodeRange last + 1);
+			yourself);
 		scrollValue: 0 @ (source lineNumberCorrespondingToIndex: selectedCodeRange first).
+	
 	self installIconStyler
 ]
 
@@ -178,5 +179,7 @@ PulsarContextEditor >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 
-	super updatePresenter
+	super updatePresenter.
+	"I want it to be seen when user traverses the stack"
+	self withPanelWidgetDo: [ :w | w raise ]
 ]
