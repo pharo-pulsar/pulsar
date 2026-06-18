@@ -96,8 +96,8 @@ PulsarVersionsBrowser >> defaultLayout [
 PulsarVersionsBrowser >> defineActionsOn: aBuilder [
 	<dockActions>
 
-	aBuilder addGroup: #versionActions with: [ :group | 
-		group addActionWith: [ :action | action 
+	aBuilder addGroup: #versionActions with: [ :group | group 
+		addActionWith: [ :action | action 
 			name: 'Revert';
 			description: 'Revert to this version';
 			iconName: 'accept';

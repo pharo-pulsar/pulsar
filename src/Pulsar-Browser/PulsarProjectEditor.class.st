@@ -1,8 +1,6 @@
 Class {
 	#name : 'PulsarProjectEditor',
 	#superclass : 'PulsarBaseView',
-	#traits : 'PulsarTPanelWindow',
-	#classTraits : 'PulsarTPanelWindow classTrait',
 	#instVars : [
 		'dependentListPresenter',
 		'dependencePresenter',

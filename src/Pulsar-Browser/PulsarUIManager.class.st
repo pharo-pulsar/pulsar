@@ -36,7 +36,7 @@ PulsarUIManager >> chooseFrom: optionsArray lines: linesArray title: aString [
 	
 	self flag: #TODO. "Using this is wrong (as everything on UIManager)"
 
-self halt
+	self halt
 ]
 
 { #category : 'error handling' }
