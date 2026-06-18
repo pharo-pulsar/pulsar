@@ -91,12 +91,12 @@ PulsarWelcomeView >> updatePresenter [
 				iter := w textBuffer iterAtOffset: 1.
 				anchor := w textBuffer createChildAnchor: iter.
 				image := GtkPicture newForFileName: (self application resourcesDir / 'logos' / 'pharo.png') fullName.
-				image sizeRequest: 208@200.
+				image sizeRequest: 154@150.
 				w addChild: image atAnchor: anchor.
 				
 				iter := w textBuffer iterAtOffset: 2.
 				anchor := w textBuffer createChildAnchor: iter.
 				image := GtkPicture newForFileName: (self application resourcesDir / 'logos' / 'pulsar.png') fullName.
-				image sizeRequest: 180@200.
+				image sizeRequest: 130@150.
 				w addChild: image atAnchor: anchor ] ] ]
 ]
