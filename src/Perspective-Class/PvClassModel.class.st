@@ -407,7 +407,8 @@ PvClassModel >> traitHierarchyTopModel [
 		newEnvironment: self environmentModel 
 		entity: self entity.
 	
-	node childrenNodeProvider: [ :anEntity | anEntity traitUsers ].
+	node childrenNodeProvider: [ :anEntity | 
+		anEntity traitUsers asArray ].
 	
 	^ node
 ]
