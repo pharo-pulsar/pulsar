@@ -7,8 +7,8 @@ Its default position in the dock browser is center.
 Class {
 	#name : 'PulsarEditor',
 	#superclass : 'PulsarBaseView',
-	#traits : 'PulsarTPanelWindow + PulsarTControlUpdate',
-	#classTraits : 'PulsarTPanelWindow classTrait + PulsarTControlUpdate classTrait',
+	#traits : 'PulsarTControlUpdate',
+	#classTraits : 'PulsarTControlUpdate classTrait',
 	#instVars : [
 		'toolbarPresenter',
 		'editorPresenter',
