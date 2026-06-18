@@ -43,7 +43,7 @@ PulsarRepositoryPackageModel >> defineBaselineActionsOn: aBuilder [
 			priority: 1;
 			name: ('Install {1}' format: { self baselineName });
 			description: 'Install baseline';
-			action: [ :aContext | aContext doInstallBaseline: self ].
+			action: [ :aContext | aContext doInstallBaseline: self ] ].
 		
 		self isBaselineLocked 
 			ifTrue: [ 
@@ -57,7 +57,7 @@ PulsarRepositoryPackageModel >> defineBaselineActionsOn: aBuilder [
 					name: ('Lock {1}' format: { self baselineName });
 					priority: 100;
 					description: 'Lock baseline';
-					action: [ :aContext | aContext doLockBaseline: self ] ] ] ] ].
+					action: [ :aContext | aContext doLockBaseline: self ] ] ] ].
 ]
 
 { #category : 'private - definitions' }

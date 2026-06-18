@@ -58,6 +58,12 @@ PulsarDebugger >> doOpenClassOutlineView [
 	outlineView takeKeyboardFocus
 ]
 
+{ #category : 'private - actions' }
+PulsarDebugger >> doOpenEditorStackView [
+	
+	
+]
+
 { #category : 'events' }
 PulsarDebugger >> eventContextChanged: anAnnouncement [
 	

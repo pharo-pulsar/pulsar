@@ -62,9 +62,7 @@ PulsarRepositoryBaseBranchView >> defineGitCommonActionsOn: aBuilder [
 			iconName: 'checkout-branch';
 			description: 'Checkout branch';
 			actionEnabled: [ self hasSelectedItem and: [ self selectedItem isHead not ] ];
-			action: [ self doCheckoutSelectedBranchOrTag ] ] 
- 
-		]
+			action: [ self doCheckoutSelectedBranchOrTag ] ] ]
 ]
 
 { #category : 'private - actions' }

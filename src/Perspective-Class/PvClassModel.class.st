@@ -70,6 +70,16 @@ PvClassModel >> addVariableNamed: aName type: aClass [
 	self entity addSlot: (aClass named: aName asSymbol)
 ]
 
+{ #category : 'accessing' }
+PvClassModel >> allTestMethods [
+
+	^ self entity allTestSelectors
+		collect: [ :each | 
+			PvMethodModel 
+				newEnvironment: self environmentModel
+				entity: self entity >> each ]
+]
+
 { #category : 'converting' }
 PvClassModel >> asClassModel [
 
@@ -265,6 +275,12 @@ PvClassModel >> initialize [
 PvClassModel >> instanceSide [
 
 	^ self entity instanceSide
+]
+
+{ #category : 'testing' }
+PvClassModel >> isAbstract [
+
+	^ self entity isAbstract
 ]
 
 { #category : 'testing' }

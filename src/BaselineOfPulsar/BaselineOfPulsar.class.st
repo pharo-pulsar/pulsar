@@ -14,34 +14,32 @@ BaselineOfPulsar >> adwaita: spec [
 
 { #category : 'baselines' }
 BaselineOfPulsar >> baseline: spec [
+
 	<baseline>
-	
-	spec for: #common do: [ 
-		self adwaita: spec.
-		self vte: spec.
-		self linden: spec.
-		self mcp: spec.
-		
-		spec package: 'Perspective-Spotter' 			with: [ spec requires: 'Linden' ]. 
-		spec package: 'Perspective' 					with: [ spec requires: #('Adwaita' 'Linden' 'Perspective-Spotter') ]. 
-		spec package: 'Perspective-Project' 			with: [ spec requires: 'Perspective' ].
-		spec package: 'Perspective-Package' 			with: [ spec requires: 'Perspective' ].
-		spec package: 'Perspective-Class' 			with: [ spec requires: 'Perspective' ].
-		spec package: 'Perspective-Method' 			with: [ spec requires: 'Perspective' ].
-		"base browser & tools"
-		spec package: 'Pulsar-Browser' 				with: [ spec requires: 'Perspective' ].
-		"non-base tools"
-		spec package: 'Pulsar-Tool-Changes' 			with: [ spec requires: 'Pulsar-Browser' ].
-		spec package: 'Pulsar-Tool-Repositories' 		with: [ spec requires: 'Pulsar-Browser' ].
-		spec package: 'Pulsar-Tool-ObjectExplorer' 	with: [ spec requires: 'Pulsar-Browser' ].
-		spec package: 'Pulsar-Tool-FlagsConsole' 		with: [ spec requires: 'Pulsar-Browser' ].
-		spec package: 'Pulsar-Tool-CritiquesConsole'	with: [ spec requires: 'Pulsar-Browser' ].
-		spec package: 'Pulsar-Tool-Roassal' 			with: [ spec requires: 'Pulsar-Browser' ].
-		spec package: 'Pulsar-Tool-FileEditor'		with: [ spec requires: 'Pulsar-Browser' ].
-		spec package: 'Pulsar-Tool-LLM' 				with: [ spec requires: #('Pulsar-Browser' 'Vte' 'MCP') ].
-		"tests"
-		spec package: 'Pulsar-Browser-Tests' 		with: [ spec requires: 'Pulsar-Browser' ] 
-	]
+	spec for: #common do: [
+			self adwaita: spec.
+			self vte: spec.
+			self linden: spec.
+			self mcp: spec.
+
+			spec package: 'Perspective-Spotter' with: [ spec requires: 'Linden' ].
+			spec package: 'Perspective' with: [ spec requires: #( 'Adwaita' 'Linden' 'Perspective-Spotter' ) ].
+			spec package: 'Perspective-Project' with: [ spec requires: 'Perspective' ].
+			spec package: 'Perspective-Package' with: [ spec requires: 'Perspective' ].
+			spec package: 'Perspective-Class' with: [ spec requires: 'Perspective' ].
+			spec package: 'Perspective-Method' with: [ spec requires: 'Perspective' ]. "base browser & tools"
+			spec package: 'Pulsar-Browser' with: [ spec requires: 'Perspective' ]. "non-base tools"
+			spec package: 'Pulsar-Tool-Changes' with: [ spec requires: 'Pulsar-Browser' ].
+			spec package: 'Pulsar-Tool-Repositories' with: [ spec requires: 'Pulsar-Browser' ].
+			spec package: 'Pulsar-Tool-ObjectExplorer' with: [ spec requires: 'Pulsar-Browser' ].
+			spec package: 'Pulsar-Tool-FlagsConsole' with: [ spec requires: 'Pulsar-Browser' ].
+			spec package: 'Pulsar-Tool-CritiquesConsole' with: [ spec requires: 'Pulsar-Browser' ].
+			spec package: 'Pulsar-Tool-Roassal' with: [ spec requires: 'Pulsar-Browser' ].
+			spec package: 'Pulsar-Tool-FileEditor' with: [ spec requires: 'Pulsar-Browser' ].
+			spec package: 'Pulsar-Tool-TestRunner' with: [ spec requires: 'Pulsar-Browser' ].
+			spec package: 'Pulsar-Tool-LLM' with: [ spec requires: #( 'Pulsar-Browser' 'Vte' 'MCP' ) ].
+			spec package: 'Pulsar-Tool-TestRunner' with: [ spec requires: 'Pulsar-Browser' ]. "tests"
+			spec package: 'Pulsar-Browser-Tests' with: [ spec requires: 'Pulsar-Browser' ] ]
 ]
 
 { #category : 'external projects' }

@@ -54,6 +54,20 @@ PulsarRepositoryLocalBranchView >> defineGitActionsOn: aBuilder [
 			action: [ self doPullIntoSelectedBranch ] ]" ]
 ]
 
+{ #category : 'private - definitions' }
+PulsarRepositoryLocalBranchView >> defineRemoveBranchActionOn: aBuilder [
+	<dockActions>
+	
+	aBuilder addGroup: #removeActions with: [ :group | group
+		priority: 50;
+		addActionWith: [ :action | action
+			dynamicName: [ 'Remove {1}' format: { self selectedItemName } ];
+			description: 'Delete this local branch';
+			iconName: 'remove';
+			actionEnabled: [ self hasSelectedItem and: [ self selectedItem isHead not ] ];
+			action: [ self doRemoveSelectedBranch ] ] ]
+]
+
 { #category : 'actions' }
 PulsarRepositoryLocalBranchView >> doCreateBranchCommand: anAction [
 
@@ -93,6 +107,24 @@ PulsarRepositoryLocalBranchView >> doPullIntoSelectedBranch [
 PulsarRepositoryLocalBranchView >> doPush [
 
 	(PulsarRepositoryActionContext on: self) doPush: self model
+]
+
+{ #category : 'private - actions' }
+PulsarRepositoryLocalBranchView >> doRemoveSelectedBranch [
+
+	| selected |
+	selected := self selectedItem.
+	selected ifNil: [ ^ self ].
+
+	(self application newConfirm
+		 title: 'Remove local branch';
+		 message: ('Are you sure you want to delete branch "{1}"?' format: { selected name });
+		 acceptLabel: 'Delete';
+		 openModalWithParent: self window) ifFalse: [ ^ self ].
+
+	(self model newRemoveLocalBranchAction: selected)
+		onSuccess: [ self notifyRepositoryModified: PulsarRepositoryModifiedReason localBranchRemoved ];
+		executeWithContext: self
 ]
 
 { #category : 'accessing' }

@@ -13,7 +13,7 @@ Class {
 { #category : 'accessing - actions' }
 PulsarBaseProjectModel >> actionsWithContextOn: aContextPresenter [
 
-	^ (self actions actionsFor: 'operations') copyWithContext: aContextPresenter
+	^ (self actions actionsForAll: #(operations tools operationCritical)) copyWithContext: aContextPresenter
 ]
 
 { #category : 'accessing' }
@@ -25,17 +25,21 @@ PulsarBaseProjectModel >> addPackageNamed: aName [
 
 { #category : 'private - definitions' }
 PulsarBaseProjectModel >> defineActionsOn: aBuilder [
-
 	<dockActions>
-	aBuilder addGroup: 'operations' with: [ :group |
-			group
-				name: 'Operations';
-				beDisplayedAsGroup;
-				addActionWith: [ :actions |
-						actions
-							name: ('Close project {1}' format: { self name });
-							description: 'Remove project from projects list';
-							action: [ :aContext | aContext doCloseProject: self ] ] ]
+]
+
+{ #category : 'private - definitions' }
+PulsarBaseProjectModel >> defineCriticalActionsOn: aBuilder [
+	<dockActions>
+	
+	aBuilder addGroup: #operationCritical with: [ :group | group
+		name: 'DANGER ZONE';
+		priority: 1000;
+		beDisplayedAsGroup;
+		addActionWith: [ :action | action
+			name: ('Close project {1}' format: { self name });
+			description: 'Remove project from projects list';
+			action: [ :aContext | aContext doCloseProject: self ] ] ]
 ]
 
 { #category : 'accessing' }

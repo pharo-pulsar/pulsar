@@ -42,6 +42,14 @@ PulsarRepositoryModified class >> fetch: aModel [
 ]
 
 { #category : 'instance creation' }
+PulsarRepositoryModified class >> localBranchRemoved: aModel [
+
+	^ (self newValue: aModel)
+		  reason: PulsarRepositoryModifiedReason localBranchRemoved;
+		  yourself
+]
+
+{ #category : 'instance creation' }
 PulsarRepositoryModified class >> merge: aModel [
 
 	^ (self newValue: aModel)
@@ -70,6 +78,14 @@ PulsarRepositoryModified class >> push: aModel [
 
 	^ (self newValue: aModel)
 		  reason: PulsarRepositoryModifiedReason push;
+		  yourself
+]
+
+{ #category : 'instance creation' }
+PulsarRepositoryModified class >> remoteBranchRemoved: aModel [
+
+	^ (self newValue: aModel)
+		  reason: PulsarRepositoryModifiedReason remoteBranchRemoved;
 		  yourself
 ]
 

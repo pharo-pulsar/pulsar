@@ -21,6 +21,12 @@ PulsarRepositoryBranchModel >> branch [
 	^ self entity
 ]
 
+{ #category : 'actions' }
+PulsarRepositoryBranchModel >> delete [
+
+	self entity delete
+]
+
 { #category : 'accessing' }
 PulsarRepositoryBranchModel >> incomingCommits [
 

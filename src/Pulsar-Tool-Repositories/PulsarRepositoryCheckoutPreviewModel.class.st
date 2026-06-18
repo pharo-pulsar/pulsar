@@ -21,6 +21,12 @@ PulsarRepositoryCheckoutPreviewModel class >> repositoryModel: aRepositoryModel 
 ]
 
 { #category : 'accessing' }
+PulsarRepositoryCheckoutPreviewModel >> checkoutDiffNode [
+
+	^ self diffNode
+]
+
+{ #category : 'accessing' }
 PulsarRepositoryCheckoutPreviewModel >> checkoutStrategies [
 
 	^ IceCheckoutStrategy allStrategies

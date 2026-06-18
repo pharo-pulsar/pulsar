@@ -10,9 +10,11 @@ Class {
 		'ReasonCheckout',
 		'ReasonCommit',
 		'ReasonFetch',
+		'ReasonLocalBranchRemoved',
 		'ReasonMerge',
 		'ReasonPull',
 		'ReasonPush',
+		'ReasonRemoteBranchRemoved',
 		'ReasonRepair'
 	],
 	#category : 'Pulsar-Tool-Repositories-Model',
@@ -51,6 +53,12 @@ PulsarRepositoryModifiedReason class >> fetch [
 ]
 
 { #category : 'instance creation' }
+PulsarRepositoryModifiedReason class >> localBranchRemoved [
+
+	^ ReasonLocalBranchRemoved ifNil: [ ReasonLocalBranchRemoved := PulsarRepositoryModifiedLocalBranchRemovedReason new ]
+]
+
+{ #category : 'instance creation' }
 PulsarRepositoryModifiedReason class >> merge [
 
 	^ ReasonMerge ifNil: [ ReasonMerge := PulsarRepositoryModifiedMergeReason new ]
@@ -66,6 +74,12 @@ PulsarRepositoryModifiedReason class >> pull [
 PulsarRepositoryModifiedReason class >> push [
 
 	^ ReasonPush ifNil: [ ReasonPush := PulsarRepositoryModifiedPushReason new ]
+]
+
+{ #category : 'instance creation' }
+PulsarRepositoryModifiedReason class >> remoteBranchRemoved [
+
+	^ ReasonRemoteBranchRemoved ifNil: [ ReasonRemoteBranchRemoved := PulsarRepositoryModifiedRemoteBranchRemovedReason new ]
 ]
 
 { #category : 'instance creation' }

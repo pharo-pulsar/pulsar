@@ -110,15 +110,15 @@ PulsarRepositoryModel >> canCommit [
 
 { #category : 'accessing' }
 PulsarRepositoryModel >> checkoutDiffNode [
-
-	| headCommit diff |
+	| headCommit checkoutDiff |
+	
 	headCommit := self entity head commit.
-	diff := headCommit diffTo: self entity workingCopy.
+	checkoutDiff := headCommit diffTo: self entity workingCopy.
 	^ PulsarDiffRoot
 		  newRepository: self
 		  from: self entity workingCopy
 		  to: headCommit
-		  tree: diff tree
+		  tree: checkoutDiff tree
 ]
 
 { #category : 'accessing' }
@@ -459,6 +459,17 @@ PulsarRepositoryModel >> newRecalculateDirtyPackagesAction [
 ]
 
 { #category : 'actions - command' }
+PulsarRepositoryModel >> newRemoveLocalBranchAction: aBranchModel [
+
+	^ IceTipStandardAction new
+		  repository: self entity;
+		  message: ('Removing local branch {1}' format: { aBranchModel name });
+		  onSuccessRepositoryModified;
+		  action: [ aBranchModel delete ];
+		  yourself
+]
+
+{ #category : 'actions - command' }
 PulsarRepositoryModel >> newRemoveRemoteActionFor: aRemote [
 	
 	^ IceTipStandardAction new
@@ -467,6 +478,17 @@ PulsarRepositoryModel >> newRemoveRemoteActionFor: aRemote [
 		onSuccessRepositoryModified;
 		action: [ self entity removeRemote: aRemote ];
 		yourself
+]
+
+{ #category : 'actions - command' }
+PulsarRepositoryModel >> newRemoveRemoteBranchAction: aBranchModel [
+
+	^ IceTipStandardAction new
+		  repository: self entity;
+		  message: ('Removing remote branch {1}' format: { aBranchModel name });
+		  onSuccessRepositoryModified;
+		  action: [ aBranchModel delete ];
+		  yourself
 ]
 
 { #category : 'actions' }

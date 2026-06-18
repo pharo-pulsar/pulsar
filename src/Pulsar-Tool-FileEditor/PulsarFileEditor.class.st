@@ -137,12 +137,14 @@ PulsarFileEditor >> updateModel: aString [
 
 { #category : 'initialization' }
 PulsarFileEditor >> updatePresenter [
+	| source |
 
 	self model ifNil: [ ^ self ].
-
-	self updatingWhile: [
-		self model sourceCodeLanguage
-			ifNotNil: [ :language | editorPresenter language: language ].
-		editorPresenter text: self model sourceCode ].
-	self updateBreadcrumbs
+	self scheduleJob: [
+		source := self model sourceCode.	
+		self updatingWhile: [
+			self model sourceCodeLanguage
+				ifNotNil: [ :language | editorPresenter language: language ].
+			editorPresenter text: source ].
+		self updateBreadcrumbs ]
 ]

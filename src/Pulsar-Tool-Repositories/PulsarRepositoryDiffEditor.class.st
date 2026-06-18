@@ -71,7 +71,8 @@ PulsarRepositoryDiffEditor >> eventCommitModelSelected: ann [
 	commitModel := ann value.
 	lastDiffNodeModel := nil.
 	
-	self model: commitModel diffNode
+	self model: commitModel diffNode.
+	self withPanelWidgetDo: [ :w | w raise ]
 ]
 
 { #category : 'events' }
@@ -81,7 +82,8 @@ PulsarRepositoryDiffEditor >> eventDiffModelSelected: ann [
 	diffNodeModel := ann value.
 	lastDiffNodeModel = diffNodeModel ifTrue: [ ^ self ].
 	
-	self model: diffNodeModel
+	self model: diffNodeModel.
+	self withPanelWidgetDo: [ :w | w raise ]
 ]
 
 { #category : 'initialization' }
@@ -238,7 +240,6 @@ PulsarRepositoryDiffEditor >> updatePatchContents [
 
 { #category : 'initialization' }
 PulsarRepositoryDiffEditor >> updatePresenter [
-	| contents |
 	
 	self model ifNil: [ ^ self ].
 
