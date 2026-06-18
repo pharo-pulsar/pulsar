@@ -50,7 +50,10 @@ PulsarFlagModel >> location: aNode [
 	| methodNode |
 	
 	methodNode := aNode methodNode.
-	location := { methodNode methodClass. methodNode selector. aNode sourceInterval }
+	location := { 
+		methodNode methodClass. 
+		methodNode selector. 
+		aNode sourceInterval first to:  aNode sourceInterval stop + 1}
 ]
 
 { #category : 'accessing' }

@@ -79,7 +79,7 @@ PulsarFlagsModel >> locationDescriptionFor: aFlag [
 { #category : 'instance creation' }
 PulsarFlagsModel >> newActivationAnnouncementFor: aFlag [
 	| announcement |
-
+	
 	announcement := PulsarModelActivated newValue: (PvMethodModel 
 		newEnvironment: self environmentModel 
 		entity: aFlag locationMethod).
