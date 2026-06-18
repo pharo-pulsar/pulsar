@@ -146,8 +146,13 @@ PulsarMethodEditor >> doRunSampleInstanceCommand: anAction [
 
 { #category : 'private - actions' }
 PulsarMethodEditor >> doRunScriptCommand: anAction [
+	| result |
 
-	self model runScript
+	result := self model runScript.
+	self withWindowDo: [ :w | 
+		w inform: (result 
+			ifNotNil: [ 'Script executed: {1}' format: { result } ]
+			ifNil: [ 'Script executed' ]) ]
 ]
 
 { #category : 'actions' }
