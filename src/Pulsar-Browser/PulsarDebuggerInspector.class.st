@@ -22,18 +22,17 @@ PulsarDebuggerInspector class >> defaultPanelPosition [
 PulsarDebuggerInspector class >> defineActionsOn: aBuilder [
 	<dockActions>
 
-	aBuilder 
-		addGroup: #inspectorActions with: [ :group | group 
-			addActionWith: [ :action | action 
-				name: 'Inspect';
-				description: 'Inspect current receiver';
-				iconName: 'inspector.neutral';
-				action: [ :aContext | aContext doInspectReceiver ] ];
-			addActionWith: [ :action | action 
-				name: 'Browse';
-				description: 'Browse current receiver''s class';
-				iconName: 'browse.neutral';
-				action: [ :aContext | aContext doBrowseReceiverClass ] ] ]
+	aBuilder addGroup: #inspectorActions with: [ :group | group 
+		addActionWith: [ :action | action 
+			name: 'Inspect';
+			description: 'Inspect current receiver';
+			iconName: 'inspector.neutral';
+			action: [ :aContext | aContext doInspectReceiver ] ];
+		addActionWith: [ :action | action 
+			name: 'Browse';
+			description: 'Browse current receiver''s class';
+			iconName: 'browse.neutral';
+			action: [ :aContext | aContext doBrowseReceiverClass ] ] ]
 ]
 
 { #category : 'layout' }
