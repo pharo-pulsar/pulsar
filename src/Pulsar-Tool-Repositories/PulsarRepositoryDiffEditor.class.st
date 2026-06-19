@@ -92,9 +92,7 @@ PulsarRepositoryDiffEditor >> initializePanelWidget: aPanelWidgetPresenter [
 	super initializePanelWidget: aPanelWidgetPresenter.
 	aPanelWidgetPresenter
 		pinned: true;
-		windowIcon: (self iconNamed: 'diff');
-		whenPresentedDo: [ self recordLastPresented ];
-		whenFocusReceivedDo: [ self notifyEditorActivated ].
+		windowIcon: (self iconNamed: 'diff')
 ]
 
 { #category : 'initialization' }
@@ -156,6 +154,13 @@ PulsarRepositoryDiffEditor >> newScheduler [
 		priority: Processor userBackgroundPriority;
 		inTool: self class;
 		start
+]
+
+{ #category : 'private' }
+PulsarRepositoryDiffEditor >> panelFocused [
+
+	logger trace.
+	self notifyEditorActivated
 ]
 
 { #category : 'initialization' }
