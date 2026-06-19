@@ -9,7 +9,9 @@ Class {
 { #category : 'accessing' }
 PulsarAllMethodsVirtualProtocol >> methods [
 
-	^ self entity methods reject: [ :each | each origin = TraitedClass ]
+	^ (self entity methods 
+		reject: [ :each | each origin = TraitedClass ])
+		sorted: #selector ascending
 ]
 
 { #category : 'accessing' }

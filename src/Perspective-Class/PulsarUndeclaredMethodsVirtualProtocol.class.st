@@ -29,7 +29,9 @@ PulsarUndeclaredMethodsVirtualProtocol >> iconName [
 { #category : 'accessing' }
 PulsarUndeclaredMethodsVirtualProtocol >> methods [
 
-	^ self entity methods select: [ :each | each usesUndeclareds ]
+	^ (self entity methods 
+		select: [ :each | each usesUndeclareds ])
+		sorted: #selector ascending
 ]
 
 { #category : 'accessing' }

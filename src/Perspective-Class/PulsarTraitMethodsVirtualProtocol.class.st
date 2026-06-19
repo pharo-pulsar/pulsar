@@ -32,8 +32,9 @@ PulsarTraitMethodsVirtualProtocol >> iconName [
 { #category : 'accessing' }
 PulsarTraitMethodsVirtualProtocol >> methods [
 
-	^ self entity methods 
-		select: [ :each | each origin = self trait ]
+	^ (self entity methods 
+		select: [ :each | each origin = self trait ])
+		sorted: #selector ascending
 ]
 
 { #category : 'accessing' }
