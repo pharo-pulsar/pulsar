@@ -79,19 +79,19 @@ PulsarCritiquesModel >> isScope: aSymbol [
 ]
 
 { #category : 'instance creation' }
-PulsarCritiquesModel >> newActivationAnnouncementFor: aCritic [
-
-	"this is different if this is a class ot a method"
-	self subclassResponsibility
-	"| announcement |
-
-	announcement := PulsarModelActivated newValue: (PvMethodModel 
-		newEnvironment: self environmentModel 
-		entity: aCritic locationMethod).
+PulsarCritiquesModel >> newActivationAnnouncementFor: aCritique [
+	| ann |
 	
-	announcement selection: aFlag selection.
+	self flag: 'this is different if this is a class or a method'.
+	ann := self currentModel newActivationAnnouncement.
 	
-	^ announcement"
+	self currentModel isMethodModel ifTrue: [ 
+		| interval |
+		interval := aCritique sourceAnchor interval.
+		interval ifNotNil: [ 
+			ann selection: (interval first to: interval last + 1) ] ].
+
+	^ ann
 ]
 
 { #category : 'private' }
