@@ -21,6 +21,8 @@ Class {
 PulsarLLMChatConsole class >> defaultPanelPosition [
 
 	^ SpPanelPosition bottomArea
+		column: 2;
+		yourself
 ]
 
 { #category : 'accessing' }
