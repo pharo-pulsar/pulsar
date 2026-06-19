@@ -1,8 +1,8 @@
 Class {
 	#name : 'PulsarBaseView',
 	#superclass : 'SpPresenter',
-	#traits : 'SpTModel + PulsarTActionContainer + PulsarTNotificationCenter + PulsarTSnapshot + PulsarTPanelWindowWithPlacedIcon + PulsarTPanelWindow',
-	#classTraits : 'SpTModel classTrait + PulsarTActionContainer classTrait + PulsarTNotificationCenter classTrait + PulsarTSnapshot classTrait + PulsarTPanelWindowWithPlacedIcon classTrait + PulsarTPanelWindow classTrait',
+	#traits : 'SpTModel + PulsarTActionContainer + PulsarTNotificationCenter + PulsarTSnapshot + PulsarTPanelWindow',
+	#classTraits : 'SpTModel classTrait + PulsarTActionContainer classTrait + PulsarTNotificationCenter classTrait + PulsarTSnapshot classTrait + PulsarTPanelWindow classTrait',
 	#category : 'Pulsar-Browser-View-Base',
 	#package : 'Pulsar-Browser',
 	#tag : 'View-Base'
@@ -32,15 +32,6 @@ PulsarBaseView >> initialize [
 	super initialize.
 	self registerToEvents.
 	self registerToSystemEvents
-]
-
-{ #category : 'initialization' }
-PulsarBaseView >> initializePanelWidget: aPanelWidgetPresenter [
-
-	super initializePanelWidget: aPanelWidgetPresenter.
-	aPanelWidgetPresenter 
-		whenPlacedDo: [ self panelPlaced: aPanelWidgetPresenter ];
-		whenTransferredDo: [ :ann | self panelTransferredFrom: ann fromWindow to: ann toWindow ]
 ]
 
 { #category : 'initialization' }
@@ -81,16 +72,6 @@ PulsarBaseView >> newPulsarToolbar [
 PulsarBaseView >> panelPosition [
 
 	^ self class defaultPanelPosition
-]
-
-{ #category : 'private' }
-PulsarBaseView >> panelTransferredFrom: fromWindow to: toWindow [
-
-	logger trace.
-	
-	toWindow 
-		moveWindow: self panelWidget
-		from: fromWindow
 ]
 
 { #category : 'theme' }

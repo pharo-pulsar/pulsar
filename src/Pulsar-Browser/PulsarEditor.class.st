@@ -130,22 +130,6 @@ PulsarEditor >> doCopyToClipboard [
 ]
 
 { #category : 'private - actions' }
-PulsarEditor >> doDetachWindow [
-	| newBrowser panelWindow |
-
-	newBrowser := PulsarDetachedBrowser 
-		newApplication: self application 
-		model: self window model.
-	panelWindow := self panelWidget.
-	
-	"it seems to look better if I open it first (the visualisation effect is nicer)"
-	newBrowser open.
-	newBrowser 
-		moveWindow: panelWindow 
-		from: self window
-]
-
-{ #category : 'private - actions' }
 PulsarEditor >> doReset [
 
 	self updatingWhile: [ 
@@ -196,7 +180,7 @@ PulsarEditor >> doSubmit: aString [
 { #category : 'initialization' }
 PulsarEditor >> editorActions [
 		
-	^ self actions actionsForAll: #(navigation panelWidget)
+	^ self actions actionsFor: #navigation
 ]
 
 { #category : 'private - actions' }
@@ -205,6 +189,7 @@ PulsarEditor >> editorContextMenuActions [
 	^ SpActionGroup new 
 		add: (editorPresenter rootCommandsGroup name: 'Code');
 		add: self editorActions beDisplayedAsGroup;
+		add: self panelWidgetActions beDisplayedAsSubMenu;
 		yourself
 ]
 
@@ -334,10 +319,6 @@ PulsarEditor >> initializePanelWidget: aPanelWidgetPresenter [
 
 	super initializePanelWidget: aPanelWidgetPresenter.
 	aPanelWidgetPresenter
-		actions: self windowActions;
-		whenPresentedDo: [ self panelPresented ];
-		whenFocusReceivedDo: [ self panelFocused ];
-		whenModifiedChangedDo: [ self panelModifiedChanged ];
 		whenSaveDo: [ :ann | ann success: self saveContent ];
 		whenDiscardDo: [ :ann | 
 			"I don't know what to do with this... nothing feels right." ]

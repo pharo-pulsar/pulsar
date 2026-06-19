@@ -5,8 +5,8 @@ Trait {
 		'panelPosition',
 		'pinned'
 	],
-	#traits : 'PulsarTPanelWindowWithPlacedIcon',
-	#classTraits : 'PulsarTPanelWindowWithPlacedIcon classTrait',
+	#traits : 'PulsarTActionContainer',
+	#classTraits : 'PulsarTActionContainer classTrait',
 	#category : 'Pulsar-Browser-View-Base',
 	#package : 'Pulsar-Browser',
 	#tag : 'View-Base'
@@ -42,13 +42,30 @@ PulsarTPanelWindow >> activateWith: anActivation [
 	"override to react to an activation detail"
 ]
 
+{ #category : 'private - actions' }
+PulsarTPanelWindow >> doDetachWindow [
+	| newBrowser panelWindow |
+
+	newBrowser := PulsarDetachedBrowser 
+		newApplication: self application 
+		model: self window model.
+	panelWindow := self panelWidget.
+	
+	"it seems to look better if I open it first (the visualisation effect is nicer)"
+	newBrowser open.
+	newBrowser 
+		moveWindow: panelWindow 
+		from: self window
+]
+
 { #category : 'initialization' }
 PulsarTPanelWindow >> initializePanelWidget: aPanelWidgetPresenter [
+	"WARNING: if you override this method, you need to call the associated initialize method 
+	 (make sure all the required events are mapped)"
 
 	super initializePanelWidget: aPanelWidgetPresenter.
-	aPanelWidgetPresenter
-		whenPresentedDo: [ self recordLastPresented ];
-		whenFocusReceivedDo: [ self notifyEditorActivated ]
+	aPanelWidgetPresenter actions: self panelWidgetActions.
+	self registerToPanelWidgetEvents: aPanelWidgetPresenter
 ]
 
 { #category : 'initialization' }
@@ -86,6 +103,19 @@ PulsarTPanelWindow >> lastTimePresented: aDateAndTime [
 	lastTimePresented := aDateAndTime
 ]
 
+{ #category : 'private' }
+PulsarTPanelWindow >> maybeActivateIconOnPanel: aPanelWidgetPresenter [
+	| inHorizontalArea iconName |
+
+	iconName := self panelPlacedIconName.
+	iconName ifNil: [ ^ self ].
+		
+	inHorizontalArea := { SpPanelArea top. SpPanelArea bottom } includes: aPanelWidgetPresenter panelArea.
+	aPanelWidgetPresenter windowIcon: (inHorizontalArea
+		ifTrue: [ self iconNamed: iconName ]
+		ifFalse: [ nil ])
+]
+
 { #category : 'initialization' }
 PulsarTPanelWindow >> notifyEditorActivated [
 
@@ -98,6 +128,29 @@ PulsarTPanelWindow >> notifyEditorClosed [
 	self notificationCenter announce: (PulsarEditorClosed newValue: self model)
 ]
 
+{ #category : 'private' }
+PulsarTPanelWindow >> panelFocused [
+]
+
+{ #category : 'private' }
+PulsarTPanelWindow >> panelModifiedChanged [
+	 
+	self notifyEditorActivated
+]
+
+{ #category : 'private' }
+PulsarTPanelWindow >> panelPlaced: aPanelWidgetPresenter [
+	
+	logger trace.
+	self maybeActivateIconOnPanel: aPanelWidgetPresenter
+]
+
+{ #category : 'private' }
+PulsarTPanelWindow >> panelPlacedIconName [
+
+	^ nil
+]
+
 { #category : 'accessing' }
 PulsarTPanelWindow >> panelPosition [
 
@@ -108,6 +161,32 @@ PulsarTPanelWindow >> panelPosition [
 PulsarTPanelWindow >> panelPosition: aPanelPosition [
 
 	panelPosition := aPanelPosition
+]
+
+{ #category : 'private' }
+PulsarTPanelWindow >> panelPresented [
+	
+	self recordLastPresented
+]
+
+{ #category : 'private' }
+PulsarTPanelWindow >> panelTransferredFrom: fromWindow to: toWindow [
+	| isEditor |
+
+	isEditor := self isEditor.
+	
+	logger trace: isEditor.
+	
+	self registerToBrowser: toWindow.
+	isEditor ifTrue: [
+		fromWindow notificationCenter announce: (PulsarEditorClosed newValue: self).
+		toWindow notificationCenter announce: (PulsarEditorActivated newValue: self) ]
+]
+
+{ #category : 'private' }
+PulsarTPanelWindow >> panelWidgetActions [
+
+	^ self actions actionsFor: #panelWidget
 ]
 
 { #category : 'accessing' }
@@ -127,4 +206,15 @@ PulsarTPanelWindow >> raise [
 PulsarTPanelWindow >> recordLastPresented [
 
 	self lastTimePresented: DateAndTime now
+]
+
+{ #category : 'initialization' }
+PulsarTPanelWindow >> registerToPanelWidgetEvents: aPanelWidgetPresenter [
+
+	aPanelWidgetPresenter	
+		whenPresentedDo: [ self panelPresented ];
+		whenFocusReceivedDo: [ self panelFocused ];
+		whenModifiedChangedDo: [ self panelModifiedChanged ];
+		whenPlacedDo: [ self panelPlaced: aPanelWidgetPresenter ];
+		whenTransferredDo: [ :ann | self panelTransferredFrom: ann fromWindow to: ann toWindow ]
 ]

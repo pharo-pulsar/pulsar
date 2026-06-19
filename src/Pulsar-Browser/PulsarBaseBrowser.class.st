@@ -237,19 +237,24 @@ PulsarBaseBrowser >> addUniquePresenterClass: aPresenterClass model: anObject [
 	self addPresenterClass: aPresenterClass model: anObject
 ]
 
-{ #category : 'view' }
+{ #category : 'private' }
 PulsarBaseBrowser >> addWindow: aWindow [
 
 	self mutex critical: [
+
 		aWindow presenter registerToBrowser: self.
+
 		super addWindow: aWindow.
-		self flag: #TODO. "This could be better refactored by sending a message (an announcement?)
-		to the panels?"
+	
+		self flag: #TODO. "This could be better refactored by sending a 
+		message (an announcement?) to the panels?"
 		aWindow presenter isEditor ifFalse: [
 			aWindow whenPanelPositionChangedDo: [ :newPosition |
-				self class 
+				"going like this because we can change the window (if transferred)"
+				aWindow window class 
 					savePanelPosition: newPosition 
-					forViewClass: aWindow presenter class ] ].
+					forViewClass: aWindow presenter class  ] ].
+		
 		aWindow raise ]
 ]
 
@@ -572,12 +577,6 @@ PulsarBaseBrowser >> registerToSystemEvents [
 		when: SystemAnnouncement, MetacelloExecutionAnnouncement 
 			send: #resendAnnouncement: 
 			to: self
-]
-
-{ #category : 'private' }
-PulsarBaseBrowser >> remove: aPanelWindowPresenter [
-
-	aPanelWindowPresenter forceClose
 ]
 
 { #category : 'private' }

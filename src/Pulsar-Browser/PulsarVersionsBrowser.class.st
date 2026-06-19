@@ -1,8 +1,8 @@
 Class {
 	#name : 'PulsarVersionsBrowser',
 	#superclass : 'SpPresenter',
-	#traits : 'SpTModel + PulsarTNotificationCenter + PulsarTPanelWindow + PulsarTSnapshot + PulsarTActionContainer + PulsarTJobHandler + PulsarTTaskWorker',
-	#classTraits : 'SpTModel classTrait + PulsarTNotificationCenter classTrait + PulsarTPanelWindow classTrait + PulsarTSnapshot classTrait + PulsarTActionContainer classTrait + PulsarTJobHandler classTrait + PulsarTTaskWorker classTrait',
+	#traits : 'SpTModel + PulsarTNotificationCenter + PulsarTPanelWindow + PulsarTSnapshot + PulsarTJobHandler + PulsarTTaskWorker',
+	#classTraits : 'SpTModel classTrait + PulsarTNotificationCenter classTrait + PulsarTPanelWindow classTrait + PulsarTSnapshot classTrait + PulsarTJobHandler classTrait + PulsarTTaskWorker classTrait',
 	#instVars : [
 		'headerPresenter',
 		'versionListPresenter',

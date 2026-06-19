@@ -82,15 +82,6 @@ PulsarProjectEditor >> doAddProject [
 ]
 
 { #category : 'initialization' }
-PulsarProjectEditor >> initializePanelWidget: aPanelWidgetPresenter [
-
-	super initializePanelWidget: aPanelWidgetPresenter.
-	aPanelWidgetPresenter 
-		whenPresentedDo: [ self recordLastPresented ];
-		whenFocusReceivedDo: [ self notifyEditorActivated ]
-]
-
-{ #category : 'initialization' }
 PulsarProjectEditor >> initializePresenters [
 
 	self addStyle: 'pulsarProjectEditor'.
@@ -123,6 +114,13 @@ PulsarProjectEditor >> initializeWindow: aWindowPresenter [
 PulsarProjectEditor >> notifyEditorActivated [
 
 	self notificationCenter announce: (PulsarEditorActivated newValue: self)
+]
+
+{ #category : 'private' }
+PulsarProjectEditor >> panelFocused [
+
+	logger trace.
+	self notifyEditorActivated
 ]
 
 { #category : 'initialization' }
