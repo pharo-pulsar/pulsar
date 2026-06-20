@@ -596,8 +596,11 @@ PulsarApplication >> takeSnapshot [
 PulsarApplication >> themeChanged: ann [
 	"reset icon provider because I will need to change them"
 
-	self properties removeKey: #gtkPaintablesByForm ifAbsent: [ ].
+	"WARNING: the order is important. If we remove first the paintables cache the iconProvider may 
+	 still be used while the icons do not exist anymore (as we have several threads happening and 
+	 this is not thread safe (something we should maybe fix, eventually)"
 	self iconProvider reset.
+	self properties removeKey: #gtkPaintablesByForm ifAbsent: [ ].
 	self resendAnnouncement: ann
 ]
 
