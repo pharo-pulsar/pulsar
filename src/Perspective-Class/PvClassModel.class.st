@@ -53,6 +53,13 @@ PvClassModel >> actionsWithContextOn: aContextPresenter [
 ]
 
 { #category : 'updating' }
+PvClassModel >> addClassVariableNamed: aName type: aClass [
+
+	"class side variables are not slots for the moment (sadly)"
+	self entity classSide addInstVarNamed: aName asSymbol
+]
+
+{ #category : 'updating' }
 PvClassModel >> addProtocolNamed: aName [
 
 	self entity addProtocol: (Protocol named: aName)

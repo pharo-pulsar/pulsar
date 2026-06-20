@@ -51,6 +51,12 @@ PulsarClassOutlineSideView >> activateMethodPreviewPopover [
 	self maybePopupPreview
 ]
 
+{ #category : 'private - actions' }
+PulsarClassOutlineSideView >> addVariableName: aName type: aType [
+	
+	self subclassResponsibility
+]
+
 { #category : 'private' }
 PulsarClassOutlineSideView >> collectProtocols [
 
@@ -209,7 +215,7 @@ PulsarClassOutlineSideView >> doAddProtocolCommand: aCommand [
 
 { #category : 'private - actions' }
 PulsarClassOutlineSideView >> doAddVariableCommand: aCommand [
-	| variableDefinition dialog result |
+	| variableDefinition dialog |
 	
 	variableDefinition := PulsarNewSlotModel new.
 	dialog := self instantiate: PulsarNewSlotPresenter on: variableDefinition.
@@ -219,10 +225,12 @@ PulsarClassOutlineSideView >> doAddVariableCommand: aCommand [
 		popupModalAndWait.
 	dialog isOk ifFalse: [ ^ self ].
 	
-	self model asClassModel 
-		addVariableNamed: variableDefinition name 
+	self 
+		addVariableName: variableDefinition name 
 		type: variableDefinition slotType.
+	
 	self updateVariables.
+	
 	variablesListPresenter selectItem: (variablesListPresenter items 
 		detect: [ :each | each name = variableDefinition name ]).
 	self owner notifyEntityChanged: self model asClassModel

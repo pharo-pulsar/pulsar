@@ -6,6 +6,14 @@ Class {
 	#tag : 'View-Outline'
 }
 
+{ #category : 'private - actions' }
+PulsarClassOutlineInstanceSideView >> addVariableName: aName type: aType [
+	
+	self model asClassModel 
+		addVariableNamed:  aName
+		type: aType
+]
+
 { #category : 'private' }
 PulsarClassOutlineInstanceSideView >> collectProtocols [
 

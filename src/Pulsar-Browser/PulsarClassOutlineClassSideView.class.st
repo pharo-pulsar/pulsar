@@ -10,6 +10,14 @@ Class {
 	#tag : 'View-Outline'
 }
 
+{ #category : 'private - actions' }
+PulsarClassOutlineClassSideView >> addVariableName: aName type: aType [
+	
+	self model asClassModel 
+		addClassVariableNamed:  aName
+		type: aType
+]
+
 { #category : 'private' }
 PulsarClassOutlineClassSideView >> collectProtocols [
 
@@ -30,7 +38,7 @@ PulsarClassOutlineClassSideView >> collectVariables [
 
 { #category : 'private - actions' }
 PulsarClassOutlineClassSideView >> doAddSharedVariableCommand: aCommand [
-	| variableName dialog result |
+	| variableName dialog |
 	
 	dialog := self instantiate: PulsarRequestPresenter.
 	dialog label: 'Shared Variable Name'.
@@ -44,8 +52,32 @@ PulsarClassOutlineClassSideView >> doAddSharedVariableCommand: aCommand [
 	
 	self model asClassModel addSharedVariableNamed: variableName.
 	self updateSharedVariables.
-	sharedVariablesPresenter selectItem: (variablesListPresenter items 
+	sharedVariablesPresenter selectItem: (sharedVariablesPresenter items
 		detect: [ :each | each name = variableName ]).
+	self owner notifyEntityChanged: self model asClassModel
+]
+
+{ #category : 'private - actions' }
+PulsarClassOutlineClassSideView >> doAddVariableCommand: aCommand [
+	| variableDefinition dialog |
+	
+	variableDefinition := PulsarNewSlotModel new.
+	dialog := self instantiate: PulsarNewSlotPresenter on: variableDefinition.
+	dialog useSimpleLayout.
+	
+	dialog asPopover
+		relativeTo: aCommand presenter;
+		popupModalAndWait.
+	dialog isOk ifFalse: [ ^ self ].
+	
+	self 
+		addVariableName: variableDefinition name 
+		type: variableDefinition slotType.
+	
+	self updateVariables.
+	
+	variablesListPresenter selectItem: (variablesListPresenter items 
+		detect: [ :each | each name = variableDefinition name ]).
 	self owner notifyEntityChanged: self model asClassModel
 ]
 

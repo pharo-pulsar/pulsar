@@ -98,6 +98,21 @@ PulsarNewSlotPresenter >> saveThen: aBlock [
 	aBlock value
 ]
 
+{ #category : 'layout' }
+PulsarNewSlotPresenter >> simpleLayout [
+
+	^ SpBoxLayout newVertical
+		vAlignStart;
+		add: 'Slot Name';
+		add: namePresenter;
+		add: (SpBoxLayout newHorizontal
+			beHomogeneous;
+			add: cancelButton;
+			add: acceptButton;
+			yourself); 
+		yourself
+]
+
 { #category : 'initialization' }
 PulsarNewSlotPresenter >> updatePresenter [
 
@@ -107,4 +122,10 @@ PulsarNewSlotPresenter >> updatePresenter [
 	slotPresenter 
 		items: self model availableSlotTypes;
 		selectItem: self model slotType
+]
+
+{ #category : 'layout' }
+PulsarNewSlotPresenter >> useSimpleLayout [
+
+	self layout: self simpleLayout
 ]
