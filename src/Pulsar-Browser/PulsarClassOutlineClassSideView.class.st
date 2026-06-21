@@ -3,7 +3,7 @@ Class {
 	#superclass : 'PulsarClassOutlineSideView',
 	#instVars : [
 		'sharedVariablesToolbarPresenter',
-		'sharedVariablesPresenter'
+		'sharedVariablesListPresenter'
 	],
 	#category : 'Pulsar-Browser-View-Outline',
 	#package : 'Pulsar-Browser',
@@ -36,6 +36,31 @@ PulsarClassOutlineClassSideView >> collectVariables [
 	^ self model collectClassVariables
 ]
 
+{ #category : 'private - definitions' }
+PulsarClassOutlineClassSideView >> defineSharedVariableActionsOn: aBuilder [
+	<dockActions>
+	
+	aBuilder 
+		addGroup: #sharedVariable with: [ :group | group
+			priority: 10;
+			name: 'Variables';
+			beDisplayedAsGroup;
+			addActionWith: [ :action | action 
+				name: 'New shared variable';
+				description: 'Add a new shared variable to this class';
+				iconName: 'add';
+				action: [ self doAddSharedVariableCommand: action ] ] ];
+		addGroup: #sharedVariableCritical with: [ :group | group
+			priority: 1000;
+			name: 'DANGER ZONE';
+			beDisplayedAsGroup;
+			addActionWith: [ :action | action 
+				dynamicName: [ 'Remove {1}' format: { self selectedSharedVariableName }  ];
+				description: 'Remove this shared variable';
+				shortcutKey: $x mod1 shift;
+				action: [ self doForceRemoveSharedVariable ] ] ]
+]
+
 { #category : 'private - actions' }
 PulsarClassOutlineClassSideView >> doAddSharedVariableCommand: aCommand [
 	| variableName dialog |
@@ -52,13 +77,15 @@ PulsarClassOutlineClassSideView >> doAddSharedVariableCommand: aCommand [
 	
 	self model asClassModel addSharedVariableNamed: variableName.
 	self updateSharedVariables.
-	sharedVariablesPresenter selectItem: (sharedVariablesPresenter items
+	sharedVariablesListPresenter selectItem: (sharedVariablesListPresenter items
 		detect: [ :each | each name = variableName ]).
 	self owner notifyEntityChanged: self model asClassModel
 ]
 
 { #category : 'private - actions' }
 PulsarClassOutlineClassSideView >> doAddVariableCommand: aCommand [
+	"overriden because I need #useSimpleLayout.
+	 When class side accept slots, we need to remove this method (and fix the variable creation)"
 	| variableDefinition dialog |
 	
 	variableDefinition := PulsarNewSlotModel new.
@@ -81,6 +108,12 @@ PulsarClassOutlineClassSideView >> doAddVariableCommand: aCommand [
 	self owner notifyEntityChanged: self model asClassModel
 ]
 
+{ #category : 'testing' }
+PulsarClassOutlineClassSideView >> hasSharedSelectedVariable [
+
+	^ self selectedSharedVariable isNotNil
+]
+
 { #category : 'layout' }
 PulsarClassOutlineClassSideView >> horizontalLayout [
 
@@ -95,7 +128,7 @@ PulsarClassOutlineClassSideView >> horizontalLayout [
 					yourself);
 				add: (SpBoxLayout newVertical
 					add: sharedVariablesToolbarPresenter expand: false;
-					add: sharedVariablesPresenter;
+					add: sharedVariablesListPresenter;
 					yourself);
 				yourself);
 			add: (SpBoxLayout newVertical
@@ -123,10 +156,14 @@ PulsarClassOutlineClassSideView >> initializeSharedVariables [
 	sharedVariablesToolbarPresenter := self instantiate: PulsarToolbarPresenter.
 	sharedVariablesToolbarPresenter actions: self sharedVariablesToolbarActions.
 	
-	sharedVariablesPresenter := self newEasyListView
+	sharedVariablesListPresenter := self newEasyListView
 		addStyle: 'stList';
 		addStyle: 'pulsarSharedVariablesList';
 		display: #name;
+		actions: (SpActionGroup new 
+			add: (self actions actionsForAll: #(sharedVariable sharedVariableCritical));
+			addDynamicGroup: #dynamic with: [ :group | group add: self variableRefactorActions ];
+			yourself);
 		yourself
 ]
 
@@ -143,6 +180,28 @@ PulsarClassOutlineClassSideView >> newMethodModelForNewMethod [
 	^ PvMethodModel
 		newEnvironment: self model environmentModel 
 		beNewClassMethodWithParent: self model
+]
+
+{ #category : 'private - accessing' }
+PulsarClassOutlineClassSideView >> selectedSharedVariable [
+
+	^ sharedVariablesListPresenter selectedItem
+]
+
+{ #category : 'private - accessing' }
+PulsarClassOutlineClassSideView >> selectedSharedVariableName [
+
+	^ self selectedSharedVariable 
+		ifNotNil: [ :aModel | aModel name ]
+		ifNil: [ 'Unknown' ]
+]
+
+{ #category : 'private' }
+PulsarClassOutlineClassSideView >> sharedVariableRefactorActions [
+
+	self hasSharedSelectedVariable ifFalse: [ ^ SpActionGroup new ].
+
+	^ self selectedSharedVariable actionsWithContextOn: self
 ]
 
 { #category : 'initialization' }
@@ -164,7 +223,7 @@ PulsarClassOutlineClassSideView >> updatePresenter [
 	self application defer: [
 		self updatingWhile: [ 
 			super updatePresenter.
-			sharedVariablesPresenter items: self collectSharedVariables ] ]
+			sharedVariablesListPresenter items: self collectSharedVariables ] ]
 ]
 
 { #category : 'updating' }
@@ -172,9 +231,9 @@ PulsarClassOutlineClassSideView >> updateSharedVariables [
 	| sharedVariables |
 
 	sharedVariables := self collectSharedVariables.
-	sharedVariablesPresenter updateItemsKeepingSelection: self collectSharedVariables.
-	(sharedVariablesPresenter selectedItems isEmpty and: [ sharedVariables isNotEmpty ]) 
-		ifTrue: [ sharedVariablesPresenter selectFirst ].
+	sharedVariablesListPresenter updateItemsKeepingSelection: self collectSharedVariables.
+	(sharedVariablesListPresenter selectedItems isEmpty and: [ sharedVariables isNotEmpty ]) 
+		ifTrue: [ sharedVariablesListPresenter selectFirst ].
 		
 	"activeSharedVariables := variablesListPresenter selectedItems"
 ]
@@ -193,7 +252,7 @@ PulsarClassOutlineClassSideView >> verticalLayout [
 					yourself);
 				add: (SpBoxLayout newVertical
 					add: sharedVariablesToolbarPresenter expand: false;
-					add: sharedVariablesPresenter;
+					add: sharedVariablesListPresenter;
 					yourself);
 				yourself);
 			add: (SpBoxLayout newVertical
@@ -212,7 +271,7 @@ PulsarClassOutlineClassSideView >> verticalLayout [
 PulsarClassOutlineClassSideView >> visitClassModel: aModel [
 	
 	super visitClassModel: aModel.
-	sharedVariablesPresenter unselectAll
+	sharedVariablesListPresenter unselectAll
 ]
 
 { #category : 'visiting' }

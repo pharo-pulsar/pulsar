@@ -350,7 +350,7 @@ box.pulsarDialog box { margin: 0px; }
 .pulsarSpotter { margin: 5px; border-spacing: 5px; min-width: 700px; }
 .pulsarSpotter entry.search { margin: 15px 10px 5px 10px; }
 
-.pulsarMessageFlyingBrowser { min-width: 680px; min-height: 440px; }
+.pulsarMessageFlyingBrowser { min-width: 720px; min-height: 460px; }
 .pulsarInspectorFlyingBrowser { min-width: 680px; min-height: 440px; }
 .pulsarHierarchyFlyingBrowser { min-width: 450px; min-height: 350px; }
 .pulsarMethodHierarchyFlyingBrowser { min-width: 680px; min-height: 440px; }

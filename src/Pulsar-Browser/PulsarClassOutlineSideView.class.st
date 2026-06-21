@@ -258,6 +258,27 @@ PulsarClassOutlineSideView >> doForceRemoveMethod [
 ]
 
 { #category : 'private - actions' }
+PulsarClassOutlineSideView >> doForceRemoveSharedVariable [ 
+ 	"Forcefully remove a variable  (without passing through the refactor remove implementation
+	 that will check all usages, etc.)"
+	| okToRemove selectedSharedVariableModel |
+	
+	selectedSharedVariableModel := self selectedSharedVariable.
+	selectedSharedVariableModel ifNil: [ ^ self ].
+
+	okToRemove := self application newConfirm
+		title: 'Remove shared variable';
+		message: ('Do you want to remove {1}?' format: { selectedSharedVariableModel name });
+		acceptLabel: 'Remove';
+		openModalWithParent: self window.
+	okToRemove ifFalse: [ ^ self ].
+	
+	selectedSharedVariableModel removeSharedVariable.
+	"the update will happen with the notification"
+	self owner notifyEntityChanged: self model asClassModel
+]
+
+{ #category : 'private - actions' }
 PulsarClassOutlineSideView >> doForceRemoveSlot [
  	"Forcefully remove a variable  (without passing through the refactor remove implementation
 	 that will check all usages, etc.)"
