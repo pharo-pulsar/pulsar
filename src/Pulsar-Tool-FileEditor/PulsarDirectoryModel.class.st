@@ -38,6 +38,27 @@ PulsarDirectoryModel >> children [
 		  yourself
 ]
 
+{ #category : 'actions' }
+PulsarDirectoryModel >> createDirectoryNamed: aString [
+	"Create a new directory with the given name inside this one and return its model."
+
+	| dirRef |
+	dirRef := self entity / aString ensureCreateDirectory.
+	^ PulsarDirectoryModel newEnvironment: self environmentModel parent: self entity: dirRef
+]
+
+{ #category : 'actions' }
+PulsarDirectoryModel >> createFileNamed: aString [
+	"Create an empty file with the given name in this directory and return its model."
+	| fileRef |
+	
+	fileRef := (self entity / aString) ensureCreateFile.
+	^ PulsarFileModel 
+		newEnvironment: self environmentModel 
+		parent: self 
+		entity: fileRef
+]
+
 { #category : 'accessing' }
 PulsarDirectoryModel >> fullName [
 

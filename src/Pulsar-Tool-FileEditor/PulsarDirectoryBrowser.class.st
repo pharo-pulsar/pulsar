@@ -60,13 +60,77 @@ PulsarDirectoryBrowser >> defaultLayout [
 PulsarDirectoryBrowser >> defineActionsOn: aBuilder [
 	<dockActions>
 	
-	aBuilder addGroup: #actions with: [ :group | group 
-		beDisplayedAsGroup;
-		addActionWith: [ :action | action 
-			name: 'Open file location';
-			iconName: 'open';
-			description: 'Open current file location on the external file manager';
-			action: [ self doOpenCurrentFolder ] ] ]
+	aBuilder
+		addGroup: #actions with: [ :group | group
+			beDisplayedAsGroup;
+			addActionWith: [ :action | action
+				name: 'Open file location';
+				iconName: 'open';
+				description: 'Open current file location on the external file manager';
+				action: [ self doOpenCurrentFolder ] ] ];
+		addGroup: #directory with: [ :group | group
+			priority: 10;
+			name: 'Directory';
+			beDisplayedAsGroup;
+			addActionWith: [ :action | action
+				name: 'New file';
+				description: 'Create a new empty file';
+				iconName: 'add';
+				action: [ self doAddFileCommand: action ] ];
+			addActionWith: [ :action | action
+				name: 'New folder';
+				description: 'Create a new directory';
+				iconName: 'add';
+				action: [ self doAddFolderCommand: action ] ] ];
+		addGroup: #directoryCritical with: [ :group | group
+			priority: 1000;
+			name: 'DANGER ZONE';
+			beDisplayedAsGroup;
+			addActionWith: [ :action | action
+				name: 'Remove';
+				description: 'Remove selected file or folder';
+				shortcutKey: $x mod1 shift;
+				action: [ self doRemoveSelectedFileOrFolder ] ] ]
+]
+
+{ #category : 'private - actions' }
+PulsarDirectoryBrowser >> doAddFileCommand: aCommand [
+
+	| dialog fileName selectedDir |
+	selectedDir := self selectedDirectoryModel.
+
+	dialog := self instantiate: PulsarRequestPresenter.
+	dialog label: 'File Name'.
+	dialog acceptLabel: 'Create'.
+
+	dialog asPopover
+		relativeTo: aCommand presenter;
+		popupModalAndWait.
+	dialog isOk ifFalse: [ ^ self ].
+
+	fileName := dialog text.
+	selectedDir createFileNamed: fileName.
+	self updatePresenter
+]
+
+{ #category : 'private - actions' }
+PulsarDirectoryBrowser >> doAddFolderCommand: aCommand [
+
+	| dialog folderName selectedDir |
+	selectedDir := self selectedDirectoryModel.
+
+	dialog := self instantiate: PulsarRequestPresenter.
+	dialog label: 'Folder Name'.
+	dialog acceptLabel: 'Create'.
+
+	dialog asPopover
+		relativeTo: aCommand presenter;
+		popupModalAndWait.
+	dialog isOk ifFalse: [ ^ self ].
+
+	folderName := dialog text.
+	selectedDir createDirectoryNamed: folderName.
+	self updatePresenter
 ]
 
 { #category : 'private - actions' }
@@ -84,22 +148,44 @@ PulsarDirectoryBrowser >> doOpenCurrentFolder [
 
 ]
 
+{ #category : 'private - actions' }
+PulsarDirectoryBrowser >> doRemoveSelectedFileOrFolder [
+	"Remove the selected file or folder after user confirmation."
+
+	| okToRemove selected |
+	selected := directoryTreePresenter selectedItem.
+	selected ifNil: [ ^ self ].
+
+	okToRemove := self application newConfirm
+		              title: 'Remove';
+		              message: ('Do you want to remove {1}?' format: { selected name });
+		              acceptLabel: 'Remove';
+		              openModalWithParent: self window.
+	okToRemove ifFalse: [ ^ self ].
+
+	selected entity delete.
+	self updatePresenter
+]
+
 { #category : 'initialization' }
 PulsarDirectoryBrowser >> initializePresenters [
 
 	self addStyle: 'pulsarDirectoryBrowser'.
 
 	headerPresenter := self instantiate: PulsarEditorToolbarPresenter.
-	headerPresenter actions: self actions.
+	headerPresenter actions: (self actions actionsFor: #actions).
+	
+	headerPresenter addPresenter: (self newToolbar 
+		beIcons;
+		fillWith: (self actions actionsFor: #directory)).
 
 	directoryTreePresenter := self newEasyTreeListView
 		addStyle: 'stTree';
 		children: [ :aModel | aModel children ];
 		display: [ :aModel | aModel name ];
 		displayIcon: [ :aModel | self iconNamed: aModel iconName ];
-		yourself.
-
-	"editorPresenter := self instantiate: PulsarFileEditor"
+		actions: (self actions actionsForAll: #( directory directoryCritical ));
+		yourself "editorPresenter := self instantiate: PulsarFileEditor"
 ]
 
 { #category : 'testing' }
@@ -140,6 +226,17 @@ PulsarDirectoryBrowser >> raise [
 PulsarDirectoryBrowser >> registerToBrowser: aPulsarBrowser [
 
 	self notificationCenter: aPulsarBrowser notificationCenter
+]
+
+{ #category : 'private - accessing' }
+PulsarDirectoryBrowser >> selectedDirectoryModel [
+	"Return the selected item if it is a directory model, otherwise return the root model."
+
+	| selected |
+	selected := directoryTreePresenter selectedItem.
+	^ (selected isNotNil and: [ selected isDirectory ])
+		  ifTrue: [ selected ]
+		  ifFalse: [ self model ]
 ]
 
 { #category : 'accessing - model' }
