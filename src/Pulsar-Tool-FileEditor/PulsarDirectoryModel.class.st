@@ -41,10 +41,13 @@ PulsarDirectoryModel >> children [
 { #category : 'actions' }
 PulsarDirectoryModel >> createDirectoryNamed: aString [
 	"Create a new directory with the given name inside this one and return its model."
-
 	| dirRef |
+	
 	dirRef := self entity / aString ensureCreateDirectory.
-	^ PulsarDirectoryModel newEnvironment: self environmentModel parent: self entity: dirRef
+	^ PulsarDirectoryModel 
+		newEnvironment: self environmentModel 
+		parent: self 
+		entity: dirRef
 ]
 
 { #category : 'actions' }
@@ -57,6 +60,12 @@ PulsarDirectoryModel >> createFileNamed: aString [
 		newEnvironment: self environmentModel 
 		parent: self 
 		entity: fileRef
+]
+
+{ #category : 'actions' }
+PulsarDirectoryModel >> delete [ 
+
+	self entity ensureDelete
 ]
 
 { #category : 'accessing' }

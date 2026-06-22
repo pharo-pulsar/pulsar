@@ -95,8 +95,8 @@ PulsarDirectoryBrowser >> defineActionsOn: aBuilder [
 
 { #category : 'private - actions' }
 PulsarDirectoryBrowser >> doAddFileCommand: aCommand [
-
 	| dialog fileName selectedDir |
+	
 	selectedDir := self selectedDirectoryModel.
 
 	dialog := self instantiate: PulsarRequestPresenter.
@@ -115,8 +115,8 @@ PulsarDirectoryBrowser >> doAddFileCommand: aCommand [
 
 { #category : 'private - actions' }
 PulsarDirectoryBrowser >> doAddFolderCommand: aCommand [
-
 	| dialog folderName selectedDir |
+	
 	selectedDir := self selectedDirectoryModel.
 
 	dialog := self instantiate: PulsarRequestPresenter.
@@ -151,19 +151,19 @@ PulsarDirectoryBrowser >> doOpenCurrentFolder [
 { #category : 'private - actions' }
 PulsarDirectoryBrowser >> doRemoveSelectedFileOrFolder [
 	"Remove the selected file or folder after user confirmation."
-
-	| okToRemove selected |
-	selected := directoryTreePresenter selectedItem.
-	selected ifNil: [ ^ self ].
+	| okToRemove selectedFile |
+	
+	selectedFile := directoryTreePresenter selectedItem.
+	selectedFile ifNil: [ ^ self ].
 
 	okToRemove := self application newConfirm
-		              title: 'Remove';
-		              message: ('Do you want to remove {1}?' format: { selected name });
-		              acceptLabel: 'Remove';
-		              openModalWithParent: self window.
+		title: 'Remove';
+		message: ('Do you want to remove {1}?' format: { selected name });
+		acceptLabel: 'Remove';
+		openModalWithParent: self window.
 	okToRemove ifFalse: [ ^ self ].
 
-	selected entity delete.
+	selectedFile delete.
 	self updatePresenter
 ]
 
