@@ -602,9 +602,11 @@ PulsarRepositoryModel >> status [
 { #category : 'actions' }
 PulsarRepositoryModel >> switchToBranchNamed: branchName [
 
-	self entity
-		ensureBranch: branchName;
-		switchToBranchNamed: branchName
+	"when I am creating a new repository (e.g. switching from master to main) 
+	 I cannot just switch to the branch (because it does not exist)"
+	self entity ensureBranch: branchName.
+	self entity head isUnbornBranch 
+		ifFalse: [ self entity switchToBranchNamed: branchName ]
 ]
 
 { #category : 'accessing' }
