@@ -60,6 +60,8 @@ PulsarClassOutlineView >> defaultLayout [
 PulsarClassOutlineView >> eventClassChanged: aClassAnnouncement [
 
 	logger trace: aClassAnnouncement.
+	
+	self model ifNil: [ ^ self ].
 	(self model isSameClass: aClassAnnouncement classAffected) ifFalse: [ ^ self ].
 
 	logger trace: aClassAnnouncement.
