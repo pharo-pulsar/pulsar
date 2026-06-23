@@ -250,6 +250,8 @@ PulsarRepositoryModel >> isDirty [
 { #category : 'testing' }
 PulsarRepositoryModel >> isHeadInBranch [
 
+	self entity isValid ifFalse: [ ^ false ].
+
 	^ self critical: [ self entity head isBranch ]
 ]
 
@@ -494,7 +496,7 @@ PulsarRepositoryModel >> newRemoveRemoteBranchAction: aBranchModel [
 { #category : 'actions' }
 PulsarRepositoryModel >> openInOSFileBrowser [
 
-	^ self entity location openInOSFileBrowser
+	^ StTerminalInterface default openTerminalOn: self entity location
 ]
 
 { #category : 'accessing' }

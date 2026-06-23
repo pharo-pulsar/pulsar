@@ -104,7 +104,14 @@ PulsarDiffNode >> countChildren [
 
 { #category : 'private' }
 PulsarDiffNode >> createPatch [
-	| operation from to patch |
+	| operation |
+	
+	(self entity definition isFileDefinition
+		and: [ self entity definition isBinary ])
+		ifTrue: [ 
+			^ SpPatchModel 
+				newFrom: ''
+				to: 'Binary file, contents can''t be visualised.' ]. 
 	
 	operation := self node value.
 	patch := SpPatchModel
@@ -193,6 +200,12 @@ PulsarDiffNode >> isActive [
 PulsarDiffNode >> isBigChange [
 
 	^ self countChildren > 750
+]
+
+{ #category : 'testing' }
+PulsarDiffNode >> isCode [
+
+	^ self entity definition isCodeDefinition
 ]
 
 { #category : 'testing' }

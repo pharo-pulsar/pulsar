@@ -221,7 +221,8 @@ PulsarRepositoryDiffEditor >> updatePatchContents [
 		self model withAllChildrenDo: [ :eachModel | 
 			eachModel hasChanges ifTrue: [ stream nextPut: eachModel ] ] ].
 
-	contents := SpBoxLayout newVertical vAlignStart. "40 is a magic number"
+	contents := SpBoxLayout newVertical vAlignStart. 
+	"40 is a magic number"
 	groups := nodes groupsOf: 40.
 	self withWindowDo: #jobStart.
 	contents add: self newDiffHeader.
@@ -232,13 +233,14 @@ PulsarRepositoryDiffEditor >> updatePatchContents [
 					| patchPresenter |
 					patchPresenter := self instantiate: self patchPresenterClass on: eachModel.
 					patchPresenter notificationCenter: self notificationCenter.
-					self application defer: [ contents add: patchPresenter ] ] ] ensure: [
+					self application defer: [ contents add: patchPresenter ] ] ] 
+			ensure: [
 				index = groups size ifTrue: [ self withWindowDo: #jobEnd ] ] ] ].
 
 	self application defer: [
 		self scrollableLayoutForContent child: (self newPresenter
-				 layout: contents;
-				 yourself) ].
+			layout: contents;
+			yourself) ].
 	
 	self updateCommitInfo
 ]

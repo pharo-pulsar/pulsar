@@ -11,6 +11,16 @@ Class {
 }
 
 { #category : 'initialization' }
+PulsarRepositoryRow >> addBranch [
+
+	extraPresenter layout
+		add: (self newLabel 
+			addStyle: 'branch';
+			label: self model headName;
+			yourself)
+]
+
+{ #category : 'initialization' }
 PulsarRepositoryRow >> addIncomingCommits: incomingCommits [
 
 	extraPresenter layout 
@@ -81,11 +91,12 @@ PulsarRepositoryRow >> updatePresenter [
 	labelPresenter addStyle: self model status asString.
 	
 	extraPresenter layout removeAll.
+	self model isHeadInBranch 
+		ifTrue: [ self addBranch ].
 	self model headTags 
 		ifNotEmpty: [ :tags | self addTags: tags ].
 	self model outgoingCommits
 		ifNotEmpty: [ :outgoingCommits | self addOutgoingCommits: outgoingCommits ].
 	self model incomingCommits
-		ifNotEmpty: [ :incomingCommits | self addIncomingCommits: incomingCommits ].
-
+		ifNotEmpty: [ :incomingCommits | self addIncomingCommits: incomingCommits ]		
 ]

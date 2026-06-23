@@ -274,6 +274,8 @@ PulsarMDINeutralIconProvider >> createTable [
 		"Files"
 		('file'					'file-outline' 				'#b86e00' '#d9902f')
 		('folder'				'folder-outline' 			'#b86e00' '#d9902f')
+		('addFolder'				'folder-plus-outline')
+		('console'			    'console')
 	)
 ]
 

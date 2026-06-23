@@ -141,6 +141,7 @@ PulsarGtkConfiguration >> darkPaletteStyle [
 @define-color commit_outgoing 		LightGreen;
 @define-color commit_incoming 		Yellow;
 @define-color package_notloaded 		DarkGray;
+@define-color repository_branch 		DarkGray;
 /* pin */
 @define-color pinned_bg_color		#1f232a;
 /* commit */
@@ -240,6 +241,7 @@ PulsarGtkConfiguration >> lightPaletteStyle [
 @define-color commit_outgoing 			green;
 @define-color commit_incoming 			orange;
 @define-color package_notloaded 			#A0A0A0;
+@define-color repository_branch 			#A0A0A0;
 /* pin */
 @define-color pinned_bg_color			#f3f6fb;
 /* commit */
@@ -453,7 +455,8 @@ box.commitInfo .separator { opacity: 0.8; }
 .pulsarRepositoryBranchRow label.head { font-weight: bold; }
 .pulsarRepositoryRow .extra label.outgoing, .pulsarRepositoryBranchRow .extra label.outgoing { color: @commit_outgoing; }
 .pulsarRepositoryRow .extra label.incoming, .pulsarRepositoryBranchRow .extra label.incoming{ color: @commit_incoming; }
-.pulsarRepositoryRow .extra label.tags { font-style: italic; font-size: 0.8em; }
+.pulsarRepositoryRow .extra label.tags,
+.pulsarRepositoryRow .extra label.branch { font-style: italic; font-size: 0.8em; color: @repository_branch }
 .pulsarRepositoryCommit label.outgoing { color: @commit_outgoing; }
 /* .pulsarRepositoryPackageRow label.loaded { } */
 .pulsarRepositoryPackageRow label.notloaded { color: @package_notloaded; }

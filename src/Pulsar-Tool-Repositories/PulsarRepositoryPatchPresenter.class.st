@@ -78,6 +78,14 @@ PulsarRepositoryPatchPresenter >> registerToBrowser: aPulsarBrowser [
 ]
 
 { #category : 'initialization' }
+PulsarRepositoryPatchPresenter >> updatePatch [
+
+	patchPresenter 
+		syntaxHighlight: self model isCode;
+		patch: self model patch
+]
+
+{ #category : 'initialization' }
 PulsarRepositoryPatchPresenter >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
@@ -91,5 +99,5 @@ PulsarRepositoryPatchPresenter >> updatePresenter [
 
 	summaryPresenter label: self model summary.
 
-	patchPresenter patch: self model patch
+	self updatePatch
 ]
