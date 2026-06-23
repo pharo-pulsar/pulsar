@@ -667,11 +667,13 @@ PulsarApplication >> windowWillClose: aPulsarWindow [
 		canClose := (anyEditorDirty or: [ lostChanges ])
 			ifTrue: [
 				self newConfirm 
-					title: 'Quit Pharo?';
+					title: ((self windows size = 1) 
+						ifTrue: [  'Quit Pharo?' ]
+						ifFalse: [ 'Close the Window?' ] );
 					"message: (
 						(String cr join: messages),
 						String cr, 'Quit anyway?');"  
-					message: 'There are unsaved changes in your environment.<n>Quit anyway?' expandMacros;
+					message: 'There are unsaved changes.<n>Close anyway?' expandMacros;
 					cancelLabel: 'Stay';
 					acceptLabel: 'Quit';
 					openModalWithParent: aPulsarWindow ]
