@@ -67,7 +67,12 @@ PulsarDirectoryBrowser >> defineActionsOn: aBuilder [
 				name: 'Open file location';
 				iconName: 'open';
 				description: 'Open current file location on the external file manager';
-				action: [ self doOpenCurrentFolder ] ] ];
+				action: [ self doOpenCurrentFolder ] ];
+			addActionWith: [ :action | action
+				name: 'Open terminal';
+				iconName: 'console';
+				description: 'Open a terminal on current file location';
+				action: [ self doOpenTerminalOnCurrentFolder ] ] ];
 		addGroup: #directory with: [ :group | group
 			priority: 10;
 			name: 'Directory';
@@ -80,7 +85,7 @@ PulsarDirectoryBrowser >> defineActionsOn: aBuilder [
 			addActionWith: [ :action | action
 				name: 'New folder';
 				description: 'Create a new directory';
-				iconName: 'add';
+				iconName: 'addFolder';
 				action: [ self doAddFolderCommand: action ] ] ];
 		addGroup: #directoryCritical with: [ :group | group
 			priority: 1000;
@@ -149,6 +154,12 @@ PulsarDirectoryBrowser >> doOpenCurrentFolder [
 ]
 
 { #category : 'private - actions' }
+PulsarDirectoryBrowser >> doOpenTerminalOnCurrentFolder [
+
+	self model openTerminal
+]
+
+{ #category : 'private - actions' }
 PulsarDirectoryBrowser >> doRemoveSelectedFileOrFolder [
 	"Remove the selected file or folder after user confirmation."
 	| okToRemove selectedFile |
@@ -158,7 +169,7 @@ PulsarDirectoryBrowser >> doRemoveSelectedFileOrFolder [
 
 	okToRemove := self application newConfirm
 		title: 'Remove';
-		message: ('Do you want to remove {1}?' format: { selected name });
+		message: ('Do you want to remove {1}?' format: { selectedFile name });
 		acceptLabel: 'Remove';
 		openModalWithParent: self window.
 	okToRemove ifFalse: [ ^ self ].

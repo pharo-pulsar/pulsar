@@ -400,6 +400,12 @@ PulsarFileModel class >> reset [
 	NameBasedIcons := nil
 ]
 
+{ #category : 'actions' }
+PulsarFileModel >> delete [
+
+	self entity ensureDelete
+]
+
 { #category : 'accessing' }
 PulsarFileModel >> fullName [
 

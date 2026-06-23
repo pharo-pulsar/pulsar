@@ -110,6 +110,12 @@ PulsarDirectoryModel >> openInOSFileBrowser [
 	^ self entity openInOSFileBrowser
 ]
 
+{ #category : 'actions' }
+PulsarDirectoryModel >> openTerminal [
+
+	PulsarTerminalInterface default openTerminalOn: self entity fullName
+]
+
 { #category : 'accessing - ui' }
 PulsarDirectoryModel >> pulsarEditorClass [
 
