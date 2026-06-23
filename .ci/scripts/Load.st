@@ -22,6 +22,7 @@ MetaMetacello load: [ :spec | spec
 		loads: #('Roassal-Spec-Gtk') ];
 	"threaded iceberg"
 	baseline: 'LibGit' with: [ spec repository: 'github://pharo-vcs/libgit2-pharo-bindings:experimental-run-in-thread' ];
+	baseline: 'Iceberg' with: [ spec repository: 'github://pharo-vcs/iceberg:track-external-files' ];
 	"LLM (should be optional)"
 	baseline: 'JRPC' with: [ spec 
 		repository: 'github://juliendelplanque/JRPC:v3.2.1'; 
