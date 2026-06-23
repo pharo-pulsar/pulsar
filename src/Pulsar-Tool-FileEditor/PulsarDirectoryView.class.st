@@ -72,8 +72,8 @@ PulsarDirectoryView >> defineActionsOn: aBuilder [
 
 { #category : 'private - actions' }
 PulsarDirectoryView >> doAddFileCommand: aCommand [
-
 	| dialog fileName selectedDir |
+	
 	selectedDir := self selectedDirectoryModel.
 
 	dialog := self instantiate: PulsarRequestPresenter.
@@ -92,8 +92,8 @@ PulsarDirectoryView >> doAddFileCommand: aCommand [
 
 { #category : 'private - actions' }
 PulsarDirectoryView >> doAddFolderCommand: aCommand [
-
 	| dialog folderName selectedDir |
+	
 	selectedDir := self selectedDirectoryModel.
 
 	dialog := self instantiate: PulsarRequestPresenter.
@@ -125,16 +125,16 @@ PulsarDirectoryView >> doOpenCurrentFolder [
 { #category : 'private - actions' }
 PulsarDirectoryView >> doRemoveSelectedFileOrFolder [
 	"Remove the selected file or folder after user confirmation."
-
 	| okToRemove selected |
+	
 	selected := listPresenter selectedItem.
 	selected ifNil: [ ^ self ].
 
 	okToRemove := self application newConfirm
-		              title: 'Remove';
-		              message: ('Do you want to remove {1}?' format: { selected name });
-		              acceptLabel: 'Remove';
-		              openModalWithParent: self window.
+		title: 'Remove';
+		message: ('Do you want to remove {1}?' format: { selected name });
+		acceptLabel: 'Remove';
+		openModalWithParent: self window.
 	okToRemove ifFalse: [ ^ self ].
 
 	selected entity delete.
@@ -149,22 +149,22 @@ PulsarDirectoryView >> initializePresenters [
 	toolbarPresenter := self instantiate: PulsarEditorToolbarPresenter.
 	toolbarPresenter actions: (self actions actionsForAll: #( actions directory )).
 	toolbarPresenter addPresenter: (self newToolbar
-			 beIcons;
-			 add: (self newButton
-					  addStyle: 'flat';
-					  icon: (self iconNamed: 'close');
-					  help: 'Close critics console';
-					  action: [ self doClose ];
-					  yourself);
-			 yourself).
+		beIcons;
+		add: (self newButton
+			addStyle: 'flat';
+			icon: (self iconNamed: 'close');
+			help: 'Close critics console';
+			action: [ self doClose ];
+			yourself);
+		yourself).
 
 	listPresenter := self newEasyTreeListView
-		                 addStyle: 'stTree';
-		                 children: [ :aModel | aModel children ];
-		                 display: [ :aModel | aModel name ];
-		                 displayIcon: [ :aModel | self iconNamed: aModel iconName ];
-		                 actions: (self actions actionsForAll: #( directory directoryCritical ));
-		                 yourself
+		addStyle: 'stTree';
+		children: [ :aModel | aModel children ];
+		display: [ :aModel | aModel name ];
+		displayIcon: [ :aModel | self iconNamed: aModel iconName ];
+		actions: (self actions actionsForAll: #( directory directoryCritical ));
+		yourself
 ]
 
 { #category : 'private' }
@@ -176,8 +176,8 @@ PulsarDirectoryView >> panelPlacedIconName [
 { #category : 'private - accessing' }
 PulsarDirectoryView >> selectedDirectoryModel [
 	"Return the selected item if it is a directory model, otherwise return the root model."
-
 	| selected |
+	
 	selected := listPresenter selectedItem.
 	^ (selected isNotNil and: [ selected isDirectory ])
 		  ifTrue: [ selected ]
