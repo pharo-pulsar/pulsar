@@ -194,7 +194,8 @@ PulsarDebugger >> updatePresenter [
 { #category : 'initialization' }
 PulsarDebugger >> updateTitle [
 
-	self withWindowDo: [ :aWindow | aWindow title: self model name ]
+	self withWindowDo: [ :aWindow | 
+		aWindow title: (self model name truncateWithElipsisTo: 150) withoutTrailingNewlines ]
 ]
 
 { #category : 'private' }
