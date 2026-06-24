@@ -32,7 +32,14 @@ PulsarPackageDependenciesPresenter >> connectPresenters [
 
 	packagesList
 		transmitTo: dependenciesItems
-		transform: [ :selected | selected ifNil: [ #(  ) ] ifNotNil: [ self model dependencyItemsFor: selected ] ]
+		transform: [ :selected |
+			selected 
+				ifNotNil: [ self model dependencyItemsFor: selected ]
+				ifNil: [ #() ]  ].
+
+	dependenciesItems outputActivationPort transmitDo: [ :dependency |
+		(dependency browsableEntityOn: self environmentModel)
+			ifNotNil: [ :entity | self notifyActivateEntity: entity ] ]
 ]
 
 { #category : 'layout' }
@@ -45,6 +52,12 @@ PulsarPackageDependenciesPresenter >> defaultLayout [
 			add: dependenciesItems;
 			yourself);
 		yourself
+]
+
+{ #category : 'private' }
+PulsarPackageDependenciesPresenter >> environmentModel [
+
+	^ self owner model environmentModel
 ]
 
 { #category : 'initialization' }
@@ -90,6 +103,20 @@ PulsarPackageDependenciesPresenter >> initializePresenters [
 		displayIcon: [ :each | self iconNamed: each nodeClass new iconName ];
 		enableSearch;
 		yourself
+]
+
+{ #category : 'accessing' }
+PulsarPackageDependenciesPresenter >> notificationCenter [
+
+	^ self owner notificationCenter
+]
+
+{ #category : 'private - announcing' }
+PulsarPackageDependenciesPresenter >> notifyActivateEntity: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+
+	self notificationCenter announce: anEntity newActivationAnnouncement
 ]
 
 { #category : 'events' }
