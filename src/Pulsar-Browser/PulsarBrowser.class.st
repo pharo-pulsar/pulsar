@@ -90,16 +90,6 @@ PulsarBrowser >> defaultKeyboardFocus [
 ]
 
 { #category : 'private - definitions' }
-PulsarBrowser >> defineDevelopmentToolsActionsOn: aBuilder [
-	<dockActions>
-
-	"this actions are just possible in linux"
-	OSPlatform current isLinux ifFalse: [ ^ self ].
-	
-	aBuilder addAll: (PulsarMorphicWorldActivator uniqueInstance actions entries)
-]
-
-{ #category : 'private - definitions' }
 PulsarBrowser >> defineExtraActionsOn: aBuilder [
 	<dockActions>
 	"nothing here for now, but we override because the playground is 
