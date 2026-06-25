@@ -1,8 +1,8 @@
 Class {
 	#name : 'PulsarVersionsBrowser',
 	#superclass : 'SpPresenter',
-	#traits : 'SpTModel + PulsarTNotificationCenter + PulsarTPanelWindow + PulsarTSnapshot + PulsarTJobHandler + PulsarTTaskWorker',
-	#classTraits : 'SpTModel classTrait + PulsarTNotificationCenter classTrait + PulsarTPanelWindow classTrait + PulsarTSnapshot classTrait + PulsarTJobHandler classTrait + PulsarTTaskWorker classTrait',
+	#traits : 'SpTModel + PulsarTNotificationCenter + PulsarTPanelWindow + PulsarTPopover + PulsarTSnapshot + PulsarTJobHandler + PulsarTTaskWorker',
+	#classTraits : 'SpTModel classTrait + PulsarTNotificationCenter classTrait + PulsarTPanelWindow classTrait + PulsarTPopover classTrait + PulsarTSnapshot classTrait + PulsarTJobHandler classTrait + PulsarTTaskWorker classTrait',
 	#instVars : [
 		'headerPresenter',
 		'versionListPresenter',
@@ -28,10 +28,7 @@ Class {
 PulsarVersionsBrowser >> addPopoverControls [
 	| controlsPresenter |
 
-	controlsPresenter := self instantiate: PulsarPopoverControlBoxPresenter.
-	controlsPresenter onPulsar: [ 
-		self withPopoverDo: #dismiss.
-		self notifyActivateEntity: self model ].
+	controlsPresenter := self newPopoverControlBoxPresenter.
 	controlsPresenter popoverActions: self versionActions.
 	headerPresenter addPresenter: controlsPresenter
 ]

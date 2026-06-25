@@ -4,8 +4,8 @@ A hierarchy presenter for metamodels (classes, methods)
 Class {
 	#name : 'PulsarHierarchyPresenter',
 	#superclass : 'PvMethodHierarchyPresenter',
-	#traits : 'PulsarTNotificationCenter + PulsarTPanelWindow + PulsarTSnapshot',
-	#classTraits : 'PulsarTNotificationCenter classTrait + PulsarTPanelWindow classTrait + PulsarTSnapshot classTrait',
+	#traits : 'PulsarTNotificationCenter + PulsarTPanelWindow + PulsarTSnapshot + PulsarTPopover',
+	#classTraits : 'PulsarTNotificationCenter classTrait + PulsarTPanelWindow classTrait + PulsarTSnapshot classTrait + PulsarTPopover classTrait',
 	#instVars : [
 		'headerPresenter'
 	],
@@ -16,13 +16,8 @@ Class {
 
 { #category : 'initialization' }
 PulsarHierarchyPresenter >> addPopoverControls [
-	| controlsPresenter |
 
-	controlsPresenter := self instantiate: PulsarPopoverControlBoxPresenter.
-	controlsPresenter onPulsar: [ 
-		self withPopoverDo: #dismiss.
-		self notifyActivateEntity: self model ].
-	headerPresenter addPresenter: controlsPresenter
+	headerPresenter addPresenter: self newPopoverControlBoxPresenter
 ]
 
 { #category : 'initialization' }

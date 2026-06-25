@@ -4,8 +4,8 @@ A message browser (to show senders and implementors)
 Class {
 	#name : 'PulsarMessageBrowser',
 	#superclass : 'SpPresenter',
-	#traits : 'SpTModel + PulsarTNotificationCenter + PulsarTPanelWindow + PulsarTSnapshot',
-	#classTraits : 'SpTModel classTrait + PulsarTNotificationCenter classTrait + PulsarTPanelWindow classTrait + PulsarTSnapshot classTrait',
+	#traits : 'SpTModel + PulsarTNotificationCenter + PulsarTPanelWindow + PulsarTSnapshot + PulsarTPopover',
+	#classTraits : 'SpTModel classTrait + PulsarTNotificationCenter classTrait + PulsarTPanelWindow classTrait + PulsarTSnapshot classTrait + PulsarTPopover classTrait',
 	#instVars : [
 		'messageListPresenter',
 		'editorPresenter',
@@ -32,13 +32,8 @@ PulsarMessageBrowser >> acceptMethod: aMehodModel [
 
 { #category : 'initialization' }
 PulsarMessageBrowser >> addPopoverControls [
-	| controlsPresenter |
 
-	controlsPresenter := self instantiate: PulsarPopoverControlBoxPresenter.
-	controlsPresenter onPulsar: [ 
-		self withPopoverDo: #dismiss.
-		self notifyActivateEntity: self model ].
-	headerPresenter addPresenter: controlsPresenter
+	headerPresenter addPresenter: self newPopoverControlBoxPresenter
 ]
 
 { #category : 'initialization' }

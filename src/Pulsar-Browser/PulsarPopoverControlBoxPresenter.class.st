@@ -3,7 +3,8 @@ Class {
 	#superclass : 'SpPresenter',
 	#instVars : [
 		'toolbarPresenter',
-		'dockAction'
+		'detachAction',
+		'attachAction'
 	],
 	#category : 'Pulsar-Browser-View-Base',
 	#package : 'Pulsar-Browser',
@@ -11,10 +12,17 @@ Class {
 }
 
 { #category : 'private' }
-PulsarPopoverControlBoxPresenter >> announceDock [ 
+PulsarPopoverControlBoxPresenter >> announceAttach [ 
 
-	dockAction ifNil: [ ^ self ].
-	dockAction value
+	attachAction ifNil: [ ^ self ].
+	attachAction value
+]
+
+{ #category : 'private' }
+PulsarPopoverControlBoxPresenter >> announceDettach [ 
+
+	detachAction ifNil: [ ^ self ].
+	detachAction value
 ]
 
 { #category : 'layout' }
@@ -37,12 +45,18 @@ PulsarPopoverControlBoxPresenter >> initializePresenters [
 ]
 
 { #category : 'events' }
-PulsarPopoverControlBoxPresenter >> onPulsar: aBlock [
+PulsarPopoverControlBoxPresenter >> onAttach: aBlock [
 
-	dockAction := aBlock
+	attachAction := aBlock
 ]
 
-{ #category : 'api - actions' }
+{ #category : 'events' }
+PulsarPopoverControlBoxPresenter >> onDetach: aBlock [
+
+	detachAction := aBlock
+]
+
+{ #category : 'accessing' }
 PulsarPopoverControlBoxPresenter >> popoverActions: anActionGroup [
 
 	toolbarPresenter fillWith: (SpActionGroup new
@@ -56,10 +70,15 @@ PulsarPopoverControlBoxPresenter >> popoverControlGroup [
 
 	^ SpActionGroup new
 		addActionWith: [ :action | action 
-			name: 'Pulsar';
+			name: 'Attach';
 			iconName: 'arrowDown';
-			description: 'Dock popover.';
-			action: [ self announceDock ] ];
+			description: 'Attach popover.';
+			action: [ self announceAttach ] ];
+		addActionWith: [ :action | action 
+			name: 'Detach';
+			iconName: 'arrowUp';
+			description: 'Detach popover.';
+			action: [ self announceDettach ] ];
 		addActionWith: [ :action | action 
 			name: 'Close';
 			iconName: 'close';

@@ -4,6 +4,8 @@ An editor for methods.
 Class {
 	#name : 'PulsarMethodEditor',
 	#superclass : 'PulsarEditor',
+	#traits : 'PulsarTPopover',
+	#classTraits : 'PulsarTPopover classTrait',
 	#instVars : [
 		'protocolPresenter',
 		'linkedToSelection',
@@ -58,14 +60,8 @@ PulsarMethodEditor >> activateWith: anActivationAnnouncement [
 
 { #category : 'initialization' }
 PulsarMethodEditor >> addPopoverControls [
-	| controlsPresenter |
 
-	controlsPresenter := self instantiate: PulsarPopoverControlBoxPresenter.
-	controlsPresenter onPulsar: [ 
-		self withPopoverDo: #dismiss.
-		self notifyActivateEntity: self model ].
-	
-	toolbarPresenter addPresenterAtEnd: controlsPresenter
+	toolbarPresenter addPresenterAtEnd: self newPopoverControlBoxPresenter
 ]
 
 { #category : 'private' }

@@ -4,8 +4,8 @@ An inspector to be shown as a popover or docked in a browser.
 Class {
 	#name : 'PulsarInspector',
 	#superclass : 'SpPresenter',
-	#traits : 'PulsarTNotificationCenter + PulsarTPanelWindow + PulsarTSnapshot + SpTModel',
-	#classTraits : 'PulsarTNotificationCenter classTrait + PulsarTPanelWindow classTrait + PulsarTSnapshot classTrait + SpTModel classTrait',
+	#traits : 'SpTModel + PulsarTNotificationCenter + PulsarTPanelWindow + PulsarTSnapshot + PulsarTPopover',
+	#classTraits : 'SpTModel classTrait + PulsarTNotificationCenter classTrait + PulsarTPanelWindow classTrait + PulsarTSnapshot classTrait + PulsarTPopover classTrait',
 	#instVars : [
 		'headerPresenter',
 		'inspectionsPresenter'
@@ -17,13 +17,8 @@ Class {
 
 { #category : 'initialization' }
 PulsarInspector >> addPopoverControls [
-	| controlsPresenter |
 
-	controlsPresenter := self instantiate: PulsarPopoverControlBoxPresenter.
-	controlsPresenter onPulsar: [ 
-		self withPopoverDo: #dismiss.
-		self notifyActivateEntity: self model ].
-	headerPresenter addPresenter: controlsPresenter
+	headerPresenter addPresenter: self newPopoverControlBoxPresenter
 ]
 
 { #category : 'private' }
