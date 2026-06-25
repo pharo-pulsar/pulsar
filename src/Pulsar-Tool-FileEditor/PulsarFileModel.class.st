@@ -498,12 +498,14 @@ PulsarFileModel >> updateWith: aString [
 	| bakReference |	
 	
 	"make backup"
-	bakReference := self entity copy withExtension: (self entity extension, '~').
+	bakReference := (self entity parent / (self entity basename, '~')).
 	bakReference ensureDelete.
-	self entity copy renameTo: bakReference basename.
+	self entity copyTo: bakReference.
 	
 	"write new contents"
-	self entity writeStreamDo: [ :stream | stream nextPutAll: aString ].
+	self entity 
+		ensureDelete;
+		writeStreamDo: [ :stream | stream nextPutAll: aString ].
 	
 	^ true
 ]

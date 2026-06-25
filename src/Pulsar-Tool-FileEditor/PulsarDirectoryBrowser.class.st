@@ -102,7 +102,7 @@ PulsarDirectoryBrowser >> defineActionsOn: aBuilder [
 
 { #category : 'private - actions' }
 PulsarDirectoryBrowser >> doAddFileCommand: aCommand [
-	| dialog fileName selectedDir |
+	| dialog fileName selectedDir reference |
 	
 	selectedDir := self selectedDirectoryModel.
 
@@ -116,13 +116,16 @@ PulsarDirectoryBrowser >> doAddFileCommand: aCommand [
 	dialog isOk ifFalse: [ ^ self ].
 
 	fileName := dialog text.
-	selectedDir createFileNamed: fileName.
-	self updatePresenter
+	reference := selectedDir createFileNamed: fileName.
+	self updatePresenter.
+	directoryTreePresenter 
+		selectItem: reference;
+		takeKeyboardFocus
 ]
 
 { #category : 'private - actions' }
 PulsarDirectoryBrowser >> doAddFolderCommand: aCommand [
-	| dialog folderName selectedDir |
+	| dialog folderName selectedDir reference |
 	
 	selectedDir := self selectedDirectoryModel.
 
@@ -136,8 +139,11 @@ PulsarDirectoryBrowser >> doAddFolderCommand: aCommand [
 	dialog isOk ifFalse: [ ^ self ].
 
 	folderName := dialog text.
-	selectedDir createDirectoryNamed: folderName.
-	self updatePresenter
+	reference := selectedDir createDirectoryNamed: folderName.
+	self updatePresenter.
+	directoryTreePresenter 
+		selectItem: reference;
+		takeKeyboardFocus
 ]
 
 { #category : 'private - actions' }
