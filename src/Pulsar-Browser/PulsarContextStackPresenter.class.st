@@ -58,6 +58,7 @@ PulsarContextStackPresenter >> initializeWindow: aWindowPresenter [
 { #category : 'private' }
 PulsarContextStackPresenter >> panelPlaced: aPanelWidgetPresenter [
 
+	logger trace.
 	self maybeActivateIconOnPanel: aPanelWidgetPresenter
 ]
 

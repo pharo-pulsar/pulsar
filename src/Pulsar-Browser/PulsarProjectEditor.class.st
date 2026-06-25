@@ -51,13 +51,6 @@ PulsarProjectEditor >> notifyEditorActivated [
 	self notificationCenter announce: (PulsarEditorActivated newValue: self)
 ]
 
-{ #category : 'private' }
-PulsarProjectEditor >> panelFocused [
-
-	logger trace.
-	self notifyEditorActivated
-]
-
 { #category : 'initialization' }
 PulsarProjectEditor >> updatePresenter [
 

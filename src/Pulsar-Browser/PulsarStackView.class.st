@@ -160,15 +160,15 @@ PulsarStackView >> eventContextChanged: anAnnouncement [
 
 { #category : 'events' }
 PulsarStackView >> eventEditorActivated: anAnnouncement [
-	| currentItem activatedEditor |
+	| activatedEditor |
 
 	activatedEditor := anAnnouncement value.
 	self flag: #FIXME. "I am filtering if this is the same I activated last. 
 	For some reason, it is arriving twice. Probably the solution would be not 
 	to make it arrive twice, but for now the check is fine."
 	lastActivatedEditor = activatedEditor ifTrue: [ ^ self ].
-	lastActivatedEditor := activatedEditor. 	
 	
+	lastActivatedEditor := activatedEditor. 	
 	logger trace: activatedEditor.
 	self mutex critical: [
 		self updatePresenter.

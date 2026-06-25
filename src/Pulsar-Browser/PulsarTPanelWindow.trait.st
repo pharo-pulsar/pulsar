@@ -130,12 +130,13 @@ PulsarTPanelWindow >> notifyEditorClosed [
 
 { #category : 'private' }
 PulsarTPanelWindow >> panelFocused [
+
+	logger trace.
+	self notifyEditorActivated
 ]
 
 { #category : 'private' }
 PulsarTPanelWindow >> panelModifiedChanged [
-	 
-	self notifyEditorActivated
 ]
 
 { #category : 'private' }
@@ -165,8 +166,10 @@ PulsarTPanelWindow >> panelPosition: aPanelPosition [
 
 { #category : 'private' }
 PulsarTPanelWindow >> panelPresented [
-	
-	self recordLastPresented
+
+	logger trace.
+	self recordLastPresented.
+	self panelFocused
 ]
 
 { #category : 'private' }

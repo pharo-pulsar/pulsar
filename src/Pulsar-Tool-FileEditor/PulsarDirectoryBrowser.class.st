@@ -2,6 +2,8 @@
 A combined directory browser showing a tree list of directories and files on the left, with an inspector on the right.
 
 It follows the same pattern as PulsarMessageBrowser: a header toolbar, a list/tree, and a content editor. Clicking a file in the tree opens it in the embedded PulsarFileEditor. The model is a PulsarDirectoryModel wrapping a root directory FileReference.
+
+For the moment, the editorPresenter (sensed to contain a preview in this case) is not active.
 "
 Class {
 	#name : 'PulsarDirectoryBrowser',
@@ -219,6 +221,14 @@ PulsarDirectoryBrowser >> notifyActivateEntity: anEntity [
 	anEntity canBeActivated ifFalse: [ ^ self ].
 	
 	self notificationCenter announce: anEntity newActivationAnnouncement
+]
+
+{ #category : 'private' }
+PulsarDirectoryBrowser >> panelFocused [
+
+	logger trace.
+	self notifyEditorActivated.
+	self takeKeyboardFocus
 ]
 
 { #category : 'accessing' }

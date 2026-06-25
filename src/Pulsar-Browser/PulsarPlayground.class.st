@@ -28,9 +28,9 @@ PulsarPlayground class >> defaultTitle [
 ]
 
 { #category : 'private - actions' }
-PulsarPlayground >> activatePage: page [
+PulsarPlayground >> activatePage: aPage [
 
-	self model loadPage: page.
+	self model loadPage: aPage.
 	self updatePresenter.
 	self takeKeyboardFocus
 ]

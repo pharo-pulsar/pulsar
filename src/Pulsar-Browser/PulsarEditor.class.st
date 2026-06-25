@@ -438,29 +438,15 @@ PulsarEditor >> originalContent [
 { #category : 'private' }
 PulsarEditor >> panelFocused [
 
-	logger trace.
-	self notifyEditorActivated
+	super panelFocused.
+	"transfer focus to default"
+	self takeKeyboardFocus
 ]
 
 { #category : 'private' }
 PulsarEditor >> panelModifiedChanged [
 
 	self notificationCenter announce: (PulsarEditorModified newValue: self)
-]
-
-{ #category : 'private' }
-PulsarEditor >> panelPlaced [
-
-	logger trace.
-	"right now nothing"
-]
-
-{ #category : 'private' }
-PulsarEditor >> panelPresented [
-
-	logger trace.
-	self recordLastPresented.
-	self panelFocused
 ]
 
 { #category : 'printing' }
