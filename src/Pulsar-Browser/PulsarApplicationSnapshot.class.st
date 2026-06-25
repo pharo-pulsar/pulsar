@@ -25,9 +25,10 @@ PulsarApplicationSnapshot >> initialize [
 { #category : 'initialization' }
 PulsarApplicationSnapshot >> restoreTo: anApplication [
 
-	(records sorted: #restorePriority ascending)
-		collect: [ :each | self restoreWindow: each to: anApplication  ]
-		thenDo: [ :each | each open ]
+	anApplication suspendAnnouncementsDuring: [ 
+		(records sorted: #restorePriority ascending)
+			collect: [ :each | self restoreWindow: each to: anApplication  ]
+			thenDo: [ :each | each open ] ]
 ]
 
 { #category : 'initialization' }
