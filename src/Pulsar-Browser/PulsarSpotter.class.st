@@ -268,10 +268,10 @@ PulsarSpotter >> tabActivated: aPresenter [
 { #category : 'private' }
 PulsarSpotter >> toolsContext [
 
-	^ toolsContext ifNil: [ 
-		toolsContext := PulsarSpotterSearchContext searchTools
-			browser: self owner window;
-			yourself ]
+	^ toolsContext ifNil: [
+			  toolsContext := PulsarSpotterSearchContext searchTools
+				                  browser: self owner root;
+				                  yourself ]
 ]
 
 { #category : 'initialization' }
@@ -322,6 +322,12 @@ PulsarSpotter >> visitMethodEntry: aClassEntry [
 	self notifyActivateEntity: (PvMethodModel 
 		newEnvironment: self model environmentModel
 		entity: aClassEntry content)
+]
+
+{ #category : 'visiting' }
+PulsarSpotter >> visitPackageEntry: aPackageEntry [
+
+	self notifyActivateEntity: (PvPackageModel newEnvironment: self model environmentModel entity: aPackageEntry content)
 ]
 
 { #category : 'visiting' }

@@ -32,7 +32,7 @@ PulsarBrowser class >> defineToolActionsOn: aBuilder [
 		addActionWith: [ :action | action 
 			priority: 200;
 			name: 'Process Browser';
-			description: 'Open the Process Browser';
+			description: 'Open a Process Browser';
 			action: [ :aContext | aContext spawnNewProcessBrowser ] ];
 		addActionWith: [ :action | action 
 			priority: 910;
@@ -42,31 +42,31 @@ PulsarBrowser class >> defineToolActionsOn: aBuilder [
 		addActionWith: [ :action | action
 			priority: 915;
 			name: 'Editor Stack';
-			description: 'Open editor stack';
+			description: 'Toggle editor stack';
 			actionState: [ :aContext | aContext hasPresenterClass: PulsarStackView ];
 			action: [ :aContext | aContext doOpenEditorStack: action state ] ];
 		addActionWith: [ :action | action
 			priority: 920;
 			name: 'Repositories';
-			description: 'Open git repositories';
+			description: 'Toggle git repositories';
 			actionState: [ :aContext | aContext hasPresenterClass: PulsarRepositoriesView ];
 			action: [ :aContext | aContext doOpenRepositories: action state ] ];
 		addActionWith: [ :action| action
 			priority: 930;
 			name: 'Flag Console';
-			description: 'Open flags console';
+			description: 'Toggle flags console';
 			actionState: [ :aContext | aContext hasPresenterClass: PulsarFlagsConsole ];
 			action: [ :aContext | aContext doOpenFlagsConsole: action state ] ];
 		addActionWith: [ :action | action
 			priority: 940;
 			name: 'Critiques Console';
-			description: 'Open critiques console';
+			description: 'Toggle critiques console';
 			actionState: [ :aContext | aContext hasPresenterClass: PulsarCritiquesConsole ];
 			action: [ :aContext | aContext doOpenCritiquesConsole: action state ] ];
 		addActionWith: [ :action | action
 			priority: 950;
 			name: 'File Manager';
-			description: 'Open file manager on image location';
+			description: 'Toggle file manager on image location';
 			actionState: [ :aContext | aContext hasPresenterClass: PulsarDirectoryView ];
 			action: [ :aContext | aContext doOpenFileManager: action state ] ] ]
 ]

@@ -83,59 +83,46 @@ PvUnifiedProcessor >> calculateLowercaseSourcesOn: anStream [
 PvUnifiedProcessor >> calculateUppercaseSourcesOn: anStream [
 	| classesBeginsWith classesIncludesString packagesBeginsWith packagesIncludesString wordsAwareClassesSource wordsAwarePackageSource classAndSelectorImplementors |
 	
-	(self categoriesIncludes: #Classes) 
-		ifTrue: [
-			classesBeginsWith := self sourceFactory classesBeginsWithSource.			
-			textFilteringIterators add: classesBeginsWith.
-			anStream nextPut: classesBeginsWith ].
+	(self categoriesIncludes: #Classes) ifTrue: [
+		classesBeginsWith := self sourceFactory classesBeginsWithSource.
+		textFilteringIterators add: classesBeginsWith.
+		anStream nextPut: classesBeginsWith ].
 
-	(self categoriesIncludes: #Packages) 
-		ifTrue: [
-			packagesBeginsWith := (StPackageIterator new 
-				collect: [ :each | StPackageEntry on: each ]) 
-				asBeginsWithFilter.			
-			textFilteringIterators add: packagesBeginsWith.
-			anStream nextPut: packagesBeginsWith ].
+	(self categoriesIncludes: #Packages) ifTrue: [
+		packagesBeginsWith := (StPackageIterator new collect: [ :each | PvPackageEntry on: each ]) asBeginsWithFilter.
+		textFilteringIterators add: packagesBeginsWith.
+		anStream nextPut: packagesBeginsWith ].
 
-	(self categoriesIncludes: #Classes) 
-		ifTrue: [
-			classesIncludesString := self sourceFactory classesSubstringSource.
-			textFilteringIterators add: classesIncludesString.
-			anStream nextPut: classesIncludesString ].
-		
-	(self categoriesIncludes: #Packages) 
-		ifTrue: [
-			packagesIncludesString := (StPackageIterator new 
-				collect: [ :each | StPackageEntry on: each ]) 
-				asSubstringFilter.		
-			textFilteringIterators add: packagesIncludesString.
-			anStream nextPut: packagesIncludesString ].
-		
-	(self categoriesIncludes: #Classes) 
-		ifTrue: [
-			wordsAwareClassesSource := StWordsAwareFilter new 
-				inner: (self sourceFactory classesSubstringSource); 
-				yourself.
-			textFilteringIterators add: wordsAwareClassesSource.
-			anStream nextPut: wordsAwareClassesSource ].
+	(self categoriesIncludes: #Classes) ifTrue: [
+		classesIncludesString := self sourceFactory classesSubstringSource.
+		textFilteringIterators add: classesIncludesString.
+		anStream nextPut: classesIncludesString ].
 
-	(self categoriesIncludes: #Implementors) 
-		ifTrue: 	[ 	
-			classAndSelectorImplementors := StClassWithSelectorWordFilter new 
-				inner: (StSourceFactory current implementorsSubstringSource); 
-				yourself.
-			textFilteringIterators add: classAndSelectorImplementors.
-			anStream nextPut: classAndSelectorImplementors ].
+	(self categoriesIncludes: #Packages) ifTrue: [
+		packagesIncludesString := (StPackageIterator new collect: [ :each | PvPackageEntry on: each ]) asSubstringFilter.
+		textFilteringIterators add: packagesIncludesString.
+		anStream nextPut: packagesIncludesString ].
 
-	(self categoriesIncludes: #Packages) 
-		ifTrue: [
-			wordsAwarePackageSource := StWordsAwareFilter new 
-				inner: ((StPackageIterator new 
-					collect: [ :each | StPackageEntry on: each ]) 
-					asSubstringFilter); 
-				yourself.
-			textFilteringIterators add: wordsAwarePackageSource.
-			anStream nextPut: wordsAwarePackageSource ]
+	(self categoriesIncludes: #Classes) ifTrue: [
+		wordsAwareClassesSource := StWordsAwareFilter new
+			inner: self sourceFactory classesSubstringSource;
+			yourself.
+		textFilteringIterators add: wordsAwareClassesSource.
+		anStream nextPut: wordsAwareClassesSource ].
+
+	(self categoriesIncludes: #Implementors) ifTrue: [
+		classAndSelectorImplementors := StClassWithSelectorWordFilter new
+			inner: StSourceFactory current implementorsSubstringSource;
+			yourself.
+		textFilteringIterators add: classAndSelectorImplementors.
+		anStream nextPut: classAndSelectorImplementors ].
+
+	(self categoriesIncludes: #Packages) ifTrue: [
+		wordsAwarePackageSource := StWordsAwareFilter new
+			inner: (StPackageIterator new collect: [ :each | PvPackageEntry on: each ]) asSubstringFilter;
+			yourself.
+		textFilteringIterators add: wordsAwarePackageSource.
+		anStream nextPut: wordsAwarePackageSource ]
 ]
 
 { #category : 'sources' }
