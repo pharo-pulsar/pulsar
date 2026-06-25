@@ -86,12 +86,6 @@ PulsarTPanelWindow >> isDirty [
 ]
 
 { #category : 'testing' }
-PulsarTPanelWindow >> isEditor [
-
-	^ false
-]
-
-{ #category : 'testing' }
 PulsarTPanelWindow >> isPinned [
 	
 	^ pinned ifNil: [ pinned := false ]
