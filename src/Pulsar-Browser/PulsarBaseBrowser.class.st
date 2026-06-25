@@ -281,7 +281,9 @@ PulsarBaseBrowser >> defineExtraActionsOn: aBuilder [
 { #category : 'private - actions' }
 PulsarBaseBrowser >> doNewPlayground [
 
-	self notificationCenter announce: PulsarRequestNewPlayground
+	self notificationCenter announce: (PulsarRequestNewPlayground new	
+		model: self model environmentModel;
+		yourself)
 ]
 
 { #category : 'private - actions' }

@@ -1,8 +1,8 @@
 Class {
 	#name : 'PulsarPlaygroundModel',
 	#superclass : 'Object',
-	#traits : 'PulsarTModelSnapshot',
-	#classTraits : 'PulsarTModelSnapshot classTrait',
+	#traits : 'PulsarTEnvironmentModel + PulsarTModelSnapshot',
+	#classTraits : 'PulsarTEnvironmentModel classTrait + PulsarTModelSnapshot classTrait',
 	#instVars : [
 		'page'
 	],
@@ -10,6 +10,12 @@ Class {
 	#package : 'Pulsar-Browser',
 	#tag : 'Tool-Playground'
 }
+
+{ #category : 'accessing' }
+PulsarPlaygroundModel >> activationAnnouncementClass [
+
+	^ nil
+]
 
 { #category : 'accessing' }
 PulsarPlaygroundModel >> contents [
@@ -21,6 +27,12 @@ PulsarPlaygroundModel >> contents [
 PulsarPlaygroundModel >> contents: aString [
 
 	page contents: aString
+]
+
+{ #category : 'testing' }
+PulsarPlaygroundModel >> includesClassModel [
+
+	^ false
 ]
 
 { #category : 'initialization' }
@@ -44,4 +56,10 @@ PulsarPlaygroundModel >> newVersionsModel [
 
 { #category : 'private' }
 PulsarPlaygroundModel >> prepareForSnapshot [
+]
+
+{ #category : 'accessing' }
+PulsarPlaygroundModel >> selectionAnnouncementClass [
+
+	^ nil
 ]

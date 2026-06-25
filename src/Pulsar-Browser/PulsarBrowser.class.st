@@ -243,7 +243,7 @@ PulsarBrowser >> initializeDefaultWorkspace [
 	self addPresenterClass: PulsarRepositoriesView model: (PulsarRepositoriesModel on: self model).
 	self addPresenterClass: PulsarCritiquesConsole model: (PulsarCritiquesModel on: self model). 	
 	self addPresenterClass: PulsarFlagsConsole model: (PulsarFlagsModel on: self model). 	
-	self addPresenterClass: PulsarPlayground.
+	self addPresenterClass: PulsarPlayground model: (PulsarPlaygroundModel on: self model).
 	self 
 		addPresenterClass: PulsarDirectoryView 
 		model: (PulsarDirectoryModel newEnvironment: self model entity: FileLocator imageDirectory).
@@ -299,7 +299,9 @@ PulsarBrowser >> openMethod: aMethod [
 { #category : 'actions' }
 PulsarBrowser >> openPlayground [
 
-	self addPresenterClass: PulsarPlayground
+	self 
+		addPresenterClass: PulsarPlayground 
+		model: (PulsarPlaygroundModel on: self model)
 ]
 
 { #category : 'actions' }

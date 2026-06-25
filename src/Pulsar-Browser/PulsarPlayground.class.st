@@ -156,7 +156,9 @@ PulsarPlayground >> doNewPage [
 { #category : 'private - actions' }
 PulsarPlayground >> doNewPlayground [
 
-	self notificationCenter announce: PulsarRequestNewPlayground
+	self notificationCenter announce: (PulsarRequestNewPlayground new
+		model: (PulsarPlaygroundModel on: self model environmentModel);
+		yourself)
 ]
 
 { #category : 'initialization' }
@@ -175,13 +177,6 @@ PulsarPlayground >> eventThemeChanged: ann [
 
 	super eventThemeChanged: ann.
 	codePresenter styleScheme: self application styleScheme
-]
-
-{ #category : 'initialization' }
-PulsarPlayground >> initialize [
-
-	model := PulsarPlaygroundModel new.
-	super initialize
 ]
 
 { #category : 'initialization' }
