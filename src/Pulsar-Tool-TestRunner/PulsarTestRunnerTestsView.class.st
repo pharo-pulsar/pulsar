@@ -26,8 +26,10 @@ PulsarTestRunnerTestsView >> connectPresenters [
 
 	super connectPresenters.
 
-	listPresenter outputSelectionPort transmitDo: [ :anEntity | self entitySelected: anEntity ].
-	listPresenter outputActivationPort transmitDo: [ :anEntity | self entityActivated: anEntity ]
+	listPresenter outputSelectionPort 
+		transmitDo: [ :anEntity | self entitySelected: anEntity ].
+	listPresenter outputActivationPort 
+		transmitDo: [ :anEntity | self entityActivated: anEntity ]
 ]
 
 { #category : 'layout' }
@@ -41,45 +43,39 @@ PulsarTestRunnerTestsView >> defaultLayout [
 
 { #category : 'private - definitions' }
 PulsarTestRunnerTestsView >> defineTestRunnerActionsOn: aBuilder [
-
 	<dockActions>
-	aBuilder addGroup: #testRunner with: [ :group |
-			group
-				priority: 100;
-				name: 'Tests';
-				beDisplayedAsGroup;
-				addActionWith: [ :action |
-						action
-							name: 'Run Selected';
-							iconName: 'testGreen';
-							description: 'Run selected tests';
-							shortcutKey: $r actionModifier;
-							action: [ self doRunSelected ] ];
-				addActionWith: [ :action |
-						action
-							name: 'Run All';
-							iconName: 'testNotRun';
-							description: 'Run all tests';
-							shortcutKey: $r shift actionModifier;
-							action: [ self doRunAll ] ];
-				addActionWith: [ :action |
-						action
-							name: 'Select All';
-							iconName: 'checkboxSelected';
-							description: 'Select all tests';
-							action: [ self doSelectAll ] ];
-				addActionWith: [ :action |
-						action
-							name: 'Deselect All';
-							iconName: 'checkboxUnselected';
-							description: 'Deselect all tests';
-							action: [ self doDeselectAll ] ];
-				addActionWith: [ :action |
-						action
-							name: 'Refresh';
-							iconName: 'refresh';
-							description: 'Refresh test tree';
-							action: [ self doRefresh ] ] ]
+	
+	aBuilder addGroup: #testRunner with: [ :group | group
+		priority: 100;
+		name: 'Tests';
+		beDisplayedAsGroup;
+		addActionWith: [ :action | action
+			name: 'Run Selected';
+			iconName: 'testGreen';
+			description: 'Run selected tests';
+			shortcutKey: $r actionModifier;
+			action: [ self doRunSelected ] ];
+		addActionWith: [ :action | action
+			name: 'Run All';
+			iconName: 'testNotRun';
+			description: 'Run all tests';
+			shortcutKey: $r shift actionModifier;
+			action: [ self doRunAll ] ];
+		addActionWith: [ :action | action
+			name: 'Select All';
+			iconName: 'checkboxSelected';
+			description: 'Select all tests';
+			action: [ self doSelectAll ] ];
+		addActionWith: [ :action | action
+			name: 'Deselect All';
+			iconName: 'checkboxUnselected';
+			description: 'Deselect all tests';
+			action: [ self doDeselectAll ] ];
+		addActionWith: [ :action | action
+			name: 'Refresh';
+			iconName: 'refresh';
+			description: 'Refresh test tree';
+			action: [ self doRefresh ] ] ]
 ]
 
 { #category : 'private - actions' }
@@ -168,6 +164,6 @@ PulsarTestRunnerTestsView >> updatePresenter [
 		root := self model testTreeRoot.
 		self application defer: [ 
 			listPresenter 
-				roots: { root };
+				roots: root children;
 				expandAll ] ]
 ]
