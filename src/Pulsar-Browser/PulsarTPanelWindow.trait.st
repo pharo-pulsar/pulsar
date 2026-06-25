@@ -86,6 +86,12 @@ PulsarTPanelWindow >> isDirty [
 ]
 
 { #category : 'testing' }
+PulsarTPanelWindow >> isEditor [
+
+	^ false
+]
+
+{ #category : 'testing' }
 PulsarTPanelWindow >> isPinned [
 	
 	^ pinned ifNil: [ pinned := false ]
@@ -116,23 +122,45 @@ PulsarTPanelWindow >> maybeActivateIconOnPanel: aPanelWidgetPresenter [
 		ifFalse: [ nil ])
 ]
 
-{ #category : 'initialization' }
-PulsarTPanelWindow >> notifyEditorActivated [
+{ #category : 'private' }
+PulsarTPanelWindow >> maybeTakeKeyboardFocus [
 
-	self notificationCenter announce: (PulsarToolEditorActivated newValue: self)
+	self isEditor ifFalse: [ ^ self ].
+	self takeKeyboardFocus
 ]
 
-{ #category : 'initialization' }
+{ #category : 'private - notifying' }
+PulsarTPanelWindow >> notifyActivated [
+
+	self isEditor
+		ifTrue: [ self notifyEditorActivated ]
+		ifFalse: [ self notifyPanelActivated ]
+]
+
+{ #category : 'private - notifying' }
+PulsarTPanelWindow >> notifyEditorActivated [
+
+	self notificationCenter announce: (PulsarEditorActivated newValue: self)
+]
+
+{ #category : 'private - notifying' }
 PulsarTPanelWindow >> notifyEditorClosed [
 
 	self notificationCenter announce: (PulsarEditorClosed newValue: self model)
+]
+
+{ #category : 'private - notifying' }
+PulsarTPanelWindow >> notifyPanelActivated [
+
+	self notificationCenter announce: (PulsarPanelActivated newValue: self)
 ]
 
 { #category : 'private' }
 PulsarTPanelWindow >> panelFocused [
 
 	logger trace.
-	self notifyEditorActivated
+	self notifyActivated.
+	self maybeTakeKeyboardFocus
 ]
 
 { #category : 'private' }
@@ -211,7 +239,7 @@ PulsarTPanelWindow >> recordLastPresented [
 	self lastTimePresented: DateAndTime now
 ]
 
-{ #category : 'initialization' }
+{ #category : 'private - notifying' }
 PulsarTPanelWindow >> registerToPanelWidgetEvents: aPanelWidgetPresenter [
 
 	aPanelWidgetPresenter	

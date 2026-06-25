@@ -25,6 +25,12 @@ PulsarTEnvironmentModel classSide >> newEnvironment: aModel [
 		yourself.
 ]
 
+{ #category : 'instance creation' }
+PulsarTEnvironmentModel classSide >> on: aModel [
+
+	^ self newEnvironment: aModel
+]
+
 { #category : 'accessing' }
 PulsarTEnvironmentModel >> environmentModel [
 
@@ -35,12 +41,4 @@ PulsarTEnvironmentModel >> environmentModel [
 PulsarTEnvironmentModel >> environmentModel: aModel [
 
 	environmentModel := aModel
-]
-
-{ #category : 'testing' }
-PulsarTEnvironmentModel >> includesClassModel [
-	"by default, models do not include a class model (this is useful to discriminate 
-	 updates of the environment that may depend on them)"
-
-	^ false
 ]

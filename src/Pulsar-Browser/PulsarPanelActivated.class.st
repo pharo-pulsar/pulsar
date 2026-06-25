@@ -1,5 +1,9 @@
+"
+A panel (not an editor) has been activated/focused.
+
+"
 Class {
-	#name : 'PulsarToolEditorActivated',
+	#name : 'PulsarPanelActivated',
 	#superclass : 'PulsarAnnouncement',
 	#category : 'Pulsar-Browser-Announcement',
 	#package : 'Pulsar-Browser',

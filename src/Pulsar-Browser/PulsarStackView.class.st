@@ -328,7 +328,6 @@ PulsarStackView >> registerToEvents [
 	super registerToEvents.
 	self announcer
 		when: PulsarEditorActivated send: #eventEditorActivated: to: self;
-		when: PulsarToolEditorActivated send: #eventEditorActivated: to: self;
 		when: PulsarEditorClosed send: #eventEditorClosed: to: self;
 		when: PulsarEditorModified send: #eventEditorModified: to: self;
 		when: PulsarModelChanged send: #eventModelChanged: to: self;

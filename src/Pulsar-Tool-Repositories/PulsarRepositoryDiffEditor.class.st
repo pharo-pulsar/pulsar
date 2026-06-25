@@ -1,8 +1,8 @@
 Class {
 	#name : 'PulsarRepositoryDiffEditor',
 	#superclass : 'PulsarBaseView',
-	#traits : 'PulsarTTaskWorker',
-	#classTraits : 'PulsarTTaskWorker classTrait',
+	#traits : 'PulsarTTaskWorker + PulsarTEditor',
+	#classTraits : 'PulsarTTaskWorker classTrait + PulsarTEditor classTrait',
 	#instVars : [
 		'toolbarPresenter',
 		'lastDiffNodeModel',

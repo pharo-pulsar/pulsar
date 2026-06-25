@@ -7,8 +7,8 @@ Its default position in the dock browser is center.
 Class {
 	#name : 'PulsarEditor',
 	#superclass : 'PulsarBaseView',
-	#traits : 'PulsarTControlUpdate',
-	#classTraits : 'PulsarTControlUpdate classTrait',
+	#traits : 'PulsarTControlUpdate + PulsarTEditor',
+	#classTraits : 'PulsarTControlUpdate classTrait + PulsarTEditor classTrait',
 	#instVars : [
 		'toolbarPresenter',
 		'editorPresenter',
@@ -355,12 +355,6 @@ PulsarEditor >> isDirty [
 	^ dirty
 ]
 
-{ #category : 'testing' }
-PulsarEditor >> isEditor [
-	
-	^ true
-]
-
 { #category : 'private - updating' }
 PulsarEditor >> markDirty [
 	
@@ -433,14 +427,6 @@ PulsarEditor >> originalContent [
 	"used to compare when deciding if an editor is dirty or not"
 
 	^ self subclassResponsibility
-]
-
-{ #category : 'private' }
-PulsarEditor >> panelFocused [
-
-	super panelFocused.
-	"transfer focus to default"
-	self takeKeyboardFocus
 ]
 
 { #category : 'private' }

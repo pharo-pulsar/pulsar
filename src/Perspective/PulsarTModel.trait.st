@@ -43,6 +43,14 @@ PulsarTModel >> iconName [
 	^ self shouldBeImplemented
 ]
 
+{ #category : 'testing' }
+PulsarTModel >> includesClassModel [
+	"by default, models do not include a class model (this is useful to discriminate 
+	 updates of the environment that may depend on them)"
+
+	^ false
+]
+
 { #category : 'accessing' }
 PulsarTModel >> name [
 
