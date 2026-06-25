@@ -52,7 +52,7 @@ PulsarDirectoryView >> defineActionsOn: aBuilder [
 			addActionWith: [ :action | action
 				name: 'New file';
 				description: 'Create a new empty file';
-				iconName: 'add';
+				iconName: 'addFile';
 				action: [ self doAddFileCommand: action ] ];
 			addActionWith: [ :action | action
 				name: 'New folder';
@@ -141,6 +141,13 @@ PulsarDirectoryView >> doRemoveSelectedFileOrFolder [
 	self updatePresenter
 ]
 
+{ #category : 'events' }
+PulsarDirectoryView >> eventModelChanged: ann [
+
+	ann value = self model ifFalse: [ ^ self ].
+	self updatePresenter
+]
+
 { #category : 'initialization' }
 PulsarDirectoryView >> initializePresenters [
 
@@ -171,6 +178,13 @@ PulsarDirectoryView >> initializePresenters [
 PulsarDirectoryView >> panelPlacedIconName [
 
 	^ 'fileManager'
+]
+
+{ #category : 'initialization' }
+PulsarDirectoryView >> registerToEvents [
+
+	super registerToEvents.
+	self announcer when: PulsarModelChanged send: #eventModelChanged: to: self
 ]
 
 { #category : 'private - accessing' }

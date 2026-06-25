@@ -82,7 +82,7 @@ PulsarDirectoryBrowser >> defineActionsOn: aBuilder [
 			addActionWith: [ :action | action
 				name: 'New file';
 				description: 'Create a new empty file';
-				iconName: 'add';
+				iconName: 'addFile';
 				action: [ self doAddFileCommand: action ] ];
 			addActionWith: [ :action | action
 				name: 'New folder';
@@ -180,6 +180,13 @@ PulsarDirectoryBrowser >> doRemoveSelectedFileOrFolder [
 	self updatePresenter
 ]
 
+{ #category : 'events' }
+PulsarDirectoryBrowser >> eventModelChanged: ann [
+
+	ann value = self model ifFalse: [ ^ self ].
+	self updatePresenter
+]
+
 { #category : 'initialization' }
 PulsarDirectoryBrowser >> initializePresenters [
 
@@ -247,6 +254,13 @@ PulsarDirectoryBrowser >> raise [
 PulsarDirectoryBrowser >> registerToBrowser: aPulsarBrowser [
 
 	self notificationCenter: aPulsarBrowser notificationCenter
+]
+
+{ #category : 'initialization' }
+PulsarDirectoryBrowser >> registerToEvents [
+
+	super registerToEvents.
+	self announcer when: PulsarModelChanged send: #eventModelChanged: to: self
 ]
 
 { #category : 'private - accessing' }

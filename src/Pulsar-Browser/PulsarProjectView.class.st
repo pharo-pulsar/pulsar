@@ -191,6 +191,7 @@ PulsarProjectView >> defineProjectActionsOn: aBuilder [
 			name: 'Refresh project';
 			description: 'Refresh this project (reload configuration)';
 			iconName: 'refresh';
+			actionEnabled: [ self hasSelectedEntity ];
 			action: [ self refreshProject ] ] ]
 ]
 
@@ -643,7 +644,7 @@ PulsarProjectView >> selectedEntitiesInPath [
 { #category : 'accessing' }
 PulsarProjectView >> selectedEntity [
 
-	^ self listPresenter selectedItem
+	^ self listPresenter ifNotNil: #selectedItem
 ]
 
 { #category : 'accessing' }

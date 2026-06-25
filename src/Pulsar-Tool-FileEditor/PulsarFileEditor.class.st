@@ -127,8 +127,13 @@ PulsarFileEditor >> updateBreadcrumbs [
 
 { #category : 'private - actions' }
 PulsarFileEditor >> updateModel: aString [
-
-	^ self model updateWith: aString
+	| result |
+	
+	result := self model updateWith: aString.
+	self model parentModel 
+		ifNotNil: [ :dir | self notificationCenter announce: (PulsarModelChanged newValue: dir) ].
+	
+	^ result
 ]
 
 { #category : 'initialization' }
