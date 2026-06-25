@@ -1,6 +1,8 @@
 Class {
 	#name : 'PulsarProjectEditor',
 	#superclass : 'PulsarBaseView',
+	#traits : 'PulsarTEditor',
+	#classTraits : 'PulsarTEditor classTrait',
 	#instVars : [
 		'baselineMapPresenter',
 		'dependenciesPresenter'
@@ -55,7 +57,8 @@ PulsarProjectEditor >> notifyEditorActivated [
 PulsarProjectEditor >> updatePresenter [
 
 	dependenciesPresenter updatePresenter.
-	baselineMapPresenter baselineClass: self model entity.
+	self model isVolatileProject
+		ifFalse: [ baselineMapPresenter baselineClass: self model entity ].
 
 	self withPanelWidgetDo: [ :aWindow | aWindow title: self model name ]
 ]
