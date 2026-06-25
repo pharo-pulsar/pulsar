@@ -36,7 +36,8 @@ PulsarApplicationSnapshot >> restoreWindow: aSnapshot to: anApplication [
 	| window |
 
 	window := aSnapshot instantiateOn: anApplication.
-	aSnapshot restoreTo: window.
+	window notificationCenter 
+		suspendAllWhile: [ aSnapshot restoreTo: window ].
 	
 	^ window
 ]

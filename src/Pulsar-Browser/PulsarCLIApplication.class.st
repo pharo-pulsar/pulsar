@@ -15,9 +15,15 @@ PulsarCLIApplication class >> addOpenFlagsTo: aSpec [
 
 	aSpec
 		addFlag: #reset description: 'Reset pulsar IDE (cleaning up snapshot and living processes)';
-		addFlag: #logLevel
-		description: 'Enable trace log level (info, warn, debug, trace). Default = warn'
-		positionalSpec: [ :positional | positional defaultValue: [ :arg :app | 'warn' ] ]
+		addFlag: #logLevel 
+			description: 'Enable trace log level (info, warn, debug, trace). Default = warn'
+			positionalSpec: [ :positional | positional defaultValue: [ :arg :app | 'warn' ] ];
+		addFlag: #logFilterByClass 
+			description: 'Add log filter by class.'
+			positionalSpec: [ :positional | positional defaultValue: [ :arg :app | nil ] ];
+		addFlag: #logFilterByHierarchyOfClass
+			description: 'Add log filter by hierarchy of class.'
+			positionalSpec: [ :positional | positional defaultValue: [ :arg :app | nil ] ]	
 ]
 
 { #category : 'commandline' }
@@ -68,6 +74,26 @@ PulsarCLIApplication class >> updateSubcommandSpec [
 ]
 
 { #category : 'execution' }
+PulsarCLIApplication >> addFilterByClass: aName [
+
+	aName ifNil: [ ^ self ].
+
+	^ (self class environment classNamed: aName)
+		ifNotNil: [ :aClass | logger filterByClass: aClass ]
+		ifNil: [ logger error: aName. ' class not found.' ]
+]
+
+{ #category : 'execution' }
+PulsarCLIApplication >> addFilterByHierarchyOfClass: aName [
+
+	aName ifNil: [ ^ self ].
+
+	^ (self class environment classNamed: aName)
+		ifNotNil: [ :aClass | logger filterByHierarchyOfClass: aClass ]
+		ifNil: [ logger error: aName. ' class not found.' ]
+]
+
+{ #category : 'execution' }
 PulsarCLIApplication >> enableTrace: aLevel [
 	| index |
 	
@@ -95,6 +121,10 @@ PulsarCLIApplication >> executeOpen [
 
 	(self hasFlag: #reset) ifTrue: [ self forceReset ].
 	(self hasFlag: #logLevel) ifTrue: [ self enableTrace: (self positional: #logLevel) ].
+	(self hasFlag: #logFilterByClass) 
+		ifTrue: [ self addFilterByClass: (self positional: #logFilterByClass) ].
+	(self hasFlag: #logFilterByHierarchyOfClass) 
+		ifTrue: [ self addFilterByHierarchyOfClass: (self positional: #logFilterByHierarchyOfClass) ].
 
 	self runApplication
 ]

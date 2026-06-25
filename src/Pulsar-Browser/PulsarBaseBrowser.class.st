@@ -255,7 +255,7 @@ PulsarBaseBrowser >> addWindow: aWindow [
 					savePanelPosition: newPosition 
 					forViewClass: aWindow presenter class  ] ].
 		
-		aWindow raise ]
+		aWindow raiseAndTakeKeyboardFocus ]
 ]
 
 { #category : 'private' }

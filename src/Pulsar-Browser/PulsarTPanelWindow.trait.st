@@ -116,13 +116,6 @@ PulsarTPanelWindow >> maybeActivateIconOnPanel: aPanelWidgetPresenter [
 		ifFalse: [ nil ])
 ]
 
-{ #category : 'private' }
-PulsarTPanelWindow >> maybeTakeKeyboardFocus [
-
-	self isEditor ifFalse: [ ^ self ].
-	self takeKeyboardFocus
-]
-
 { #category : 'private - notifying' }
 PulsarTPanelWindow >> notifyActivated [
 
@@ -153,8 +146,7 @@ PulsarTPanelWindow >> notifyPanelActivated [
 PulsarTPanelWindow >> panelFocused [
 
 	logger trace.
-	self notifyActivated.
-	self maybeTakeKeyboardFocus
+	self notifyActivated
 ]
 
 { #category : 'private' }
