@@ -7,12 +7,34 @@ Class {
 	#instVars : [
 		'name',
 		'children',
-		'iconName'
+		'iconName',
+		'realModel'
 	],
 	#category : 'Perspective-Model',
 	#package : 'Perspective',
 	#tag : 'Model'
 }
+
+{ #category : 'instance creation' }
+PvTreeNodeModel class >> newModel: aModel name: aName children: aCollection [
+
+	^ self new 
+		name: aName;
+		children: aCollection;
+		realModel: aModel;
+		yourself
+]
+
+{ #category : 'instance creation' }
+PvTreeNodeModel class >> newModel: aModel name: aName iconName: anIconName children: aCollection [
+
+	^ self new 
+		name: aName;
+		iconName: anIconName;
+		children: aCollection;
+		realModel: aModel;
+		yourself
+]
 
 { #category : 'instance creation' }
 PvTreeNodeModel class >> newName: aName children: aCollection [
@@ -79,4 +101,16 @@ PvTreeNodeModel >> name [
 PvTreeNodeModel >> name: aString [
 
 	name := aString
+]
+
+{ #category : 'accessing' }
+PvTreeNodeModel >> realModel [
+
+	^ realModel ifNil: [ super realModel ]
+]
+
+{ #category : 'accessing' }
+PvTreeNodeModel >> realModel: aModel [
+
+	realModel := aModel
 ]
