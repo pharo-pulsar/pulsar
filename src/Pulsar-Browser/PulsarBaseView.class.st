@@ -23,7 +23,7 @@ PulsarBaseView >> colorNamed: aString [
 { #category : 'events' }
 PulsarBaseView >> eventThemeChanged: ann [
 
-	self refreshIcons
+	self updatePresentersAfterThemeChange
 ]
 
 { #category : 'initialization' }
@@ -74,12 +74,6 @@ PulsarBaseView >> panelPosition [
 	^ self class defaultPanelPosition
 ]
 
-{ #category : 'theme' }
-PulsarBaseView >> refreshIcons [
-
-	self traversePresentersDo: [ :each | each pulsarThemeChanged ]
-]
-
 { #category : 'initialization' }
 PulsarBaseView >> registerToBrowser: aPulsarBrowser [
 	
@@ -124,4 +118,16 @@ PulsarBaseView >> spotterTitle [
 	self withPanelWidgetDo: [ :aPanelWindow | ^ aPanelWindow title ].
 	
 	^ 'Unnamed'
+]
+
+{ #category : 'theme' }
+PulsarBaseView >> updatePresentersAfterSyntaxHighlightThemeChange [
+
+	self traversePresentersDo: [ :each | each pulsarSyntaxHighlightThemeChanged ]
+]
+
+{ #category : 'theme' }
+PulsarBaseView >> updatePresentersAfterThemeChange [
+
+	self traversePresentersDo: [ :each | each pulsarThemeChanged ]
 ]

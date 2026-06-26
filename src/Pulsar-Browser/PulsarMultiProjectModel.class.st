@@ -112,6 +112,15 @@ PulsarMultiProjectModel >> findPathForClassModel: aClassModel [
 ]
 
 { #category : 'accessing' }
+PulsarMultiProjectModel >> findPathForEntity: anEntity [
+
+	((anEntity isKindOf: PvEnvironmentModel) or: [ anEntity realModel isProject ]) 
+		ifTrue: [ ^ { self allChildren indexOf: anEntity } ].
+		
+	^ self findPathForPackage: anEntity realModel asPackageModel
+]
+
+{ #category : 'accessing' }
 PulsarMultiProjectModel >> findPathForPackage: aPackage [
 	| path |
 	
@@ -139,6 +148,16 @@ PulsarMultiProjectModel >> findRecursivelyPathForClassModel: aClassModel inNode:
 	^ #()
 ]
 
+{ #category : 'accessing' }
+PulsarMultiProjectModel >> findRootForEntity: anEntity [
+	| path |
+
+	path := self findPathForEntity: anEntity.
+	path isEmptyOrNil ifTrue: [ ^ 0 ].
+	
+	^ self allChildren at: path first
+]
+
 { #category : 'initialization' }
 PulsarMultiProjectModel >> initialize [
 	projectModels := #().
@@ -157,7 +176,7 @@ PulsarMultiProjectModel >> initializeVolatileProjects [
 				| packageModel |
 				packageModel := PvPackageModel
 		            newEnvironment: self environmentModel
-		            project: projectModel
+		            parent: projectModel
 		            entity: (self environmentModel packageNamed: eachPackageName).
 				projectModel packageModels add: packageModel ] ].
 		projectModels := projectModels copyWith: projectModel ].

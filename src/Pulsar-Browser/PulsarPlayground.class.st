@@ -169,7 +169,7 @@ PulsarPlayground >> ensureCodeBindings [
 { #category : 'events' }
 PulsarPlayground >> eventSyntaxHighlightThemeChanged: ann [
 
-	codePresenter syntaxHighlightTheme: self application syntaxHighlightTheme
+	self updatePresentersAfterSyntaxHighlightThemeChange
 ]
 
 { #category : 'events' }

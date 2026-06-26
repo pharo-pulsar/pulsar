@@ -56,12 +56,6 @@ PulsarWelcomeModel >> iconName [
 ]
 
 { #category : 'testing' }
-PulsarWelcomeModel >> includesClassModel [
-
-	^ false
-]
-
-{ #category : 'testing' }
 PulsarWelcomeModel >> isSameClass: aClassModel [
 
 	^ false

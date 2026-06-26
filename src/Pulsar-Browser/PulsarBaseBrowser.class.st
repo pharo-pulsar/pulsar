@@ -282,7 +282,7 @@ PulsarBaseBrowser >> defineExtraActionsOn: aBuilder [
 PulsarBaseBrowser >> doNewPlayground [
 
 	self notificationCenter announce: (PulsarRequestNewPlayground new	
-		model: self model environmentModel;
+		model: (PulsarPlaygroundModel on: self model environmentModel);
 		yourself)
 ]
 

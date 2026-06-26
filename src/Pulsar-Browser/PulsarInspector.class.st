@@ -52,18 +52,13 @@ PulsarInspector >> defaultLayout [
 { #category : 'events' }
 PulsarInspector >> eventSyntaxHighlightThemeChanged: ann [
 
-	self allPresenters
-		select: [ :each | each isKindOf: SpCodePresenter ]
-		thenDo: [ :each | each syntaxHighlightTheme: self application syntaxHighlightTheme ]
+	self updatePresentersAfterSyntaxHighlightThemeChange
 ]
 
 { #category : 'events' }
 PulsarInspector >> eventThemeChanged: ann [
 
-	self allPresenters
-		select: [ :each | each isKindOf: SpCodePresenter ]
-		thenDo: [ :each | each styleScheme: self application styleScheme ].
-	self refreshIcons
+	self updatePresentersAfterThemeChange
 ]
 
 { #category : 'initialization' }

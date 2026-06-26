@@ -44,7 +44,12 @@ PulsarDirectoryView >> defineActionsOn: aBuilder [
 				name: 'Open file location';
 				iconName: 'open';
 				description: 'Open current file location on the external file manager';
-				action: [ self doOpenCurrentFolder ] ] ];
+				action: [ self doOpenCurrentFolder ] ];
+			addActionWith: [ :action | action
+				name: 'Open terminal';
+				iconName: 'console';
+				description: 'Open a terminal on current file location';
+				action: [ self doOpenTerminalOnCurrentFolder ] ] ];
 		addGroup: #directory with: [ :group | group
 			priority: 10;
 			name: 'Directory';
@@ -126,6 +131,12 @@ PulsarDirectoryView >> doClose [
 PulsarDirectoryView >> doOpenCurrentFolder [
 
 	self model entity openInOSFileBrowser
+]
+
+{ #category : 'private - actions' }
+PulsarDirectoryView >> doOpenTerminalOnCurrentFolder [
+
+	self model openTerminal
 ]
 
 { #category : 'private - actions' }

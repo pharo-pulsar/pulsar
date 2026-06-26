@@ -277,6 +277,9 @@ PulsarMDINeutralIconProvider >> createTable [
 		('addFolder'				'folder-plus-outline')
 		('addFile'				'file-plus-outline')
 		('console'			    'console')
+		
+		"Tesr Runner"
+		('testRunner'			'test-tube-empty')
 	)
 ]
 

@@ -1,21 +1,10 @@
 Class {
 	#name : 'PvPackageModel',
 	#superclass : 'PvBaseModel',
-	#instVars : [
-		'projectModel'
-	],
 	#category : 'Perspective-Package-Model',
 	#package : 'Perspective-Package',
 	#tag : 'Model'
 }
-
-{ #category : 'instance creation' }
-PvPackageModel class >> newEnvironment: anEnvironmentModel project: projectModel entity: anObject [
-
-	^ (super newEnvironment: anEnvironmentModel entity: anObject)
-		project: projectModel;
-		yourself
-]
 
 { #category : 'accessing - actions' }
 PvPackageModel >> actionDecorators [
@@ -35,6 +24,12 @@ PvPackageModel >> actionsWithContextOn: aContextPresenter [
 PvPackageModel >> addPackageTagNamed: aString [
 
 	self entity ensureTag: aString
+]
+
+{ #category : 'converting' }
+PvPackageModel >> asPackageModel [
+
+	^ self
 ]
 
 { #category : 'accessing' }
@@ -163,13 +158,7 @@ PvPackageModel >> package [
 { #category : 'accessing' }
 PvPackageModel >> project [
 
-	^ projectModel
-]
-
-{ #category : 'accessing' }
-PvPackageModel >> project: aProjectModel [
-
-	projectModel := aProjectModel
+	^ self parentModel
 ]
 
 { #category : 'accessing' }

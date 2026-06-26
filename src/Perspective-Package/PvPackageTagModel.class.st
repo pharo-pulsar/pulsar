@@ -25,6 +25,14 @@ PvPackageTagModel >> actionsWithContextOn: aContextPresenter [
 		copyWithContext: (PulsarRefactorPackageContext on: aContextPresenter)
 ]
 
+{ #category : 'converting' }
+PvPackageTagModel >> asPackageModel [
+
+	^ PvPackageModel 
+		newEnvironment: self environmentModel
+		entity: self package
+]
+
 { #category : 'accessing' }
 PvPackageTagModel >> children [
 
@@ -45,7 +53,11 @@ PvPackageTagModel >> classDefinitionString [
 PvPackageTagModel >> classes [
 
 	^ (self entity classes
-		collect: [ :each | PvClassModel newEnvironment: self environmentModel entity: each ]
+		collect: [ :each | 
+			PvClassModel 
+				newEnvironment: self environmentModel 
+				parent: self
+				entity: each ]
 		as: OrderedCollection)
 		sorted: #name ascending
 ]

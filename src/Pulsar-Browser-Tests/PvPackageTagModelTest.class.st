@@ -8,10 +8,10 @@ Class {
 
 { #category : 'running' }
 PvPackageTagModelTest >> packageTagModel [
-	| pkg tag |
+	| package tag |
 
-	pkg := PackageOrganizer default packageNamed: 'Kernel'.
-	tag := (pkg instVarNamed: #tags) anyOne.
+	package := PackageOrganizer default packageNamed: 'Kernel'.
+	tag := (package instVarNamed: #tags) anyOne.
 	^ PvPackageTagModel newEnvironment: self environmentModel entity: tag
 ]
 

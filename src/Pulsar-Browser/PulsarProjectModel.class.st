@@ -53,14 +53,28 @@ PulsarProjectModel >> baselineClassModel [
 { #category : 'accessing' }
 PulsarProjectModel >> children [
 
-	^ Array streamContents: [ :stream |
+	"honestly, I have not used in one full year the access to the dependencies, so for now I am just 
+	 letting them out, until I know what to do with them."
+	^ self collectPackageModels
+	"^ Array streamContents: [ :stream |
 		stream nextPutAll: self collectPackageModels.
+		stream nextPutAll: self collectDependencyModels"
+]
+
+{ #category : 'private' }
+PulsarProjectModel >> collectDependencyModels [
+
+	^ Array streamContents: [ :stream |
 		self entity new project version projects do: [ :each |
 			self class environment 
 				at: each className asSymbol
 				ifPresent: [ :aBaselineClass |
 					stream nextPut: (PvTreeNodeModel
-						newName: each name 
+						newModel: (PulsarProjectModel 
+							newEnvironment: self environmentModel
+							parent: self parentModel
+							entity: aBaselineClass)
+						name: each name 
 						iconName: 'project'
 						children: (self collectPackageModelsOn: aBaselineClass)) ] ] ]
 ]

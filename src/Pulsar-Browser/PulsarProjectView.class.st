@@ -191,7 +191,9 @@ PulsarProjectView >> defineProjectActionsOn: aBuilder [
 			name: 'Refresh project';
 			description: 'Refresh this project (reload configuration)';
 			iconName: 'refresh';
-			actionEnabled: [ self hasSelectedEntity ];
+			actionEnabled: [ 
+				self hasSelectedEntity 
+					and: [ (self model findRootForEntity: self selectedEntity) isProject ] ];
 			action: [ self refreshProject ] ] ]
 ]
 
@@ -366,6 +368,13 @@ PulsarProjectView >> doRequestNewTrait [
 	self notifyActivateEntity: (PvClassModel
 		newEnvironment: self model environmentModel 
 		beNewTraitWithParent: parent)	
+]
+
+{ #category : 'private' }
+PulsarProjectView >> entitySelected: anEntity [
+
+	super entitySelected: anEntity.
+	self updateToolbar
 ]
 
 { #category : 'events - system' }
@@ -709,4 +718,10 @@ PulsarProjectView >> updatePresenter [
 		^ self ].
 	
 	self updateListPresenterExpanding: #(1)
+]
+
+{ #category : 'private - updating' }
+PulsarProjectView >> updateToolbar [
+
+	self actions allCommands do: [ :each | each updateEnableStatus ]
 ]

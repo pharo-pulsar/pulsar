@@ -33,14 +33,13 @@ PulsarWelcomeView >> eventModelRemoved: ann [
 { #category : 'events' }
 PulsarWelcomeView >> eventSyntaxHighlightThemeChanged: ann [
 
-	"contentPresenter syntaxHighlightTheme: self application syntaxHighlightTheme"
+	self updatePresentersAfterSyntaxHighlightThemeChange
 ]
 
 { #category : 'events' }
 PulsarWelcomeView >> eventThemeChanged: ann [
 
-	contentPresenter styleScheme: self application styleScheme.
-	self refreshIcons
+	self updatePresentersAfterThemeChange
 ]
 
 { #category : 'initialization' }

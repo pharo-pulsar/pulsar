@@ -250,7 +250,7 @@ PulsarEditor >> eventModelRemoved: anAnnouncement [
 { #category : 'events' }
 PulsarEditor >> eventSyntaxHighlightThemeChanged: ann [
 
-	editorPresenter syntaxHighlightTheme: self application syntaxHighlightTheme
+	self updatePresentersAfterSyntaxHighlightThemeChange
 ]
 
 { #category : 'events' }

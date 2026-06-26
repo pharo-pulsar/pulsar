@@ -23,6 +23,12 @@ PulsarBaseProjectModel >> addPackageNamed: aName [
 	^ self environmentModel addPackageNamed: aName
 ]
 
+{ #category : 'accessing' }
+PulsarBaseProjectModel >> children [
+
+	self subclassResponsibility
+]
+
 { #category : 'private - definitions' }
 PulsarBaseProjectModel >> defineActionsOn: aBuilder [
 	<dockActions>
@@ -76,6 +82,13 @@ PulsarBaseProjectModel >> isProject [
 PulsarBaseProjectModel >> isVolatileProject [
 
 	^ false
+]
+
+{ #category : 'accessing - navigating' }
+PulsarBaseProjectModel >> parentModel [
+	"in pulsar metamodel, projects do not have parent"
+
+	^ nil
 ]
 
 { #category : 'accessing' }
