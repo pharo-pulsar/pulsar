@@ -382,7 +382,7 @@ PulsarRepositoryModel >> newCommitAction [
 		yourself
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'factory' }
 PulsarRepositoryModel >> newDirectoryModel [
 
 	^ PulsarDirectoryModel 

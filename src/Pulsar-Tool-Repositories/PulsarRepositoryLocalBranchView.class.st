@@ -13,6 +13,23 @@ PulsarRepositoryLocalBranchView >> branches [
 ]
 
 { #category : 'private - definitions' }
+PulsarRepositoryLocalBranchView >> defineExtraActionOn: aBuilder [
+	<dockActions>
+	
+	aBuilder addGroup: #extra with: [ :group | group
+		addActionWith: [ :action | action
+			dynamicName: 'Open location';
+			description: 'Open repository location';
+			iconName: 'open';
+			action: [ self doOpenLocation ] ]";		
+		addActionWith: [ :action | action
+			dynamicName: 'Open terminal';
+			description: 'Open a terminal on the repository location';
+			iconName: 'console';
+			action: [ self doOpenTerminal ] ]" ]
+]
+
+{ #category : 'private - definitions' }
 PulsarRepositoryLocalBranchView >> defineGitActionsOn: aBuilder [
 	<dockActions>
 	
@@ -55,7 +72,7 @@ PulsarRepositoryLocalBranchView >> defineGitActionsOn: aBuilder [
 ]
 
 { #category : 'private - definitions' }
-PulsarRepositoryLocalBranchView >> defineRemoveBranchActionOn: aBuilder [
+PulsarRepositoryLocalBranchView >> defineRemoveBranchActionsOn: aBuilder [
 	<dockActions>
 	
 	aBuilder addGroup: #removeActions with: [ :group | group
@@ -87,6 +104,18 @@ PulsarRepositoryLocalBranchView >> doCreateBranchCommand: anAction [
 
 	self model switchToBranchNamed: branchName.
 	self notifyRepositoryModified: PulsarRepositoryModifiedReason branchCreated
+]
+
+{ #category : 'private - actions' }
+PulsarRepositoryLocalBranchView >> doOpenLocation [
+
+	self notifyActivateEntity: self model newDirectoryModel
+]
+
+{ #category : 'private - actions' }
+PulsarRepositoryLocalBranchView >> doOpenTerminal [
+
+	self model openTerminal
 ]
 
 { #category : 'actions' }
@@ -125,6 +154,15 @@ PulsarRepositoryLocalBranchView >> doRemoveSelectedBranch [
 	(self model newRemoveLocalBranchAction: selected)
 		onSuccess: [ self notifyRepositoryModified: PulsarRepositoryModifiedReason localBranchRemoved ];
 		executeWithContext: self
+]
+
+{ #category : 'initialization' }
+PulsarRepositoryLocalBranchView >> initializePresenters [
+
+	super initializePresenters.
+	toolbarPresenter addPresenter: (self newToolbar
+		beIcons;
+		fillWith: (self actions actionsFor: #extra))
 ]
 
 { #category : 'accessing' }
