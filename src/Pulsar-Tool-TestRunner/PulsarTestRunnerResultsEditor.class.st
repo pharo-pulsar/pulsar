@@ -25,52 +25,45 @@ PulsarTestRunnerResultsEditor class >> defaultPanelPosition [
 ]
 
 { #category : 'private' }
-PulsarTestRunnerResultsEditor >> buildGroup: aName icon: anIcon items: anItemCollection [
-	"Build a tree node for a status group (passed/failures/errors/skipped)."
+PulsarTestRunnerResultsEditor >> buildGroupNode: aSuite for: caseCollection label: aLabel [
+	"Build a tree node for a group of cases from the same suite."
 
-	| groupNode classGroups |
+	| groupNode |
 	groupNode := PvTreeNodeModel new
-		             name: ('{1} ({2})' format: {
-						              aName.
-						              anItemCollection size });
-		             iconName: anIcon;
+		             name: ('{1} - {2} ({3})' format: {
+						              aSuite name.
+						              aLabel.
+						              caseCollection size });
+		             iconName: #testNotRun;
 		             children: OrderedCollection new;
 		             yourself.
-
-	classGroups := anItemCollection groupedBy: [ :each | each testClassName ].
-	classGroups keysAndValuesDo: [ :className :classItems |
-			| classNode |
-			classNode := PvTreeNodeModel new
-				             name: className;
-				             iconName: #testClass;
-				             children: OrderedCollection new;
-				             yourself.
-			classItems do: [ :eachItem |
-					| methodNode |
-					methodNode := PvTreeNodeModel new
-						              name: eachItem testSelector asString;
-						              iconName: eachItem statusIconName;
-						              children: #(  );
-						              yourself.
-					classNode children add: methodNode ].
-			groupNode children add: classNode ].
-
+	caseCollection do: [ :eachCase |
+			| methodNode |
+			methodNode := PvTreeNodeModel new
+				              name: eachCase testSelector;
+				              iconName: #testNotRun;
+				              children: #(  );
+				              yourself.
+			groupNode children add: methodNode ].
 	^ groupNode
 ]
 
 { #category : 'private' }
-PulsarTestRunnerResultsEditor >> buildResultTreeFor: aResult [
-	"Build a tree for display: status groups → classes → methods."
+PulsarTestRunnerResultsEditor >> buildResultTreeFor: aSuiteCollection [
+	"Build a tree: failures group → class → method."
 
-	| groups |
-	groups := OrderedCollection new.
+	| failureNodes errorNodes |
+	failureNodes := OrderedCollection new.
+	errorNodes := OrderedCollection new.
 
-	aResult passedCount > 0 ifTrue: [ groups add: (self buildGroup: 'Passed' icon: #testPassed items: aResult passed) ].
-	aResult failureCount > 0 ifTrue: [ groups add: (self buildGroup: 'Failures' icon: #testFailure items: aResult failures) ].
-	aResult errorCount > 0 ifTrue: [ groups add: (self buildGroup: 'Errors' icon: #testError items: aResult errors) ].
-	aResult skippedCount > 0 ifTrue: [ groups add: (self buildGroup: 'Skipped' icon: #testNotRun items: aResult skipped) ].
+	aSuiteCollection do: [ :eachSuite |
+			| failureCases errorCases |
+			failureCases := eachSuite children select: [ :each | each result = #failure ].
+			errorCases := eachSuite children select: [ :each | each result = #error ].
+			failureCases ifNotEmpty: [ failureNodes add: (self buildGroupNode: eachSuite for: failureCases label: 'Failures') ].
+			errorCases ifNotEmpty: [ errorNodes add: (self buildGroupNode: eachSuite for: errorCases label: 'Errors') ] ].
 
-	^ groups
+	^ failureNodes , errorNodes
 ]
 
 { #category : 'initialization' }
@@ -93,22 +86,11 @@ PulsarTestRunnerResultsEditor >> defaultLayout [
 		yourself
 ]
 
-{ #category : 'private' }
-PulsarTestRunnerResultsEditor >> detailTextFor: aNode [
-	"Display detail text for an error/failure node."
-
-	| text |
-	text := ''.
-	detailPresenter text: text
-]
-
 { #category : 'events' }
 PulsarTestRunnerResultsEditor >> eventTestRunFinished: ann [
 
-	| result |
-	result := ann value.
-	result ifNil: [ ^ self ].
-	self updateFromResult: result
+	ann value ifNil: [ ^ self ].
+	self updateFromSuites: ann value suites
 ]
 
 { #category : 'initialization' }
@@ -145,8 +127,21 @@ PulsarTestRunnerResultsEditor >> registerToEvents [
 ]
 
 { #category : 'private' }
-PulsarTestRunnerResultsEditor >> updateFromResult: aResult [
+PulsarTestRunnerResultsEditor >> updateFromSuites: aSuiteCollection [
 
-	summaryPresenter label: aResult summaryString.
-	resultsTree roots: (self buildResultTreeFor: aResult)
+	| passCount failCount errorCount |
+	passCount := 0.
+	failCount := 0.
+	errorCount := 0.
+	aSuiteCollection do: [ :eachSuite |
+			eachSuite children do: [ :eachCase |
+					eachCase result ifNil: [ passCount := passCount + 1 ] ifNotNil: [ :r |
+							r = #failure
+								ifTrue: [ failCount := failCount + 1 ]
+								ifFalse: [ errorCount := errorCount + 1 ] ] ] ].
+	summaryPresenter label: ('{1} passed, {2} failures, {3} errors' format: {
+				 passCount.
+				 failCount.
+				 errorCount }).
+	resultsTree roots: (self buildResultTreeFor: aSuiteCollection)
 ]

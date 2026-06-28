@@ -7,8 +7,7 @@ Class {
 	#name : 'PulsarTestRunnerModel',
 	#superclass : 'PvBaseModel',
 	#instVars : [
-		'testTreeRoot',
-		'lastResult',
+		'suites',
 		'mutex'
 	],
 	#category : 'Pulsar-Tool-TestRunner-Model',
@@ -17,11 +16,18 @@ Class {
 }
 
 { #category : 'tree building' }
-PulsarTestRunnerModel >> buildTestTree [
+PulsarTestRunnerModel >> buildSuites [
+	"Scan the project for TestCase subclasses and build PulsarTestSuite instances."
 
-	testTreeRoot := PulsarTestProjectNode newEntity: self projectModel parent: nil model: self.
-	testTreeRoot selectAll.
-	^ testTreeRoot
+	| allPackages testClasses |
+	allPackages := self projectModel packagesOn: self projectModel entity.
+	testClasses := IdentitySet new.
+	allPackages do: [ :eachPkg |
+			eachPkg definedClasses do: [ :eachClass |
+					((eachClass inheritsFrom: TestCase) and: [ eachClass isAbstract not and: [ eachClass allTestSelectors isNotEmpty ] ])
+						ifTrue: [ testClasses add: eachClass ] ] ].
+	^ (testClasses sorted: #name ascending) collect: [ :eachClass |
+		  PulsarTestSuite newEnvironment: self environmentModel entity: eachClass ]
 ]
 
 { #category : 'initialization' }
@@ -29,18 +35,6 @@ PulsarTestRunnerModel >> initialize [
 
 	super initialize.
 	mutex := Mutex new
-]
-
-{ #category : 'accessing' }
-PulsarTestRunnerModel >> lastResult [
-
-	^ lastResult
-]
-
-{ #category : 'accessing' }
-PulsarTestRunnerModel >> lastResult: anObject [
-
-	lastResult := anObject
 ]
 
 { #category : 'accessing' }
@@ -70,73 +64,72 @@ PulsarTestRunnerModel >> projectModel [
 { #category : 'tree building' }
 PulsarTestRunnerModel >> refresh [
 
-	testTreeRoot := nil.
-	self buildTestTree
+	suites := nil.
+	self suites
 ]
 
 { #category : 'running' }
 PulsarTestRunnerModel >> runAllTests [
-	"Run all tests synchronously and return the result."
 
-	| result |
-	testTreeRoot ifNil: [ self buildTestTree ].
-	result := NewTestRunner runSuite: self suiteFromAllTests.
-	^ self storeAndReturnResult: result
+	| allCases |
+	allCases := OrderedCollection new.
+	self suites do: [ :eachSuite | allCases addAll: eachSuite children ].
+	self runSuite: (self suiteFromCases: allCases) for: allCases
 ]
 
 { #category : 'running' }
 PulsarTestRunnerModel >> runSelectedTests [
-	"Run selected tests synchronously and return the result."
 
-	| methods result |
-	methods := self selectedTestMethods.
-	methods ifEmpty: [ ^ nil ].
-	result := NewTestRunner runSuite: (self suiteFromMethods: methods).
-	^ self storeAndReturnResult: result
+	| cases |
+	cases := self selectedTestCases.
+	cases ifEmpty: [ ^ self ].
+	self runSuite: (self suiteFromCases: cases) for: cases
 ]
 
 { #category : 'running' }
-PulsarTestRunnerModel >> selectedTestMethods [
-	"Collect all active test method nodes from the tree."
+PulsarTestRunnerModel >> runSuite: aTestSuite for: caseCollection [
+	"Run aTestSuite and distribute results back to individual cases."
 
-	testTreeRoot ifNil: [ self buildTestTree ].
-	^ testTreeRoot selectedMethodNodes
+	| testResult |
+	testResult := NewTestRunner runSuite: aTestSuite.
+	self updateCases: caseCollection fromResult: testResult.
+	^ testResult
 ]
 
 { #category : 'running' }
-PulsarTestRunnerModel >> storeAndReturnResult: aTestResult [
-	"Store the test result and return a PulsarTestRunResult."
+PulsarTestRunnerModel >> selectedTestCases [
+	"Collect all selected PulsarTestCase instances across all suites."
 
-	lastResult := PulsarTestRunResult fromTestResult: aTestResult.
-	^ lastResult
+	^ Array streamContents: [ :stream | self suites do: [ :eachSuite | stream nextPutAll: eachSuite selectedCases ] ]
 ]
 
 { #category : 'running' }
-PulsarTestRunnerModel >> suiteFromAllTests [
+PulsarTestRunnerModel >> suiteFromCases: aCaseCollection [
 
 	| suite |
 	suite := TestSuite named: self name.
-	testTreeRoot selectedMethodNodes do: [ :eachNode | suite addTest: (eachNode testClass selector: eachNode testSelector) ].
-	^ suite
-]
-
-{ #category : 'running' }
-PulsarTestRunnerModel >> suiteFromMethods: aMethodNodeCollection [
-
-	| suite |
-	suite := TestSuite named: self name.
-	aMethodNodeCollection do: [ :eachNode | suite addTest: (eachNode testClass selector: eachNode testSelector) ].
+	aCaseCollection do: [ :eachCase | suite addTest: eachCase entity ].
 	^ suite
 ]
 
 { #category : 'accessing' }
-PulsarTestRunnerModel >> testTreeRoot [
+PulsarTestRunnerModel >> suites [
 
-	^ testTreeRoot ifNil: [ testTreeRoot := self buildTestTree ]
+	^ suites ifNil: [ suites := self buildSuites ]
 ]
 
 { #category : 'accessing' }
-PulsarTestRunnerModel >> testTreeRoot: anObject [
+PulsarTestRunnerModel >> suites: anObject [
 
-	testTreeRoot := anObject
+	suites := anObject
+]
+
+{ #category : 'running' }
+PulsarTestRunnerModel >> updateCases: caseCollection fromResult: aTestResult [
+	"Distribute SUnit TestResult back to individual PulsarTestCase instances."
+
+	caseCollection do: [ :eachCase |
+			(aTestResult isPassedFor: eachCase testClass selector: eachCase testSelector) ifTrue: [ eachCase result: nil ].
+			(aTestResult isFailureFor: eachCase testClass selector: eachCase testSelector) ifTrue: [ eachCase result: #failure ].
+			(aTestResult isErrorFor: eachCase testClass selector: eachCase testSelector) ifTrue: [ eachCase result: #error ] ]
 ]

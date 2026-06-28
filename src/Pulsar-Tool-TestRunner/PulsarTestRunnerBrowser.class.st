@@ -15,63 +15,31 @@ Class {
 
 { #category : 'private - definitions' }
 PulsarTestRunnerBrowser >> defineTestRunnerGlobalActionsOn: aBuilder [
+
 	<dockActions>
-	
-	aBuilder addGroup: #testRunnerGlobal with: [ :group | group
-		beDisplayedAsGroup;
-		addActionWith: [ :action | action
-			name: 'Run Selected';
-			iconName: 'testGreen';
-			description: 'Run selected tests';
-			shortcutKey: $r actionModifier;
-			action: [ self doRunSelected ] ];
-		addActionWith: [ :action | action
-			name: 'Run All';
-			iconName: 'testNotRun';
-			description: 'Run all tests';
-			shortcutKey: $r shift actionModifier;
-			action: [ self doRunAll ] ];
-		addActionWith: [ :action | action
-			name: 'Refresh';
-			iconName: 'refresh';
-			description: 'Refresh test tree';
-			action: [ self doRefresh ] ] ]
-]
-
-{ #category : 'private - actions' }
-PulsarTestRunnerBrowser >> doRefresh [
-
-	self model refresh.
-	self presentersDo: [ :eachPresenter |
-		(eachPresenter presenter isKindOf: PulsarTestRunnerTestsView) ifTrue: [ eachPresenter presenter updatePresenter ] ]
-]
-
-{ #category : 'private - actions' }
-PulsarTestRunnerBrowser >> doRunAll [
-
-	self scheduleJob: [ :aJob |
-			| result |
-			aJob
-				title: 'Running all tests';
-				min: 0;
-				max: 1;
-				progress: 1.
-			result := self model runAllTests.
-			result ifNotNil: [ self announce: (PulsarTestRunFinished newValue: result) ] ]
-]
-
-{ #category : 'private - actions' }
-PulsarTestRunnerBrowser >> doRunSelected [
-
-	self scheduleJob: [ :aJob |
-			| result |
-			aJob
-				title: 'Running selected tests';
-				min: 0;
-				max: 1;
-				progress: 1.
-			result := self model runSelectedTests.
-			result ifNotNil: [ self announce: (PulsarTestRunFinished newValue: result) ] ]
+	aBuilder addGroup: #testRunnerGlobal with: [ :group |
+			group
+				beDisplayedAsGroup;
+				addActionWith: [ :action |
+						action
+							name: 'Run Selected';
+							iconName: 'testGreen';
+							description: 'Run selected tests';
+							shortcutKey: $r actionModifier;
+							action: [ (PulsarTestRunnerActionContext on: self) doRunSelectedFor: self model ] ];
+				addActionWith: [ :action |
+						action
+							name: 'Run All';
+							iconName: 'testNotRun';
+							description: 'Run all tests';
+							shortcutKey: $r shift actionModifier;
+							action: [ (PulsarTestRunnerActionContext on: self) doRunAllFor: self model ] ];
+				addActionWith: [ :action |
+						action
+							name: 'Refresh';
+							iconName: 'refresh';
+							description: 'Refresh test tree';
+							action: [ (PulsarTestRunnerActionContext on: self) doRefreshFor: self model ] ] ]
 ]
 
 { #category : 'initialization' }

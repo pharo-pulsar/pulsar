@@ -31,6 +31,12 @@ PulsarActionContext >> application [
 ]
 
 { #category : 'accessing' }
+PulsarActionContext >> notificationCenter [
+
+	^ self window notificationCenter
+]
+
+{ #category : 'accessing' }
 PulsarActionContext >> owner [
 
 	^ owner
@@ -40,18 +46,6 @@ PulsarActionContext >> owner [
 PulsarActionContext >> owner: aPresenter [
 
 	owner := aPresenter
-]
-
-{ #category : 'private' }
-PulsarActionContext >> schedule: aBlock [
-
-	self 
-		deprecated: 'This is confusing, use #scheduleTask:' 
-		transformWith:
-			'`@receiver schedule: `@arg' -> 
-			'`@receiver scheduleTask: `@arg'.
-
-	^ self scheduleTask: aBlock
 ]
 
 { #category : 'private' }

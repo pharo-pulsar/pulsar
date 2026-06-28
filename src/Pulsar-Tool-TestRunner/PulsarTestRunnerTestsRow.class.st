@@ -17,7 +17,10 @@ Class {
 { #category : 'initialization' }
 PulsarTestRunnerTestsRow >> connectPresenters [
 
-	checkBoxPresenter whenActivatedDo: [ self model toggleActiveInBranch ]
+	checkBoxPresenter whenActivatedDo: [
+			(self model isKindOf: PulsarTestSuite)
+				ifTrue: [ self model toggleAllSelection ]
+				ifFalse: [ self model toggleSelection ] ]
 ]
 
 { #category : 'layout' }
@@ -44,15 +47,8 @@ PulsarTestRunnerTestsRow >> initializePresenters [
 { #category : 'accessing - model' }
 PulsarTestRunnerTestsRow >> model: aTestNode [
 
-	self model ifNotNil: [ self model resetStateChangedAction ].
 	super model: aTestNode.
-	aTestNode whenStateChangedDo: [ :aValue | self updateActiveStatus: aValue ]
-]
-
-{ #category : 'initialization' }
-PulsarTestRunnerTestsRow >> updateActiveStatus: aBoolean [
-
-	checkBoxPresenter state: aBoolean
+	self updatePresenter
 ]
 
 { #category : 'initialization' }
@@ -60,7 +56,7 @@ PulsarTestRunnerTestsRow >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 
-	checkBoxPresenter state: self model isActive.
+	checkBoxPresenter state: self model isSelected.
 	imagePresenter image: (self iconNamed: self model iconName).
 	labelPresenter label: self model description
 ]
