@@ -313,6 +313,9 @@ panelgrid listview { background-color: @view_bg_color; } /* reset central part s
 paneldock panelframe popover listview { background-color: @view_bg_color; }
 paneldock panelframe popover box.pulsarToolbarPanel { background-color: unset; }
 
+checkbutton { padding: 0; min-width: 0; min-height: 0; }
+checkbutton check { min-width: 12px; min-height: 12px; margin: 0; }
+
 .stList listview, 
 .stTree listview { 
 	font-size: 0.9em; 
