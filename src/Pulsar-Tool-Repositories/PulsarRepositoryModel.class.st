@@ -496,13 +496,7 @@ PulsarRepositoryModel >> newRemoveRemoteBranchAction: aBranchModel [
 { #category : 'actions' }
 PulsarRepositoryModel >> openInOSFileBrowser [
 
-	^ StTerminalInterface default openTerminalOn: self entity location
-]
-
-{ #category : 'actions' }
-PulsarRepositoryModel >> openTerminal [
-
-	PulsarTerminalInterface default openTerminalOn: self entity location fullName
+	^ self entity location openInOSFileBrowser
 ]
 
 { #category : 'accessing' }
