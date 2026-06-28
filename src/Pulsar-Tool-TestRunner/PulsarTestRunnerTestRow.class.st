@@ -2,7 +2,7 @@
 Row presenter for the test runner tree, displaying a checkbox, icon, and label for each test node. Matches the PulsarRepositoryChangeRow pattern.
 "
 Class {
-	#name : 'PulsarTestRunnerTestsRow',
+	#name : 'PulsarTestRunnerTestRow',
 	#superclass : 'SpEasyAbstractRowPresenter',
 	#instVars : [
 		'checkBoxPresenter',
@@ -15,7 +15,7 @@ Class {
 }
 
 { #category : 'initialization' }
-PulsarTestRunnerTestsRow >> connectPresenters [
+PulsarTestRunnerTestRow >> connectPresenters [
 
 	checkBoxPresenter whenActivatedDo: [
 			(self model isKindOf: PulsarTestSuite)
@@ -24,7 +24,7 @@ PulsarTestRunnerTestsRow >> connectPresenters [
 ]
 
 { #category : 'layout' }
-PulsarTestRunnerTestsRow >> defaultLayout [
+PulsarTestRunnerTestRow >> defaultLayout [
 
 	^ SpBoxLayout newHorizontal
 		  add: checkBoxPresenter expand: false;
@@ -34,7 +34,7 @@ PulsarTestRunnerTestsRow >> defaultLayout [
 ]
 
 { #category : 'initialization' }
-PulsarTestRunnerTestsRow >> initializePresenters [
+PulsarTestRunnerTestRow >> initializePresenters [
 
 	self addStyle: 'stRow'.
 	self addStyle: 'pulsarTestRunnerRow'.
@@ -45,14 +45,14 @@ PulsarTestRunnerTestsRow >> initializePresenters [
 ]
 
 { #category : 'accessing - model' }
-PulsarTestRunnerTestsRow >> model: aTestNode [
+PulsarTestRunnerTestRow >> model: aTestNode [
 
 	super model: aTestNode.
 	self updatePresenter
 ]
 
 { #category : 'initialization' }
-PulsarTestRunnerTestsRow >> updatePresenter [
+PulsarTestRunnerTestRow >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 

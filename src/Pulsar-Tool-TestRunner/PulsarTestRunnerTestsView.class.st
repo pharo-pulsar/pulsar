@@ -45,43 +45,37 @@ PulsarTestRunnerTestsView >> defaultLayout [
 PulsarTestRunnerTestsView >> defineTestRunnerActionsOn: aBuilder [
 
 	<dockActions>
-	aBuilder addGroup: #testRunner with: [ :group |
-			group
-				priority: 100;
-				name: 'Tests';
-				beDisplayedAsGroup;
-				addActionWith: [ :action |
-						action
-							name: 'Run Selected';
-							iconName: 'testGreen';
-							description: 'Run selected tests';
-							shortcutKey: $r actionModifier;
-							action: [ (PulsarTestRunnerActionContext on: self) doRunSelectedFor: self model ] ];
-				addActionWith: [ :action |
-						action
-							name: 'Run All';
-							iconName: 'testNotRun';
-							description: 'Run all tests';
-							shortcutKey: $r shift actionModifier;
-							action: [ (PulsarTestRunnerActionContext on: self) doRunAllFor: self model ] ];
-				addActionWith: [ :action |
-						action
-							name: 'Select All';
-							iconName: 'checkboxSelected';
-							description: 'Select all tests';
-							action: [ self doSelectAll ] ];
-				addActionWith: [ :action |
-						action
-							name: 'Deselect All';
-							iconName: 'checkboxUnselected';
-							description: 'Deselect all tests';
-							action: [ self doDeselectAll ] ];
-				addActionWith: [ :action |
-						action
-							name: 'Refresh';
-							iconName: 'refresh';
-							description: 'Refresh test tree';
-							action: [ (PulsarTestRunnerActionContext on: self) doRefreshFor: self model ] ] ]
+	aBuilder addGroup: #testRunner with: [ :group | group
+		priority: 100;
+		name: 'Tests';
+		beDisplayedAsGroup;
+		addActionWith: [ :action | action
+			name: 'Run Selected';
+			iconName: 'testGreen';
+			description: 'Run selected tests';
+			shortcutKey: $r actionModifier;
+			action: [ (PulsarTestRunnerActionContext on: self) doRunSelectedFor: self model ] ];
+		addActionWith: [ :action | action
+			name: 'Run All';
+			iconName: 'testNotRun';
+			description: 'Run all tests';
+			shortcutKey: $r shift actionModifier;
+			action: [ (PulsarTestRunnerActionContext on: self) doRunAllFor: self model ] ];
+		addActionWith: [ :action | action
+			name: 'Select All';
+			iconName: 'checkboxSelected';
+			description: 'Select all tests';
+			action: [ self doSelectAll ] ];
+		addActionWith: [ :action | action
+			name: 'Deselect All';
+			iconName: 'checkboxUnselected';
+			description: 'Deselect all tests';
+			action: [ self doDeselectAll ] ];
+		addActionWith: [ :action | action
+			name: 'Refresh';
+			iconName: 'refresh';
+			description: 'Refresh test tree';
+			action: [ (PulsarTestRunnerActionContext on: self) doRefreshFor: self model ] ] ]
 ]
 
 { #category : 'private - actions' }
@@ -116,7 +110,7 @@ PulsarTestRunnerTestsView >> initializePresenters [
 	listPresenter := self newEasyTreeListView
 		                 addStyle: 'stTree';
 		                 addStyle: 'pulsarTestRunnerTree';
-		                 rowPresenterClass: PulsarTestRunnerTestsRow;
+		                 rowPresenterClass: PulsarTestRunnerTestRow;
 		                 display: [ :aNode | aNode description ];
 		                 children: [ :aNode | aNode children ];
 		                 actions: (self actions actionsFor: #nodeActions);

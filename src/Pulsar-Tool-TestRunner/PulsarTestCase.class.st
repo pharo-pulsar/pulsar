@@ -5,15 +5,22 @@ Slots: result (TestResult or nil after execution), isSelected (Boolean).
 "
 Class {
 	#name : 'PulsarTestCase',
-	#superclass : 'PvBaseModel',
+	#superclass : 'PulsarBaseTestModel',
 	#instVars : [
-		'result',
-		'isSelected'
+		'result'
 	],
 	#category : 'Pulsar-Tool-TestRunner-Model',
 	#package : 'Pulsar-Tool-TestRunner',
 	#tag : 'Model'
 }
+
+{ #category : 'converting' }
+PulsarTestCase >> asEntityModel [
+
+	^ PvMethodModel 
+		newEnvironment: self environmentModel
+		entity: self entity class >> self entity selector
+]
 
 { #category : 'accessing' }
 PulsarTestCase >> children [
@@ -25,26 +32,6 @@ PulsarTestCase >> children [
 PulsarTestCase >> description [
 
 	^ self entity selector
-]
-
-{ #category : 'accessing' }
-PulsarTestCase >> iconName [
-
-	self flag: #TODO. "Use result status"
-	^ #testNotRun
-]
-
-{ #category : 'accessing' }
-PulsarTestCase >> isSelected [
-
-	isSelected ifNil: [ isSelected := true ].
-	^ isSelected
-]
-
-{ #category : 'accessing' }
-PulsarTestCase >> isSelected: aBoolean [
-
-	isSelected := aBoolean
 ]
 
 { #category : 'accessing' }
