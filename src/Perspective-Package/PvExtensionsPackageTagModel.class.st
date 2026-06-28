@@ -12,6 +12,14 @@ PvExtensionsPackageTagModel class >> order [
 	^ 1000
 ]
 
+{ #category : 'converting' }
+PvExtensionsPackageTagModel >> asPackageModel [
+
+	^ PvPackageModel
+		newEnvironment: self environmentModel
+		entity: self entity
+]
+
 { #category : 'accessing' }
 PvExtensionsPackageTagModel >> children [
 
