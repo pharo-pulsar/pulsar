@@ -26,10 +26,21 @@ PulsarTestRunnerActionContext >> doRunAllFor: aModel [
 ]
 
 { #category : 'actions' }
-PulsarTestRunnerActionContext >> doRunSelectedFor: aModel [
+PulsarTestRunnerActionContext >> doRunCase: aCase [
 
 	self scheduleJob: [ :statusbar |
-		statusbar pushMessage: 'Running selected tests'.
-		aModel runSelectedTests.
-		self notificationCenter announce: (PulsarTestRunFinished newValue: aModel) ]
+		statusbar pushMessage: ('Running {1}>>{2}' format: {
+			aCase testClass name.
+			aCase testSelector }).
+		self owner model runCase: aCase.
+		self notificationCenter announce: (PulsarTestRunFinished newValue: aCase) ]
+]
+
+{ #category : 'actions' }
+PulsarTestRunnerActionContext >> doRunSuite: aSuite [
+
+	self scheduleJob: [ :statusbar |
+		statusbar pushMessage: ('Running {1}' format: { aSuite name }).
+		self owner model runSuite: aSuite.
+		self notificationCenter announce: (PulsarTestRunFinished newValue: aSuite) ]
 ]

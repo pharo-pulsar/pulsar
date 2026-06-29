@@ -4,18 +4,28 @@ Abstract base for test runner models (suites and cases). Provides common selecti
 Class {
 	#name : 'PulsarBaseTestModel',
 	#superclass : 'PvBaseModel',
-	#instVars : [
-		'isSelected'
-	],
-	#category : 'Pulsar-Tool-TestRunner-Model',
-	#package : 'Pulsar-Tool-TestRunner',
-	#tag : 'Model'
+	#category : 'Pulsar-Tool-TestRunner',
+	#package : 'Pulsar-Tool-TestRunner'
 }
+
+{ #category : 'comparing' }
+PulsarBaseTestModel >> = other [
+
+	^ self species = other species
+		and: [ self entity = other entity ]
+]
 
 { #category : 'converting' }
 PulsarBaseTestModel >> asEntityModel [
 
 	^ self subclassResponsibility
+]
+
+{ #category : 'comparing' }
+PulsarBaseTestModel >> hash [
+
+	^ self species hash
+		bitXor: self entity hash
 ]
 
 { #category : 'accessing' }
@@ -24,25 +34,25 @@ PulsarBaseTestModel >> iconName [
 	^ self statusIconForModel
 ]
 
-{ #category : 'accessing' }
-PulsarBaseTestModel >> isSelected [
+{ #category : 'running' }
+PulsarBaseTestModel >> runOn: anActionContext [
 
-	isSelected ifNil: [ isSelected := true ].
-	^ isSelected
+	self subclassResponsibility
 ]
 
 { #category : 'accessing' }
-PulsarBaseTestModel >> isSelected: aBoolean [
+PulsarBaseTestModel >> statusDescription [
 
-	isSelected := aBoolean
+	^ self asEntityModel lastTestExecutionResult ifNotNil: #asString
 ]
 
 { #category : 'private' }
 PulsarBaseTestModel >> statusIconForModel [
 
 	self asEntityModel lastTestExecutionResult ifNotNil: [ :aResult |
-			aResult hasErrors ifTrue: [ ^ 'run-test-error' ].
-			aResult hasFailures ifTrue: [ ^ 'run-test-failure' ].
-			aResult hasPassed ifTrue: [ ^ 'run-test-passed' ] ].
-	^ 'run-test'
+		aResult hasErrors ifTrue: [ ^ 'run-test-error' ].
+		aResult hasFailures ifTrue: [ ^ 'run-test-failure' ].
+		aResult hasEffectivePassed ifTrue: [ ^ 'run-test-passed' ] ].
+	
+	^ 'test-not-run'
 ]

@@ -8,7 +8,7 @@ Class {
 	#superclass : 'PulsarCollectionView',
 	#instVars : [
 		'toolbarPresenter',
-		'mutex'
+		'expansions'
 	],
 	#category : 'Pulsar-Tool-TestRunner-View',
 	#package : 'Pulsar-Tool-TestRunner',
@@ -43,34 +43,18 @@ PulsarTestRunnerTestsView >> defaultLayout [
 
 { #category : 'private - definitions' }
 PulsarTestRunnerTestsView >> defineTestRunnerActionsOn: aBuilder [
-
 	<dockActions>
+	
 	aBuilder addGroup: #testRunner with: [ :group | group
 		priority: 100;
 		name: 'Tests';
 		beDisplayedAsGroup;
 		addActionWith: [ :action | action
-			name: 'Run Selected';
-			iconName: 'testGreen';
-			description: 'Run selected tests';
-			shortcutKey: $r actionModifier;
-			action: [ (PulsarTestRunnerActionContext on: self) doRunSelectedFor: self model ] ];
-		addActionWith: [ :action | action
 			name: 'Run All';
-			iconName: 'testNotRun';
+			iconName: 'run-test';
 			description: 'Run all tests';
 			shortcutKey: $r shift actionModifier;
 			action: [ (PulsarTestRunnerActionContext on: self) doRunAllFor: self model ] ];
-		addActionWith: [ :action | action
-			name: 'Select All';
-			iconName: 'checkboxSelected';
-			description: 'Select all tests';
-			action: [ self doSelectAll ] ];
-		addActionWith: [ :action | action
-			name: 'Deselect All';
-			iconName: 'checkboxUnselected';
-			description: 'Deselect all tests';
-			action: [ self doDeselectAll ] ];
 		addActionWith: [ :action | action
 			name: 'Refresh';
 			iconName: 'refresh';
@@ -79,24 +63,16 @@ PulsarTestRunnerTestsView >> defineTestRunnerActionsOn: aBuilder [
 ]
 
 { #category : 'private - actions' }
-PulsarTestRunnerTestsView >> doDeselectAll [
+PulsarTestRunnerTestsView >> doRun: aModel [
 
-	self model suites do: [ :each | each deselectAll ].
-	self updatePresenter
-]
-
-{ #category : 'private - actions' }
-PulsarTestRunnerTestsView >> doSelectAll [
-
-	self model suites do: [ :each | each selectAll ].
-	self updatePresenter
+	aModel runOn: (PulsarTestRunnerActionContext on: self)
 ]
 
 { #category : 'initialization' }
 PulsarTestRunnerTestsView >> initialize [
 
-	super initialize.
-	mutex := Mutex new
+	expansions := Set new.
+	super initialize
 ]
 
 { #category : 'initialization' }
@@ -108,13 +84,27 @@ PulsarTestRunnerTestsView >> initializePresenters [
 	toolbarPresenter actions: (self actions actionsFor: #testRunner).
 
 	listPresenter := self newEasyTreeListView
-		                 addStyle: 'stTree';
-		                 addStyle: 'pulsarTestRunnerTree';
-		                 rowPresenterClass: PulsarTestRunnerTestRow;
-		                 display: [ :aNode | aNode description ];
-		                 children: [ :aNode | aNode children ];
-		                 actions: (self actions actionsFor: #nodeActions);
-		                 yourself
+		addStyle: 'stTree';
+		addStyle: 'pulsarTestRunnerTree';
+		whenExpandChangedDo: [ :ann | 
+			self registerExpansion: ann item expand: ann expanded ];
+		rowPresenterClass: PulsarTestRunnerTestsRow;
+		whenRowPresenterInstantiatedDo: [ :aRowPresenter | 
+			aRowPresenter whenActivatedDo: [ :aModel | self doRun: aModel ] ];
+		display: [ :aNode | aNode description ];
+		children: [ :aNode | aNode children ];
+		actions: (self actions actionsFor: #nodeActions);
+		yourself
+]
+
+{ #category : 'private' }
+PulsarTestRunnerTestsView >> registerExpansion: item expand: expand [
+
+	expand 
+		ifTrue: [ expansions add: item ]
+		ifFalse: [ expansions remove: item ifAbsent: [] ].
+		
+	expansions printToStdout.
 ]
 
 { #category : 'initialization' }
@@ -128,5 +118,13 @@ PulsarTestRunnerTestsView >> registerToEvents [
 PulsarTestRunnerTestsView >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
-	listPresenter roots: self model suites
+	
+	self scheduleTask: [
+		| selected |
+	
+		self application defer: [ 
+			selected := listPresenter selectedItem.
+			listPresenter roots: self model suites.
+			expansions do: [ :each | listPresenter expandItem: each ].
+			listPresenter selectItem: selected ] ]
 ]

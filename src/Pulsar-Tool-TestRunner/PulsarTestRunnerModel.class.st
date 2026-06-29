@@ -78,12 +78,22 @@ PulsarTestRunnerModel >> runAllTests [
 ]
 
 { #category : 'running' }
-PulsarTestRunnerModel >> runSelectedTests [
+PulsarTestRunnerModel >> runCase: aCase [
 
-	| cases |
-	cases := self selectedTestCases.
+	| suite |
+	suite := TestSuite named: self name.
+	suite addTest: aCase entity.
+	^ self runSuite: suite for: { aCase }
+]
+
+{ #category : 'running' }
+PulsarTestRunnerModel >> runSuite: aTestSuite [
+
+	| cases suite |
+	cases := aTestSuite children.
 	cases ifEmpty: [ ^ self ].
-	self runSuite: (self suiteFromCases: cases) for: cases
+	suite := self suiteFromCases: cases.
+	^ self runSuite: suite for: cases
 ]
 
 { #category : 'running' }
@@ -94,13 +104,6 @@ PulsarTestRunnerModel >> runSuite: aTestSuite for: caseCollection [
 	testResult := NewTestRunner runSuite: aTestSuite.
 	self updateCases: caseCollection fromResult: testResult.
 	^ testResult
-]
-
-{ #category : 'running' }
-PulsarTestRunnerModel >> selectedTestCases [
-	"Collect all selected PulsarTestCase instances across all suites."
-
-	^ Array streamContents: [ :stream | self suites do: [ :eachSuite | stream nextPutAll: eachSuite selectedCases ] ]
 ]
 
 { #category : 'running' }

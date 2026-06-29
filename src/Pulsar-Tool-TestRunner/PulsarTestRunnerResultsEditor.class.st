@@ -41,7 +41,8 @@ PulsarTestRunnerResultsEditor >> buildGroupNode: aSuite for: caseCollection labe
 			| methodNode |
 			methodNode := PvTreeNodeModel new
 				              name: eachCase testSelector;
-				              iconName: #testNotRun;
+				              iconName: eachCase iconName;
+				              realModel: eachCase;
 				              children: #(  );
 				              yourself.
 			groupNode children add: methodNode ].
@@ -86,11 +87,31 @@ PulsarTestRunnerResultsEditor >> defaultLayout [
 		yourself
 ]
 
+{ #category : 'private' }
+PulsarTestRunnerResultsEditor >> detailTextFor: aNode [
+	"Display detail text for the selected test case."
+	| realCase |
+	
+	aNode ifNil: [ ^ self ].
+	
+	realCase := aNode realModel.
+	(realCase isKindOf: PulsarTestCase) ifFalse: [ ^ detailPresenter text: '' ].
+	detailPresenter text: (String streamContents: [ :stream |
+				 stream nextPutAll: 'Class: '.
+				 stream nextPutAll: realCase testClass name.
+				 stream cr.
+				 stream nextPutAll: 'Selector: '.
+				 stream nextPutAll: realCase testSelector.
+				 stream cr.
+				 stream nextPutAll: 'Status: '.
+				 stream nextPutAll: (realCase result ifNil: [ 'passed' ]) ])
+]
+
 { #category : 'events' }
 PulsarTestRunnerResultsEditor >> eventTestRunFinished: ann [
 
 	ann value ifNil: [ ^ self ].
-	self updateFromSuites: ann value suites
+	"self updateFromSuites: ann value suites"
 ]
 
 { #category : 'initialization' }

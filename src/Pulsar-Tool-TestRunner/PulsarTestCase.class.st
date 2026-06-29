@@ -52,6 +52,18 @@ PulsarTestCase >> result: anObject [
 	result := anObject
 ]
 
+{ #category : 'running' }
+PulsarTestCase >> runOn: anActionContext [
+	
+	^ anActionContext doRunCase: self
+]
+
+{ #category : 'accessing' }
+PulsarTestCase >> statusDescription [
+	
+	^ super statusDescription ifNil: [ 'Test not ran' ]
+]
+
 { #category : 'accessing' }
 PulsarTestCase >> testClass [
 
@@ -62,10 +74,4 @@ PulsarTestCase >> testClass [
 PulsarTestCase >> testSelector [
 
 	^ self entity selector
-]
-
-{ #category : 'selection' }
-PulsarTestCase >> toggleSelection [
-
-	self isSelected: self isSelected not
 ]

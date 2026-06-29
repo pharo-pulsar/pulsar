@@ -46,12 +46,12 @@ PulsarMethodActionRunTestPresenter >> initializePresenters [
 { #category : 'private' }
 PulsarMethodActionRunTestPresenter >> statusIconForModel [
  
-	self contextModel lastTestExecutionResult ifNotNil: [ :result | 
-		result hasErrors ifTrue: [ ^ 'run-test-error' ].	
-		result hasFailures ifTrue: [ ^ 'run-test-failure' ].	
-		result hasPassed ifTrue: [ ^ 'run-test-passed' ] ].	
+	self contextModel lastTestExecutionResult ifNotNil: [ :aResult | 
+		aResult hasErrors ifTrue: [ ^ 'run-test-error' ].	
+		aResult hasFailures ifTrue: [ ^ 'run-test-failure' ].	
+		aResult hasEffectivePassed ifTrue: [ ^ 'run-test-passed' ] ].	
 		
-	^ 'run-test'
+	^ 'test-not-run'
 ]
 
 { #category : 'initialization' }

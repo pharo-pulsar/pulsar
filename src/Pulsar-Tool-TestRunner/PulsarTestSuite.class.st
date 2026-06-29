@@ -50,7 +50,7 @@ PulsarTestSuite >> description [
 	^ self entity name
 ]
 
-{ #category : 'selection' }
+{ #category : 'as yet unclassified' }
 PulsarTestSuite >> deselectAll [
 
 	self children do: [ :each | each isSelected: false ]
@@ -62,7 +62,7 @@ PulsarTestSuite >> iconName [
 	^ self statusIconForModel
 ]
 
-{ #category : 'selection' }
+{ #category : 'as yet unclassified' }
 PulsarTestSuite >> isSelected [
 	"Return true if all cases are selected."
 
@@ -75,13 +75,19 @@ PulsarTestSuite >> name [
 	^ self entity name
 ]
 
-{ #category : 'selection' }
+{ #category : 'running' }
+PulsarTestSuite >> runOn: anActionContext [
+	
+	^ anActionContext doRunSuite: self
+]
+
+{ #category : 'as yet unclassified' }
 PulsarTestSuite >> selectAll [
 
 	self children do: [ :each | each isSelected: true ]
 ]
 
-{ #category : 'selection' }
+{ #category : 'as yet unclassified' }
 PulsarTestSuite >> selectedCases [
 
 	^ self children select: [ :each | each isSelected ]
@@ -98,7 +104,7 @@ PulsarTestSuite >> statusIconForModel [
 	^ 'run-test'
 ]
 
-{ #category : 'selection' }
+{ #category : 'as yet unclassified' }
 PulsarTestSuite >> toggleAllSelection [
 
 	self isSelected

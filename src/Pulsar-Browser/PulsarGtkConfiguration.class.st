@@ -297,6 +297,13 @@ PulsarGtkConfiguration >> settings [
 PulsarGtkConfiguration >> style [
 
 	^ ' 
+checkbutton { padding: 0; min-width: 0; min-height: 0; }
+checkbutton check { min-width: 12px; min-height: 12px; margin: 0; }
+button.compact { min-width: 0; min-height: 0; padding: 0; margin: 0; }
+button.compact image { min-width: 14px; min-height: 14px; -gtk-icon-size: 14px; }
+treeexpander { border-spacing: 1px; }
+treeexpander > expander { margin: 0; min-width: 8x; min-height: 8px; }
+
 popover label { color: unset; }
 popover label.dim { color: LightSlateGrey; }
 toast { border-radius: 4px; padding: 0px 8px; }
@@ -313,13 +320,8 @@ panelgrid listview { background-color: @view_bg_color; } /* reset central part s
 paneldock panelframe popover listview { background-color: @view_bg_color; }
 paneldock panelframe popover box.pulsarToolbarPanel { background-color: unset; }
 
-checkbutton { padding: 0; min-width: 0; min-height: 0; }
-checkbutton check { min-width: 12px; min-height: 12px; margin: 0; }
-
 .stList listview, 
-.stTree listview { 
-	font-size: 0.9em; 
-}
+.stTree listview { font-size: 0.9em; }
 .stTree columnview listview row cell { margin: 0px; padding: 2px; }
 .stTree columnview listview row cell box { border-spacing: 5px; }
 .stRow { margin: 1px; border-spacing: 3px; }

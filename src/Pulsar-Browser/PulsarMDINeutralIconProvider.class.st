@@ -121,6 +121,7 @@ PulsarMDINeutralIconProvider >> createTable [
 		('run-test-passed'        'play-circle-outline'           '#26a269'  '#57e389')
 		('run-test-failure'       'pause-circle-outline'          '#e5a50a'  '#f8e45c')
 		('run-test-error'         'stop-circle-outline'           '#c01c28'  '#f66151')
+		('test-not-run'        	  'play-circle-outline')
 
 		"Severity / warnings"
 		('protocolVirtualWarning' 'alert-outline'                 '#e66100'  '#ffa348')
