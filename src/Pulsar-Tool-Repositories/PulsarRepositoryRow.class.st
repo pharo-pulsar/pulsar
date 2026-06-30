@@ -77,6 +77,7 @@ PulsarRepositoryRow >> initializePresenters [
 		layout: (SpBoxLayout newHorizontal
 			hAlignStart;
 			vAlignEnd;
+			spacing: 2;
 			yourself);
 		yourself
 ]
@@ -92,9 +93,10 @@ PulsarRepositoryRow >> updatePresenter [
 	
 	extraPresenter layout removeAll.
 	self model isHeadInBranch 
-		ifTrue: [ self addBranch ].
-	self model headTags 
-		ifNotEmpty: [ :tags | self addTags: tags ].
+		ifTrue: [ self addBranch ]
+		ifFalse: [ 
+			self model headTags 
+				ifNotEmpty: [ :tags | self addTags: tags ] ].
 	self model outgoingCommits
 		ifNotEmpty: [ :outgoingCommits | self addOutgoingCommits: outgoingCommits ].
 	self model incomingCommits
