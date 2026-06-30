@@ -44,6 +44,12 @@ PulsarRepositoryModel >> addRemote: aName url: anUrl [
 	self entity addRemote: (IceGitRemote name: aName url: anUrl)
 ]
 
+{ #category : 'actions' }
+PulsarRepositoryModel >> addTag: aName [
+
+	self entity createTag: aName
+]
+
 { #category : 'accessing' }
 PulsarRepositoryModel >> allPackagesAvailableToAdd [
 	| packageNames |
