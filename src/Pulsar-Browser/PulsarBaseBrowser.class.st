@@ -278,28 +278,31 @@ PulsarBaseBrowser >> defineExtraActionsOn: aBuilder [
 			action: [ self doNewPlayground ] ] ]
 ]
 
+{ #category : 'private - definitions' }
+PulsarBaseBrowser >> defineViewActionsOn: aBuilder [
+	<dockActions>
+
+	aBuilder addGroup: #view with: [ :group | group 
+		priority: 900;
+		beDisplayedAsGroup;
+		addActionWith: [ :action | action 
+			name: 'Class Outline';
+			description: 'Open a class outline panel';
+			actionState: [ self hasPresenterClass: PulsarClassOutlineView ];
+			action: [ self doToggleTool: PulsarClassOutlineView fromState: action state ] ];
+		addActionWith: [ :action | action 
+			name: 'Editor Stack';
+			description: 'Open the editor stack panel';
+			actionState: [ self hasPresenterClass: PulsarStackView ];
+			action: [ self doToggleTool: PulsarStackView fromState: action state ] ] ]
+]
+
 { #category : 'private - actions' }
 PulsarBaseBrowser >> doNewPlayground [
 
 	self notificationCenter announce: (PulsarRequestNewPlayground new	
 		model: (PulsarPlaygroundModel on: self model environmentModel);
 		yourself)
-]
-
-{ #category : 'private - actions' }
-PulsarBaseBrowser >> doOpenClassOutlineView [
-	| outlineView |
-
-	outlineView := self ensureClassOutlineOverview.
-	outlineView takeKeyboardFocus
-]
-
-{ #category : 'private - actions' }
-PulsarBaseBrowser >> doOpenEditorStackView [
-	| stackView |
-	
-	stackView := self ensureEditorStack.
-	stackView takeKeyboardFocus
 ]
 
 { #category : 'private - actions' }
@@ -320,6 +323,39 @@ PulsarBaseBrowser >> doShowSpotterForWindows [
 	self showSpotterOn: #windows
 ]
 
+{ #category : 'private - actions' }
+PulsarBaseBrowser >> doToggleClassOutline: aBoolean [
+	
+	self doToggleTool: PulsarClassOutlineView fromState: aBoolean
+]
+
+{ #category : 'private - actions' }
+PulsarBaseBrowser >> doToggleTool: aToolClass fromState: aBoolean [
+	
+	^ self 
+		doToggleTool: aToolClass 
+		model: nil 
+		fromState: aBoolean
+]
+
+{ #category : 'private - actions' }
+PulsarBaseBrowser >> doToggleTool: aToolClass model: aModel fromState: aBoolean [ 
+	"state would be the current state, toggle the tool"
+	| toolView |
+
+	toolView := self findPresenterClass: aToolClass.
+	(aBoolean and: [ toolView isNotNil ]) 
+		ifTrue: [ 
+			toolView withNearWindowLikeDo: #close.
+			^ self ].
+
+	toolView ifNil: [ 
+		toolView  := self 
+			addPresenterClass: aToolClass 
+			model: aModel ].
+	toolView panelWidget raiseAndTakeKeyboardFocus
+]
+
 { #category : 'accessing' }
 PulsarBaseBrowser >> editors [
 	"from my list of presenters, answer those who are containing an editor.
@@ -332,17 +368,23 @@ PulsarBaseBrowser >> editors [
 ]
 
 { #category : 'private - actions' }
-PulsarBaseBrowser >> ensureClassOutlineOverview [
+PulsarBaseBrowser >> ensureTool: aToolClass [
+	"ensure a tool is shown"
 
-	^ (self findPresenterClass: PulsarClassOutlineView)
-		ifNil: [ self addPresenterClass: PulsarClassOutlineView ]
+	self 
+		doToggleTool: aToolClass
+		model: nil
+		fromState: false
 ]
 
 { #category : 'private - actions' }
-PulsarBaseBrowser >> ensureEditorStack [
+PulsarBaseBrowser >> ensureTool: aToolClass model: aModel [
+	"ensure a tool is shown"
 
-	^ (self findPresenterClass: PulsarStackView)
-		ifNil: [ self addPresenterClass: PulsarStackView ]
+	self 
+		doToggleTool: aToolClass
+		model: aModel 
+		fromState: false
 ]
 
 { #category : 'events' }

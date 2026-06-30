@@ -14,7 +14,7 @@ PulsarBrowser >> defineOpenCodeExtraActionsOn: aBuilder [
 			action: [ 
 				self 
 					doToggleTool: PulsarLLMChatConsole 
-					state: action state ] 
+					fromState: action state ] 
 		]
 	]
 ]

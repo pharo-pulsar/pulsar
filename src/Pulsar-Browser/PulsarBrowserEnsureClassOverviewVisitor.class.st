@@ -9,11 +9,11 @@ Class {
 { #category : 'visiting' }
 PulsarBrowserEnsureClassOverviewVisitor >> visitClassEditor: aPresenter [
 
-	self owner ensureClassOutlineOverview
+	self owner ensureTool: PulsarClassOutlineView
 ]
 
 { #category : 'visiting' }
 PulsarBrowserEnsureClassOverviewVisitor >> visitMethodEditor: aPresenter [
 
-	self owner ensureClassOutlineOverview
+	self owner ensureTool: PulsarClassOutlineView
 ]

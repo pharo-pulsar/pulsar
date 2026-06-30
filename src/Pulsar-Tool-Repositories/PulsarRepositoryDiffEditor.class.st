@@ -114,6 +114,12 @@ PulsarRepositoryDiffEditor >> initializeWindow: aWindowPresenter [
 		whenClosedDo: [ self windowClosed ]
 ]
 
+{ #category : 'accessing - model' }
+PulsarRepositoryDiffEditor >> model [
+
+	^ super model ifNil: [ PulsarEmptyDiffNode new ]
+]
+
 { #category : 'private' }
 PulsarRepositoryDiffEditor >> mutex [
 
@@ -248,9 +254,9 @@ PulsarRepositoryDiffEditor >> updatePatchContents [
 { #category : 'initialization' }
 PulsarRepositoryDiffEditor >> updatePresenter [
 	
-	self model ifNil: [ ^ self ].
-
-	lastDiffNodeModel = self model ifNil: [ ^ self ].
+	(self model isNil or: [ self model isEmpty ]) ifTrue: [ ^ self ].
+	lastDiffNodeModel = self model ifTrue: [ ^ self ].
+		
 	lastDiffNodeModel := self model.
 
 	self mutex critical: [

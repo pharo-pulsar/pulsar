@@ -18,22 +18,6 @@ PulsarDetachedBrowser >> composeTitle [
 		', ' join: (self editors collect: [ :each | each title ]) }
 ]
 
-{ #category : 'private - definitions' }
-PulsarDetachedBrowser >> defineViewActionsOn: aBuilder [
-	<dockActions>
-
-	aBuilder addGroup: #view with: [ :group | group 
-		beDisplayedAsGroup;
-		addActionWith: [ :action | action 
-			name: 'Class Outline';
-			description: 'Open a class outline panel';
-			action: [ self doOpenClassOutlineView ] ];
-		addActionWith: [ :action | action 
-			name: 'Editor Stack';
-			description: 'Open the editor stack panel';
-			action: [ self doOpenEditorStackView ] ] ]
-]
-
 { #category : 'initialization' }
 PulsarDetachedBrowser >> initializeWindow: aWindowPresenter [
 

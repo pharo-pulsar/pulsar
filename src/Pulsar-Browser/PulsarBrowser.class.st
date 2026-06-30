@@ -96,13 +96,19 @@ PulsarBrowser >> defineExtraActionsOn: aBuilder [
 	 already in the tool list"
 ]
 
+{ #category : 'private - definitions' }
+PulsarBrowser >> defineViewActionsOn: aBuilder [
+	<dockActions>
+	"no view actions for this one, it already include them"
+]
+
 { #category : 'actions' }
 PulsarBrowser >> doOpenCritiquesConsole: stateBoolean [
 	
 	self 
 		doToggleTool: PulsarCritiquesConsole
 		model: (PulsarCritiquesModel on: self model) 
-		state: stateBoolean
+		fromState: stateBoolean
 ]
 
 { #category : 'actions' }
@@ -110,7 +116,7 @@ PulsarBrowser >> doOpenEditorStack: stateBoolean [
 	
 	self 
 		doToggleTool: PulsarStackView
-		state: stateBoolean
+		fromState: stateBoolean
 ]
 
 { #category : 'actions' }
@@ -121,7 +127,7 @@ PulsarBrowser >> doOpenFileManager: stateBoolean [
 		model: (PulsarDirectoryModel 
 			newEnvironment: self model 
 			entity: FileLocator imageDirectory) 
-		state: stateBoolean
+		fromState: stateBoolean
 ]
 
 { #category : 'actions' }
@@ -129,7 +135,7 @@ PulsarBrowser >> doOpenFlagsConsole: stateBoolean [
 	self 
 		doToggleTool: PulsarFlagsConsole
 		model: (PulsarFlagsModel on: self model) 
-		state: stateBoolean
+		fromState: stateBoolean
 ]
 
 { #category : 'actions' }
@@ -138,34 +144,7 @@ PulsarBrowser >> doOpenRepositories: stateBoolean [
 	self 
 		doToggleTool: PulsarRepositoriesView
 		model: (PulsarRepositoriesModel on: self model) 
-		state: stateBoolean
-]
-
-{ #category : 'private - actions' }
-PulsarBrowser >> doToggleTool: aToolClass model: aModel state: aBoolean [ 
-	"state would be the current state, toggle the tool"
-	| toolView |
-
-	toolView := self findPresenterClass: aToolClass.
-	(aBoolean and: [ toolView isNotNil ]) 
-		ifTrue: [ 
-			toolView withNearWindowLikeDo: #close.
-			^ self ].
-
-	toolView ifNil: [ 
-		toolView  := self 
-			addPresenterClass: aToolClass 
-			model: aModel ].
-	toolView panelWidget raiseAndTakeKeyboardFocus
-]
-
-{ #category : 'private - actions' }
-PulsarBrowser >> doToggleTool: aToolClass state: aBoolean [
-	
-	^ self 
-		doToggleTool: aToolClass 
-		model: nil 
-		state: aBoolean
+		fromState: stateBoolean
 ]
 
 { #category : 'private' }

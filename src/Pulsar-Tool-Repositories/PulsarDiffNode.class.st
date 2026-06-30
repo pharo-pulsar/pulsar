@@ -215,6 +215,12 @@ PulsarDiffNode >> isDirectory [
 ]
 
 { #category : 'testing' }
+PulsarDiffNode >> isEmpty [
+
+	^ false
+]
+
+{ #category : 'testing' }
 PulsarDiffNode >> isRoot [
 
 	^ self node value definition isDirectoryDefinition

@@ -32,24 +32,6 @@ PulsarDebugger >> defaultKeyboardFocus [
 	^ stackView
 ]
 
-{ #category : 'private - definitions' }
-PulsarDebugger >> defineViewActionsOn: aBuilder [
-	<dockActions>
-
-	aBuilder addGroup: #view with: [ :group | group 
-		beDisplayedAsGroup;
-		addActionWith: [ :action | action 
-			name: 'Class Outline';
-			description: 'Open a class outline panel';
-			actionState: [ self hasPresenterClass: PulsarClassOutlineView ];
-			action: [ self doOpenClassOutlineView ] ];
-		addActionWith: [ :action | action 
-			name: 'Editor Stack';
-			description: 'Open the editor stack panel';
-			actionState: [ self hasPresenterClass: PulsarStackView ];
-			action: [ self doOpenEditorStackView ] ] ]
-]
-
 { #category : 'events' }
 PulsarDebugger >> eventContextChanged: anAnnouncement [
 	

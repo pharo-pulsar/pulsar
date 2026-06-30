@@ -17,6 +17,17 @@ PulsarRefactorClassContext >> doDuplicateClass: aClassModel [
 ]
 
 { #category : 'refactors' }
+PulsarRefactorClassContext >> doInsertSubclass: aClassModel [
+
+	self scheduleTask: [
+		(ReInsertSubclassDriver newApplication: self application)
+			superclass: aClassModel entity;
+			packageName: aClassModel entity packageName;	
+			scopes: { RBBrowserEnvironment new };
+			runRefactoring ]
+]
+
+{ #category : 'refactors' }
 PulsarRefactorClassContext >> doInsertSuperclass: aClassModel [
 
 	self scheduleTask: [

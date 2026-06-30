@@ -86,14 +86,14 @@ PulsarTestRunnerTestsView >> initializePresenters [
 	listPresenter := self newEasyTreeListView
 		addStyle: 'stTree';
 		addStyle: 'pulsarTestRunnerTree';
-		whenExpandChangedDo: [ :ann | 
-			self registerExpansion: ann item expand: ann expanded ];
 		rowPresenterClass: PulsarTestRunnerTestsRow;
 		whenRowPresenterInstantiatedDo: [ :aRowPresenter | 
 			aRowPresenter whenActivatedDo: [ :aModel | self doRun: aModel ] ];
 		display: [ :aNode | aNode description ];
 		children: [ :aNode | aNode children ];
 		actions: (self actions actionsFor: #nodeActions);
+		whenExpandChangedDo: [ :ann | 
+			self registerExpansion: ann item expand: ann expanded ];
 		yourself
 ]
 
