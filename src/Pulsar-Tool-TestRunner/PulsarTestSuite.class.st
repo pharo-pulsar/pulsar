@@ -93,15 +93,15 @@ PulsarTestSuite >> selectedCases [
 	^ self children select: [ :each | each isSelected ]
 ]
 
-{ #category : 'as yet unclassified' }
+{ #category : 'private' }
 PulsarTestSuite >> statusIconForModel [
  
 	self asEntityModel lastTestExecutionResult ifNotNil: [ :result | 
 		result hasErrors ifTrue: [ ^ 'run-test-error' ].	
 		result hasFailures ifTrue: [ ^ 'run-test-failure' ].	
-		result hasPassed ifTrue: [ ^ 'run-test-passed' ] ].	
+		result hasEffectivePassed ifTrue: [ ^ 'run-test-passed' ] ].	
 		
-	^ 'run-test'
+	^ 'test-not-run'
 ]
 
 { #category : 'as yet unclassified' }
