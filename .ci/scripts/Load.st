@@ -19,7 +19,7 @@ MetaMetacello load: [ :spec | spec
 		loads: #(default 'NewTools-Gtk') ];
 	baseline: 'Roassal' with: [ spec 
 		repository: 'git:git@forge.smallworks.eu:pharo/Roassal.git:main';
-		loads: #('Roassal-Spec-Gtk') ];
+		loads: #('Roassal-Spec' 'Roassal-Spec-Gtk') ];
 	"threaded iceberg"
 	baseline: 'LibGit' with: [ spec repository: 'github://pharo-vcs/libgit2-pharo-bindings:experimental-run-in-thread' ];
 	baseline: 'Iceberg' with: [ spec repository: 'github://pharo-vcs/iceberg:track-external-files' ];
