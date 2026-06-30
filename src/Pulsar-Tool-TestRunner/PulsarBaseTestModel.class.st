@@ -4,8 +4,9 @@ Abstract base for test runner models (suites and cases). Provides common selecti
 Class {
 	#name : 'PulsarBaseTestModel',
 	#superclass : 'PvBaseModel',
-	#category : 'Pulsar-Tool-TestRunner',
-	#package : 'Pulsar-Tool-TestRunner'
+	#category : 'Pulsar-Tool-TestRunner-Model',
+	#package : 'Pulsar-Tool-TestRunner',
+	#tag : 'Model'
 }
 
 { #category : 'comparing' }
