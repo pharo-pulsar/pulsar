@@ -17,8 +17,9 @@ PulsarRepositoryLocalBranchView >> defineExtraActionOn: aBuilder [
 	<dockActions>
 	
 	aBuilder addGroup: #extra with: [ :group | group
+		priority: 1000;
 		addActionWith: [ :action | action
-			dynamicName: 'Open location';
+			name: 'Open location';
 			description: 'Open repository location';
 			iconName: 'open';
 			action: [ self doOpenLocation ] ]";		
