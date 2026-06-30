@@ -34,16 +34,6 @@ PulsarDetachedBrowser >> defineViewActionsOn: aBuilder [
 			action: [ self doOpenEditorStackView ] ] ]
 ]
 
-{ #category : 'private - actions' }
-PulsarDetachedBrowser >> doOpenClassOutlineView [
-	| outlineView |
-
-	outlineView := (self findPresenterClass: PulsarClassOutlineView)
-		ifNil: [ self addPresenterClass: PulsarClassOutlineView ].
-		
-	outlineView takeKeyboardFocus
-]
-
 { #category : 'initialization' }
 PulsarDetachedBrowser >> initializeWindow: aWindowPresenter [
 

@@ -23,11 +23,13 @@ PulsarToolbarPresenter >> actionsFirstLayout [
 		vAlignCenter;
 		add: (SpBoxLayout newHorizontal
 				hAlignStart;
+				vAlignCenter;
 				add: actionToolbarPresenter;
 				yourself)
 			expand: false;
 		add: (presenterContainer := SpBoxLayout newHorizontal
 			hAlignEnd;
+			vAlignCenter;
 			yourself);
 		yourself
 ]
@@ -36,11 +38,14 @@ PulsarToolbarPresenter >> actionsFirstLayout [
 PulsarToolbarPresenter >> actionsLastLayout [
 
 	^ SpBoxLayout newHorizontal
+		vAlignCenter;
 		add: (presenterContainer := SpBoxLayout newHorizontal
 			hAlignStart;
+			vAlignCenter;
 			yourself);
 		add: (SpBoxLayout newHorizontal
 				hAlignEnd;
+				vAlignCenter;
 				add: actionToolbarPresenter;
 				yourself)
 			expand: false;

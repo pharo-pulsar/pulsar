@@ -14,10 +14,16 @@ Class {
 PulsarEditorToolbarPresenter >> actionsFirstLayout [
 
 	^ SpBoxLayout newHorizontal
-		add: actionToolbarPresenter expand: false;
+		vAlignCenter;
+		add: (SpBoxLayout newHorizontal
+				vAlignCenter;
+				add: actionToolbarPresenter;
+				yourself) 
+			expand: false;
 		add: titlePresenter;
 		add: (presenterContainer := SpBoxLayout newHorizontal
 			hAlignEnd;
+			vAlignCenter;
 			yourself);
 		add: contentActionPresenter expand: false;
 		yourself
@@ -27,12 +33,18 @@ PulsarEditorToolbarPresenter >> actionsFirstLayout [
 PulsarEditorToolbarPresenter >> actionsLastLayout [
 
 	^ SpBoxLayout newHorizontal
+		vAlignCenter;
 		add: contentActionPresenter expand: false;
 		add: (presenterContainer := SpBoxLayout newHorizontal
 			hAlignStart;
+			vAlignCenter;
 			yourself);
 		add: titlePresenter;
-		add: actionToolbarPresenter expand: false;
+		add: (SpBoxLayout newHorizontal
+				add: actionToolbarPresenter;
+				vAlignCenter;
+				yourself) 
+			expand: false;
 		yourself
 ]
 

@@ -287,6 +287,22 @@ PulsarBaseBrowser >> doNewPlayground [
 ]
 
 { #category : 'private - actions' }
+PulsarBaseBrowser >> doOpenClassOutlineView [
+	| outlineView |
+
+	outlineView := self ensureClassOutlineOverview.
+	outlineView takeKeyboardFocus
+]
+
+{ #category : 'private - actions' }
+PulsarBaseBrowser >> doOpenEditorStackView [
+	| stackView |
+	
+	stackView := self ensureEditorStack.
+	stackView takeKeyboardFocus
+]
+
+{ #category : 'private - actions' }
 PulsarBaseBrowser >> doShowSpotterForCommands [
 
 	self showSpotterOn: #commands
@@ -320,6 +336,13 @@ PulsarBaseBrowser >> ensureClassOutlineOverview [
 
 	^ (self findPresenterClass: PulsarClassOutlineView)
 		ifNil: [ self addPresenterClass: PulsarClassOutlineView ]
+]
+
+{ #category : 'private - actions' }
+PulsarBaseBrowser >> ensureEditorStack [
+
+	^ (self findPresenterClass: PulsarStackView)
+		ifNil: [ self addPresenterClass: PulsarStackView ]
 ]
 
 { #category : 'events' }

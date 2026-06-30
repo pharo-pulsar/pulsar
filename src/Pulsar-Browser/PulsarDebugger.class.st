@@ -50,20 +50,6 @@ PulsarDebugger >> defineViewActionsOn: aBuilder [
 			action: [ self doOpenEditorStackView ] ] ]
 ]
 
-{ #category : 'private - actions' }
-PulsarDebugger >> doOpenClassOutlineView [
-	| outlineView |
-
-	outlineView := self ensureClassOutlineOverview.
-	outlineView takeKeyboardFocus
-]
-
-{ #category : 'private - actions' }
-PulsarDebugger >> doOpenEditorStackView [
-	
-	
-]
-
 { #category : 'events' }
 PulsarDebugger >> eventContextChanged: anAnnouncement [
 	
