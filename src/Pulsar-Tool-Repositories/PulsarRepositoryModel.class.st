@@ -23,6 +23,12 @@ PulsarRepositoryModel >> acceptsRepair [
 		or: [ self isDetached  ]
 ]
 
+{ #category : 'accessing - actions' }
+PulsarRepositoryModel >> actionsWithContextOn: aContextPresenter [
+
+	^ (self actions actionsForAll: #(metacello)) copyWithContext: aContextPresenter
+]
+
 { #category : 'private' }
 PulsarRepositoryModel >> activeNodes [
 
@@ -158,6 +164,25 @@ PulsarRepositoryModel >> commitsUpTo: aNumber inBranch: aRepositoryBranchModel [
 PulsarRepositoryModel >> critical: aBlock [
 
 	^ self mutex critical: aBlock
+]
+
+{ #category : 'private - definitions' }
+PulsarRepositoryModel >> defineMetacelloActionsOn: aBuilder [
+	<dockActions>
+	
+	aBuilder addGroup: #metacello with: [ :group | 
+		
+		group 
+			priority: 1;
+			beDisplayedAsSubMenu; 
+			name: 'Metacello'.
+		
+		self baselines do: [ :each | 
+			group addActionWith: [ :action | action 
+				name: ('Install {1}' format: { each baselineName });
+				description: 'Install baseline';
+				action: [ :aContext | aContext doInstallBaseline: each ] ] ] 
+	]
 ]
 
 { #category : 'accessing' }

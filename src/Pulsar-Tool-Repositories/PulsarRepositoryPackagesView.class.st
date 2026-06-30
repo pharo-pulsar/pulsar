@@ -76,23 +76,8 @@ PulsarRepositoryPackagesView >> doAddPackageCommand: anAction [
 
 { #category : 'private - actions' }
 PulsarRepositoryPackagesView >> doInstallBaseline: aPackageModel [
- 	| presenter |
  	
- 	presenter := self instantiate: PulsarInstallBaselineDialog.
- 	(presenter asModalWindow
- 		owner: self window;
- 		open;
- 		isOk)
- 		ifFalse: [ ^ self ].
- 
-	self scheduleJob: [ :statusbar |
-		statusbar pushMessage: ('Installing {1}...' format: { aPackageModel baselineName }).
- 		aPackageModel 
- 			installBaselineGroups: presenter groups
- 			upgradePolicy: presenter upgradePolicy
- 			conflictPolicy: presenter conflictPolicy
- 			ignoreImage: presenter isIgnoreImage.
- 		self updatePresenter ]
+	(PulsarRepositoryActionContext on: self) doInstallBaseline: aPackageModel
 ]
 
 { #category : 'private - actions' }

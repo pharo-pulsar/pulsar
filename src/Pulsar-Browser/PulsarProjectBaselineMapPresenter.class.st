@@ -11,8 +11,8 @@ Class {
 
 { #category : 'accessing' }
 PulsarProjectBaselineMapPresenter >> baselineClass: aBaselineClass [
-
 	| builder canvas isDark |
+	
 	aBaselineClass ifNil: [ ^ self ].
 
 	isDark := self application configuration isDarkTheme.

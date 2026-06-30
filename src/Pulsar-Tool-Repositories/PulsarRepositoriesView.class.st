@@ -193,6 +193,12 @@ PulsarRepositoriesView >> doForgetSelectedRepository [
 ]
 
 { #category : 'private - actions' }
+PulsarRepositoriesView >> doInstallBaseline: aPackageModel [
+ 	
+ 	(PulsarRepositoryActionContext on: self) doInstallBaseline: aPackageModel
+]
+
+{ #category : 'private - actions' }
 PulsarRepositoriesView >> doOpenExternalLocationOfSelectedRepository [
 	
 	self selectedRepository openInOSFileBrowser
@@ -368,7 +374,10 @@ PulsarRepositoriesView >> initializePresenters [
 		addStyle: 'stList';
 		rowPresenterClass: PulsarRepositoryRow;
 		display: [ :aRepositoryModel | aRepositoryModel name ];
-		actions: (self actions actionsFor: #contextActions);
+		actions: (SpActionGroup new 
+			add: (self actions actionsFor: #contextActions);
+			addDynamicGroup: #dynamic with: [ :group | group add: self repositoryActions ];
+			yourself);
 		enableSearch;
 		yourself
 ]
@@ -458,6 +467,13 @@ PulsarRepositoriesView >> registerToSystemEvents [
 		when: MetacelloExecutionEndAnnouncement
 			send: #eventMetacelloExecutionEnd:
 			to: self
+]
+
+{ #category : 'initialization' }
+PulsarRepositoriesView >> repositoryActions [
+
+	self hasSelectedItem ifFalse: [ ^ SpActionGroup new ]. 
+	^ self selectedItem actionsWithContextOn: self
 ]
 
 { #category : 'private - accessing' }

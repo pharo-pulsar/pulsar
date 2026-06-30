@@ -6,6 +6,7 @@ Class {
 	#superclass : 'Object',
 	#classVars : [
 		'ReasonAnything',
+		'ReasonBaselineInstalled',
 		'ReasonBranchCreated',
 		'ReasonCheckout',
 		'ReasonCommit',
@@ -26,6 +27,12 @@ Class {
 PulsarRepositoryModifiedReason class >> anything [
 
 	^ ReasonAnything ifNil: [ ReasonAnything := PulsarRepositoryModifiedAnythingReason new ]
+]
+
+{ #category : 'instance creation' }
+PulsarRepositoryModifiedReason class >> baselineInstalled [
+
+	^ ReasonBaselineInstalled ifNil: [ ReasonBaselineInstalled := PulsarRepositoryModifiedBaselineInstalledReason new ]
 ]
 
 { #category : 'instance creation' }
