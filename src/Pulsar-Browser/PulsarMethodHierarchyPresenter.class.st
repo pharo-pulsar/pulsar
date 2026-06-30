@@ -35,7 +35,8 @@ PulsarMethodHierarchyPresenter >> initializePresenters [
 	
 	self addStyle: 'pulsarMethodHierarchyFlyingBrowser'.
 	
-	editorPresenter := self instantiate: PulsarMethodEditor
+	editorPresenter := self instantiate: PulsarMethodEditor.
+	editorPresenter shouldUpdateTitle: false
 ]
 
 { #category : 'private' }

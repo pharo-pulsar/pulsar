@@ -15,7 +15,8 @@ Class {
 		'dirty',
 		'editorOverlayLayout',
 		'dirtyMarkerPresenter',
-		'searchBarPresenter'
+		'searchBarPresenter',
+		'shouldUpdateTitle'
 	],
 	#category : 'Pulsar-Browser-View-Editor',
 	#package : 'Pulsar-Browser',
@@ -298,6 +299,7 @@ PulsarEditor >> initialize [
 
 	dirty := false. 
 	updating := false.
+	shouldUpdateTitle := true.
 	super initialize
 ]
 
@@ -481,6 +483,21 @@ PulsarEditor >> saveContent [
 	^ self doSubmit: editorPresenter text
 ]
 
+{ #category : 'testing' }
+PulsarEditor >> shouldUpdateTitle [
+	"when editors are embeded, it may happen we want to avoid modifying the title. 
+	 e.g. senders of a method, we do not want to change the panel window that 
+	 contains it."
+
+	^ shouldUpdateTitle
+]
+
+{ #category : 'accessing' }
+PulsarEditor >> shouldUpdateTitle: aBoolean [
+
+	shouldUpdateTitle := aBoolean
+]
+
 { #category : 'accessing - snapshot' }
 PulsarEditor >> snapshot [
 
@@ -592,6 +609,8 @@ PulsarEditor >> updateSearch [
 { #category : 'initialization' }
 PulsarEditor >> updateTitle [
 
+	self shouldUpdateTitle ifFalse: [ ^ self ].
+	
 	self nearWindowLike ifNotNil: [ :aWindow |
 		logger trace: aWindow.
 		(PulsarEditorUpdateVisitor on: self) visit: aWindow ]

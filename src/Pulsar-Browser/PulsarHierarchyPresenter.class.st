@@ -4,8 +4,8 @@ A hierarchy presenter for metamodels (classes, methods)
 Class {
 	#name : 'PulsarHierarchyPresenter',
 	#superclass : 'PvMethodHierarchyPresenter',
-	#traits : 'PulsarTNotificationCenter + PulsarTPanelWindow + PulsarTSnapshot + PulsarTPopover',
-	#classTraits : 'PulsarTNotificationCenter classTrait + PulsarTPanelWindow classTrait + PulsarTSnapshot classTrait + PulsarTPopover classTrait',
+	#traits : 'PulsarTNotificationCenter + PulsarTPanelWindow + PulsarTEditor + PulsarTSnapshot + PulsarTPopover',
+	#classTraits : 'PulsarTNotificationCenter classTrait + PulsarTPanelWindow classTrait + PulsarTEditor classTrait + PulsarTSnapshot classTrait + PulsarTPopover classTrait',
 	#instVars : [
 		'headerPresenter'
 	],

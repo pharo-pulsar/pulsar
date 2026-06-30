@@ -98,7 +98,9 @@ PulsarMessageBrowser >> initializePresenters [
 		display: #fullName;
 		whenFilterChangedDo: [ self updateCount ];
 		yourself.
-	editorPresenter := self instantiate: PulsarMethodEditor
+		
+	editorPresenter := self instantiate: PulsarMethodEditor.
+	editorPresenter shouldUpdateTitle: false
 ]
 
 { #category : 'private' }
