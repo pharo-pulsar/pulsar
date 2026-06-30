@@ -40,6 +40,7 @@ PulsarRepositoryActionContext >> doInstallBaseline: aPackageModel [
  	| presenter |
  	
  	presenter := self owner instantiate: PulsarInstallBaselineDialog.
+ 	presenter packageModel: aPackageModel.
  	(presenter asModalWindow
  		owner: self window;
  		open;
