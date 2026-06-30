@@ -18,25 +18,6 @@ PulsarTPanelWindow classSide >> defaultPanelPosition [
 	^ SpPanelPosition centerArea
 ]
 
-{ #category : 'definitions' }
-PulsarTPanelWindow classSide >> defineWindowActionsOn: aBuilder [
-	<dockActions>
-
-	aBuilder addGroup: #panelWidget with: [ :group | group
-		priority: 1010;
-		name: 'Window';
-		beDisplayedAsSubMenu;
-		addActionWith: [ :action | action
-			name: 'Maximize';
-			description: 'Maximize current window';
-			action: [ :aContext | aContext withPanelWidgetDo: #maximize ] ];		
-		addActionWith: [ :action | action
-			name: 'Detach';
-			shortcutKey: Character arrowUp alt shift;
-			description: 'Detach this window from this browser (open a new window)';
-			action: [ :aContext | aContext doDetachWindow ] ] ]
-]
-
 { #category : 'private - actions' }
 PulsarTPanelWindow >> activateWith: anActivation [
 	"override to react to an activation detail"
