@@ -102,9 +102,7 @@ PulsarTestRunnerTestsView >> registerExpansion: item expand: expand [
 
 	expand 
 		ifTrue: [ expansions add: item ]
-		ifFalse: [ expansions remove: item ifAbsent: [] ].
-		
-	expansions printToStdout.
+		ifFalse: [ expansions remove: item ifAbsent: [] ]
 ]
 
 { #category : 'initialization' }
