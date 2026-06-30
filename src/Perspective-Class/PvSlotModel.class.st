@@ -9,7 +9,7 @@ Class {
 { #category : 'accessing - actions' }
 PvSlotModel >> actionsWithContextOn: aContextPresenter [
 
-	^ (self actions actionsFor: 'refactors') 
+	^ (self actions actionsFor: #refactors) 
 		copyWithContext: (PulsarRefactorSlotContext on: aContextPresenter)
 ]
 
@@ -21,16 +21,21 @@ PvSlotModel >> defineRefactorActionsOn: aBuilder [
 	 context), because execute them require interact with the UI"
 	aBuilder addGroup: #refactors with: [ :group | group 
 		name: 'Refactors';
-		beDisplayedAsSubMenu.
+		beDisplayedAsGroup.
 		
-		group addActionWith: [ :action | action
-			name: ('Rename {1}' format: { self name });
-			description: 'Rename method';
-			action: [ :aContext | aContext doRenameVariable: self ] ].
+		group
+			addActionWith: [ :action | action
+				name: ('Generate accesors for {1}' format: { self name });
+				description: 'Generate variable accessors';
+				action: [ :aContext | aContext doGenerateVariableAccessors: self ] ];
+			addActionWith: [ :action | action
+				name: ('Rename {1}' format: { self name });
+				description: 'Rename method';
+				action: [ :aContext | aContext doRenameVariable: self ] ].
 			
 		self isInstanceVariable ifTrue: [
-			group 
-				 
+			group addGroupWith: [ :pullGroup | pullGroup
+				beDisplayedAsGroup;
 				addActionWith: [ :action | action
 					name: ('Pull up {1}' format: { self name });
 					description: 'Pull up variable';
@@ -38,7 +43,7 @@ PvSlotModel >> defineRefactorActionsOn: aBuilder [
 				addActionWith: [ :action | action
 					name: ('Push down {1}' format: { self name });
 					description: 'Push down variable';
-					action: [ :aContext | aContext doPushDownVariable: self ] ] 
+					action: [ :aContext | aContext doPushDownVariable: self ] ] ] 
 		] 
 	]
 ]

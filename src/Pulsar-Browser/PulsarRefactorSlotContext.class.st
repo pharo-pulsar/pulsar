@@ -7,6 +7,20 @@ Class {
 }
 
 { #category : 'refactors' }
+PulsarRefactorSlotContext >> doGenerateVariableAccessors: aSlotModel [
+
+	self scheduleTask: [
+		| rbClasses |
+		rbClasses := RBClassEnvironment classes: { aSlotModel variableClass }.
+		(ReGenerateAccessorsDriver newApplication: self application)
+			targetClass: aSlotModel variableClass;
+			scopes: { rbClasses }
+				scopeInstanceSide: aSlotModel isInstanceVariable
+				selectedVariables: { aSlotModel name };
+			runRefactoring ]
+]
+
+{ #category : 'refactors' }
 PulsarRefactorSlotContext >> doPullUpVariable: aSlotModel [
 
 	self scheduleTask: [

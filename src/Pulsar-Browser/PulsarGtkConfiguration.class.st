@@ -297,12 +297,12 @@ PulsarGtkConfiguration >> settings [
 PulsarGtkConfiguration >> style [
 
 	^ ' 
-checkbutton { padding: 0; min-width: 0; min-height: 0; }
-checkbutton check { min-width: 12px; min-height: 12px; margin: 0; }
-button.compact { min-width: 0; min-height: 0; padding: 0; margin: 0; }
+checkbutton { padding: 0px; min-width: 0px; min-height: 0px; }
+checkbutton check { min-width: 12px; min-height: 12px; margin: 0px; }
+button.compact { min-width: 0px; min-height: 0px; padding: 0px; margin: 0px; }
 button.compact image { min-width: 14px; min-height: 14px; -gtk-icon-size: 14px; }
 treeexpander { border-spacing: 1px; }
-treeexpander > expander { margin: 0; min-width: 8x; min-height: 8px; }
+treeexpander > expander { margin: 0px; min-width: 8px; min-height: 8px; }
 
 popover label { color: unset; }
 popover label.dim { color: LightSlateGrey; }
@@ -461,7 +461,7 @@ box.commitInfo .separator { opacity: 0.8; }
 .pulsarRepositoryRow .extra label.outgoing, .pulsarRepositoryBranchRow .extra label.outgoing { color: @commit_outgoing; }
 .pulsarRepositoryRow .extra label.incoming, .pulsarRepositoryBranchRow .extra label.incoming{ color: @commit_incoming; }
 .pulsarRepositoryRow .extra label.tags,
-.pulsarRepositoryRow .extra label.branch { font-style: italic; font-size: 0.8em; color: @repository_branch }
+.pulsarRepositoryRow .extra label.branch { font-style: italic; font-size: 0.8em; color: @repository_branch; }
 .pulsarRepositoryCommit label.outgoing { color: @commit_outgoing; }
 /* .pulsarRepositoryPackageRow label.loaded { } */
 .pulsarRepositoryPackageRow label.notloaded { color: @package_notloaded; }

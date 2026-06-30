@@ -16,7 +16,7 @@ PvPackageModel >> actionDecorators [
 { #category : 'accessing - actions' }
 PvPackageModel >> actionsWithContextOn: aContextPresenter [
 
-	^ (self actions actionsFor: 'refactors') 
+	^ (self actions actionsFor: #refactors) 
 		copyWithContext: (PulsarRefactorPackageContext on: aContextPresenter)
 ]
 
@@ -92,7 +92,7 @@ PvPackageModel >> defineRefactorActionsOn: aBuilder [
 	 context), because execute them require interact with the UI"
 	aBuilder addGroup: #refactors with: [ :group | group
 		name: 'Refactors';
-		beDisplayedAsSubMenu;
+		beDisplayedAsGroup;
 		addActionWith: [ :action | action
 			name: ('Rename {1}' format: { self name });
 			description: 'Rename package';

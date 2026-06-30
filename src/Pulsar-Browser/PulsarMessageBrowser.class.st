@@ -4,8 +4,8 @@ A message browser (to show senders and implementors)
 Class {
 	#name : 'PulsarMessageBrowser',
 	#superclass : 'SpPresenter',
-	#traits : 'SpTModel + PulsarTNotificationCenter + PulsarTPanelWindow + PulsarTSnapshot + PulsarTPopover',
-	#classTraits : 'SpTModel classTrait + PulsarTNotificationCenter classTrait + PulsarTPanelWindow classTrait + PulsarTSnapshot classTrait + PulsarTPopover classTrait',
+	#traits : 'SpTModel + PulsarTNotificationCenter + PulsarTPanelWindow + PulsarTEditor + PulsarTSnapshot + PulsarTPopover',
+	#classTraits : 'SpTModel classTrait + PulsarTNotificationCenter classTrait + PulsarTPanelWindow classTrait + PulsarTEditor classTrait + PulsarTSnapshot classTrait + PulsarTPopover classTrait',
 	#instVars : [
 		'messageListPresenter',
 		'editorPresenter',

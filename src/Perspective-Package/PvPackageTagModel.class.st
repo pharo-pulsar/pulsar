@@ -21,7 +21,7 @@ PvPackageTagModel >> accept: aVisitor [
 { #category : 'accessing - actions' }
 PvPackageTagModel >> actionsWithContextOn: aContextPresenter [
 
-	^ (self actions actionsFor: 'refactors') 
+	^ (self actions actionsFor: #refactors) 
 		copyWithContext: (PulsarRefactorPackageContext on: aContextPresenter)
 ]
 
@@ -70,7 +70,7 @@ PvPackageTagModel >> defineRefactorActionsOn: aBuilder [
 	 context), because execute them require interact with the UI"
 	aBuilder addGroup: #refactors with: [ :group | group
 		name: 'Refactors';
-		beDisplayedAsSubMenu;
+		beDisplayedAsGroup;
 		addActionWith: [ :action | action
 			name: ('Rename {1}' format: { self name });
 			description: 'Rename package tag';
