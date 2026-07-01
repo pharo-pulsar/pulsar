@@ -70,10 +70,9 @@ PulsarTestRunnerModel >> refresh [
 
 { #category : 'running' }
 PulsarTestRunnerModel >> runAllTests [
-
 	| allCases |
-	allCases := OrderedCollection new.
-	self suites do: [ :eachSuite | allCases addAll: eachSuite children ].
+	
+	allCases := self suites flatCollect: #children.
 	self runSuite: (self suiteFromCases: allCases) for: allCases
 ]
 
@@ -108,10 +107,11 @@ PulsarTestRunnerModel >> runSuite: aTestSuite for: caseCollection [
 
 { #category : 'running' }
 PulsarTestRunnerModel >> suiteFromCases: aCaseCollection [
-
 	| suite |
+	
 	suite := TestSuite named: self name.
 	aCaseCollection do: [ :eachCase | suite addTest: eachCase entity ].
+	
 	^ suite
 ]
 

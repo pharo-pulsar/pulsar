@@ -20,27 +20,33 @@ PulsarTestRunnerActionContext >> doRefreshFor: aModel [
 PulsarTestRunnerActionContext >> doRunAllFor: aModel [
 
 	self scheduleJob: [ :statusbar |
-		statusbar pushMessage: 'Running all tests'.
-		aModel runAllTests.
-		self notificationCenter announce: (PulsarTestRunFinished newValue: aModel) ]
+			statusbar pushMessage: 'Running all tests'.
+			aModel runAllTests.
+			self notificationCenter announce: (PulsarTestRunFinished newValue: (PulsarTestRunnerResult fromTestRunnerModel: aModel)) ]
 ]
 
 { #category : 'actions' }
 PulsarTestRunnerActionContext >> doRunCase: aCase [
 
 	self scheduleJob: [ :statusbar |
-		statusbar pushMessage: ('Running {1}>>{2}' format: {
-			aCase testClass name.
-			aCase testSelector }).
-		self owner model runCase: aCase.
-		self notificationCenter announce: (PulsarTestRunFinished newValue: aCase) ]
+			| model |
+			model := self owner model.
+			statusbar pushMessage: ('Running {1}>>{2}' format: {
+						 aCase testClass name.
+						 aCase testSelector }).
+			model runCase: aCase.
+			self notificationCenter announce:
+				(PulsarTestRunFinished newValue: (PulsarTestRunnerResult fromTestRunnerModel: model case: aCase)) ]
 ]
 
 { #category : 'actions' }
 PulsarTestRunnerActionContext >> doRunSuite: aSuite [
 
 	self scheduleJob: [ :statusbar |
-		statusbar pushMessage: ('Running {1}' format: { aSuite name }).
-		self owner model runSuite: aSuite.
-		self notificationCenter announce: (PulsarTestRunFinished newValue: aSuite) ]
+			| model |
+			model := self owner model.
+			statusbar pushMessage: ('Running {1}' format: { aSuite name }).
+			model runSuite: aSuite.
+			self notificationCenter announce:
+				(PulsarTestRunFinished newValue: (PulsarTestRunnerResult fromTestRunnerModel: model suite: aSuite)) ]
 ]

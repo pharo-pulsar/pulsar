@@ -150,15 +150,7 @@ PvMethodModel >> defineDecorationActionsOn: aBuilder [
 				name: 'Run Script';
 				description: 'Execute [self name]';
 				iconName: 'play';
-				action: [ :aContext | aContext doRunScriptCommand: action ] ] ].
-				
-		self isTestMethod ifTrue: [
-			group addActionWith: [ :action | action 
-				name: 'Run Test';
-				description: 'Execute test of current method/class';
-				iconName: 'play';
-				presenterClass: PulsarMethodActionRunTestPresenter;
-				action: [ :aContext | aContext doRunTestCommand: action ] ] ].
+				action: [ :aContext | aContext doRunScriptCommand: action ] ] ].				
 	]
 ]
 
@@ -477,24 +469,6 @@ PvMethodModel >> runScript [
 		ifTrue: [ ^ nil ].
 	
 	^ result
-]
-
-{ #category : 'actions' }
-PvMethodModel >> runTestAnnouncingTo: anAnnouncer [
-	| testSuite testCase |
-	
-	testCase := self methodClass selector: self entity selector.
-	testSuite := TestSuite new
-		addTest: testCase;
-		yourself.
-	"resend announcements"
-	testSuite testSuiteAnnouncer 
-		when: TestCaseAnnouncement
-		send: #announce: 
-		to: anAnnouncer.
-	[ testSuite debug ]
-	ensure: [ 
-		testSuite testSuiteAnnouncer unsubscribe: anAnnouncer ]
 ]
 
 { #category : 'accessing' }

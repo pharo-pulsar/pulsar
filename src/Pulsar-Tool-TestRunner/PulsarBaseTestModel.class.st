@@ -35,6 +35,12 @@ PulsarBaseTestModel >> iconName [
 	^ self statusIconForModel
 ]
 
+{ #category : 'instance creation' }
+PulsarBaseTestModel >> newActivationAnnouncement [
+
+	^ self asEntityModel newActivationAnnouncement
+]
+
 { #category : 'running' }
 PulsarBaseTestModel >> runOn: anActionContext [
 

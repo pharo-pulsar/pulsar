@@ -48,13 +48,6 @@ PulsarFileEditor >> doOpenCurrentFolder [
 ]
 
 { #category : 'private - actions' }
-PulsarFileEditor >> doRunTestCommand: aCommand [
-	"Not applicable for a file editor."
-
-	
-]
-
-{ #category : 'private - actions' }
 PulsarFileEditor >> editorContextMenuActions [
 
 	^ SpActionGroup new

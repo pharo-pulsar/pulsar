@@ -1,0 +1,33 @@
+Extension { #name : 'PvMethodModel' }
+
+{ #category : '*Pulsar-Tool-TestRunner' }
+PvMethodModel >> defineTestRunnerDecorationActionsOn: aBuilder [
+	"action decorations for this method. 
+	 this group should define all actions the method model can execute *everywhere* it is 
+	 found (editors, methods lists...)."
+	<dockActions>
+	
+	self isTestMethod ifFalse: [ ^ self ].
+	
+	aBuilder addGroup: #decoration with: [ :group | group 
+		addActionWith: [ :action | action 
+			name: 'Run Test';
+			description: 'Execute test of current method';
+			iconName: 'play';
+			presenterClass: PulsarMethodActionRunTestPresenter;
+			action: [ :aContext | self runTestAnnouncingTo: aContext notificationCenter ] ] ]
+]
+
+{ #category : '*Pulsar-Tool-TestRunner' }
+PvMethodModel >> runTestAnnouncingTo: anAnnouncer [
+	| testSuite testCase |
+	
+	testCase := self methodClass selector: self entity selector.
+	testSuite := TestSuite new
+		addTest: testCase;
+		yourself.
+	
+	testSuite 
+		announceTo: anAnnouncer
+		during: [ testSuite debug ]
+]

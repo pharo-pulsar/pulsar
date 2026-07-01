@@ -139,12 +139,6 @@ PulsarEditor >> doReset [
 ]
 
 { #category : 'private - actions' }
-PulsarEditor >> doRunTestCommand: anAction [
-
-	self model runTestAnnouncingTo: self notificationCenter
-]
-
-{ #category : 'private - actions' }
 PulsarEditor >> doShowHierarchy: anAction [
 	| popover navigation |
 	

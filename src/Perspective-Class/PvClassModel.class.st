@@ -183,14 +183,6 @@ PvClassModel >> defineDecorationActionsOn: aBuilder [
 	aBuilder addGroup: #decoration with: [ :group | group
 		name: 'Decorations';
 		beDisplayedAsGroup.
-		
-		self isTestCase ifTrue: [
-			group addActionWith: [ :action | action 
-				name: 'Run Test';
-				description: ('Execute test of {1} class' format: { self name });
-				iconName: 'play';
-				presenterClass: PulsarMethodActionRunTestPresenter;
-				action: [ :aContext | self runTestAnnouncingTo: aContext notificationCenter ] ] ] 
 	]
 ]
 
@@ -371,21 +363,6 @@ PvClassModel >> printOn: stream [
 
 	super printOn: stream.
 	stream << '(' << self name << ')'
-]
-
-{ #category : 'actions' }
-PvClassModel >> runTestAnnouncingTo: anAnnouncer [
-	| testSuite |
-	
-	testSuite := self entity suite.
-	"resend announcements"
-	testSuite testSuiteAnnouncer 
-		when: TestCaseAnnouncement
-		send: #announce: 
-		to: anAnnouncer.
-	[ testSuite run ]
-	ensure: [ 
-		testSuite testSuiteAnnouncer unsubscribe: anAnnouncer ]
 ]
 
 { #category : 'updating' }
