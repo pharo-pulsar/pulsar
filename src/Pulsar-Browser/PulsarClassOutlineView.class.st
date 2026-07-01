@@ -267,7 +267,7 @@ PulsarClassOutlineView >> updateTitle [
 		w title: self model name ]
 ]
 
-{ #category : 'events' }
+{ #category : 'visiting' }
 PulsarClassOutlineView >> visitClassModel: aModel [
 	
 	logger trace: aModel.
@@ -276,7 +276,7 @@ PulsarClassOutlineView >> visitClassModel: aModel [
 		each visitClassModel: aModel ]
 ]
 
-{ #category : 'events' }
+{ #category : 'visiting' }
 PulsarClassOutlineView >> visitMethodModel: aModel [
 
 	logger trace: aModel.
@@ -287,7 +287,13 @@ PulsarClassOutlineView >> visitMethodModel: aModel [
 		each visitMethodModel: aModel ]
 ]
 
-{ #category : 'events' }
+{ #category : 'visiting' }
+PulsarClassOutlineView >> visitModel: aModel [
+	
+	logger trace: aModel
+]
+
+{ #category : 'visiting' }
 PulsarClassOutlineView >> visitProjectModel: aModel [
 
 	self visitClassModel: aModel asClassModel
