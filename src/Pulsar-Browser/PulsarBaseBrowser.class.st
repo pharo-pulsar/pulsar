@@ -272,6 +272,7 @@ PulsarBaseBrowser >> defineExtraActionsOn: aBuilder [
 
 	aBuilder addGroup: #extra with: [ :group | group 
 		beDisplayedAsGroup;
+		priority: 890;
 		addActionWith: [ :action | action 
 			name: 'Payground';
 			description: 'Open a new playground';
