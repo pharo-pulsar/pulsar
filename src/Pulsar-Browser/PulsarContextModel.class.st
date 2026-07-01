@@ -246,14 +246,6 @@ PulsarContextModel >> methodClassName [
 	^ self methodClass name
 ]
 
-{ #category : 'private' }
-PulsarContextModel >> methodModel [
-
-	^ PvMethodModel 
-		newEnvironment: self environmentModel
-		entity: self method
-]
-
 { #category : 'accessing' }
 PulsarContextModel >> methodName [
 
