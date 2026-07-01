@@ -159,6 +159,8 @@ PulsarBrowser >> eventManyModelDeactivated: anAnnouncement [
 	| editors |
 
 	editors := anAnnouncement value copy.
+	editors isEmptyOrNil ifTrue: [ ^ self ].
+	
 	logger trace: editors.
 	"I suspend announcements for most of them"
 	self application defer: [
