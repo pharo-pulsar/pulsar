@@ -22,7 +22,8 @@ PulsarDebuggerInspector class >> defaultPanelPosition [
 PulsarDebuggerInspector class >> defineActionsOn: aBuilder [
 	<dockActions>
 
-	aBuilder addGroup: #inspectorActions with: [ :group | group 
+	self flag: #TODO. "Not doing this atm. No clear is needed."
+	"aBuilder addGroup: #inspectorActions with: [ :group | group 
 		addActionWith: [ :action | action 
 			name: 'Inspect';
 			description: 'Inspect current receiver';
@@ -32,7 +33,7 @@ PulsarDebuggerInspector class >> defineActionsOn: aBuilder [
 			name: 'Browse';
 			description: 'Browse current receiver''s class';
 			iconName: 'browse.neutral';
-			action: [ :aContext | aContext doBrowseReceiverClass ] ] ]
+			action: [ :aContext | aContext doBrowseReceiverClass ] ] ]"
 ]
 
 { #category : 'layout' }
