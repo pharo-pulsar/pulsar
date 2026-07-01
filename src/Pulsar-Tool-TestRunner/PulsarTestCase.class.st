@@ -7,7 +7,8 @@ Class {
 	#name : 'PulsarTestCase',
 	#superclass : 'PulsarBaseTestModel',
 	#instVars : [
-		'result'
+		'result',
+		'duration'
 	],
 	#category : 'Pulsar-Tool-TestRunner-Model',
 	#package : 'Pulsar-Tool-TestRunner',
@@ -32,6 +33,26 @@ PulsarTestCase >> children [
 PulsarTestCase >> description [
 
 	^ self entity selector
+]
+
+{ #category : 'accessing' }
+PulsarTestCase >> duration [
+
+	^ duration
+]
+
+{ #category : 'accessing' }
+PulsarTestCase >> duration: anInteger [
+
+	duration := anInteger
+]
+
+{ #category : 'accessing' }
+PulsarTestCase >> fullDescription [
+
+	^ '{1} · {2}' format: {
+			  self testClass name.
+			  self entity selector }
 ]
 
 { #category : 'accessing' }
@@ -62,6 +83,15 @@ PulsarTestCase >> runOn: anActionContext [
 PulsarTestCase >> statusDescription [
 	
 	^ super statusDescription ifNil: [ 'Test not ran' ]
+]
+
+{ #category : 'accessing' }
+PulsarTestCase >> statusLabel [
+
+	result ifNil: [ ^ 'Passed' ].
+	result == #failure ifTrue: [ ^ 'Failed' ].
+	result == #error ifTrue: [ ^ 'Error' ].
+	^ 'Unknown'
 ]
 
 { #category : 'accessing' }

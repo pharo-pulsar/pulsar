@@ -29,8 +29,9 @@ PulsarTestRunnerResultsEditor >> connectPresenters [
 
 	super connectPresenters.
 
-	listPresenter outputSelectionPort transmitDo: [ :aCase | self detailTextFor: aCase ].
-	listPresenter display: [ :eachCase | eachCase description ]
+	listPresenter transmitDo: [ :aCase | detailPresenter model: aCase ].
+
+	listPresenter outputActivationPort transmitDo: [ :aCase | self notifyActivateEntity: aCase ]
 ]
 
 { #category : 'layout' }
@@ -38,31 +39,21 @@ PulsarTestRunnerResultsEditor >> defaultLayout [
 
 	^ SpBoxLayout newVertical
 		  add: summaryPresenter expand: false;
-		  add: (SpPanedLayout newTopToBottom
-				   add: listPresenter;
-				   add: detailPresenter;
-				   yourself);
+		  add: listPresenter;
+		  add: detailPresenter expand: false;
 		  yourself
-]
-
-{ #category : 'private' }
-PulsarTestRunnerResultsEditor >> detailTextFor: aCase [
-
-	aCase ifNil: [ ^ detailPresenter text: '' ].
-
-	detailPresenter text: (String streamContents: [ :stream |
-				 stream nextPutAll: 'Class: '.
-				 stream nextPutAll: aCase testClass name.
-				 stream cr.
-				 stream nextPutAll: 'Selector: '.
-				 stream nextPutAll: aCase testSelector.
-				 stream cr.
-				 stream nextPutAll: 'Status: '.
-				 stream nextPutAll: (aCase result ifNil: [ 'passed' ]) ])
 ]
 
 { #category : 'events' }
 PulsarTestRunnerResultsEditor >> eventTestRunFinished: ann [
+
+	ann value ifNil: [ ^ self ].
+	
+	self model: ann value
+]
+
+{ #category : 'events' }
+PulsarTestRunnerResultsEditor >> eventTestRunStarted: ann [
 
 	ann value ifNil: [ ^ self ].
 	
@@ -87,11 +78,12 @@ PulsarTestRunnerResultsEditor >> initializePresenters [
 	summaryPresenter label: 'No results yet.'.
 
 	listPresenter := self newEasyListView
-		addStyle: 'stList';
-		yourself.
+		                 addStyle: 'stList';
+		                 display: [ :aCase | aCase description ];
+		                 displayIcon: [ :aCase | self iconNamed: (self model iconNameFor: aCase) ];
+		                 yourself.
 
-	detailPresenter := self newText.
-	detailPresenter beNotEditable
+	detailPresenter := self instantiate: PulsarTestCaseDetailPresenter
 ]
 
 { #category : 'initialization' }
@@ -102,11 +94,18 @@ PulsarTestRunnerResultsEditor >> initializeWindow: aWindowPresenter [
 		title: 'Results'
 ]
 
+{ #category : 'private - announcing' }
+PulsarTestRunnerResultsEditor >> notifyActivateEntity: anEntity [
+
+	anEntity ifNil: [ ^ self ].
+	self notificationCenter announce: anEntity newActivationAnnouncement
+]
+
 { #category : 'initialization' }
 PulsarTestRunnerResultsEditor >> registerToEvents [
 
 	super registerToEvents.
-	self announcer when: PulsarTestRunStarted send: #eventTestRunFinished: to: self.
+	self announcer when: PulsarTestRunStarted send: #eventTestRunStarted: to: self.
 	self announcer when: PulsarTestExecutionChanged send: #updatePresenter to: self
 ]
 

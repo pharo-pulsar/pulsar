@@ -14,7 +14,9 @@ Class {
 		'passCount',
 		'failCount',
 		'errorCount',
-		'notificationCenter'
+		'notificationCenter',
+		'testResult',
+		'startTimes'
 	],
 	#category : 'Pulsar-Tool-TestRunner-Model',
 	#package : 'Pulsar-Tool-TestRunner',
@@ -57,10 +59,22 @@ PulsarTestRunnerExecution >> findCaseInSuites: aTestClass selector: aSelector [
 { #category : 'accessing' }
 PulsarTestRunnerExecution >> iconName [
 
-	errorCount > 0 ifTrue: [ ^ 'run-test-error' ].
-	failCount > 0 ifTrue: [ ^ 'run-test-failure' ].
-	passCount > 0 ifTrue: [ ^ 'run-test-passed' ].
+	errorCount > 0 ifTrue: [ ^ 'testResultError' ].
+	failCount > 0 ifTrue: [ ^ 'testResultFailure' ].
+	passCount > 0 ifTrue: [ ^ 'testResultPass' ].
 	^ 'test-not-run'
+]
+
+{ #category : 'accessing' }
+PulsarTestRunnerExecution >> iconNameFor: aPulsarTestCase [
+
+	testResult ifNil: [ ^ 'testResults' ].
+
+	(testResult errors includes: aPulsarTestCase entity) ifTrue: [ ^ 'testResultError' ].
+	(testResult failures includes: aPulsarTestCase entity) ifTrue: [ ^ 'testResultFailure' ].
+	(testResult passed includes: aPulsarTestCase entity) ifTrue: [ ^ 'testResultPass' ].
+
+	^ 'testResults'
 ]
 
 { #category : 'private' }
@@ -73,10 +87,12 @@ PulsarTestRunnerExecution >> initializeOn: aNotificationCenter fromModel: aTestR
 	notificationCenter := aNotificationCenter.
 	suites := aTestRunnerModel suites.
 	entries := OrderedCollection new.
+	startTimes := Dictionary new.
 	passCount := 0.
 	failCount := 0.
 	errorCount := 0.
 
+	notificationCenter when: TestCaseStarted send: #processTestCaseStarted: to: self.
 	notificationCenter when: TestCaseEnded send: #processTestCaseEnded: to: self.
 	notificationCenter when: TestSuiteEnded send: #processTestSuiteEnded: to: self
 ]
@@ -96,26 +112,36 @@ PulsarTestRunnerExecution >> passCount [
 { #category : 'events' }
 PulsarTestRunnerExecution >> processTestCaseEnded: ann [
 
-	| testClass selector testResult pulsarCase |
+	| testClass selector result pulsarCase startTime |
 	testClass := ann testCase class.
 	selector := ann testSelector.
-	testResult := ann testResult.
+	result := ann testResult.
+	testResult := result.
 
 	pulsarCase := self findCaseInSuites: testClass selector: selector.
 	pulsarCase ifNil: [ ^ self ].
 
-	(testResult isPassedFor: testClass selector: selector) ifTrue: [
+	startTime := startTimes at: testClass name -> selector ifAbsent: [ nil ].
+	startTime ifNotNil: [ pulsarCase duration: (DateAndTime now - startTime) asMilliSeconds ].
+
+	(result isPassedFor: testClass selector: selector) ifTrue: [
 			pulsarCase result: nil.
 			passCount := passCount + 1 ].
-	(testResult isFailureFor: testClass selector: selector) ifTrue: [
+	(result isFailureFor: testClass selector: selector) ifTrue: [
 			pulsarCase result: #failure.
 			failCount := failCount + 1 ].
-	(testResult isErrorFor: testClass selector: selector) ifTrue: [
+	(result isErrorFor: testClass selector: selector) ifTrue: [
 			pulsarCase result: #error.
 			errorCount := errorCount + 1 ].
 
 	entries add: pulsarCase.
 	notificationCenter announce: (PulsarTestExecutionChanged newValue: self)
+]
+
+{ #category : 'events' }
+PulsarTestRunnerExecution >> processTestCaseStarted: ann [
+
+	startTimes at: ann testCase class name -> ann testSelector put: DateAndTime now
 ]
 
 { #category : 'events' }
@@ -137,4 +163,10 @@ PulsarTestRunnerExecution >> summary [
 			  passCount.
 			  failCount.
 			  errorCount }
+]
+
+{ #category : 'accessing' }
+PulsarTestRunnerExecution >> testResult [
+
+	^ testResult
 ]

@@ -474,6 +474,15 @@ box.pulsarRepositoryCheckout box.checkoutStrategy {
 
 /* llm */
 .pulsarChatConsole vte-terminal { min-width: 200px; }
+
+/* test case detail */
+box.testCaseDetail { margin: 10px; }
+box.testCaseDetail box { margin: 0px; }
+box.testCaseDetail > * { margin-top: 4px; }
+box.testCaseDetail box.horizontal { border-spacing: 6px; }
+box.testCaseDetail .detailStatus { font-weight: 500; letter-spacing: 0.01em; }
+box.testCaseDetail .detailInfo { font-size: 0.9em; color: alpha(currentColor, 0.75); }
+box.testCaseDetail .detailDuration { font-size: 0.85em; color: alpha(currentColor, 0.55); }
 '
 ]
 
