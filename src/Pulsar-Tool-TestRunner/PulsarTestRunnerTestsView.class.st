@@ -109,7 +109,7 @@ PulsarTestRunnerTestsView >> registerExpansion: item expand: expand [
 PulsarTestRunnerTestsView >> registerToEvents [
 
 	super registerToEvents.
-	self announcer when: PulsarTestRunFinished send: #updatePresenter to: self
+	self announcer when: PulsarTestRunStarted send: #updatePresenter to: self
 ]
 
 { #category : 'initialization' }

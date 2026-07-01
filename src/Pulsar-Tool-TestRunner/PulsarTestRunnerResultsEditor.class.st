@@ -10,7 +10,7 @@ Class {
 	#superclass : 'PulsarBaseView',
 	#instVars : [
 		'summaryPresenter',
-		'resultsTree',
+		'listPresenter',
 		'detailPresenter'
 	],
 	#category : 'Pulsar-Tool-TestRunner-View',
@@ -29,39 +29,36 @@ PulsarTestRunnerResultsEditor >> connectPresenters [
 
 	super connectPresenters.
 
-	resultsTree whenSelectionChangedDo: [ :selection | selection ifNotNil: [ self detailTextFor: selection selectedItem ] ]
+	listPresenter outputSelectionPort transmitDo: [ :aCase | self detailTextFor: aCase ].
+	listPresenter display: [ :eachCase | eachCase description ]
 ]
 
 { #category : 'layout' }
 PulsarTestRunnerResultsEditor >> defaultLayout [
 
 	^ SpBoxLayout newVertical
-		add: summaryPresenter expand: false;
-		add: (SpPanedLayout newTopToBottom
-			add: resultsTree;
-			add: detailPresenter;
-			yourself);
-		yourself
+		  add: summaryPresenter expand: false;
+		  add: (SpPanedLayout newTopToBottom
+				   add: listPresenter;
+				   add: detailPresenter;
+				   yourself);
+		  yourself
 ]
 
 { #category : 'private' }
-PulsarTestRunnerResultsEditor >> detailTextFor: aNode [
-	"Display detail text for the selected test case."
-	| realCase |
-	
-	aNode ifNil: [ ^ self ].
-	
-	realCase := aNode realModel.
-	(realCase isKindOf: PulsarTestCase) ifFalse: [ ^ detailPresenter text: '' ].
+PulsarTestRunnerResultsEditor >> detailTextFor: aCase [
+
+	aCase ifNil: [ ^ detailPresenter text: '' ].
+
 	detailPresenter text: (String streamContents: [ :stream |
 				 stream nextPutAll: 'Class: '.
-				 stream nextPutAll: realCase testClass name.
+				 stream nextPutAll: aCase testClass name.
 				 stream cr.
 				 stream nextPutAll: 'Selector: '.
-				 stream nextPutAll: realCase testSelector.
+				 stream nextPutAll: aCase testSelector.
 				 stream cr.
 				 stream nextPutAll: 'Status: '.
-				 stream nextPutAll: (realCase result ifNil: [ 'passed' ]) ])
+				 stream nextPutAll: (aCase result ifNil: [ 'passed' ]) ])
 ]
 
 { #category : 'events' }
@@ -89,10 +86,8 @@ PulsarTestRunnerResultsEditor >> initializePresenters [
 	summaryPresenter := self newLabel.
 	summaryPresenter label: 'No results yet.'.
 
-	resultsTree := self newEasyTreeListView
-		display: [ :aNode | aNode name ];
-		displayIcon: [ :aNode | self iconNamed: aNode iconName ];
-		children: [ :aNode | aNode children ];
+	listPresenter := self newEasyListView
+		addStyle: 'stList';
 		yourself.
 
 	detailPresenter := self newText.
@@ -111,7 +106,8 @@ PulsarTestRunnerResultsEditor >> initializeWindow: aWindowPresenter [
 PulsarTestRunnerResultsEditor >> registerToEvents [
 
 	super registerToEvents.
-	self announcer when: PulsarTestRunFinished send: #eventTestRunFinished: to: self
+	self announcer when: PulsarTestRunStarted send: #eventTestRunFinished: to: self.
+	self announcer when: PulsarTestExecutionChanged send: #updatePresenter to: self
 ]
 
 { #category : 'private' }
@@ -120,7 +116,5 @@ PulsarTestRunnerResultsEditor >> updatePresenter [
 	self model ifNil: [ ^ self ].
 
 	summaryPresenter label: self model summary.
-	resultsTree 
-		roots: self model resultNodes;
-		expandRoots
+	listPresenter items: self model entries
 ]
