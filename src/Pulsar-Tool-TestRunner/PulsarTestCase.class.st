@@ -40,6 +40,12 @@ PulsarTestCase >> name [
 	^ self entity selector
 ]
 
+{ #category : 'instance creation' }
+PulsarTestCase >> newActivationAnnouncement [
+
+	^ self asEntityModel newActivationAnnouncement
+]
+
 { #category : 'accessing' }
 PulsarTestCase >> result [
 
