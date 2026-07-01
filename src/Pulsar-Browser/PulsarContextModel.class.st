@@ -205,6 +205,12 @@ PulsarContextModel >> inOneLine [
 	^ string
 ]
 
+{ #category : 'testing' }
+PulsarContextModel >> includesClassModel [
+
+	^ true
+]
+
 { #category : 'actions' }
 PulsarContextModel >> installIconStylerOn: aPresenter [
 	| method |

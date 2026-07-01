@@ -66,6 +66,7 @@ PulsarDebugger >> eventModelSelected: anAnnouncement [
 	| selectedModel |
 	
 	selectedModel := anAnnouncement value.
+	selectedModel includesClassModel ifFalse: [ ^ self ].
 	selectedModel isContextModel ifFalse: [ ^ self ].
 
 	contextEditor ifNil: [
