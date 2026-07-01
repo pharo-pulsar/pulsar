@@ -20,13 +20,6 @@ PulsarContextModel class >> newEnvironment: anEnvironmentModel debuggerModel: aD
 		yourself
 ]
 
-{ #category : 'comparing' }
-PulsarContextModel >> = other [
-
-	self species = other species ifFalse: [ ^ false ].
-	^ self entity = other entity
-]
-
 { #category : 'accessing' }
 PulsarContextModel >> actionDecorators [
 
@@ -180,12 +173,6 @@ PulsarContextModel >> defineActionsOn: aBuilder [
 PulsarContextModel >> fullName [
 
 	^ self name
-]
-
-{ #category : 'comparing' }
-PulsarContextModel >> hash [
-
-	^ self species hash bitXor: self entity
 ]
 
 { #category : 'private' }
