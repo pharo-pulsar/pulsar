@@ -69,39 +69,49 @@ PulsarTestRunnerModel >> refresh [
 ]
 
 { #category : 'running' }
-PulsarTestRunnerModel >> runAllTests [
+PulsarTestRunnerModel >> runAllTestsAnnouncingTo: aNotificationCenter [
 	| allCases |
 	
 	allCases := self suites flatCollect: #children.
-	self runSuite: (self suiteFromCases: allCases) for: allCases
+	self 
+		runSuite: (self suiteFromCases: allCases) 
+		for: allCases 
+		announcingTo: aNotificationCenter
 ]
 
 { #category : 'running' }
-PulsarTestRunnerModel >> runCase: aCase [
-
+PulsarTestRunnerModel >> runCase: aCase announcingTo: aNotificationCenter [
 	| suite |
+	
 	suite := TestSuite named: self name.
 	suite addTest: aCase entity.
-	^ self runSuite: suite for: { aCase }
+	^ self 
+		runSuite: suite 
+		for: { aCase } 
+		announcingTo: aNotificationCenter
 ]
 
 { #category : 'running' }
-PulsarTestRunnerModel >> runSuite: aTestSuite [
-
+PulsarTestRunnerModel >> runSuite: aPulsarSuite announcingTo: aNotificationCenter [
 	| cases suite |
-	cases := aTestSuite children.
+	
+	cases := aPulsarSuite children.
 	cases ifEmpty: [ ^ self ].
 	suite := self suiteFromCases: cases.
-	^ self runSuite: suite for: cases
+	^ self 
+		runSuite: suite 
+		for: cases 
+		announcingTo: aNotificationCenter
 ]
 
 { #category : 'running' }
-PulsarTestRunnerModel >> runSuite: aTestSuite for: caseCollection [
+PulsarTestRunnerModel >> runSuite: aTestSuite for: caseCollection announcingTo: aNotificationCenter [
 	"Run aTestSuite and distribute results back to individual cases."
-
 	| testResult |
-	testResult := NewTestRunner runSuite: aTestSuite.
+	
+	testResult := aTestSuite runAnnouncingTo: aNotificationCenter.
 	self updateCases: caseCollection fromResult: testResult.
+	
 	^ testResult
 ]
 
@@ -132,7 +142,10 @@ PulsarTestRunnerModel >> updateCases: caseCollection fromResult: aTestResult [
 	"Distribute SUnit TestResult back to individual PulsarTestCase instances."
 
 	caseCollection do: [ :eachCase |
-			(aTestResult isPassedFor: eachCase testClass selector: eachCase testSelector) ifTrue: [ eachCase result: nil ].
-			(aTestResult isFailureFor: eachCase testClass selector: eachCase testSelector) ifTrue: [ eachCase result: #failure ].
-			(aTestResult isErrorFor: eachCase testClass selector: eachCase testSelector) ifTrue: [ eachCase result: #error ] ]
+		(aTestResult isPassedFor: eachCase testClass selector: eachCase testSelector) 
+			ifTrue: [ eachCase result: nil ].
+		(aTestResult isFailureFor: eachCase testClass selector: eachCase testSelector) 
+			ifTrue: [ eachCase result: #failure ].
+		(aTestResult isErrorFor: eachCase testClass selector: eachCase testSelector) 
+			ifTrue: [ eachCase result: #error ] ]
 ]

@@ -73,6 +73,15 @@ PulsarTestRunnerResultsEditor >> eventTestRunFinished: ann [
 ]
 
 { #category : 'initialization' }
+PulsarTestRunnerResultsEditor >> initializePanelWidget: aPanelWidgetPresenter [
+
+	super initializePanelWidget: aPanelWidgetPresenter.
+	aPanelWidgetPresenter
+		pinned: true;
+		windowIcon: (self iconNamed: 'testResults')
+]
+
+{ #category : 'initialization' }
 PulsarTestRunnerResultsEditor >> initializePresenters [
 
 	self addStyle: 'pulsarTestResultsEditor'.

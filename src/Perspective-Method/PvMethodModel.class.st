@@ -375,7 +375,7 @@ PvMethodModel >> lastTestExecutionResult [
 	(lastClassResult isPassed: testCase) ifTrue: [ result addPass: testCase ].
 	
 	^ result tests
-		ifNotEmpty: [ result ]			
+		ifNotEmpty: [ result ]
 		ifEmpty: [ nil ]
 ]
 

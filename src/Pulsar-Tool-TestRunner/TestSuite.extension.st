@@ -8,14 +8,14 @@ TestSuite >> announceTo: anAnnouncer during: aBlock [
 		send: #announce: 
 		to: anAnnouncer.
 	
-	aBlock ensure: [ 
+	^ aBlock ensure: [ 
 		self testSuiteAnnouncer unsubscribe: anAnnouncer ]
 ]
 
 { #category : '*Pulsar-Tool-TestRunner' }
 TestSuite >> runAnnouncingTo: anAnnouncer [
 
-	self 
+	^ self 
 		announceTo: anAnnouncer 
 		during: [ self run ]
 ]
