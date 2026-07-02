@@ -39,6 +39,16 @@ PvMethodModel class >> newMethod: aMethod [
 		yourself
 ]
 
+{ #category : 'comparing' }
+PvMethodModel >> = other [
+	"I do not compare by entity because entity can change (a compiled method changes and I 
+	 could still have a reference to the old one)"
+
+	^ self species = other species
+		and: [ self entity methodClass = other entity methodClass
+		and: [ self entity selector = other entity selector ] ]
+]
+
 { #category : 'visiting' }
 PvMethodModel >> accept: aVisitor [
 
@@ -197,6 +207,16 @@ PvMethodModel >> fullName [
 PvMethodModel >> hasDefinedProtocol [
 
 	^ self protocol isNotNil and: [ self protocol isUnclassifiedProtocol not ] 
+]
+
+{ #category : 'comparing' }
+PvMethodModel >> hash [
+	"I do not compare by entity because entity can change (a compiled method changes and I 
+	 could still have a reference to the old one)"
+
+	^ (self species hash
+		bitXor: self entity methodClass hash)
+		bitXor: self entity selector
 ]
 
 { #category : 'accessing' }
