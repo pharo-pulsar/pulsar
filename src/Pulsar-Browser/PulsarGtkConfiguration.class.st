@@ -483,6 +483,10 @@ box.testCaseDetail box.horizontal { border-spacing: 6px; }
 box.testCaseDetail .detailStatus { font-weight: 500; letter-spacing: 0.01em; }
 box.testCaseDetail .detailInfo { font-size: 0.9em; color: alpha(currentColor, 0.75); }
 box.testCaseDetail .detailDuration { font-size: 0.85em; color: alpha(currentColor, 0.55); }
+/* test case summary */
+box.testResultSummary { margin: 6px 6px 12px 6px; border-spacing: 6px; }
+box.testResultSummary box.horizontal { margin: 0px; border-spacing: 3px; }
+box.testResultSummary label { font-weight: 500; letter-spacing: 0.01em; }
 '
 ]
 

@@ -170,3 +170,9 @@ PulsarTestRunnerExecution >> testResult [
 
 	^ testResult
 ]
+
+{ #category : 'tests' }
+PulsarTestRunnerExecution >> testRunnerModel [
+
+	^ self entity newTestRunnerModel
+]

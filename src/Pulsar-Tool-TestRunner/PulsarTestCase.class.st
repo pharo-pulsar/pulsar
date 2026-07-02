@@ -29,6 +29,12 @@ PulsarTestCase >> children [
 	^ #(  )
 ]
 
+{ #category : 'running' }
+PulsarTestCase >> debugOn: anActionContext [
+	
+	^ anActionContext doDebugCase: self
+]
+
 { #category : 'accessing' }
 PulsarTestCase >> description [
 
@@ -50,8 +56,9 @@ PulsarTestCase >> duration: anInteger [
 { #category : 'accessing' }
 PulsarTestCase >> fullDescription [
 
-	^ '{1} · {2}' format: {
+	^ '{1} {2} {3}' format: {
 			  self testClass name.
+			  (Character value: 16r232A) asString.
 			  self entity selector }
 ]
 
@@ -77,6 +84,12 @@ PulsarTestCase >> result: anObject [
 PulsarTestCase >> runOn: anActionContext [
 	
 	^ anActionContext doRunCase: self
+]
+
+{ #category : 'accessing' }
+PulsarTestCase >> status [
+
+	^ result ifNil: [ #passed ]
 ]
 
 { #category : 'accessing' }

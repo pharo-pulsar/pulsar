@@ -84,6 +84,14 @@ PulsarBaseProjectModel >> isVolatileProject [
 	^ false
 ]
 
+{ #category : 'instance creation' }
+PulsarBaseProjectModel >> newTestRunnerModel [
+
+	^ PulsarTestRunnerModel 
+		newEnvironment: self environmentModel 
+		entity: self
+]
+
 { #category : 'accessing - navigating' }
 PulsarBaseProjectModel >> parentModel [
 	"in pulsar metamodel, projects do not have parent"

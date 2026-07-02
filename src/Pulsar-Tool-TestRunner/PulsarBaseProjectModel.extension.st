@@ -17,8 +17,6 @@ PulsarBaseProjectModel >> defineTestRunnerActionOn: aBuilder [
 				aContext scheduleTask: [
 					(PulsarTestRunnerBrowser
 						newApplication: aContext application
-						model: (PulsarTestRunnerModel 
-							newEnvironment: self environmentModel 
-							entity: self)) 
+						model: self newTestRunnerModel) 
 						open ] ] ] ]
 ]

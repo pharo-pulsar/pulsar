@@ -30,6 +30,29 @@ PulsarTestRunnerModel >> buildSuites [
 		  PulsarTestSuite newEnvironment: self environmentModel entity: eachClass ]
 ]
 
+{ #category : 'running' }
+PulsarTestRunnerModel >> debugCase: aCase announcingTo: aNotificationCenter [
+	| suite |
+	
+	suite := TestSuite named: self name.
+	suite addTest: aCase entity.
+	^ self 
+		debugSuite: suite 
+		for: { aCase }
+		announcingTo: aNotificationCenter
+]
+
+{ #category : 'running' }
+PulsarTestRunnerModel >> debugSuite: aTestSuite for: caseCollection announcingTo: aNotificationCenter [
+	"Run aTestSuite and distribute results back to individual cases."
+	| testResult |
+	
+	testResult := aTestSuite debugAnnouncingTo: aNotificationCenter.
+	self updateCases: caseCollection fromResult: testResult.
+	
+	^ testResult
+]
+
 { #category : 'initialization' }
 PulsarTestRunnerModel >> initialize [
 

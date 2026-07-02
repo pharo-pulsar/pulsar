@@ -13,6 +13,14 @@ TestSuite >> announceTo: anAnnouncer during: aBlock [
 ]
 
 { #category : '*Pulsar-Tool-TestRunner' }
+TestSuite >> debugAnnouncingTo: anAnnouncer [
+
+	^ self 
+		announceTo: anAnnouncer 
+		during: [ self debug ]
+]
+
+{ #category : '*Pulsar-Tool-TestRunner' }
 TestSuite >> runAnnouncingTo: anAnnouncer [
 
 	^ self 
