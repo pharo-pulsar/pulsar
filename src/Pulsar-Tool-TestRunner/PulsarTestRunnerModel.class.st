@@ -53,6 +53,15 @@ PulsarTestRunnerModel >> debugSuite: aTestSuite for: caseCollection announcingTo
 	^ testResult
 ]
 
+{ #category : 'filtering' }
+PulsarTestRunnerModel >> filterWith: aString [
+	| allCases |
+	
+	allCases := self suites flatCollect: [ :eachSuite | eachSuite children ].
+	^ allCases select: [ :eachCase | 
+		eachCase description includesSubstring: aString caseSensitive: false ]
+]
+
 { #category : 'initialization' }
 PulsarTestRunnerModel >> initialize [
 

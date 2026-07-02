@@ -8,7 +8,10 @@ Class {
 	#superclass : 'PulsarCollectionView',
 	#instVars : [
 		'toolbarPresenter',
-		'expansions'
+		'expansions',
+		'mutex',
+		'filterInputPresenter',
+		'filterListPresenter'
 	],
 	#category : 'Pulsar-Tool-TestRunner-View',
 	#package : 'Pulsar-Tool-TestRunner',
@@ -21,7 +24,7 @@ PulsarTestRunnerTestsView class >> defaultPanelPosition [
 	^ SpPanelPosition startArea
 ]
 
-{ #category : 'initialization' }
+{ #category : 'connecting' }
 PulsarTestRunnerTestsView >> connectPresenters [
 
 	super connectPresenters.
@@ -29,15 +32,25 @@ PulsarTestRunnerTestsView >> connectPresenters [
 	listPresenter outputSelectionPort 
 		transmitDo: [ :anEntity | self entitySelected: anEntity ].
 	listPresenter outputActivationPort 
-		transmitDo: [ :anEntity | self entityActivated: anEntity ]
+		transmitDo: [ :anEntity | self entityActivated: anEntity ].
+
+	filterListPresenter outputSelectionPort 
+		transmitDo: [ :anEntity | self entitySelected: anEntity ].
+	filterListPresenter outputActivationPort 
+		transmitDo: [ :anEntity | self entityActivated: anEntity ].
+	
+	filterInputPresenter whenTextChangedDo: [ :aString | 
+		self updateFilterWith: aString ]
 ]
 
-{ #category : 'layout' }
+{ #category : 'initialization' }
 PulsarTestRunnerTestsView >> defaultLayout [
 
 	^ SpBoxLayout newVertical
 		  add: toolbarPresenter expand: false;
 		  add: listPresenter;
+		  add: filterListPresenter;
+		  add: filterInputPresenter expand: false;
 		  yourself
 ]
 
@@ -68,11 +81,37 @@ PulsarTestRunnerTestsView >> doRun: aModel [
 	aModel runOn: (PulsarTestRunnerActionContext on: self)
 ]
 
+{ #category : 'filtering' }
+PulsarTestRunnerTestsView >> filterStartingSize [
+
+	^ 3
+]
+
 { #category : 'initialization' }
 PulsarTestRunnerTestsView >> initialize [
 
 	expansions := Set new.
+	mutex := Mutex new.
 	super initialize
+]
+
+{ #category : 'filtering' }
+PulsarTestRunnerTestsView >> initializeFilter [
+
+	filterListPresenter := self newEasyListView
+		addStyle: 'stList';
+		addStyle: 'pulsarTestRunnerFilterList';
+		display: [ :aModel | aModel description ];
+		rowPresenterClass: PulsarTestRunnerTestsRow;
+				actions: (self actions actionsFor: #nodeActions);
+		yourself.
+
+	filterListPresenter hide.
+
+	filterInputPresenter := self newTextInput
+		addStyle: 'flat';
+		placeholder: ('Filter ({1}+ characters)...' format: { self filterStartingSize });
+		yourself
 ]
 
 { #category : 'initialization' }
@@ -83,18 +122,25 @@ PulsarTestRunnerTestsView >> initializePresenters [
 	toolbarPresenter := self instantiate: PulsarToolbarPresenter.
 	toolbarPresenter actions: (self actions actionsFor: #testRunner).
 
+	self initializeTree.
+	self initializeFilter
+]
+
+{ #category : 'initialization' }
+PulsarTestRunnerTestsView >> initializeTree [
+
 	listPresenter := self newEasyTreeListView
 		addStyle: 'stTree';
 		addStyle: 'pulsarTestRunnerTree';
 		rowPresenterClass: PulsarTestRunnerTestsRow;
-		whenRowPresenterInstantiatedDo: [ :aRowPresenter | 
+		whenRowPresenterInstantiatedDo: [ :aRowPresenter |
 			aRowPresenter whenActivatedDo: [ :aModel | self doRun: aModel ] ];
 		display: [ :aNode | aNode description ];
 		children: [ :aNode | aNode children ];
 		actions: (self actions actionsFor: #nodeActions);
-		whenExpandChangedDo: [ :ann | 
-			self registerExpansion: ann item expand: ann expanded ];
-		yourself
+		whenExpandChangedDo: [ :ann | self registerExpansion: ann item expand: ann expanded ];
+		yourself.
+
 ]
 
 { #category : 'private' }
@@ -110,6 +156,24 @@ PulsarTestRunnerTestsView >> registerToEvents [
 
 	super registerToEvents.
 	self announcer when: PulsarTestRunStarted send: #updatePresenter to: self
+]
+
+{ #category : 'filtering' }
+PulsarTestRunnerTestsView >> updateFilterWith: aString [
+
+	(aString isEmptyOrNil or: [ aString size < self filterStartingSize ]) ifTrue: [
+		self application defer: [
+			listPresenter show.
+			filterListPresenter hide ].
+		^ self ].
+
+	self scheduleTask: [
+		| items |
+		items := self model filterWith: aString.
+		self application defer: [
+			listPresenter hide.
+			filterListPresenter show.
+			filterListPresenter items: items ] ]
 ]
 
 { #category : 'initialization' }
