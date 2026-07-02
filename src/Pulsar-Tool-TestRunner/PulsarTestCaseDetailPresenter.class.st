@@ -32,9 +32,10 @@ PulsarTestCaseDetailPresenter >> defaultLayout [
 { #category : 'private' }
 PulsarTestCaseDetailPresenter >> iconForResult: aSymbol [
 
-	aSymbol ifNil: [ ^ self iconNamed: 'testResultPass' ].
+	aSymbol == #passed ifTrue: [ ^ self iconNamed: 'testResultPass' ].
 	aSymbol == #failure ifTrue: [ ^ self iconNamed: 'testResultFailure' ].
 	aSymbol == #error ifTrue: [ ^ self iconNamed: 'testResultError' ].
+	
 	^ self iconNamed: 'test-not-run'
 ]
 
@@ -63,7 +64,7 @@ PulsarTestCaseDetailPresenter >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 
-	iconPresenter image: (self iconForResult: self model result).
+	iconPresenter image: (self iconForResult: self model status).
 	statusPresenter label: self model statusLabel.
 	descriptionPresenter label: self model fullDescription.
 	durationPresenter label: ('Duration: {1} ms' format: { (self model duration ifNil: [ 0 ]) })

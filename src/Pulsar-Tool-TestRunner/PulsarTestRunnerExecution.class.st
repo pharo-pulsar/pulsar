@@ -109,33 +109,33 @@ PulsarTestRunnerExecution >> passCount [
 	^ passCount
 ]
 
-{ #category : 'events' }
+{ #category : 'processing' }
 PulsarTestRunnerExecution >> processTestCaseEnded: ann [
+    | testClass selector result pulsarCase startTime |
 
-	| testClass selector result pulsarCase startTime |
-	testClass := ann testCase class.
-	selector := ann testSelector.
-	result := ann testResult.
-	testResult := result.
+    testClass := ann testCase class.
+    selector := ann testSelector.
+    result := ann testResult.
+    testResult := result.
 
-	pulsarCase := self findCaseInSuites: testClass selector: selector.
-	pulsarCase ifNil: [ ^ self ].
+    pulsarCase := self findCaseInSuites: testClass selector: selector.
+    pulsarCase ifNil: [ ^ self ].
 
-	startTime := startTimes at: testClass name -> selector ifAbsent: [ nil ].
-	startTime ifNotNil: [ pulsarCase duration: (DateAndTime now - startTime) asMilliSeconds ].
+    startTime := startTimes at: testClass name -> selector ifAbsent: [ nil ].
+    startTime ifNotNil: [ pulsarCase duration: (DateAndTime now - startTime) asMilliSeconds ].
 
-	(result isPassedFor: testClass selector: selector) ifTrue: [
-			pulsarCase result: nil.
-			passCount := passCount + 1 ].
-	(result isFailureFor: testClass selector: selector) ifTrue: [
-			pulsarCase result: #failure.
-			failCount := failCount + 1 ].
-	(result isErrorFor: testClass selector: selector) ifTrue: [
-			pulsarCase result: #error.
-			errorCount := errorCount + 1 ].
+    (result isPassedFor: testClass selector: selector) ifTrue: [
+        TestResult updateTestHistoryFor: ann testCase status: #passed.
+        passCount := passCount + 1 ].
+    (result isFailureFor: testClass selector: selector) ifTrue: [
+        TestResult updateTestHistoryFor: ann testCase status: #failures.
+        failCount := failCount + 1 ].
+    (result isErrorFor: testClass selector: selector) ifTrue: [
+        TestResult updateTestHistoryFor: ann testCase status: #errors.
+        errorCount := errorCount + 1 ].
 
-	entries add: pulsarCase.
-	notificationCenter announce: (PulsarTestExecutionChanged newValue: self)
+    entries add: pulsarCase.
+    notificationCenter announce: (PulsarTestExecutionChanged newValue: self)
 ]
 
 { #category : 'events' }

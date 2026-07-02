@@ -44,13 +44,11 @@ PulsarTestRunnerModel >> debugCase: aCase announcingTo: aNotificationCenter [
 
 { #category : 'running' }
 PulsarTestRunnerModel >> debugSuite: aTestSuite for: caseCollection announcingTo: aNotificationCenter [
-	"Run aTestSuite and distribute results back to individual cases."
-	| testResult |
-	
-	testResult := aTestSuite debugAnnouncingTo: aNotificationCenter.
-	self updateCases: caseCollection fromResult: testResult.
-	
-	^ testResult
+    | testResult |
+
+    testResult := aTestSuite debugAnnouncingTo: aNotificationCenter.
+
+    ^ testResult
 ]
 
 { #category : 'filtering' }
@@ -138,13 +136,11 @@ PulsarTestRunnerModel >> runSuite: aPulsarSuite announcingTo: aNotificationCente
 
 { #category : 'running' }
 PulsarTestRunnerModel >> runSuite: aTestSuite for: caseCollection announcingTo: aNotificationCenter [
-	"Run aTestSuite and distribute results back to individual cases."
-	| testResult |
-	
-	testResult := aTestSuite runAnnouncingTo: aNotificationCenter.
-	self updateCases: caseCollection fromResult: testResult.
-	
-	^ testResult
+    | testResult |
+
+    testResult := aTestSuite runAnnouncingTo: aNotificationCenter.
+
+    ^ testResult
 ]
 
 { #category : 'running' }
@@ -167,17 +163,4 @@ PulsarTestRunnerModel >> suites [
 PulsarTestRunnerModel >> suites: anObject [
 
 	suites := anObject
-]
-
-{ #category : 'running' }
-PulsarTestRunnerModel >> updateCases: caseCollection fromResult: aTestResult [
-	"Distribute SUnit TestResult back to individual PulsarTestCase instances."
-
-	caseCollection do: [ :eachCase |
-		(aTestResult isPassedFor: eachCase testClass selector: eachCase testSelector) 
-			ifTrue: [ eachCase result: nil ].
-		(aTestResult isFailureFor: eachCase testClass selector: eachCase testSelector) 
-			ifTrue: [ eachCase result: #failure ].
-		(aTestResult isErrorFor: eachCase testClass selector: eachCase testSelector) 
-			ifTrue: [ eachCase result: #error ] ]
 ]

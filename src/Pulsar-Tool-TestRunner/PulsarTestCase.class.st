@@ -7,7 +7,6 @@ Class {
 	#name : 'PulsarTestCase',
 	#superclass : 'PulsarBaseTestModel',
 	#instVars : [
-		'result',
 		'duration'
 	],
 	#category : 'Pulsar-Tool-TestRunner-Model',
@@ -68,18 +67,6 @@ PulsarTestCase >> name [
 	^ self entity selector
 ]
 
-{ #category : 'accessing' }
-PulsarTestCase >> result [
-
-	^ result
-]
-
-{ #category : 'accessing' }
-PulsarTestCase >> result: anObject [
-
-	result := anObject
-]
-
 { #category : 'running' }
 PulsarTestCase >> runOn: anActionContext [
 	
@@ -88,8 +75,15 @@ PulsarTestCase >> runOn: anActionContext [
 
 { #category : 'accessing' }
 PulsarTestCase >> status [
+	| history |
 
-	^ result ifNil: [ #passed ]
+	history := self testClass history.
+	
+	((history at: #errors ifAbsent: [ #() ]) includes: self testSelector) ifTrue: [ ^ #error ].
+	((history at: #failures ifAbsent: [ #() ]) includes: self testSelector) ifTrue: [ ^ #failure ].
+	((history at: #passed ifAbsent: [ #() ]) includes: self testSelector) ifTrue: [ ^ #passed ].
+	
+	^ #passed
 ]
 
 { #category : 'accessing' }
@@ -100,10 +94,12 @@ PulsarTestCase >> statusDescription [
 
 { #category : 'accessing' }
 PulsarTestCase >> statusLabel [
+	| status |
 
-	result ifNil: [ ^ 'Passed' ].
-	result == #failure ifTrue: [ ^ 'Failed' ].
-	result == #error ifTrue: [ ^ 'Error' ].
+	status := self status.
+	status == #passed ifTrue: [ ^ 'Passed' ].
+	status == #failure ifTrue: [ ^ 'Failed' ].
+	status == #error ifTrue: [ ^ 'Error' ].
 	^ 'Unknown'
 ]
 
