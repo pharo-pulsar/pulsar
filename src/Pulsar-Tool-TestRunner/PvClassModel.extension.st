@@ -20,9 +20,9 @@ PvClassModel >> defineTestRunnerDecorationActionsOn: aBuilder [
 
 { #category : '*Pulsar-Tool-TestRunner' }
 PvClassModel >> runTestAnnouncingTo: anAnnouncer [
-	| testSuite |
-	
-	testSuite := self entity suite.
-	testSuite runAnnouncingTo: anAnnouncer
 
+	NewTestRunner 
+		executeSuite: self entity suite 
+		announcingTo: anAnnouncer 
+		inMode: ExecutionMode runTestsMode
 ]

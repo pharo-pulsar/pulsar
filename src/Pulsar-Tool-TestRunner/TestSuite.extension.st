@@ -11,19 +11,3 @@ TestSuite >> announceTo: anAnnouncer during: aBlock [
 	^ aBlock ensure: [ 
 		self testSuiteAnnouncer unsubscribe: anAnnouncer ]
 ]
-
-{ #category : '*Pulsar-Tool-TestRunner' }
-TestSuite >> debugAnnouncingTo: anAnnouncer [
-
-	^ self 
-		announceTo: anAnnouncer 
-		during: [ self debug ]
-]
-
-{ #category : '*Pulsar-Tool-TestRunner' }
-TestSuite >> runAnnouncingTo: anAnnouncer [
-
-	^ self 
-		announceTo: anAnnouncer 
-		during: [ self run ]
-]

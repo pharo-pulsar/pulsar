@@ -44,11 +44,20 @@ PulsarTestRunnerModel >> debugCase: aCase announcingTo: aNotificationCenter [
 
 { #category : 'running' }
 PulsarTestRunnerModel >> debugSuite: aTestSuite for: caseCollection announcingTo: aNotificationCenter [
-    | testResult |
 
-    testResult := aTestSuite debugAnnouncingTo: aNotificationCenter.
+    ^ self
+        executeSuite: aTestSuite
+        announcingTo: aNotificationCenter
+        inMode: ExecutionMode debugMode
+]
 
-    ^ testResult
+{ #category : 'running' }
+PulsarTestRunnerModel >> executeSuite: aTestSuite announcingTo: aNotificationCenter inMode: anExecutionMode [
+
+    ^ NewTestRunner
+        executeSuite: aTestSuite
+        announcingTo: aNotificationCenter
+        inMode: anExecutionMode
 ]
 
 { #category : 'filtering' }
@@ -136,11 +145,11 @@ PulsarTestRunnerModel >> runSuite: aPulsarSuite announcingTo: aNotificationCente
 
 { #category : 'running' }
 PulsarTestRunnerModel >> runSuite: aTestSuite for: caseCollection announcingTo: aNotificationCenter [
-    | testResult |
 
-    testResult := aTestSuite runAnnouncingTo: aNotificationCenter.
-
-    ^ testResult
+    ^ self
+        executeSuite: aTestSuite
+        announcingTo: aNotificationCenter
+        inMode: ExecutionMode runTestsMode
 ]
 
 { #category : 'running' }
