@@ -19,7 +19,7 @@ PulsarTestCase >> asEntityModel [
 
 	^ PvMethodModel 
 		newEnvironment: self environmentModel
-		entity: self entity class >> self entity selector
+		entity: (self entity class lookupSelector: self entity selector)
 ]
 
 { #category : 'accessing' }
