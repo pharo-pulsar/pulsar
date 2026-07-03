@@ -43,23 +43,24 @@ PulsarTestCaseSummaryPresenter >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 
-	self layout 
-		removeAll;
-		add: (self
-			newResultStyle: 'passed' 
-			icon: 'testResultPass' 
-			label: 'passed' 
-			count: self model passCount);
-		add: (self newLabel label: '·');
-		add: (self 
-			newResultStyle: 'failure' 
-			icon: 'testResultFailure' 
-			label: 'failures' 
-			count: self model failCount);
-		add: (self newLabel label: '·');
-		add: (self 
-			newResultStyle: 'errors' 
-			icon: 'testResultError' 
-			label: 'errors' 
-			count: self model errorCount)
+	self application defer: [ 
+		self layout 
+			removeAll;
+			add: (self
+				newResultStyle: 'passed' 
+				icon: 'testResultPass' 
+				label: 'passed' 
+				count: self model passCount);
+			add: (self newLabel label: '·');
+			add: (self 
+				newResultStyle: 'failure' 
+				icon: 'testResultFailure' 
+				label: 'failures' 
+				count: self model failCount);
+			add: (self newLabel label: '·');
+			add: (self 
+				newResultStyle: 'errors' 
+				icon: 'testResultError' 
+				label: 'errors' 
+				count: self model errorCount) ]
 ]
