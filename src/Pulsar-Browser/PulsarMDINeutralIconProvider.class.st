@@ -193,6 +193,7 @@ PulsarMDINeutralIconProvider >> createTable [
 		('paste'					 'content-paste')
 		('cut'					 'content-cut')
 		('copy-to-clipboard'		 'clipboard-check-outline')
+		('changeSet'				 'file-multiple-outline')
 
 		"Navigation / menus / arrows"
 		('view-more-symbolic'     'dots-horizontal')

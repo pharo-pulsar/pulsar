@@ -90,7 +90,7 @@ PulsarCommitInfoPresenter >> initializePresenters [
 		yourself
 ]
 
-{ #category : 'private' }
+{ #category : 'initialization' }
 PulsarCommitInfoPresenter >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
@@ -122,7 +122,7 @@ PulsarCommitInfoPresenter >> versionLayout [
 				add: (self newButton
 					 addStyle: 'flat';
 					 addStyle: 'small';
-					 icon: (self iconNamed: 'open');
+					 icon: (self iconNamed: 'changeSet');
 					 help: 'Open diff for this commit';
 					 action: [ self doOpenCommitDiff ];
 					 yourself);
