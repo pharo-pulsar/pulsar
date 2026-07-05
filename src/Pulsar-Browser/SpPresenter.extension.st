@@ -1,6 +1,12 @@
 Extension { #name : 'SpPresenter' }
 
 { #category : '*Pulsar-Browser' }
+SpPresenter >> isPulsarBrowser [
+
+	^ false
+]
+
+{ #category : '*Pulsar-Browser' }
 SpPresenter >> panelPosition [
 
 	^ SpPanelPosition bottom

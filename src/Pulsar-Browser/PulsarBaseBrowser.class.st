@@ -525,6 +525,12 @@ PulsarBaseBrowser >> initializeWorkspace [
 
 ]
 
+{ #category : 'testing' }
+PulsarBaseBrowser >> isPulsarBrowser [
+
+	^ true
+]
+
 { #category : 'private' }
 PulsarBaseBrowser >> maybeDockView: aViewModel withActivation: anActivation [
 	"if the entity has an editor associated:
