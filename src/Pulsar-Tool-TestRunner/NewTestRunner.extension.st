@@ -43,11 +43,12 @@ NewTestRunner class >> executeTestCase: aTestCase withRunner: aRunner suite: aTe
 	"Execute aTestCase using anExecutionMode and merge the result into aRunner.
 
      The ensure block guarantees cleanup and result recording even when the
-     user abandons the debugger during execution. On abandon, the assignment
-     to testResult never happens, so we record the test as an error so the
-     suite-level result carries a correct count for TestSuiteEnded."
+     user abandons the debugger. When executeCase: is abandoned testResult
+     stays nil: we recover the correct failure/error classification from the
+     SUnit history, which the debug method already wrote before opening the
+     debugger."
+
 	| testResult |
-	
 	aTestCase prepareToRunOn: aTestSuite.
 	testResult := nil.
 	[
@@ -55,6 +56,25 @@ NewTestRunner class >> executeTestCase: aTestCase withRunner: aRunner suite: aTe
 		aRunner result mergeWith: testResult ] 
 	ensure: [
 		testResult ifNil: [ 
-			aRunner result addError: aTestCase ].
+			self recoverTestCase: aTestCase into: aRunner ].
 		aTestCase cleanAfterRunOn: aTestSuite ]
+]
+
+{ #category : '*Pulsar-Tool-TestRunner' }
+NewTestRunner class >> recoverTestCase: aTestCase into: aRunner [
+	"Read the test's status from SUnit class-side history, which was
+     updated by debug before opening the debugger, and record it in aRunner."
+	| history selector |
+	
+	history := aTestCase class history.
+	selector := aTestCase selector.
+
+	((history at: #errors ifAbsent: [ #() ]) includes: selector) 
+		ifTrue: [ ^ aRunner result addError: aTestCase ].
+	((history at: #failures ifAbsent: [ #() ]) includes: selector) 
+		ifTrue: [ ^ aRunner result addFailure: aTestCase ].
+	((history at: #passed ifAbsent: [ #() ]) includes: selector) 
+		ifTrue: [ ^ aRunner result addPass: aTestCase ].
+	
+	aRunner result addError: aTestCase
 ]
