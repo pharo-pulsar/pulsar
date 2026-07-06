@@ -37,6 +37,10 @@ PulsarWelcomeView >> eventSyntaxHighlightThemeChanged: ann [
 ]
 
 { #category : 'events' }
+PulsarWelcomeView >> eventTestCaseEnded: ann [
+]
+
+{ #category : 'events' }
 PulsarWelcomeView >> eventThemeChanged: ann [
 
 	self updatePresentersAfterThemeChange
