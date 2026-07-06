@@ -207,6 +207,8 @@ PulsarClassEditor >> eventTestCaseEnded: aTestCaseEnded [
 { #category : 'events' }
 PulsarClassEditor >> eventTestSuiteEnded: aTestSuiteEnded [
 
+	logger trace: aTestSuiteEnded.
+
 	(self model isTestCase
 		and: [ aTestSuiteEnded testResult classesTested includes: self model entity ])
 		ifFalse: [ ^ self ].

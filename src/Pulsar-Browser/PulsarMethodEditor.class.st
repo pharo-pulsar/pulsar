@@ -281,6 +281,7 @@ PulsarMethodEditor >> eventTestCaseEnded: aTestCaseEnded [
 		ifFalse: [ ^ self ].
 
 	logger trace: aTestCaseEnded.
+	
 	self updateContentActions
 ]
 

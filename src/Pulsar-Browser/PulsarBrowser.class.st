@@ -175,6 +175,8 @@ PulsarBrowser >> eventManyModelDeactivated: anAnnouncement [
 PulsarBrowser >> eventTestSuiteEnded: aTestSuiteEnded [
 	| message |
 	
+	logger trace: aTestSuiteEnded.	
+	
 	self scheduleTask: [ self resendAnnouncement: aTestSuiteEnded ].
 	self scheduleTask: [
 		message := 'Passed'.
