@@ -11,7 +11,8 @@ Class {
 		'hideSystemProjects',
 		'toggleSystemProjectsButtonPresenter',
 		'toggleDirtyProjectsButtonPresenter',
-		'hideNonDirtyProjects'
+		'hideNonDirtyProjects',
+		'mutex'
 	],
 	#category : 'Pulsar-Tool-Repositories-View-Repositories',
 	#package : 'Pulsar-Tool-Repositories',
@@ -407,6 +408,12 @@ PulsarRepositoriesView >> maybeSort: aCollection [
 ]
 
 { #category : 'private' }
+PulsarRepositoriesView >> mutex [
+
+	^ mutex ifNil: [ mutex := Mutex new ]
+]
+
+{ #category : 'private' }
 PulsarRepositoriesView >> notifyRepositoryModified: aModel reason: aReason [
 
 	logger trace: aModel.
@@ -528,8 +535,10 @@ PulsarRepositoriesView >> updatePresenter [
 	self scheduleJob: [
 		| filteredRepositories |
 		updating ifFalse: [
-			filteredRepositories := self maybeSort: (self filterRepositories: self model repositories).
-			listPresenter updateItemsKeepingSelection: filteredRepositories ] ]
+			self updatingWhile: [	
+				self mutex critical: [
+					filteredRepositories := self maybeSort: (self filterRepositories: self model repositories). 
+					listPresenter updateItemsKeepingSelection: filteredRepositories ] ] ] ]
 ]
 
 { #category : 'private' }
