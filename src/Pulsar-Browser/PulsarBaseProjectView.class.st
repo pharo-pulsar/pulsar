@@ -27,36 +27,42 @@ PulsarBaseProjectView >> activateContextPopover [
 { #category : 'selection' }
 PulsarBaseProjectView >> canRemoveSelectedEntity [
 
-	^ self selectedEntity ifNotNil: [ :anEntityModel | anEntityModel canBeRemoved ] ifNil: [ false ]
+	^ self selectedEntity 
+		ifNotNil: [ :anEntityModel | anEntityModel canBeRemoved ] 
+		ifNil: [ false ]
 ]
 
 { #category : 'selection' }
 PulsarBaseProjectView >> canRenameSelectedEntity [
 
-	^ self selectedEntity ifNotNil: [ :anEntityModel | anEntityModel canBeRenamed ] ifNil: [ false ]
+	^ self selectedEntity 
+		ifNotNil: [ :anEntityModel | anEntityModel canBeRenamed ] 
+		ifNil: [ false ]
 ]
 
 { #category : 'selection' }
 PulsarBaseProjectView >> closestEntityInPathMatching: aBlock [
 
-	^ self selectedEntitiesInPath ifNotEmpty: [ :entities | entities reversed detect: aBlock ] ifEmpty: [ nil ]
+	^ self selectedEntitiesInPath 
+		ifNotEmpty: [ :entities | entities reversed detect: aBlock ] 
+		ifEmpty: [ nil ]
 ]
 
 { #category : 'selection' }
 PulsarBaseProjectView >> closestPathInPathMatching: aBlock [
-
 	  | selectedEntities |
 	  selectedEntities := self selectedEntitiesInPath.
 	  selectedEntities ifNil: [ ^ nil ].
 
-	  selectedEntities withIndexDo: [ :each :index | (aBlock value: each) ifTrue: [ ^ selectedEntities copyFrom: 1 to: index ] ].
+	  selectedEntities withIndexDo: [ :each :index | 
+	  	(aBlock value: each) ifTrue: [ 
+	  		^ selectedEntities copyFrom: 1 to: index ] ].
 
 	  ^ nil
 ]
 
 { #category : 'initialization' }
 PulsarBaseProjectView >> connectPresenters [
-
 	super connectPresenters.
 
 	listPresenter outputSelectionPort transmitDo: [ :anEntity | self entitySelected: anEntity ].
@@ -86,58 +92,51 @@ PulsarBaseProjectView >> defaultLayout [
 
 { #category : 'actions-definition' }
 PulsarBaseProjectView >> defineExtraActionsOn: aBuilder [
-
 	<dockActions>
-	aBuilder addGroup: 'extra' with: [ :group |
-			group
-				priority: 900;
-				name: 'Extra';
-				beDisplayedAsGroup;
-				addActionWith: [ :action |
-						action
-							name: 'Collapse All';
-							description: 'Collapses all open nodes';
-							iconName: 'collapse-all';
-							action: [ self doCollapseAll ] ] ]
+	
+	aBuilder addGroup: 'extra' with: [ :group | group
+		priority: 900;
+		name: 'Extra';
+		beDisplayedAsGroup;
+		addActionWith: [ :action | action
+			name: 'Collapse All';
+			description: 'Collapses all open nodes';
+			iconName: 'collapse-all';
+			action: [ self doCollapseAll ] ] ]
 ]
 
 { #category : 'actions-definition' }
 PulsarBaseProjectView >> defineNewActionsOn: aBuilder [
-
 	<dockActions>
-	aBuilder addGroup: #new with: [ :group |
-			group
-				priority: 200;
-				name: 'New';
-				beDisplayedAsGroup;
-				addActionWith: [ :action |
-						action
-							priority: 210;
-							name: 'New package';
-							description: 'Add a new package';
-							iconName: 'new-file';
-							action: [ self doNewPackage ] ];
-				addActionWith: [ :action |
-						action
-							priority: 220;
-							name: 'New tag';
-							description: 'Add a new tag to this package';
-							iconName: 'new-file';
-							action: [ self doNewPackageTag ] ];
-				addActionWith: [ :action |
-						action
-							priority: 230;
-							name: 'New class';
-							description: 'Add a new class';
-							iconName: 'new-file';
-							action: [ self doRequestNewClass ] ];
-				addActionWith: [ :action |
-						action
-							priority: 240;
-							name: 'New trait';
-							description: 'Add a new trait';
-							iconName: 'new-file';
-							action: [ self doRequestNewTrait ] ] ]
+	
+	aBuilder addGroup: #new with: [ :group | group
+		priority: 200;
+		name: 'New';
+		beDisplayedAsGroup;
+		addActionWith: [ :action | action
+			priority: 210;
+			name: 'New package';
+			description: 'Add a new package';
+			iconName: 'new-file';
+			action: [ self doNewPackage ] ];
+		addActionWith: [ :action | action
+			priority: 220;
+			name: 'New tag';
+			description: 'Add a new tag to this package';
+			iconName: 'new-file';
+			action: [ self doNewPackageTag ] ];
+		addActionWith: [ :action | action
+			priority: 230;
+			name: 'New class';
+			description: 'Add a new class';
+			iconName: 'new-file';
+			action: [ self doRequestNewClass ] ];
+		addActionWith: [ :action | action
+			priority: 240;
+			name: 'New trait';
+			description: 'Add a new trait';
+			iconName: 'new-file';
+			action: [ self doRequestNewTrait ] ] ]
 ]
 
 { #category : 'actions' }
@@ -150,42 +149,44 @@ PulsarBaseProjectView >> doCollapseAll [
 
 { #category : 'actions' }
 PulsarBaseProjectView >> doRemoveClass [
-
 	| parentPath |
+	
 	parentPath := listPresenter selection selectedPath allButLast.
 	self application schedule: [
-			(ReRemoveClassDriver newApplication: self application)
-				classes: { self selectedEntity };
-				model: RBBrowserEnvironment new;
-				scopes: { RBBrowserEnvironment new };
-				runRefactoring.
-			listPresenter selectPath: parentPath scrollToSelection: true ]
+		(ReRemoveClassDriver newApplication: self application)
+			classes: { self selectedEntity };
+			model: RBBrowserEnvironment new;
+			scopes: { RBBrowserEnvironment new };
+			runRefactoring.
+		listPresenter selectPath: parentPath scrollToSelection: true ]
 ]
 
 { #category : 'actions' }
 PulsarBaseProjectView >> doRemoveSelectedEntity [
 
-	listPresenter selectedItem ifNotNil: [ :aModel | (PulsarProjectRemoveModel on: self) visit: aModel realModel ]
+	listPresenter selectedItem ifNotNil: [ :aModel | 
+		(PulsarProjectRemoveModel on: self) visit: aModel realModel ]
 ]
 
 { #category : 'actions' }
 PulsarBaseProjectView >> doRenameClass [
-
 	| parentPath |
+	
 	parentPath := listPresenter selection selectedPath allButLast.
 	self application schedule: [
-			(ReRenameClassDriver newApplication: self owner application)
-				oldName: self selectedEntityName asSymbol;
-				model: RBBrowserEnvironment new;
-				scopes: { RBBrowserEnvironment new };
-				runRefactoring.
-			listPresenter selectPath: parentPath scrollToSelection: true ]
+		(ReRenameClassDriver newApplication: self owner application)
+			oldName: self selectedEntityName asSymbol;
+			model: RBBrowserEnvironment new;
+			scopes: { RBBrowserEnvironment new };
+			runRefactoring.
+		listPresenter selectPath: parentPath scrollToSelection: true ]
 ]
 
 { #category : 'actions' }
 PulsarBaseProjectView >> doRenameSelectedEntity [
 
-	listPresenter selectedItem ifNotNil: [ :aModel | (PulsarProjectRenameModel on: self) visit: aModel realModel ]
+	listPresenter selectedItem ifNotNil: [ :aModel | 
+		(PulsarProjectRenameModel on: self) visit: aModel realModel ]
 ]
 
 { #category : 'actions' }
@@ -195,17 +196,21 @@ PulsarBaseProjectView >> doRequestNewClass [
 	parent := self closestEntityInPathMatching: [ :each | each isPackageOrTag ].
 	parent ifNil: [ ^ self ].
 
-	self notifyActivateEntity: (PvClassModel newEnvironment: self model environmentModel beNewClassWithParent: parent)
+	self notifyActivateEntity: (PvClassModel 
+		newEnvironment: self model environmentModel 
+		beNewClassWithParent: parent)
 ]
 
 { #category : 'actions' }
 PulsarBaseProjectView >> doRequestNewTrait [
-
 	| parent |
+	
 	parent := self closestEntityInPathMatching: [ :each | each isPackageOrTag ].
 	parent ifNil: [ ^ self ].
 
-	self notifyActivateEntity: (PvClassModel newEnvironment: self model environmentModel beNewTraitWithParent: parent)
+	self notifyActivateEntity: (PvClassModel 
+		newEnvironment: self model environmentModel 
+		beNewTraitWithParent: parent)
 ]
 
 { #category : 'private' }
@@ -222,8 +227,8 @@ PulsarBaseProjectView >> entitySelected: anEntity [
 
 { #category : 'events' }
 PulsarBaseProjectView >> eventBehaviorAdded: anAnnouncement [
-
 	| classAdded path |
+	
 	classAdded := anAnnouncement classAdded.
 	path := self model findPathForClass: classAdded.
 	path ifNotNil: [ self refreshProjectPath: path ]
@@ -231,8 +236,8 @@ PulsarBaseProjectView >> eventBehaviorAdded: anAnnouncement [
 
 { #category : 'events' }
 PulsarBaseProjectView >> eventBehaviorRemoved: anAnnouncement [
-
 	| classRemoved path |
+	
 	classRemoved := anAnnouncement classRemoved.
 	path := self model findPathForPackage: classRemoved package.
 	self refreshProjectPath: path
@@ -240,8 +245,8 @@ PulsarBaseProjectView >> eventBehaviorRemoved: anAnnouncement [
 
 { #category : 'events' }
 PulsarBaseProjectView >> eventBehaviorRenamed: anAnnouncement [
-
 	| classRenamed path |
+	
 	classRenamed := anAnnouncement classRenamed.
 	path := self model findPathForClass: classRenamed.
 	path ifNotNil: [ self refreshProjectPath: path ]
@@ -249,13 +254,15 @@ PulsarBaseProjectView >> eventBehaviorRenamed: anAnnouncement [
 
 { #category : 'events' }
 PulsarBaseProjectView >> eventEditorActivated: anAnnouncement [
-
 	| editorModel classModel path |
+	
 	editorModel := anAnnouncement value model.
 	editorModel includesClassModel ifFalse: [ ^ self ].
 
 	classModel := editorModel asClassModel.
-	(listPresenter selectedItem isNotNil and: [ listPresenter selectedItem realModel = classModel ]) ifTrue: [ ^ self ].
+	(listPresenter selectedItem isNotNil 
+		and: [ listPresenter selectedItem realModel = classModel ]) 
+		ifTrue: [ ^ self ].
 
 	path := self model findPathForClassModel: classModel.
 	path ifNil: [ ^ self ].
@@ -272,7 +279,9 @@ PulsarBaseProjectView >> filterStartingSize [
 { #category : 'selection' }
 PulsarBaseProjectView >> hasSelectedClass [
 
-	^ self selectedEntity ifNotNil: [ :anEntityModel | anEntityModel realModel isClassModel ] ifNil: [ false ]
+	^ self selectedEntity 
+		ifNotNil: [ :anEntityModel | anEntityModel realModel isClassModel ] 
+		ifNil: [ false ]
 ]
 
 { #category : 'selection' }
@@ -292,54 +301,50 @@ PulsarBaseProjectView >> initialize [
 PulsarBaseProjectView >> initializeFilter [
 
 	filterListPresenter := self newEasyListView
-		                       addStyle: 'stList';
-		                       addStyle: 'pulsarProjectFilterList';
-		                       display: [ :aModel | aModel name ];
-		                       rowPresenterClass: PulsarProjectNodeRow;
-		                       actions: (SpActionGroup new
-				                        add: self actions;
-				                        addDynamicGroup: #dynamic with: [ :group | group add: self refactorActions ];
-				                        addShortcutWith: [ :action |
-						                        action
-							                        shortcutKey: KeyboardKey right asKeyCombination;
-							                        action: [ self activateContextPopover ] ];
-				                        addShortcutWith: [ :action |
-						                        action
-							                        shortcutKey: KeyboardKey left asKeyCombination | KeyboardKey escape asKeyCombination;
-							                        action: [ self deactivateContextPopover ] ];
-				                        yourself);
-		                       yourself.
+		addStyle: 'stList';
+		addStyle: 'pulsarProjectFilterList';
+		display: [ :aModel | aModel name ];
+		rowPresenterClass: PulsarProjectNodeRow;
+		actions: (SpActionGroup new
+			add: self actions;
+			addDynamicGroup: #dynamic with: [ :group | group add: self refactorActions ];
+			addShortcutWith: [ :action | action
+		        shortcutKey: KeyboardKey right asKeyCombination;
+		        action: [ self activateContextPopover ] ];
+			addShortcutWith: [ :action | action
+		        shortcutKey: KeyboardKey left asKeyCombination | KeyboardKey escape asKeyCombination;
+		        action: [ self deactivateContextPopover ] ];
+			yourself);
+		yourself.
 
 	filterListPresenter hide.
 
 	filterInputPresenter := self newTextInput
-		                        addStyle: 'flat';
-		                        placeholder: ('Filter ({1}+ characters)...' format: { self filterStartingSize });
-		                        yourself
+		addStyle: 'flat';
+		placeholder: ('Filter ({1}+ characters)...' format: { self filterStartingSize });
+		yourself
 ]
 
 { #category : 'initialization' }
 PulsarBaseProjectView >> intializeProjectTree [
 
 	listPresenter := self newEasyTreeListView
-		                 addStyle: 'stTree';
-		                 addStyle: 'pulsarProjectTree';
-		                 children: [ :aModel | aModel children ];
-		                 rowPresenterClass: PulsarProjectNodeRow;
-		                 searchMatching: [ :anEntity :pattern | anEntity matches: pattern ];
-		                 actions: (SpActionGroup new
-				                  add: self actions;
-				                  addDynamicGroup: #dynamic with: [ :group | group add: self refactorActions ];
-				                  addShortcutWith: [ :action |
-						                  action
-							                  shortcutKey: KeyboardKey right asKeyCombination;
-							                  action: [ self activateContextPopover ] ];
-				                  addShortcutWith: [ :action |
-						                  action
-							                  shortcutKey: KeyboardKey left asKeyCombination | KeyboardKey escape asKeyCombination;
-							                  action: [ self deactivateContextPopover ] ];
-				                  yourself);
-		                 yourself
+		addStyle: 'stTree';
+		addStyle: 'pulsarProjectTree';
+		children: [ :aModel | aModel children ];
+		rowPresenterClass: PulsarProjectNodeRow;
+		searchMatching: [ :anEntity :pattern | anEntity matches: pattern ];
+		actions: (SpActionGroup new
+			add: self actions;
+			addDynamicGroup: #dynamic with: [ :group | group add: self refactorActions ];
+			addShortcutWith: [ :action | action
+				shortcutKey: KeyboardKey right asKeyCombination;
+				action: [ self activateContextPopover ] ];
+			addShortcutWith: [ :action | action
+				shortcutKey: KeyboardKey left asKeyCombination | KeyboardKey escape asKeyCombination;
+				action: [ self deactivateContextPopover ] ];
+			yourself);
+		yourself
 ]
 
 { #category : 'events' }
@@ -408,18 +413,18 @@ PulsarBaseProjectView >> toolbarPresenter [
 PulsarBaseProjectView >> updateFilterWith: aString [
 
 	(aString isEmptyOrNil or: [ aString size < self filterStartingSize ]) ifTrue: [
-			self application defer: [
-					listPresenter show.
-					filterListPresenter hide ].
-			^ self ].
+		self application defer: [
+			listPresenter show.
+			filterListPresenter hide ].
+		^ self ].
 
 	self scheduleTask: [
-			| items |
-			items := self model filterWith: aString.
-			self application defer: [
-					listPresenter hide.
-					filterListPresenter show.
-					filterListPresenter items: items ] ]
+		| items |
+		items := self model filterWith: aString.
+		self application defer: [
+			listPresenter hide.
+			filterListPresenter show.
+			filterListPresenter items: items ] ]
 ]
 
 { #category : 'updating' }

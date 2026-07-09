@@ -14,38 +14,39 @@ Class {
 
 { #category : 'actions-definition' }
 PulsarSingleProjectView >> defineProjectActionsOn: aBuilder [
-
 	<dockActions>
-	aBuilder addGroup: #project with: [ :group |
-			group
-				priority: 100;
-				name: 'Project';
-				beDisplayedAsSubMenu;
-				addActionWith: [ :action |
-						action
-							priority: 110;
-							name: 'Refresh project';
-							description: 'Refresh this project (reload configuration)';
-							iconName: 'refresh';
-							action: [ self refreshProject ] ];
-				addActionWith: [ :action |
-						action
-							priority: 120;
-							name: 'Test Runner';
-							description: 'Open a Test Runner on this Project';
-							iconName: 'testRunner';
-							action: [
-								self scheduleTask: [ (PulsarTestRunnerBrowser newApplication: self application model: self model newTestRunnerModel) open ] ] ] ]
+	
+	aBuilder addGroup: #project with: [ :group | group
+		priority: 100;
+		name: 'Project';
+		beDisplayedAsSubMenu;
+		addActionWith: [ :action | action
+			priority: 110;
+			name: 'Refresh project';
+			description: 'Refresh this project (reload configuration)';
+			iconName: 'refresh';
+			action: [ self refreshProject ] ];
+		addActionWith: [ :action | action
+			priority: 120;
+			name: 'Test Runner';
+			description: 'Open a Test Runner on this Project';
+			iconName: 'testRunner';
+			action: [
+				self scheduleTask: [ 
+					(PulsarTestRunnerBrowser 
+						newApplication: self application 
+						model: self model newTestRunnerModel) 
+						open ] ] ] ]
 ]
 
 { #category : 'actions' }
 PulsarSingleProjectView >> doNewPackage [
-
 	| packageName package |
+	
 	packageName := self application newRequest
-		               title: 'New package';
-		               message: 'Package name';
-		               openModalWithParent: self window.
+		title: 'New package';
+		message: 'Package name';
+		openModalWithParent: self window.
 	packageName ifNil: [ ^ self ].
 
 	package := self model addPackageNamed: packageName.
@@ -55,12 +56,12 @@ PulsarSingleProjectView >> doNewPackage [
 
 { #category : 'actions' }
 PulsarSingleProjectView >> doNewPackageTag [
-
 	| packageName parents package packageTag |
+	
 	packageName := self application newRequest
-		               title: 'New tag';
-		               label: 'Tag name';
-		               openModalWithParent: self window.
+		title: 'New tag';
+		label: 'Tag name';
+		openModalWithParent: self window.
 	packageName ifNil: [ ^ self ].
 
 	parents := self closestPathInPathMatching: [ :each | each isPackage ].
@@ -85,10 +86,10 @@ PulsarSingleProjectView >> initializePresenters [
 	toolbarPresenter := self instantiate: PulsarToolbarPresenter.
 	toolbarPresenter actions: (self actions actionsFor: #project).
 	toolbarPresenter addPresenter: (self newMenuButton
-			 addStyle: 'flat';
-			 icon: (self iconNamed: 'menu');
-			 actions: (self actions actionsForAll: #( new extra ));
-			 yourself).
+		addStyle: 'flat';
+		icon: (self iconNamed: 'menu');
+		actions: (self actions actionsForAll: #( new extra ));
+		yourself).
 
 	self intializeProjectTree.
 	self initializeFilter
@@ -114,17 +115,17 @@ PulsarSingleProjectView >> refreshProject [
 
 { #category : 'events' }
 PulsarSingleProjectView >> refreshProjectPath: aPath [
-
 	| pathToPackage |
+	
 	aPath ifNil: [ ^ self ].
 
 	pathToPackage := aPath first: (aPath size min: 1).
 	(listPresenter isExpanded: pathToPackage) ifTrue: [
-			self application defer: [
-					mutex critical: [
-							listPresenter
-								collapsePath: pathToPackage;
-								expandPath: aPath ] ] ]
+		self application defer: [
+			mutex critical: [
+				listPresenter
+					collapsePath: pathToPackage;
+					expandPath: aPath ] ] ]
 ]
 
 { #category : 'snapshot' }
