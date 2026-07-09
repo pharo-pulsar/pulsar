@@ -180,13 +180,14 @@ PulsarTestRunnerTestsView >> updateFilterWith: aString [
 PulsarTestRunnerTestsView >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
-	
+
 	self scheduleTask: [
-		| selected |
-	
-		self application defer: [ 
-			selected := listPresenter selectedItem.
-			listPresenter roots: self model suites.
-			expansions do: [ :each | listPresenter expandItem: each ].
-			listPresenter selectItem: selected ] ]
+			| selected |
+			self application defer: [
+					selected := self model consumePendingSelection ifNil: [ listPresenter selectedItem ].
+					listPresenter roots: self model suites.
+					expansions do: [ :each | listPresenter expandItem: each ].
+					selected ifNotNil: [
+							selected parentModel ifNotNil: [ :parent | listPresenter expandItem: parent ].
+							listPresenter selectItem: selected ] ] ]
 ]

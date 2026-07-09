@@ -1,20 +1,61 @@
 Extension { #name : 'PvBaseModel' }
 
 { #category : '*Pulsar-Tool-TestRunner' }
-PvBaseModel >> findTestRunnerProjectIn: anApplication [
-	"Search all windows of anApplication for one containing self
-	 in its project tree. Returns the PulsarBaseProjectModel root,
-	 or nil if self is not part of any opened project."
+PvBaseModel >> findTestRunnerProjectIn: aContext [
+	"Find the PulsarBaseProjectModel containing self, checking the
+	 context's own window first, then falling back to all application windows."
+	| window |
+	
+	aContext isPresenter ifFalse: [ ^ nil ].
+	
+	window := aContext window.
+	window isPulsarBrowser ifTrue: [
+		| root |
+		root := self findTestRunnerRootInWindow: window.
+		root ifNotNil: [ ^ root ] ].
 
-	anApplication windows 
-		select: [ :eachWindow | eachWindow isPulsarBrowser ]
+	aContext application windows 
+		reject: [ :eachWindow | eachWindow = window ]
 		thenDo: [ :eachWindow |
-			| projectView |
-			projectView := eachWindow findPresenterClass: PulsarProjectView.
-			projectView ifNotNil: [
+			eachWindow isPulsarBrowser ifTrue: [
 				| root |
-				root := projectView model findRootForEntity: self.
-				root isProject ifTrue: [ ^ root ] ] ].
-
+				root := self findTestRunnerRootInWindow: eachWindow.
+				root ifNotNil: [ ^ root ] ] ].
+	
 	^ nil
+]
+
+{ #category : '*Pulsar-Tool-TestRunner' }
+PvBaseModel >> findTestRunnerRootInWindow: aWindow [
+	| projectView root |
+	
+	projectView := aWindow findPresenterClass: PulsarProjectView.
+	projectView ifNil: [ ^ nil ].
+	root := projectView model findRootForEntity: self.
+	^ root isProject
+		  ifTrue: [ root ]
+		  ifFalse: [ nil ]
+]
+
+{ #category : '*Pulsar-Tool-TestRunner' }
+PvBaseModel >> openTestRunnerInContext: aContext [
+	| projectModel |
+	
+	projectModel := self findTestRunnerProjectIn: aContext.
+	projectModel ifNil: [ ^ self ].
+	
+	aContext scheduleTask: [
+		|  runnerModel |
+		runnerModel := PulsarTestRunnerModel newEnvironment: self environmentModel entity: projectModel.
+		self prepareRunnerSelection: runnerModel.
+		(PulsarTestRunnerBrowser 
+			newApplication: aContext application 
+			model: runnerModel) 
+			open ]
+]
+
+{ #category : '*Pulsar-Tool-TestRunner' }
+PvBaseModel >> prepareRunnerSelection: aRunnerModel [
+
+	"do nothing. Subclasses can define a selection"
 ]

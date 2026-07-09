@@ -20,23 +20,14 @@ PvClassModel >> defineTestRunnerDecorationActionsOn: aBuilder [
 			name: 'Open Test Runner';
 			description: ('Open Test Runner for project containing {1}' format: { self name });
 			iconName: 'testRunner';
-			actionEnabled: [ :aContext | (self findTestRunnerProjectIn: aContext application) notNil ];
-			action: [ :aContext |
-				| projectModel |
-				projectModel := self findTestRunnerProjectIn: aContext application.
-				projectModel ifNotNil: [
-					aContext scheduleTask: [
-						(PulsarTestRunnerBrowser
-							 newApplication: aContext application
-							 model: (PulsarTestRunnerModel 
-							 	newEnvironment: self environmentModel 
-							 	entity: projectModel)) 
-						open 
-					] 
-				] 
-			] 
-		] 
-	]
+			actionEnabled: [ :aContext | (self findTestRunnerProjectIn: aContext) isNotNil ];
+			action: [ :aContext | self openTestRunnerInContext: aContext ] ] ]
+]
+
+{ #category : '*Pulsar-Tool-TestRunner' }
+PvClassModel >> prepareRunnerSelection: aRunnerModel [
+
+	aRunnerModel selectSuiteFromModel: self
 ]
 
 { #category : '*Pulsar-Tool-TestRunner' }

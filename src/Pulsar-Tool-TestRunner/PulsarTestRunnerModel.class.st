@@ -8,7 +8,8 @@ Class {
 	#superclass : 'PvBaseModel',
 	#instVars : [
 		'suites',
-		'mutex'
+		'mutex',
+		'pendingSelection'
 	],
 	#category : 'Pulsar-Tool-TestRunner-Model',
 	#package : 'Pulsar-Tool-TestRunner',
@@ -28,6 +29,15 @@ PulsarTestRunnerModel >> buildSuites [
 						ifTrue: [ testClasses add: eachClass ] ] ].
 	^ (testClasses sorted: #name ascending) collect: [ :eachClass |
 		  PulsarTestSuite newEnvironment: self environmentModel entity: eachClass ]
+]
+
+{ #category : 'selection' }
+PulsarTestRunnerModel >> consumePendingSelection [
+
+	| value |
+	value := pendingSelection.
+	pendingSelection := nil.
+	^ value
 ]
 
 { #category : 'running' }
@@ -150,6 +160,24 @@ PulsarTestRunnerModel >> runSuite: aTestSuite for: caseCollection announcingTo: 
         executeSuite: aTestSuite
         announcingTo: aNotificationCenter
         inMode: ExecutionMode runTestsMode
+]
+
+{ #category : 'selection' }
+PulsarTestRunnerModel >> selectCaseFromModel: aMethodModel [
+	"Set pendingSelection to the PulsarTestCase matching aMethodModel's entity."
+
+	| targetClass targetSelector |
+	targetClass := aMethodModel methodClass.
+	targetSelector := aMethodModel entity selector.
+	pendingSelection := (self suites detect: [ :each | each entity = targetClass ] ifNone: [ nil ]) ifNotNil: [ :suite |
+		                    suite children detect: [ :each | each entity selector = targetSelector ] ifNone: [ nil ] ]
+]
+
+{ #category : 'selection' }
+PulsarTestRunnerModel >> selectSuiteFromModel: aClassModel [
+	"Set pendingSelection to the PulsarTestSuite matching aClassModel's entity."
+
+	pendingSelection := self suites detect: [ :each | each entity = aClassModel entity ] ifNone: [ nil ]
 ]
 
 { #category : 'running' }
