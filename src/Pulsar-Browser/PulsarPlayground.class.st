@@ -1,8 +1,6 @@
 Class {
 	#name : 'PulsarPlayground',
 	#superclass : 'PulsarBaseView',
-	#traits : 'PulsarTSnapshot',
-	#classTraits : 'PulsarTSnapshot classTrait',
 	#instVars : [
 		'codePresenter',
 		'toolbarPresenter',
