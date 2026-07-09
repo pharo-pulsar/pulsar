@@ -148,6 +148,18 @@ PvClassHierarchyNode >> name [
 	^ self element name
 ]
 
+{ #category : 'instance creation' }
+PvClassHierarchyNode >> newActivationAnnouncement [
+
+	^ self realModel newActivationAnnouncement
+]
+
+{ #category : 'instance creation' }
+PvClassHierarchyNode >> newSelectionAnnouncement [
+
+	^ self realModel newSelectionAnnouncement
+]
+
 { #category : 'accessing' }
 PvClassHierarchyNode >> parent [
 

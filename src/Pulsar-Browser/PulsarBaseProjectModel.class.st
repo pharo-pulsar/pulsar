@@ -32,6 +32,17 @@ PulsarBaseProjectModel >> children [
 { #category : 'private - definitions' }
 PulsarBaseProjectModel >> defineActionsOn: aBuilder [
 	<dockActions>
+	
+	aBuilder addGroup: #tools with: [ :group | group
+		name: 'Tools';
+		beDisplayedAsGroup;
+		priority: 900;
+		addActionWith: [ :action | action
+			name: 'Browse in panel';
+			iconName: 'project';
+			description: 'Open this project in a focused panel';
+			action: [ :aContext | 
+				aContext notificationCenter announce: (PulsarRequestProjectAnnouncement on: self)  ] ] ]
 ]
 
 { #category : 'private - definitions' }
@@ -58,6 +69,45 @@ PulsarBaseProjectModel >> dependencyModels [
 PulsarBaseProjectModel >> editorClass [
 
 	^ PvProjectEditorView
+]
+
+{ #category : 'updating' }
+PulsarBaseProjectModel >> filterWith: aString [
+
+	^ (self environmentModel classesMatching: aString) collect: [ :each |
+		  PvClassModel newEnvironment: self environmentModel entity: each ]
+]
+
+{ #category : 'accessing' }
+PulsarBaseProjectModel >> findPathForClass: aClass [
+
+	^ self findPathForClassModel: (PvClassModel 
+		newEnvironment: self environmentModel 
+		entity: aClass)
+]
+
+{ #category : 'accessing' }
+PulsarBaseProjectModel >> findPathForClassModel: aClassModel [
+	| path |
+	
+	path := self
+		pathTo: {
+			aClassModel packageName.
+			aClassModel packageTagName }
+		in: self children.
+	path ifNotEmpty: [ ^ (path collect: #value) , (self findRecursivelyPathForClassModel: aClassModel inNode: path last key) ].
+
+	^ nil
+]
+
+{ #category : 'accessing' }
+PulsarBaseProjectModel >> findPathForPackage: aPackage [
+	| path |
+	
+	path := self pathTo: { aPackage name } in: self children.
+	path ifNotEmpty: [ ^ path collect: #value ].
+
+	^ nil
 ]
 
 { #category : 'accessing' }

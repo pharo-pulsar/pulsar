@@ -5,7 +5,8 @@ Class {
 	#classTraits : 'PulsarTEditor classTrait',
 	#instVars : [
 		'baselineMapPresenter',
-		'dependenciesPresenter'
+		'dependenciesPresenter',
+		'projectViewPresenter'
 	],
 	#category : 'Pulsar-Browser-View-Project',
 	#package : 'Pulsar-Browser',
@@ -23,6 +24,7 @@ PulsarProjectEditor >> defaultLayout [
 
 	^ SpTabLayout new
 		  add: baselineMapPresenter label: 'Baseline Map';
+		  add: projectViewPresenter label: 'Packages';
 		  add: dependenciesPresenter label: 'Dependencies';
 		  yourself
 ]
@@ -34,9 +36,9 @@ PulsarProjectEditor >> initializePresenters [
 
 	baselineMapPresenter := self instantiate: PulsarProjectBaselineMapPresenter.
 
-	dependenciesPresenter := self 
-		instantiate: PulsarProjectDependenciesPresenter
-		on: self model
+	projectViewPresenter := self instantiate: PulsarSingleProjectView on: self model.
+
+	dependenciesPresenter := self instantiate: PulsarProjectDependenciesPresenter on: self model
 ]
 
 { #category : 'initialization' }
@@ -54,11 +56,18 @@ PulsarProjectEditor >> notifyEditorActivated [
 ]
 
 { #category : 'initialization' }
+PulsarProjectEditor >> registerToBrowser: aPulsarBrowser [
+
+	super registerToBrowser: aPulsarBrowser.
+	projectViewPresenter registerToBrowser: aPulsarBrowser
+]
+
+{ #category : 'updating' }
 PulsarProjectEditor >> updatePresenter [
 
+	projectViewPresenter updatePresenter.
 	dependenciesPresenter updatePresenter.
-	self model isVolatileProject
-		ifFalse: [ baselineMapPresenter baselineClass: self model entity ].
+	self model isVolatileProject ifFalse: [ baselineMapPresenter baselineClass: self model entity ].
 
 	self withPanelWidgetDo: [ :aWindow | aWindow title: self model name ]
 ]

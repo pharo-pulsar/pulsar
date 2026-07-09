@@ -126,6 +126,18 @@ PvBaseModel >> entity: anObject [
 	entity := anObject
 ]
 
+{ #category : 'private' }
+PvBaseModel >> findRecursivelyPathForClassModel: aClassModel inNode: aNode [
+
+	aNode children withIndexDo: [ :each :index |
+		each realModel = aClassModel ifTrue: [ ^ { index } ].
+		(self 
+			findRecursivelyPathForClassModel: aClassModel inNode: each) 
+			ifNotEmpty: [ :subPath | ^ { index } , subPath ] ].
+
+	^ #()
+]
+
 { #category : 'testing' }
 PvBaseModel >> hasEditor [
 
@@ -235,6 +247,20 @@ PvBaseModel >> parentModel [
 PvBaseModel >> parentModel: aParentlModel [
 
 	parentModel := aParentlModel
+]
+
+{ #category : 'private' }
+PvBaseModel >> pathTo: aPath in: aCollection [
+	| segment |
+	
+	aPath ifEmpty: [ ^ #() ].
+
+	segment := aPath first.
+	aCollection withIndexDo: [ :each :index |
+		each name = segment 
+			ifTrue: [ ^ { (each -> index) } , (self pathTo: aPath allButFirst in: each children) ] ].
+
+	^ #()
 ]
 
 { #category : 'accessing - ui' }
