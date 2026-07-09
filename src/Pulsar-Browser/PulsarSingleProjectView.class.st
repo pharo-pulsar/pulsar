@@ -7,6 +7,7 @@ Class {
 	#name : 'PulsarSingleProjectView',
 	#superclass : 'PulsarBaseProjectView',
 	#traits : 'PulsarTEditor',
+	#classTraits : 'PulsarTEditor classTrait',
 	#category : 'Pulsar-Browser-View-Project',
 	#package : 'Pulsar-Browser',
 	#tag : 'View-Project'
