@@ -138,9 +138,23 @@ PulsarCLIApplication >> executeSubcommand [
 
 { #category : 'execution' }
 PulsarCLIApplication >> executeUpdate [
+	| success |
 
-	PulsarUpdater update.
-	self exitSuccess
+	logger enable
+		logLevelWarning;
+		sendToStdout.
+
+	success := true.
+	[ PulsarUpdater update ]
+	on: Error 
+	do: [ :e |
+		logger error: e.
+		success := false ].
+	
+	success
+		ifTrue: [ self exitSuccess ]
+		ifFalse: [ self exitFailure: 'Update errored.' ]
+	
 ]
 
 { #category : 'initialization' }

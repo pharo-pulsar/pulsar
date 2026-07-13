@@ -33,7 +33,8 @@ PulsarUpdater >> loadScriptUrl [
 { #category : 'private' }
 PulsarUpdater >> saveImage [
 
-	Smalltalk snapshot: true andQuit: false
+	[ Smalltalk snapshot: true andQuit: false ] fork.
+	10 milliSeconds wait
 ]
 
 { #category : 'updating' }
@@ -41,7 +42,11 @@ PulsarUpdater >> update [
 
 	OpalCompiler evaluate: self updateScript.
 	
-	self saveImage
+	logger info: 'Saving image...'.
+	
+	self saveImage.
+	
+	logger info: 'Update finished.'.
 ]
 
 { #category : 'private' }
