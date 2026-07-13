@@ -56,7 +56,7 @@ PulsarLLMOpenCodeModel >> performConnectTo: aTerminalPresenter [
 	aTerminalPresenter 
 		spawnAsync: command trimBoth 
 		workingDirectory: FileLocator imageDirectory fullName 
-		arguments: #("'--port' '4096' '--hostname' '127.0.0.1'")
+		arguments: #("'--port' '4096'")
 ]
 
 { #category : 'actions' }
