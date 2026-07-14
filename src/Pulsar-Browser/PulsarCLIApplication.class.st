@@ -154,7 +154,6 @@ PulsarCLIApplication >> executeUpdate [
 	success
 		ifTrue: [ self exitSuccess ]
 		ifFalse: [ self exitFailure: 'Update errored.' ]
-	
 ]
 
 { #category : 'initialization' }

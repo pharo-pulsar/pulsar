@@ -61,19 +61,44 @@ MCPToolPulsarDebugger >> defaultName [
 	^ 'pulsar-debugger'
 ]
 
-{ #category : 'defaults' }
+{ #category : 'schema' }
 MCPToolPulsarDebugger >> defaultOutputSchema [
 
+	| debuggerItemSchema stackItemSchema |
+	debuggerItemSchema := MCPStructureProperties new
+		                      type: 'object';
+		                      properties: {
+				                      (self schemaPropertyNamed: 'windowIndex' type: 'integer' description: '1-based debugger window index.').
+				                      (self schemaPropertyNamed: 'name' type: 'string' description: 'Debugger window title.').
+				                      (self schemaPropertyNamed: 'contextCount' type: 'integer' description: 'Number of stack contexts.').
+				                      (self schemaPropertyNamed: 'topContext' type: 'string' description: 'Topmost stack context description.') };
+		                      required: #( 'windowIndex' 'name' 'contextCount' );
+		                      additionalProperties: false;
+		                      yourself.
+	stackItemSchema := MCPStructureProperties new
+		                   type: 'object';
+		                   properties: {
+				                   (self
+					                    schemaPropertyNamed: 'name'
+					                    type: 'string'
+					                    description: 'Method name and class within the stack context.').
+				                   (self
+					                    schemaPropertyNamed: 'methodClass'
+					                    type: 'string'
+					                    description: 'The class defining this stack method.').
+				                   (self schemaPropertyNamed: 'methodName' type: 'string' description: 'The method selector string.').
+				                   (self schemaPropertyNamed: 'sourceCode' type: 'string' description: 'Source code for this stack context.') };
+		                   required: #( 'name' 'methodClass' 'methodName' );
+		                   additionalProperties: false;
+		                   yourself.
 	^ self
 		  standardOutputSchemaForDataProperties: {
-				  (self
-					   stringArraySchemaNamed: 'debuggers'
-					   description: 'List of debugger windows when operation=list.'
-					   itemDescription: 'A debugger window entry.').
-				  (self
-					   stringArraySchemaNamed: 'stack'
-					   description: 'Stack trace entries when operation=inspect.'
-					   itemDescription: 'A stack context entry.').
+				  ((self schemaPropertyNamed: 'debuggers' type: 'array' description: 'List of debugger windows when operation=list.')
+					   items: debuggerItemSchema;
+					   yourself).
+				  ((self schemaPropertyNamed: 'stack' type: 'array' description: 'Stack trace entries when operation=inspect.')
+					   items: stackItemSchema;
+					   yourself).
 				  (self schemaPropertyNamed: 'result' type: 'string' description: 'Step result or evaluated expression result.') }
 		  required: #(  )
 ]
@@ -157,27 +182,27 @@ MCPToolPulsarDebugger >> formattedDataContentBlocks: aDictionary [
 	^ #(  )
 ]
 
-{ #category : 'private' }
+{ #category : 'operations' }
 MCPToolPulsarDebugger >> inspectDebuggerAt: windowIndex contextIndex: contextIndex [
 	"Inspect the stack of a debugger, or a single context if contextIndex is provided."
 
 	| model stack contexts |
 	model := self debuggerModelAt: windowIndex.
 	stack := model stack.
-	contexts := (contextIndex > 0
-		             ifTrue: [
-				             { (stack
-					              at: contextIndex
-					              ifAbsent: [
-					              ^ self errorResultText: 'contextIndex out of range.' details: { (#max -> stack size) } asDictionary ]) } ]
-		             ifFalse: [ stack ]) collect: [ :eachContext |
-			            | method |
-			            method := eachContext realMethod.
-			            {
-				            (#name -> eachContext name).
-				            (#methodClass -> eachContext methodClassName).
-				            (#methodName -> (method ifNotNil: [ method selector asString ] ifNil: [ '' ])).
-				            (#sourceCode -> eachContext sourceCode) } asDictionary ].
+	contexts := ((contextIndex > 0
+		              ifTrue: [
+				              { (stack
+					               at: contextIndex
+					               ifAbsent: [
+					               ^ self errorResultText: 'contextIndex out of range.' details: { (#max -> stack size) } asDictionary ]) } ]
+		              ifFalse: [ stack ]) collect: [ :eachContext |
+			             | method |
+			             method := eachContext realMethod.
+			             {
+				             (#name -> eachContext name).
+				             (#methodClass -> eachContext methodClassName).
+				             (#methodName -> (method ifNotNil: [ method selector asString ] ifNil: [ '' ])).
+				             (#sourceCode -> eachContext sourceCode) } asDictionary ]) asArray.
 	^ self
 		  successResultText: 'Debugger ' , windowIndex printString , ' ' , (contextIndex > 0
 				   ifTrue: [ 'context ' , contextIndex printString ]
