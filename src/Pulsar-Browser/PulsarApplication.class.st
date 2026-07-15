@@ -657,9 +657,7 @@ PulsarApplication >> windowWillClose: aPulsarWindow [
 		anyEditorDirty ifTrue: [
 			messages add: ('There are modified editors: ', (String cr join: modifiedEditors)) ].
 		
-		self flag: #TODO. "check last snapshot and see if there are changes to save. This line is not working 
-		(it works just at the startup actions, hence is not useful for us)"
-		lostChanges  := EpLostChangesDetector new hasLostChanges.
+		lostChanges := EpMonitor current log head content class ~= EpSessionSnapshot.
 		lostChanges ifTrue: [
 			messages add: 'The image has unsaved changes.' ].
 		
