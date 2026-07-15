@@ -657,7 +657,11 @@ PulsarApplication >> windowWillClose: aPulsarWindow [
 		anyEditorDirty ifTrue: [
 			messages add: ('There are modified editors: ', (String cr join: modifiedEditors)) ].
 		
-		lostChanges := EpMonitor current log head content class ~= EpSessionSnapshot.
+		lostChanges := [ 
+				EpMonitor current log head content class ~= EpSessionSnapshot ] 
+			on: Error 
+			do: [ :e | false ].
+		
 		lostChanges ifTrue: [
 			messages add: 'The image has unsaved changes.' ].
 		
