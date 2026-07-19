@@ -29,6 +29,13 @@ PulsarTEditor classSide >> defineWindowActionsOn: aBuilder [
 ]
 
 { #category : 'testing' }
+PulsarTEditor >> canBeListed [
+	"indicated when this editor can be listed in the editor stack"
+
+	^ true
+]
+
+{ #category : 'testing' }
 PulsarTEditor >> isEditor [
 
 	^ true

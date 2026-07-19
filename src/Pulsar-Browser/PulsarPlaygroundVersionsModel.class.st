@@ -1,8 +1,8 @@
 Class {
 	#name : 'PulsarPlaygroundVersionsModel',
 	#superclass : 'Object',
-	#traits : 'PulsarTModel + PulsarTModelSnapshot + PulsarTEditable',
-	#classTraits : 'PulsarTModel classTrait + PulsarTModelSnapshot classTrait + PulsarTEditable classTrait',
+	#traits : 'PulsarTModel + PulsarTModelSnapshot + PulsarTModelEditable',
+	#classTraits : 'PulsarTModel classTrait + PulsarTModelSnapshot classTrait + PulsarTModelEditable classTrait',
 	#instVars : [
 		'page'
 	],

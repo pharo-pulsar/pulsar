@@ -109,6 +109,14 @@ PulsarPackageEditor >> doSubmit: aString [
 ]
 
 { #category : 'events' }
+PulsarPackageEditor >> eventModelRemoved: anAnnouncememnt [ 
+
+	anAnnouncememnt value = self model ifFalse: [ ^ self ].
+
+	self withPanelWidgetDo: [ :aPanelWindow | aPanelWindow close ]
+]
+
+{ #category : 'events' }
 PulsarPackageEditor >> eventThemeChanged: ann [
 
 	super eventThemeChanged: ann.

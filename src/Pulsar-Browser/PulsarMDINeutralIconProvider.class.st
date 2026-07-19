@@ -286,6 +286,9 @@ PulsarMDINeutralIconProvider >> createTable [
 		('testResultPass'    	'check-circle'  				'#1a7f37' '#57e389')
 		('testResultFailure' 	'alert'         				'#9a6700' '#f6d32d')
 		('testResultError'   	'close-circle'  				'#cf222e' '#ff6b6b') 
+		
+		"Preview editor"
+		('preview' 				'compass-outline')
 )
 ]
 

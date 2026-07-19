@@ -1,8 +1,8 @@
 Class {
 	#name : 'PulsarVersionsModel',
 	#superclass : 'PvBaseModel',
-	#traits : 'PulsarTEditable',
-	#classTraits : 'PulsarTEditable classTrait',
+	#traits : 'PulsarTModelEditable',
+	#classTraits : 'PulsarTModelEditable classTrait',
 	#instVars : [
 		'ringDefinition',
 		'remoteVersions'
