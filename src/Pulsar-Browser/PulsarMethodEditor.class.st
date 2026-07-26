@@ -37,9 +37,18 @@ PulsarMethodEditor class >> defineActionsOn: aBuilder [
 			beDisplayedAsGroup;
 			addActionWith: [ :action | action 
 				name: 'Toggle link';
-				description: 'Toggle method selection link.', String cr, 'Link this editor with the method selection in the class outline.';
+				description: 
+					'Toggle method selection link.', String cr, 
+					'Link this editor with the method selection in the class outline.';
 				iconName: 'link';
-				action: [ :aContext | aContext doToggleSelectionLinkCommand: action ] ] ]
+				actionVisible: [ :aContext | aContext isEmbedded not];
+				action: [ :aContext | aContext doToggleSelectionLinkCommand: action ] ];
+			addActionWith: [ :action | action 
+				name: 'Attach editor in browser';
+				description: 'Attack this embedded editor in browser';
+				iconName: 'arrowDown';
+				actionVisible: [ :aContext | aContext isEmbedded ];
+				action: [ :aContext | aContext notificationCenter announce: aContext model newActivationAnnouncement ] ] ]
 ]
 
 { #category : 'visiting' }
