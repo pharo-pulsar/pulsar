@@ -40,3 +40,11 @@ PulsarTEditor >> isEditor [
 
 	^ true
 ]
+
+{ #category : 'testing' }
+PulsarTEditor >> isEmbedded [
+	"an editor is embeded if it is not contained into a panel widget directly"
+
+	self owner ifNil: [ ^ false ].
+	^ self owner isPanelWidget not
+]
