@@ -6,6 +6,8 @@ When the user navigates (selects) through entities, the preview editor adapts by
 Class {
 	#name : 'PulsarPreviewEditor',
 	#superclass : 'PulsarBaseView',
+	#traits : 'PulsarTEditor',
+	#classTraits : 'PulsarTEditor classTrait',
 	#instVars : [
 		'innerEditor'
 	],
@@ -22,7 +24,8 @@ PulsarPreviewEditor class >> defaultTitle [
 
 { #category : 'testing' }
 PulsarPreviewEditor >> canBeListed [
-
+	"no, the preview editor will not be shown at the stack editor list or alike"
+	
 	^ false
 ]
 
@@ -36,21 +39,14 @@ PulsarPreviewEditor >> defaultLayout [
 PulsarPreviewEditor >> eventModelSelected: anAnnouncement [
 	| selectedModel editorClass |
 	
-	selectedModel := anAnnouncement value.
-	selectedModel hasPulsarEditor ifFalse: [ ^ self ].
+	anAnnouncement value hasPulsarEditor ifFalse: [ ^ self ].
+
+	selectedModel := anAnnouncement value copy.
+	self model updateEntityWith: selectedModel.
 	editorClass := selectedModel pulsarEditorClass.
-	
 	innerEditor class == editorClass
 		ifTrue: [ innerEditor model: selectedModel ]
 		ifFalse: [ self replaceEditorWith: editorClass model: selectedModel ]
-]
-
-{ #category : 'initialization' }
-PulsarPreviewEditor >> initialize [
-
-	model := PulsarPreviewModel new.
-	super initialize.
-	
 ]
 
 { #category : 'initialization' }
@@ -59,14 +55,14 @@ PulsarPreviewEditor >> initializePanelWidget: aPanelWidgetPresenter [
 	super initializePanelWidget: aPanelWidgetPresenter.
 	aPanelWidgetPresenter 
 		pinned: true;
-		windowIcon: (self iconNamed: 'preview')
+		windowIcon: (self iconNamed: self panelPlacedIconName)
 ]
 
 { #category : 'initialization' }
 PulsarPreviewEditor >> initializePresenters [
 	"Nothing to add initially. The inner editor is added lazily on first model selection."
 
-	
+	self addStyle: 'pulsarPreviewEditor'
 ]
 
 { #category : 'initialization' }
@@ -75,7 +71,7 @@ PulsarPreviewEditor >> initializeWindow: aWindowPresenter [
 	super initializeWindow: aWindowPresenter.
 	aWindowPresenter 
 		title: self class defaultTitle;
-		windowIcon: (self iconNamed: 'preview')
+		windowIcon: self panelPlacedIconName
 ]
 
 { #category : 'private' }
@@ -96,7 +92,9 @@ PulsarPreviewEditor >> replaceEditorWith: editorClass model: selectedModel [
 	| newEditor |
 	
 	newEditor := self instantiate: editorClass on: selectedModel.
+	
 	newEditor registerToBrowser: self window.
+	
 	innerEditor 
 		ifNotNil: [ self layout replace: innerEditor with: newEditor ]
 		ifNil: [ self layout add: newEditor ].

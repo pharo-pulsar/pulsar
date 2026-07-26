@@ -487,6 +487,10 @@ box.testCaseDetail .detailDuration { font-size: 0.85em; color: alpha(currentColo
 box.testResultSummary { margin: 6px 6px 12px 6px; border-spacing: 6px; }
 box.testResultSummary box.horizontal { margin: 0px; border-spacing: 3px; }
 box.testResultSummary label { font-weight: 500; letter-spacing: 0.01em; }
+
+/* preview editor */
+.pulsarPreviewEditor box.pulsarEditorBreadcrumb { font-style: italic; }
+.pulsarPreviewEditor { border-width: 1px; border-style: solid; border-color: @accent_bg_color; }
 '
 ]
 

@@ -10,13 +10,13 @@ Class {
 	#traits : 'PulsarTControlUpdate + PulsarTEditor',
 	#classTraits : 'PulsarTControlUpdate classTrait + PulsarTEditor classTrait',
 	#instVars : [
-		'toolbarPresenter',
-		'editorPresenter',
-		'dirty',
-		'editorOverlayLayout',
-		'dirtyMarkerPresenter',
-		'searchBarPresenter',
-		'shouldUpdateTitle'
+		'#toolbarPresenter',
+		'#editorPresenter',
+		'#dirty',
+		'#editorOverlayLayout',
+		'#dirtyMarkerPresenter',
+		'#searchBarPresenter',
+		'#shouldUpdateTitle'
 	],
 	#category : 'Pulsar-Browser-View-Editor',
 	#package : 'Pulsar-Browser',

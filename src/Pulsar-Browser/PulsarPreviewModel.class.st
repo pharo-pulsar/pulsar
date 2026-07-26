@@ -1,18 +1,10 @@
 Class {
 	#name : 'PulsarPreviewModel',
-	#superclass : 'Object',
-	#traits : 'PulsarTModelSnapshot',
-	#classTraits : 'PulsarTModelSnapshot classTrait',
+	#superclass : 'PvBaseModel',
 	#category : 'Pulsar-Browser-View-Editor',
 	#package : 'Pulsar-Browser',
 	#tag : 'View-Editor'
 }
-
-{ #category : 'accessing' }
-PulsarPreviewModel >> fullName [
-
-	^ self name
-]
 
 { #category : 'accessing' }
 PulsarPreviewModel >> iconName [
@@ -23,11 +15,13 @@ PulsarPreviewModel >> iconName [
 { #category : 'accessing' }
 PulsarPreviewModel >> name [
 
-	^ 'Preview'
+	^ self entity 
+		ifNotNil: [ 'Preview: ', self entity name ]
+		ifNil: [ 'Preview' ]
 ]
 
 { #category : 'accessing' }
-PulsarPreviewModel >> title [
+PulsarPreviewModel >> updateEntityWith: anEntityModel [
 
-	^ self name
+	entity := anEntityModel
 ]
