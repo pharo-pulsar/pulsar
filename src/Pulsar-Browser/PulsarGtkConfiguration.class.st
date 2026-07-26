@@ -1,3 +1,26 @@
+"
+I am the Pulsar IDE configuration for the Gtk backend. 
+
+I extend the base Pharo Gtk configuration with full theme management through PulsarSettings, 
+including dark, light, and system-preference modes. I propagate theme changes via announcements 
+(PulsarThemeChanged, PulsarSyntaxHighlightThemeChanged) so that the UI can react dynamically.
+
+My CSS style (see `style`) provides the complete Pulsar widget look: compact controls, panel 
+docks, editor decorations, repository views, method rows, and palette-defined colors for test 
+results and repository states. I also support custom user CSS via 'pulsar-custom-style.css'.
+
+Custom styles can be added by the user by adding custom files (any of the following): 
+```
+{imageDirectory}/pharo-local/pulsar-custom-style.css
+{imageDirectory}/pharo-local/pulsar-custom-style/*.css
+```
+
+I am configured in `#configure:` with a PanelApplication and integrate the AdwStyleManager 
+to detect dark/light mode. Settings are applied in `#applySettings` and persisted through 
+the settings object.
+
+
+"
 Class {
 	#name : 'PulsarGtkConfiguration',
 	#superclass : 'StPharoGtkConfiguration',
@@ -10,6 +33,22 @@ Class {
 	#package : 'Pulsar-Browser',
 	#tag : 'Application'
 }
+
+{ #category : 'configuring' }
+PulsarGtkConfiguration >> addCustomStyle [
+	| customCssReference customCssDirectory | 
+	
+	"add a css reference"
+	customCssReference := FileLocator localDirectory / 'pulsar-custom-style.css'.
+	customCssReference exists ifTrue: [
+		self addCSSProviderFromReference: customCssReference ].
+		
+	"look for directory"
+	customCssDirectory := FileLocator localDirectory / 'pulsar-custom-style'.
+	(customCssDirectory exists and: [ customCssDirectory isDirectory ]) ifTrue: [
+		(customCssDirectory childrenMatching: '*.css') 
+			do: [ :eachReference | self addCSSProviderFromReference: eachReference ] ]
+]
 
 { #category : 'private' }
 PulsarGtkConfiguration >> announceSyntaxHighlightThemeChanged [
@@ -103,6 +142,9 @@ PulsarGtkConfiguration >> configureGeneral: anApplication [
 	"now that we have settings processed, we apply the palette (as settings can 
 	 change the theme, hence the palette)"
 	self addCSSProviderFromString: self paletteStyle.
+		
+	"add any custom css (if found)"
+	self addCustomStyle.
 		
 	"we are already in a defer, this is just to ensure it" 
 	GRunLoop defer: [
