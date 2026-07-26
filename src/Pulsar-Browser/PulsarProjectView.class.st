@@ -47,7 +47,7 @@ PulsarProjectView >> defineProjectActionsOn: aBuilder [
 		addActionWith: [ :action | action 
 			priority: 110;
 			name: 'New project';
-			description: 'Create a new project (baseline)';
+			description: 'Create a new volatile project';
 			iconName: 'add';
 			shortcutKey: $n mod1;
 			action: [ self doNewProject ] ];
