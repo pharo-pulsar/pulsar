@@ -163,10 +163,10 @@ PulsarStackView >> eventEditorActivated: anAnnouncement [
 	| activatedEditor |
 
 	activatedEditor := anAnnouncement value.
-	(activatedEditor isEditor and: [ activatedEditor canBeListed ]) ifFalse: [ 
-		logger trace: activatedEditor.
-		logger debug: 'skipped'.
-		^ self ].
+	(activatedEditor isEditor and: [ activatedEditor canBeListed ]) 
+		ifFalse: [ 
+			logger debug: '{1} skipped' withArguments: { activatedEditor }.
+			^ self ].
 	
 	self flag: #FIXME. "I am filtering if this is the same I activated last. 
 	For some reason, it is arriving twice. Probably the solution would be not 
@@ -343,7 +343,8 @@ PulsarStackView >> registerToEvents [
 PulsarStackView >> shownEditors [
 	| editors |
 
-	editors := self sortEditors: (self window editors reject: [ :each | each isClosed ]).
+	editors := self sortEditors: (self window editors 
+		reject: [ :each | each isClosed or: [ each presenter canBeListed not ] ]).
 	^ editors collect: [ :each | each presenter ]
 ]
 
