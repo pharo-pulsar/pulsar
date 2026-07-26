@@ -91,8 +91,8 @@ PulsarTPanelWindow >> maybeActivateIconOnPanel: aPanelWidgetPresenter [
 	iconName := self panelPlacedIconName.
 	iconName ifNil: [ ^ self ].
 		
-	inHorizontalArea := { SpPanelArea top. SpPanelArea bottom } includes: aPanelWidgetPresenter panelArea.
-	aPanelWidgetPresenter windowIcon: (inHorizontalArea
+	inHorizontalArea := aPanelWidgetPresenter panelArea isAnyOf: { SpPanelArea top. SpPanelArea bottom }.
+	aPanelWidgetPresenter windowIcon: ((inHorizontalArea or: [ aPanelWidgetPresenter isPinned ])
 		ifTrue: [ self iconNamed: iconName ]
 		ifFalse: [ nil ])
 ]
