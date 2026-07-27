@@ -615,7 +615,7 @@ PulsarClassOutlineSideView >> popupPreview [
 	editorPresenter := (previewPopover 
 			instantiate: PulsarMethodEditor 
 			on: selectedModel)
-		addStyle: 'pulsarPreviewEditor';
+		addStyle: 'pulsarPopoverEditor';
 		notificationCenter: self owner notificationCenter;
 		yourself.
 		

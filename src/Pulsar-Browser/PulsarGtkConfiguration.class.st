@@ -392,7 +392,7 @@ tab .tab-title label { font-size: 0.9em; }
 .pulsarDirtyMarker .accept { background-color: @button_bg_accept_mark; }
 .pulsarEditorBreadcrumb { font-size: 9pt; }
 .pulsarEditorBreadcrumb label.separator { padding: 0px 5px 0px 5px; }
-popover .pulsarPreviewEditor { min-width: 680px; min-height: 340px; }
+popover .pulsarPopoverEditor { min-width: 680px; min-height: 340px; }
 .pulsarDialog, .pulsarFlyingBrowser { margin: 5px; border-spacing: 5px; }
 box.pulsarDialog box { margin: 0px; } 
 
