@@ -55,7 +55,15 @@ The skill provides formatting rules and conventions for this project.
 { #category : 'accessing' }
 PulsarLLMModel class >> allModels [
 
-	^ self allSubclasses sorted: #label ascending
+	^ (self allSubclasses 
+		select: #isAvailable)
+		sorted: #label ascending
+]
+
+{ #category : 'testing' }
+PulsarLLMModel class >> isAvailable [
+
+	^ true
 ]
 
 { #category : 'accessing' }
