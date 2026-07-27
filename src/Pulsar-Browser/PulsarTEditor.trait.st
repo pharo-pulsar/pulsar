@@ -46,5 +46,7 @@ PulsarTEditor >> isEmbedded [
 	"an editor is embeded if it is not contained into a panel widget directly"
 
 	self owner ifNil: [ ^ false ].
-	^ self owner isPanelWidget not
+	
+	^ (self owner isPanelWidget not) 
+		and: [ self owner isWindow not ]
 ]
