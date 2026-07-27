@@ -125,14 +125,7 @@ PulsarClassEditor >> defaultLayout [
 			add: ((commentOverlayLayout := SpOverlayLayout new)
 				child: commentPresenter;
 				yourself);
-			add: ((editorPanelPresenter := self newPresenter)
-				layout: (SpBoxLayout newVertical
-					add: ((editorOverlayLayout := SpOverlayLayout new) 
-						child: editorPresenter;
-						yourself);
-					add: searchBarPresenter expand: false;				
-					yourself);
-				yourself);
+			add: (editorPanelPresenter := self newEditorPresenter);
 			yourself);
 		yourself
 ]
@@ -277,21 +270,34 @@ PulsarClassEditor >> isDirty [
 PulsarClassEditor >> newCommentDirtyMarkerPresenter [
 
 	^ self newToolbar
-		  addStyle: 'pulsarDirtyMarker';
-		  beIcons;
-		  add: (self newToolbarButton
-				   addStyle: 'accept';
-				   icon: (self iconNamed: #accept);
-				   action: [ self doSaveComment: commentPresenter text ];
-				   help: 'Accept changes';
-				   yourself);
-		  add: (self newToolbarButton
-				   addStyle: 'cancel';
-				   icon: (self iconNamed: #cancel);
-				   action: [ self doResetComment ];
-				   help: 'Cancel changes';
-				   yourself);
-		  yourself
+		addStyle: 'pulsarDirtyMarker';
+		beIcons;
+		add: (self newToolbarButton
+			addStyle: 'accept';
+			icon: (self iconNamed: #accept);
+			action: [ self doSaveComment: commentPresenter text ];
+			help: 'Accept changes';
+			yourself);
+		add: (self newToolbarButton
+			addStyle: 'cancel';
+			icon: (self iconNamed: #cancel);
+			action: [ self doResetComment ];
+			help: 'Cancel changes';
+			yourself);
+		yourself
+]
+
+{ #category : 'private' }
+PulsarClassEditor >> newEditorPresenter [
+
+	^ self newPresenter
+		layout: (SpBoxLayout newVertical
+			add: ((editorOverlayLayout := SpOverlayLayout new) 
+				child: editorPresenter;
+				yourself);
+			add: searchBarPresenter expand: false;				
+			yourself);
+		yourself
 ]
 
 { #category : 'private' }
