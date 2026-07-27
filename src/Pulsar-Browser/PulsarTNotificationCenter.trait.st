@@ -23,7 +23,7 @@ PulsarTNotificationCenter >> basicNotificationCenter: anAnnouncer [
 { #category : 'private' }
 PulsarTNotificationCenter >> notificationCenter [
 
-	^ notificationCenter
+	^ notificationCenter ifNil: [ notificationCenter := PulsarNULLAnnouncer new ]
 ]
 
 { #category : 'private' }
