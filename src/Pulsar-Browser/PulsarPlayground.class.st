@@ -6,7 +6,8 @@ Class {
 		'toolbarPresenter',
 		'page',
 		'actionsPresenter',
-		'moreActionsPresenter'
+		'moreActionsPresenter',
+		'searchBarPresenter'
 	],
 	#category : 'Pulsar-Browser-Tool-Playground',
 	#package : 'Pulsar-Browser',
@@ -64,6 +65,7 @@ PulsarPlayground >> defaultLayout [
 	^ SpBoxLayout newVertical
 		add: toolbarPresenter expand: false;
 		add: codePresenter;
+		add: searchBarPresenter expand: false;
 		yourself
 ]
 
@@ -204,7 +206,10 @@ PulsarPlayground >> initializePresenters [
 	(codePresenter := self newCode)
 		addStyle: 'stCode';
 		interactionModel: self newInteractionModel; 
-		systemNavigation: self newSystemNavigation
+		systemNavigation: self newSystemNavigation.
+		
+		
+	searchBarPresenter := self instantiate: PulsarSearchBarPresenter on: codePresenter
 ]
 
 { #category : 'initialization' }
