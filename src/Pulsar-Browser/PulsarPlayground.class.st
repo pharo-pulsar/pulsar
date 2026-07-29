@@ -1,3 +1,9 @@
+"
+A PulsarPlayground is an interactive code workspace panel that lets users write, evaluate, and experiment with Smalltalk code.
+
+Pages group playground sessions and are persisted to disk via `StPlaygroundPage`, which handles automatic save/flush and version history. Each playground keeps a code editor with syntax highlighting and a live interaction model for code evaluation.
+
+"
 Class {
 	#name : 'PulsarPlayground',
 	#superclass : 'PulsarBaseView',
@@ -207,8 +213,7 @@ PulsarPlayground >> initializePresenters [
 		addStyle: 'stCode';
 		interactionModel: self newInteractionModel; 
 		systemNavigation: self newSystemNavigation.
-		
-		
+	
 	searchBarPresenter := self instantiate: PulsarSearchBarPresenter on: codePresenter
 ]
 
