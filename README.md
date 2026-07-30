@@ -2,9 +2,7 @@
   <img src="resources/logos/pharo.png" width="180" alt="Pharo logo">
   <img src="resources/logos/pulsar.png" width="180" alt="Pulsar logo">
 </p>
-
 <h1 align="center">Pulsar</h1>
-
 <p align="center">
   <strong>A coding-first IDE for Pharo.</strong>
 </p>
@@ -46,13 +44,11 @@ compatible Pharo VM. It creates a `pulsar` launcher in the current directory.
 
 ### Linux
 
-You need `curl`, `tar` and
-[Flatpak](https://flatpak.org/setup/) installed on the host.
+You need `curl`, `tar` and [Flatpak](https://flatpak.org/setup/) installed on the host.
 
 ```bash
 mkdir -p pulsar && cd pulsar
-curl -L https://forge.smallworks.eu/pharo/Pulsar-installers/raw/branch/main/install-linux.sh \
-  | bash -s -- -m
+curl -L https://forge.smallworks.eu/pharo/Pulsar-installers/raw/branch/main/install-linux.sh | bash -s -- -m
 ./pulsar
 ```
 
@@ -64,8 +60,7 @@ the traditional Pharo ZeroConf distribution.
 
 ```bash
 mkdir -p pulsar && cd pulsar
-curl -L https://forge.smallworks.eu/pharo/Pulsar-installers/raw/branch/main/install-macos.sh \
-  | bash -s -- -m
+curl -L https://forge.smallworks.eu/pharo/Pulsar-installers/raw/branch/main/install-macos.sh | bash -s -- -m
 ./pulsar
 ```
 
@@ -78,8 +73,7 @@ run through WSL.
 On an Ubuntu or Debian WSL installation, prepare Flatpak support first:
 
 ```bash
-curl -L https://forge.smallworks.eu/pharo/Pulsar-installers/raw/branch/main/support/setup-pulsar-wsl-flatpak.sh \
-  | bash
+curl -L https://forge.smallworks.eu/pharo/Pulsar-installers/raw/branch/main/support/setup-pulsar-wsl-flatpak.sh | bash
 ```
 
 Then follow the Linux installation instructions above.
@@ -99,8 +93,7 @@ Nightly packages can also be
 On Linux, omit `-m` if a compatible `pharo` command is already available:
 
 ```bash
-curl -L https://forge.smallworks.eu/pharo/Pulsar-installers/raw/branch/main/install-linux.sh \
-  | bash
+curl -L https://forge.smallworks.eu/pharo/Pulsar-installers/raw/branch/main/install-linux.sh | bash
 ./pulsar
 ```
 
@@ -119,7 +112,7 @@ You do not need to build Pulsar to use it; the nightly pipeline produces a
 ready-to-run image every day.
 
 Pulsar currently targets Pharo 14. Its build requires GTK 4, GtkSourceView 5,
-libadwaita, libpanel, librsvg and VTE, plus SSH access to the project
+libadwaita, libpanel, librsvg and VTE, plus access to the project
 dependencies hosted on the Smallworks forge.
 
 The authoritative build process lives in [`.ci/scripts`](.ci/scripts). In an
