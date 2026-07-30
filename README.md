@@ -1,11 +1,12 @@
 <p align="center">
-  <img src="resources/logos/pulsar-logo.png" width="180" alt="Pulsar logo">
+  <img src="resources/logos/pharo.png" width="180" alt="Pharo logo">
+  <img src="resources/logos/pulsar.png" width="180" alt="Pulsar logo">
 </p>
 
 <h1 align="center">Pulsar</h1>
 
 <p align="center">
-  <strong>A modern desktop IDE for Pharo.</strong>
+  <strong>A coding-first IDE for Pharo.</strong>
 </p>
 
 Pulsar brings Pharo's live, reflective development model into a focused,
