@@ -1,138 +1,154 @@
-# Install instructions
+<p align="center">
+  <img src="resources/logos/pulsar-logo.png" width="180" alt="Pulsar logo">
+</p>
 
-package dependencies: 
-- gtk4
-- gtksourceview5
-- libadwaita
-- libpanel
-- librsvg
+<h1 align="center">Pulsar</h1>
 
-## 1. Download VM
+<p align="center">
+  <strong>A modern desktop IDE for Pharo.</strong>
+</p>
 
-### Linux 
-You should be ok about dependencies, but you may need `libpanel`, `librsvg` and `gtksourceview5` if you are running a tiny machine. 
-If that is the case, install them using you favorite package manager.  
-E.g. in Ubuntu (And maybe other debian distros) you can do this:
-```shell
-sudo apt install libadwaita-1-0 libgtksourceview-5-0 libpanel-1-1 librsvg2-2
-``` 
+Pulsar brings Pharo's live, reflective development model into a focused,
+project-oriented workspace. It combines the tools expected from a contemporary
+IDE—editors, navigation, version control, tests, diagnostics, files and
+terminals—without giving up the immediacy of working inside a live image.
 
-**WARNING** Do not use zeroconf as your Pharo VM! Zeroconf ships with libraries that will interfere with the ones Pulsar uses.  
-Instead, you should install a VM provided by [open build service (OBS)](https://software.opensuse.org//download.html?project=devel:languages:pharo:stable&package=pharo-ui).
+Pulsar is built with Spec, GTK 4 and libadwaita, and is designed to feel at 
+home on the desktop rather than like an isolated world of its own.
 
-### MacOS
-You can download a VM prepared with dependencies [here](https://forge.smallworks.eu/pharo/-/packages/generic/pharovm-full-macos-arm).  
-We currently do not support old macOS intel machines (and probably ever will).
+> **Project status:** Pulsar is under active development. Nightly builds are
+> available, but there is no stable release yet and some workflows are still
+> evolving. Please report rough edges: early feedback is especially useful now.
+
+Pulsar was presented at ESUG 2026, where it received first prize in the
+Innovation Awards.
+
+## What is in Pulsar today?
+
+- A project and package browser with tabbed class and method editors.
+- Fast navigation across projects, packages, classes, methods and open editors.
+- Integrated Git repositories, branches, working changes and history.
+- A test runner, code critiques and source-change recovery tools.
+- Live debugging, inspection, playgrounds and transcripts.
+- File-system browsing and integration with native terminals.
+- Extensible panels and early integrations for CLI coding agents.
+
+Pulsar is not an attempt to make Pharo behave like a conventional static
+language. The goal is to give its live environment a coherent, efficient
+workspace for everyday development—and to make the path from writing code to
+understanding its effects as short as possible.
+
+## Install
+
+The installer downloads the latest nightly Pulsar image and, with `-m`, a
+compatible Pharo VM. It creates a `pulsar` launcher in the current directory.
+
+### Linux
+
+You need `curl`, `tar` and
+[Flatpak](https://flatpak.org/setup/) installed on the host.
+
+```bash
+mkdir -p pulsar && cd pulsar
+curl -L https://forge.smallworks.eu/pharo/Pulsar-installers/raw/branch/main/install-linux.sh \
+  | bash -s -- -m
+./pulsar
+```
+
+The VM is installed as a per-user Flatpak. The bundle includes the native
+libraries Pulsar needs, so it does not interfere with libraries installed by
+the traditional Pharo ZeroConf distribution.
+
+### macOS
+
+```bash
+mkdir -p pulsar && cd pulsar
+curl -L https://forge.smallworks.eu/pharo/Pulsar-installers/raw/branch/main/install-macos.sh \
+  | bash -s -- -m
+./pulsar
+```
 
 ### Windows
 
-**TODO**
+The native Windows distribution is temporarily unavailable because of a
+limitation in the current FFI architecture. Until that is resolved, Pulsar can
+run through WSL.
 
-## 2. Download a Pulsar image
-You can download a bundle with the pre-built image from [nightly builds](https://forge.smallworks.eu/pharo/-/packages/generic/pulsar-nightly-build).  
-We do not have stable releases for the moment (this is still early development).
+On an Ubuntu or Debian WSL installation, prepare Flatpak support first:
 
-## 3. Run it
-
-in Linux:
-```Shell
-pharo --worker Pharo.image openPulsar
+```bash
+curl -L https://forge.smallworks.eu/pharo/Pulsar-installers/raw/branch/main/support/setup-pulsar-wsl-flatpak.sh \
+  | bash
 ```
 
-**NOTE:** You may want to create an alias in your shell to easy the start. I use fishshell and I have defined this function in my `config.fish` : 
-```fish
-function psr
-    pharo --worker $argv[1] openPulsar $argv[2..-1]
-end
+Then follow the Linux installation instructions above.
+
+### Installer options
+
+Use `-d <directory>` to choose a destination, `-v YYYY-MM-DD` to install a
+particular nightly, and `-o` to replace an existing installation. See the
+[installer repository](https://forge.smallworks.eu/pharo/Pulsar-installers)
+for complete usage and platform notes.
+
+Nightly packages can also be
+[downloaded directly](https://forge.smallworks.eu/pharo/-/packages/generic/pulsar-nightly-build).
+
+## Run Pulsar with an existing VM
+
+On Linux, omit `-m` if a compatible `pharo` command is already available:
+
+```bash
+curl -L https://forge.smallworks.eu/pharo/Pulsar-installers/raw/branch/main/install-linux.sh \
+  | bash
+./pulsar
 ```
 
-in MacOS:
-```Shell
-./Pharo.app/Contents/MacOS/Pharo --worker Pharo.image openPulsar
+Do not use the ZeroConf VM for Pulsar: its bundled libraries can take
+precedence over the GTK stack Pulsar expects.
+
+The underlying command is:
+
+```bash
+pharo --worker Pulsar.image openPulsar
 ```
 
-in Windows:
-```Shell
-PharoConsole.exe --worker --headless Pharo.image openPulsar
+## Build from source
+
+You do not need to build Pulsar to use it; the nightly pipeline produces a
+ready-to-run image every day.
+
+Pulsar currently targets Pharo 14. Its build requires GTK 4, GtkSourceView 5,
+libadwaita, libpanel, librsvg and VTE, plus SSH access to the project
+dependencies hosted on the Smallworks forge.
+
+The authoritative build process lives in [`.ci/scripts`](.ci/scripts). In an
+environment with those dependencies and a compatible `pharo` command:
+
+```bash
+git clone https://forge.smallworks.eu/pharo/Pulsar.git
+cd Pulsar
+mkdir build && cd build
+python3 ../.ci/scripts/build.py
 ```
 
-# Build instructions
-**You do not need to build the pulsar image by yourself**, the CI does that job for you. Nevertheless this information is useful 
-in case, for any reason I cannot see, you still want to build the Pulsar image by yourself.
+The resulting archive is written below `build/dist/`.
 
-## 1. Download a usable image
-Right now we are using Pharo 14, download the latest image (knowing that also Pharo is in development, things may fail).
+## Contributing
 
-## 2. Install MetaMetacello
-(this is not really *required* but it will make easier the next step ;)
+Pulsar is at a stage where testing, bug reports, design feedback and code are
+all valuable. If something breaks—or if a workflow feels heavier than it
+should—please [open an issue](https://forge.smallworks.eu/pharo/Pulsar/issues).
 
-```smalltalk
-Metacello new 
-	repository: 'github://estebanlm/MetaMetacello:main';
-	baseline: 'MetaMetacello';
-	load.
-```
+For code contributions:
 
-### 3. Install a lot of packages
+1. Create a branch from `main`.
+2. Keep the change focused and include tests when appropriate.
+3. Open a pull request explaining the problem and the chosen approach.
 
-**IMPORTANT!!! For all this to work you need to add your keys to your account in the forge!** 
+## License
 
-```smalltalk
-MetaMetacello load: [ :spec | spec
-	baseline: 'UnifiedFFI' with: [ spec 
-		repository: 'github://pharo-cig/UnifiedFFI:main';
-		className: #BaselineOfUnifiedFFIFull ];
-	baseline: 'Alexandrie' with: [ spec repository: 'github://pharo-graphics/Alexandrie:master' ]; 
-	baseline: 'Resvg' with: [ spec repository: 'github://pharo-cig/pharo-resvg:main' ]; 
-	baseline: 'StringInterpolation' with: [ spec 
-		repository: 'github://estebanlm/pharo-string-interpolation:master';
-		loads: #('StringInterpolation') ];
-	baseline: 'Refactoring' with: [ spec
-		repository: 'git:git@forge.smallworks.eu:pharo/RefactoringEngine.git:main' ];
-	baseline: 'Themes' with: [ spec 
-		repository: 'github://estebanlm/Themes:main';
-		loads: #('HighlightStyles') ]; 
-	baseline: 'Spec2' with: [ spec 
-		repository: 'github://pharo-spec/Spec:dev-3.0';
-		loads: #(default 'Spec2-Alexandrie' 'Spec2-Adapters-Morphic-Alexandrie') ];
-	baseline: 'Gtk' with: [ spec 
-		repository: 'github://pharo-spec/gtk-bindings:main';
-		loads: #(default 'Gtk-Utils') ];
-	baseline: 'SpecGtk' with: [ spec 
-		repository: 'github://pharo-spec/Spec-Gtk:main';
-		loads: #(default) ];
-	baseline: 'NewTools' with: [ spec 
-		repository: 'github://pharo-spec/NewTools:dev-2.0';
-		loads: #(default 'NewTools-Gtk') ];
-	baseline: 'Stargate' with: [ spec repository: 'github://estebanlm/stargate:main' ];
-	baseline: 'Linden' with: [ spec repository: 'git:git@forge.smallworks.eu:estebanlm/linden.git:main' ];
-	baseline: 'Adwaita' with: [ spec repository: 'github://estebanlm/Spec-LibAdwaita:main' ];
-	baseline: 'SourceEditor' with: [ spec repository: 'git:git@forge.smallworks.eu:pharo/SourceEditor.git:main' ];
-	baseline: 'Panel' with: [ spec repository: 'github://estebanlm/Spec-LibPanel:main' ];
-	baseline: 'Pulsar' with: [ spec repository: 'git:git@forge.smallworks.eu:pharo/Pulsar.git:main' ] ].
-```
+Pulsar is distributed under the
+[GNU General Public License v3.0](LICENSE).
 
-### 4. Prepare your environment
-
-```smalltalk
-(Smalltalk classNamed: #GEnumeration) allSubclassesDo: #initializeEnumeration.
-"We want to work with string interpolation, but for now do not install it as it 
- creates problems while saving changes (they become corrupt, digging why). 
- Also current implementation is not backward compatible so we need to think how to  
- do it right."
-"(Smalltalk classNamed: #StringInterpolationPlugin) install."
-
-"we ban this rule because is annoying since we use LF as end line (in linux). Also this should be agnostic, we should not care about it."
-ReMethodSourceContainsLinefeedsRule enabled: false.
-"And this one, since there is no real need of this and is also annoying :P"
-ReCompactSourceCodeRule enabled: false.
-```
-
-#### 4.1. In MacOS
-`Spec-Gtk` changes the default driver for the morphic world to `OSGtkDriver` but this is not 
-working properly for the moment, so better if we revert it or your image will not be working
-when tryign to execute it in morphic.
-
-```Smalltalk
-OSWindowDriver driverClass: OSSDL2Driver.
-```  
+The bundled [Material Design Icons](LICENSE-Templarian-MDI) and
+[file-type icons](LICENSE-FileType-icons) retain their respective licenses.
