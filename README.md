@@ -1,13 +1,10 @@
 <p align="center">
-  <img src="resources/logos/pharo.png" width="180" alt="Pharo logo">
-  <img src="resources/logos/pulsar.png" width="180" alt="Pulsar logo">
+  <img src="resources/logos/pharo.png" width="120" alt="Pharo logo">
+  <img src="resources/logos/pulsar.png" width="120" alt="Pulsar logo">
 </p>
-<h1 align="center">Pulsar</h1>
-<p align="center">
-  <strong>A coding-first IDE for Pharo.</strong>
-</p>
+<h1 align="center">Pulsar — A coding-first IDE for Pharo.</h1>
 
-Pulsar brings Pharo's live, reflective development model into a focused,
+Pulsar brings [Pharo](https://pharo.org)'s live, reflective development model into a focused,
 project-oriented workspace. It combines the tools expected from a contemporary
 IDE—editors, navigation, version control, tests, diagnostics, files and
 terminals—without giving up the immediacy of working inside a live image.
