@@ -398,12 +398,6 @@ PulsarEditor >> notificationCenter: anAnnouncer [
 ]
 
 { #category : 'private - announcing' }
-PulsarEditor >> notifyEditorActivated [
-
-	self notificationCenter announce: (PulsarEditorActivated newValue: self)
-]
-
-{ #category : 'private - announcing' }
 PulsarEditor >> notifyEntityChanged: anEntity [
 
 	anEntity ifNil: [ ^ self ].
