@@ -3,8 +3,7 @@ Class {
 	#superclass : 'PulsarPanelSnapshot',
 	#instVars : [
 		'cursorPositionIndex',
-		'bindings',
-		'content'
+		'bindings'
 	],
 	#category : 'Pulsar-Browser-Tool-Playground',
 	#package : 'Pulsar-Browser',
@@ -36,7 +35,7 @@ PulsarPlaygroundSnapshot >> restoreTo: aPresenter [
 	"For some reason I need to re-set the model here (even if it is passed on initialization)"
 	aPresenter model: self model.
 	aPresenter codePresenter 
-		text: content;
+		"text: content;" 
 		cursorPositionIndex: cursorPositionIndex.
 	aPresenter codePresenter interactionModel bindings: bindings.
 	
@@ -47,7 +46,7 @@ PulsarPlaygroundSnapshot >> restoreTo: aPresenter [
 PulsarPlaygroundSnapshot >> snapshot: aPresenter [
 
 	super snapshot: aPresenter.
-	content := aPresenter codePresenter text.
+	"content := aPresenter codePresenter text."
 	cursorPositionIndex := aPresenter codePresenter cursorPositionIndex.
 	bindings := aPresenter codePresenter interactionModel lastingBindings
 ]
