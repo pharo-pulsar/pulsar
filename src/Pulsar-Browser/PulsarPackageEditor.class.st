@@ -80,6 +80,12 @@ PulsarPackageEditor >> defaultLayout [
 		yourself
 ]
 
+{ #category : 'private - definitions' }
+PulsarPackageEditor >> defineNavigationActionsOn: aBuilder [
+	<dockActions>
+
+]
+
 { #category : 'private - actions' }
 PulsarPackageEditor >> doReset [
 
