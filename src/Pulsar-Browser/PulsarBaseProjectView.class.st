@@ -8,10 +8,10 @@ Class {
 	#superclass : 'PulsarBaseView',
 	#instVars : [
 		'toolbarPresenter',
-		'mutex',
 		'filterInputPresenter',
 		'filterListPresenter',
-		'listPresenter'
+		'listPresenter',
+		'mutex'
 	],
 	#category : 'Pulsar-Browser-View-Project',
 	#package : 'Pulsar-Browser',
@@ -254,20 +254,8 @@ PulsarBaseProjectView >> eventBehaviorRenamed: anAnnouncement [
 
 { #category : 'events' }
 PulsarBaseProjectView >> eventEditorActivated: anAnnouncement [
-	| editorModel classModel path |
-	
-	editorModel := anAnnouncement value model.
-	editorModel includesClassModel ifFalse: [ ^ self ].
 
-	classModel := editorModel asClassModel.
-	(listPresenter selectedItem isNotNil 
-		and: [ listPresenter selectedItem realModel = classModel ]) 
-		ifTrue: [ ^ self ].
-
-	path := self model findPathForClassModel: classModel.
-	path ifNil: [ ^ self ].
-
-	mutex critical: [ listPresenter selectPath: path ]
+	(PulsarProjectSelectEntityVisitor on: self) visit: anAnnouncement value
 ]
 
 { #category : 'filtering' }
@@ -383,6 +371,13 @@ PulsarBaseProjectView >> registerToSystemEvents [
 		when: ClassAdded send: #eventBehaviorAdded: to: self;
 		when: ClassRemoved send: #eventBehaviorRemoved: to: self;
 		when: ClassRenamed send: #eventBehaviorRenamed: to: self
+]
+
+{ #category : 'private' }
+PulsarBaseProjectView >> selectPath: aPath [
+
+	mutex critical: [ 
+		listPresenter selectPath: aPath ]
 ]
 
 { #category : 'selection' }

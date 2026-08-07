@@ -133,6 +133,12 @@ PulsarMultiProjectModel >> findPathForPackage: aPackage [
 	^ nil
 ]
 
+{ #category : 'accessing' }
+PulsarMultiProjectModel >> findPathForProject: aProject [
+
+	^ { self allChildren indexOf: aProject }
+]
+
 { #category : 'private' }
 PulsarMultiProjectModel >> findRecursivelyPathForClassModel: aClassModel inNode: aNode [
 	"finds a subpath for a class model starting in a node. This is like this 

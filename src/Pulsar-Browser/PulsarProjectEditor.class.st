@@ -13,6 +13,12 @@ Class {
 	#tag : 'View-Project'
 }
 
+{ #category : 'visiting' }
+PulsarProjectEditor >> acceptVisitor: aVisitor [
+
+	^ aVisitor visitProjectEditor: self
+]
+
 { #category : 'api - focus' }
 PulsarProjectEditor >> defaultKeyboardFocus [
 

@@ -130,6 +130,14 @@ PvEnvironmentModel >> newMultiProjectModel [
 	^ PulsarMultiProjectModel newEnvironment: self
 ]
 
+{ #category : 'instance creation' }
+PvEnvironmentModel >> newPackageModelFor: aName [
+
+	^ PvPackageModel 
+		newEnvironment: self
+		entity: (self packageNamed: aName)
+]
+
 { #category : 'accessing' }
 PvEnvironmentModel >> packageNamed: aString [ 
 	

@@ -69,3 +69,9 @@ PulsarEditorVisitor >> visitPackageEditor: aPresenter [
 PulsarEditorVisitor >> visitPresenter: aPresenter [
 
 ]
+
+{ #category : 'visiting' }
+PulsarEditorVisitor >> visitProjectEditor: aPresenter [
+
+	^ self visitEditor: aPresenter
+]

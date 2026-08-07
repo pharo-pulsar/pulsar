@@ -129,6 +129,13 @@ PvPackageModel >> isPackage [
 	^ true
 ]
 
+{ #category : 'testing' }
+PvPackageModel >> isSameClass: aClass [ 
+
+	self flag: #TODO. "This may be wrong, check in senders to see why is being called" 
+	^ false
+]
+
 { #category : 'accessing' }
 PvPackageModel >> manifestClass [
 
