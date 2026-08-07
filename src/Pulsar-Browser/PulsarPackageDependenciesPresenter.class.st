@@ -33,9 +33,12 @@ PulsarPackageDependenciesPresenter >> connectPresenters [
 	packagesList
 		transmitTo: dependenciesItems
 		transform: [ :selected |
-			selected 
+			selected
 				ifNotNil: [ self model dependencyItemsFor: selected ]
 				ifNil: [ #() ]  ].
+				
+	packagesList outputActivationPort transmitDo: [ :package |
+		self notifyActivateEntity: (self environmentModel newPackageModelFor: package systemPackage name) ].		
 
 	dependenciesItems outputActivationPort transmitDo: [ :dependency |
 		(dependency browsableEntityOn: self environmentModel)
