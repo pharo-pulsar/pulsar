@@ -302,7 +302,7 @@ PulsarLLMModel >> ensureAgent [
 PulsarLLMModel >> ensureSkill: aName with: aDefinition [
 	| skillDir ref |
 	
-	skillDir := FileLocator imageDirectory / '.agents' / 'skills' / aName.
+	skillDir := FileLocator imageDirectory / self skillBaseDirectory / 'skills' / aName.
 	skillDir ensureCreateDirectory.
 
 	ref := skillDir / 'SKILL.md'.
@@ -360,6 +360,12 @@ PulsarLLMModel >> reset [
 
 	mcp := nil.
 	connected := false
+]
+
+{ #category : 'private' }
+PulsarLLMModel >> skillBaseDirectory [
+
+	^ '.agents'
 ]
 
 { #category : 'private' }

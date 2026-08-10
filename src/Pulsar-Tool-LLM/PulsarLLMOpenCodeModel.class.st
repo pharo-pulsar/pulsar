@@ -46,6 +46,14 @@ PulsarLLMOpenCodeModel >> ensureConfig [
 ]
 
 { #category : 'private' }
+PulsarLLMOpenCodeModel >> ensureExa [
+
+	OSEnvironment current 
+		at: #OPENCODE_ENABLE_EXA
+		ifAbsentPut: [ 'true' ]
+]
+
+{ #category : 'private' }
 PulsarLLMOpenCodeModel >> performConnectTo: aTerminalPresenter [
 	| command |
 	
@@ -63,5 +71,12 @@ PulsarLLMOpenCodeModel >> performConnectTo: aTerminalPresenter [
 PulsarLLMOpenCodeModel >> prepare [
 
 	super prepare.
-	self ensureConfig
+	self ensureConfig.
+	self ensureExa
+]
+
+{ #category : 'private' }
+PulsarLLMOpenCodeModel >> skillBaseDirectory [
+
+	^ '.opencode'
 ]
