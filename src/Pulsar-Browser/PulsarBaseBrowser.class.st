@@ -347,7 +347,7 @@ PulsarBaseBrowser >> doToggleTool: aToolClass model: aModel fromState: aBoolean 
 	toolView := self findPresenterClass: aToolClass.
 	(aBoolean and: [ toolView isNotNil ]) 
 		ifTrue: [ 
-			toolView withNearWindowLikeDo: #close.
+			toolView withNearWindowLikeDo: #forceClose.
 			^ self ].
 
 	toolView ifNil: [ 
