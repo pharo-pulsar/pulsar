@@ -1,7 +1,7 @@
 "
 An editor for arbitrary text files.
 
-Unlike PulsarMethodEditor or PulsarClassEditor, this editor is not coupled to the Pharo image. It uses SeEditorPresenter for syntax highlighting with language auto-detection based on file extension, and persists changes directly to disk.
+Unlike `PulsarMethodEditor` or `PulsarClassEditor`, this editor is not coupled to the Pharo image. It uses `SeEditorPresenter` for syntax highlighting with language auto-detection based on file extension, and persists changes directly to disk.
 "
 Class {
 	#name : 'PulsarFileEditor',
