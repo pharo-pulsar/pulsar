@@ -76,6 +76,31 @@ PulsarProjectView >> doCloseProject: aProjectModel [
 ]
 
 { #category : 'private - actions' }
+PulsarProjectView >> doCreateBaselineFromProject: aProjectModel [
+	"Create the BaselineOf class for a volatile project, asking for an override if it already exists, then replace the volatile project by it."
+	| creator okToOverride |
+	
+	creator := PulsarBaselineCreator fromProject: aProjectModel.
+	creator exists ifTrue: [
+		okToOverride := self application newConfirm
+		    title: 'Baseline already exists';
+		    message: ('The baseline {1} already exists. Do you want to override its #baseline: method?'
+				format: { creator baselineName });
+		    acceptLabel: 'Override';
+		    openModalWithParent: self window.
+		okToOverride ifFalse: [ ^ self ] ].
+
+	self scheduleTask: [
+		| baselineClass persistentProject |
+		baselineClass := creator ensureBaseline.
+		persistentProject := self model 
+			replaceVolatileProject: aProjectModel 
+			withBaseline: baselineClass.
+		self updatePresenter.
+		listPresenter selectPathByItems: { persistentProject } ]
+]
+
+{ #category : 'private - actions' }
 PulsarProjectView >> doNewPackage [
 
 	| packageName project package |

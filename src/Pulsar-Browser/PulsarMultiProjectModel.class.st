@@ -248,3 +248,14 @@ PulsarMultiProjectModel >> removeProjectModel: aModel [
 			PulsarVolatileProjectSpec unregisterProjectNamed: aModel name ].
 	projectModels := projectModels copyWithout: aModel
 ]
+
+{ #category : 'actions' }
+PulsarMultiProjectModel >> replaceVolatileProject: aProjectModel withBaseline: aBaselineClass [
+	"Replace a volatile project by the non-volatile project built from aBaselineClass, preserving its packages."
+
+	self addProject: aBaselineClass.
+	PulsarVolatileProjectSpec unregisterProjectNamed: aProjectModel name.
+	projectModels := projectModels copyWithout: aProjectModel.
+	
+	^ projectModels detect: [ :each | each entity = aBaselineClass ]
+]

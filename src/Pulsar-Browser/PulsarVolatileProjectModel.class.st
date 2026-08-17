@@ -58,6 +58,17 @@ PulsarVolatileProjectModel >> children [
 	^ packageModels
 ]
 
+{ #category : 'private - definitions' }
+PulsarVolatileProjectModel >> defineCreateBaselineActionOn: aBuilder [
+	<dockActions>
+	
+	aBuilder addGroup: #tools with: [ :group | group 
+		addActionWith: [ :action | action
+			name: 'Create baseline';
+			description: 'Create a baseline listing the packages of this project';
+			action: [ :aContext | aContext doCreateBaselineFromProject: self ] ] ]
+]
+
 { #category : 'accessing' }
 PulsarVolatileProjectModel >> iconName [
 
