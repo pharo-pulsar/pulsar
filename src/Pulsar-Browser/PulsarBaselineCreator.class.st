@@ -1,10 +1,10 @@
 "
-""A helper that creates a BaselineOf class for a volatile project in Pulsar.
+A helper that creates a BaselineOf class for a volatile project in Pulsar.
 
 Given a project name and the package names it contains, it produces the
 BaselineOf<Name> class whose #baseline: method lists those packages flat.
 It also detects when the baseline already exists so callers can propose
-an override.""
+an override.
 "
 Class {
 	#name : 'PulsarBaselineCreator',

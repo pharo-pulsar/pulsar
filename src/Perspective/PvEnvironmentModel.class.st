@@ -130,7 +130,7 @@ PvEnvironmentModel >> newMultiProjectModel [
 	^ PulsarMultiProjectModel newEnvironment: self
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'factory' }
 PvEnvironmentModel >> newPackageModelFor: aName [
 
 	^ PvPackageModel 
