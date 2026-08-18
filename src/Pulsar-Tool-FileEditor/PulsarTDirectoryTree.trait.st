@@ -188,5 +188,14 @@ PulsarTDirectoryTree >> updatePresenter [
 	self model ifNil: [ ^ self ].
 
 	self listPresenter roots: self model children.
-	self updateHeaderPresenter
+	self updateHeaderPresenter.
+	self model startMonitoringDo: [ 
+		self updatePresenter ]
+]
+
+{ #category : 'private' }
+PulsarTDirectoryTree >> windowClosed [
+
+	super windowClosed.
+	self model stopMonitoring
 ]

@@ -6,6 +6,9 @@ It wraps a FileReference pointing to a directory and provides lazy children enum
 Class {
 	#name : 'PulsarDirectoryModel',
 	#superclass : 'PvBaseModel',
+	#instVars : [
+		'monitor'
+	],
 	#category : 'Pulsar-Tool-FileEditor-Model',
 	#package : 'Pulsar-Tool-FileEditor',
 	#tag : 'Model'
@@ -126,6 +129,22 @@ PulsarDirectoryModel >> pulsarEditorClass [
 PulsarDirectoryModel >> spotterTitle [
 
 	^ self entity basename
+]
+
+{ #category : 'events' }
+PulsarDirectoryModel >> startMonitoringDo: aBlock [
+
+	monitor ifNotNil: [ ^ self ].
+	monitor := PulsarFileMonitor newFrom: self entity.
+	monitor startMonitoringDo: aBlock
+]
+
+{ #category : 'events' }
+PulsarDirectoryModel >> stopMonitoring [
+
+	monitor ifNil: [ ^ self ],
+	monitor stopAndDispose.
+	monitor := nil
 ]
 
 { #category : 'accessing' }
