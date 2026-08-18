@@ -113,16 +113,16 @@ PulsarTDirectoryTree >> doOpenTerminalOnCurrentFolder [
 { #category : 'private - actions' }
 PulsarTDirectoryTree >> doRemoveSelectedFileOrFolder [
 	"Remove the selected file or folder after user confirmation."
-
 	| okToRemove selected |
+	
 	selected := self listPresenter selectedItem.
 	selected ifNil: [ ^ self ].
 
 	okToRemove := self application newConfirm
-		              title: 'Remove';
-		              message: ('Do you want to remove {1}?' format: { selected name });
-		              acceptLabel: 'Remove';
-		              openModalWithParent: self window.
+		title: 'Remove';
+		message: ('Do you want to remove {1}?' format: { selected name });
+		acceptLabel: 'Remove';
+		openModalWithParent: self window.
 	okToRemove ifFalse: [ ^ self ].
 
 	selected delete.
@@ -159,8 +159,8 @@ PulsarTDirectoryTree >> registerToEvents [
 { #category : 'private - accessing' }
 PulsarTDirectoryTree >> selectedDirectoryModel [
 	"Return the selected item if it is a directory model, otherwise return the root model."
-
 	| selected |
+	
 	selected := self listPresenter selectedItem.
 	^ (selected isNotNil and: [ selected isDirectory ])
 		  ifTrue: [ selected ]
@@ -170,8 +170,6 @@ PulsarTDirectoryTree >> selectedDirectoryModel [
 { #category : 'initialization' }
 PulsarTDirectoryTree >> updateHeaderPresenter [
 	"Presenters with a header should override this to update it with the current model."
-
-	
 ]
 
 { #category : 'initialization' }
