@@ -131,3 +131,8 @@ PulsarBaseView >> updatePresentersAfterThemeChange [
 
 	self traversePresentersDo: [ :each | each pulsarThemeChanged ]
 ]
+
+{ #category : 'private' }
+PulsarBaseView >> windowClosed [
+	"Subclasses override this to clean up when their window is closed."
+]

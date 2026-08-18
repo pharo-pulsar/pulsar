@@ -13,6 +13,12 @@ Class {
 	#tag : 'View'
 }
 
+{ #category : 'private - actions' }
+PulsarFileEditor >> closeEditorPanel [
+	
+	self withPanelWidgetDo: [ :aPanelWindow | aPanelWindow close ]
+]
+
 { #category : 'private - definitions' }
 PulsarFileEditor >> defineActionsOn: aBuilder [
 	<dockActions>
@@ -42,9 +48,66 @@ PulsarFileEditor >> doBrowseSendersCommand: aCommand [
 ]
 
 { #category : 'private - actions' }
+PulsarFileEditor >> doConfirmCloseAfterExternalDeletion [
+	"Ask the user whether to close the editor after the file was deleted on disk."
+	| okToClose |
+	
+	okToClose := self application newConfirm
+		title: 'File deleted';
+		message: ('{1} was deleted on disk. Close the editor?' format: { self model name });
+		acceptLabel: 'Close';
+		openModalWithParent: self window.
+	okToClose ifFalse: [ ^ self ].
+	
+	self closeEditorPanel
+]
+
+{ #category : 'private - actions' }
+PulsarFileEditor >> doConfirmExternalChangeReload: contentString [
+	"Ask the user to reload the file from disk, discarding local changes."
+	| okToReload |
+	
+	okToReload := self application newConfirm
+		title: 'File changed';
+		message: ('{1} was modified on disk. Reload and discard your changes?' format: { self model name });
+		acceptLabel: 'Reload';
+		openModalWithParent: self window.
+	okToReload ifFalse: [ ^ self ].
+	self reloadContent: contentString
+]
+
+{ #category : 'events' }
+PulsarFileEditor >> doHandleExternalFileDeletion [
+	"React to the external deletion of the file: close a clean editor, ask first if dirty."
+
+	self isDirty ifFalse: [ ^ self closeEditorPanel ].
+	self doConfirmCloseAfterExternalDeletion
+]
+
+{ #category : 'private - actions' }
 PulsarFileEditor >> doOpenCurrentFolder [
 
 	self model openInOSFileBrowser
+]
+
+{ #category : 'events' }
+PulsarFileEditor >> doReactToChangedContent: contentString [
+	"Reload the editor with the new content, asking first if it is dirty."
+
+	self model entity exists ifFalse: [ ^ self doHandleExternalFileDeletion ].
+	contentString = self originalContent ifTrue: [ ^ self ].
+	self isDirty
+		ifTrue: [ self doConfirmExternalChangeReload: contentString ]
+		ifFalse: [ self reloadContent: contentString ]
+]
+
+{ #category : 'events' }
+PulsarFileEditor >> doReactToExternalFileChange [
+	"React to an external change of the file on disk."
+	
+	self model ifNil: [ ^ self ].
+	self model entity exists ifFalse: [ ^ self doHandleExternalFileDeletion ].
+	self doReactToChangedContent: self model sourceCode
 ]
 
 { #category : 'private - actions' }
@@ -82,8 +145,10 @@ PulsarFileEditor >> markDirty [
 
 { #category : 'private' }
 PulsarFileEditor >> originalContent [
-
-	^ self model sourceCode
+	
+	^ self model entity exists
+		ifTrue: [ self model sourceCode ]
+		ifFalse: [ nil ]
 ]
 
 { #category : 'initialization' }
@@ -91,6 +156,16 @@ PulsarFileEditor >> registerToSystemEvents [
 	"No Pharo system events to listen to for a file editor."
 
 	
+]
+
+{ #category : 'private - actions' }
+PulsarFileEditor >> reloadContent: contentString [
+	"Replace the editor text with the given content without marking it dirty."
+	
+	self updatingWhile: [
+		editorPresenter removeAllTextSegmentDecorations.
+		editorPresenter text: contentString ].
+	self unmarkDirty
 ]
 
 { #category : 'accessing - snapshot' }
@@ -132,14 +207,21 @@ PulsarFileEditor >> updateModel: aString [
 { #category : 'initialization' }
 PulsarFileEditor >> updatePresenter [
 	| source |
-
+	
 	self model ifNil: [ ^ self ].
+	self model ensureMonitoringDo: [ self doReactToExternalFileChange ].
 	self scheduleJob: [
-		source := self model sourceCode.	
+		source := self model sourceCode.
 		self updatingWhile: [
 			self model isSmalltalk ifFalse: [ 
 				self model sourceCodeLanguage
 					ifNotNil: [ :language | editorPresenter language: language ] ].
 			editorPresenter text: source ].
 		self updateBreadcrumbs ]
+]
+
+{ #category : 'private' }
+PulsarFileEditor >> windowClosed [
+	
+	self model stopMonitoring
 ]

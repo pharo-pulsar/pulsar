@@ -6,6 +6,9 @@ It wraps a FileReference as its entity and provides source code access, file wri
 Class {
 	#name : 'PulsarFileModel',
 	#superclass : 'PvBaseModel',
+	#instVars : [
+		'monitor'
+	],
 	#classVars : [
 		'LanguagesByExtension',
 		'LanguagesByName',
@@ -406,6 +409,15 @@ PulsarFileModel >> delete [
 	self entity ensureDelete
 ]
 
+{ #category : 'events' }
+PulsarFileModel >> ensureMonitoringDo: aBlock [
+	"ensure the monitoring status. If it is already running, skip"
+	
+	monitor ifNotNil: [ ^ self ].
+	monitor := PulsarFileMonitor newFrom: self entity.
+	monitor startMonitoringDo: aBlock
+]
+
 { #category : 'accessing' }
 PulsarFileModel >> fullName [
 
@@ -490,6 +502,14 @@ PulsarFileModel >> sourceCodeLanguage [
 PulsarFileModel >> spotterTitle [
 
 	^ self entity basename
+]
+
+{ #category : 'events' }
+PulsarFileModel >> stopMonitoring [
+	
+	monitor ifNil: [ ^ self ].
+	monitor stopAndDispose.
+	monitor := nil
 ]
 
 { #category : 'updating' }

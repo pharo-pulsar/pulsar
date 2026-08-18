@@ -71,6 +71,14 @@ PulsarDirectoryModel >> delete [
 	self entity ensureDelete
 ]
 
+{ #category : 'events' }
+PulsarDirectoryModel >> ensureMonitoringDo: aBlock [
+
+	monitor ifNotNil: [ ^ self ].
+	monitor := PulsarFileMonitor newFrom: self entity.
+	monitor startMonitoringDo: aBlock
+]
+
 { #category : 'accessing' }
 PulsarDirectoryModel >> fullName [
 
@@ -129,14 +137,6 @@ PulsarDirectoryModel >> pulsarEditorClass [
 PulsarDirectoryModel >> spotterTitle [
 
 	^ self entity basename
-]
-
-{ #category : 'events' }
-PulsarDirectoryModel >> startMonitoringDo: aBlock [
-
-	monitor ifNotNil: [ ^ self ].
-	monitor := PulsarFileMonitor newFrom: self entity.
-	monitor startMonitoringDo: aBlock
 ]
 
 { #category : 'events' }

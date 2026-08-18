@@ -189,7 +189,7 @@ PulsarTDirectoryTree >> updatePresenter [
 
 	self listPresenter roots: self model children.
 	self updateHeaderPresenter.
-	self model startMonitoringDo: [ 
+	self model ensureMonitoringDo: [ 
 		self updatePresenter ]
 ]
 
