@@ -14,12 +14,6 @@ Class {
 	#tag : 'Model'
 }
 
-{ #category : 'testing' }
-PulsarDirectoryModel >> canBeActivated [
-
-	^ false
-]
-
 { #category : 'accessing' }
 PulsarDirectoryModel >> children [
 	"Return child models: subdirectories (as PulsarDirectoryModel) followed by files (as PulsarFileModel), sorted by name."
