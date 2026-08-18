@@ -12,52 +12,44 @@ Trait {
 
 { #category : 'private - definitions' }
 PulsarTDirectoryTree >> defineActionsOn: aBuilder [
-
 	<dockActions>
+	
 	aBuilder
-		addGroup: #actions with: [ :group |
-				group
-					beDisplayedAsGroup;
-					addActionWith: [ :action |
-							action
-								name: 'Open file location';
-								iconName: 'open';
-								description: 'Open current file location on the external file manager';
-								action: [ self doOpenCurrentFolder ] ];
-					addActionWith: [ :action |
-							action
-								name: 'Open terminal';
-								iconName: 'console';
-								description: 'Open a terminal on current file location';
-								action: [ self doOpenTerminalOnCurrentFolder ] ] ];
-		addGroup: #directory with: [ :group |
-			group
-				priority: 10;
-				name: 'Directory';
-				beDisplayedAsGroup;
-				addActionWith: [ :action |
-						action
-							name: 'New file';
-							description: 'Create a new empty file';
-							iconName: 'addFile';
-							action: [ self doAddFileCommand: action ] ];
-				addActionWith: [ :action |
-						action
-							name: 'New folder';
-							description: 'Create a new directory';
-							iconName: 'addFolder';
-							action: [ self doAddFolderCommand: action ] ] ];
-		addGroup: #directoryCritical with: [ :group |
-			group
-				priority: 1000;
-				name: 'DANGER ZONE';
-				beDisplayedAsGroup;
-				addActionWith: [ :action |
-						action
-							name: 'Remove';
-							description: 'Remove selected file or folder';
-							shortcutKey: $x mod1 shift;
-							action: [ self doRemoveSelectedFileOrFolder ] ] ]
+		addGroup: #actions with: [ :group | group
+			beDisplayedAsGroup;
+			addActionWith: [ :action | action
+				name: 'Open file location';
+				iconName: 'open';
+				description: 'Open current file location on the external file manager';
+				action: [ self doOpenCurrentFolder ] ];
+			addActionWith: [ :action | action
+				name: 'Open terminal';
+				iconName: 'console';
+				description: 'Open a terminal on current file location';
+				action: [ self doOpenTerminalOnCurrentFolder ] ] ];
+		addGroup: #directory with: [ :group | group
+			priority: 10;
+			name: 'Directory';
+			beDisplayedAsGroup;
+			addActionWith: [ :action | action
+				name: 'New file';
+				description: 'Create a new empty file';
+				iconName: 'addFile';
+				action: [ self doAddFileCommand: action ] ];
+			addActionWith: [ :action | action
+				name: 'New folder';
+				description: 'Create a new directory';
+				iconName: 'addFolder';
+				action: [ self doAddFolderCommand: action ] ] ];
+		addGroup: #directoryCritical with: [ :group | group
+			priority: 1000;
+			name: 'DANGER ZONE';
+			beDisplayedAsGroup;
+			addActionWith: [ :action | action
+				name: 'Remove';
+				description: 'Remove selected file or folder';
+				shortcutKey: $x mod1 shift;
+				action: [ self doRemoveSelectedFileOrFolder ] ] ]
 ]
 
 { #category : 'private - actions' }
