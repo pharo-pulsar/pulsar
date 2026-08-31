@@ -7,7 +7,8 @@ Class {
 	#instVars : [
 		'batchMilliseconds',
 		'changedAction',
-		'changedWaiting'
+		'changedWaiting',
+		'mutex'
 	],
 	#classVars : [
 		'gFile',
@@ -64,6 +65,7 @@ PulsarFileMonitor >> fromReference: aFileReference [
 PulsarFileMonitor >> initialize [
 
 	changedWaiting := false.
+	mutex := Mutex new.
 	super initialize.
 ]
 
@@ -98,8 +100,16 @@ PulsarFileMonitor >> startMonitoringDo: aBlock [
 { #category : 'events' }
 PulsarFileMonitor >> stopAndDispose [
 
-	self defer: [ 
-		gMonitor cancel.
-		gMonitor objectUnref.
-		gFile objectUnref ]
+	self flag: #FIXME. "I added the mutex because this is being called twice. While a security 
+	flag does not hurts, is better to find the place where this is happening and fix it."
+	mutex critical: [  
+		gMonitor ifNil: [ ^ self ].
+		self defer: [ 
+			[ 
+				gMonitor cancel.
+				gMonitor objectUnref.
+				gFile objectUnref.
+			] 
+			ensure: [ 
+				gMonitor := gFile := nil ] ] ]
 ]
