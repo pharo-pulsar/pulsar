@@ -143,6 +143,13 @@ PulsarFileEditor >> markDirty [
 	^ super markDirty
 ]
 
+{ #category : 'private - notifying' }
+PulsarFileEditor >> notifyEditorClosed [
+
+	super notifyEditorClosed.
+	self windowClosed
+]
+
 { #category : 'private' }
 PulsarFileEditor >> originalContent [
 	
