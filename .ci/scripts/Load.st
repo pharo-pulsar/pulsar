@@ -34,4 +34,5 @@ MetaMetacello load: [ :spec | spec
 	baseline: 'Adwaita' with: [ spec repository: 'github://estebanlm/Spec-LibAdwaita:main' ];
 	baseline: 'SourceEditor' with: [ spec repository: 'git:git@forge.smallworks.eu:pharo/SourceEditor.git:main' ];
 	baseline: 'Panel' with: [ spec repository: 'github://estebanlm/Spec-LibPanel:main' ];
+	baseline: 'StringInterpolation' with: [ spec repository: 'git:git@forge.smallworks.eu:pharo/StringInterpolation.git:main' ];
 	baseline: 'Pulsar' with: [ spec repository: 'git:git@forge.smallworks.eu:pharo/Pulsar.git:main' ] ]
