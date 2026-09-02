@@ -123,6 +123,11 @@ PulsarPackageEditor >> eventModelRemoved: anAnnouncememnt [
 ]
 
 { #category : 'events' }
+PulsarPackageEditor >> eventTestCaseEnded: aTestCaseEnded [
+	"do nothing"
+]
+
+{ #category : 'events' }
 PulsarPackageEditor >> eventThemeChanged: ann [
 
 	super eventThemeChanged: ann.
