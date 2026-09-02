@@ -28,7 +28,7 @@ PulsarLLMChatConsole class >> defaultPanelPosition [
 { #category : 'accessing' }
 PulsarLLMChatConsole class >> defaultTitle [
 
-	^ 'Chat'
+	^ 'Assistant'
 ]
 
 { #category : 'accessing' }
