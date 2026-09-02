@@ -152,3 +152,9 @@ PulsarRepositoryPackageModel >> package [
 
 	^ self entity
 ]
+
+{ #category : 'actions' }
+PulsarRepositoryPackageModel >> unload [
+
+	self entity unload
+]

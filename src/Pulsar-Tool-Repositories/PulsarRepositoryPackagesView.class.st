@@ -82,11 +82,19 @@ PulsarRepositoryPackagesView >> doInstallBaseline: aPackageModel [
 
 { #category : 'private - actions' }
 PulsarRepositoryPackagesView >> doLoadPackage: aPackageModel [
- 	| presenter |
  	
 	self scheduleJob: [ :statusbar |
 		statusbar pushMessage: ('Loading {1}...' format: { aPackageModel name }).
  		aPackageModel load.
+ 		self updatePresenter ]
+]
+
+{ #category : 'private - actions' }
+PulsarRepositoryPackagesView >> doUnloadPackage: aPackageModel [
+ 	
+	self scheduleJob: [ :statusbar |
+		statusbar pushMessage: ('Unloading {1}...' format: { aPackageModel name }).
+ 		aPackageModel unload.
  		self updatePresenter ]
 ]
 
