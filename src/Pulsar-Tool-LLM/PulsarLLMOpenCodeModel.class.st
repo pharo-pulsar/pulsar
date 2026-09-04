@@ -36,6 +36,19 @@ PulsarLLMOpenCodeModel class >> label [
 	^ 'OpenCode'
 ]
 
+{ #category : 'api' }
+PulsarLLMOpenCodeModel >> api [
+	"Answer a client for the OpenCode server API, matching the port this model spawns OpenCode with."
+
+	^ PulsarLLMOpenCodeAPI new
+]
+
+{ #category : 'private' }
+PulsarLLMOpenCodeModel >> connectionArguments [
+
+	^  #('--port' '4096')
+]
+
 { #category : 'private' }
 PulsarLLMOpenCodeModel >> ensureConfig [
 	| ref |
@@ -64,7 +77,7 @@ PulsarLLMOpenCodeModel >> performConnectTo: aTerminalPresenter [
 	aTerminalPresenter 
 		spawnAsync: command trimBoth 
 		workingDirectory: FileLocator imageDirectory fullName 
-		arguments: #("'--port' '4096'")
+		arguments:self connectionArguments
 ]
 
 { #category : 'actions' }
