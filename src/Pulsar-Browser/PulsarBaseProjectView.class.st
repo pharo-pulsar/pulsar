@@ -309,7 +309,7 @@ PulsarBaseProjectView >> initializeFilter [
 
 	filterInputPresenter := self newTextInput
 		addStyle: 'flat';
-		placeholder: ('Filter ({1}+ characters)...' format: { self filterStartingSize });
+		placeholder: (f'Filter ([self filterStartingSize]+ characters)...');
 		yourself
 ]
 

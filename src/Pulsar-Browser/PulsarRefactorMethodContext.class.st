@@ -18,6 +18,17 @@ PulsarRefactorMethodContext >> doPullUpMethod: aMethodModel [
 ]
 
 { #category : 'refactoring' }
+PulsarRefactorMethodContext >> doPushDownInSomeClassesMethod: aMethodModel [
+
+	self scheduleTask: [
+		(RePushDownMethodInSomeClassesDriver newApplication: self application)
+			model: (RBNamespace onEnvironment: RBBrowserEnvironment new)
+				scopes: { RBBrowserEnvironment new }
+				pushDownMethods: { aMethodModel entity };
+			runRefactoring ]
+]
+
+{ #category : 'refactoring' }
 PulsarRefactorMethodContext >> doPushDownMethod: aMethodModel [
 
 	self scheduleTask: [

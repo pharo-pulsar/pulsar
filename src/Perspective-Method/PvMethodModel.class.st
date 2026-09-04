@@ -174,17 +174,23 @@ PvMethodModel >> defineRefactorActionsOn: aBuilder [
 		name: 'Refactors';
 		beDisplayedAsGroup;
 		addActionWith: [ :action | action
-			name: ('Rename {1}' format: { self name });
+			name: (f'Rename [self name]');
 			description: 'Rename method';
 			action: [ :aContext | aContext doRenameMethod: self ] ];
 		addActionWith: [ :action | action
-			name: ('Pull up {1}' format: { self name });
+			name: (f'Pull up [self name]');
 			description: 'Pull up method';
 			action: [ :aContext | aContext doPullUpMethod: self ] ];
 		addActionWith: [ :action | action
-			name: ('Push down {1}' format: { self name });
+			name: (f'Push down [self name]');
 			description: 'Push down method';
-			action: [ :aContext | aContext doPushDownMethod: self ] ] ]
+			actionEnabled: [ self methodClass hasSubclasses ];
+			action: [ :aContext | aContext doPushDownMethod: self ] ];
+		addActionWith: [ :action | action
+			name: (f'Push down [self name] in some classes');
+			description: 'Push down method in some classes';
+			actionEnabled: [ self methodClass hasSubclasses ];
+			action: [ :aContext | aContext doPushDownInSomeClassesMethod: self ] ] ]
 ]
 
 { #category : 'accessing - editor' }

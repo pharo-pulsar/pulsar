@@ -177,7 +177,7 @@ PulsarClassOutlineSideView >> defineVariableActionsOn: aBuilder [
 			name: 'DANGER ZONE';
 			beDisplayedAsGroup;
 			addActionWith: [ :action | action 
-				dynamicName: [ 'Remove {1}' format: { self selectedVariableName }  ];
+				dynamicName: [ f'Remove [self selectedVariableName]' ];
 				description: 'Remove this slot';
 				shortcutKey: $x mod1 shift;
 				action: [ self doForceRemoveSlot ] ] ]
@@ -247,7 +247,7 @@ PulsarClassOutlineSideView >> doForceRemoveMethod [
 
 	okToRemove := self application newConfirm
 		title: 'Remove method';
-		message: ('Do you want to remove method {1}?' format: { selectedMethodModel name });
+		message: (f'Do you want to remove method [selectedMethodModel name]?');
 		acceptLabel: 'Remove';
 		openModalWithParent: self window.
 	okToRemove ifFalse: [ ^ self ].
@@ -268,7 +268,7 @@ PulsarClassOutlineSideView >> doForceRemoveSharedVariable [
 
 	okToRemove := self application newConfirm
 		title: 'Remove shared variable';
-		message: ('Do you want to remove {1}?' format: { selectedSharedVariableModel name });
+		message: (f'Do you want to remove [selectedSharedVariableModel name]?');
 		acceptLabel: 'Remove';
 		openModalWithParent: self window.
 	okToRemove ifFalse: [ ^ self ].
@@ -289,7 +289,7 @@ PulsarClassOutlineSideView >> doForceRemoveSlot [
 
 	okToRemove := self application newConfirm
 		title: 'Remove slot';
-		message: ('Do you want to remove  {1}?' format: { selectedVariableModel name });
+		message: (f'Do you want to remove [selectedVariableModel name]?');
 		acceptLabel: 'Remove';
 		openModalWithParent: self window.
 	okToRemove ifFalse: [ ^ self ].
@@ -307,7 +307,7 @@ PulsarClassOutlineSideView >> doRemoveSelectedProtocol [
 
 	okToRemove := self application newConfirm
 		title: 'Remove protocol';
-		message: ('Do you really want to remove protocol "{1}" and all its methods?' format: { protocolModel name });
+		message: (f'Do you really want to remove protocol "[protocolModel name]" and all its methods?');
 		acceptLabel: 'Remove';
 		openModalWithParent: self window.
 	okToRemove ifFalse: [ ^ self ].

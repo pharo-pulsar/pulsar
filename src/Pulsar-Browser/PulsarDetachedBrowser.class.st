@@ -13,9 +13,7 @@ Class {
 { #category : 'private' }
 PulsarDetachedBrowser >> composeTitle [
 
-	^ 'Pharo({1}): {2}' format: {
-		FileLocator image base.
-		', ' join: (self editors collect: [ :each | each title ]) }
+	^ f'Pharo([FileLocator image base]): [', ' join: (self editors collect: [ :each | each title ])]'
 ]
 
 { #category : 'initialization' }

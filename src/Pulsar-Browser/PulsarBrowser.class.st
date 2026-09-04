@@ -76,11 +76,9 @@ PulsarBrowser >> composeTitle [
 
 	^ (projectView isNotNil and: [ projectView openedProjects isNotEmpty ])
 		ifTrue: [
-			'Pharo({1}): {2}' format: { 
-				FileLocator image base.
-				', ' join: (projectView openedProjects collect: #name) } ]
+			f'Pharo([FileLocator image base]): [', ' join: (projectView openedProjects collect: #name)]' ]
 		ifFalse: [ 
-			'Pharo({1})' format: { FileLocator image base } ]
+			f'Pharo([FileLocator image base])' ]
 ]
 
 { #category : 'api - focus' }

@@ -34,7 +34,7 @@ PulsarClassCritiquesModel >> isScope: aSymbol [
 PulsarClassCritiquesModel >> title [
 
 	^ self currentModel
-		ifNotNil:[ :aModel | 'Critiques on {1} class' format: { aModel name } ]
+		ifNotNil:[ :aModel | f'Critiques on [aModel name] class' ]
 		ifNil: [ 'No class selected' ]
 ]
 

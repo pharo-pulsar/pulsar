@@ -5,14 +5,12 @@ Class {
 	#name : 'PulsarFileMonitor',
 	#superclass : 'Object',
 	#instVars : [
+		'gFile',
+		'gMonitor',
 		'batchMilliseconds',
 		'changedAction',
 		'changedWaiting',
 		'mutex'
-	],
-	#classVars : [
-		'gFile',
-		'gMonitor'
 	],
 	#category : 'Pulsar-Tool-FileEditor-Utilities',
 	#package : 'Pulsar-Tool-FileEditor',

@@ -55,7 +55,7 @@ PulsarClassOutlineClassSideView >> defineSharedVariableActionsOn: aBuilder [
 			name: 'DANGER ZONE';
 			beDisplayedAsGroup;
 			addActionWith: [ :action | action 
-				dynamicName: [ 'Remove {1}' format: { self selectedSharedVariableName }  ];
+				dynamicName: [ f'Remove [self selectedSharedVariableName]'  ];
 				description: 'Remove this shared variable';
 				shortcutKey: $x mod1 shift;
 				action: [ self doForceRemoveSharedVariable ] ] ]

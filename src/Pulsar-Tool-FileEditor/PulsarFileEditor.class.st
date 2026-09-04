@@ -54,7 +54,7 @@ PulsarFileEditor >> doConfirmCloseAfterExternalDeletion [
 	
 	okToClose := self application newConfirm
 		title: 'File deleted';
-		message: ('{1} was deleted on disk. Close the editor?' format: { self model name });
+		message: (f'[self model name] was deleted on disk. Close the editor?');
 		acceptLabel: 'Close';
 		openModalWithParent: self window.
 	okToClose ifFalse: [ ^ self ].

@@ -92,6 +92,6 @@ PulsarDirectoryBrowser >> updateHeaderPresenter [
 			aBreadcrumb
 				addSegment: self model fullName;
 				addButtonSegment: 'copy-to-clipboard'
-				help: ('Copy {1} to the clipboard' format: { self model fullName })
+				help: (f'Copy [self model fullName] to the clipboard')
 				action: [ self doCopyToClipboard ] ]
 ]

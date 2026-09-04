@@ -54,7 +54,7 @@ PulsarBaseProjectModel >> defineCriticalActionsOn: aBuilder [
 		priority: 1000;
 		beDisplayedAsGroup;
 		addActionWith: [ :action | action
-			name: ('Close project {1}' format: { self name });
+			name: (f'Close project [self name]');
 			description: 'Remove project from projects list';
 			action: [ :aContext | aContext doCloseProject: self ] ] ]
 ]

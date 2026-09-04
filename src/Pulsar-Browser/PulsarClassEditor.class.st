@@ -355,7 +355,7 @@ PulsarClassEditor >> updateBreadcrumbs [
 		aBreadcrumb 
 			addSegment: name;
 			addButtonSegment: 'copy-to-clipboard'
-				help: ('Copy {1} to the clipboard' format: { self model fullName })
+				help: (f'Copy [self model fullName] to the clipboard')
 				action: [ self doCopyToClipboard ] ]
 ]
 

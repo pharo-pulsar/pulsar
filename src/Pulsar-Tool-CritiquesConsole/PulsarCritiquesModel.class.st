@@ -125,7 +125,7 @@ PulsarCritiquesModel >> rules [
 PulsarCritiquesModel >> title [
 
 	^ self currentModel 
-		ifNotNil: [ 'Critiques of {1}' format: { self currentModel fullName } ]
+		ifNotNil: [ f'Critiques of [self currentModel fullName]' ]
 		ifNil: [ 'Critiques' ] 
 ]
 

@@ -42,7 +42,7 @@ PulsarBaselineCreator >> baselineMethodSource [
 	  	
 	  	self packageNames 
 	  		do: [ :each | 
-	  			stream tab; tab; nextPutAll: ('spec package: ''{1}''' format: { each }) ]
+	  			stream tab; tab; nextPutAll: (f'spec package: ''[each]''') ]
 	  		separatedBy: [ 
 	  			stream cr ].
 	  	

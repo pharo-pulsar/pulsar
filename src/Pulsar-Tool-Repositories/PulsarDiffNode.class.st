@@ -42,7 +42,7 @@ PulsarDiffNode >> active: aBoolean [
 PulsarDiffNode >> addClassActionsTo: group [
 
 	group addActionWith: [ :action | action 
-		name: ('Open editor for {1}' format: { self name });
+		name: (f'Open editor for [self name]');
 		actionEnabled: [ self canBeActivated ];
 		action: [ :aContext | aContext notifyActivateEntity: self newClassModel ] ]
 ]
@@ -51,7 +51,7 @@ PulsarDiffNode >> addClassActionsTo: group [
 PulsarDiffNode >> addMethodActionsTo: group [
 
 	group addActionWith: [ :action | action 
-		name: ('Open editor for {1}' format: { self name });
+		name: (f'Open editor for [self name]');
 		actionEnabled: [ self canBeActivated ];
 		action: [ :aContext | aContext notifyActivateEntity: self newMethodModel ] ]
 ]
@@ -141,12 +141,8 @@ PulsarDiffNode >> description [
 	operation := self node value.
 	
 	^ operation definition isMethodDefinition 
-		ifTrue: [ 
-			'{1} >> {2}' format: { 
-				operation definition className. 
-				operation definition name } ]
-		ifFalse: [ 
-			operation definition name ]
+		ifTrue: [ f'[operation definition className] >> [operation definition name]' ]
+		ifFalse: [ operation definition name ]
 ]
 
 { #category : 'testing' }
@@ -364,9 +360,7 @@ PulsarDiffNode >> selectionAnnouncementClass [
 { #category : 'accessing' }
 PulsarDiffNode >> summary [
 
-	^ '<b><span foreground="green">+{1}</span> <span foreground="red">-{2}</span></b>' format: { 
-		self patchInsertions. 
-		self patchDeletions }
+	^ f'<b><span foreground="green">+[self patchInsertions]</span> <span foreground="red">-[self patchDeletions]</span></b>'
 ]
 
 { #category : 'accessing' }

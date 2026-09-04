@@ -35,7 +35,7 @@ PulsarClassFlagsModel >> locationDescriptionFor: aFlag [
 PulsarClassFlagsModel >> title [
 
 	^ self currentModel
-		ifNotNil:[ :aModel | 'Flags on {1}' format: { aModel name } ]
+		ifNotNil:[ :aModel | f'Flags on [aModel name]' ]
 		ifNil: [ 'No class selected' ]
 ]
 
