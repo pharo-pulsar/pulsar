@@ -67,6 +67,12 @@ PulsarFileMonitor >> initialize [
 	super initialize.
 ]
 
+{ #category : 'testing' }
+PulsarFileMonitor >> isMonitoring [
+
+	^ gMonitor isNotNil
+]
+
 { #category : 'private' }
 PulsarFileMonitor >> maybeStartChangedActivationBatch [
 
@@ -76,7 +82,8 @@ PulsarFileMonitor >> maybeStartChangedActivationBatch [
 	[ 
 		self batchMilliseconds wait.
 		changedWaiting := false.
-		changedAction value 
+		self isMonitoring
+			ifTrue: [ changedAction ifNotNil: #value ].
 	] fork
 ]
 
@@ -105,6 +112,7 @@ PulsarFileMonitor >> stopAndDispose [
 		self defer: [ 
 			[ 
 				gMonitor cancel.
+				changedAction := nil.
 				gMonitor objectUnref.
 				gFile objectUnref.
 			] 
