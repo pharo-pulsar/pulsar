@@ -9,7 +9,8 @@ Class {
 { #category : 'testing' }
 PvMethodExtensionDecorator class >> appliesTo: aMethod [
 
-	^ aMethod isExtension or: [ aMethod protocol isExtensionProtocol ]
+	^ aMethod isExtension or: [ 
+		aMethod protocol isNotNil and: [ aMethod protocol isExtensionProtocol ] ]
 ]
 
 { #category : 'accessing' }
