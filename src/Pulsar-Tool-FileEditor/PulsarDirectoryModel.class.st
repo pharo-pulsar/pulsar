@@ -17,22 +17,30 @@ Class {
 { #category : 'accessing' }
 PulsarDirectoryModel >> children [
 	"Return child models: subdirectories (as PulsarDirectoryModel) followed by files (as PulsarFileModel), sorted by name."
-
 	| directoryModels fileModels |
-	directoryModels := self entity directories
-		                   collect: [ :each | PulsarDirectoryModel newEnvironment: self environmentModel parent: self entity: each ]
-		                   as: OrderedCollection.
+	
+	self entity exists ifFalse: [ ^ #() ].
+	
+	directoryModels := self entity directories 
+		collect: [ :each | 
+			PulsarDirectoryModel 
+				newEnvironment: self environmentModel 
+				parent: self 
+				entity: each ]
+			as: Array.
 
 	fileModels := self entity files
-		              collect: [ :each | PulsarFileModel newEnvironment: self environmentModel parent: self entity: each ]
-		              as: OrderedCollection.
+		collect: [ :each | 
+			PulsarFileModel 
+				newEnvironment: self environmentModel 
+				parent: self 
+				entity: each ]
+		as: Array.
 
 	directoryModels sort: [ :aModel :bModel | aModel name <= bModel name ].
 	fileModels sort: [ :aModel :bModel | aModel name <= bModel name ].
 
-	^ directoryModels
-		  addAll: fileModels;
-		  yourself
+	^ directoryModels, fileModels
 ]
 
 { #category : 'actions' }

@@ -5,6 +5,9 @@ It provides the directory tree widget creation, the directory/file actions (crea
 "
 Trait {
 	#name : 'PulsarTDirectoryTree',
+	#instVars : [
+		'expandedItems'
+	],
 	#category : 'Pulsar-Tool-FileEditor-View',
 	#package : 'Pulsar-Tool-FileEditor',
 	#tag : 'View'
@@ -136,6 +139,18 @@ PulsarTDirectoryTree >> eventModelChanged: ann [
 	self updatePresenter
 ]
 
+{ #category : 'accessing' }
+PulsarTDirectoryTree >> expandedItems [
+	
+	^ expandedItems ifNil: [ expandedItems := Set new ]
+]
+
+{ #category : 'accessing' }
+PulsarTDirectoryTree >> expandedItems: aSet [
+
+	expandedItems := aSet
+]
+
 { #category : 'private' }
 PulsarTDirectoryTree >> newDirectoryTree [
 	"Create the directory tree list used by directory presenters."
@@ -146,7 +161,23 @@ PulsarTDirectoryTree >> newDirectoryTree [
 		  display: [ :aModel | aModel name ];
 		  displayIcon: [ :aModel | self iconNamed: aModel iconName ];
 		  actions: (self actions actionsForAll: #( directory directoryCritical ));
+		  whenExpandChangedDo: [ :ann | self registerExpansionOf: ann ];
 		  yourself
+]
+
+{ #category : 'private' }
+PulsarTDirectoryTree >> pathIndexOf: aModel [
+	"Answer the 1-based path locating aModel within the tree contents, or a path containing zero when not found."
+
+	^ self listPresenter contentView pathIndexOf: { aModel }
+]
+
+{ #category : 'events' }
+PulsarTDirectoryTree >> registerExpansionOf: ann [
+
+	ann expanded
+		ifTrue: [ self expandedItems add: ann item ]
+		ifFalse: [ self expandedItems remove: ann item ifAbsent: [] ]
 ]
 
 { #category : 'initialization' }
@@ -154,6 +185,21 @@ PulsarTDirectoryTree >> registerToEvents [
 
 	super registerToEvents.
 	self announcer when: PulsarModelChanged send: #eventModelChanged: to: self
+]
+
+{ #category : 'updating' }
+PulsarTDirectoryTree >> restoreExpandedBranches [
+	"Re-expand the branches that were open before the last refresh."
+
+	self expandedItems ifEmpty: [ ^ self ].
+
+	(self expandedItems copy)
+		do: [ :each |
+			| path |
+			path := self pathIndexOf: each.
+			path first isZero
+				ifTrue: [ self expandedItems remove: each ifAbsent: [  ] ]
+				ifFalse: [ self listPresenter expandPath: path ] ]
 ]
 
 { #category : 'private - accessing' }
@@ -178,7 +224,9 @@ PulsarTDirectoryTree >> updatePresenter [
 	self model ifNil: [ ^ self ].
 
 	self listPresenter roots: self model children.
+	self restoreExpandedBranches.
 	self updateHeaderPresenter.
+
 	self model ensureMonitoringDo: [ 
 		self updatePresenter ]
 ]

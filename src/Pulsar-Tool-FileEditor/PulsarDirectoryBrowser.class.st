@@ -51,8 +51,8 @@ PulsarDirectoryBrowser >> initializePresenters [
 	headerPresenter actions: (self actions actionsFor: #actions).
 
 	headerPresenter addPresenter: (self newToolbar
-			 beIcons;
-			 fillWith: (self actions actionsFor: #directory)).
+		beIcons;
+		fillWith: (self actions actionsFor: #directory)).
 
 	listPresenter := self newDirectoryTree
 ]
