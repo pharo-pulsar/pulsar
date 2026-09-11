@@ -45,8 +45,9 @@ PulsarRepositoryChangeRow >> model: aDiffNode [
 
 	model ifNotNil: [ model resetStateChangedAction ].
 	super model: aDiffNode.
-	aDiffNode whenStateChangedDo: [ :aValue | 
-		self updateActiveStatus: aValue ]
+	aDiffNode ifNotNil: [ 
+		aDiffNode whenStateChangedDo: [ :aValue | 
+			self updateActiveStatus: aValue ] ]
 ]
 
 { #category : 'initialization' }

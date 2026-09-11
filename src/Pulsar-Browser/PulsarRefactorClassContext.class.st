@@ -18,13 +18,31 @@ PulsarRefactorClassContext >> doDuplicateClass: aClassModel [
 
 { #category : 'refactors' }
 PulsarRefactorClassContext >> doInsertSubclass: aClassModel [
-
+	
 	self scheduleTask: [
-		(ReInsertSubclassDriver newApplication: self application)
-			superclass: aClassModel entity;
-			packageName: aClassModel entity packageName;	
-			scopes: { RBBrowserEnvironment new };
-			runRefactoring ]
+		| choiceTuple driver |
+
+		choiceTuple := (SpSelectDialog newApplication: self application)
+			title: 'Choose a way to create your new class';
+			message: 'Select the strategy you want to use';
+			items: {
+				(false -> 'Insert your new class in between the target class and its subclasses').
+				(true -> 'Add your new class as subclass of the target class and don''t change its hierarchy') };
+			display: [ :each | each value ];
+			openModal.
+		
+		choiceTuple ifNotNil: [
+			driver := (ReInsertSubclassDriver newApplication: self application)
+				superclass: aClassModel entity;
+				packageName: aClassModel entity packageName;	
+				scopes: { RBBrowserEnvironment new };
+				yourself.
+				
+			choiceTuple key 
+				ifTrue: [ driver beSibling ].
+				
+			driver runRefactoring ]
+	]
 ]
 
 { #category : 'refactors' }
