@@ -26,7 +26,7 @@ PulsarSystemNavigation >> application [
 	^ self window application
 ]
 
-{ #category : 'opening' }
+{ #category : 'accessing' }
 PulsarSystemNavigation >> browse: anObject [
 	| modelClass |
 
@@ -38,6 +38,12 @@ PulsarSystemNavigation >> browse: anObject [
 	self window announce: (PulsarModelActivated newValue: (modelClass 
 		newEnvironment: self window model environmentModel 
 		entity: anObject))
+]
+
+{ #category : 'accessing' }
+PulsarSystemNavigation >> browseAllSendersOf: aVariableOrClassName from: aContext [
+
+	^ self browseAllReferencesTo: aVariableOrClassName
 ]
 
 { #category : 'accessing' }
