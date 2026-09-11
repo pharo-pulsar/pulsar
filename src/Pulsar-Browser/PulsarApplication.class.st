@@ -291,7 +291,11 @@ PulsarApplication >> iconNamed: aString [
 { #category : 'ui - requests' }
 PulsarApplication >> inform: aString [
 
-	aString printToStdout
+	logger info: aString.
+
+	self topWindow 
+		ifNotNil: [ :aWindow | aWindow inform: aString ]
+		ifNil: [ aString crTrace ]
 ]
 
 { #category : 'initialization' }
