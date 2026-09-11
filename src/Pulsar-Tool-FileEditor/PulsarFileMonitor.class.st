@@ -109,10 +109,11 @@ PulsarFileMonitor >> stopAndDispose [
 	flag does not hurts, is better to find the place where this is happening and fix it."
 	mutex critical: [  
 		gMonitor ifNil: [ ^ self ].
+		changedAction := nil.
 		self defer: [ 
 			[ 
+				gMonitor disconnectAll.
 				gMonitor cancel.
-				changedAction := nil.
 				gMonitor objectUnref.
 				gFile objectUnref.
 			] 
