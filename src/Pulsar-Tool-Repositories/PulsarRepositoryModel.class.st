@@ -252,6 +252,12 @@ PulsarRepositoryModel >> headTags [
 		PulsarRepositoryTagModel newRepository: self entity: each ]
 ]
 
+{ #category : 'testing' }
+PulsarRepositoryModel >> includesBaseline: aBaselineName [
+
+	^ self baselines anySatisfy: [ :each | each name = aBaselineName ]
+]
+
 { #category : 'accessing' }
 PulsarRepositoryModel >> incomingCommits [
 

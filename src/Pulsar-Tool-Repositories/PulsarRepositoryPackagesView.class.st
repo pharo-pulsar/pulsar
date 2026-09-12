@@ -98,6 +98,22 @@ PulsarRepositoryPackagesView >> doUnloadPackage: aPackageModel [
  		self updatePresenter ]
 ]
 
+{ #category : 'events' }
+PulsarRepositoryPackagesView >> eventMetacelloExecutionEnd: anAnnouncement [
+	| roots |
+
+	logger trace.
+
+	"collect projects afected and see if this repository includes one any of them, 
+	 just then we can refresh... otherwise no need"
+	roots := anAnnouncement executor roots collect: #projectName.
+	(roots anySatisfy: [ :each | self model includesBaseline: each ])
+		ifFalse: [ ^ self ].
+	
+	logger debug: 'Updating'.
+	self updatePresenter
+]
+
 { #category : 'testing' }
 PulsarRepositoryPackagesView >> hasSelectedPackage [
 
@@ -146,6 +162,16 @@ PulsarRepositoryPackagesView >> packageActions [
 PulsarRepositoryPackagesView >> panelPlacedIconName [
 
 	^ 'packages'
+]
+
+{ #category : 'initialization' }
+PulsarRepositoryPackagesView >> registerToSystemEvents [
+
+	super registerToSystemEvents.
+	self announcer 
+		when: MetacelloExecutionEndAnnouncement 
+		send: #eventMetacelloExecutionEnd: 
+		to: self
 ]
 
 { #category : 'accessing' }

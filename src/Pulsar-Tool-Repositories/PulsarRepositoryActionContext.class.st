@@ -37,24 +37,28 @@ PulsarRepositoryActionContext >> doCommit: aModel [
 
 { #category : 'private - actions' }
 PulsarRepositoryActionContext >> doInstallBaseline: aPackageModel [
- 	| presenter |
- 	
- 	presenter := self owner instantiate: PulsarInstallBaselineDialog.
- 	presenter packageModel: aPackageModel.
- 	(presenter asModalWindow
- 		owner: self window;
- 		open;
- 		isOk)
- 		ifFalse: [ ^ self ].
- 
+	| presenter |
+	
+	presenter := self owner instantiate: PulsarInstallBaselineDialog.
+	presenter packageModel: aPackageModel.
+	(presenter asModalWindow
+		owner: self window;
+		open;
+		isOk) 
+	ifFalse: [ ^ self ].
+
 	self scheduleJob: [ :statusbar |
 		statusbar pushMessage: ('Installing {1}...' format: { aPackageModel baselineName }).
- 		aPackageModel 
- 			installBaselineGroups: presenter groups
- 			upgradePolicy: presenter upgradePolicy
- 			conflictPolicy: presenter conflictPolicy
- 			ignoreImage: presenter isIgnoreImage.
- 		self notifyRepositoryModified: aPackageModel reason: PulsarRepositoryModifiedReason pull ]
+		
+		aPackageModel
+			installBaselineGroups: presenter groups
+			upgradePolicy: presenter upgradePolicy
+			conflictPolicy: presenter conflictPolicy
+			ignoreImage: presenter isIgnoreImage.
+		
+		self 
+			notifyRepositoryModified: aPackageModel repository 
+			reason: PulsarRepositoryModifiedReason baselineInstalled ]
 ]
 
 { #category : 'actions' }
