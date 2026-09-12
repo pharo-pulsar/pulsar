@@ -50,6 +50,9 @@ PulsarRepositoryBrowser >> initializeDefaultWorkspace [
 			
 	self addPresenterClass: PulsarRepositoryChangesView model: self model.
 	self addPresenterClass: PulsarRepositoryPackagesView model: self model.
+	self 
+		addPresenterClass: PulsarDirectoryView 
+		model: (PulsarDirectoryModel newEnvironment: self model entity: self model repositoryLocation).
 	self addPresenterClass: PulsarRepositoryBranchesView model: self model.
 	self addPresenterClass: PulsarRepositoryCommitsView model: self model.
 	
