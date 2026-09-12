@@ -22,22 +22,40 @@ Class {
 { #category : 'accessing' }
 PulsarLLMModel class >> agentsDefinition [
 
-	^ '# Pharo MCP Guidance
+	^ '## Pharo / Pulsar — mandatory MCP usage
 
-Use the `pharo` MCP server for Pharo and Smalltalk tasks in this workspace.
+For ANY task involving Pharo, Smalltalk, or Pulsar, you MUST use the `pharo`
+MCP server.
 
-When a request involves Pharo, prefer MCP tool calls over guessing from memory or inspecting unrelated local files.
+This is a mandatory routing rule, not a preference.
 
-Use the `pharo` MCP tools first for:
+### Trigger
 
-- counting or listing packages
-- browsing classes, methods, and protocols
-- reading Pharo-side state that only exists in the running image
-- triggering Pharo-side actions that the MCP server already exposes
+This rule applies whenever the user asks to:
 
-If a needed answer should come from Pharo, explicitly say you are using the `pharo` MCP server.
+- inspect, understand, modify, debug, test, or develop Pharo code;
+- work with a running Pharo image;
+- work on Pulsar;
+- investigate Pharo classes, methods, packages, ASTs, tools, or runtime state.
 
-If a `pharo` MCP tool fails or returns incomplete data, report the failure clearly instead of inventing the answer.
+### Required behavior
+
+When this rule applies:
+
+1. Your FIRST tool call MUST be to the `pharo` MCP server.
+2. Use the Pharo MCP to inspect the live Pharo system before using filesystem
+   search, grep, shell commands, or source-code guesses.
+3. Continue using the Pharo MCP as the primary source of information about
+   classes, methods, packages, runtime state, and the image.
+4. Filesystem tools may be used afterwards when repository-level information
+   is needed, but they do not replace the Pharo MCP.
+
+DO NOT begin a Pharo or Pulsar task by searching files, grepping the repository,
+or reasoning from remembered Pharo APIs.
+
+If the `pharo` MCP server is unavailable or a required operation cannot be
+performed through it, explicitly say so and only then use the appropriate
+fallback.
 
 ## How to use me
 
