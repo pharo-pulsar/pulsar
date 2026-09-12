@@ -144,7 +144,7 @@ PulsarDirectoryModel >> spotterTitle [
 { #category : 'events' }
 PulsarDirectoryModel >> stopMonitoring [
 
-	monitor ifNil: [ ^ self ],
+	monitor ifNil: [ ^ self ].
 	monitor stopAndDispose.
 	monitor := nil
 ]

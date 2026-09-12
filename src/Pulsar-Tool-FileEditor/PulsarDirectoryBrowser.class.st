@@ -66,6 +66,13 @@ PulsarDirectoryBrowser >> notifyActivateEntity: anEntity [
 	self notificationCenter announce: anEntity newActivationAnnouncement
 ]
 
+{ #category : 'private - notifying' }
+PulsarDirectoryBrowser >> notifyEditorClosed [
+
+	super notifyEditorClosed.
+	self windowClosed
+]
+
 { #category : 'private' }
 PulsarDirectoryBrowser >> panelFocused [
 
@@ -94,4 +101,13 @@ PulsarDirectoryBrowser >> updateHeaderPresenter [
 				addButtonSegment: 'copy-to-clipboard'
 				help: (f'Copy [self model fullName] to the clipboard')
 				action: [ self doCopyToClipboard ] ]
+]
+
+{ #category : 'private' }
+PulsarDirectoryBrowser >> windowClosed [
+
+	logger trace.
+
+	super windowClosed.
+	self model stopMonitoring
 ]
