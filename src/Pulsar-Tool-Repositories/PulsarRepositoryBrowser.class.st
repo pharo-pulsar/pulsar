@@ -15,7 +15,7 @@ Class {
 { #category : 'accessing - defaults' }
 PulsarRepositoryBrowser class >> defaultWindowSize [
 
-	^ 1100@950
+	^ 1200@950
 ]
 
 { #category : 'private - definitions' }
