@@ -41,7 +41,7 @@ PulsarSystemNavigation >> browse: anObject [
 ]
 
 { #category : 'accessing' }
-PulsarSystemNavigation >> browseAllSendersOf: aVariableOrClassName from: aContext [
+PulsarSystemNavigation >> browseAllSendersOf: aVariableOrClassName [
 
 	^ self browseAllReferencesTo: aVariableOrClassName
 ]
