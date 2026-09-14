@@ -178,7 +178,7 @@ PulsarFileEditor >> reloadContent: contentString [
 { #category : 'accessing - snapshot' }
 PulsarFileEditor >> snapshot [
 
-	^ PulsarDirectorySnapshot on: self
+	^ PulsarFileSnapshot on: self
 ]
 
 { #category : 'accessing' }

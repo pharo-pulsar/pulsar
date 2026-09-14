@@ -86,12 +86,6 @@ PulsarDirectoryBrowser >> panelPlacedIconName [
 	^ #folder
 ]
 
-{ #category : 'accessing - snapshot' }
-PulsarDirectoryBrowser >> snapshot [
-
-	^ PulsarDirectorySnapshot on: self
-]
-
 { #category : 'initialization' }
 PulsarDirectoryBrowser >> updateHeaderPresenter [
 

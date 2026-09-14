@@ -146,9 +146,9 @@ PulsarTDirectoryTree >> expandedItems [
 ]
 
 { #category : 'accessing' }
-PulsarTDirectoryTree >> expandedItems: aSet [
+PulsarTDirectoryTree >> expandedItems: aCollection [
 
-	expandedItems := aSet
+	expandedItems := aCollection asSet
 ]
 
 { #category : 'private' }
@@ -211,6 +211,12 @@ PulsarTDirectoryTree >> selectedDirectoryModel [
 	^ (selected isNotNil and: [ selected isDirectory ])
 		  ifTrue: [ selected ]
 		  ifFalse: [ self model ]
+]
+
+{ #category : 'snapshot' }
+PulsarTDirectoryTree >> snapshot [
+
+	^ PulsarDirectorySnapshot on: self
 ]
 
 { #category : 'initialization' }

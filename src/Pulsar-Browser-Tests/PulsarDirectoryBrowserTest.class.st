@@ -114,6 +114,40 @@ PulsarDirectoryBrowserTest >> testExpandedBranchSurvivesRefresh [
 ]
 
 { #category : 'tests' }
+PulsarDirectoryBrowserTest >> testSnapshotRemembersExpandedBranches [
+	| directoryView tree snapshot directorySnapshot |
+
+	self openBrowser.
+	directoryView := (browser presenterWithClass: PulsarDirectoryView) presenter.
+	tree := directoryView listPresenter.
+	tree expandPath: #(1).
+	self waitForUI.
+	snapshot := browser snapshot.
+	directorySnapshot := snapshot snapshotWithClass: PulsarDirectorySnapshot.
+	self assert: directorySnapshot expandedItems asSet equals: directoryView expandedItems
+]
+
+{ #category : 'tests' }
+PulsarDirectoryBrowserTest >> testSnapshotRestoresExpandedBranches [
+	| directoryView tree snapshot restoredBrowser restoredView restoredTree |
+
+	self openBrowser.
+	directoryView := (browser presenterWithClass: PulsarDirectoryView) presenter.
+	tree := directoryView listPresenter.
+	tree expandPath: #(1).
+	self waitForUI.
+	snapshot := browser snapshot.
+	restoredBrowser := snapshot instantiateOn: self application.
+	[
+		snapshot restoreTo: restoredBrowser.
+		restoredBrowser open.
+		self waitForUI.
+		restoredView := (restoredBrowser presenterWithClass: PulsarDirectoryView) presenter.
+		restoredTree := restoredView listPresenter.
+		self assert: (restoredTree isExpanded: #(1)) ] ensure: [ restoredBrowser withWindowDo: [ :aWindow | aWindow close ] ]
+]
+
+{ #category : 'tests' }
 PulsarDirectoryBrowserTest >> testVanishedDirectoryIsPrunedFromExpandedItems [
 	| tree |
 	self createFileSystem.
