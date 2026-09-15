@@ -269,12 +269,9 @@ PulsarProjectView >> sortProjects: aCollection [
 ]
 
 { #category : 'initialization' }
-PulsarProjectView >> updateListPresenterExpanding: aPath [
-	
-	mutex critical: [
-		listPresenter roots: (self sortProjects: self model allChildren).
-		aPath ifNotNil: [
-			listPresenter expandPath: aPath ] ]
+PulsarProjectView >> treeRoots [
+
+	^ self sortProjects: self model allChildren
 ]
 
 { #category : 'initialization' }

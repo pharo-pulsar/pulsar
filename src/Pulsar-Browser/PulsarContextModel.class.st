@@ -71,7 +71,8 @@ PulsarContextModel >> canExecuteCreateMissingClassCommand [
 { #category : 'testing' }
 PulsarContextModel >> canExecuteCreateMissingMethodCommand [
 
-	^ self session isInterruptedContextDoesNotUnderstand
+	^ self session interruptedContext isNotNil 
+		and: [ self session isInterruptedContextDoesNotUnderstand ]
 ]
 
 { #category : 'debug - testing' }

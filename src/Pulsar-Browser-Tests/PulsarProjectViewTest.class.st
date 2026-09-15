@@ -46,6 +46,32 @@ PulsarProjectViewTest >> testAddProject [
 	self assert: (items anySatisfy: [ :each | each entity = BaselineOfPulsar ])
 ]
 
+{ #category : 'running' }
+PulsarProjectViewTest >> testCollapseAllClearsExpandedItems [
+	| tree |
+	
+	self openBrowserOnProject.
+	tree := browser projectView listPresenter.
+	tree expandPath: #(1 1).
+	self waitForUI.
+	self assert: browser projectView expandedItems isNotEmpty.
+	
+	browser projectView doCollapseAll.
+	self waitForUI.
+	
+	self assert: browser projectView expandedItems isEmpty.
+]
+
+{ #category : 'running' }
+PulsarProjectViewTest >> testCollapsedBranchStaysCollapsed [
+	| tree |
+	
+	self openBrowserOnProject.
+	tree := browser projectView listPresenter.
+	
+	self deny: (tree isExpanded: #(1 1)).
+]
+
 { #category : 'tests' }
 PulsarProjectViewTest >> testDoRemoveSelectedEntityWhenProjectModel [
 	"tests a new editor for a new class is added when we request it"
@@ -81,4 +107,74 @@ PulsarProjectViewTest >> testDoRequestNewClass [
 	browser projectView doRequestNewClass.
 	self waitForUI.
 	self assert: (browser presenterWithTitle: title) isNotNil
+]
+
+{ #category : 'running' }
+PulsarProjectViewTest >> testExpandedBranchSurvivesRefresh [
+	| tree |
+	
+	self openBrowserOnProject.
+	tree := browser projectView listPresenter.
+	
+	"expand the first package of the project"
+	tree expandPath: #(1 1).
+	self waitForUI.
+	
+	"refresh as a model update would"
+	browser projectView updatePresenter.
+	self waitForUI.
+	
+	self assert: (tree isExpanded: #(1 1)).
+]
+
+{ #category : 'running' }
+PulsarProjectViewTest >> testRemovedProjectIsPrunedFromExpandedItems [
+	| tree project |
+	
+	self openBrowserOnProject.
+	tree := browser projectView listPresenter.
+	tree expandPath: #(1 1).
+	self waitForUI.
+	self assert: browser projectView expandedItems isNotEmpty.
+	
+	project := browser projectView model children first.
+	browser projectView removeProjectModel: project.
+	self waitForUI.
+	
+	self assert: browser projectView expandedItems isEmpty.
+]
+
+{ #category : 'running' }
+PulsarProjectViewTest >> testSnapshotRemembersExpandedBranches [
+	| tree snapshot projectSnapshot |
+	
+	self openBrowserOnProject.
+	tree := browser projectView listPresenter.
+	tree expandPath: #(1 1).
+	self waitForUI.
+	
+	snapshot := browser snapshot.
+	projectSnapshot := snapshot snapshotWithClass: PulsarProjectSnapshot.
+	
+	self assert: projectSnapshot expandedItems asSet equals: browser projectView expandedItems.
+]
+
+{ #category : 'running' }
+PulsarProjectViewTest >> testSnapshotRestoresExpandedBranches [
+	| tree snapshot restoredBrowser restoredView restoredTree |
+	
+	self openBrowserOnProject.
+	tree := browser projectView listPresenter.
+	tree expandPath: #(1 1).
+	self waitForUI.
+	snapshot := browser snapshot.
+	restoredBrowser := snapshot instantiateOn: self application.
+	[
+		snapshot restoreTo: restoredBrowser.
+		restoredBrowser open.
+		self waitForUI.
+		restoredView := (restoredBrowser presenterWithClass: PulsarProjectView) presenter.
+		restoredTree := restoredView listPresenter.
+		self assert: (restoredTree isExpanded: #(1 1)) ]
+		ensure: [ restoredBrowser withWindowDo: [ :aWindow | aWindow close ] ].
 ]

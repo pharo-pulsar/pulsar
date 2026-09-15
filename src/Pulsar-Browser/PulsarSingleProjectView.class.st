@@ -132,16 +132,13 @@ PulsarSingleProjectView >> refreshProjectPath: aPath [
 { #category : 'snapshot' }
 PulsarSingleProjectView >> snapshot [
 
-	^ PulsarPanelSnapshot on: self
+	^ PulsarProjectSnapshot on: self
 ]
 
 { #category : 'updating' }
-PulsarSingleProjectView >> updateListPresenterExpanding: aPath [
+PulsarSingleProjectView >> treeRoots [
 
-	mutex critical: [
-		listPresenter roots: self model children.
-		aPath ifNotNil: [ 
-			listPresenter expandPath: aPath ] ]
+	^ self model children
 ]
 
 { #category : 'initialization' }

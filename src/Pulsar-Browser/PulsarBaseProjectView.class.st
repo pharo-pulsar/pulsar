@@ -11,7 +11,8 @@ Class {
 		'filterInputPresenter',
 		'filterListPresenter',
 		'listPresenter',
-		'mutex'
+		'mutex',
+		'expandedItems'
 	],
 	#category : 'Pulsar-Browser-View-Project',
 	#package : 'Pulsar-Browser',
@@ -142,9 +143,11 @@ PulsarBaseProjectView >> defineNewActionsOn: aBuilder [
 { #category : 'actions' }
 PulsarBaseProjectView >> doCollapseAll [
 
-	listPresenter
-		unselectAll;
-		collapseAll
+	self application defer: [
+		listPresenter
+			unselectAll;
+			collapseAll.
+		self resetExpandedItems ]
 ]
 
 { #category : 'actions' }
@@ -258,10 +261,34 @@ PulsarBaseProjectView >> eventEditorActivated: anAnnouncement [
 	(PulsarProjectSelectEntityVisitor on: self) visit: anAnnouncement value
 ]
 
+{ #category : 'accessing' }
+PulsarBaseProjectView >> expandedItems [
+
+	^ expandedItems ifNil: [ expandedItems := Set new ]
+]
+
+{ #category : 'accessing' }
+PulsarBaseProjectView >> expandedItems: aCollection [
+
+	expandedItems := aCollection asSet
+]
+
 { #category : 'filtering' }
 PulsarBaseProjectView >> filterStartingSize [
 
 	^ 3
+]
+
+{ #category : 'updating' }
+PulsarBaseProjectView >> findPathOf: aModel in: aCollection [
+	| subPath |
+	
+	aCollection withIndexDo: [ :each :index |
+		each = aModel ifTrue: [ ^ { index } ].
+		subPath := self findPathOf: aModel in: each children.
+		subPath first isZero ifFalse: [ ^ { index }, subPath ] ].
+	
+	^ { 0 }
 ]
 
 { #category : 'selection' }
@@ -317,22 +344,31 @@ PulsarBaseProjectView >> initializeFilter [
 PulsarBaseProjectView >> intializeProjectTree [
 
 	listPresenter := self newEasyTreeListView
-		addStyle: 'stTree';
-		addStyle: 'pulsarProjectTree';
-		children: [ :aModel | aModel children ];
-		rowPresenterClass: PulsarProjectNodeRow;
-		searchMatching: [ :anEntity :pattern | anEntity matches: pattern ];
-		actions: (SpActionGroup new
-			add: self actions;
-			addDynamicGroup: #dynamic with: [ :group | group add: self refactorActions ];
-			addShortcutWith: [ :action | action
-				shortcutKey: KeyboardKey right asKeyCombination;
-				action: [ self activateContextPopover ] ];
-			addShortcutWith: [ :action | action
-				shortcutKey: KeyboardKey left asKeyCombination | KeyboardKey escape asKeyCombination;
-				action: [ self deactivateContextPopover ] ];
-			yourself);
-		yourself
+		                 addStyle: 'stTree';
+		                 addStyle: 'pulsarProjectTree';
+		                 children: [ :aModel | aModel children ];
+		                 rowPresenterClass: PulsarProjectNodeRow;
+		                 searchMatching: [ :anEntity :pattern | anEntity matches: pattern ];
+		                 actions: (SpActionGroup new
+				                  add: self actions;
+				                  addDynamicGroup: #dynamic with: [ :group | group add: self refactorActions ];
+				                  addShortcutWith: [ :action |
+						                  action
+							                  shortcutKey: KeyboardKey right asKeyCombination;
+							                  action: [ self activateContextPopover ] ];
+				                  addShortcutWith: [ :action |
+						                  action
+							                  shortcutKey: KeyboardKey left asKeyCombination | KeyboardKey escape asKeyCombination;
+							                  action: [ self deactivateContextPopover ] ];
+				                  yourself);
+		                 whenExpandChangedDo: [ :ann | self registerExpansionOf: ann ];
+		                 yourself
+]
+
+{ #category : 'accessing' }
+PulsarBaseProjectView >> listPresenter [
+
+	^ listPresenter
 ]
 
 { #category : 'events' }
@@ -349,6 +385,13 @@ PulsarBaseProjectView >> notifySelectEntity: anEntity [
 	self notificationCenter announce: anEntity realModel newSelectionAnnouncement
 ]
 
+{ #category : 'updating' }
+PulsarBaseProjectView >> pathIndexOf: aModel [
+	"Answer the 1-based path locating aModel within the tree contents, or a path containing zero when not found."
+
+	^ self findPathOf: aModel in: self listPresenter roots
+]
+
 { #category : 'actions' }
 PulsarBaseProjectView >> refactorActions [
 
@@ -357,20 +400,57 @@ PulsarBaseProjectView >> refactorActions [
 	^ self selectedEntity realModel actionsWithContextOn: self
 ]
 
-{ #category : 'events' }
+{ #category : 'updating' }
+PulsarBaseProjectView >> registerExpansionOf: ann [
+
+	ann expanded
+		ifTrue: [ self expandedItems add: ann item ]
+		ifFalse: [ self expandedItems remove: ann item ifAbsent: [  ] ]
+]
+
+{ #category : 'initialization' }
 PulsarBaseProjectView >> registerToEvents [
 
 	super registerToEvents.
-	self announcer when: PulsarEditorActivated send: #eventEditorActivated: to: self
+	self announcer 
+		when: PulsarEditorActivated 
+		send: #eventEditorActivated: 
+		to: self
 ]
 
-{ #category : 'events' }
+{ #category : 'initialization' }
 PulsarBaseProjectView >> registerToSystemEvents [
 
 	self announcer
 		when: ClassAdded send: #eventBehaviorAdded: to: self;
 		when: ClassRemoved send: #eventBehaviorRemoved: to: self;
 		when: ClassRenamed send: #eventBehaviorRenamed: to: self
+]
+
+{ #category : 'private' }
+PulsarBaseProjectView >> resetExpandedItems [
+
+	expandedItems := Set new
+]
+
+{ #category : 'updating' }
+PulsarBaseProjectView >> restoreExpandedBranches [
+	"Re-expand the branches that were open before the last refresh."
+
+	self expandedItems ifEmpty: [ ^ self ].
+	self restoreExpandedBranchesFrom: self expandedItems
+]
+
+{ #category : 'updating' }
+PulsarBaseProjectView >> restoreExpandedBranchesFrom: aCollection [
+
+	mutex critical: [
+		(aCollection copy) do: [ :each |
+			| path |
+			path := self pathIndexOf: each.
+			path first isZero
+				ifTrue: [ self expandedItems remove: each ifAbsent: [  ] ]
+				ifFalse: [ self listPresenter expandPath: path ] ] ]
 ]
 
 { #category : 'private' }
@@ -404,6 +484,12 @@ PulsarBaseProjectView >> toolbarPresenter [
 	^ toolbarPresenter
 ]
 
+{ #category : 'updating' }
+PulsarBaseProjectView >> treeRoots [
+
+	self subclassResponsibility
+]
+
 { #category : 'filtering' }
 PulsarBaseProjectView >> updateFilterWith: aString [
 
@@ -420,6 +506,17 @@ PulsarBaseProjectView >> updateFilterWith: aString [
 			listPresenter hide.
 			filterListPresenter show.
 			filterListPresenter items: items ] ]
+]
+
+{ #category : 'updating' }
+PulsarBaseProjectView >> updateListPresenterExpanding: aPath [
+
+	mutex critical: [
+		| remembered |
+		remembered := self expandedItems copy.
+		listPresenter roots: self treeRoots.
+		aPath ifNotNil: [ listPresenter expandPath: aPath ].
+		self restoreExpandedBranchesFrom: remembered ]
 ]
 
 { #category : 'updating' }
