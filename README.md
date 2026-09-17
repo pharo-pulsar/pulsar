@@ -41,7 +41,7 @@ compatible Pharo VM. It creates a `pulsar` launcher in the current directory.
 
 <details open>
 <summary><strong>Linux</strong></summary>
-
+<br>
 You need `curl`, `tar` and [Flatpak](https://flatpak.org/setup/) installed on the host.
 
 ```bash
@@ -57,7 +57,7 @@ the traditional Pharo ZeroConf distribution.
 
 <details>
 <summary><strong>macOS</strong></summary>
-
+<br>
 ```bash
 mkdir -p pulsar && cd pulsar
 curl -L https://forge.smallworks.eu/pharo/Pulsar-installers/raw/branch/main/install-macos.sh | bash -s -- -m
@@ -67,7 +67,7 @@ curl -L https://forge.smallworks.eu/pharo/Pulsar-installers/raw/branch/main/inst
 
 <details>
 <summary><strong>Windows</strong></summary>
-
+<br>
 The native Windows distribution is temporarily unavailable because of a
 limitation in the current FFI architecture. Until that is resolved, Pulsar can
 run through WSL.
