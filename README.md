@@ -58,6 +58,7 @@ the traditional Pharo ZeroConf distribution.
 <details>
 <summary><strong>macOS</strong></summary>
 <br>
+
 ```bash
 mkdir -p pulsar && cd pulsar
 curl -L https://forge.smallworks.eu/pharo/Pulsar-installers/raw/branch/main/install-macos.sh | bash -s -- -m
