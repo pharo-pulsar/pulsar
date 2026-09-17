@@ -17,26 +17,22 @@ Class {
 
 { #category : 'accessing' }
 PulsarLLMPiModel class >> configDefinition [
+	<pulsarFileEditor: 'json'>
 
 	^ '{
-  "mcp": {
+  "mcpServers": {
     "pharo": {
-      "type": "remote",
       "url": "http://127.0.0.1:4000",
-      "enabled": true
+      "directTools": true
     }
   }
-}
-'
+}'
 ]
 
 { #category : 'testing' }
 PulsarLLMPiModel class >> isAvailable [
 
-	self flag: #TODO. "not included for the moment because I need to add an MCP extension 
-	and I do not have time/energy right now" 
-
-	^ false
+	^ true
 ]
 
 { #category : 'accessing' }
@@ -47,11 +43,19 @@ PulsarLLMPiModel class >> label [
 
 { #category : 'private' }
 PulsarLLMPiModel >> ensureConfig [
-	"| ref |
+	| dir ref |
 
-	ref := FileLocator imageDirectory / 'opencode.json'.
+	dir := (FileLocator imageDirectory / '.pi') ensureCreateDirectory.
+	ref := dir / 'mcp.json'. 
 	ref exists ifFalse: [ 
-		ref writeStreamDo: [ :stream | stream << self class configDefinition ] ]"
+		ref writeStreamDo: [ :stream | stream << self class configDefinition ] ]
+]
+
+{ #category : 'actions' }
+PulsarLLMPiModel >> ensureEnvironment [
+
+	"OSEnvironment current 
+		at: #EDITOR put: 'micro'"
 ]
 
 { #category : 'private' }
@@ -62,15 +66,13 @@ PulsarLLMPiModel >> performConnectTo: aTerminalPresenter [
 	command ifEmpty: [ 
 		self error: 'Pi not found. Please install it and make sure it can be found in the PATH.' ].
 
-	aTerminalPresenter 
-		spawnAsync: command trimBoth 
-		workingDirectory: FileLocator imageDirectory fullName 
-		arguments: #()
+	self spawn: command arguments: #() in: aTerminalPresenter
 ]
 
 { #category : 'actions' }
 PulsarLLMPiModel >> prepare [
 
 	super prepare.
-	self ensureConfig
+	self ensureEnvironment.
+	self ensureConfig.
 ]

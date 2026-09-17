@@ -90,11 +90,7 @@ PulsarLLMCodexModel >> performConnectTo: aTerminalPresenter [
 	command ifEmpty: [ 
 		self error: 'Codex not found. Please install it and make sure it can be found in the PATH.' ].
 
-	aTerminalPresenter 
-		spawnAsync: command trimBoth 
-		workingDirectory: FileLocator imageDirectory fullName 
-		arguments: #().
-
+	self spawn: 'codex' arguments: #() in: aTerminalPresenter
 ]
 
 { #category : 'actions' }

@@ -166,28 +166,47 @@ PvMethodModel >> defineDecorationActionsOn: aBuilder [
 
 { #category : 'private - definitions' }
 PvMethodModel >> defineRefactorActionsOn: aBuilder [
-	<dockActions>
-
 	"this actions cannot be used directly in this context (the model 
 	 context), because execute them require interact with the UI"
-	aBuilder addGroup: #refactors with: [ :group | group 
+	<dockActions>
+	
+	aBuilder addGroup: #refactors with: [ :group | group
 		name: 'Refactors';
 		beDisplayedAsGroup;
 		addActionWith: [ :action | action
-			name: (f'Rename [self name]');
+			name: f'Rename [self name]';
 			description: 'Rename method';
 			action: [ :aContext | aContext doRenameMethod: self ] ];
 		addActionWith: [ :action | action
-			name: (f'Pull up [self name]');
+			name: f'Add argument [self name]';
+			description: 'Add argument to method';
+			action: [ :aContext | aContext doAddParameter: self ] ];
+		addActionWith: [ :action | action
+			name: f'Remove argument [self name]';
+			description: 'Remove argument from method';
+			actionEnabled: [ self entity argumentNames notEmpty ];
+			action: [ :aContext | aContext doRemoveParameter: self ] ];
+		addActionWith: [ :action | action
+			name: f'Move to instance side';
+			description: 'Move method to instance side';
+			actionVisible: [ self isInstanceSide not  ];
+			action: [ :aContext | aContext doMoveToInstanceSide: self ] ];
+		addActionWith: [ :action | action
+			name: f'Move to class side';
+			description: 'Move method to class side';
+			actionVisible: [ self isInstanceSide  ];
+			action: [ :aContext | aContext doMoveToClassSide: self ] ];
+		addActionWith: [ :action | action
+			name: f'Pull up [self name]';
 			description: 'Pull up method';
 			action: [ :aContext | aContext doPullUpMethod: self ] ];
 		addActionWith: [ :action | action
-			name: (f'Push down [self name]');
+			name: f'Push down [self name]';
 			description: 'Push down method';
 			actionEnabled: [ self methodClass hasSubclasses ];
 			action: [ :aContext | aContext doPushDownMethod: self ] ];
 		addActionWith: [ :action | action
-			name: (f'Push down [self name] in some classes');
+			name: f'Push down [self name] in some classes';
 			description: 'Push down method in some classes';
 			actionEnabled: [ self methodClass hasSubclasses ];
 			action: [ :aContext | aContext doPushDownInSomeClassesMethod: self ] ] ]

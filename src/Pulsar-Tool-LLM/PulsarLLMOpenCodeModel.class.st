@@ -46,7 +46,7 @@ PulsarLLMOpenCodeModel >> api [
 { #category : 'private' }
 PulsarLLMOpenCodeModel >> connectionArguments [
 
-	^  #('--port' '4096')
+	^ #()
 ]
 
 { #category : 'private' }
@@ -59,11 +59,19 @@ PulsarLLMOpenCodeModel >> ensureConfig [
 ]
 
 { #category : 'private' }
+PulsarLLMOpenCodeModel >> ensureEnvironment [
+
+	OSEnvironment current 
+		at: #OPENCODE_ENABLE_EXA ifAbsentPut: [ 'true' ];
+		at: #OPENCODE_SERVER_PASSWORD put: UUID new asString
+]
+
+{ #category : 'private' }
 PulsarLLMOpenCodeModel >> ensureExa [
 
 	OSEnvironment current 
-		at: #OPENCODE_ENABLE_EXA
-		ifAbsentPut: [ 'true' ]
+		at: #OPENCODE_ENABLE_EXA ifAbsentPut: [ 'true' ];
+		at: #OPENCODE_SERVER_PASSWORD put: UUID new asString
 ]
 
 { #category : 'private' }
@@ -74,10 +82,12 @@ PulsarLLMOpenCodeModel >> performConnectTo: aTerminalPresenter [
 	command ifEmpty: [ 
 		self error: 'OpenCode not found. Please install it and make sure it can be found in the PATH.' ].
 
-	aTerminalPresenter 
-		spawnAsync: command trimBoth 
-		workingDirectory: FileLocator imageDirectory fullName 
-		arguments:self connectionArguments
+	"spawn serve"
+	"self spawn: 'opencode' arguments: #('serve' '--port' '49375') in: aTerminalPresenter."
+	"spawn opencode"
+	"self spawn: 'opencode' arguments: #('--server' 'http://127.0.0.1:49375') in: aTerminalPresenter."
+	
+	self spawnFromHost: command trimBoth arguments: #('--port' '4096') in: aTerminalPresenter.
 ]
 
 { #category : 'actions' }
@@ -85,7 +95,7 @@ PulsarLLMOpenCodeModel >> prepare [
 
 	super prepare.
 	self ensureConfig.
-	self ensureExa
+	self ensureEnvironment
 ]
 
 { #category : 'private' }

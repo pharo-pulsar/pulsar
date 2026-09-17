@@ -387,6 +387,38 @@ PulsarLLMModel >> skillBaseDirectory [
 ]
 
 { #category : 'private' }
+PulsarLLMModel >> spawn: aCommand arguments: aCollection in: aTerminalPresenter [
+
+	OSPlatform current isFlatpak
+		ifTrue: [ self spawnFromFlatpak: aCommand trimBoth arguments: #() in: aTerminalPresenter ]
+		ifFalse: [ self spawnFromHost: aCommand trimBoth arguments: #() in: aTerminalPresenter ]
+]
+
+{ #category : 'private' }
+PulsarLLMModel >> spawnFromFlatpak: aCommand arguments: aCollection in: aTerminalPresenter [
+
+	aTerminalPresenter 
+		spawnAsync: 'flatpak-spawn' 
+		workingDirectory: FileLocator imageDirectory fullName 
+		arguments: (Array streamContents: [ :stream |
+			stream 
+				nextPut: '--host'; 
+				nextPut: '--watch-bus';
+				nextPut: aCommand;
+				nextPutAll: aCollection ]).	
+
+]
+
+{ #category : 'private' }
+PulsarLLMModel >> spawnFromHost: aCommand arguments: aCollection in: aTerminalPresenter [
+
+	aTerminalPresenter 
+		spawnAsync: aCommand
+		workingDirectory: FileLocator imageDirectory fullName 
+		arguments: #()
+]
+
+{ #category : 'private' }
 PulsarLLMModel >> startMCP [
 
 	(mcp isNotNil and: [ mcp isRunning ]) ifTrue: [ ^ self ].
