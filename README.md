@@ -146,7 +146,7 @@ For code contributions:
 ## License
 
 Pulsar is distributed under the
-[MIT](LICENSE).
+[MIT License](LICENSE).
 
 The bundled [Material Design Icons](LICENSE-Templarian-MDI) and
 [file-type icons](LICENSE-FileType-icons) retain their respective licenses.
