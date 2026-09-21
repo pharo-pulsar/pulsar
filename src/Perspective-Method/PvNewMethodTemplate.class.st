@@ -57,6 +57,12 @@ PvNewMethodTemplate >> hasFlag [
 	^ false
 ]
 
+{ #category : 'testing' }
+PvNewMethodTemplate >> hasPragmaNamed: aName [
+
+	^ false
+]
+
 { #category : 'initialization' }
 PvNewMethodTemplate >> initialize [
 

@@ -217,6 +217,19 @@ PvMethodModel >> editorClass [
 	^ PvMethodEditorView
 ]
 
+{ #category : 'accessing - editor' }
+PvMethodModel >> extraEditors [
+	| editors |
+
+	editors := OrderedCollection new.
+	PulsarPragmaCollector 
+		collectPragma: #pulsarMethodEditor 
+		in: self 
+		withArguments: { editors }. 
+	
+	^ editors
+]
+
 { #category : 'accessing' }
 PvMethodModel >> fullName [
 
@@ -487,7 +500,7 @@ PvMethodModel >> protocolName [
 { #category : 'accessing - ui' }
 PvMethodModel >> pulsarEditorClass [
 
-	^ PulsarMethodEditor
+	^ PulsarTabbedMethodEditor
 ]
 
 { #category : 'updating' }

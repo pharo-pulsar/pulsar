@@ -337,6 +337,7 @@ PulsarGtkConfiguration >> settings [
 
 { #category : 'accessing - style' }
 PulsarGtkConfiguration >> style [
+	<pulsarSourceEditor: 'css'>
 
 	^ ' 
 checkbutton { padding: 0px; min-width: 0px; min-height: 0px; }

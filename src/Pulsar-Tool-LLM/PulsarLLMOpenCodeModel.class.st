@@ -17,6 +17,7 @@ Class {
 
 { #category : 'accessing' }
 PulsarLLMOpenCodeModel class >> configDefinition [
+	<pulsarSourceEditor: 'json'>
 
 	^ '{
   "mcp": {

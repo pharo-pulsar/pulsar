@@ -17,7 +17,7 @@ Class {
 
 { #category : 'accessing' }
 PulsarLLMPiModel class >> configDefinition [
-	<pulsarFileEditor: 'json'>
+	<pulsarSourceEditor: 'json'>
 
 	^ '{
   "mcpServers": {

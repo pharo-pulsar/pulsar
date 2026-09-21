@@ -418,6 +418,12 @@ PulsarFileModel >> ensureMonitoringDo: aBlock [
 	monitor startMonitoringDo: aBlock
 ]
 
+{ #category : 'testing' }
+PulsarFileModel >> fileExists [
+
+	^ self entity exists
+]
+
 { #category : 'accessing' }
 PulsarFileModel >> fullName [
 

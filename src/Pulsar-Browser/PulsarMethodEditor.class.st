@@ -165,7 +165,7 @@ PulsarMethodEditor >> doSubmit: aString [
 	| result |
 	self updatingWhile: [
 		result := super doSubmit: aString.
-		self updateContentActions ].
+		self updateAfterSubmit: result ].
 	self installIconStyler.
 	^ result
 ]
@@ -368,6 +368,12 @@ PulsarMethodEditor >> registerToSystemEvents [
 		when: MethodRepackaged send: #eventMethodRepackaged: to: self;
 		when: MethodModified send: #eventMethodModified: to: self;
 		when: MethodRemoved send: #eventMethodRemoved: to: self
+]
+
+{ #category : 'actions' }
+PulsarMethodEditor >> updateAfterSubmit: result [
+
+	self updateContentActions
 ]
 
 { #category : 'initialization' }

@@ -21,6 +21,7 @@ Class {
 
 { #category : 'accessing' }
 PulsarLLMModel class >> agentsDefinition [
+	<pulsarSourceEditor: 'markdown'>
 
 	^ '## Pharo / Pulsar — mandatory MCP usage
 
@@ -98,6 +99,8 @@ PulsarLLMModel class >> mcpPort [
 
 { #category : 'accessing' }
 PulsarLLMModel class >> pharoFormattingSkillDefinition [
+	<pulsarSourceEditor: 'markdown'>
+
 	^ '---
 name: pharo-formatting
 description: Pharo Smalltalk code formatting rules and conventions for Pulsar

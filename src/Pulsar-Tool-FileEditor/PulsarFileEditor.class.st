@@ -116,12 +116,25 @@ PulsarFileEditor >> editorContextMenuActions [
 	^ SpActionGroup new
 ]
 
+{ #category : 'initialization' }
+PulsarFileEditor >> ensureMonitoring [
+
+	self model ensureMonitoringDo: [ 
+		self doReactToExternalFileChange ]
+]
+
 { #category : 'events' }
 PulsarFileEditor >> eventModelRemoved: anAnnouncememnt [ 
 
 	anAnnouncememnt value = self model ifFalse: [ ^ self ].
 
 	self withPanelWidgetDo: [ :aPanelWindow | aPanelWindow close ]
+]
+
+{ #category : 'testing' }
+PulsarFileEditor >> fileExists [
+
+	^ self entity exists
 ]
 
 { #category : 'initialization' }
@@ -153,7 +166,7 @@ PulsarFileEditor >> notifyEditorClosed [
 { #category : 'private' }
 PulsarFileEditor >> originalContent [
 	
-	^ self model entity exists
+	^ self model fileExists
 		ifTrue: [ self model sourceCode ]
 		ifFalse: [ nil ]
 ]
@@ -189,9 +202,9 @@ PulsarFileEditor >> spotterTitle [
 
 { #category : 'initialization' }
 PulsarFileEditor >> updateBreadcrumbs [
-
 	| fullPath |
-	fullPath := self model entity fullName.
+	
+	fullPath := self model fullName.
 	toolbarPresenter updateBreadcrumbWith: [ :aBreadcrumb | 
 		aBreadcrumb 
 			addSegment: fullPath;
@@ -213,18 +226,24 @@ PulsarFileEditor >> updateModel: aString [
 
 { #category : 'initialization' }
 PulsarFileEditor >> updatePresenter [
-	| source |
 	
 	self model ifNil: [ ^ self ].
-	self model ensureMonitoringDo: [ self doReactToExternalFileChange ].
+	self ensureMonitoring.
 	self scheduleJob: [
-		source := self model sourceCode.
 		self updatingWhile: [
-			self model isSmalltalk ifFalse: [ 
-				self model sourceCodeLanguage
-					ifNotNil: [ :language | editorPresenter language: language ] ].
-			editorPresenter text: source ].
+			self updateSource ].
 		self updateBreadcrumbs ]
+]
+
+{ #category : 'initialization' }
+PulsarFileEditor >> updateSource [
+	| source |
+			
+	source := self model sourceCode.
+	self model isSmalltalk ifFalse: [ 
+		self model sourceCodeLanguage
+			ifNotNil: [ :language | editorPresenter language: language ] ].
+	editorPresenter text: source
 ]
 
 { #category : 'private' }
