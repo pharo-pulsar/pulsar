@@ -28,7 +28,8 @@ MetaMetacello load: [ :spec | spec
 		repository: 'github://juliendelplanque/JRPC:v3.2.1'; 
 		loads: #('Deployment') ];
 	"using mine for now to have better control"
-	baseline: 'MCP' with: [ spec repository: 'github://estebanlm/MCP:main' ];
+	baseline: 'MCP' with: [ spec repository: 'github://estebanlm/MCP:main' ];	
+	baseline: 'GitRiver' with: [ spec repository: 'git:git@forge.smallworks.eu:pharo/pharo-git-rivera.git:main' ];
 	baseline: 'Stargate' with: [ spec repository: 'github://estebanlm/stargate:main' ];
 	baseline: 'Linden' with: [ spec repository: 'git:git@forge.smallworks.eu:estebanlm/linden.git:main' ];
 	baseline: 'Adwaita' with: [ spec repository: 'github://estebanlm/Spec-LibAdwaita:main' ];
