@@ -514,6 +514,12 @@ box.pulsarRepositoryCheckout box.checkoutStrategy {
 	padding: 5px 10px;
 }
 
+.pulsarCommitList .gitRiverGraph { font-family: monospace; }
+.pulsarCommitList .gitRiverSummary { padding-left: 5px; }
+.pulsarCommitList row cell { padding: 0; margin: 0; }
+.pulsarCommitList row cell:nth-child(1) { min-width: 60px; }
+.pulsarCommitList row cell:nth-child(2) { min-width: 20px; }
+
 /* llm */
 .pulsarChatConsole vte-terminal { min-width: 200px; }
 

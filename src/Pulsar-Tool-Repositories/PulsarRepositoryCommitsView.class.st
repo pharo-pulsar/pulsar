@@ -4,12 +4,19 @@ Class {
 	#instVars : [
 		'#toolbarPresenter',
 		'#isDisplayed',
-		'#lastBranchSelected => WeakSlot'
+		'#lastBranchSelected => WeakSlot',
+		'#updatingList'
 	],
 	#category : 'Pulsar-Tool-Repositories-View-Commit',
 	#package : 'Pulsar-Tool-Repositories',
 	#tag : 'View-Commit'
 }
+
+{ #category : 'private' }
+PulsarRepositoryCommitsView class >> colorPalette [
+
+	^ Color purpleColors
+]
 
 { #category : 'defaults' }
 PulsarRepositoryCommitsView class >> defaultPanelPosition [
@@ -75,28 +82,34 @@ PulsarRepositoryCommitsView >> initializePresenters [
 	
 	listPresenter := self newEasyColumnView
 		addStyle: 'stList';
+		addStyle: 'pulsarCommitList';
 		addColumn: (SpColumnViewColumn new 
+			beNotExpandable;
 			title: 'Commit';
 			setup: [ :aPresenter | aPresenter newLabel addStyle: 'commitId'; yourself ];
 			bind: [ :aPresenter :aCommitModel | 
-				aPresenter label: aCommitModel shortCommitId.
-				aCommitModel isOutgoing
+				aPresenter label: aCommitModel shortId.
+				(self model isOutgoingCommit: aCommitModel)
 					ifTrue: [ aPresenter addStyle: 'outgoing' ]
-					ifFalse: [ aPresenter removeStyle: 'outgoing' ]];
+					ifFalse: [ aPresenter removeStyle: 'outgoing' ] ];
 			yourself);
 		addColumn: (SpColumnViewColumn new 
+			beNotExpandable;
 			title: 'Au';
 			setup: [ :aPresenter | aPresenter newLabel addStyle: 'commitAuthor'; yourself ];
-			bind: [ :aPresenter :aCommitModel | 
+			bind: [ :aPresenter :aCommitModel |
 				aCommitModel ifNotNil: [
 					aPresenter 
 						label: aCommitModel shortCommitAuthor;
 						help: aCommitModel normalizedCommitAuthor ] ];
 			yourself);
 		addColumn: (SpColumnViewColumn new 
-			title: 'Message';
-			setup: [ :aPresenter | aPresenter newLabel addStyle: 'commitMessage'; yourself ];
-			bind: [ :aPresenter :aCommitModel | aPresenter label: aCommitModel shortCommitMessage ];
+			title: 'Summary';
+			setup: [ :aPresenter | 
+				(aPresenter instantiate: PulsarRepositoryRiverRow)
+					branchPalette: self class colorPalette;
+					yourself ];
+			bind: [ :aPresenter :aCommitModel | aPresenter model: aCommitModel ];
 			yourself);
 		yourself
 ]
@@ -108,10 +121,46 @@ PulsarRepositoryCommitsView >> initializeWindow: aWindowPresenter [
 ]
 
 { #category : 'private' }
+PulsarRepositoryCommitsView >> listSizeChangedFrom: oldSize to: newSize [
+	
+	newSize > oldSize ifFalse: [ ^ self ].
+	
+	self scheduleJob: [
+		listPresenter contentView withAdapterDo: [ :anAdapter |
+			anAdapter innerWidgetDo: [ :w |
+				w selectionModel model writeSlotNamed: 'items' value: listPresenter items copy.
+				w selectionModel
+					itemsChangedAt: oldSize
+					removed: 0
+					added: newSize - oldSize
+			]
+		] 
+	]
+]
+
+{ #category : 'private - announcing' }
+PulsarRepositoryCommitsView >> notifyActivateEntity: aGitRiverLayoutRow [
+	| commitModel |
+
+	aGitRiverLayoutRow ifNil: [ ^ self ].
+	commitModel := self model newCommitModelWithId: aGitRiverLayoutRow  id.
+	self notificationCenter announce: commitModel newActivationAnnouncement
+]
+
+{ #category : 'private' }
 PulsarRepositoryCommitsView >> notifyRepositoryModified [
 
 	"inform to all windows, as all may have things to do"
 	self application resendAnnouncement: (PulsarRepositoryModified newValue: self model)
+]
+
+{ #category : 'private - announcing' }
+PulsarRepositoryCommitsView >> notifySelectEntity: aGitRiverLayoutRow [
+	| commitModel |
+
+	aGitRiverLayoutRow ifNil: [ ^ self ].
+	commitModel := self model newCommitModelWithId: aGitRiverLayoutRow id.
+	self notificationCenter announce: commitModel newSelectionAnnouncement
 ]
 
 { #category : 'initialization' }
@@ -138,9 +187,7 @@ PulsarRepositoryCommitsView >> registerToEvents [
 { #category : 'private' }
 PulsarRepositoryCommitsView >> retrieveCommits [
 
-	^ self model 
-		commitsUpTo: self numberOfCommitsToRetrieve
-		inBranch: lastBranchSelected
+	^ self model newRiverInBranch: lastBranchSelected
 ]
 
 { #category : 'initialization' }
@@ -151,12 +198,12 @@ PulsarRepositoryCommitsView >> updatePresenter [
 	isDisplayed ifFalse: [ ^ self ].
 	
 	self scheduleJob: [ :statusbar |
-		| items |
+		| itemsModel |
 		statusbar pushMessage: ('Retrieving commits of {1}...' format: { self model name }).
-		items := self retrieveCommits.
+		itemsModel := self retrieveCommits.
 		self scheduleTask: [ 
 			self application defer: [ 
-				listPresenter items: items.
+				listPresenter model: itemsModel.
 				self updateTitle ] ] ]
 ]
 

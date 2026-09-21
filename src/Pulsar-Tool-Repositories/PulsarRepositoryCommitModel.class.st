@@ -45,6 +45,12 @@ PulsarRepositoryCommitModel >> diffNode [
 			tree: self entity diffToParent tree ]
 ]
 
+{ #category : 'accessing' }
+PulsarRepositoryCommitModel >> id [
+
+	^ self commit id
+]
+
 { #category : 'testing' }
 PulsarRepositoryCommitModel >> isBigChange [
 

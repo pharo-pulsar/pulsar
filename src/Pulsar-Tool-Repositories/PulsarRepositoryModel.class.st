@@ -322,7 +322,7 @@ PulsarRepositoryModel >> isOutgoingCommit: aCommitModel [
 
 	self entity outgoingCommits ifNotEmpty: [ :aCollection | 
 		^ aCollection anySatisfy: [ :each |
-			each id = aCommitModel commit id ] ].
+			each id = aCommitModel id ] ].
 
 	^ false
 ]
@@ -417,6 +417,17 @@ PulsarRepositoryModel >> newCommitAction [
 		diff: self diffToReferenceCommit;
 		items: self activeNodes;
 		yourself
+]
+
+{ #category : 'factory' }
+PulsarRepositoryModel >> newCommitModelWithId: anId [
+	| commit |
+
+	commit := self entity lookupCommit: anId ifAbsent: [ ^ nil ].
+	
+	^ PulsarRepositoryCommitModel 
+		newRepository: self 
+		entity: commit
 ]
 
 { #category : 'factory' }
@@ -528,6 +539,22 @@ PulsarRepositoryModel >> newRemoveRemoteBranchAction: aBranchModel [
 		  onSuccessRepositoryModified;
 		  action: [ aBranchModel delete ];
 		  yourself
+]
+
+{ #category : 'factory' }
+PulsarRepositoryModel >> newRiverInBranch: aRepositoryBranchModel [
+	| branch |
+
+	self entity isValid ifFalse: [ ^ #() ].
+
+	branch := aRepositoryBranchModel 
+		ifNotNil: [ :aModel | aModel entity ]
+		ifNil: [ self branchOrTag ].
+
+	^ GitRiver
+    		historyListModelOn: self repositoryLocation fullName
+    		startingAt: branch commit id
+    		pageSize: 250
 ]
 
 { #category : 'actions' }
