@@ -2,8 +2,7 @@ Class {
 	#name : 'PvMethodModel',
 	#superclass : 'PvBaseModel',
 	#instVars : [
-		'decorators',
-		'actionDecorators'
+		'decorators'
 	],
 	#category : 'Perspective-Method-Model',
 	#package : 'Perspective-Method',
@@ -453,8 +452,7 @@ PvMethodModel >> newVersionsModel [
 { #category : 'private' }
 PvMethodModel >> prepareForSnapshot [
 
-	decorators := nil.
-	actionDecorators := nil
+	decorators := nil
 ]
 
 { #category : 'printing' }
@@ -496,12 +494,6 @@ PvMethodModel >> pulsarEditorClass [
 PvMethodModel >> removeMethod [
 
 	self entity removeFromSystem
-]
-
-{ #category : 'accessing' }
-PvMethodModel >> resetActionDecorators [
-	
-	actionDecorators := nil
 ]
 
 { #category : 'actions' }
