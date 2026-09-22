@@ -29,6 +29,7 @@ MetaMetacello load: [ :spec | spec
 		loads: #('Deployment') ];
 	"using mine for now to have better control"
 	baseline: 'MCP' with: [ spec repository: 'github://estebanlm/MCP:main' ];	
+	baseline: 'ColorsExtensions' with: [ spec repository: 'github://pharo-contributions/ColorsExtensions:master' ];	
 	baseline: 'GitRiver' with: [ spec repository: 'git:git@forge.smallworks.eu:pharo/pharo-git-rivera.git:main' ];
 	baseline: 'Stargate' with: [ spec repository: 'github://estebanlm/stargate:main' ];
 	baseline: 'Linden' with: [ spec repository: 'git:git@forge.smallworks.eu:estebanlm/linden.git:main' ];
