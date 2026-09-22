@@ -48,12 +48,14 @@ PulsarMethodSourceModel >> sourceCodeLanguage [
 
 { #category : 'updating' }
 PulsarMethodSourceModel >> updateWith: aString [
+	| escapedString |
 
+	escapedString := aString escapeCharacter: $'.
 	self 
 		updateWith: f'[self selector]
 	<pulsarSourceEditor: ''[self sourceCodeLanguage]''>
 
-	^ ''[aString escapeCharacter: $']'''
+	^ ''[escapedString]'''
 		notifying: (SpCodeMethodInteractionModel on: self entity).
 		
 	^ true
