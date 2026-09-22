@@ -418,6 +418,21 @@ PulsarBaseBrowser >> eventModelDeactivated: anAnnouncement [
 	self maybeUndockView: anAnnouncement value
 ]
 
+{ #category : 'events' }
+PulsarBaseBrowser >> eventTestSuiteEnded: aTestSuiteEnded [
+	| message resultColor |
+	
+	logger trace: aTestSuiteEnded.	
+	
+	self scheduleTask: [ self resendAnnouncement: aTestSuiteEnded ].
+	self scheduleTask: [
+		message := 'Passed'.
+		aTestSuiteEnded testResult hasFailures ifTrue: [ message := 'Has failures' ].
+		aTestSuiteEnded testResult hasErrors ifTrue: [ message := 'Has errors' ].
+		resultColor := self application colorForTestResultAt: aTestSuiteEnded testResult status.
+		self inform: (f'Test run: <span foreground="[resultColor]">[message].</span>') ]
+]
+
 { #category : 'accessing' }
 PulsarBaseBrowser >> findAllPresentersClass: aClass [
 	"answer sll presenters matching the class."
@@ -648,7 +663,8 @@ PulsarBaseBrowser >> registerToSystemEvents [
 	self announcer 
 		when: JobStart send: #eventJobStart: to: self;
 		when: JobEnd send: #eventJobEnd: to: self;
-		when: SystemAnnouncement, MetacelloExecutionAnnouncement 
+		when: TestSuiteEnded send: #eventTestSuiteEnded: to: self;
+		when: SystemAnnouncement, MetacelloExecutionAnnouncement, TestCaseEnded, TestCaseStarted
 			send: #resendAnnouncement: 
 			to: self
 ]

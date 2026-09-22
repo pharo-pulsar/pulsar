@@ -169,22 +169,6 @@ PulsarBrowser >> eventManyModelDeactivated: anAnnouncement [
 		self maybeUndockView: editors last ]
 ]
 
-{ #category : 'events' }
-PulsarBrowser >> eventTestSuiteEnded: aTestSuiteEnded [
-	| message |
-	
-	logger trace: aTestSuiteEnded.	
-	
-	self scheduleTask: [ self resendAnnouncement: aTestSuiteEnded ].
-	self scheduleTask: [
-		message := 'Passed'.
-		aTestSuiteEnded testResult hasFailures ifTrue: [ message := 'Has failures' ].
-		aTestSuiteEnded testResult hasErrors ifTrue: [ message := 'Has errors' ].
-		self inform: ('Test run: <span foreground="{1}">{2}.</span>' format: {
-					 (self application colorForTestResultAt: aTestSuiteEnded testResult status).
-					 message }) ]
-]
-
 { #category : 'private' }
 PulsarBrowser >> informLostChanges: ann [ 
 
@@ -323,20 +307,9 @@ PulsarBrowser >> projectView [
 PulsarBrowser >> registerToEvents [
 
 	super registerToEvents.
-	self registerToTestCaseEvents.
 	self announcer 
 		when: PulsarLostChangesAnnouncement 
 			send: #informLostChanges:
-			to: self
-]
-
-{ #category : 'initialization' }
-PulsarBrowser >> registerToTestCaseEvents [
-	
-	self announcer
-		when: TestSuiteEnded send: #eventTestSuiteEnded: to: self;
-		when: TestCaseEnded, TestCaseStarted 
-			send: #resendAnnouncement: 
 			to: self
 ]
 
