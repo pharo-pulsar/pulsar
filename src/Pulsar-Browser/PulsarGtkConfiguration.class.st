@@ -166,6 +166,7 @@ PulsarGtkConfiguration >> darkColorsForTestResult [
 
 { #category : 'accessing - style' }
 PulsarGtkConfiguration >> darkPaletteStyle [
+	<pulsarSourceEditor: 'css'>
 
 	^ '
 /* testing */
@@ -188,6 +189,9 @@ PulsarGtkConfiguration >> darkPaletteStyle [
 @define-color pinned_bg_color		#1f232a;
 /* commit */
 @define-color commit_active_bg 		rgba(220, 130, 40, 0.26);
+
+@define-color context_postmortem 		rgba(147, 51, 234, 0.35); /* Deep violet */
+@define-color context_cannotCompile 	DarkOrange;
 '
 ]
 
@@ -266,6 +270,7 @@ PulsarGtkConfiguration >> lightColorsForTestResult [
 
 { #category : 'accessing - style' }
 PulsarGtkConfiguration >> lightPaletteStyle [
+	<pulsarSourceEditor: 'css'>
 
 	^ '
 /* testing */
@@ -287,7 +292,9 @@ PulsarGtkConfiguration >> lightPaletteStyle [
 /* pin */
 @define-color pinned_bg_color			#f3f6fb;
 /* commit */
-@define-color commit_active_bg 			rgba(255, 165, 80, 0.30);
+@define-color commit_active_bg 				rgba(255, 165, 80, 0.30);
+@define-color context_postmortem 			rgba(167, 139, 250, 0.25); /* Soft lavender */
+@define-color context_cannotCompile 		orange;
 '
 ]
 
@@ -410,7 +417,10 @@ box.pulsarDialog box { margin: 0px; }
 .pulsarPopoverControlToolbar { margin: 0px; padding: 0px 0px 0px 10px; }
 .pulsarDebuggerToolbar { background-color: @window_bg_color; }
 .pulsarDebuggerToolbar .stToolbar { padding: 1px; }
+.pulsarMethodEditor .postmortem { border-width: 1px; border-style: solid; border-color: @context_postmortem; }
+.pulsarMethodEditor .cannotCompile { border-width: 1px; border-style: solid; border-color: @context_cannotCompile; }
 .pulsarPlaygroundBindingsFlyingBrowser { min-width: 400px; min-height: 240px; }
+
 /* Versions browser */
 box.pulsarVersionsFlyingBrowser { min-width: 680px; min-height: 420px; }
 box.pulsarVersionsFlyingBrowser panelstatusbar { background-color: transparent; } 

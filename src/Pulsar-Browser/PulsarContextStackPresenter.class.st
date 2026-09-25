@@ -1,6 +1,9 @@
 Class {
 	#name : 'PulsarContextStackPresenter',
 	#superclass : 'PulsarCollectionView',
+	#instVars : [
+		'toolbarPresenter'
+	],
 	#category : 'Pulsar-Browser-Tool-Debugger',
 	#package : 'Pulsar-Browser',
 	#tag : 'Tool-Debugger'
@@ -18,8 +21,33 @@ PulsarContextStackPresenter class >> defaultPanelPosition [
 PulsarContextStackPresenter >> defaultLayout [
 
 	^ SpBoxLayout newVertical
+		add: toolbarPresenter expand: false;
 		add: listPresenter;
 		yourself
+]
+
+{ #category : 'private - definitions' }
+PulsarContextStackPresenter >> defineStackActionsOn: aBuilder [
+	<dockActions>
+	
+	aBuilder addGroup: #stack with: [ :group | group 
+		priority: 100;
+		name: 'Stack';
+		beDisplayedAsGroup;	
+		addActionWith: [ :action | action 
+			priority: 110;
+			name: 'Copy to clipboard';
+			description: 'Copy stack to clipboard';
+			iconName: 'copy-to-clipboard';
+			action: [ self doCopyToClipboard ] ] ]
+]
+
+{ #category : 'private - actions' }
+PulsarContextStackPresenter >> doCopyToClipboard [
+
+	self model ifNil: [ ^ self ].
+	self model doCopyToClipboardOn: self application.
+	self withWindowDo: [ :w | w inform: 'Copied to clipboard' ]
 ]
 
 { #category : 'private' }
@@ -39,11 +67,16 @@ PulsarContextStackPresenter >> findFirstRelevantStackIndex [
 PulsarContextStackPresenter >> initializePresenters [
 
 	self addStyle: 'pulsarDebugger'.
+	
+	
+	toolbarPresenter := self instantiate: PulsarToolbarPresenter.
+	toolbarPresenter actions: (self actions actionsFor: #stack).	
 
-	listPresenter := self newEasyListView
+	listPresenter := self newFilteringList
 		addStyle: 'stList';
 		addStyle: 'pulsarContextStackList';
 		display: [ :aModel | aModel name ];
+		enableSearch;
 		yourself
 ]
 

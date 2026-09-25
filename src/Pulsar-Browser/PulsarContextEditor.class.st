@@ -149,6 +149,10 @@ PulsarContextEditor >> updateEditor [
 PulsarContextEditor >> updateModel: aString [
 	| force contextInteractionModel |
 	
+	self model canNotBeCompiledReason ifNotNil: [ :aReason |
+		self withWindowDo: [ :aWindow | aWindow inform: f'Can''t save: [aReason]' ].
+		^ false ].
+	
 	"since the context editor presenter works with a debugger interaction model, 
 	 which is designed to operate with doit/printit/etc commands, we need to 
 	 change the interactionModel while triggering a recompile of the method, 
@@ -180,6 +184,15 @@ PulsarContextEditor >> updatePresenter [
 	self model ifNil: [ ^ self ].
 
 	super updatePresenter.
+	
+	self model isPostMortem
+		ifTrue: [ editorPresenter addStyle: 'postmortem']
+		ifFalse: [ editorPresenter removeStyle: 'postmortem' ].
+		
+	self model canBeCompiled
+		ifTrue: [ editorPresenter removeStyle: 'cannotCompile' ]
+		ifFalse: [ editorPresenter addStyle: 'cannotCompile' ].
+
 	"I want it to be seen when user traverses the stack"
 	self withPanelWidgetDo: [ :w | w raise ]
 ]

@@ -62,6 +62,12 @@ PulsarContextModel >> asOutlineClassModel [
 		entity: self methodClass
 ]
 
+{ #category : 'debug - testing' }
+PulsarContextModel >> canBeCompiled [
+
+	^ self canNotBeCompiledReason isNil
+]
+
 { #category : 'testing' }
 PulsarContextModel >> canExecuteCreateMissingClassCommand [
 
@@ -92,6 +98,26 @@ PulsarContextModel >> canExecuteRestartCommand [
 PulsarContextModel >> canExecuteReturnCommand [
 
 	^ self actionModel isInterruptedContextDead not
+]
+
+{ #category : 'debug - testing' }
+PulsarContextModel >> canNotBeCompiledReason [
+	"Answer the reason why the code of the current context cannot be saved
+	 as a new version of its method followed by a restart, or nil if it can.
+	 In a post mortem session the context can still be saved (compiled);
+	 the missing restart is handled by the confirmation in
+	 PulsarContextEditor>>updateModel:"
+
+	self entity ifNil: [ ^ 'There is no context to save' ].
+	self isSessionPostMortem ifFalse: [
+		self entity isDead ifTrue: [ ^ 'The context is dead' ].
+		self isContextStale ifTrue: [ ^ 'The context is not in the process stack' ] ].
+	^ self entity isBlockContext
+	  ifTrue: [ 
+	  	self entity activeHome 
+	  		ifNil: [ 'The home of this block is not in the stack' ] 
+	  		ifNotNil: [ nil ] ]
+	  ifFalse: [ nil ]
 ]
 
 { #category : 'private' }
@@ -217,6 +243,17 @@ PulsarContextModel >> isContextModel [
 	^ true
 ]
 
+{ #category : 'private - accessing' }
+PulsarContextModel >> isContextStale [
+	"Answer whether the current context is no longer part of the process
+	 stack, so it could not be restarted. Only meaningful when the session
+	 is not post mortem."
+
+	^ [ self session isContextPostMortem: self entity ]
+		  on: Error
+		  do: [ :e | true ]
+]
+
 { #category : 'testing' }
 PulsarContextModel >> isNew [
 
@@ -224,9 +261,25 @@ PulsarContextModel >> isNew [
 ]
 
 { #category : 'testing' }
+PulsarContextModel >> isPostMortem [
+
+	^ self debuggerModel isContextPostMortem: self entity
+]
+
+{ #category : 'testing' }
 PulsarContextModel >> isSameClass: aClass [
 
 	^ self methodClass instanceSide = aClass instanceSide
+]
+
+{ #category : 'private - accessing' }
+PulsarContextModel >> isSessionPostMortem [
+	"Answer whether the session is inspecting a context that is no longer
+	 attached to a live process, as in DebugSession>>recompileMethodTo:inContext:notifying:force:"
+
+	^ [ self session isContextPostMortem: self session interruptedContext ]
+		  on: Error
+		  do: [ :e | true ]
 ]
 
 { #category : 'accessing' }

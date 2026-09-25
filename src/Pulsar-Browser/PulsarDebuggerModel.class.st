@@ -33,6 +33,13 @@ PulsarDebuggerModel >> clearSession [
 		clear
 ]
 
+{ #category : 'actions' }
+PulsarDebuggerModel >> doCopyToClipboardOn: anApplication [
+
+	anApplication copyToClipboard: (String streamContents: [ :stream | 
+		self session context printStackTraceOn: stream ])
+]
+
 { #category : 'initialization' }
 PulsarDebuggerModel >> entity: aDebugSession [
 
@@ -40,6 +47,16 @@ PulsarDebuggerModel >> entity: aDebugSession [
 	actionModel := StDebuggerClientModel on: aDebugSession.
 	logger trace: actionModel.
 	super entity: aDebugSession
+]
+
+{ #category : 'testing' }
+PulsarDebuggerModel >> isContextPostMortem: aContext [
+
+	^ [ self session isContextPostMortem: aContext ]
+		on: Error 
+		do: [ :e | 
+			logger error: e. 
+			true ]
 ]
 
 { #category : 'accessing' }
