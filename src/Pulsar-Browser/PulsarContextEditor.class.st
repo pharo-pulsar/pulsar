@@ -4,6 +4,9 @@ An editor for stack contexts (that are like methods, but with special behavior)
 Class {
 	#name : 'PulsarContextEditor',
 	#superclass : 'PulsarMethodEditor',
+	#instVars : [
+		'messageLabelPresenter'
+	],
 	#category : 'Pulsar-Browser-Tool-Debugger',
 	#package : 'Pulsar-Browser',
 	#tag : 'Tool-Debugger'
@@ -25,7 +28,10 @@ PulsarContextEditor >> announceActivateMethod [
 PulsarContextEditor >> defaultLayout [
 
 	^ SpBoxLayout newVertical 
-		add: super defaultLayout;
+		add: (SpOverlayLayout new 
+			child: super defaultLayout;
+			addOverlay: messageLabelPresenter withConstraints: [ :c | c vAlignEnd; hAlignCenter ];
+			yourself);
 		yourself
 ]
 
@@ -96,8 +102,14 @@ PulsarContextEditor >> initializePanelWidget: aPanelWidgetPresenter [
 PulsarContextEditor >> initializePresenters [
 
 	super initializePresenters.
+	self addStyle: 'pulsarContextEditor'.
 	"a context editor is always linked for now (there is just one, linked to the stack)."
-	editorPresenter addStyle: 'pulsarEditorLinked'
+	editorPresenter addStyle: 'pulsarEditorLinked'.
+	
+	messageLabelPresenter := self newLabel 
+		addStyle: 'message';
+		hide;
+		yourself
 ]
 
 { #category : 'private' }
@@ -189,9 +201,13 @@ PulsarContextEditor >> updatePresenter [
 		ifTrue: [ editorPresenter addStyle: 'postmortem']
 		ifFalse: [ editorPresenter removeStyle: 'postmortem' ].
 		
-	self model canBeCompiled
-		ifTrue: [ editorPresenter removeStyle: 'cannotCompile' ]
-		ifFalse: [ editorPresenter addStyle: 'cannotCompile' ].
+	self model canNotBeCompiledReason
+		ifNotNil: [ :aString | 
+			editorPresenter addStyle: 'cannotCompile'.
+			messageLabelPresenter label: aString; show ]
+		ifNil: [ 
+			editorPresenter removeStyle: 'cannotCompile'.
+			messageLabelPresenter label: ''; hide ].
 
 	"I want it to be seen when user traverses the stack"
 	self withPanelWidgetDo: [ :w | w raise ]

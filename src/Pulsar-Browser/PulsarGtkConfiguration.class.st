@@ -417,8 +417,9 @@ box.pulsarDialog box { margin: 0px; }
 .pulsarPopoverControlToolbar { margin: 0px; padding: 0px 0px 0px 10px; }
 .pulsarDebuggerToolbar { background-color: @window_bg_color; }
 .pulsarDebuggerToolbar .stToolbar { padding: 1px; }
-.pulsarMethodEditor .postmortem { border-width: 1px; border-style: solid; border-color: @context_postmortem; }
-.pulsarMethodEditor .cannotCompile { border-width: 1px; border-style: solid; border-color: @context_cannotCompile; }
+.pulsarContextEditor .postmortem { border-width: 1px; border-style: solid; border-color: @context_postmortem; }
+.pulsarContextEditor .cannotCompile { border-width: 1px; border-style: solid; border-color: @context_cannotCompile; }
+.pulsarContextEditor .message { font-size: 0.9em; background-color: @context_cannotCompile; color: black; padding: 0px; margin: 5px; }
 .pulsarPlaygroundBindingsFlyingBrowser { min-width: 400px; min-height: 240px; }
 
 /* Versions browser */
