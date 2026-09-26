@@ -480,7 +480,7 @@ box.commitInfo .separator { opacity: 0.8; }
 .pulsarMethodRow:hover button.action {
 	opacity: 1;
 }
-
+.pulsarProjectNodeRow .deprecated,
 .pulsarMethodRow .deprecated { 
 	text-decoration-line: line-through;
 }

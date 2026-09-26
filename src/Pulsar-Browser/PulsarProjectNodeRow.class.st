@@ -1,6 +1,8 @@
 Class {
 	#name : 'PulsarProjectNodeRow',
 	#superclass : 'SpEasyAbstractRowPresenter',
+	#traits : 'PulsarTModelVisitor',
+	#classTraits : 'PulsarTModelVisitor classTrait',
 	#instVars : [
 		'imagePresenter',
 		'labelPresenter'
@@ -34,12 +36,19 @@ PulsarProjectNodeRow >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
 	
-	self model iconName 
-		ifNotNil: [ :aName | imagePresenter show; image: (self iconNamed: aName) ]
-		ifNil: [ imagePresenter hide ].
-	labelPresenter label: self model name.
-	
-	"self model isManagedAndModified
-		ifTrue: [ labelPresenter addStyle: 'modified' ]
-		ifFalse: [ labelPresenter removeStyle: 'modified' ]"
+	self application defer: [
+		self model iconName 
+			ifNotNil: [ :aName | imagePresenter show; image: (self iconNamed: aName) ]
+			ifNil: [ imagePresenter hide ].
+		
+		labelPresenter label: self model name.
+		self model accept: self ]
+]
+
+{ #category : 'visiting' }
+PulsarProjectNodeRow >> visitClassModel: aModel [
+
+	labelPresenter removeAllStyles.
+	aModel isDeprecated ifTrue: [
+		labelPresenter addStyle: 'deprecated' ]
 ]

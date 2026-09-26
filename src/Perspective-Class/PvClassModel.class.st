@@ -294,6 +294,12 @@ PvClassModel >> isClassModel [
 	^ true
 ]
 
+{ #category : 'testing' }
+PvClassModel >> isDeprecated [
+
+	^ self entity isDeprecated
+]
+
 { #category : 'accessing - navigating' }
 PvClassModel >> isLargeHierarchy [
 

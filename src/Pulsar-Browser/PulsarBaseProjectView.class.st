@@ -344,25 +344,23 @@ PulsarBaseProjectView >> initializeFilter [
 PulsarBaseProjectView >> intializeProjectTree [
 
 	listPresenter := self newEasyTreeListView
-		                 addStyle: 'stTree';
-		                 addStyle: 'pulsarProjectTree';
-		                 children: [ :aModel | aModel children ];
-		                 rowPresenterClass: PulsarProjectNodeRow;
-		                 searchMatching: [ :anEntity :pattern | anEntity matches: pattern ];
-		                 actions: (SpActionGroup new
-				                  add: self actions;
-				                  addDynamicGroup: #dynamic with: [ :group | group add: self refactorActions ];
-				                  addShortcutWith: [ :action |
-						                  action
-							                  shortcutKey: KeyboardKey right asKeyCombination;
-							                  action: [ self activateContextPopover ] ];
-				                  addShortcutWith: [ :action |
-						                  action
-							                  shortcutKey: KeyboardKey left asKeyCombination | KeyboardKey escape asKeyCombination;
-							                  action: [ self deactivateContextPopover ] ];
-				                  yourself);
-		                 whenExpandChangedDo: [ :ann | self registerExpansionOf: ann ];
-		                 yourself
+		addStyle: 'stTree';
+		addStyle: 'pulsarProjectTree';
+		children: [ :aModel | aModel children ];
+		rowPresenterClass: PulsarProjectNodeRow;
+		searchMatching: [ :anEntity :pattern | anEntity matches: pattern ];
+		actions: (SpActionGroup new
+			add: self actions;
+			addDynamicGroup: #dynamic with: [ :group | group add: self refactorActions ];
+			addShortcutWith: [ :action | action
+				shortcutKey: KeyboardKey right asKeyCombination;
+				action: [ self activateContextPopover ] ];
+			addShortcutWith: [ :action | action
+				shortcutKey: KeyboardKey left asKeyCombination | KeyboardKey escape asKeyCombination;
+				action: [ self deactivateContextPopover ] ];
+			yourself);
+		whenExpandChangedDo: [ :ann | self registerExpansionOf: ann ];
+		yourself
 ]
 
 { #category : 'accessing' }
