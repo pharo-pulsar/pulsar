@@ -28,9 +28,32 @@ PulsarRefactorMethodContext >> doAddParameter: aMethodModel [
 PulsarRefactorMethodContext >> doMoveToClassSide: aMethodModel [
 
 	self scheduleTask: [
-		(ReMoveMethodsToClassSideDriver newApplication: self application)
-			scopes: { RBBrowserEnvironment new } methods: { aMethodModel entity };
-			runRefactoring ]
+		| choiceTuple driver |
+
+		choiceTuple := (SpSelectDialog newApplication: self application)
+			title: f'Choose how to move [aMethodModel fullName]';
+			message: 'Select the strategy you want to use';
+			items: {
+				(true -> 'Move method').
+				(false -> 'Apply refactor') };
+			display: [ :each | each value ];
+			openModal.
+		
+		choiceTuple ifNotNil: [
+			driver := choiceTuple key
+				ifTrue: [
+					(ReMoveMethodToClassDriver newApplication: self application)
+						scopes: { RBBrowserEnvironment new }
+							method: aMethodModel entity
+							class: aMethodModel methodClass classSide; 
+						yourself ]
+				ifFalse: [
+					(ReMoveMethodsToClassSideDriver newApplication: self application)
+						scopes: { RBBrowserEnvironment new } methods: { aMethodModel entity };
+						yourself ].
+						
+			driver runRefactoring ] 
+	]
 ]
 
 { #category : 'refactoring' }
