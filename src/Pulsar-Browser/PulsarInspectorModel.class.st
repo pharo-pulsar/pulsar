@@ -29,6 +29,14 @@ PulsarInspectorModel >> iconName [
 ]
 
 { #category : 'accessing' }
+PulsarInspectorModel >> name [
+
+	^ [ self inspectedObject displayString truncateWithElipsisTo: self class maxTitleLength ]
+		on: Exception
+		do: [ :e | e printString ]
+]
+
+{ #category : 'accessing' }
 PulsarInspectorModel >> pulsarEditorClass [
 
 	^ PulsarMillerColumnInspector
@@ -38,4 +46,10 @@ PulsarInspectorModel >> pulsarEditorClass [
 PulsarInspectorModel >> realModel [
 
 	^ self
+]
+
+{ #category : 'accessing' }
+PulsarInspectorModel >> windowTitle [
+
+	^ f'Inspector on [self name]'
 ]

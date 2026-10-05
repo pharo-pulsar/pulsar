@@ -409,6 +409,8 @@ box.pulsarDialog box { margin: 0px; }
 .pulsarMessageFlyingBrowser { min-width: 720px; min-height: 460px; }
 .pulsarInspectorFlyingBrowser { min-width: 680px; min-height: 440px; }
 .pulsarMillerColumnInspector { min-width: 740px; }
+.pulsarSingleInspector:nth-child(1) .pulsarToolbarPanel label { padding: 10px; }
+.pulsarSingleInspector .pulsarToolbarPanel button { padding: 0px; }
 .pulsarHierarchyFlyingBrowser { min-width: 450px; min-height: 350px; }
 .pulsarMethodHierarchyFlyingBrowser { min-width: 680px; min-height: 440px; }
 

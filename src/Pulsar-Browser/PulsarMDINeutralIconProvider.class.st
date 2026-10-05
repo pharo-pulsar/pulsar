@@ -253,10 +253,13 @@ PulsarMDINeutralIconProvider >> createTable [
 		('critiques'              'bell-outline')
 		('closeAll'               'close-box-multiple-outline')
 		('close'                  'close')
+		('close-panel'			  'minus')
 		('glamorousClose'         'close')
 		('cancel'                 'close')
 		('variables'              'variable')
 		('systemRepository'		  'archive-cog-outline')
+		('plus'					  'plus')
+		('minus'					  'minus')
 		('inspector-column-shown'   'square')
 		('inspector-column-hidden'  'square-outline')
 

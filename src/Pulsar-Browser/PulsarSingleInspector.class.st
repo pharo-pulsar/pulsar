@@ -10,7 +10,9 @@ Class {
 	#classTraits : 'SpTModel classTrait + PulsarTEditor classTrait + PulsarTNotificationCenter classTrait + PulsarTPanelWindow classTrait + PulsarTSnapshot classTrait + PulsarTPopover classTrait + SpTActivable classTrait',
 	#instVars : [
 		'headerPresenter',
-		'inspectionsPresenter'
+		'inspectionsPresenter',
+		'closeAction',
+		'closeButtonPresenter'
 	],
 	#category : 'Pulsar-Browser-Tool-Inspector',
 	#package : 'Pulsar-Browser',
@@ -51,6 +53,13 @@ PulsarSingleInspector >> allPages [
 	
 	^ self allContexts 
 		collect: [ :each | self newPageForContext: each ]
+]
+
+{ #category : 'private - announcing' }
+PulsarSingleInspector >> announceClose [
+
+	closeAction ifNil: [ ^ self ].
+	closeAction cull: self
 ]
 
 { #category : 'api - focus' }
@@ -106,7 +115,20 @@ PulsarSingleInspector >> initializePopover: aPopoverPresenter [
 { #category : 'initialization' }
 PulsarSingleInspector >> initializePresenters [
 		
+	self addStyle: 'pulsarSingleInspector'.
+		
 	headerPresenter := self instantiate: PulsarEditorToolbarPresenter.
+	headerPresenter addPresenter: (self newToolbar 
+		beIcons;
+		add: ((closeButtonPresenter := self newButton)
+			addStyle: 'flat';
+			icon: (self iconNamed: 'close-panel');
+			help: 'Close inspector page';
+			action: [ self announceClose ];
+			yourself);
+		yourself).
+	closeButtonPresenter hide.
+	
 	inspectionsPresenter := self newNotebook
 ]
 
@@ -209,5 +231,12 @@ PulsarSingleInspector >> updatePresenter [
 PulsarSingleInspector >> updateTitle [
 	
 	headerPresenter updateBreadcrumbWith: [ :aBreadcrumb | 
-		aBreadcrumb addSegment: self model windowTitle ]
+		aBreadcrumb addSegment: self model name ]
+]
+
+{ #category : 'api - events' }
+PulsarSingleInspector >> whenClosedDo: aBlock [
+
+	closeAction := aBlock.
+	closeButtonPresenter show
 ]

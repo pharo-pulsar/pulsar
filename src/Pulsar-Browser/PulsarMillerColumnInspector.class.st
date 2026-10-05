@@ -14,7 +14,11 @@ Class {
 		'visiblePanels',
 		'visibleRange',
 		'panelsList',
-		'paginatorPresenter'
+		'paginatorPresenter',
+		'incColumnsButtonPresenter',
+		'visibleColumnsPresenter',
+		'decColumnsButtonPresenter',
+		'rangeLabelPresenter'
 	],
 	#category : 'Pulsar-Browser-Tool-Inspector',
 	#package : 'Pulsar-Browser',
@@ -35,6 +39,11 @@ PulsarMillerColumnInspector >> addColumn: aModel [
 	presenter := self 
 		instantiate: PulsarSingleInspector 
 		on: aModel.
+	presenter notificationCenter: self notificationCenter.
+	millerList children ifNotEmpty: [ 
+		presenter whenClosedDo: [ :aPresenter | 
+			self pageRemoved: aPresenter ] ].
+	
 	self application defer: [
 		self addPresenterToList: presenter. 
 		self updateVisibleColumns ]
@@ -45,23 +54,38 @@ PulsarMillerColumnInspector >> addPaginator [
 
 	^ self newPresenter 
 		layout: (SpBoxLayout newHorizontal
-			spacing: 0;
-			hAlignCenter;
-			add: (self newButton
-				addStyle: 'flat';
-				addStyle: 'circular';
-				icon: (self iconNamed: 'chevron-left');
-				action: [ self shiftRange: -1 ];
+			vAlignCenter;
+			add: (SpBoxLayout newHorizontal
+				vAlignCenter;
+				vAlignStart;
+				add: rangeLabelPresenter;
 				yourself);
-			add: (SpBoxLayout newVertical 
-				vAlignCenter; 
-				add: panelsList;
-				yourself);
-			add: (self newButton
-				addStyle: 'flat';
-				addStyle: 'circular';
-				icon: (self iconNamed: 'chevron-right');
-				action: [ self shiftRange: 1 ];
+			add: (SpBoxLayout newHorizontal
+					hAlignCenter;
+					add: (self newButton
+						addStyle: 'flat';
+						addStyle: 'circular';
+						icon: (self iconNamed: 'chevron-left');
+						action: [ self shiftRange: -1 ];
+						yourself);
+					add: (SpBoxLayout newVertical 
+						vAlignCenter; 
+						add: panelsList;
+						yourself);
+					add: (self newButton
+						addStyle: 'flat';
+						addStyle: 'circular';
+						icon: (self iconNamed: 'chevron-right');
+						action: [ self shiftRange: 1 ];
+						yourself);
+					yourself) 
+				expand: false;
+			add: (SpBoxLayout newHorizontal
+				vAlignCenter;
+				hAlignEnd;
+				add: decColumnsButtonPresenter;
+				add: visibleColumnsPresenter;
+				add: incColumnsButtonPresenter;
 				yourself);
 			yourself);
 		yourself
@@ -78,7 +102,7 @@ PulsarMillerColumnInspector >> addPresenterToList: presenter [
 
 	self resetVisibleRange.
 	millerList add: presenter.
-	presenter propertyAt: #index put: millerList children size.
+	self setIndexOfPage: presenter to: millerList children size.
 	presenter outputActivationPort
 		transmitDo: [ :anObject | 
 			self application defer: [ 
@@ -86,7 +110,7 @@ PulsarMillerColumnInspector >> addPresenterToList: presenter [
 				self addColumn: (PulsarInspectorModel on: anObject) ] ]
 ]
 
-{ #category : '(All)' }
+{ #category : 'accessing' }
 PulsarMillerColumnInspector >> defaultKeyboardFocus [
 
 	^ millerList children
@@ -100,13 +124,7 @@ PulsarMillerColumnInspector >> defaultLayout [
 	^ SpBoxLayout newVertical
 		add: headerPresenter expand: false;
 		add: millerList;
-		add: (SpBoxLayout newHorizontal
-			vAlignCenter;
-			add: SpBoxLayout newHorizontal;
-			add: paginatorPresenter expand: false;
-			add: SpBoxLayout newHorizontal;
-			yourself)
-		expand: false;
+		add: paginatorPresenter expand: false;
 		yourself
 ]
 
@@ -120,6 +138,12 @@ PulsarMillerColumnInspector >> eventSyntaxHighlightThemeChanged: ann [
 PulsarMillerColumnInspector >> eventThemeChanged: ann [
 
 	self traversePresentersDo: [ :each | each pulsarThemeChanged ]
+]
+
+{ #category : 'private' }
+PulsarMillerColumnInspector >> indexOfPage: aPresenter [
+
+	^ aPresenter propertyAt: #index
 ]
 
 { #category : 'initialization' }
@@ -159,7 +183,28 @@ PulsarMillerColumnInspector >> initializePresenters [
 	millerList := SpBoxLayout newHorizontal beHomogeneous.
 	panelsList := SpBoxLayout newHorizontal.
 	
-	paginatorPresenter := self addPaginator
+	rangeLabelPresenter := self newLabel 
+		label: self rangeString;
+		yourself.
+	
+	incColumnsButtonPresenter := self newButton
+		addStyle: 'flat';
+		icon: (self iconNamed: 'plus');
+		action: [ self visiblePanels: self visiblePanels + 1 ];
+		yourself.
+	
+	visibleColumnsPresenter := self newLabel
+		label: self visiblePanels + 1;
+		yourself.
+
+	decColumnsButtonPresenter := self newButton
+		addStyle: 'flat';
+		icon: (self iconNamed: 'minus');
+		action: [ self visiblePanels: self visiblePanels - 1 ];
+		yourself.
+
+	
+	paginatorPresenter := self addPaginator.
 ]
 
 { #category : 'initialization' }
@@ -180,14 +225,21 @@ PulsarMillerColumnInspector >> insertPopover: aPresenter [
 { #category : 'testing' }
 PulsarMillerColumnInspector >> isVisible: aPresenter [
 
-	^ self visibleRange includes: (aPresenter propertyAt: #index)
+	^ self visibleRange includes: (self indexOfPage: aPresenter)
 ]
 
 { #category : 'private' }
 PulsarMillerColumnInspector >> moveTo: aNumber [
 
+	self moveTo: aNumber force: false
+]
+
+{ #category : 'private' }
+PulsarMillerColumnInspector >> moveTo: aNumber force: forceBoolean [
+
 	"if is already visible, skip"
-	(self visibleRange includes: aNumber) ifTrue: [ ^ self ].
+	(forceBoolean not and: [ self visibleRange includes: aNumber]) 
+		ifTrue: [ ^ self ].
 	
 	visibleRange := aNumber < self visibleRange first 
 		ifTrue: [ aNumber to: (aNumber + self visiblePanels - 1) ]
@@ -203,6 +255,24 @@ PulsarMillerColumnInspector >> notifyActivateEntity: anEntity [
 	self notificationCenter announce: anEntity newActivationAnnouncement
 ]
 
+{ #category : 'private' }
+PulsarMillerColumnInspector >> pageRemoved: aPresenter [
+
+	self application defer: [
+		| indexOfNextPage |
+		indexOfNextPage := (self indexOfPage: aPresenter) - 1.
+		self removePanelsFrom: (millerList children at: indexOfNextPage).
+		self 
+			moveTo: indexOfNextPage
+			force: true ]
+]
+
+{ #category : 'private' }
+PulsarMillerColumnInspector >> rangeString [
+	
+	^ self visibleRange asString
+]
+
 { #category : 'initialization' }
 PulsarMillerColumnInspector >> registerToEvents [
 
@@ -215,9 +285,9 @@ PulsarMillerColumnInspector >> registerToEvents [
 PulsarMillerColumnInspector >> removePanelsFrom: presenter [
 	| index |
 
-	index := presenter propertyAt: #index.
+	index := self indexOfPage: presenter.
 	millerList children copy reverseDo: [ :each |
-		(each propertyAt: #index) > index 
+		(self indexOfPage: each) > index 
 			ifTrue: [ millerList remove: each ] ]
 ]
 
@@ -225,6 +295,14 @@ PulsarMillerColumnInspector >> removePanelsFrom: presenter [
 PulsarMillerColumnInspector >> resetVisibleRange [
 
 	visibleRange := nil
+]
+
+{ #category : 'private' }
+PulsarMillerColumnInspector >> setIndexOfPage: aPresenter to: aNumber [
+
+	aPresenter 
+		propertyAt: #index
+		put: aNumber
 ]
 
 { #category : 'private' }
@@ -278,15 +356,17 @@ PulsarMillerColumnInspector >> updatePresenter [
 { #category : 'initialization' }
 PulsarMillerColumnInspector >> updateTitle [
 
-	headerPresenter updateBreadcrumbWith: [ :aBreadcrumb | 
-		aBreadcrumb addSegment: self model windowTitle ]
+	headerPresenter title: 'Inspector'
 ]
 
 { #category : 'private - updating' }
 PulsarMillerColumnInspector >> updateVisibleColumns [
 	| size |
 
-	self application defer: [ 
+	self application defer: [
+		visibleColumnsPresenter label: self visiblePanels asString.
+		rangeLabelPresenter label: self rangeString.
+		
 		size := millerList children size.
 		millerList children withIndexDo: [ :each :index |
 			each visible: (self isVisible: each) ].
@@ -297,6 +377,13 @@ PulsarMillerColumnInspector >> updateVisibleColumns [
 PulsarMillerColumnInspector >> visiblePanels [
 
 	^ visiblePanels ifNil: [ self class defaultVisiblePanels ]
+]
+
+{ #category : 'accessing' }
+PulsarMillerColumnInspector >> visiblePanels: aNumber [
+
+	visiblePanels := aNumber max: 1.
+	self updatePresenter
 ]
 
 { #category : 'accessing' }
