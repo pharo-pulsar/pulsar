@@ -183,6 +183,8 @@ PulsarDebugger >> windowClosed [
 { #category : 'private' }
 PulsarDebugger >> windowWillClose [
 
-	self application windowWillClose: self.
+	self flag: #TODO. "This is annoying most of the times... real problem is `windowWillClose:` is not
+	working fine, but for now I need to make the pain less important"
+	"^ self application windowWillClose: self."
 	^ true
 ]
