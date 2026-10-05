@@ -54,7 +54,7 @@ PulsarBaselineCreator >> baselineMethodSource [
 { #category : 'accessing' }
 PulsarBaselineCreator >> baselineName [
 
-	^ ('BaselineOf' , name) asSymbol
+	^ (f'BaselineOf[name]') asSymbol
 ]
 
 { #category : 'generating' }
