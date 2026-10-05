@@ -147,13 +147,15 @@ PulsarChangesSessionPresenter >> updatePatchWith: aCollectionOfEntries [
 
 { #category : 'initialization' }
 PulsarChangesSessionPresenter >> updatePresenter [
+	| modificationTime |
 
 	self model ifNil: [
 		headerPresenter title: 'No session selected'.
 		entryListPresenter items: #().
 		^ self ].
 	
-	headerPresenter title: 'Session: ', self model fileReference modificationTime epiceaBrowsersAsString. 
+	modificationTime := self model fileReference modificationTime.
+	headerPresenter title: f'Session: [modificationTime epiceaBrowsersAsString] ([modificationTime])'. 
 	entryListPresenter items: self model entries
 ]
 
