@@ -160,6 +160,19 @@ PulsarSingleInspector >> isActiveOnSingleClick [
 ]
 
 { #category : 'accessing' }
+PulsarSingleInspector >> maybeSelectAnyOf: aCollection [
+
+	aCollection 
+		reject: [ :eachName | eachName isNil or: [ eachName = 'Raw' ] ]
+		thenDo: [ :eachName | 
+			inspectionsPresenter pages 
+				detect: [ :each | each title = eachName ]
+				ifFound: [ :aPage | 
+					inspectionsPresenter selectPage: aPage.
+					^ self ] ]
+]
+
+{ #category : 'accessing' }
 PulsarSingleInspector >> maybeSelectPageNamed: aName [
 
 	inspectionsPresenter pages 

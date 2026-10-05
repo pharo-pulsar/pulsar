@@ -18,7 +18,8 @@ Class {
 		'incColumnsButtonPresenter',
 		'visibleColumnsPresenter',
 		'decColumnsButtonPresenter',
-		'rangeLabelPresenter'
+		'rangeLabelPresenter',
+		'lastSelectedPageName'
 	],
 	#category : 'Pulsar-Browser-Tool-Inspector',
 	#package : 'Pulsar-Browser',
@@ -106,8 +107,26 @@ PulsarMillerColumnInspector >> addPresenterToList: presenter [
 	lastPageName := self lastPageName.
 	millerList add: presenter.
 	self setIndexOfPage: presenter to: millerList children size.
-	lastPageName ifNotNil: [
-		presenter maybeSelectPageNamed: lastPageName ].
+	presenter maybeSelectAnyOf: { lastSelectedPageName. lastPageName }.
+	presenter outputActivationPort
+		transmitDo: [ :anObject | 
+			self application defer: [
+				lastSelectedPageName := (millerList children after: presenter ifAbsent: [ nil ])
+					ifNotNil: [ :aPresenterToBeRemoved | aPresenterToBeRemoved selectedPageName ].
+				self removePanelsFrom: presenter.
+				self addColumn: anObject asPulsarInspectorModel ] ]
+]
+
+{ #category : 'private' }
+PulsarMillerColumnInspector >> addPresenterToList: presenter selecting: aName [
+	| lastPageName |
+
+	self resetVisibleRange.
+	
+	lastPageName := self lastPageName.
+	millerList add: presenter.
+	self setIndexOfPage: presenter to: millerList children size.
+	presenter maybeSelectAnyOf: { aName. lastPageName }.
 	presenter outputActivationPort
 		transmitDo: [ :anObject | 
 			self application defer: [ 
