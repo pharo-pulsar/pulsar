@@ -272,7 +272,7 @@ PulsarRepositoryDiffEditor >> updatePresenter [
 { #category : 'private' }
 PulsarRepositoryDiffEditor >> updateRootContents [
 
-	scrollableLayoutForContent child: (self newPresenter
+	self scrollableLayoutForContent child: (self newPresenter
 			 layout: (SpBoxLayout newVertical
 					  vAlignStart;
 					  add: (self newLabel
