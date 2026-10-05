@@ -346,8 +346,7 @@ PulsarGtkConfiguration >> settings [
 PulsarGtkConfiguration >> style [
 	<pulsarSourceEditor: 'css'>
 
-	^ ' 
-checkbutton { padding: 0px; min-width: 0px; min-height: 0px; }
+	^ 'checkbutton { padding: 0px; min-width: 0px; min-height: 0px; }
 checkbutton check { min-width: 12px; min-height: 12px; margin: 0px; }
 button.compact { min-width: 0px; min-height: 0px; padding: 0px; margin: 0px; }
 button.compact image { min-width: 14px; min-height: 14px; -gtk-icon-size: 14px; }
@@ -551,7 +550,7 @@ box.testResultSummary label { font-weight: 500; letter-spacing: 0.01em; }
 /* preview editor */
 .pulsarPreviewEditor box.pulsarEditorBreadcrumb { font-style: italic; }
 .pulsarPreviewEditor { border-width: 1px; border-style: solid; border-color: @accent_bg_color; }
-'
+.paginatorPanelMarker { padding: 2px; }'
 ]
 
 { #category : 'private' }
