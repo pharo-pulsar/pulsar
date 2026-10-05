@@ -198,6 +198,14 @@ PulsarApplication >> cleanUp [
 		do: [ :each | each terminate ]
 ]
 
+{ #category : 'ui - utilities' }
+PulsarApplication >> closeAllDebuggers [
+
+	self windows copy
+		select: [ :each | each class = PulsarDebugger ]
+		thenDo: [ :each | each close ]
+]
+
 { #category : 'settings' }
 PulsarApplication >> colorForTestResultAt: aStatus [
 	"aStatus is 'Passed', 'Failed' or 'Error'"
