@@ -89,6 +89,20 @@ PulsarLLMOpenCodeAPI class >> onHost: aHost port: aPort [
 	^ api
 ]
 
+{ #category : 'accessing' }
+PulsarLLMOpenCodeAPI class >> query: aString [
+	"Create a fresh session, send a prompt, print the reply, and answer it.
+	The session is kept so it can be inspected afterwards."
+	| api sessionID reply |
+	
+	api := self new.
+	sessionID := (api createSession: 'Query') at: 'id'.
+	reply := api answerTextFrom: (api sendText: aString toSession: sessionID).
+	api deleteSession: sessionID.
+	
+	^ reply
+]
+
 { #category : 'sessions' }
 PulsarLLMOpenCodeAPI >> abortSession: aSessionID [
 

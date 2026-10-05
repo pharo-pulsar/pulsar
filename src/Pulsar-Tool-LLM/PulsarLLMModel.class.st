@@ -393,8 +393,8 @@ PulsarLLMModel >> skillBaseDirectory [
 PulsarLLMModel >> spawn: aCommand arguments: aCollection in: aTerminalPresenter [
 
 	OSPlatform current isFlatpak
-		ifTrue: [ self spawnFromFlatpak: aCommand trimBoth arguments: #() in: aTerminalPresenter ]
-		ifFalse: [ self spawnFromHost: aCommand trimBoth arguments: #() in: aTerminalPresenter ]
+		ifTrue: [ self spawnFromFlatpak: aCommand trimBoth arguments: aCollection in: aTerminalPresenter ]
+		ifFalse: [ self spawnFromHost: aCommand trimBoth arguments: aCollection in: aTerminalPresenter ]
 ]
 
 { #category : 'private' }
@@ -418,7 +418,7 @@ PulsarLLMModel >> spawnFromHost: aCommand arguments: aCollection in: aTerminalPr
 	aTerminalPresenter 
 		spawnAsync: aCommand
 		workingDirectory: FileLocator imageDirectory fullName 
-		arguments: #()
+		arguments: aCollection
 ]
 
 { #category : 'private' }

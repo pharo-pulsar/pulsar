@@ -45,12 +45,6 @@ PulsarLLMOpenCodeModel >> api [
 ]
 
 { #category : 'private' }
-PulsarLLMOpenCodeModel >> connectionArguments [
-
-	^ #()
-]
-
-{ #category : 'private' }
 PulsarLLMOpenCodeModel >> ensureConfig [
 	| ref |
 
@@ -84,11 +78,16 @@ PulsarLLMOpenCodeModel >> performConnectTo: aTerminalPresenter [
 		self error: 'OpenCode not found. Please install it and make sure it can be found in the PATH.' ].
 
 	"spawn serve"
-	"self spawn: 'opencode' arguments: #('serve' '--port' '49375') in: aTerminalPresenter."
+	"self spawn: 'opencode' arguments: #('serve' '--port' '4096') in: aTerminalPresenter."
 	"spawn opencode"
-	"self spawn: 'opencode' arguments: #('--server' 'http://127.0.0.1:49375') in: aTerminalPresenter."
+	"self spawn: 'opencode' arguments: #('--server' 'http://127.0.0.1:4096') in: aTerminalPresenter."
 	
-	self spawnFromHost: command trimBoth arguments: #('--port' '4096') in: aTerminalPresenter.
+	"self spawn: 'opencode' arguments: #('--port' '4096') in: aTerminalPresenter."
+		
+	self 
+		spawnFromHost: command trimBoth
+		arguments: #('--port' '4096')
+		in: aTerminalPresenter
 ]
 
 { #category : 'actions' }
