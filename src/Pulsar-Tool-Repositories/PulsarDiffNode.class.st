@@ -256,6 +256,7 @@ PulsarDiffNode >> newEntityModel [
 	
 	self nodeDefinition isMethodDefinition ifTrue: [ ^ self newMethodModel ].
 	self nodeDefinition isClassDefinition ifTrue: [ ^ self newClassModel ].
+	self nodeDefinition isPackageDefinition ifTrue: [ ^ self newPackageModel ].
 	self nodeDefinition isFileDefinition ifTrue: [ ^ self newFileModel ].
 	
 	self error: 'Should not arrive here' 
@@ -279,6 +280,16 @@ PulsarDiffNode >> newMethodModel [
 	^ PvMethodModel 
 		newEnvironment: self repository environmentModel
 		entity: definition contextClass >> definition name asSymbol
+]
+
+{ #category : 'private - factory' }
+PulsarDiffNode >> newPackageModel [
+	| definition |
+
+	definition := self nodeDefinition.
+	^ PvPackageModel 
+		newEnvironment: self repository environmentModel
+		entity: (self repository environmentModel packageNamed: definition packageName)
 ]
 
 { #category : 'accessing' }
