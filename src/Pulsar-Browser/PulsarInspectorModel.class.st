@@ -8,6 +8,12 @@ Class {
 	#tag : 'Tool-Inspector'
 }
 
+{ #category : 'converting' }
+PulsarInspectorModel >> asPulsarInspectorModel [
+
+	^ self
+]
+
 { #category : 'accessing' }
 PulsarInspectorModel >> fullName [
 

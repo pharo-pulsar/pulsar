@@ -20,11 +20,11 @@ Class {
 }
 
 { #category : 'private - actions' }
-PulsarSingleInspector >> activateWith: anActivation [
+PulsarSingleInspector >> activateWith: aNode [
 	"override to react to an activation detail"
 	
 	activationAction ifNil: [ ^ self ].
-	activationAction cull: (SpActivatedSelection newValue: anActivation)
+	activationAction cull: (SpActivatedSelection newValue: aNode)
 ]
 
 { #category : 'private' }
@@ -159,6 +159,14 @@ PulsarSingleInspector >> isActiveOnSingleClick [
 	^ true
 ]
 
+{ #category : 'accessing' }
+PulsarSingleInspector >> maybeSelectPageNamed: aName [
+
+	inspectionsPresenter pages 
+		detect: [ :each | each title = aName ]
+		ifFound: [ :aPage | inspectionsPresenter selectPage: aPage ]
+]
+
 { #category : 'private' }
 PulsarSingleInspector >> newInspectionForContext: aContext [
 
@@ -202,6 +210,20 @@ PulsarSingleInspector >> registerToEvents [
 	self announcer 
 		when: PulsarThemeChanged send: #eventThemeChanged: to: self;
 		when: PulsarSyntaxHighlightThemeChanged send: #eventSyntaxHighlightThemeChanged: to: self
+]
+
+{ #category : 'accessing' }
+PulsarSingleInspector >> selectPageName: aName [
+
+	inspectionsPresenter pages 
+		detect: [ :each | each title = aName ]
+		ifFound: [ :aPage | inspectionsPresenter selectPage: aPage ]
+]
+
+{ #category : 'accessing' }
+PulsarSingleInspector >> selectedPageName [
+
+	^ inspectionsPresenter selectedPage ifNotNil: #title
 ]
 
 { #category : 'accessing - snapshot' }

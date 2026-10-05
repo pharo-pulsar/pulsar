@@ -99,15 +99,20 @@ PulsarMillerColumnInspector >> addPopoverControls [
 
 { #category : 'private' }
 PulsarMillerColumnInspector >> addPresenterToList: presenter [
+	| lastPageName |
 
 	self resetVisibleRange.
+	
+	lastPageName := self lastPageName.
 	millerList add: presenter.
 	self setIndexOfPage: presenter to: millerList children size.
+	lastPageName ifNotNil: [
+		presenter maybeSelectPageNamed: lastPageName ].
 	presenter outputActivationPort
 		transmitDo: [ :anObject | 
 			self application defer: [ 
 				self removePanelsFrom: presenter.
-				self addColumn: (PulsarInspectorModel on: anObject) ] ]
+				self addColumn: anObject asPulsarInspectorModel ] ]
 ]
 
 { #category : 'accessing' }
@@ -226,6 +231,14 @@ PulsarMillerColumnInspector >> insertPopover: aPresenter [
 PulsarMillerColumnInspector >> isVisible: aPresenter [
 
 	^ self visibleRange includes: (self indexOfPage: aPresenter)
+]
+
+{ #category : 'private' }
+PulsarMillerColumnInspector >> lastPageName [
+
+	^ millerList children
+		ifNotEmpty: [ :children | children last selectedPageName ]
+		ifEmpty: [ nil ]
 ]
 
 { #category : 'private' }
