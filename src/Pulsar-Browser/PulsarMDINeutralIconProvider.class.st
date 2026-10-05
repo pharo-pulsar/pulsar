@@ -257,6 +257,8 @@ PulsarMDINeutralIconProvider >> createTable [
 		('cancel'                 'close')
 		('variables'              'variable')
 		('systemRepository'		  'archive-cog-outline')
+		('inspector-column-shown'   'square')
+		('inspector-column-hidden'  'square-outline')
 
 		"History / undo / redo / save"
 		('smallUndo'              'undo-variant')

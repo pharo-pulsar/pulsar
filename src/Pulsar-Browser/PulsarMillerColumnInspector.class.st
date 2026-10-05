@@ -83,7 +83,7 @@ PulsarMillerColumnInspector >> addPresenterToList: presenter [
 		transmitDo: [ :anObject | 
 			self application defer: [ 
 				self removePanelsFrom: presenter.
-				self addColumn: anObject asInspectorModel ] ]
+				self addColumn: (PulsarInspectorModel on: anObject) ] ]
 ]
 
 { #category : '(All)' }
@@ -152,7 +152,7 @@ PulsarMillerColumnInspector >> initializePresenters [
 	self
 		addStyle: 'pulsarFlyingBrowser';
 		addStyle: 'pulsarInspectorFlyingBrowser';
-		addStyle: 'pulsarMillerInspector'.
+		addStyle: 'pulsarMillerColumnInspector'.
 
 	headerPresenter := self instantiate: PulsarEditorToolbarPresenter.
 
@@ -250,15 +250,18 @@ PulsarMillerColumnInspector >> updatePaginator [
 	millerList children withIndexDo: [ :each :index |
 		panelsList add: ((self isVisible: each)
 			ifTrue: [ 
-				self newLabel 
-					label: '◽';
+				self newImage
+					addStyle: 'paginatorPanelMarker';
+					image: (self iconNamed: 'inspector-column-shown');
+					help: each model windowTitle;
 					yourself]
 			ifFalse: [ 
 				self newButton
 					addStyle: 'paginatorPanelMarker';
 					addStyle: 'flat';
 					action: [ self moveTo: index ];
-					label: '▫';
+					icon: (self iconNamed: 'inspector-column-hidden');
+					help: each model windowTitle;
 					yourself ]) 
 	]
 ]
@@ -275,7 +278,8 @@ PulsarMillerColumnInspector >> updatePresenter [
 { #category : 'initialization' }
 PulsarMillerColumnInspector >> updateTitle [
 
-	headerPresenter updateBreadcrumbWith: [ :aBreadcrumb | aBreadcrumb addSegment: self model windowTitle ]
+	headerPresenter updateBreadcrumbWith: [ :aBreadcrumb | 
+		aBreadcrumb addSegment: self model windowTitle ]
 ]
 
 { #category : 'private - updating' }
