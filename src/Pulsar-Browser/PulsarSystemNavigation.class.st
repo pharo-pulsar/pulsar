@@ -103,7 +103,7 @@ PulsarSystemNavigation >> inspect: anObject [
 	| inspector |
 	
 	inspector := self window 
-		instantiate: PulsarInspector
+		instantiate: PulsarMillerColumnInspector
 		on: (PulsarInspectorModel on: anObject).
 	inspector notificationCenter: self notificationCenter.
 	self responderPresenter insertPopover: inspector

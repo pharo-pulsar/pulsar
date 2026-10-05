@@ -143,7 +143,7 @@ PulsarMethodEditor >> doRunSampleInstanceCommand: anAction [
 	result ifNil: [ ^ self ].
 	
 	inspector := self
-		instantiate: PulsarInspector
+		instantiate: PulsarMillerColumnInspector
 		on: (PulsarInspectorModel on: result).
 		
 	anAction presenter insertPopover: inspector

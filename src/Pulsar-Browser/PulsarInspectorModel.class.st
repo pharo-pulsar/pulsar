@@ -31,7 +31,7 @@ PulsarInspectorModel >> iconName [
 { #category : 'accessing' }
 PulsarInspectorModel >> pulsarEditorClass [
 
-	^ PulsarInspector
+	^ PulsarMillerColumnInspector
 ]
 
 { #category : 'accessing' }
