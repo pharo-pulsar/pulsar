@@ -346,7 +346,15 @@ PulsarClassOutlineSideView >> doRenameProtocolCommand: anAction [
 PulsarClassOutlineSideView >> doRequestNewMethod [
 
 	self flag: #TODO. "I am using owner, which introcuces perhaps an undesirable coupling..."
-	self owner notifyActivateEntity: self newMethodModelForNewMethod
+	self owner notifyActivateEntity: (self newMethodModelForNewMethod
+		in: [ :this | 
+			| protocol |
+			protocol := self selectedProtocol. 
+			(protocol isNotNil 
+				and: [ protocol isUnclassified not
+				and: [ protocol isVirtual not ] ]) 
+				ifTrue: [ this protocol: protocol name ] ];
+		yourself)
 ]
 
 { #category : 'private' }
@@ -662,6 +670,12 @@ PulsarClassOutlineSideView >> selectedMethodName [
 	^ self selectedMethod 
 		ifNotNil: [ :aModel | aModel name ]
 		ifNil: [ 'Unknown' ]
+]
+
+{ #category : 'private - accessing' }
+PulsarClassOutlineSideView >> selectedProtocol [
+
+	^ protocolListPresenter selectedItem
 ]
 
 { #category : 'private - accessing' }

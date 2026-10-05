@@ -482,6 +482,12 @@ PvMethodModel >> protocol [
 ]
 
 { #category : 'accessing' }
+PvMethodModel >> protocol: aProtocol [
+
+	self entity protocol: aProtocol
+]
+
+{ #category : 'accessing' }
 PvMethodModel >> protocolModel [
 	
 	^ PvProtocolModel 
