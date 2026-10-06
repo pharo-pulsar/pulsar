@@ -11,7 +11,6 @@ Class {
 	#instVars : [
 		'headerPresenter',
 		'millerList',
-		'visiblePanels',
 		'visibleRange',
 		'panelsList',
 		'paginatorPresenter',
@@ -20,6 +19,9 @@ Class {
 		'decColumnsButtonPresenter',
 		'rangeLabelPresenter',
 		'lastSelectedPageName'
+	],
+	#classVars : [
+		'VisiblePanels'
 	],
 	#category : 'Pulsar-Browser-Tool-Inspector',
 	#package : 'Pulsar-Browser',
@@ -408,13 +410,13 @@ PulsarMillerColumnInspector >> updateVisibleColumns [
 { #category : 'accessing' }
 PulsarMillerColumnInspector >> visiblePanels [
 
-	^ visiblePanels ifNil: [ self class defaultVisiblePanels ]
+	^ VisiblePanels ifNil: [ self class defaultVisiblePanels ]
 ]
 
 { #category : 'accessing' }
 PulsarMillerColumnInspector >> visiblePanels: aNumber [
 
-	visiblePanels := aNumber max: 1.
+	VisiblePanels := aNumber max: 1.
 	self updatePresenter
 ]
 
