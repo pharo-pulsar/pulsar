@@ -56,18 +56,19 @@ PulsarMillerColumnInspector >> addColumn: aModel [
 PulsarMillerColumnInspector >> addPaginator [
 
 	^ self newPresenter 
+		addStyle: 'paginator';
 		layout: (SpBoxLayout newHorizontal
 			vAlignCenter;
 			add: (SpBoxLayout newHorizontal
 				vAlignCenter;
-				vAlignStart;
+				hAlignStart;
 				add: rangeLabelPresenter;
 				yourself);
 			add: (SpBoxLayout newHorizontal
+					vAlignCenter;
 					hAlignCenter;
 					add: (self newButton
 						addStyle: 'flat';
-						addStyle: 'circular';
 						icon: (self iconNamed: 'chevron-left');
 						action: [ self shiftRange: -1 ];
 						yourself);
@@ -77,7 +78,6 @@ PulsarMillerColumnInspector >> addPaginator [
 						yourself);
 					add: (self newButton
 						addStyle: 'flat';
-						addStyle: 'circular';
 						icon: (self iconNamed: 'chevron-right');
 						action: [ self shiftRange: 1 ];
 						yourself);
@@ -210,6 +210,8 @@ PulsarMillerColumnInspector >> initializePresenters [
 	panelsList := SpBoxLayout newHorizontal.
 	
 	rangeLabelPresenter := self newLabel 
+		addStyle: 'dim';
+		addStyle: 'tinyFont';
 		label: self rangeString;
 		yourself.
 	
@@ -220,6 +222,8 @@ PulsarMillerColumnInspector >> initializePresenters [
 		yourself.
 	
 	visibleColumnsPresenter := self newLabel
+		addStyle: 'dim';
+		addStyle: 'tinyFont';
 		label: self visiblePanels + 1;
 		yourself.
 

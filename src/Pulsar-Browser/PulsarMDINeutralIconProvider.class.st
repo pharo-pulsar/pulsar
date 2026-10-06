@@ -253,7 +253,7 @@ PulsarMDINeutralIconProvider >> createTable [
 		('critiques'              'bell-outline')
 		('closeAll'               'close-box-multiple-outline')
 		('close'                  'close')
-		('close-panel'			  'minus')
+		('close-panel'			  'close')
 		('glamorousClose'         'close')
 		('cancel'                 'close')
 		('variables'              'variable')
@@ -352,7 +352,7 @@ PulsarMDINeutralIconProvider >> lightColorFor: iconName forceNeutral: forceBoole
 ]
 
 { #category : 'utilities' }
-PulsarMDINeutralIconProvider >> loadIcon: svgReference tint: colorHexString [
+PulsarMDINeutralIconProvider >> loadIcon: svgReference tint: colorHexString size: aSize [
 	| rawContents contents |
 	
 	rawContents := svgReference contents substrings: '>'.
@@ -371,20 +371,25 @@ PulsarMDINeutralIconProvider >> loadIcon: svgReference tint: colorHexString [
 		 size and let gtk4 do the scale work."
 		LibRsvg
 			renderFromString: contents
-			size: 24@24 ]
+			size: aSize ]
 ]
 
 { #category : 'utilities' }
 PulsarMDINeutralIconProvider >> loadIconNamed: aName [
-	| iconName cleanName forceNeutral |
+	| iconName cleanName forceNeutral size |
 
-	(aName endsWith: '.neutral') 
-		ifTrue: [
-			cleanName := aName allButLast: 8.
-			forceNeutral := true ]
-		ifFalse: [
-			cleanName := aName.
-			forceNeutral := false ].
+	
+	cleanName := aName.
+	forceNeutral := false.
+	size := 24@24.
+
+	(aName endsWith: '.neutral') ifTrue: [
+		cleanName := aName allButLast: 8.
+		forceNeutral := true ].
+	
+	(cleanName endsWith: '.small') ifTrue: [
+		cleanName := cleanName allButLast: 6.
+		size := 12@12 ].
 	
 	iconName := table at: cleanName ifAbsent: [ ^ nil ].	
 
@@ -392,7 +397,10 @@ PulsarMDINeutralIconProvider >> loadIconNamed: aName [
 		| ref |	
 		ref := (each / iconName) withExtension: 'svg'.
 		ref exists ifTrue: [
-			^ self loadIcon: ref tint: (self colorFor: cleanName forceNeutral: forceNeutral) ] ].
+			^ self 
+				loadIcon: ref 
+				tint: (self colorFor: cleanName forceNeutral: forceNeutral)
+				size: size ] ].
 	
 	^ nil
 ]
