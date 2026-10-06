@@ -252,12 +252,23 @@ PulsarDiffNode >> newClassModel [
 ]
 
 { #category : 'private - factory' }
+PulsarDiffNode >> newDirectoryModel [
+	| definition |
+	
+	definition := self nodeDefinition.
+	^ PulsarDirectoryModel 
+		newEnvironment: self repository environmentModel
+		entity: self repository location / definition path fullName
+]
+
+{ #category : 'private - factory' }
 PulsarDiffNode >> newEntityModel [
 	
 	self nodeDefinition isMethodDefinition ifTrue: [ ^ self newMethodModel ].
 	self nodeDefinition isClassDefinition ifTrue: [ ^ self newClassModel ].
 	self nodeDefinition isPackageDefinition ifTrue: [ ^ self newPackageModel ].
 	self nodeDefinition isFileDefinition ifTrue: [ ^ self newFileModel ].
+	self nodeDefinition isDirectoryDefinition ifTrue: [ ^ self newDirectoryModel ].
 	
 	self error: 'Should not arrive here' 
 ]
