@@ -147,6 +147,12 @@ PulsarRepositoryPackageModel >> name [
 	^ self package name
 ]
 
+{ #category : 'instance creation' }
+PulsarRepositoryPackageModel >> newPackageModel [
+
+	^ self repository environmentModel newPackageModelFor: self entity name
+]
+
 { #category : 'accessing' }
 PulsarRepositoryPackageModel >> package [
 

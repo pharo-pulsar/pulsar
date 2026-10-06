@@ -18,11 +18,6 @@ PulsarRepositoryPackagesView class >> defaultPanelPosition [
 		yourself
 ]
 
-{ #category : 'initialization' }
-PulsarRepositoryPackagesView >> connectPresenters [
-	
-]
-
 { #category : 'layout' }
 PulsarRepositoryPackagesView >> defaultLayout [
 
@@ -96,6 +91,22 @@ PulsarRepositoryPackagesView >> doUnloadPackage: aPackageModel [
 		statusbar pushMessage: ('Unloading {1}...' format: { aPackageModel name }).
  		aPackageModel unload.
  		self updatePresenter ]
+]
+
+{ #category : 'private' }
+PulsarRepositoryPackagesView >> entityActivated: aRepositoryPackageModel [
+
+	aRepositoryPackageModel isLoaded ifFalse: [ ^ self ].
+	
+	super entityActivated: aRepositoryPackageModel newPackageModel
+]
+
+{ #category : 'private' }
+PulsarRepositoryPackagesView >> entitySelected: anEntity [
+
+	"for the moment, we do not do anything on entity selected, 
+	 but I am letting the stub here because there are things we 
+	 could do in the future (like show some info, etc...)"
 ]
 
 { #category : 'events' }
