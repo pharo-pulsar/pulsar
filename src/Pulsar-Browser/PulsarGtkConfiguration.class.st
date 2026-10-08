@@ -405,6 +405,7 @@ box.pulsarDialog box { margin: 0px; }
 
 .pulsarSpotter { margin: 5px; border-spacing: 5px; min-width: 700px; }
 .pulsarSpotter entry.search { margin: 15px 10px 5px 10px; }
+.pulsarSpotter notebook { margin: 10px; }
 
 .pulsarMessageFlyingBrowser { min-width: 720px; min-height: 460px; }
 .pulsarInspectorFlyingBrowser { min-width: 680px; min-height: 440px; }

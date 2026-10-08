@@ -277,6 +277,7 @@ PulsarMDINeutralIconProvider >> createTable [
 		"LLM"
 		('chat'			 			'chat-outline')
 		('chat-connect'			 	'server-network-outline')
+		('agent'						'robot-outline')
 		
 		"Files"
 		('file'					'file-outline' 				'#b86e00' '#d9902f')

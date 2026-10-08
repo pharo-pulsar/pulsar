@@ -445,15 +445,15 @@ PulsarEditor >> registerToEvents [
 		when: PulsarModelRemoved send: #eventModelRemoved: to: self
 ]
 
-{ #category : 'initialization' }
+{ #category : 'events' }
 PulsarEditor >> registerToSystemEvents [
-	"subclasses can fill this"
-	
-	self announcer
-		when: TestCaseEnded send: #eventTestCaseEnded: to: self;
-		when: ClassModifiedClassDefinition, ClassRenamed send: #eventClassChanged: to: self;
-		when: ClassRemoved send: #eventClassRemoved: to: self;
-		when: SpWindowWillClose send: #windowWillClose: to: self
+	  "subclasses can fill this"
+
+	  self announcer
+		  when: TestCaseEnded send: #eventTestCaseEnded: to: self;
+		  when: ClassModifiedClassDefinition , ClassRenamed , ClassCommented send: #eventClassChanged: to: self;
+		  when: ClassRemoved send: #eventClassRemoved: to: self;
+		  when: SpWindowWillClose send: #windowWillClose: to: self
 ]
 
 { #category : 'accessing - overlay' }

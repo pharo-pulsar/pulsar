@@ -141,23 +141,23 @@ PvMethodModel >> defineDecorationActionsOn: aBuilder [
 			name: 'Decoration';
 			beDisplayedAsGroup.
 			
-		group addActionWith: [ :action | action 
+		group addActionWith: [ :action | action
 			name: 'Versions';
-			description: ('Browse versions of ', self name);
+			description: (f'Browse versions of [self name]');
 			iconName: 'versions';
 			action: [ :aContext | aContext doBrowseVersionsCommand: action ] ].
-			
+				
 		self isExampleMethod ifTrue: [
 			group addActionWith: [ :action | action 
 				name: 'Run Sample';
-				description: 'Execute [self name] and take a sample instance';
+				description: f'Execute [self name] and take a sample instance';
 				iconName: 'play'	;
 				action: [ :aContext | aContext doRunSampleInstanceCommand: action ] ] ].
 				
 		self isScriptMethod ifTrue: [
 			group addActionWith: [ :action | action 
 				name: 'Run Script';
-				description: 'Execute [self name]';
+				description: f'Execute [self name]';
 				iconName: 'play';
 				action: [ :aContext | aContext doRunScriptCommand: action ] ] ].				
 	]

@@ -16,41 +16,6 @@ Class {
 	#tag : 'View-Editor'
 }
 
-{ #category : 'accessing - actions' }
-PulsarMethodEditor class >> defineActionsOn: aBuilder [
-	<dockActions>
-
-	aBuilder 
-		addGroup: #structuring with: [ :group | group 
-			priority: -10;
-			name: 'Structure';
-			beDisplayedAsGroup;
-			addActionWith: [ :anAction | anAction
-				name: 'Classify method';
-				description: 'Change protocol of current method';
-				iconName: 'tag';
-				shortcutKey:  $p mod1 shift;
-				action: [ :aContext | aContext doRequestChangeProtocol ] ] ];
-		addGroup: #editorActions with: [ :group | group
-			priority: 1;
-			name: 'Editor';
-			beDisplayedAsGroup;
-			addActionWith: [ :action | action 
-				name: 'Toggle link';
-				description: 
-					'Toggle method selection link.', String cr, 
-					'Link this editor with the method selection in the class outline.';
-				iconName: 'link';
-				actionVisible: [ :aContext | aContext isEmbedded not];
-				action: [ :aContext | aContext doToggleSelectionLinkCommand: action ] ];
-			addActionWith: [ :action | action 
-				name: 'Attach editor in browser';
-				description: 'Attack this embedded editor in browser';
-				iconName: 'arrowDown';
-				actionVisible: [ :aContext | aContext isEmbedded ];
-				action: [ :aContext | aContext notificationCenter announce: aContext model newActivationAnnouncement ] ] ]
-]
-
 { #category : 'visiting' }
 PulsarMethodEditor >> acceptVisitor: aVisitor [
 
@@ -86,6 +51,41 @@ PulsarMethodEditor >> connectPresenters [
 	protocolPresenter whenProtocolChangedDo: [ :aProtocolModel |
 		self notifyEntityChanged: self model.
 		self takeKeyboardFocus ]
+]
+
+{ #category : 'private - definitions' }
+PulsarMethodEditor >> defineActionsOn: aBuilder [
+	<dockActions>
+
+	aBuilder 
+		addGroup: #structuring with: [ :group | group 
+			priority: -10;
+			name: 'Structure';
+			beDisplayedAsGroup;
+			addActionWith: [ :anAction | anAction
+				name: 'Classify method';
+				description: 'Change protocol of current method';
+				iconName: 'tag';
+				shortcutKey:  $p mod1 shift;
+				action: [ self  doRequestChangeProtocol ] ] ];
+		addGroup: #editorActions with: [ :group | group
+			priority: 1;
+			name: 'Editor';
+			beDisplayedAsGroup;
+			addActionWith: [ :action | action 
+				name: 'Toggle link';
+				description: 
+					'Toggle method selection link.', String cr, 
+					'Link this editor with the method selection in the class outline.';
+				iconName: 'link';
+				actionVisible: [ self  isEmbedded not];
+				action: [ self  doToggleSelectionLinkCommand: action ] ];
+			addActionWith: [ :action | action 
+				name: 'Attach editor in browser';
+				description: 'Attack this embedded editor in browser';
+				iconName: 'arrowDown';
+				actionVisible: [ self  isEmbedded ];
+				action: [ self  notificationCenter announce: self model newActivationAnnouncement ] ] ]
 ]
 
 { #category : 'private - actions' }
