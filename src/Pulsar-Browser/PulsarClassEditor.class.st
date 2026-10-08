@@ -98,6 +98,12 @@ PulsarClassEditor >> commentOverlayLayout [
 	^ commentOverlayLayout ifNil: [ commentOverlayLayout := SpOverlayLayout new ]
 ]
 
+{ #category : 'private' }
+PulsarClassEditor >> commentPresenter [
+
+	^ commentPresenter
+]
+
 { #category : 'private - updating' }
 PulsarClassEditor >> commentUnmarkDirty [
 
@@ -260,6 +266,12 @@ PulsarClassEditor >> initializePresenters [
 		withoutLineNumbers;
 		withHyperlinks;
 		yourself
+]
+
+{ #category : 'testing' }
+PulsarClassEditor >> isCommentDirty [
+
+	  ^ commentDirty
 ]
 
 { #category : 'testing' }
