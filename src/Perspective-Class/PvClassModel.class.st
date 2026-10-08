@@ -1,3 +1,23 @@
+"
+I represent a class (or trait) in the browser.
+
+Responsibilities:
+- I wrap a Class entity and expose what the UI needs: name, comment (markdown), fluid class definition, slots and protocols.
+- I back the class editor (PulsarClassEditor) and the class outline (PvOutlineClassModel).
+- While a class is being created I wrap a PvNewClassTemplate until it is installed.
+
+Collaborators:
+- environmentModel (PvPackageModel): the environment where my entity lives; used to compile the fluid definition.
+- PulsarClassEditor: the editor that presents me.
+- PvOutlineClassModel: my representation in the class outline.
+
+Public API and Key Messages:
+- comment / commentOrTemplate / saveComment: - my markdown comment.
+- classDefinitionString / updateWith:notifying: - the fluid definition and its installation.
+
+Instance Variables:
+    isNew: <Boolean> - true while my entity is a template for a new class.
+"
 Class {
 	#name : 'PvClassModel',
 	#superclass : 'PvBaseModel',
