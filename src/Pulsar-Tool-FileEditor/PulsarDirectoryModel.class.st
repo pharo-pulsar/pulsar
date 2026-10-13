@@ -16,31 +16,26 @@ Class {
 
 { #category : 'accessing' }
 PulsarDirectoryModel >> children [
-	"Return child models: subdirectories (as PulsarDirectoryModel) followed by files (as PulsarFileModel), sorted by name."
+	"Return child models: subdirectories (as PulsarDirectoryModel), HTML files (as PulsarWebModel) and other files (as PulsarFileModel), sorted by name."
+
 	| directoryModels fileModels |
-	
-	self entity exists ifFalse: [ ^ #() ].
-	
-	directoryModels := self entity directories 
-		collect: [ :each | 
-			PulsarDirectoryModel 
-				newEnvironment: self environmentModel 
-				parent: self 
-				entity: each ]
-			as: Array.
+	self entity exists ifFalse: [ ^ #(  ) ].
+
+	directoryModels := self entity directories
+		                   collect: [ :each | PulsarDirectoryModel newEnvironment: self environmentModel parent: self entity: each ]
+		                   as: Array.
 
 	fileModels := self entity files
-		collect: [ :each | 
-			PulsarFileModel 
-				newEnvironment: self environmentModel 
-				parent: self 
-				entity: each ]
-		as: Array.
+		              collect: [ :each |
+				              (PulsarWebModel handlesFile: each)
+					              ifTrue: [ PulsarWebModel newEnvironment: self environmentModel parent: self entity: each resolve asZnUrl ]
+					              ifFalse: [ PulsarFileModel newEnvironment: self environmentModel parent: self entity: each ] ]
+		              as: Array.
 
 	directoryModels sort: [ :aModel :bModel | aModel name <= bModel name ].
 	fileModels sort: [ :aModel :bModel | aModel name <= bModel name ].
 
-	^ directoryModels, fileModels
+	^ directoryModels , fileModels
 ]
 
 { #category : 'actions' }

@@ -253,7 +253,7 @@ PvMethodModel >> hash [
 
 	^ (self species hash
 		bitXor: self entity methodClass hash)
-		bitXor: self entity selector
+		bitXor: self entity selector hash
 ]
 
 { #category : 'accessing' }
