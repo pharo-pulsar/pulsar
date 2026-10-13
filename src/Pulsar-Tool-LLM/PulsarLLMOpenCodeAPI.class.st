@@ -16,11 +16,12 @@ Class {
 	#instVars : [
 		'host',
 		'port',
-		'timeout'
+		'timeout',
+		'model'
 	],
-	#category : 'Pulsar-Tool-LLM-Model',
+	#category : 'Pulsar-Tool-LLM-Agent',
 	#package : 'Pulsar-Tool-LLM',
-	#tag : 'Model'
+	#tag : 'Agent'
 }
 
 { #category : 'constants' }
@@ -33,6 +34,13 @@ PulsarLLMOpenCodeAPI class >> defaultHost [
 PulsarLLMOpenCodeAPI class >> defaultPort [
 
 	^ 4096
+]
+
+{ #category : 'constants' }
+PulsarLLMOpenCodeAPI class >> defaultStreamKinds [
+	"Kinds streamed by default, matching what the OpenCode TUI surfaces."
+
+	^ #( #text #reasoning #tool #step )
 ]
 
 { #category : 'examples' }
@@ -348,6 +356,63 @@ PulsarLLMOpenCodeAPI >> globalEventsDo: aBlock [
 	    ^ self streamEventsFrom: '/global/event' do: aBlock
 ]
 
+{ #category : 'private' }
+PulsarLLMOpenCodeAPI >> handlePartDelta: aProperties kinds: aCollection partTypes: aPartTypeMap text: aWriteStream do: aBlock [
+
+	| partID field delta kind |
+	field := aProperties at: 'field' ifAbsent: [ nil ].
+	field = 'text' ifFalse: [ ^ self ].
+
+	partID := aProperties at: 'partID' ifAbsent: [ nil ].
+	delta := aProperties at: 'delta' ifAbsent: [ '' ].
+	kind := (aPartTypeMap at: partID ifAbsent: [ 'text' ]) = 'reasoning'
+		        ifTrue: [ #reasoning ]
+		        ifFalse: [ #text ].
+	(aCollection includes: kind) ifFalse: [ ^ self ].
+
+	kind = #text ifTrue: [ aWriteStream nextPutAll: delta ].
+	aBlock value: delta value: kind
+]
+
+{ #category : 'private' }
+PulsarLLMOpenCodeAPI >> handlePartUpdate: aPart kinds: aCollection partTypes: aPartTypeMap toolStates: aToolStateMap do: aBlock [
+
+	| partID partType |
+	partID := aPart at: 'id' ifAbsent: [ ^ self ].
+	partType := aPart at: 'type' ifAbsent: [ ^ self ].
+	aPartTypeMap at: partID put: partType.
+
+	(partType = 'tool' and: [ aCollection includes: #tool ]) ifTrue: [
+			| status |
+			status := (aPart at: 'state' ifAbsent: [ nil ]) ifNotNil: [ :state | state at: 'status' ifAbsent: [ nil ] ].
+			(aToolStateMap at: partID ifAbsent: [ nil ]) = status ifFalse: [
+					aToolStateMap at: partID put: status.
+					aBlock value: (self toolStreamLineFor: aPart) value: #tool ] ].
+
+	((partType = 'step-start' or: [ partType = 'step-finish' ]) and: [ aCollection includes: #step ]) ifTrue: [
+		aBlock value: (self stepStreamLineFor: aPart) value: #step ]
+]
+
+{ #category : 'private' }
+PulsarLLMOpenCodeAPI >> handleStreamType: aType properties: aProperties kinds: aCollection partTypes: aPartTypeMap toolStates: aToolStateMap text: aWriteStream do: aBlock [
+
+	aType = 'message.part.updated' ifTrue: [
+			self
+				handlePartUpdate: (aProperties at: 'part' ifAbsent: [ Dictionary new ])
+				kinds: aCollection
+				partTypes: aPartTypeMap
+				toolStates: aToolStateMap
+				do: aBlock ].
+	aType = 'message.part.delta' ifTrue: [
+			self
+				handlePartDelta: aProperties
+				kinds: aCollection
+				partTypes: aPartTypeMap
+				text: aWriteStream
+				do: aBlock ].
+	aType = 'session.error' ifTrue: [ aBlock value: 'session error' value: #error ]
+]
+
 { #category : 'health' }
 PulsarLLMOpenCodeAPI >> health [
 
@@ -437,16 +502,35 @@ PulsarLLMOpenCodeAPI >> messagesInSession: aSessionID [
 	^ self get: '/session/' , aSessionID , '/message'
 ]
 
+{ #category : 'accessing' }
+PulsarLLMOpenCodeAPI >> model [
+	"it can be nil"
+
+	^ model
+]
+
+{ #category : 'accessing' }
+PulsarLLMOpenCodeAPI >> model: aString [
+	"e.g. deepseek-flash"
+
+	model := aString
+]
+
 { #category : 'private' }
 PulsarLLMOpenCodeAPI >> newClient: aUrl [
 
-	| client |
-	client := ZnClient new.
-	client
+	^ ZnClient new
 		url: aUrl;
+		username: 'opencode' password: self serverPassword;
 		timeout: self timeout;
-		accept: ZnMimeType applicationJson.
-	^ client
+		accept: ZnMimeType applicationJson;
+		yourself
+]
+
+{ #category : 'instance creation' }
+PulsarLLMOpenCodeAPI >> newSession [
+
+	^ PulsarLLMAgentSession on: self
 ]
 
 { #category : 'private' }
@@ -514,7 +598,7 @@ PulsarLLMOpenCodeAPI >> openTuiThemes [
 { #category : 'private' }
 PulsarLLMOpenCodeAPI >> parseJSON: aString [
 
-	aString ifEmpty: [ ^ nil ].
+	(aString isNil or: [ aString isEmpty ]) ifTrue: [ ^ nil ].
 	^ STONJSON fromString: aString
 ]
 
@@ -588,13 +672,21 @@ PulsarLLMOpenCodeAPI >> projects [
 
 { #category : 'private' }
 PulsarLLMOpenCodeAPI >> promptPayloadFor: aString model: aModel agent: anAgent [
-
 	  | payload |
-	  payload := Dictionary new
-		              at: 'parts' put: { (Dictionary with: 'type' -> 'text' with: 'text' -> aString) };
+	  
+	  payload := OrderedDictionary new
+		at: 'parts' put: { (Dictionary with: 'type' -> 'text' with: 'text' -> aString) };
 		yourself.
-	  aModel ifNotNil: [ payload at: 'model' put: aModel ].
+		
+	  aModel ifNotNil: [ 
+	  	payload 
+	  		at: 'model' 
+	  		put: (Dictionary 
+	  			with: 'providerID' -> (aModel copyUpTo: $/)
+	  			with: 'modelID' -> (aModel copyAfter: $/)) ].
+
 	  anAgent ifNotNil: [ payload at: 'agent' put: anAgent ].
+	  
 	  ^ payload
 ]
 
@@ -674,15 +766,75 @@ PulsarLLMOpenCodeAPI >> sendText: aString toSession: aSessionID [
 	^ self
 		  sendText: aString
 		  toSession: aSessionID
-		  model: nil
+		  model: self model
 		  agent: nil
+]
+
+{ #category : 'messages' }
+PulsarLLMOpenCodeAPI >> sendText: aString toSession: aSessionID do: aBlock [
+	"Send a text prompt and stream the answer chunks to aBlock until the turn ends."
+
+	^ self
+		  sendText: aString
+		  toSession: aSessionID
+		  kinds: self class defaultStreamKinds
+		  do: aBlock
+]
+
+{ #category : 'messages' }
+PulsarLLMOpenCodeAPI >> sendText: aString toSession: aSessionID kinds: aCollection do: aBlock [
+	"Send a text prompt and stream the answer to aBlock until the turn ends.
+	 aBlock receives a chunk String and a kind Symbol among #text, #reasoning,
+	 #tool, #step and #error. Answers the accumulated text of the #text chunks."
+	| ready finished partTypes toolStates text |
+	
+	ready := Semaphore new.
+	finished := Semaphore new.
+	partTypes := Dictionary new.
+	toolStates := Dictionary new.
+	text := WriteStream on: String new.
+
+	self
+		subscribeSession: aSessionID
+		kinds: aCollection
+		ready: ready
+		finished: finished
+		partTypes: partTypes
+		toolStates: toolStates
+		text: text
+		do: aBlock.
+
+	ready waitTimeoutSeconds: 5.
+	self
+		sendTextAsync: aString
+		toSession: aSessionID
+		model: self model
+		agent: nil.
+	(finished waitTimeoutSeconds: self timeout) ifTrue: [ aBlock value: 'stream timed out' value: #error ].
+	^ text contents
 ]
 
 { #category : 'messages' }
 PulsarLLMOpenCodeAPI >> sendText: aString toSession: aSessionID model: aModel agent: anAgent [
 	"Send a text prompt and wait for the reply."
 
-	^ self post: '/session/' , aSessionID , '/message' json: (self promptPayloadFor: aString model: aModel agent: anAgent)
+	^ self 
+		post: '/session/' , aSessionID , '/message' 
+		json: (self 
+			promptPayloadFor: aString 
+			model: aModel 
+			agent: anAgent)
+]
+
+{ #category : 'messages' }
+PulsarLLMOpenCodeAPI >> sendTextAsync: aString toSession: aSessionID [
+	"Send a text prompt without waiting for the reply, using the current model."
+
+	^ self
+		  sendTextAsync: aString
+		  toSession: aSessionID
+		  model: self model
+		  agent: nil
 ]
 
 { #category : 'messages' }
@@ -690,6 +842,12 @@ PulsarLLMOpenCodeAPI >> sendTextAsync: aString toSession: aSessionID model: aMod
 	  "Send a text prompt without waiting for the reply."
 
 	  ^ self post: '/session/' , aSessionID , '/prompt_async' json: (self promptPayloadFor: aString model: aModel agent: anAgent)
+]
+
+{ #category : 'private' }
+PulsarLLMOpenCodeAPI >> serverPassword [
+
+	^ OSEnvironment current at: #OPENCODE_SERVER_PASSWORD
 ]
 
 { #category : 'sessions' }
@@ -738,6 +896,12 @@ PulsarLLMOpenCodeAPI >> showTuiToast: aMessage variant: aVariant [
 ]
 
 { #category : 'private' }
+PulsarLLMOpenCodeAPI >> stepStreamLineFor: aPart [
+
+	^ '[step] ' , (aPart at: 'type' ifAbsent: [ 'step' ]) , String cr
+]
+
+{ #category : 'private' }
 PulsarLLMOpenCodeAPI >> streamEventsFrom: aPath do: aBlock [
 
 	    | client stream |
@@ -753,6 +917,34 @@ PulsarLLMOpenCodeAPI >> streamEventsFrom: aPath do: aBlock [
 PulsarLLMOpenCodeAPI >> submitTuiPrompt [
 
 	    ^ self post: '/tui/submit-prompt' json: Dictionary new
+]
+
+{ #category : 'private' }
+PulsarLLMOpenCodeAPI >> subscribeSession: aSessionID kinds: aCollection ready: aReady finished: aFinished partTypes: aPartTypeMap toolStates: aToolStateMap text: aWriteStream do: aBlock [
+	"Fork a process that streams the OpenCode events for aSessionID until the turn ends."
+
+	[
+		[
+			self eventsDo: [ :eachEventName :eachEventData |
+					eachEventData isDictionary ifTrue: [
+							| type properties |
+							type := eachEventData at: 'type' ifAbsent: [ nil ].
+							properties := eachEventData at: 'properties' ifAbsent: [ nil ].
+							type = 'server.connected' ifTrue: [ aReady signal ].
+							(properties isDictionary and: [ (properties at: 'sessionID' ifAbsent: [ nil ]) = aSessionID ]) ifTrue: [
+									self
+										handleStreamType: type
+										properties: properties
+										kinds: aCollection
+										partTypes: aPartTypeMap
+										toolStates: aToolStateMap
+										text: aWriteStream
+										do: aBlock.
+									(type = 'session.idle' or: [ type = 'session.error' ]) ifTrue: [ PulsarLLMStreamStop signal ] ] ] ] ]
+			on: Error
+			do: [ :e |
+					(e isKindOf: PulsarLLMStreamStop) ifFalse: [ aBlock value: 'stream error: ' , e description value: #error ].
+					aFinished signal ] ] fork
 ]
 
 { #category : 'sessions' }
@@ -782,6 +974,16 @@ PulsarLLMOpenCodeAPI >> timeout: anObject [
 PulsarLLMOpenCodeAPI >> todosOfSession: aSessionID [
 
 	^ self get: '/session/' , aSessionID , '/todo'
+]
+
+{ #category : 'private' }
+PulsarLLMOpenCodeAPI >> toolStreamLineFor: aPart [
+
+	| status |
+	status := (aPart at: 'state' ifAbsent: [ nil ])
+		          ifNotNil: [ :state | state at: 'status' ifAbsent: [ 'pending' ] ]
+		          ifNil: [ 'pending' ].
+	^ '[tool] ' , (aPart at: 'tool' ifAbsent: [ '?' ]) , ' (' , status asString , ')' , String cr
 ]
 
 { #category : 'sessions' }

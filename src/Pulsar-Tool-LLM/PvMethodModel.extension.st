@@ -17,3 +17,9 @@ PvMethodModel >> defineAgentActionsOn: aBuilder [
 					callerPresenter: aContext)
 					show ] ] ]
 ]
+
+{ #category : '*Pulsar-Tool-LLM' }
+PvMethodModel >> newAgentModel [
+
+	^ PulsarLLMMethodAgentModel on: self
+]

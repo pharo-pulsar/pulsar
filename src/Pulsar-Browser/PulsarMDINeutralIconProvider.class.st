@@ -278,6 +278,8 @@ PulsarMDINeutralIconProvider >> createTable [
 		('chat'			 			'chat-outline')
 		('chat-connect'			 	'server-network-outline')
 		('agent'						'robot-outline')
+		('explain'					'head-cog')
+		('comment'					'comment-plus')
 		
 		"Files"
 		('file'					'file-outline' 				'#b86e00' '#d9902f')

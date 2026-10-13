@@ -82,7 +82,10 @@ PulsarLLMOpenCodeModel >> performConnectTo: aTerminalPresenter [
 	"spawn opencode"
 	"self spawn: 'opencode' arguments: #('--server' 'http://127.0.0.1:4096') in: aTerminalPresenter."
 	
-	"self spawn: 'opencode' arguments: #('--port' '4096') in: aTerminalPresenter."
+	"self 
+		spawnFromHost: command trimBoth 
+		arguments: #('serve' '--port' '4096') 
+		in: aTerminalPresenter."
 		
 	self 
 		spawnFromHost: command trimBoth

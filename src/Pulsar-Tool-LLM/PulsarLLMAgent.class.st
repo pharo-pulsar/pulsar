@@ -26,7 +26,10 @@ PulsarLLMAgent class >> newModel: aModel callerAction: anAction callerPresenter:
 { #category : 'private' }
 PulsarLLMAgent >> agentPresenter [
 
-	^ agentPresenter ifNil: [ self newAgentPresenter ]
+	^ agentPresenter ifNil: [ 
+		agentPresenter := self newAgentPresenter.
+		agentPresenter notificationCenter: self callerPresenter window notificationCenter.
+		agentPresenter ]
 ]
 
 { #category : 'accessing' }

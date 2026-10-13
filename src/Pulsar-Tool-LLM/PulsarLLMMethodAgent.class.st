@@ -11,6 +11,6 @@ PulsarLLMMethodAgent >> newAgentPresenter [
 	"Answer a new agent presenter instantiated by my caller presenter and wired to my model."
 
 	^ self callerPresenter 
-		instantiate: PulsarLLMMethodAgentPresenter
-		on: self model
+		instantiate: PulsarLLMAgentPresenter
+		on: self model newAgentModel
 ]
