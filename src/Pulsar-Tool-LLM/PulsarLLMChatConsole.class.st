@@ -134,7 +134,7 @@ PulsarLLMChatConsole >> initializePresenters [
 	(toggleConnectButtonPresenter := self newToggleButton)
 		addStyle: 'flat';
 		icon: (self iconNamed: 'chat-connect');
-		help: 'Toggle chat connect';
+		help: 'Toggle  connect';
 		state: self isConnected;
 		whenChangedDo: [ :state | self toggleConnection: state ];
 		yourself.
@@ -188,7 +188,7 @@ PulsarLLMChatConsole >> isConnected [
 { #category : 'private' }
 PulsarLLMChatConsole >> panelPlacedIconName [
 
-	^ 'chat'
+	^ "'chat'" 'agent'
 ]
 
 { #category : 'private - actions' }
@@ -232,7 +232,7 @@ PulsarLLMChatConsole >> updatePresenter [
 PulsarLLMChatConsole >> updateStatus [
 
 	toggleConnectButtonPresenter 
-		help: ('Toggle chat connect (current: {1}CONNECTED)' format: { self isConnected 
+		help: ('Toggle MCP connect (current: {1}CONNECTED)' format: { self isConnected 
 			ifTrue: [ '' ] 
 			ifFalse: [ 'DIS' ]});
 		state: self isConnected not
