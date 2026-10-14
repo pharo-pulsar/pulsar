@@ -12,7 +12,10 @@ PulsarLLMMethodAgentModel >> commentPrompt [
 
 	^ f'using pulsar
 add a comment (do not save) to the editor [self fullName].
-concise, what he does and not *how* it does it unless this is really useful'
+concise, what he does and not *how* it does it unless this is really useful
+
+Skip any image save & backup phase.
+Skip any learning phase.'
 ]
 
 { #category : 'private - prompts' }
@@ -26,5 +29,8 @@ explanation can contain also
 - answer type (self or type)
 - type of arguments expected  
 - constraints to use it
-- some example on how and where the method is being used.'
+- some example on how and where the method is being used.
+
+Skip any image save & backup phase.
+Skip any learning phase.'
 ]

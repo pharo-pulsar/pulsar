@@ -131,8 +131,25 @@ PulsarContextStackPresenter >> selectedContextModel [
 PulsarContextStackPresenter >> updatePresenter [
 
 	self model ifNil: [ ^ self ].
-	
+
 	self application defer: [
+		self updateStackToolbarActions.
 		listPresenter items: self model stack.
 		self selectFirstRelevantStackIndex ]
+]
+
+{ #category : 'initialization' }
+PulsarContextStackPresenter >> updateStackToolbarActions [
+	| group modelActions 
+	|
+	modelActions := PulsarActionContextVisitor new
+		context: self;
+		visit: (self model actions actionsFor: #stack).
+	
+	group := SpActionGroup new
+		add: (self actions actionsFor: #stack);
+		add: modelActions;
+		yourself.
+	
+	toolbarPresenter actions: group
 ]

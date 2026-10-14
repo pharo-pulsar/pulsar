@@ -39,17 +39,18 @@ PulsarLLMAgentPresenter >> defaultLayout [
 PulsarLLMAgentPresenter >> defineToolbarActionsOn: aBuilder [
 	<dockActions>
 	
-	aBuilder addGroup: #toolbar with: [ :group | group 
-		addActionWith: [ :action | action 
+	aBuilder addGroup: #toolbar with: [ :group | group
+		addActionWith: [ :action | action
 			name: 'Explain';
 			iconName: 'explain';
 			description: f'Attempt to put [self model fullName] in context to provide a better understanding of it';
 			action: [ self doExplain ] ];
-		addActionWith: [ :action | action 
+		addActionWith: [ :action | action
 			name: 'Comment';
 			iconName: 'comment';
 			description: f'Add a comment to [self model fullName]';
-			action: [ self doComment ] ]	]
+			actionVisible: [ :aContext | aContext showsCommentAction ];
+			action: [ self doComment ] ] ]
 ]
 
 { #category : 'private - actions' }
@@ -115,6 +116,12 @@ PulsarLLMAgentPresenter >> notifyEditorClosed [
 
 	self model closeSession.
 	super notifyEditorClosed
+]
+
+{ #category : 'accessing' }
+PulsarLLMAgentPresenter >> showsCommentAction [
+
+	^ true
 ]
 
 { #category : 'accessing' }

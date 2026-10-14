@@ -74,7 +74,7 @@ PulsarMDINeutralIconProvider >> colorFor: iconName themePosition: aNumber forceN
 PulsarMDINeutralIconProvider >> createTable [
 	"a list of arrays internal-name, material-name, light-color, dark-color. 
 	 light and dark colors can be missing (because neutral colors are taken elsewhere)"
-	 <script: 'self syncIconTable'>
+	<script: 'self syncIconTable'>
 	<pulsarTableEditor: #('Internal name' 'Material name' 'Light color' 'Dark color')>
 
 	^ #(

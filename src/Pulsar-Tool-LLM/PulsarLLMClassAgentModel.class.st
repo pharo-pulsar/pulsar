@@ -17,7 +17,10 @@ PulsarLLMClassAgentModel >> commentPrompt [
 	
 	^ f'using pulsar
 add a comment (do not save) to the class editor [self fullName].
-concise, what the class does and why it exists and not *how* it does it unless this is really useful'
+concise, what the class does and why it exists and not *how* it does it unless this is really useful
+
+Skip any image save & backup phase.
+Skip any learning phase.'
 ]
 
 { #category : 'accessing' }
@@ -31,5 +34,8 @@ explanation can contain also
 - its responsibilities
 - its main collaborators
 - how it relates to its superclass and subclasses
-- some example on how and where the class is being used.'
+- some example on how and where the class is being used.
+
+Skip any image save & backup phase.
+Skip any learning phase.'
 ]
