@@ -59,10 +59,13 @@ PulsarLLMAgent >> model [
 	^ model
 ]
 
-{ #category : 'private' }
+{ #category : 'as yet undefined' }
 PulsarLLMAgent >> newAgentPresenter [
-	
-	self subclassResponsibility
+	"Answer a new agent presenter instantiated by my caller presenter and wired to my model."
+
+	^ self callerPresenter 
+		instantiate: PulsarLLMAgentPresenter 
+		on: self model newAgentModel
 ]
 
 { #category : 'showing' }
