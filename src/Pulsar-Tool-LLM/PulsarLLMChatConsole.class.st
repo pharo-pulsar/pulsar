@@ -134,7 +134,7 @@ PulsarLLMChatConsole >> initializePresenters [
 	(toggleConnectButtonPresenter := self newToggleButton)
 		addStyle: 'flat';
 		icon: (self iconNamed: 'chat-connect');
-		help: 'Toggle  connect';
+		help: 'Toggle MCP connect';
 		state: self isConnected;
 		whenChangedDo: [ :state | self toggleConnection: state ];
 		yourself.

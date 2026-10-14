@@ -1,3 +1,15 @@
+"
+I am the Pulsar model for a single method, whether instance-side or class-side.
+
+I give every Pulsar tool one shared representation of a method: I know its class, selector, protocol and source, and I can tell whether it is a test, a script or an example. I also expose the decorators and refactor actions that apply to it, and I navigate to my related models (class, package, hierarchy, versions).
+
+I collaborate with PvBaseModel, which holds my compiled-method entity, with PvClassModel and PvPackageModel for navigation, and with PvMethodDecorator for the actions overlaid on a method. I exist so that editors, method lists, hierarchies, versions and test views share the same model instead of each reimplementing method behavior.
+
+Public API and Key Messages
+
+- `#newEnvironment:beNewMethodWithParent:` and `#newEnvironment:beNewClassMethodWithParent:` create models for methods that are not compiled yet.
+- `#updateWith:notifying:` recompiles the method from new source.
+"
 Class {
 	#name : 'PvMethodModel',
 	#superclass : 'PvBaseModel',
