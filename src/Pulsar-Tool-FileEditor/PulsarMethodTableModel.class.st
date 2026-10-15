@@ -1,7 +1,25 @@
 "
-""This is a model to edit a method whose body is a literal array of arrays (a table of rows) as a table.
+I am the Pulsar model for a method whose body is a literal array of arrays, that is, a table of rows.
 
-It wraps a compiled method decorated with the <pulsarTableEditor: #(columnTitles...)> pragma. It extracts the rows from the method AST and, when saved, regenerates the method source by splicing the new row text into the original source so comments and layout of untouched rows are preserved.""
+I expose such a method as rows of strings so a tool can edit it cell by cell, and I know the method's original source together with the source span of the whole literal array and of each row. I answer a new method source from edited rows, keeping untouched rows, comments and layout intact. I exist so tabular methods (icon tables, color tables, mappings) can be edited as tables instead of as raw source.
+
+I collaborate with PvMethodModel, my superclass, which owns the compiled-method entity I edit; with PulsarMethodTableEditor, which presents me as a table; and with the `<pulsarTableEditor: #(...)>` pragma, which marks a method as tabular and declares its column titles.
+
+# Public API and Key Messages
+
+- `#rows` answers the extracted rows, padded to the column count.
+- `#updateWith:` recompiles the method from edited rows and answers whether it succeeded.
+- `#columnTitles` answers the titles declared by the pragma.
+- `PvMethodModel>>#editorTable:` creates me for a method carrying the pragma.
+
+A method is table-editable when it carries the pragma:
+
+	myIcons
+		<pulsarTableEditor: #('Name' 'Icon')>
+
+		^ #(
+			('open' 'folder-open-outline')
+			('close' 'close'))
 "
 Class {
 	#name : 'PulsarMethodTableModel',
@@ -115,7 +133,7 @@ PulsarMethodTableModel >> paddedRow: eachRow [
 				  ifFalse: [ '' ] ]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'private' }
 PulsarMethodTableModel >> pragma [
 
 	^ self entity pragmaAt: #pulsarTableEditor:

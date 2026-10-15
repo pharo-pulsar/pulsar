@@ -30,8 +30,11 @@ PvMethodModel >> editorTable: aCollection [
 { #category : '*Pulsar-Tool-FileEditor' }
 PvMethodModel >> ffiCallArrayNode [
 	"Answer the literal array node that is the first argument of a single ffiCall: family send in this method, or nil if the method is not a simple FFI call."
-
-	| body statement send firstArgument |
+	| body statement send firstArgument ast |
+	
+	ast := self entity ast.
+	ast ifNil: [ ^ nil ].
+	
 	body := self entity ast body.
 	body statements size = 1 ifFalse: [ ^ nil ].
 	statement := body statements first.
