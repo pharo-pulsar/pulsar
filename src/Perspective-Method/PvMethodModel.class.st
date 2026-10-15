@@ -613,6 +613,8 @@ PvMethodModel >> updateWith: aString notifying: anInteractionModel [
 
 	"update entity"
 	entity := newMethod.
+	"reset actions as they may be no longer valid"
+	actions := nil.
 
  	^ true
 ]

@@ -373,7 +373,8 @@ PulsarMethodEditor >> registerToSystemEvents [
 { #category : 'actions' }
 PulsarMethodEditor >> updateAfterSubmit: result [
 
-	self updateContentActions
+	self application defer: [ 
+		self updateContentActions ]
 ]
 
 { #category : 'initialization' }

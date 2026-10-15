@@ -1,3 +1,10 @@
+"
+I am the protocol (tag) widget of the method editor toolbar.
+
+I show the protocol of the currently edited method as a clickable link and let the user reclassify that method through a popover chooser, without leaving the editor. I exist to give the method editor a single, self-contained control for viewing and editing a method's protocol.
+
+I hold a method model that knows the current protocol and accepts reclassification, and I open a protocol chooser presenter in the popover. I notify my owner editor when the protocol changes so it can refresh and keep keyboard focus.
+"
 Class {
 	#name : 'PulsarProtocolButtonPresenter',
 	#superclass : 'SpPresenter',
