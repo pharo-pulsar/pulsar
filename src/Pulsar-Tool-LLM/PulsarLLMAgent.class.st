@@ -23,19 +23,35 @@ PulsarLLMAgent class >> newModel: aModel callerAction: anAction callerPresenter:
 		yourself
 ]
 
-{ #category : 'private' }
+{ #category : 'accessing' }
 PulsarLLMAgent >> agentPresenter [
 
-	^ agentPresenter ifNil: [ 
-		agentPresenter := self newAgentPresenter.
-		agentPresenter notificationCenter: self callerPresenter window notificationCenter.
-		agentPresenter ]
+	^ agentPresenter ifNil: [
+			  agentPresenter := self newAgentPresenter.
+			  agentPresenter notificationCenter: self callerNotificationCenter.
+			  agentPresenter ]
 ]
 
 { #category : 'accessing' }
 PulsarLLMAgent >> callerAction [
 
 	^ callerAction
+]
+
+{ #category : 'accessing' }
+PulsarLLMAgent >> callerNotificationCenter [
+	"Answer the notification center to wire the agent presenter with.
+	
+	 Browser panels answer #notificationCenter, but plain window presenters may not, so fall back to the caller presenter own notification center."
+
+	| window |
+	window := [ self callerPresenter window ]
+		          on: Error
+		          do: [ :e | nil ].
+	window ifNotNil: [ :each | (each respondsTo: #notificationCenter) ifTrue: [ ^ each notificationCenter ] ].
+	^ (self callerPresenter respondsTo: #notificationCenter)
+		  ifTrue: [ self callerPresenter notificationCenter ]
+		  ifFalse: [ PulsarNULLAnnouncer new ]
 ]
 
 { #category : 'accessing' }

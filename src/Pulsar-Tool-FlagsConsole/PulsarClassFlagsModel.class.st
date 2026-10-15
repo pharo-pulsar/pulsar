@@ -12,9 +12,10 @@ PulsarClassFlagsModel >> calculateEnvironment [
 	env := SystemEnvironment new.
 	
 	self currentModel ifNotNil: [ :aModel |
-		env 
-			at: aModel entity name 
-			put: aModel entity ].
+		aModel entity isObsolete ifFalse: [ 
+			env 
+				at: aModel entity name 
+				put: aModel entity ] ].
 
 	^ env
 ]

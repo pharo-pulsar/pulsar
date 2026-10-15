@@ -118,6 +118,13 @@ PulsarLLMAgentPresenter >> notifyEditorClosed [
 	super notifyEditorClosed
 ]
 
+{ #category : 'api' }
+PulsarLLMAgentPresenter >> resetStream [
+	"Drop the stream styler so the next query starts with fresh state."
+
+	styler := nil
+]
+
 { #category : 'accessing' }
 PulsarLLMAgentPresenter >> showsCommentAction [
 

@@ -1,3 +1,19 @@
+"
+I represent a method whose body is an embedded text document (CSS, Markdown, JSON, ...) that should be edited as a file with syntax highlighting.
+
+I exist so that a method decorated with the `<pulsarSourceEditor: 'FILETYPE'>` pragma can be edited in a dedicated source editor instead of the regular method editor. I extract the document from the method's string literal and write edits back into the method source.
+
+My main collaborators are PvMethodModel, which holds my compiled-method entity and the pragma-driven extra-editor machinery, and PulsarMethodSourceEditor, the view I am edited through.
+
+Public API and Key Messages
+
+- `newEnvironment:entity:` to create an instance for a compiled method.
+- `pulsarEditorClass` and `windowTitle` to resolve the editor and its tab label.
+- `sourceCode` and `sourceCodeLanguage` to read the embedded document and its language.
+- `updateWith:` to write edited text back and recompile the method.
+
+Example: PulsarGtkConfiguration>>style is decorated with `<pulsarSourceEditor: 'css'>` and edited through this model.
+"
 Class {
 	#name : 'PulsarMethodSourceModel',
 	#superclass : 'PvMethodModel',

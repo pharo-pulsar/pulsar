@@ -68,9 +68,8 @@ PulsarLLMAgentModel >> entity: aModel [
 PulsarLLMAgentModel >> explainOn: anAgentPresenter [
 
 	self ensureSessionOn: anAgentPresenter application.
-	self session 
-		query: self explainPrompt 
-		do: [ :chunk :kind | anAgentPresenter feed: chunk kind: kind ]
+	anAgentPresenter resetStream.
+	self session query: self explainPrompt do: [ :chunk :kind | anAgentPresenter feed: chunk kind: kind ]
 ]
 
 { #category : 'private - prompts' }

@@ -12,7 +12,8 @@ Class {
 		'inFencedCode',
 		'atLineStart',
 		'pendingTail',
-		'inFenceHeader'
+		'inFenceHeader',
+		'headingLevel'
 	],
 	#category : 'Pulsar-Tool-LLM-Agent',
 	#package : 'Pulsar-Tool-LLM',
@@ -72,16 +73,18 @@ PulsarLLMMarkdownStyler >> format: aString [
 				ifTrue: [
 						isNewline ifTrue: [
 								inFenceHeader := false.
+								headingLevel := 0.
 								atLineStart := true ] ]
 				ifFalse: [
 						isNewline
 							ifTrue: [
 									| styled |
-									styled := self formatLine: line contents lineStart: atLineStart.
+									styled := line contents ifEmpty: [ '' ] ifNotEmpty: [ self formatLine: line contents lineStart: atLineStart ].
 									styled ifNotNil: [
 											out nextPutAll: styled.
 											out nextPut: eachCharacter ].
 									line := WriteStream on: String new.
+									headingLevel := 0.
 									atLineStart := true ]
 							ifFalse: [ line nextPut: eachCharacter ] ] ].
 	line contents ifNotEmpty: [
@@ -91,7 +94,7 @@ PulsarLLMMarkdownStyler >> format: aString [
 	^ out contents
 ]
 
-{ #category : 'private' }
+{ #category : 'formatting' }
 PulsarLLMMarkdownStyler >> formatLine: aLine lineStart: aBoolean [
 	"Answer the styled line, or nil to suppress both the line and its newline."
 
@@ -100,15 +103,18 @@ PulsarLLMMarkdownStyler >> formatLine: aLine lineStart: aBoolean [
 	inFencedCode ifTrue: [
 			(trimmed beginsWith: '```') ifTrue: [
 					inFencedCode := false.
+					headingLevel := 0.
 					^ nil ].
 			^ self codeStyle: aLine ].
 	(aBoolean and: [ trimmed beginsWith: '```' ]) ifTrue: [
 			inFencedCode := true.
+			headingLevel := 0.
 			^ nil ].
 	(aBoolean and: [ trimmed beginsWith: '>' ]) ifTrue: [ ^ self quoteStyle: aLine ].
 	(aBoolean and: [ self isHorizontalRule: trimmed ]) ifTrue: [ ^ self ruleStyle ].
 	(aBoolean and: [ trimmed beginsWith: '#' ]) ifTrue: [ ^ self headingStyle: aLine ].
 	(aBoolean and: [ self isListLine: trimmed ]) ifTrue: [ ^ self listLine: aLine ].
+	headingLevel > 0 ifTrue: [ ^ self headingStyleLevel: headingLevel text: aLine ].
 	^ self inlineStyle: aLine
 ]
 
@@ -133,10 +139,32 @@ PulsarLLMMarkdownStyler >> formatTrailingLine: aLine [
 	^ self formatLine: parts first lineStart: lineStart
 ]
 
-{ #category : 'private' }
-PulsarLLMMarkdownStyler >> headingStyle: aLine [
+{ #category : 'formatting' }
+PulsarLLMMarkdownStyler >> headingLevelOf: aLine [
+	"Answer the number of leading # characters in aLine."
 
-	^ ansi bold , (ansi color: (self colorAt: #heading)) , (self inlineStyle: (self headingText: aLine)) , ansi reset
+	| trimmed index |
+	trimmed := aLine trimBoth.
+	index := 1.
+	[ index <= trimmed size and: [ (trimmed at: index) = $# ] ] whileTrue: [ index := index + 1 ].
+	^ index - 1
+]
+
+{ #category : 'formatting' }
+PulsarLLMMarkdownStyler >> headingStyle: aLine [
+	"Answer the opencode heading styling for aLine: h1 bold+underline, h2-h6 color-only."
+
+	headingLevel := self headingLevelOf: aLine.
+	^ self headingStyleLevel: headingLevel text: (self headingText: aLine)
+]
+
+{ #category : 'formatting' }
+PulsarLLMMarkdownStyler >> headingStyleLevel: aLevel text: aText [
+	"Answer aText styled for the given heading level: 1 bold+underline, 2-6 color-only."
+
+	aLevel = 1 ifTrue: [
+		^ ansi bold , ansi underline , (ansi color: (self colorAt: #heading)) , (self inlineStyle: aText) , ansi reset ].
+	^ (ansi color: (self colorAt: #heading)) , (self inlineStyle: aText) , ansi reset
 ]
 
 { #category : 'private' }
@@ -154,10 +182,7 @@ PulsarLLMMarkdownStyler >> initialize [
 
 	ansi := PulsarLLMAnsiWriter new.
 	palette := Dictionary new.
-	inFencedCode := false.
-	inFenceHeader := false.
-	atLineStart := true.
-	pendingTail := ''.
+	self reset.
 	super initialize
 ]
 
@@ -352,6 +377,17 @@ PulsarLLMMarkdownStyler >> quoteStyle: aLine [
 	barIndex = 0 ifTrue: [ ^ self inlineStyle: aLine ].
 	content := (aLine copyFrom: barIndex + 1 to: aLine size) trimBoth.
 	^ (ansi color: (self colorAt: #quote)) , '│ ' , ansi reset , (self inlineStyle: content)
+]
+
+{ #category : 'initialize' }
+PulsarLLMMarkdownStyler >> reset [
+	"Clear the incremental parsing state so a new stream or kind starts clean."
+
+	inFencedCode := false.
+	inFenceHeader := false.
+	headingLevel := 0.
+	atLineStart := true.
+	pendingTail := ''
 ]
 
 { #category : 'private' }

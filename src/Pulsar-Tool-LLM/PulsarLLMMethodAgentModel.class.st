@@ -9,7 +9,7 @@ Class {
 { #category : 'private - prompts' }
 PulsarLLMMethodAgentModel >> commentPrompt [
 	<pulsarSourceEditor: 'markdown'>
-
+	
 	^ f'using pulsar
 add a comment (do not save) to the editor [self fullName].
 concise, what he does and not *how* it does it unless this is really useful

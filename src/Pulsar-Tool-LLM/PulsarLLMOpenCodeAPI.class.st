@@ -111,6 +111,15 @@ PulsarLLMOpenCodeAPI class >> query: aString [
 	^ reply
 ]
 
+{ #category : 'streaming' }
+PulsarLLMOpenCodeAPI class >> toolIcons [
+	"Answer the opencode TUI glyph for each tool that has a dedicated icon."
+
+	^ Dictionary newFromPairs:
+		  #( 'read' '→' 'write' '←' 'glob' '✱' 'grep' '✱' 'webfetch' '%' 'websearch' '◈' 'notice' '◈' 'bash' '$' 'question' '→' 'skill'
+		     '→' )
+]
+
 { #category : 'sessions' }
 PulsarLLMOpenCodeAPI >> abortSession: aSessionID [
 
@@ -410,7 +419,7 @@ PulsarLLMOpenCodeAPI >> handleStreamType: aType properties: aProperties kinds: a
 				partTypes: aPartTypeMap
 				text: aWriteStream
 				do: aBlock ].
-	aType = 'session.error' ifTrue: [ aBlock value: 'session error' value: #error ]
+	aType = 'session.error' ifTrue: [ aBlock value: '✗ session error' value: #error ]
 ]
 
 { #category : 'health' }
@@ -896,9 +905,23 @@ PulsarLLMOpenCodeAPI >> showTuiToast: aMessage variant: aVariant [
 ]
 
 { #category : 'private' }
+PulsarLLMOpenCodeAPI >> statusIconFor: aStatus [
+	"Answer the opencode status glyph used when a tool has no dedicated icon."
+
+	aStatus = 'completed' ifTrue: [ ^ '✓' ].
+	aStatus = 'error' ifTrue: [ ^ '✗' ].
+	^ '⋯'
+]
+
+{ #category : 'private' }
 PulsarLLMOpenCodeAPI >> stepStreamLineFor: aPart [
 
-	^ '[step] ' , (aPart at: 'type' ifAbsent: [ 'step' ]) , String cr
+	| type icon |
+	type := aPart at: 'type' ifAbsent: [ 'step' ].
+	icon := type = 'step-finish'
+		        ifTrue: [ '·' ]
+		        ifFalse: [ '›' ].
+	^ icon , ' ' , type , String cr
 ]
 
 { #category : 'private' }
@@ -977,13 +1000,21 @@ PulsarLLMOpenCodeAPI >> todosOfSession: aSessionID [
 ]
 
 { #category : 'private' }
+PulsarLLMOpenCodeAPI >> toolIconFor: aTool status: aStatus [
+	"Answer the opencode icon for aTool, falling back to the status glyph."
+
+	^ (self class toolIcons at: aTool ifAbsent: [ nil ]) ifNil: [ self statusIconFor: aStatus ]
+]
+
+{ #category : 'private' }
 PulsarLLMOpenCodeAPI >> toolStreamLineFor: aPart [
 
-	| status |
+	| status tool |
 	status := (aPart at: 'state' ifAbsent: [ nil ])
 		          ifNotNil: [ :state | state at: 'status' ifAbsent: [ 'pending' ] ]
 		          ifNil: [ 'pending' ].
-	^ '[tool] ' , (aPart at: 'tool' ifAbsent: [ '?' ]) , ' (' , status asString , ')' , String cr
+	tool := aPart at: 'tool' ifAbsent: [ '?' ].
+	^ (self toolIconFor: tool status: status) , ' ' , tool , ' (' , status asString , ')' , String cr
 ]
 
 { #category : 'sessions' }

@@ -10,32 +10,23 @@ Class {
 		'colored',
 		'ansi',
 		'palette',
-		'markdown'
+		'markdown',
+		'reasoningHeaderSent',
+		'lastKind',
+		'lastEndedNewline'
 	],
 	#category : 'Pulsar-Tool-LLM-Agent',
 	#package : 'Pulsar-Tool-LLM',
 	#tag : 'Agent'
 }
 
-{ #category : 'constants' }
+{ #category : 'private' }
 PulsarLLMAgentStreamStyler class >> defaultPalette [
-	"256-color indices approximating the OpenCode TUI (glamour) theme."
+	"Answer the 256-color palette used by the agent stream styler."
 
-	^ Dictionary new
-		  at: #text put: 252;
-		  at: #reasoning put: 245;
-		  at: #tool put: 74;
-		  at: #step put: 240;
-		  at: #error put: 203;
-		  at: #code put: 252;
-		  at: #codeBackground put: 236;
-		  at: #heading put: 81;
-		  at: #link put: 39;
-		  at: #bullet put: 74;
-		  at: #listMarker put: 74;
-		  at: #quote put: 244;
-		  at: #rule put: 240;
-		  yourself
+	^ Dictionary newFromPairs:
+		  #( 'text' 252 'reasoning' 245 'tool' 74 'step' 240 'error' 203 'code' 252 'codeBackground' 236 'heading' 140 'link' 39 'bullet'
+		     74 'listMarker' 74 'quote' 244 'rule' 240 )
 ]
 
 { #category : 'private' }
@@ -57,12 +48,41 @@ PulsarLLMAgentStreamStyler >> colored: anObject [
 ]
 
 { #category : 'formatting' }
-PulsarLLMAgentStreamStyler >> format: aChunk kind: aKind [
-	"Answer the ANSI rendering of aChunk for aKind, or plain text when colors are off."
+PulsarLLMAgentStreamStyler >> endsWithVisibleNewline: aString [
+	"Answer whether the last character of aString outside ANSI escapes is a line break."
 
+	| last inEscape |
+	last := nil.
+	inEscape := false.
+	aString do: [ :each |
+			each = Character escape
+				ifTrue: [ inEscape := true ]
+				ifFalse: [
+						inEscape
+							ifTrue: [ inEscape := each ~= $m ]
+							ifFalse: [ last := each ] ] ].
+	^ last notNil and: [ last = Character cr or: [ last = Character lf ] ]
+]
+
+{ #category : 'formatting' }
+PulsarLLMAgentStreamStyler >> format: aChunk kind: aKind [
+	"Answer the ANSI rendering of aChunk for aKind, or plain text when colors are off.
+
+	A kind change that happens mid-line is separated by a line break."
+
+	| header body prefix result |
 	(aChunk isNil or: [ aChunk isEmpty ]) ifTrue: [ ^ '' ].
-	colored ifFalse: [ ^ self plainFormat: aChunk kind: aKind ].
-	^ (self styledChunk: aChunk kind: aKind) , ansi reset
+	prefix := self kindBoundaryPrefix: aKind.
+	header := aKind = #reasoning
+		          ifTrue: [ self takeReasoningHeader ]
+		          ifFalse: [ '' ].
+	colored
+		ifTrue: [ body := (self styledChunk: aChunk kind: aKind) , ansi reset ]
+		ifFalse: [ body := self plainFormat: aChunk kind: aKind ].
+	result := prefix , header , body.
+	lastKind := aKind.
+	result ifNotEmpty: [ lastEndedNewline := self endsWithVisibleNewline: result ].
+	^ result
 ]
 
 { #category : 'initialize' }
@@ -74,7 +94,25 @@ PulsarLLMAgentStreamStyler >> initialize [
 	markdown := PulsarLLMMarkdownStyler new.
 	markdown ansi: ansi.
 	markdown palette: palette.
+	reasoningHeaderSent := false.
+	lastKind := nil.
+	lastEndedNewline := true.
 	super initialize
+]
+
+{ #category : 'formatting' }
+PulsarLLMAgentStreamStyler >> kindBoundaryPrefix: aKind [
+	"Answer a leading line break when aKind follows a different kind mid-line, and
+	forget incremental markdown state at every kind change."
+
+	| changed |
+	lastKind ifNil: [ ^ '' ].
+	changed := lastKind ~= aKind.
+	changed ifFalse: [ ^ '' ].
+	markdown reset.
+	^ lastEndedNewline
+		  ifTrue: [ '' ]
+		  ifFalse: [ String cr ]
 ]
 
 { #category : 'accessing' }
@@ -100,4 +138,15 @@ PulsarLLMAgentStreamStyler >> styledChunk: aChunk kind: aKind [
 	aKind = #step ifTrue: [ ^ (ansi color: (self colorAt: #step)) , aChunk ].
 	aKind = #error ifTrue: [ ^ ansi bold , (ansi color: (self colorAt: #error)) , aChunk ].
 	^ aChunk
+]
+
+{ #category : 'private' }
+PulsarLLMAgentStreamStyler >> takeReasoningHeader [
+	"Answer the dim opencode-style thinking header once per query, or an empty string after that."
+
+	reasoningHeaderSent ifTrue: [ ^ '' ].
+	reasoningHeaderSent := true.
+	^ colored
+		  ifTrue: [ (ansi color: (self colorAt: #reasoning)) , ansi dim , '⋯ Thinking' , ansi reset , String cr ]
+		  ifFalse: [ '⋯ Thinking' , String cr ]
 ]
