@@ -59,9 +59,24 @@ PulsarRepositoryDiffEditor >> commitToString: aCommitOrWorkingCopy [
 PulsarRepositoryDiffEditor >> defaultLayout [
 
 	^ SpBoxLayout newVertical
+		  add: toolbarPresenter expand: false;
 		  add: self scrollableLayoutForContent;
 		  add: commitInfoPresenter expand: false;
 		  yourself
+]
+
+{ #category : 'actions' }
+PulsarRepositoryDiffEditor >> defineAgentActionsOn: aBuilder [
+
+	<dockActions>
+	aBuilder addGroup: #agent with: [ :group |
+			group addActionWith: [ :action |
+					action
+						name: 'Agent';
+						description: 'Agent actions on this diff';
+						iconName: 'agent';
+						actionVisible: [ :aContext | (aContext application settings isFeatureEnabled: #llm) and: [ self model isEmpty not ] ];
+						action: [ :aContext | (PulsarLLMRepositoryAgent newModel: self model callerAction: action callerPresenter: aContext) show ] ] ]
 ]
 
 { #category : 'events' }
@@ -99,9 +114,12 @@ PulsarRepositoryDiffEditor >> initializePanelWidget: aPanelWidgetPresenter [
 PulsarRepositoryDiffEditor >> initializePresenters [
 
 	super initializePresenters.
-	
+
 	self addStyle: 'diffEditor'.
-	
+
+	toolbarPresenter := self instantiate: PulsarToolbarPresenter.
+	self updateToolbar.
+
 	commitInfoPresenter := self instantiate: PulsarCommitInfoPresenter.
 	commitInfoPresenter hide
 ]
@@ -251,22 +269,22 @@ PulsarRepositoryDiffEditor >> updatePatchContents [
 	self updateCommitInfo
 ]
 
-{ #category : 'initialization' }
+{ #category : 'updating' }
 PulsarRepositoryDiffEditor >> updatePresenter [
-	
+
+	self updateToolbar.
 	(self model isNil or: [ self model isEmpty ]) ifTrue: [ ^ self ].
 	lastDiffNodeModel = self model ifTrue: [ ^ self ].
-		
+
 	lastDiffNodeModel := self model.
 
-	self mutex critical: [
-		"since large repositories (e.g. pharo itself) can have a lot of changes when working 
+	self mutex critical: [ "since large repositories (e.g. pharo itself) can have a lot of changes when working 
 	 	 on an outdated branch, we skip the diff for the root, as calculate this will take a 
 	 	 lot of time without giving real value to the user."
-		(self model isRoot and: [ self model isBigChange ]) ifTrue: [ ^ self updateRootContents ].
-		self queueTask: [ 
-			self updatePatchContents.
-			self updateCommitInfo ] ]
+			(self model isRoot and: [ self model isBigChange ]) ifTrue: [ ^ self updateRootContents ].
+			self queueTask: [
+					self updatePatchContents.
+					self updateCommitInfo ] ]
 ]
 
 { #category : 'private' }
@@ -281,6 +299,14 @@ PulsarRepositoryDiffEditor >> updateRootContents [
 					  yourself);
 			 yourself).
 	commitInfoPresenter model: self commitForInfo
+]
+
+{ #category : 'updating' }
+PulsarRepositoryDiffEditor >> updateToolbar [
+	"Toolbar buttons snapshot their visibility when filled, so I refill when the model changes."
+
+	toolbarPresenter ifNil: [ ^ self ].
+	toolbarPresenter actions: (self actions actionsFor: #agent)
 ]
 
 { #category : 'private' }
