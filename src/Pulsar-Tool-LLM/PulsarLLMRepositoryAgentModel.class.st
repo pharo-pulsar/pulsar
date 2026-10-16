@@ -34,6 +34,12 @@ PulsarLLMRepositoryAgentModel class >> on: aDiffNode [
 	^ self newEnvironment: PvEnvironmentModel onSystem entity: aDiffNode
 ]
 
+{ #category : 'testing' }
+PulsarLLMRepositoryAgentModel >> canComment [
+
+	^ false
+]
+
 { #category : 'prompts' }
 PulsarLLMRepositoryAgentModel >> commitDescription [
 

@@ -76,7 +76,7 @@ PulsarRepositoryDiffEditor >> defineAgentActionsOn: aBuilder [
 						description: 'Agent actions on this diff';
 						iconName: 'agent';
 						actionVisible: [ :aContext | (aContext application settings isFeatureEnabled: #llm) and: [ self model isEmpty not ] ];
-						action: [ :aContext | (PulsarLLMRepositoryAgent newModel: self model callerAction: action callerPresenter: aContext) show ] ] ]
+						action: [ :aContext | (PulsarLLMAgent newModel: self model callerAction: action callerPresenter: aContext) show ] ] ]
 ]
 
 { #category : 'events' }

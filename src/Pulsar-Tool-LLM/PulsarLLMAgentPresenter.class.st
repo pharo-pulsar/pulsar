@@ -35,24 +35,6 @@ PulsarLLMAgentPresenter >> defaultLayout [
 		yourself
 ]
 
-{ #category : 'private - definitions' }
-PulsarLLMAgentPresenter >> defineToolbarActionsOn: aBuilder [
-	<dockActions>
-	
-	aBuilder addGroup: #toolbar with: [ :group | group
-		addActionWith: [ :action | action
-			name: 'Explain';
-			iconName: 'explain';
-			description: f'Attempt to put [self model fullName] in context to provide a better understanding of it';
-			action: [ self doExplain ] ];
-		addActionWith: [ :action | action
-			name: 'Comment';
-			iconName: 'comment';
-			description: f'Add a comment to [self model fullName]';
-			actionVisible: [ :aContext | aContext showsCommentAction ];
-			action: [ self doComment ] ] ]
-]
-
 { #category : 'private - actions' }
 PulsarLLMAgentPresenter >> doComment [
 	
@@ -99,9 +81,9 @@ PulsarLLMAgentPresenter >> initializePresenters [
 	self addStyle: 'pulsarAgentFlyingBrowser'.
 
 	toolbarPresenter := self instantiate: PulsarToolbarPresenter.
-	toolbarPresenter actions: (self actions actionsFor: #toolbar).
-	
-	terminalPresenter := self instantiate: VteTerminalPresenter.
+	toolbarPresenter actions: (self model actionsWithContextOn: self).
+
+	terminalPresenter := self instantiate: VteTerminalPresenter
 ]
 
 { #category : 'private - announcing' }
@@ -123,12 +105,6 @@ PulsarLLMAgentPresenter >> resetStream [
 	"Drop the stream styler so the next query starts with fresh state."
 
 	styler := nil
-]
-
-{ #category : 'accessing' }
-PulsarLLMAgentPresenter >> showsCommentAction [
-
-	^ true
 ]
 
 { #category : 'accessing' }

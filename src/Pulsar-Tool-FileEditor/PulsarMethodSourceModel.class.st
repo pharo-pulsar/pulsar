@@ -22,6 +22,17 @@ Class {
 	#tag : 'Model'
 }
 
+{ #category : 'accessing' }
+PulsarMethodSourceModel >> fStringNode [
+    "Answer the f-string node of my method, if any."
+    ^ self entity ast
+        withAllChildren
+        detect: [ :node |
+            (node respondsTo: #isFStringNode)
+                and: [ node isFStringNode ] ]
+        ifNone: [ nil ]
+]
+
 { #category : 'testing' }
 PulsarMethodSourceModel >> fileExists [
 
@@ -50,10 +61,14 @@ PulsarMethodSourceModel >> pulsarEditorClass [
 
 { #category : 'accessing' }
 PulsarMethodSourceModel >> sourceCode [
-	
-	^ self entity literals 
-		detect: [ :each | each isString ]
-		ifNone: [ '' ]
+
+	^ self fStringNode
+		ifNotNil: [ :fStringNode |
+			fStringNode contentString ]
+	  	ifNil: [ 
+			self entity literals 
+				detect: [ :each | each isString ] 
+				ifNone: [ '' ] ].
 ]
 
 { #category : 'accessing' }

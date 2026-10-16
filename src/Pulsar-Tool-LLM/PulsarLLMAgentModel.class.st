@@ -1,3 +1,33 @@
+"
+I represent a Pulsar LLM agent: a conversational assistant bound to a single Pulsar entity (a class, method, debugger, or repository).
+
+I am the abstract base for the concrete agents in the `Agent` tag. I know how to open and reuse an LLM session for the entity I am attached to, stream the model's answer back chunk by chunk so it can be shown live, and keep the session until my editor is closed. The actual prompt is my subclasses' responsibility, so I stay independent of *what* is being explained or commented.
+
+My main collaborators are:
+
+- my subclasses (`PulsarLLMClassAgentModel`, `PulsarLLMMethodAgentModel`, `PulsarLLMDebugAgentModel`, `PulsarLLMRepositoryAgentModel`), which define the concrete `commentPrompt` and `explainPrompt`.
+- `PulsarLLMAgentPresenter`, which triggers `explainOn:` / `commentOn:` and renders each streamed chunk through `feed:kind:`.
+- `PulsarLLMOpenCodeAPI`, which supplies the underlying LLM session and performs the queries.
+
+## Public API and key messages
+
+- `explainOn: aPresenter` / `commentOn: aPresenter` — run the agent and stream the answer into the presenter.
+- `closeSession` — release the LLM session, e.g. when the editor closes.
+- `title`, `iconName`, `fullName` — identity of the agent and its entity.
+- `commentPrompt` / `explainPrompt` — abstract; subclasses must implement.
+- `on: aModel` creates an agent for a model (see example).
+
+## Example
+
+```smalltalk
+PulsarLLMClassAgentModel on: aClassModel
+```
+
+## References
+
+- `PvBaseModel` — superclass, provides `entity`, `environmentModel`, and the model protocol.
+- `PulsarLLMAgentPresenter` — the view that hosts and drives agents.
+"
 Class {
 	#name : 'PulsarLLMAgentModel',
 	#superclass : 'PvBaseModel',
@@ -13,6 +43,18 @@ Class {
 PulsarLLMAgentModel class >> on: aModel [
 
 	^ self newEnvironment: aModel environmentModel entity: aModel
+]
+
+{ #category : 'actions' }
+PulsarLLMAgentModel >> actionsWithContextOn: aContextPresenter [
+
+	^ (self actions actionsFor: #toolbar) copyWithContext: aContextPresenter
+]
+
+{ #category : 'testing' }
+PulsarLLMAgentModel >> canComment [
+
+	^ true
 ]
 
 { #category : 'actions' }
@@ -38,6 +80,40 @@ PulsarLLMAgentModel >> commentOn: anAgentPresenter [
 PulsarLLMAgentModel >> commentPrompt [
 
 	^ self subclassResponsibility
+]
+
+{ #category : 'private - definitions' }
+PulsarLLMAgentModel >> defineCommentActionsOn: aBuilder [
+	<dockActions>
+	
+	self canComment ifFalse: [ ^ self ].
+	
+	aBuilder addGroup: #toolbar with: [ :group | group
+		addActionWith: [ :action | action
+			priority: 100;
+			name: 'Comment';
+			iconName: 'comment';
+			description: f'Add a comment to [self fullName]';
+			action: [ :aPresenter | aPresenter doComment ] ];
+		addActionWith: [ :action | action
+			priority: 100;
+			name: 'Update comment';
+			iconName: 'updateComment';
+			description: f'Update [self fullName] comment';
+			action: [ :aPresenter | aPresenter doComment ] ] ]
+]
+
+{ #category : 'private - definitions' }
+PulsarLLMAgentModel >> defineExplainActionsOn: aBuilder [
+	<dockActions>
+	
+	aBuilder addGroup: #toolbar with: [ :group | group 
+		addActionWith: [ :action | action
+			priority: 1;
+			name: 'Explain';
+			iconName: 'explain';
+			description: f'Attempt to put [self fullName] in context to provide a better understanding of it';
+			action: [ :aPresenter | aPresenter doExplain ] ] ]
 ]
 
 { #category : 'private' }
@@ -112,4 +188,10 @@ PulsarLLMAgentModel >> session [
 PulsarLLMAgentModel >> title [
 
 	^ f'Assistant on: [self entity title]'
+]
+
+{ #category : 'private - prompts' }
+PulsarLLMAgentModel >> updateCommentPrompt [
+
+	^ self subclassResponsibility
 ]

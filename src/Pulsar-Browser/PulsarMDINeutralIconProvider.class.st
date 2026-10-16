@@ -281,6 +281,7 @@ PulsarMDINeutralIconProvider >> createTable [
 		('agent'						'robot-outline')
 		('explain'					'head-cog')
 		('comment'					'comment-plus')
+		('updateComment' 			'comment-processing')
 		
 		"Files"
 		('file'					'file-outline' 				'#b86e00' '#d9902f')

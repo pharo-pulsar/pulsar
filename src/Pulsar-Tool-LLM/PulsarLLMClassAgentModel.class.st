@@ -53,3 +53,30 @@ explanation can contain also
 Skip any image save & backup phase.
 Skip any learning phase.'
 ]
+
+{ #category : 'accessing' }
+PulsarLLMClassAgentModel >> updateCommentPrompt [
+	<pulsarSourceEditor: 'markdown'>
+	
+	^ f'using pulsar
+verify the comment of the class at the editor [self fullName] (do not save) to be sure is up to date. 
+If comment is not there, add it (do not save).
+be concise: what the class (or trait) does and why it exists and not *how* it does it unless this is really useful.
+use markdown to comment.
+suggested template:
+For the Class part: State a one line summary. For example, "I represent a paragraph of text".
+For the Responsibility part: Three sentences about main responsibilities - what I do, what I know.
+For the Collaborators Part: State my main collaborators and one line about how I interact with them.
+
+Public API and Key Messages
+
+- message one
+- message two
+- how to create instances.
+
+Consider adding one simple example.
+Consider adding one or more usage references. 
+
+Skip any image save & backup phase.
+Skip any learning phase.'
+]

@@ -1,23 +1,32 @@
 "
 # PulsarLLMDebugAgentModel
 
-I am the model of a LLM agent working on a debug stack (PulsarDebuggerModel) in the Pulsar debugger.
+I represent the LLM agent bound to a debug stack (`PulsarDebuggerModel`) in the Pulsar debugger.
 
 ## Why I exist
-Debug stacks can be explained by the in-image assistant (commenting makes no sense for a stack).
-I am the concrete `PulsarLLMAgentModel` strategy for **debugger** entities: I wrap the
-debugger model and supply the stack-specific explain prompt.
+
+A debug stack cannot be *commented*: it can only be *explained*. I am the concrete `PulsarLLMAgentModel` strategy for the debugger, wrapping the debugger and supplying the stack-specific explain prompt while my superclass owns the session and streaming.
 
 ## Responsibilities
-- I provide the explain prompt for the debug stack.
+
+- I provide the explain prompt that describes what is happening in the stack: the condition raised and the call chain leading to it.
+- I report `canComment` as false, so only explanation is offered for a stack.
 - I delegate session management and streaming to `PulsarLLMAgentModel`.
 
 ## Collaborators
-- **PulsarLLMAgentModel** — my superclass; provides the session and streaming.
-- **PulsarLLMDebugAgentPresenter** — the explain-only popover UI that consumes my prompt.
-- **PulsarDebuggerModel** — the entity I wrap (the session name is my `fullName`).
+
+- **PulsarLLMAgentModel** — my superclass; provides the LLM session, streaming, `fullName`, and lifecycle.
+- **PulsarLLMAgentPresenter** — the generic flying-window UI that calls `explainOn:` and renders streamed chunks.
+- **PulsarDebuggerModel** — the entity I wrap; its `fullName` names my session.
+
+## Public API and key messages
+
+- `explainPrompt` — the debug-stack explain prompt (my main contribution).
+- `canComment` — always false for a debug stack.
+- `PulsarLLMDebugAgentModel on: aDebuggerModel` — create an agent for a debugger model.
 
 ## Example
+
 `PulsarDebuggerModel>>newAgentModel` answers `PulsarLLMDebugAgentModel on: self`.
 "
 Class {
@@ -27,6 +36,12 @@ Class {
 	#package : 'Pulsar-Tool-LLM',
 	#tag : 'Agent'
 }
+
+{ #category : 'testing' }
+PulsarLLMDebugAgentModel >> canComment [
+
+	^ false
+]
 
 { #category : 'accessing' }
 PulsarLLMDebugAgentModel >> explainPrompt [

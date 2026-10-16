@@ -34,3 +34,16 @@ explanation can contain also
 Skip any image save & backup phase.
 Skip any learning phase.'
 ]
+
+{ #category : 'private - prompts' }
+PulsarLLMMethodAgentModel >> updateCommentPrompt [
+	<pulsarSourceEditor: 'markdown'>
+	
+	^ f'using pulsar
+verify the existing comment of the method at the editor [self fullName] (do not save) to be sure is up to date.
+if comment is not there, add it (do not save). 
+concise, what he does and not *how* it does it unless this is really useful
+
+Skip any image save & backup phase.
+Skip any learning phase.'
+]
