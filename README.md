@@ -52,9 +52,9 @@ The VM is installed as a per-user Flatpak. The bundle includes the native
 libraries Pulsar needs, so it does not interfere with libraries installed by
 the traditional Pharo ZeroConf distribution.  
 
-_Notice: You can avoid the install/usage of flatpak by not passing the `-m` option._  
-_In that case you will need a working `pharo-vm` (**NOT** zeroconf) and a series of_
-_dependencies (list may vary with development)._
+_Notice: You can avoid using Flatpak by not passing the -m option._  
+_In that case, you will need a working pharo-vm (**NOT** zeroconf) plus a set of system dependencies (the exact list may vary as development progresses). A startup check will tell you what is missing before aborting._  
+_Since it is easier to maintain and guarantees that all dependencies are available with the right versions, we recommend using Flatpak._
 
 ### macOS
 
