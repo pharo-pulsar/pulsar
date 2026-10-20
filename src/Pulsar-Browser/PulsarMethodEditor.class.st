@@ -199,7 +199,7 @@ PulsarMethodEditor >> eventMethodModified: anAnnouncement [
 	logger trace: methodModified.
 		
 	"update model"
-	self model entity: methodModified. 
+	self updateModelEntityWith: methodModified. 
 	"update presenter"
 	self updatePresenter
 ]
@@ -406,6 +406,12 @@ PulsarMethodEditor >> updateEditor [
 		beForMethod: self model entity;
 		text: self model sourceCode.
 	self installIconStyler
+]
+
+{ #category : 'private - updating' }
+PulsarMethodEditor >> updateModelEntityWith: anEntity [
+
+	self model entity: anEntity
 ]
 
 { #category : 'initialization' }

@@ -22,6 +22,17 @@ Class {
 	#tag : 'Model'
 }
 
+{ #category : 'private' }
+PulsarMethodSourceModel >> embeddedTextNodeIn: aMethodNode [
+	"Answer the node holding the embedded document (an f-string or a string
+	literal) inside the method body. Pragma arguments are intentionally excluded."
+
+	| bodyNodes |
+	bodyNodes := aMethodNode body withAllChildren.
+	^ (bodyNodes detect: [ :each | each isKindOf: OCFStringNode ] ifNone: [ nil ]) ifNil: [
+		  bodyNodes detect: [ :each | (each isKindOf: OCLiteralValueNode) and: [ each isString ] ] ifNone: [ nil ] ]
+]
+
 { #category : 'accessing' }
 PulsarMethodSourceModel >> fStringNode [
     "Answer the f-string node of my method, if any."
@@ -48,6 +59,42 @@ PulsarMethodSourceModel >> isSmalltalk [
 ]
 
 { #category : 'private' }
+PulsarMethodSourceModel >> newFStringNodeFor: aString [
+	"Answer an f-string node containing aString as raw source text.
+	Answer nil if the text cannot be scanned as an f-string body."
+
+	| quote source token parser |
+	quote := String with: $'.
+	source := 'f' , quote , aString , quote.
+	token := (OCFStringScanner on: (ReadStream on: source)) next.
+	(token isKindOf: OCFStringToken) ifFalse: [ ^ nil ].
+
+	parser := OCFStringParser new.
+	parser initializeParserWith: source from: 1 to: source size.
+	^ parser parseFStringToken: token
+]
+
+{ #category : 'updating' }
+PulsarMethodSourceModel >> newSourceFor: aString [
+	"Answer my method source with the embedded document replaced by aString.
+	The replacement is done over the AST, so pragmas, comments and any other
+	part of the method are preserved."
+	| methodNode targetNode newNode |
+	
+	methodNode := self entity ast copy.
+	targetNode := self embeddedTextNodeIn: methodNode.
+	targetNode ifNil: [ ^ nil ].
+
+	newNode := self 
+		replacementNodeFor: (aString escapeCharacter: $') 
+		replacing: targetNode.
+	newNode ifNil: [ ^ nil ].
+
+	targetNode parent replaceNode: targetNode withNode: newNode.
+	^ methodNode formattedCode
+]
+
+{ #category : 'private' }
 PulsarMethodSourceModel >> pragma [
 
 	^ self entity pragmaAt: #pulsarSourceEditor:
@@ -57,6 +104,16 @@ PulsarMethodSourceModel >> pragma [
 PulsarMethodSourceModel >> pulsarEditorClass [
 
 	^ PulsarMethodSourceEditor
+]
+
+{ #category : 'private' }
+PulsarMethodSourceModel >> replacementNodeFor: aString replacing: aNode [
+	"Answer a node holding aString as the new embedded document, keeping the
+	kind of literal of aNode."
+
+	(aNode isKindOf: OCFStringNode) ifTrue: [ ^ self newFStringNodeFor: aString ].
+
+	^ OCLiteralValueNode value: aString
 ]
 
 { #category : 'accessing' }
@@ -79,17 +136,12 @@ PulsarMethodSourceModel >> sourceCodeLanguage [
 
 { #category : 'updating' }
 PulsarMethodSourceModel >> updateWith: aString [
-	| escapedString |
 
-	escapedString := aString escapeCharacter: $'.
-	self 
-		updateWith: f'[self selector]
-	<pulsarSourceEditor: ''[self sourceCodeLanguage]''>
+	| newSource |
+	newSource := self newSourceFor: aString.
+	newSource ifNil: [ ^ false ].
 
-	^ ''[escapedString]'''
-		notifying: (SpCodeMethodInteractionModel on: self entity).
-		
-	^ true
+	^ self updateWith: newSource notifying: (SpCodeMethodInteractionModel on: self entity)
 ]
 
 { #category : 'accessing' }
