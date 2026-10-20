@@ -38,7 +38,7 @@ PulsarApplication class >> defaultBackendName [
 { #category : 'class initialization' }
 PulsarApplication class >> initialize [
 	
-	SessionManager default registerGuiClassNamed: self name
+	SessionManager default registerGuiClassNamed: self name atPriority: 10
 ]
 
 { #category : 'private' }
