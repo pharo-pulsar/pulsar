@@ -1,3 +1,15 @@
+"
+A read-only editor showing the history of a method: local change records and remote repository commits, newest first. Selecting a version displays its source and the change that introduced it; remote entries also expose commit information. The programmer can revert the method to the selected version or fetch remote versions from repositories containing the method's package.
+
+It relies on a `PulsarVersionsModel` for the version list and for reverting, and participates in the Pulsar editor lifecycle for docking and activation while never becoming dirty.
+
+Example:
+```
+PulsarVersionsModel newEnvironment: anEnvironmentModel entity: aCompiledMethod
+```
+
+Opened by `PulsarMethodEditor>>doBrowseVersionsCommand:`, typically as a popover.
+"
 Class {
 	#name : 'PulsarVersionsBrowser',
 	#superclass : 'SpPresenter',
@@ -65,28 +77,28 @@ PulsarVersionsBrowser >> defaultKeyboardFocus [
 	^ versionListPresenter
 ]
 
-{ #category : 'private' }
+{ #category : 'layout' }
 PulsarVersionsBrowser >> defaultLayout [
 
 	^ SpBoxLayout newVertical
-		  add: headerPresenter expand: false;
-		  add: (SpBoxLayout newVertical
-				   add: (SpPanedLayout newHorizontal
-						    positionOfSlider: 200;
-						    add: versionListPresenter;
-						    add: (SpTabLayout new
-								     add: (SpScrollableLayout new
-										      child: patchPresenter;
-										      withoutHScrollbar;
-										      yourself)
-								     label: 'Patch';
-								     add: sourcePresenter label: 'Source';
-								     yourself);
-						    yourself);
-				   add: commitInfoPresenter expand: false;
-				   yourself);
-		  add: statusbar expand: false;
-		  yourself
+		add: headerPresenter expand: false;
+		add: (SpBoxLayout newVertical
+			add: (SpPanedLayout newHorizontal
+				positionOfSlider: 200;
+				add: versionListPresenter;
+				add: (SpTabLayout new
+					add: (SpScrollableLayout new
+						child: patchPresenter;
+						withoutHScrollbar;
+						yourself)
+					label: 'Patch';
+					add: sourcePresenter label: 'Source';
+					yourself);
+				yourself);
+			add: commitInfoPresenter expand: false;
+			yourself);
+		add: statusbar expand: false;
+		yourself
 ]
 
 { #category : 'private - definitions' }
@@ -229,6 +241,7 @@ PulsarVersionsBrowser >> initializePresenters [
 	commitInfoPresenter := self instantiate: PulsarCommitInfoPresenter.
 	commitInfoPresenter useVersionLayout.
 	commitInfoPresenter whenOpenDiffDo: [ self doOpenCommitDiff ].
+	commitInfoPresenter hide.
 
 	statusbar := self instantiate: SpPanelStatusbarPresenter
 ]
