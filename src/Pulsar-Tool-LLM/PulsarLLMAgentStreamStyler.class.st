@@ -20,13 +20,22 @@ Class {
 	#tag : 'Agent'
 }
 
-{ #category : 'private' }
+{ #category : 'defaults' }
 PulsarLLMAgentStreamStyler class >> defaultPalette [
 	"Answer the 256-color palette used by the agent stream styler."
 
 	^ Dictionary newFromPairs:
-		  #( 'text' 252 'reasoning' 245 'tool' 74 'step' 240 'error' 203 'code' 252 'codeBackground' 236 'heading' 140 'link' 39 'bullet'
-		     74 'listMarker' 74 'quote' 244 'rule' 240 )
+		  #( 'text' 252 'reasoning' 245 'tool' 74 'error' 203 'code' 252 'codeBackground' 236 'heading' 140 'link' 39 'bullet' 74 'listMarker'
+		     74 'quote' 244 'rule' 240 )
+]
+
+{ #category : 'formatting' }
+PulsarLLMAgentStreamStyler >> boundaryGroupOf: aKind [
+	"Answer the boundary group of aKind; a tool's running, success and error lines share one line."
+
+	^ aKind = #toolError
+		  ifTrue: [ #tool ]
+		  ifFalse: [ aKind ]
 ]
 
 { #category : 'private' }
@@ -107,7 +116,7 @@ PulsarLLMAgentStreamStyler >> kindBoundaryPrefix: aKind [
 
 	| changed |
 	lastKind ifNil: [ ^ '' ].
-	changed := lastKind ~= aKind.
+	changed := (self boundaryGroupOf: lastKind) ~= (self boundaryGroupOf: aKind).
 	changed ifFalse: [ ^ '' ].
 	markdown reset.
 	^ lastEndedNewline
@@ -129,13 +138,13 @@ PulsarLLMAgentStreamStyler >> plainFormat: aChunk kind: aKind [
 	^ aChunk
 ]
 
-{ #category : 'private' }
+{ #category : 'styling' }
 PulsarLLMAgentStreamStyler >> styledChunk: aChunk kind: aKind [
 
 	aKind = #text ifTrue: [ ^ markdown format: aChunk ].
 	aKind = #reasoning ifTrue: [ ^ (ansi color: (self colorAt: #reasoning)) , ansi dim , aChunk ].
-	aKind = #tool ifTrue: [ ^ (ansi color: (self colorAt: #tool)) , aChunk ].
-	aKind = #step ifTrue: [ ^ (ansi color: (self colorAt: #step)) , aChunk ].
+	aKind = #tool ifTrue: [ ^ ansi cursorHome , (ansi color: (self colorAt: #tool)) , aChunk ].
+	aKind = #toolError ifTrue: [ ^ ansi cursorHome , ansi bold , (ansi color: (self colorAt: #error)) , aChunk ].
 	aKind = #error ifTrue: [ ^ ansi bold , (ansi color: (self colorAt: #error)) , aChunk ].
 	^ aChunk
 ]

@@ -49,11 +49,25 @@ PulsarLLMDebugAgentModel >> explainPrompt [
 	
 	^ f'using pulsar
 explain the debug stack [self fullName].
-explanation must contain what is happening: the condition raised and the call chain leading to it
-explanation can contain also
-- the likely cause of the failure
-- which stack frames are most relevant to investigate
-- suggested next steps to fix it.
+
+**Goal:** Help a Smalltalk programmer understand what is happening, how execution reached this point, and why it stopped.
+
+**Output:**
+- **Situation:** Briefly explain what the system was trying to do when execution stopped.
+- **Execution flow:** Reconstruct the relevant sequence of calls, focusing on the meaningful frames rather than listing the entire stack.
+- **Likely cause:** Explain why execution stopped, distinguishing the immediate failure from its possible underlying cause.
+- **Next step:** Suggest the most useful thing to inspect next, only if the cause remains unclear.
+
+**Constraints:**
+- Maximum 200 words.
+- Focus on causal relationships, not frame-by-frame descriptions.
+- Prioritize application code over framework and debugger infrastructure.
+- Don''t assume the top frame is the root cause.
+- Distinguish observed facts from hypotheses.
+- Don''t speculate beyond the available evidence.
+- Don''t perform a general code review or suggest refactorings.
+- Omit sections that add no useful information.
+- Return only the explanation.
 
 Skip any image save & backup phase.
 Skip any learning phase.'

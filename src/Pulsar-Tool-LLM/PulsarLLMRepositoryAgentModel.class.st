@@ -78,16 +78,26 @@ PulsarLLMRepositoryAgentModel >> commitRetrievalInstructions [
 
 { #category : 'prompts' }
 PulsarLLMRepositoryAgentModel >> explainPrompt [
-
 	<pulsarSourceEditor: 'markdown'>
-	^ f'using pulsar
-explain [self explanationSubject] in the repository [self repositoryName].
+
+	^ f'Using pulsar
+Explain [self explanationSubject] in the repository [self repositoryName].
 [self retrievalInstructions]
-The explanation must contain what changed and the likely intent of the change, not just a listing of the diff.
-The explanation can contain also
-- which packages, classes or methods are affected and how they relate to each other
-- the likely motivation behind the change
-- risks, side effects or follow-ups to consider.
+
+**Goal:** Explain what changed and why it matters, focusing on behavior and intent rather than individual code edits.
+
+**Output:**
+- **Summary:** One sentence explaining the overall change.
+- **Changes:** 2–4 concise bullets describing the important modifications.
+- **Impact:** Mention behavioral changes, API changes, or compatibility implications only when relevant.
+
+**Constraints:**
+- Be concise (maximum 120 words).
+- Group related modifications; don''t explain every file or hunk.
+- Ignore trivial formatting or mechanical changes.
+- Don''t speculate about motivations unless supported by the diff.
+- Don''t perform additional research or suggest improvements.
+- Return only the summary, without introductory text.
 
 Skip any image save & backup phase.
 Skip any learning phase.'

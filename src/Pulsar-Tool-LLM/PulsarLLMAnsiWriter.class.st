@@ -29,6 +29,13 @@ PulsarLLMAnsiWriter >> color: anIndex [
 	^ self escape , '[38;5;' , anIndex asString , 'm'
 ]
 
+{ #category : 'cursor' }
+PulsarLLMAnsiWriter >> cursorHome [
+	"Answer the sequence that moves the cursor to the first column, without a line feed."
+
+	^ self escape , '[1G'
+]
+
 { #category : 'styles' }
 PulsarLLMAnsiWriter >> dim [
 

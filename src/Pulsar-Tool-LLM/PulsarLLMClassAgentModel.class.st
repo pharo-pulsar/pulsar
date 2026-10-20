@@ -13,22 +13,28 @@ Class {
 
 { #category : 'accessing' }
 PulsarLLMClassAgentModel >> commentPrompt [
+
 	<pulsarSourceEditor: 'markdown'>
-	
 	^ f'using pulsar
-add a comment (do not save) to the class editor [self fullName].
-be concise: what the class (or trait) does and why it exists and not *how* it does it unless this is really useful.
-use markdown to comment.
-suggested template:
-For the Class part: State a one line summary. For example, "I represent a paragraph of text".
-For the Responsibility part: Three sentences about main responsibilities - what I do, what I know.
-For the Collaborators Part: State my main collaborators and one line about how I interact with them.
+Write a Pharo class (or trait) comment (do not save) to the class editor [self fullName].
 
-Public API and Key Messages
+**Goal:** Document the class so a Smalltalk programmer can quickly understand its purpose, responsibilities, and intended usage.
 
-- message one
-- message two
-- how to create instances.
+**Content:**
+- Explain what the class represents and why it exists.
+- Describe its main responsibilities and important collaborators.
+- Mention significant state, invariants, or usage patterns only when relevant.
+
+**Constraints:**
+- Maximum 150 words, preferably fewer.
+- Focus on the abstraction and its intent, not implementation details.
+- Don''t enumerate methods or accessors.
+- Don''t explain Smalltalk fundamentals.
+- Don''t repeat information obvious from the class name.
+- Don''t invent behavior or design intentions unsupported by the code.
+- Avoid boilerplate and unnecessary headings.
+- Use clear, natural English.
+- Return only the class comment.
 
 Consider adding one simple example.
 Consider adding one or more usage references. 
@@ -42,13 +48,23 @@ PulsarLLMClassAgentModel >> explainPrompt [
 	<pulsarSourceEditor: 'markdown'>
 	
 	^ f'using pulsar
-explain the class [self fullName].
-explanation must contain what the class does in the context of its package and hierarchy
-explanation can contain also
-- its responsibilities
-- its main collaborators
-- how it relates to its superclass and subclasses
-- some example on how and where the class is being used.
+Explain the class [self fullName].
+**Goal:** Help a Smalltalk programmer quickly understand what the class does, how it works, and how it fits into the system.
+
+**Output:**
+- **Purpose:** One sentence describing the class''s main responsibility.
+- **Design:** 2–4 concise bullets explaining its key abstractions, state, and behavior.
+- **Interactions:** Important collaborators, superclass relationships, or extension points, only when relevant.
+
+**Constraints:**
+- Maximum 150 words.
+- Focus on semantics and design, not method-by-method descriptions.
+- Group related methods into responsibilities.
+- Don''t explain Smalltalk language fundamentals.
+- Don''t enumerate accessors or trivial methods.
+- Don''t speculate beyond the available code.
+- Don''t perform unrelated exploration or code review.
+- Return only the explanation.
 
 Skip any image save & backup phase.
 Skip any learning phase.'
@@ -56,23 +72,29 @@ Skip any learning phase.'
 
 { #category : 'accessing' }
 PulsarLLMClassAgentModel >> updateCommentPrompt [
+
 	<pulsarSourceEditor: 'markdown'>
-	
 	^ f'using pulsar
-verify the comment of the class at the editor [self fullName] (do not save) to be sure is up to date. 
+Verify the comment of the Pharo class (or trait) comment (do not save) in the class editor [self fullName] to be sure is up to date. 
 If comment is not there, add it (do not save).
-be concise: what the class (or trait) does and why it exists and not *how* it does it unless this is really useful.
-use markdown to comment.
-suggested template:
-For the Class part: State a one line summary. For example, "I represent a paragraph of text".
-For the Responsibility part: Three sentences about main responsibilities - what I do, what I know.
-For the Collaborators Part: State my main collaborators and one line about how I interact with them.
 
-Public API and Key Messages
+**Goal:** Document the class so a Smalltalk programmer can quickly understand its purpose, responsibilities, and intended usage.
 
-- message one
-- message two
-- how to create instances.
+**Content:**
+- Explain what the class represents and why it exists.
+- Describe its main responsibilities and important collaborators.
+- Mention significant state, invariants, or usage patterns only when relevant.
+
+**Constraints:**
+- Maximum 150 words, preferably fewer.
+- Focus on the abstraction and its intent, not implementation details.
+- Don''t enumerate methods or accessors.
+- Don''t explain Smalltalk fundamentals.
+- Don''t repeat information obvious from the class name.
+- Don''t invent behavior or design intentions unsupported by the code.
+- Avoid boilerplate and unnecessary headings.
+- Use clear, natural English.
+- Return only the class comment.
 
 Consider adding one simple example.
 Consider adding one or more usage references. 

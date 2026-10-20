@@ -6,7 +6,9 @@ Class {
 	#instVars : [
 		'toolbarPresenter',
 		'terminalPresenter',
-		'styler'
+		'styler',
+		'toolbarActions',
+		'queryInProgress'
 	],
 	#category : 'Pulsar-Tool-LLM-Agent',
 	#package : 'Pulsar-Tool-LLM',
@@ -25,6 +27,13 @@ PulsarLLMAgentPresenter >> canBeListed [
 	^ true
 ]
 
+{ #category : 'private - actions' }
+PulsarLLMAgentPresenter >> cancelQuery [
+
+	self feed: String cr , '(cancelled)' , String cr kind: #text.
+	self model cancelQuery
+]
+
 { #category : 'layout' }
 PulsarLLMAgentPresenter >> defaultLayout [
 
@@ -37,16 +46,14 @@ PulsarLLMAgentPresenter >> defaultLayout [
 
 { #category : 'private - actions' }
 PulsarLLMAgentPresenter >> doComment [
-	
-	self scheduleTask: [
-		self model commentOn: self ]
+
+	self runQuery: [ self model commentOn: self ]
 ]
 
 { #category : 'private - actions' }
 PulsarLLMAgentPresenter >> doExplain [
-	
-	self scheduleTask: [
-		self model explainOn: self ]
+
+	self runQuery: [ self model explainOn: self ]
 ]
 
 { #category : 'api' }
@@ -81,9 +88,15 @@ PulsarLLMAgentPresenter >> initializePresenters [
 	self addStyle: 'pulsarAgentFlyingBrowser'.
 
 	toolbarPresenter := self instantiate: PulsarToolbarPresenter.
-	toolbarPresenter actions: (self model actionsWithContextOn: self).
+	toolbarPresenter actions: (toolbarActions := self model actionsWithContextOn: self).
 
 	terminalPresenter := self instantiate: VteTerminalPresenter
+]
+
+{ #category : 'testing' }
+PulsarLLMAgentPresenter >> isQuerying [
+
+	^ queryInProgress ifNil: [ false ]
 ]
 
 { #category : 'private - announcing' }
@@ -107,8 +120,27 @@ PulsarLLMAgentPresenter >> resetStream [
 	styler := nil
 ]
 
+{ #category : 'private - actions' }
+PulsarLLMAgentPresenter >> runQuery: aBlock [
+	"Run the query block in the background while tracking it as the ongoing inference."
+
+	queryInProgress := true.
+	self updateToolbar.
+	self scheduleTask: [
+			[ aBlock value ] ensure: [
+					queryInProgress := false.
+					self updateToolbar ] ]
+]
+
 { #category : 'accessing' }
 PulsarLLMAgentPresenter >> styler [
 
 	^ styler ifNil: [ styler := PulsarLLMAgentStreamStyler new ]
+]
+
+{ #category : 'api' }
+PulsarLLMAgentPresenter >> updateToolbar [
+
+	toolbarActions ifNil: [ ^ self ].
+	toolbarActions allCommands do: [ :each | each updateEnableStatus ]
 ]

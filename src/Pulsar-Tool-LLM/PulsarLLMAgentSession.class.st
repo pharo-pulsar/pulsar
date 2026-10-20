@@ -18,6 +18,14 @@ PulsarLLMAgentSession class >> on: anApi [
 		yourself
 ]
 
+{ #category : 'submorphs - add/remove' }
+PulsarLLMAgentSession >> abort [
+
+	sessionId ifNil: [ ^ self ].
+
+	api abortSession: sessionId
+]
+
 { #category : 'accessing' }
 PulsarLLMAgentSession >> api [
 

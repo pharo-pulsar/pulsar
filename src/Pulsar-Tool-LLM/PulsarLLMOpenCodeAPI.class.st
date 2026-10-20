@@ -17,7 +17,12 @@ Class {
 		'host',
 		'port',
 		'timeout',
-		'model'
+		'model',
+		'toolLineOpen',
+		'spinnerFrameIndex',
+		'openToolLabel',
+		'animationActive',
+		'toolLineMutex'
 	],
 	#category : 'Pulsar-Tool-LLM-Agent',
 	#package : 'Pulsar-Tool-LLM',
@@ -36,11 +41,11 @@ PulsarLLMOpenCodeAPI class >> defaultPort [
 	^ 4096
 ]
 
-{ #category : 'constants' }
+{ #category : 'private' }
 PulsarLLMOpenCodeAPI class >> defaultStreamKinds [
 	"Kinds streamed by default, matching what the OpenCode TUI surfaces."
 
-	^ #( #text #reasoning #tool #step )
+	^ #( #text #reasoning #tool )
 ]
 
 { #category : 'examples' }
@@ -111,6 +116,13 @@ PulsarLLMOpenCodeAPI class >> query: aString [
 	^ reply
 ]
 
+{ #category : 'private' }
+PulsarLLMOpenCodeAPI class >> spinnerFrames [
+	"Answer the braille frames used to animate a running tool, matching the opencode TUI."
+
+	^ #( '⠋' '⠙' '⠹' '⠸' '⠼' '⠴' '⠦' '⠧' '⠇' '⠏' )
+]
+
 { #category : 'streaming' }
 PulsarLLMOpenCodeAPI class >> toolIcons [
 	"Answer the opencode TUI glyph for each tool that has a dedicated icon."
@@ -118,6 +130,33 @@ PulsarLLMOpenCodeAPI class >> toolIcons [
 	^ Dictionary newFromPairs:
 		  #( 'read' '→' 'write' '←' 'glob' '✱' 'grep' '✱' 'webfetch' '%' 'websearch' '◈' 'notice' '◈' 'bash' '$' 'question' '→' 'skill'
 		     '→' )
+]
+
+{ #category : 'private' }
+PulsarLLMOpenCodeAPI class >> toolInputKeys [
+	"Answer, for each tool, the input keys that may hold the subject of its final line."
+
+	^ Dictionary newFromPairs:
+		  #( 'read' #( 'filePath' 'path' ) 'write' #( 'filePath' 'path' ) 'edit' #( 'filePath' 'path' ) 'glob' #( 'pattern' )
+		     'grep' #( 'pattern' ) 'webfetch' #( 'url' ) 'websearch' #( 'query' ) 'skill' #( 'name' ) 'task' #( 'description' )
+		     'bash' #( 'command' ) 'execute' #( 'command' ) )
+]
+
+{ #category : 'private' }
+PulsarLLMOpenCodeAPI class >> toolPendingLabels [
+	"Answer the opencode pending label for each tool, keyed by tool name."
+
+	^ Dictionary newFromPairs:
+		  #( 'read' 'Reading file…' 'write' 'Preparing write…' 'edit' 'Preparing edit…' 'glob' 'Finding files…' 'grep' 'Searching content…'
+		     'webfetch' 'Fetching from the web…' 'websearch' 'Searching web…' 'question' 'Asking questions…' 'skill' 'Loading skill…'
+		     'task' 'Delegating…' 'bash' 'execute' 'execute' 'execute' )
+]
+
+{ #category : 'private' }
+PulsarLLMOpenCodeAPI class >> toolSummaryPrefixes [
+	"Answer the text shown before a tool subject on its final line."
+
+	^ Dictionary newFromPairs: #( 'read' 'Read ' )
 ]
 
 { #category : 'sessions' }
@@ -164,6 +203,20 @@ PulsarLLMOpenCodeAPI >> authorizeOAuthProvider: aProviderID [
 PulsarLLMOpenCodeAPI >> baseUrl [
 
 	^ 'http://' , host , ':' , port asString
+]
+
+{ #category : 'private' }
+PulsarLLMOpenCodeAPI >> beginToolLineFor: aPart [
+	"Open a running tool line and answer its first rendering. The spinner keeps its
+	frame when the line is already open, so a pending to running change does not stutter."
+
+	| label |
+	label := self toolPendingLabelFor: aPart.
+	self toolLineMutex critical: [
+			toolLineOpen ifFalse: [ spinnerFrameIndex := 1 ].
+			toolLineOpen := true.
+			openToolLabel := label ].
+	^ self runningToolLine
 ]
 
 { #category : 'sessions' }
@@ -322,6 +375,21 @@ PulsarLLMOpenCodeAPI >> findSymbol: aQuery [
 	  ^ self get: '/find/symbol' query: (Dictionary with: 'query' -> aQuery)
 ]
 
+{ #category : 'private' }
+PulsarLLMOpenCodeAPI >> finishToolLineFor: aPart status: aStatus [
+	"Answer the final line for a completed or failed tool, overwriting the running line."
+
+	| tool line |
+	tool := aPart at: 'tool' ifAbsent: [ '?' ].
+	line := (self toolIconFor: tool status: aStatus) , ' ' , (self toolSummaryFor: aPart tool: tool).
+	self toolLineMutex critical: [
+			line := toolLineOpen
+				        ifTrue: [ self padString: line to: openToolLabel size + 2 ]
+				        ifFalse: [ line ].
+			toolLineOpen := false ].
+	^ line , String cr
+]
+
 { #category : 'sessions' }
 PulsarLLMOpenCodeAPI >> forkSession: aSessionID messageID: aMessageID [
 
@@ -390,16 +458,7 @@ PulsarLLMOpenCodeAPI >> handlePartUpdate: aPart kinds: aCollection partTypes: aP
 	partID := aPart at: 'id' ifAbsent: [ ^ self ].
 	partType := aPart at: 'type' ifAbsent: [ ^ self ].
 	aPartTypeMap at: partID put: partType.
-
-	(partType = 'tool' and: [ aCollection includes: #tool ]) ifTrue: [
-			| status |
-			status := (aPart at: 'state' ifAbsent: [ nil ]) ifNotNil: [ :state | state at: 'status' ifAbsent: [ nil ] ].
-			(aToolStateMap at: partID ifAbsent: [ nil ]) = status ifFalse: [
-					aToolStateMap at: partID put: status.
-					aBlock value: (self toolStreamLineFor: aPart) value: #tool ] ].
-
-	((partType = 'step-start' or: [ partType = 'step-finish' ]) and: [ aCollection includes: #step ]) ifTrue: [
-		aBlock value: (self stepStreamLineFor: aPart) value: #step ]
+	(partType = 'tool' and: [ aCollection includes: #tool ]) ifTrue: [ self updateToolPart: aPart states: aToolStateMap do: aBlock ]
 ]
 
 { #category : 'private' }
@@ -457,6 +516,10 @@ PulsarLLMOpenCodeAPI >> initialize [
 	host := self class defaultHost.
 	port := self class defaultPort.
 	timeout := 600.
+	toolLineMutex := Mutex new.
+	toolLineOpen := false.
+	spinnerFrameIndex := 0.
+	animationActive := false.
 	super initialize
 ]
 
@@ -605,6 +668,15 @@ PulsarLLMOpenCodeAPI >> openTuiThemes [
 ]
 
 { #category : 'private' }
+PulsarLLMOpenCodeAPI >> padString: aString to: anInteger [
+	"Answer aString padded with spaces so it overwrites at least anInteger columns."
+
+	^ aString size >= anInteger
+		  ifTrue: [ aString ]
+		  ifFalse: [ aString , (String new: anInteger - aString size withAll: Character space) ]
+]
+
+{ #category : 'private' }
 PulsarLLMOpenCodeAPI >> parseJSON: aString [
 
 	(aString isNil or: [ aString isEmpty ]) ifTrue: [ ^ nil ].
@@ -735,6 +807,17 @@ PulsarLLMOpenCodeAPI >> renameSession: aSessionID to: aTitle [
 	^ self patch: '/session/' , aSessionID json: (Dictionary with: 'title' -> aTitle)
 ]
 
+{ #category : 'private' }
+PulsarLLMOpenCodeAPI >> resetAnimation [
+	"Clear the running-tool state left over from a previous turn."
+
+	self toolLineMutex critical: [
+			toolLineOpen := false.
+			openToolLabel := nil.
+			spinnerFrameIndex := 0.
+			animationActive := false ]
+]
+
 { #category : 'sessions' }
 PulsarLLMOpenCodeAPI >> respondToPermissionID: aPermissionID inSession: aSessionID response: aResponse remember: aBoolean [
 
@@ -769,6 +852,13 @@ PulsarLLMOpenCodeAPI >> runShellCommand: aCommand inSession: aSessionID model: a
 	  ^ self post: '/session/' , aSessionID , '/shell' json: payload
 ]
 
+{ #category : 'private' }
+PulsarLLMOpenCodeAPI >> runningToolLine [
+	"Answer the current spinner frame followed by the open tool label, without a line break."
+
+	^ (self class spinnerFrames at: spinnerFrameIndex) , ' ' , openToolLabel
+]
+
 { #category : 'messages' }
 PulsarLLMOpenCodeAPI >> sendText: aString toSession: aSessionID [
 
@@ -794,15 +884,15 @@ PulsarLLMOpenCodeAPI >> sendText: aString toSession: aSessionID do: aBlock [
 PulsarLLMOpenCodeAPI >> sendText: aString toSession: aSessionID kinds: aCollection do: aBlock [
 	"Send a text prompt and stream the answer to aBlock until the turn ends.
 	 aBlock receives a chunk String and a kind Symbol among #text, #reasoning,
-	 #tool, #step and #error. Answers the accumulated text of the #text chunks."
+	 #tool and #error. Answers the accumulated text of the #text chunks."
+
 	| ready finished partTypes toolStates text |
-	
 	ready := Semaphore new.
 	finished := Semaphore new.
 	partTypes := Dictionary new.
 	toolStates := Dictionary new.
 	text := WriteStream on: String new.
-
+	self resetAnimation.
 	self
 		subscribeSession: aSessionID
 		kinds: aCollection
@@ -812,7 +902,7 @@ PulsarLLMOpenCodeAPI >> sendText: aString toSession: aSessionID kinds: aCollecti
 		toolStates: toolStates
 		text: text
 		do: aBlock.
-
+	self startToolAnimationDo: aBlock.
 	ready waitTimeoutSeconds: 5.
 	self
 		sendTextAsync: aString
@@ -820,6 +910,7 @@ PulsarLLMOpenCodeAPI >> sendText: aString toSession: aSessionID kinds: aCollecti
 		model: self model
 		agent: nil.
 	(finished waitTimeoutSeconds: self timeout) ifTrue: [ aBlock value: 'stream timed out' value: #error ].
+	self stopToolAnimation.
 	^ text contents
 ]
 
@@ -905,6 +996,19 @@ PulsarLLMOpenCodeAPI >> showTuiToast: aMessage variant: aVariant [
 ]
 
 { #category : 'private' }
+PulsarLLMOpenCodeAPI >> startToolAnimationDo: aBlock [
+	"Fork a process that keeps the running-tool spinner alive until the turn ends."
+
+	self toolLineMutex critical: [ animationActive := true ].
+	[
+		[ animationActive ] whileTrue: [
+				| line |
+				line := self toolAnimationTick.
+				line ifNotNil: [ aBlock value: line value: #tool ].
+				80 milliSeconds wait ] ] fork
+]
+
+{ #category : 'private' }
 PulsarLLMOpenCodeAPI >> statusIconFor: aStatus [
 	"Answer the opencode status glyph used when a tool has no dedicated icon."
 
@@ -914,14 +1018,10 @@ PulsarLLMOpenCodeAPI >> statusIconFor: aStatus [
 ]
 
 { #category : 'private' }
-PulsarLLMOpenCodeAPI >> stepStreamLineFor: aPart [
+PulsarLLMOpenCodeAPI >> stopToolAnimation [
+	"Stop the process that animates the running-tool spinner."
 
-	| type icon |
-	type := aPart at: 'type' ifAbsent: [ 'step' ].
-	icon := type = 'step-finish'
-		        ifTrue: [ '·' ]
-		        ifFalse: [ '›' ].
-	^ icon , ' ' , type , String cr
+	self toolLineMutex critical: [ animationActive := false ]
 ]
 
 { #category : 'private' }
@@ -1000,6 +1100,16 @@ PulsarLLMOpenCodeAPI >> todosOfSession: aSessionID [
 ]
 
 { #category : 'private' }
+PulsarLLMOpenCodeAPI >> toolAnimationTick [
+	"Advance the spinner and answer the running-tool line, or nil when no tool is open."
+
+	self toolLineMutex critical: [
+			toolLineOpen ifFalse: [ ^ nil ].
+			spinnerFrameIndex := spinnerFrameIndex \\ self class spinnerFrames size + 1.
+			^ self runningToolLine ]
+]
+
+{ #category : 'private' }
 PulsarLLMOpenCodeAPI >> toolIconFor: aTool status: aStatus [
 	"Answer the opencode icon for aTool, falling back to the status glyph."
 
@@ -1007,14 +1117,64 @@ PulsarLLMOpenCodeAPI >> toolIconFor: aTool status: aStatus [
 ]
 
 { #category : 'private' }
-PulsarLLMOpenCodeAPI >> toolStreamLineFor: aPart [
+PulsarLLMOpenCodeAPI >> toolInputOf: aPart [
 
-	| status tool |
-	status := (aPart at: 'state' ifAbsent: [ nil ])
-		          ifNotNil: [ :state | state at: 'status' ifAbsent: [ 'pending' ] ]
-		          ifNil: [ 'pending' ].
+	| state |
+	state := aPart at: 'state' ifAbsent: [ nil ].
+	state ifNil: [ ^ Dictionary new ].
+	^ state at: 'input' ifAbsent: [ Dictionary new ]
+]
+
+{ #category : 'private' }
+PulsarLLMOpenCodeAPI >> toolLineFor: aPart status: aStatus [
+	"Answer the running line for an active tool, or the final line for a finished one."
+
+	(aStatus = 'completed' or: [ aStatus = 'error' ]) ifTrue: [ ^ self finishToolLineFor: aPart status: aStatus ].
+	^ self beginToolLineFor: aPart
+]
+
+{ #category : 'private' }
+PulsarLLMOpenCodeAPI >> toolLineKindFor: aStatus [
+	"Answer the rendering kind: a failed tool keeps the tool boundary group but is shown as an error."
+
+	^ aStatus = 'error'
+		  ifTrue: [ #toolError ]
+		  ifFalse: [ #tool ]
+]
+
+{ #category : 'accessing' }
+PulsarLLMOpenCodeAPI >> toolLineMutex [
+	"Answer the mutex guarding the running-tool line, creating it on demand for
+	instances that predate the slot."
+
+	^ toolLineMutex ifNil: [ toolLineMutex := Mutex new ]
+]
+
+{ #category : 'private' }
+PulsarLLMOpenCodeAPI >> toolPendingLabelFor: aPart [
+
+	| tool |
 	tool := aPart at: 'tool' ifAbsent: [ '?' ].
-	^ (self toolIconFor: tool status: status) , ' ' , tool , ' (' , status asString , ')' , String cr
+	^ (self class toolPendingLabels at: tool ifAbsent: [ nil ]) ifNil: [ tool ]
+]
+
+{ #category : 'private' }
+PulsarLLMOpenCodeAPI >> toolStatusOf: aPart [
+
+	^ (aPart at: 'state' ifAbsent: [ nil ]) ifNotNil: [ :state | state at: 'status' ifAbsent: [ 'pending' ] ] ifNil: [ 'pending' ]
+]
+
+{ #category : 'private' }
+PulsarLLMOpenCodeAPI >> toolSummaryFor: aPart tool: aTool [
+	"Answer the subject shown after the tool icon on its final line."
+
+	| input keys key subject prefix |
+	input := self toolInputOf: aPart.
+	keys := self class toolInputKeys at: aTool ifAbsent: [ #(  ) ].
+	key := keys detect: [ :each | (input at: each ifAbsent: [ nil ]) isString ] ifNone: [ nil ].
+	subject := key ifNil: [ aTool ] ifNotNil: [ :each | input at: each ].
+	prefix := self class toolSummaryPrefixes at: aTool ifAbsent: [ '' ].
+	^ prefix , subject truncateTo: 120
 ]
 
 { #category : 'sessions' }
@@ -1036,6 +1196,18 @@ PulsarLLMOpenCodeAPI >> updateConfig: aDictionary [
 ]
 
 { #category : 'private' }
+PulsarLLMOpenCodeAPI >> updateToolPart: aPart states: aToolStateMap do: aBlock [
+	"Emit a tool line whenever a tool part changes status."
+
+	| partID status |
+	partID := aPart at: 'id' ifAbsent: [ ^ self ].
+	status := self toolStatusOf: aPart.
+	(aToolStateMap at: partID ifAbsent: [ nil ]) = status ifTrue: [ ^ self ].
+	aToolStateMap at: partID put: status.
+	aBlock value: (self toolLineFor: aPart status: status) value: (self toolLineKindFor: status)
+]
+
+{ #category : 'private' }
 PulsarLLMOpenCodeAPI >> urlFor: aPath [
 
 	^ (aPath beginsWith: '/')
@@ -1048,7 +1220,7 @@ PulsarLLMOpenCodeAPI >> validate: aClient [
 	"Raise an error when the server answered with a non-success status."
 
 	aClient response isSuccess ifFalse: [
-		self error: 'OpenCode API error ' , aClient response statusLine asString , String cr , (aClient response contents first: 300) ]
+		self error: f'OpenCode API error [aClient response statusLine] - [aClient response contents truncateTo: 300]' ]
 ]
 
 { #category : 'project' }

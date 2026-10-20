@@ -58,6 +58,14 @@ PulsarLLMAgentModel >> canComment [
 ]
 
 { #category : 'actions' }
+PulsarLLMAgentModel >> cancelQuery [
+
+	session ifNil: [ ^ self ].
+
+	session abort
+]
+
+{ #category : 'actions' }
 PulsarLLMAgentModel >> closeSession [
 
 	session ifNil: [ ^ self ].
@@ -80,6 +88,21 @@ PulsarLLMAgentModel >> commentOn: anAgentPresenter [
 PulsarLLMAgentModel >> commentPrompt [
 
 	^ self subclassResponsibility
+]
+
+{ #category : 'private - definitions' }
+PulsarLLMAgentModel >> defineCancelActionOn: aBuilder [
+
+	<dockActions>
+	aBuilder addGroup: #toolbar with: [ :group |
+			group addActionWith: [ :action |
+					action
+						priority: 50;
+						name: 'Cancel';
+						iconName: 'stop';
+						description: 'Cancel the ongoing inference';
+						actionEnabled: [ :aPresenter | aPresenter isQuerying ];
+						action: [ :aPresenter | aPresenter cancelQuery ] ] ]
 ]
 
 { #category : 'private - definitions' }
