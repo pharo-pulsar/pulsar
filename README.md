@@ -39,10 +39,8 @@ understanding its effects as short as possible.
 The installer downloads the latest nightly Pulsar image and, with `-m`, a
 compatible Pharo VM. It creates a `pulsar` launcher in the current directory.
 
-<details open>
-<summary><strong>Linux</strong></summary>
-<br>
-You need `curl`, `tar` and [Flatpak](https://flatpak.org/setup/) installed on the host.
+### Linux
+Default install require [Flatpak](https://flatpak.org/setup/) installed on the host.
 
 ```bash
 mkdir -p pulsar && cd pulsar
@@ -52,23 +50,22 @@ curl -L https://forge.smallworks.eu/pharo/Pulsar-installers/raw/branch/main/inst
 
 The VM is installed as a per-user Flatpak. The bundle includes the native
 libraries Pulsar needs, so it does not interfere with libraries installed by
-the traditional Pharo ZeroConf distribution.
-</details>
+the traditional Pharo ZeroConf distribution.  
 
-<details>
-<summary><strong>macOS</strong></summary>
-<br>
+_Notice: You can avoid the install/usage of flatpak by not passing the `-m` option._  
+_In that case you will need a working `pharo-vm` (**NOT** zeroconf) and a series of_
+_dependencies (list may vary with development)._
+
+### macOS
 
 ```bash
 mkdir -p pulsar && cd pulsar
 curl -L https://forge.smallworks.eu/pharo/Pulsar-installers/raw/branch/main/install-macos.sh | bash -s -- -m
 ./pulsar
 ```
-</details>
 
-<details>
-<summary><strong>Windows</strong></summary>
-<br>
+### Windows
+
 The native Windows distribution is temporarily unavailable because of a
 limitation in the current FFI architecture. Until that is resolved, Pulsar can
 run through WSL.
@@ -80,7 +77,6 @@ curl -L https://forge.smallworks.eu/pharo/Pulsar-installers/raw/branch/main/supp
 ```
 
 Then follow the Linux installation instructions above.
-</details>
 
 ### Installer options
 
