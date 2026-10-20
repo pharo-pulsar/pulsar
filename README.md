@@ -54,6 +54,7 @@ the traditional Pharo ZeroConf distribution.
 
 _Notice: You can avoid using Flatpak by not passing the -m option._  
 _In that case, you will need a working pharo-vm (**NOT** zeroconf) plus a set of system dependencies (the exact list may vary as development progresses). A startup check will tell you what is missing before aborting._  
+_Check [Run Pulsar with an existing VM](#run-pulsar-with-an-existing-vm) section for details on how to get it running._  
 _Since it is easier to maintain and guarantees that all dependencies are available with the right versions, we recommend using Flatpak._
 
 ### macOS
