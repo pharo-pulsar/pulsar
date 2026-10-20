@@ -194,7 +194,12 @@ PulsarApplication >> cleanUp [
 			"ZnManagingMultiThreadedServer is because if I save pulsar when I have an LLM console running, 
 			 it may let it open and we do not want that. This is too radical, and maybe the me of the future 
 			 will regret this decision. Please forgive me."
-			each name beginsWithAnyOf: #('Pulsar' 'PanelApplication' 'FFICallback' 'ZnManagingMultiThreadedServer') ])
+			each name beginsWithAnyOf: #(
+				'Pulsar' 
+				'PanelApplication' 
+				'FFICallback' 
+				'GtkToSystem' 
+				'ZnManagingMultiThreadedServer') ])
 		do: [ :each | each terminate ]
 ]
 
