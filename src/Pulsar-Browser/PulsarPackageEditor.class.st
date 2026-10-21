@@ -39,7 +39,7 @@ PulsarPackageEditor >> addOverlay: aPresenter withConstraints: aBlock [
 		withConstraints: aBlock
 ]
 
-{ #category : 'accessing' }
+{ #category : 'private - accessing' }
 PulsarPackageEditor >> classesTreePresenter [
 
 	^ classesTreePresenter
@@ -74,8 +74,10 @@ PulsarPackageEditor >> connectPresenters [
 		whenSubmitDo: [ :aString | self doSaveComment: aString ];
 		whenResetDo: [ self doResetComment ].
 
-	classesTreePresenter outputSelectionPort transmitDo: [ :anEntity | self entitySelected: anEntity ].
-	classesTreePresenter outputActivationPort transmitDo: [ :anEntity | self entityActivated: anEntity ]
+	classesTreePresenter outputSelectionPort 
+		transmitDo: [ :anEntity | self entitySelected: anEntity ].
+	classesTreePresenter outputActivationPort 
+		transmitDo: [ :anEntity | self entityActivated: anEntity ]
 ]
 
 { #category : 'layout' }
@@ -97,20 +99,18 @@ PulsarPackageEditor >> defaultLayout [
 
 { #category : 'private - definitions' }
 PulsarPackageEditor >> defineClassesActionsOn: aBuilder [
-
 	<dockActions>
-	aBuilder addGroup: #navigation with: [ :group |
-			group
-				priority: 100;
-				name: 'Navigation';
-				beDisplayedAsGroup.
-			group addActionWith: [ :action |
-					action
-						priority: 110;
-						name: 'New class';
-						description: 'Add a new class to this package';
-						iconName: 'new-file';
-						action: [ self doNewClass ] ] ]
+	
+	aBuilder addGroup: #navigation with: [ :group | group
+		priority: 100;
+		name: 'Navigation';
+		beDisplayedAsGroup;
+		addActionWith: [ :action | action
+			priority: 110;
+			name: 'New class';
+			description: 'Add a new class to this package';
+			iconName: 'new-file';
+			action: [ self doNewClass ] ] ]
 ]
 
 { #category : 'private - definitions' }
@@ -122,9 +122,11 @@ PulsarPackageEditor >> defineNavigationActionsOn: aBuilder [
 
 { #category : 'actions' }
 PulsarPackageEditor >> doNewClass [
-
 	| newClassModel |
-	newClassModel := PvClassModel newEnvironment: self model environmentModel beNewClassWithParent: self model.
+	
+	newClassModel := PvClassModel 
+		newEnvironment: self model environmentModel 
+		beNewClassWithParent: self model.
 
 	self notifyActivateEntity: newClassModel
 ]
@@ -172,19 +174,27 @@ PulsarPackageEditor >> entitySelected: anEntity [
 { #category : 'events' }
 PulsarPackageEditor >> eventClassAdded: anAnnouncement [
 
-	anAnnouncement classAdded package = self model package ifTrue: [ self updateClassesTree ]
+	anAnnouncement classAdded package = self model package 
+		ifFalse: [ ^ self ]. 
+	self updateClassesTree
 ]
 
 { #category : 'events' }
 PulsarPackageEditor >> eventClassRemoved: anAnnouncement [
 
-	anAnnouncement classRemoved package = self model package ifTrue: [ self updateClassesTree ]
+	anAnnouncement classRemoved package = self model package 
+		ifFalse: [ ^ self ].
+	
+	self updateClassesTree
 ]
 
 { #category : 'events' }
 PulsarPackageEditor >> eventClassRenamed: anAnnouncement [
 
-	anAnnouncement classRenamed package = self model package ifTrue: [ self updateClassesTree ]
+	anAnnouncement classRenamed package = self model package 
+		ifFalse: [ ^ self ].
+	
+	self updateClassesTree
 ]
 
 { #category : 'events' }
@@ -221,8 +231,8 @@ PulsarPackageEditor >> expandedItems: aCollection [
 
 { #category : 'updating' }
 PulsarPackageEditor >> findPathOf: aModel in: aCollection [
-
 	| subPath |
+	
 	aCollection withIndexDo: [ :each :index |
 			each = aModel ifTrue: [ ^ { index } ].
 			subPath := self findPathOf: aModel in: each children.
@@ -248,17 +258,17 @@ PulsarPackageEditor >> initialize [
 PulsarPackageEditor >> initializeClassesTree [
 
 	classesTreePresenter := self newEasyTreeListView
-		                        addStyle: 'stTree';
-		                        addStyle: 'pulsarPackageClassesTree';
-		                        children: [ :aNode | aNode children ];
-		                        rowPresenterClass: PulsarProjectNodeRow;
-		                        searchMatching: [ :anEntity :pattern | anEntity matches: pattern ];
-		                        actions: (SpActionGroup new
-				                         add: self actions;
-				                         addDynamicGroup: #dynamic with: [ :group | group add: self refactorActions ];
-				                         yourself);
-		                        whenExpandChangedDo: [ :ann | self registerExpansionOf: ann ];
-		                        yourself
+		addStyle: 'stTree';
+		addStyle: 'pulsarPackageClassesTree';
+		children: [ :aNode | aNode children ];
+		rowPresenterClass: PulsarProjectNodeRow;
+		searchMatching: [ :anEntity :pattern | anEntity matches: pattern ];
+		actions: (SpActionGroup new
+			add: self actions;
+			addDynamicGroup: #dynamic with: [ :group | group add: self refactorActions ];
+			yourself);
+		whenExpandChangedDo: [ :ann | self registerExpansionOf: ann ];
+		yourself
 ]
 
 { #category : 'initialization' }
@@ -269,10 +279,10 @@ PulsarPackageEditor >> initializePresenters [
 	self addStyle: 'pulsarPackageEditor'.
 
 	commentPresenter := (self instantiate: SeEditorPresenter)
-		                    addStyle: 'stCode';
-		                    withoutLineNumbers;
-		                    withHyperlinks;
-		                    yourself.
+		addStyle: 'stCode';
+		withoutLineNumbers;
+		withHyperlinks;
+		yourself.
 
 	dependenciesPresenter := self instantiate: PulsarPackageDependenciesPresenter.
 	self initializeClassesTree
@@ -372,12 +382,12 @@ PulsarPackageEditor >> restoreExpandedBranchesFrom: aCollection [
 	"Re-expand the branches that were open before the last refresh."
 
 	mutex critical: [
-			aCollection copy do: [ :each |
-					| path |
-					path := self pathIndexOf: each.
-					path first isZero
-						ifTrue: [ self expandedItems remove: each ifAbsent: [ ] ]
-						ifFalse: [ classesTreePresenter expandPath: path ] ] ]
+		aCollection copy do: [ :each |
+			| path |
+			path := self pathIndexOf: each.
+			path first isZero
+				ifTrue: [ self expandedItems remove: each ifAbsent: [ ] ]
+				ifFalse: [ classesTreePresenter expandPath: path ] ] ]
 ]
 
 { #category : 'private - actions' }
@@ -403,12 +413,12 @@ PulsarPackageEditor >> updateBreadcrumbs [
 
 { #category : 'updating' }
 PulsarPackageEditor >> updateClassesTree [
-
 	| remembered |
+	
 	mutex critical: [
-			remembered := self expandedItems copy.
-			classesTreePresenter roots: (PvClassHierarchyBuilder buildFrom: self model classes).
-			self restoreExpandedBranchesFrom: remembered ]
+		remembered := self expandedItems copy.
+		classesTreePresenter roots: (PvClassHierarchyBuilder buildFrom: self model classes).
+		self restoreExpandedBranchesFrom: remembered ]
 ]
 
 { #category : 'updating' }
