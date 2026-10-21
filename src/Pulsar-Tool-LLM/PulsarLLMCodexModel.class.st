@@ -1,11 +1,9 @@
 "
-I am the concrete model for integrating with the OpenCode CLI tool.
+I am the concrete Pulsar LLM model that drives the Codex CLI against the running image, despite my class name; my label is 'Codex'.
 
-On #prepare I ensure configuration files exist: AGENTS.md (Pharo MCP guidance for the LLM) and opencode.json (MCP server URL for the OpenCode client).
+My responsibility is session setup and lifecycle. On #prepare I inherit the AGENTS.md and skill setup, then ensure a .codex/config.toml declaring the local Pharo MCP server. On #connectTo: the inherited flow starts that server, and I spawn codex in the supplied terminal presenter, exposing Pharo tools to the agent. On #disconnect the server is stopped and the session marked ended.
 
-On #connectTo: I start the Pharo MCP server and spawn the opencode CLI in the given terminal presenter, connecting the LLM to the running image.
-
-On #disconnect I stop the MCP server and mark the session as ended.
+I collaborate with PulsarLLMModel for the shared protocol and MCP state, with MCP for the tool server, and with the Codex executable and terminal presenter. Configuration files are written only when missing.
 "
 Class {
 	#name : 'PulsarLLMCodexModel',
@@ -17,6 +15,7 @@ Class {
 
 { #category : 'accessing' }
 PulsarLLMCodexModel class >> configDefinition [
+	<pulsarSourceEditor: 'toml'>
 
 	^ '
 [mcp_servers.pharo]

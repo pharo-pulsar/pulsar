@@ -8,9 +8,8 @@ Class {
 
 { #category : 'private - prompts' }
 PulsarLLMMethodAgentModel >> commentPrompt [
-
 	<pulsarSourceEditor: 'markdown'>
-	<pulsarLLMEffor: 'immediate'>
+	
 	^ f'using pulsar
 Write a Pharo method comment for the method at the editor [self fullName] (do not save).
 

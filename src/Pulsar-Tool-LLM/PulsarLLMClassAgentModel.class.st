@@ -26,7 +26,6 @@ Write a Pharo class (or trait) comment (do not save) to the class editor [self f
 - Mention significant state, invariants, or usage patterns only when relevant.
 
 **Constraints:**
-- Maximum 150 words, preferably fewer.
 - Focus on the abstraction and its intent, not implementation details.
 - Don''t enumerate methods or accessors.
 - Don''t explain Smalltalk fundamentals.
@@ -35,6 +34,7 @@ Write a Pharo class (or trait) comment (do not save) to the class editor [self f
 - Avoid boilerplate and unnecessary headings.
 - Use clear, natural English.
 - Return only the class comment.
+- Output is in markdown.
 
 Consider adding one simple example.
 Consider adding one or more usage references. 
@@ -86,7 +86,6 @@ If comment is not there, add it (do not save).
 - Mention significant state, invariants, or usage patterns only when relevant.
 
 **Constraints:**
-- Maximum 150 words, preferably fewer.
 - Focus on the abstraction and its intent, not implementation details.
 - Don''t enumerate methods or accessors.
 - Don''t explain Smalltalk fundamentals.
@@ -95,6 +94,7 @@ If comment is not there, add it (do not save).
 - Avoid boilerplate and unnecessary headings.
 - Use clear, natural English.
 - Return only the class comment.
+- Output is in markdown.
 
 Consider adding one simple example.
 Consider adding one or more usage references. 
