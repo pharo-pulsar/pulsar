@@ -1,3 +1,12 @@
+"
+PvPackageModel is Perspective's model-side representation of a Pharo package. It wraps a package entity and exposes it to the browser: name, icon, owning project, defined classes, and package tags as children, including virtual tags such as extensions and uncategorized classes. It also adapts the package's manifest class, providing the package editor's comment and creating a manifest on demand when a comment is saved.
+
+It carries package-level actions such as renaming and supports dependency models. It is created by PvEnvironmentModel>>newPackageModelFor: and appears in environment and project trees.
+
+```
+PvPackageModel newEnvironment: anEnvironmentModel entity: aPackage
+```
+"
 Class {
 	#name : 'PvPackageModel',
 	#superclass : 'PvBaseModel',
