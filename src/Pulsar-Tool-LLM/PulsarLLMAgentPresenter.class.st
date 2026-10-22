@@ -95,13 +95,20 @@ PulsarLLMAgentPresenter >> feed: aChunk kind: aKind [
 
 { #category : 'initialization' }
 PulsarLLMAgentPresenter >> initializePopover: aPopoverPresenter [
+	| shouldCloseSession |
 
+	shouldCloseSession := true.
 	aPopoverPresenter bePositionBottom.
+	aPopoverPresenter whenClosedDo: [ 
+		shouldCloseSession ifTrue: [ 
+			self notifyEditorClosed ] ].
 	self addPopoverControls.
 	aPopoverPresenter addShortcutWith: [ :action | action 
 		shortcutKey: KeyboardKey down mod3;
 		action: [ 
-			self withPopoverDo: #dismiss.
+			shouldCloseSession := false.
+			[ self withPopoverDo: #dismiss ]
+			ensure: [ shouldCloseSession := true ].
 			self notifyActivateEntity: self model ] ]
 ]
 
