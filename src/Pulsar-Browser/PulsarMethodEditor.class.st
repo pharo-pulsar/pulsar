@@ -122,6 +122,12 @@ PulsarMethodEditor >> doCopyToClipboard [
 	self withWindowDo: [ :w | w  inform: 'Copied to clipboard' ]
 ]
 
+{ #category : 'actions' }
+PulsarMethodEditor >> doFormatMethod: aModel [
+
+	editorPresenter text: aModel formattedSourceCode
+]
+
 { #category : 'private - actions' }
 PulsarMethodEditor >> doRequestChangeProtocol [
 
@@ -178,6 +184,17 @@ PulsarMethodEditor >> doToggleSelectionLinkCommand: anAction [
 	linkedToSelection 
 		ifTrue: [ self addStyle: 'pulsarEditorLinked' ]
 		ifFalse: [ self removeStyle: 'pulsarEditorLinked' ]
+]
+
+{ #category : 'private - actions' }
+PulsarMethodEditor >> editorContextMenuActions [
+	| contextMenuActions |
+
+	contextMenuActions := super editorContextMenuActions.
+	self model ifNotNil: [ :aModel | 
+		contextMenuActions add: ((aModel actions actionsFor: #extraContextActions) copyWithContext: self) ].
+
+	^ contextMenuActions
 ]
 
 { #category : 'events - system' }

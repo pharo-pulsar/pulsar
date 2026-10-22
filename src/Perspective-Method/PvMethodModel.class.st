@@ -176,6 +176,22 @@ PvMethodModel >> defineDecorationActionsOn: aBuilder [
 ]
 
 { #category : 'private - definitions' }
+PvMethodModel >> defineExtraContextActionsOn: aBuilder [
+	"this actions cannot be used directly in this context (the model 
+	 context), because execute them require interact with the UI"
+	<dockActions>
+	
+	aBuilder addGroup: #extraContextActions with: [ :group | group
+		name: 'Extra Context Actions';
+		beDisplayedAsGroup;
+		addActionWith: [ :action | action
+			name: f'Format [self name]';
+			shortcutKey: $f shift actionModifier;
+			description: 'Format method';
+			action: [ :aContext | aContext doFormatMethod: self ] ] ]
+]
+
+{ #category : 'private - definitions' }
 PvMethodModel >> defineRefactorActionsOn: aBuilder [
 	"this actions cannot be used directly in this context (the model 
 	 context), because execute them require interact with the UI"
@@ -240,6 +256,14 @@ PvMethodModel >> extraEditors [
 		withArguments: { editors }. 
 	
 	^ editors
+]
+
+{ #category : 'accessing' }
+PvMethodModel >> formattedSourceCode [
+
+	^ self entity ast 
+		ifNotNil: [ :ast | ast formattedCode ]
+		ifNil: [ self sourceCode ]
 ]
 
 { #category : 'accessing' }
