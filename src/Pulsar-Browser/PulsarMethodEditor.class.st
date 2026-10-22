@@ -123,9 +123,9 @@ PulsarMethodEditor >> doCopyToClipboard [
 ]
 
 { #category : 'actions' }
-PulsarMethodEditor >> doFormatMethod: aModel [
+PulsarMethodEditor >> doFormatMethod [
 
-	editorPresenter text: aModel formattedSourceCode
+	editorPresenter text: self model formattedSourceCode
 ]
 
 { #category : 'private - actions' }

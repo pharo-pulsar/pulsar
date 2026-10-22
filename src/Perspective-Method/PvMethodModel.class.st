@@ -188,7 +188,7 @@ PvMethodModel >> defineExtraContextActionsOn: aBuilder [
 			name: f'Format [self name]';
 			shortcutKey: $f shift actionModifier;
 			description: 'Format method';
-			action: [ :aContext | aContext doFormatMethod: self ] ] ]
+			action: [ :aContext | aContext doFormatMethod ] ] ]
 ]
 
 { #category : 'private - definitions' }
