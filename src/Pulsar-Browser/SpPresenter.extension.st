@@ -29,3 +29,9 @@ SpPresenter >> pulsarThemeChanged [
 { #category : '*Pulsar-Browser' }
 SpPresenter >> registerToBrowser: aPulsarBrowser [
 ]
+
+{ #category : '*Pulsar-Browser' }
+SpPresenter >> snapshot [
+
+	^ PulsarNULLSnapshot on: self
+]
