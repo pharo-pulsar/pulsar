@@ -25,18 +25,28 @@ PulsarTPopover >> detachWindowWith: aModel [
 	newBrowser notificationCenter announce: aModel newActivationAnnouncement
 ]
 
+{ #category : 'private - actions' }
+PulsarTPopover >> doAttachPopover [
+
+	self withPopoverDo: #dismiss.
+	self notifyActivateEntity: self model
+]
+
+{ #category : 'private - actions' }
+PulsarTPopover >> doDetachPopover [
+
+	self withPopoverDo: #dismiss.
+	self detachWindowWith: self model
+]
+
 { #category : 'private - factory' }
 PulsarTPopover >> newPopoverControlBoxPresenter [
 	| controlsPresenter |
 
 	controlsPresenter := self instantiate: PulsarPopoverControlBoxPresenter.
 	controlsPresenter 
-		onAttach: [ 
-			self withPopoverDo: #dismiss.
-			self notifyActivateEntity: self model ];
-		onDetach: [
-			self withPopoverDo: #dismiss.
-			self detachWindowWith: self model ].
-
+		onAttach: [ self doAttachPopover ];
+		onDetach: [ self doDetachPopover ].
+		
 	^ controlsPresenter
 ]

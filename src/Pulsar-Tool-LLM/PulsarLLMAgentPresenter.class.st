@@ -32,7 +32,8 @@ Class {
 		'terminalPresenter',
 		'styler',
 		'toolbarActions',
-		'queryInProgress'
+		'queryInProgress',
+		'shouldCloseSessionOnDismiss'
 	],
 	#category : 'Pulsar-Tool-LLM-Agent',
 	#package : 'Pulsar-Tool-LLM',
@@ -69,15 +70,39 @@ PulsarLLMAgentPresenter >> defaultLayout [
 ]
 
 { #category : 'private - actions' }
+PulsarLLMAgentPresenter >> doAttachPopover [
+
+	self doNotDismissSessionWhile: [ 
+		self withPopoverDo: #dismiss ].
+	self notifyActivateEntity: self model
+]
+
+{ #category : 'private - actions' }
 PulsarLLMAgentPresenter >> doComment [
 
 	self runQuery: [ self model commentOn: self ]
 ]
 
 { #category : 'private - actions' }
+PulsarLLMAgentPresenter >> doDetachPopover [
+
+	self doNotDismissSessionWhile: [ 
+		self withPopoverDo: #dismiss ].
+	self detachWindowWith: self model
+]
+
+{ #category : 'private - actions' }
 PulsarLLMAgentPresenter >> doExplain [
 
 	self runQuery: [ self model explainOn: self ]
+]
+
+{ #category : 'private' }
+PulsarLLMAgentPresenter >> doNotDismissSessionWhile: aBlock [ 
+
+	shouldCloseSessionOnDismiss := false.
+	aBlock ensure: [ 
+		shouldCloseSessionOnDismiss := true ]
 ]
 
 { #category : 'api' }
@@ -94,21 +119,22 @@ PulsarLLMAgentPresenter >> feed: aChunk kind: aKind [
 ]
 
 { #category : 'initialization' }
-PulsarLLMAgentPresenter >> initializePopover: aPopoverPresenter [
-	| shouldCloseSession |
+PulsarLLMAgentPresenter >> initialize [
 
-	shouldCloseSession := true.
+	shouldCloseSessionOnDismiss := true.
+	super initialize
+]
+
+{ #category : 'initialization' }
+PulsarLLMAgentPresenter >> initializePopover: aPopoverPresenter [
+	
 	aPopoverPresenter bePositionBottom.
-	aPopoverPresenter whenClosedDo: [ 
-		shouldCloseSession ifTrue: [ 
-			self notifyEditorClosed ] ].
+	aPopoverPresenter whenClosedDo: [ self notifyEditorClosed ].
 	self addPopoverControls.
 	aPopoverPresenter addShortcutWith: [ :action | action 
 		shortcutKey: KeyboardKey down mod3;
 		action: [ 
-			shouldCloseSession := false.
-			[ self withPopoverDo: #dismiss ]
-			ensure: [ shouldCloseSession := true ].
+			self doNotDismissSessionWhile: [ self withPopoverDo: #dismiss ].
 			self notifyActivateEntity: self model ] ]
 ]
 
@@ -140,7 +166,8 @@ PulsarLLMAgentPresenter >> notifyActivateEntity: anEntity [
 { #category : 'private - notifying' }
 PulsarLLMAgentPresenter >> notifyEditorClosed [
 
-	self model closeSession.
+	shouldCloseSessionOnDismiss 
+		ifTrue: [ self model closeSession ].
 	super notifyEditorClosed
 ]
 
