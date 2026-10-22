@@ -217,5 +217,5 @@ PulsarLLMAgentModel >> updateCommentPrompt [
 { #category : 'accessing - ui' }
 PulsarLLMAgentModel >> windowTitle [
 
-	^ f'Assistant on [self fullName]'
+	^ f'Assistant on [self fullName]' contractTo: 50
 ]

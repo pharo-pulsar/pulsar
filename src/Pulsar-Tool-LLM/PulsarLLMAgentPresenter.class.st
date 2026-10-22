@@ -50,6 +50,10 @@ PulsarLLMAgentPresenter class >> defaultPanelPosition [
 
 { #category : 'initialization' }
 PulsarLLMAgentPresenter >> addExtraActionsToPanelWidget [
+	"Installs the assistant's auxiliary action toolbar during panel initialization and 
+	 attaches it to the main toolbar. Repeated calls are harmless. 
+	 Its only current action closes the assistant; it is the extension point for 
+	 additional panel actions."
 
 	moreActionsPresenter ifNotNil: [ ^ self ].
 
@@ -64,7 +68,6 @@ PulsarLLMAgentPresenter >> addExtraActionsToPanelWidget [
 		yourself.
 		
 	toolbarPresenter addPresenter: moreActionsPresenter
-
 ]
 
 { #category : 'initialization' }
