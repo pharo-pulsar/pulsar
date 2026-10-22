@@ -26,13 +26,17 @@ PulsarSettings class >> defaultSettings [
 { #category : 'defaults' }
 PulsarSettings class >> defaultSettingsDefinition [
 
-	  ^ '{
+	^ '{
 	#ui: { 
 		#theme: #system,
 		#styleSchemeLight: "Adwaita",
 		#styleSchemeDark: "Adwaita-dark",
 		#syntaxHighlightThemeLight: "CodeLight",
 		#syntaxHighlightThemeDark: "CodeDark"
+	},
+	#llm: {
+		#agentName: "OpenCode",
+		#thinking: true
 	},
 	#features : {
 		#experimental: false,
@@ -52,6 +56,18 @@ PulsarSettings class >> settingsFileName [
 PulsarSettings class >> settingsFileReference [
 
 	^ FileLocator localDirectory / self settingsFileName
+]
+
+{ #category : 'accessing - llm' }
+PulsarSettings >> agentName [
+
+	^ self groupAt: #llm at: #agentName
+]
+
+{ #category : 'accessing - llm' }
+PulsarSettings >> agentName: aString [
+
+	^ self groupAt: #llm at: #agentName put: aString
 ]
 
 { #category : 'private - accessing' }
@@ -175,6 +191,14 @@ PulsarSettings >> isFeatureEnabled: featureSymbol [
 	^ self groupAt: #features at: featureSymbol ifAbsent: [ true ]
 ]
 
+{ #category : 'accessing - llm' }
+PulsarSettings >> llm [
+
+	^ self settings 
+		at: #llm
+		ifAbsentPut: [ Dictionary new ]
+]
+
 { #category : 'private' }
 PulsarSettings >> mutex [
 
@@ -277,6 +301,18 @@ PulsarSettings >> theme [
 PulsarSettings >> theme: aSymbol [
 
 	self groupAt: #ui at: #theme put: aSymbol
+]
+
+{ #category : 'llm' }
+PulsarSettings >> thinking [
+
+	^ self groupAt: #llm at: #thinking ifAbsent: [ true ]
+]
+
+{ #category : 'llm' }
+PulsarSettings >> thinking: aBoolean [
+
+	^ self groupAt: #llm at: #thinking put: aBoolean
 ]
 
 { #category : 'accessing - ui' }

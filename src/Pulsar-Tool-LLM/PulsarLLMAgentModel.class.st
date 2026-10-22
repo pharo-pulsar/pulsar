@@ -7,10 +7,9 @@ My main collaborators are:
 
 - my subclasses (`PulsarLLMClassAgentModel`, `PulsarLLMMethodAgentModel`, `PulsarLLMDebugAgentModel`, `PulsarLLMRepositoryAgentModel`), which define the concrete `commentPrompt` and `explainPrompt`.
 - `PulsarLLMAgentPresenter`, which triggers `explainOn:` / `commentOn:` and renders each streamed chunk through `feed:kind:`.
-- `PulsarLLMOpenCodeAPI`, which supplies the underlying LLM session and performs the queries.
+- `PulsarLLMChatConsole`, whose selected LLM determines the API used to create new agent sessions.
 
 ## Public API and key messages
-
 - `explainOn: aPresenter` / `commentOn: aPresenter` — run the agent and stream the answer into the presenter.
 - `closeSession` — release the LLM session, e.g. when the editor closes.
 - `title`, `iconName`, `fullName` — identity of the agent and its entity.
@@ -18,13 +17,11 @@ My main collaborators are:
 - `on: aModel` creates an agent for a model (see example).
 
 ## Example
-
 ```smalltalk
 PulsarLLMClassAgentModel on: aClassModel
 ```
 
 ## References
-
 - `PvBaseModel` — superclass, provides `entity`, `environmentModel`, and the model protocol.
 - `PulsarLLMAgentPresenter` — the view that hosts and drives agents.
 "
@@ -142,11 +139,10 @@ PulsarLLMAgentModel >> defineExplainActionsOn: aBuilder [
 { #category : 'private' }
 PulsarLLMAgentModel >> ensureSessionOn: anApplication [
 
-	self flag: #TODO. "This has to come from application, as there can be other agents"
-	^ session ifNil: [ 
-		session := PulsarLLMOpenCodeAPI new 
-			model: 'litellm/deepseek-flash';
-			newSession ]
+	^ session ifNil: [
+			  | modelClass |
+			  modelClass := PulsarLLMModel findAgentNamed: anApplication settings agentName.
+			  session := (modelClass newAPIOn: anApplication) newSession ]
 ]
 
 { #category : 'accessing' }

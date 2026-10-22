@@ -1,3 +1,16 @@
+"
+I am the panel where a programmer holds a live conversation with an LLM agent from inside Pulsar. I wrap a command-line agent session in an embedded terminal and surround it with the controls needed to start, stop, and retarget that session without leaving the IDE.
+
+I own the presentation of a session, not its mechanics. A `PulsarLLMModel` subclass knows how to prepare its environment, connect to the terminal I supply, and disconnect; I choose the agent, reflect its connection state, and keep the toolbar in sync. The model selector lists the agents returned by `PulsarLLMModel class>>allModels`; changing it reconnects an active session to the new agent and remembers the choice through the application settings. Opening the window and toggling the connect control drive the same connection path, while closing the window disconnects.
+
+The terminal is a `VteTerminalPresenter`, and the surrounding toolbar is a `PulsarEditorToolbarPresenter`. A thinking-output toggle is enabled for agents that support it and is persisted in the application settings. An `updating` flag guards programmatic toolbar changes so they do not re-enter the connection callbacks.
+
+I am normally reached from the Pulsar browser dock action defined in `PulsarBrowser>>defineOpenCodeExtraActionsOn:`.
+
+```
+PulsarLLMChatConsole new open
+```
+"
 Class {
 	#name : 'PulsarLLMChatConsole',
 	#superclass : 'PulsarBaseView',
@@ -7,10 +20,9 @@ Class {
 		'toolbarPresenter',
 		'terminalPresenter',
 		'toggleConnectButtonPresenter',
-		'modelSelectorPresenter'
-	],
-	#classVars : [
-		'LLMModelClass'
+		'modelSelectorPresenter',
+		'thinkingTogglePresenter',
+		'updating'
 	],
 	#category : 'Pulsar-Tool-LLM-View',
 	#package : 'Pulsar-Tool-LLM',
@@ -31,23 +43,11 @@ PulsarLLMChatConsole class >> defaultTitle [
 	^ 'Assistant'
 ]
 
-{ #category : 'accessing' }
-PulsarLLMChatConsole class >> usingLLM [
-
-	^ LLMModelClass ifNil: [ PulsarLLMOpenCodeModel ]
-]
-
-{ #category : 'accessing' }
-PulsarLLMChatConsole class >> usingLLM: aLLMModelClass [
-
-	LLMModelClass := aLLMModelClass
-]
-
 { #category : 'initialization' }
 PulsarLLMChatConsole >> connectPresenters [
 
-	modelSelectorPresenter whenSelectedItemChangedDo: [ :selectedClass |
-		self switchLLMModel: selectedClass ].
+	"modelSelectorPresenter whenSelectedItemChangedDo: [ :selectedClass |
+		self switchLLMModel: selectedClass ]."
 		
 	terminalPresenter whenChildExitedDo: [ :ann |
 		logger debug: 'Exit with code: ' , ann status asString.
@@ -121,12 +121,13 @@ PulsarLLMChatConsole >> eventThemeChanged: ann [
 { #category : 'initialization' }
 PulsarLLMChatConsole >> initialize [
 
-	self setModelBeforeInitialization: self class usingLLM new.
+	self setModelBeforeInitialization: self usingLLM new.
 	super initialize
 ]
 
 { #category : 'initialization' }
 PulsarLLMChatConsole >> initializePresenters [
+
 	self addStyle: 'pulsarChatConsole'.
 
 	toolbarPresenter := self instantiate: PulsarEditorToolbarPresenter.
@@ -139,21 +140,30 @@ PulsarLLMChatConsole >> initializePresenters [
 		whenChangedDo: [ :state | self toggleConnection: state ];
 		yourself.
 
-	modelSelectorPresenter := self newDropDown
+	"modelSelectorPresenter := self newDropDown
+		                          addStyle: 'flat';
+		                          display: [ :each | each label ];
+		                          yourself."
+
+	(thinkingTogglePresenter := self newToggleButton)
 		addStyle: 'flat';
-		display: [ :each | each label ];
+		icon: (self iconNamed: 'agent');
+		help: 'Enable thinking output for new Claude agent sessions';
+		state: self thinking;
+		whenChangedDo: [ :state | self thinking: state ];
 		yourself.
 
 	toolbarPresenter
-		addPresenter: (self newPresenter 
-			layout: (SpBoxLayout newVertical 
+		"addPresenter: (self newPresenter
+			layout: (SpBoxLayout newVertical
 				vAlignCenter;
 				add: modelSelectorPresenter;
 				yourself);
-			yourself);
+			yourself);"
 		addPresenter: (self newToolbar
 			displayMode: self application toolbarDisplayMode;
 			add: toggleConnectButtonPresenter;
+			add: thinkingTogglePresenter;
 			yourself);
 		addPresenter: (self newToolbar
 			beIcons;
@@ -193,18 +203,31 @@ PulsarLLMChatConsole >> panelPlacedIconName [
 
 { #category : 'private - actions' }
 PulsarLLMChatConsole >> switchLLMModel: aModelClass [
+
 	| wasConnected |
-	
 	self isUpdating ifTrue: [ ^ self ].
-	aModelClass = self class usingLLM ifTrue: [ ^ self ].
-	
+	aModelClass ifNil: [ ^ self ].
+	aModelClass = self model class ifTrue: [ ^ self ].
+
 	self scheduleJob: [
-		self updatingWhile: [
-			wasConnected := self isConnected.
-			wasConnected ifTrue: [ self doDisconnectClosing: false ].
-			self class usingLLM: aModelClass.
-			self model: aModelClass new.
-			wasConnected ifTrue: [ self doConnect ] ] ]
+			self updatingWhile: [
+					wasConnected := self isConnected.
+					wasConnected ifTrue: [ self doDisconnectClosing: false ].
+					self usingLLM: aModelClass.
+					self model: aModelClass new.
+					wasConnected ifTrue: [ self doConnect ] ] ]
+]
+
+{ #category : 'accessing' }
+PulsarLLMChatConsole >> thinking [
+
+	^ self application settings thinking
+]
+
+{ #category : 'accessing' }
+PulsarLLMChatConsole >> thinking: aBoolean [
+
+	self application settings thinking: aBoolean
 ]
 
 { #category : 'private - actions' }
@@ -217,15 +240,18 @@ PulsarLLMChatConsole >> toggleConnection: aState [
 ]
 
 { #category : 'initialization' }
-PulsarLLMChatConsole >> updatePresenter [ 
+PulsarLLMChatConsole >> updatePresenter [
 
 	self updateTitle.
 	self updateStatus.
-	
-	modelSelectorPresenter 
+
+	"modelSelectorPresenter
 		items: PulsarLLMModel allModels;
-		selectItem: self class usingLLM.
-	
+		selectItem: self model class."
+
+	thinkingTogglePresenter
+		state: self thinking;
+		visible: self model hasThinkingToggle
 ]
 
 { #category : 'initialization' }
@@ -244,4 +270,16 @@ PulsarLLMChatConsole >> updateTitle [
 	toolbarPresenter title: ('{1}: {2}' format: { 
 		self class defaultTitle. 
 		self model name })
+]
+
+{ #category : 'private' }
+PulsarLLMChatConsole >> usingLLM [
+
+	^ PulsarLLMModel findAgentNamed: self application settings agentName
+]
+
+{ #category : 'accessing' }
+PulsarLLMChatConsole >> usingLLM: aModelClass [
+
+	self application settings agentName: aModelClass label
 ]

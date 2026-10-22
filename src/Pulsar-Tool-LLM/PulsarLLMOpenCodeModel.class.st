@@ -15,6 +15,12 @@ Class {
 	#tag : 'Model'
 }
 
+{ #category : 'api' }
+PulsarLLMOpenCodeModel class >> apiClass [
+
+	^ PulsarLLMOpenCodeAPI
+]
+
 { #category : 'accessing' }
 PulsarLLMOpenCodeModel class >> configDefinition [
 	<pulsarSourceEditor: 'json'>
@@ -35,13 +41,6 @@ PulsarLLMOpenCodeModel class >> configDefinition [
 PulsarLLMOpenCodeModel class >> label [
 
 	^ 'OpenCode'
-]
-
-{ #category : 'api' }
-PulsarLLMOpenCodeModel >> api [
-	"Answer a client for the OpenCode server API, matching the port this model spawns OpenCode with."
-
-	^ PulsarLLMOpenCodeAPI new
 ]
 
 { #category : 'private' }

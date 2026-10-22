@@ -79,6 +79,28 @@ PulsarLLMModel class >> allModels [
 		sorted: #label ascending
 ]
 
+{ #category : 'api' }
+PulsarLLMModel class >> apiClass [
+
+	^ nil
+]
+
+{ #category : 'api' }
+PulsarLLMModel class >> configureAPI: anAPI forApplication: anApplication [
+	"Subclasses may override to apply application settings to the API."
+
+	
+]
+
+{ #category : 'accessing' }
+PulsarLLMModel class >> findAgentNamed: aName [
+
+	| lowercaseName |
+	aName ifNil: [ ^ PulsarLLMOpenCodeModel ].
+	lowercaseName := aName asLowercase.
+	^ self allModels detect: [ :each | each label asLowercase = lowercaseName ] ifNone: [ PulsarLLMOpenCodeModel ]
+]
+
 { #category : 'testing' }
 PulsarLLMModel class >> isAvailable [
 
@@ -95,6 +117,26 @@ PulsarLLMModel class >> label [
 PulsarLLMModel class >> mcpPort [
 
 	^ 4000
+]
+
+{ #category : 'api' }
+PulsarLLMModel class >> newAPI [
+
+	| apiClass |
+	apiClass := self apiClass.
+	apiClass ifNil: [ self error: 'The selected LLM does not provide an agent session API.' ].
+	^ apiClass new
+		  model: apiClass defaultAgentModel;
+		  yourself
+]
+
+{ #category : 'api' }
+PulsarLLMModel class >> newAPIOn: anApplication [
+
+	| api |
+	api := self newAPI.
+	self configureAPI: api forApplication: anApplication.
+	^ api
 ]
 
 { #category : 'accessing' }
@@ -289,6 +331,12 @@ Same formatting rules as single control blocks:
 '
 ]
 
+{ #category : 'api' }
+PulsarLLMModel >> api [
+
+	^ self class newAPI
+]
+
 { #category : 'actions' }
 PulsarLLMModel >> connectTo: aTerminalPresenter [
 	
@@ -336,6 +384,12 @@ PulsarLLMModel >> ensureSkill: aName with: aDefinition [
 PulsarLLMModel >> ensureSkills [
 	
 	self ensureSkill: 'pharo-formatting' with: self class pharoFormattingSkillDefinition
+]
+
+{ #category : 'testing' }
+PulsarLLMModel >> hasThinkingToggle [
+
+	^ false
 ]
 
 { #category : 'initialization' }

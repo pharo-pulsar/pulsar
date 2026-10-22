@@ -1,3 +1,27 @@
+"
+I am the view of a Pulsar LLM agent. I host a terminal-like output area and a toolbar, and I drive a `PulsarLLMAgentModel` that holds the LLM session for the entity under inspection (a class, method, debugger, or repository).
+
+My model asks the LLM for an explanation or a comment, and I render the streamed answer as it arrives. Each chunk is styled by a `PulsarLLMAgentStreamStyler` and appended to a `VteTerminalPresenter`. Queries run in the background through TaskIt, and I track whether one is in progress so the toolbar can reflect it. If a query fails, the error is shown in the same output area.
+
+I am usually shown inside a popover opened from a Pulsar tool. Closing my editor releases the agent session, and I can be detached into a separate browser window.
+
+## Example
+
+Given an agent model created for a class model, a caller presenter instantiates the view:
+
+```smalltalk
+caller
+    instantiate: PulsarLLMAgentPresenter
+    on: (PulsarLLMClassAgentModel on: aClassModel)
+```
+
+## References
+
+- `PulsarLLMAgentModel` — the agent I display and whose session I drive.
+- `PulsarLLMAgent>>newAgentPresenter` — creates me for an agent.
+- `PulsarLLMAgentStreamStyler` — turns streamed chunks into ANSI-styled text.
+- `PulsarBaseView` — my superclass in the Pulsar browser.
+"
 Class {
 	#name : 'PulsarLLMAgentPresenter',
 	#superclass : 'PulsarBaseView',
@@ -127,7 +151,10 @@ PulsarLLMAgentPresenter >> runQuery: aBlock [
 	queryInProgress := true.
 	self updateToolbar.
 	self scheduleTask: [
-			[ aBlock value ] ensure: [
+			[
+				[ aBlock value ]
+					on: Error
+					do: [ :e | self feed: (e messageText ifNil: [ e description ]) kind: #error ] ] ensure: [
 					queryInProgress := false.
 					self updateToolbar ] ]
 ]

@@ -29,6 +29,12 @@ Class {
 	#tag : 'Agent'
 }
 
+{ #category : 'defaults' }
+PulsarLLMOpenCodeAPI class >> defaultAgentModel [
+
+	^ 'litellm/deepseek-flash'
+]
+
 { #category : 'constants' }
 PulsarLLMOpenCodeAPI class >> defaultHost [
 

@@ -18,6 +18,12 @@ Class {
 	#tag : 'Model'
 }
 
+{ #category : 'api' }
+PulsarLLMClaudeModel class >> apiClass [
+
+	^ PulsarLLMClaudeAPI
+]
+
 { #category : 'accessing' }
 PulsarLLMClaudeModel class >> configDefinition [
 
@@ -31,6 +37,14 @@ PulsarLLMClaudeModel class >> configDefinition [
   }
 }
 '
+]
+
+{ #category : 'api' }
+PulsarLLMClaudeModel class >> configureAPI: anAPI forApplication: anApplication [
+
+	anApplication ifNil: [ ^ self ].
+	(anApplication respondsTo: #settings) ifFalse: [ ^ self ].
+	anAPI thinking: anApplication settings thinking
 ]
 
 { #category : 'accessing' }
@@ -77,6 +91,12 @@ PulsarLLMClaudeModel >> ensureEnvironment [
 
 	OSEnvironment current 
 		at: #TERM ifAbsentPut: [ 'xterm-256color' ]
+]
+
+{ #category : 'testing' }
+PulsarLLMClaudeModel >> hasThinkingToggle [
+
+	^ true
 ]
 
 { #category : 'private' }
