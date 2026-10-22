@@ -1,3 +1,17 @@
+"
+A toolbar bar for Pulsar tool headers. I host a Spec toolbar of actions and a horizontal container where other presenters can be placed, so a tool can show its commands next to its own controls in a single row.
+
+My layout puts the action toolbar and the container side by side. By default the actions come first; `useActionsLastLayout` moves them to the end. Actions can be set from an `SpActionGroup`, and I offer helpers for common additions such as a flat close button or a menu button. Presenters added with `addPresenter:` go into the container, while `addPresenterAtEnd:` adds a presenter straight to my main layout, not to the container.
+
+I am meant to be subclassed or composed inside a tool's presenter. My subclass `PulsarEditorToolbarPresenter` extends me with a breadcrumb title and a second toolbar for content-specific actions. Pulsar editors such as `PulsarEditor` use that subclass, as do several tool presenters like `PulsarMessageBrowser` and `PulsarPlayground`.
+
+```smalltalk
+toolbar := PulsarToolbarPresenter new.
+toolbar actions: anActionGroup.
+toolbar addPresenterCloseButtonWithAction: [ self close ].
+toolbar useActionsLastLayout.
+```
+"
 Class {
 	#name : 'PulsarToolbarPresenter',
 	#superclass : 'SpPresenter',

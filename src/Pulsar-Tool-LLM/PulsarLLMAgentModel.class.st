@@ -89,17 +89,16 @@ PulsarLLMAgentModel >> commentPrompt [
 
 { #category : 'private - definitions' }
 PulsarLLMAgentModel >> defineCancelActionOn: aBuilder [
-
 	<dockActions>
-	aBuilder addGroup: #toolbar with: [ :group |
-			group addActionWith: [ :action |
-					action
-						priority: 50;
-						name: 'Cancel';
-						iconName: 'stop';
-						description: 'Cancel the ongoing inference';
-						actionEnabled: [ :aPresenter | aPresenter isQuerying ];
-						action: [ :aPresenter | aPresenter cancelQuery ] ] ]
+	
+	aBuilder addGroup: #toolbar with: [ :group | group 
+		addActionWith: [ :action | action
+			priority: 1000;
+			name: 'Cancel';
+			iconName: 'stop';
+			description: 'Cancel the ongoing inference';
+			actionEnabled: [ :aPresenter | aPresenter isQuerying ];
+			action: [ :aPresenter | aPresenter cancelQuery ] ] ]
 ]
 
 { #category : 'private - definitions' }
@@ -140,9 +139,9 @@ PulsarLLMAgentModel >> defineExplainActionsOn: aBuilder [
 PulsarLLMAgentModel >> ensureSessionOn: anApplication [
 
 	^ session ifNil: [
-			  | modelClass |
-			  modelClass := PulsarLLMModel findAgentNamed: anApplication settings agentName.
-			  session := (modelClass newAPIOn: anApplication) newSession ]
+		| modelClass |
+		modelClass := PulsarLLMModel findAgentNamed: anApplication settings agentName.
+		session := (modelClass newAPIOn: anApplication) newSession ]
 ]
 
 { #category : 'accessing' }
@@ -213,4 +212,10 @@ PulsarLLMAgentModel >> title [
 PulsarLLMAgentModel >> updateCommentPrompt [
 
 	^ self subclassResponsibility
+]
+
+{ #category : 'accessing - ui' }
+PulsarLLMAgentModel >> windowTitle [
+
+	^ f'Assistant on [self fullName]'
 ]

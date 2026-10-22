@@ -33,12 +33,39 @@ Class {
 		'styler',
 		'toolbarActions',
 		'queryInProgress',
-		'shouldCloseSessionOnDismiss'
+		'shouldCloseSessionOnDismiss',
+		'actionToolbarPresenter',
+		'moreActionsPresenter'
 	],
 	#category : 'Pulsar-Tool-LLM-Agent',
 	#package : 'Pulsar-Tool-LLM',
 	#tag : 'Agent'
 }
+
+{ #category : 'defaults' }
+PulsarLLMAgentPresenter class >> defaultPanelPosition [
+
+	^ SpPanelPosition bottomArea
+]
+
+{ #category : 'initialization' }
+PulsarLLMAgentPresenter >> addExtraActionsToPanelWidget [
+
+	moreActionsPresenter ifNotNil: [ ^ self ].
+
+	moreActionsPresenter := self newToolbar 
+		beIcons;
+		add: (self newButton
+			addStyle: 'flat';
+			icon: (self iconNamed: 'close');
+			help: 'Close assistant';
+			action: [ self doClose ];
+			yourself);
+		yourself.
+		
+	toolbarPresenter addPresenter: moreActionsPresenter
+
+]
 
 { #category : 'initialization' }
 PulsarLLMAgentPresenter >> addPopoverControls [
@@ -75,6 +102,12 @@ PulsarLLMAgentPresenter >> doAttachPopover [
 	self doNotDismissSessionWhile: [ 
 		self withPopoverDo: #dismiss ].
 	self notifyActivateEntity: self model
+]
+
+{ #category : 'private - actions' }
+PulsarLLMAgentPresenter >> doClose [
+	
+	self withNearWindowLikeDo: #close
 ]
 
 { #category : 'private - actions' }
@@ -126,6 +159,13 @@ PulsarLLMAgentPresenter >> initialize [
 ]
 
 { #category : 'initialization' }
+PulsarLLMAgentPresenter >> initializePanelWidget: aPanelWidgetPresenter [
+
+	super initializePanelWidget: aPanelWidgetPresenter.
+	self addExtraActionsToPanelWidget
+]
+
+{ #category : 'initialization' }
 PulsarLLMAgentPresenter >> initializePopover: aPopoverPresenter [
 	
 	aPopoverPresenter bePositionBottom.
@@ -144,8 +184,14 @@ PulsarLLMAgentPresenter >> initializePresenters [
 	self addStyle: 'pulsarFlyingBrowser'.
 	self addStyle: 'pulsarAgentFlyingBrowser'.
 
-	toolbarPresenter := self instantiate: PulsarToolbarPresenter.
-	toolbarPresenter actions: (toolbarActions := self model actionsWithContextOn: self).
+	toolbarPresenter := self instantiate: PulsarEditorToolbarPresenter.
+	
+	actionToolbarPresenter := self newToolbar
+		addStyle: 'pulsarToolbar';
+		displayMode: self application toolbarDisplayMode;
+		fillWith: (toolbarActions := self model actionsWithContextOn: self).
+
+	toolbarPresenter addPresenter: actionToolbarPresenter.
 
 	terminalPresenter := self instantiate: VteTerminalPresenter
 ]
@@ -169,6 +215,12 @@ PulsarLLMAgentPresenter >> notifyEditorClosed [
 	shouldCloseSessionOnDismiss 
 		ifTrue: [ self model closeSession ].
 	super notifyEditorClosed
+]
+
+{ #category : 'private' }
+PulsarLLMAgentPresenter >> panelPlacedIconName [
+
+	^ 'agent'
 ]
 
 { #category : 'api' }
@@ -199,7 +251,21 @@ PulsarLLMAgentPresenter >> styler [
 	^ styler ifNil: [ styler := PulsarLLMAgentStreamStyler new ]
 ]
 
-{ #category : 'api' }
+{ #category : 'initialization' }
+PulsarLLMAgentPresenter >> updatePresenter [
+
+	super updatePresenter.
+	self updateToolbar.
+	self updateTitle
+]
+
+{ #category : 'initialization' }
+PulsarLLMAgentPresenter >> updateTitle [
+
+	toolbarPresenter title: self model windowTitle
+]
+
+{ #category : 'initialization' }
 PulsarLLMAgentPresenter >> updateToolbar [
 
 	toolbarActions ifNil: [ ^ self ].

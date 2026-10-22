@@ -1,5 +1,26 @@
 "
-A base for all dock browsers (there should not be a lot, but more than one)
+PulsarBaseBrowser is the shared base for Pulsar's dock windows: windows that host several tool panels around a central editing area. It exists so that every concrete browser gets the same panel placement, action, announcement, background-work, and session-restoration behaviour instead of duplicating it.
+
+Concrete browsers subclass it and populate their own workspace. A presenter added to the center panel area is treated as an editor; presenters in the other areas are tools. Tools can be requested uniquely, in which case an existing instance is raised instead of duplicated, and panel areas can be shown or hidden. Model activation and deactivation announcements drive editor docking: opening a model opens or focuses its editor, and deactivating it closes that editor.
+
+The browser is also the local coordination point for its panels. It owns the window's global actions, collected from `<dockActions>` pragmas, and a private TaskIt worker pool used for non-ordered background work. Long-running jobs report their progress through the status bar and job handler. Announcements received from Pulsar and the system are re-broadcast to the browser's presenters, and spotter requests are opened against the current environment.
+
+Persistence is part of the base contract. The browser's snapshot captures the model, panel sizes, and the state of each presenter; panel positions and the last window size are remembered per concrete browser class, so each browser type can restore its own arrangement. Closing the browser closes its presenters and releases its schedulers.
+
+A minimal concrete browser only needs to define its initial workspace:
+
+```smalltalk
+PulsarBaseBrowser subclass: #MyDockBrowser
+    instanceVariableNames: ''
+    classVariableNames: ''
+    package: 'MyPackage'
+
+MyDockBrowser >> initializeDefaultWorkspace
+    super initializeDefaultWorkspace.
+    self addPresenterClass: PulsarClassOutlineView
+```
+
+Use `initializeDefaultWorkspace` for panels created only when no snapshot is restored, and `initializeWorkspace` for state that must always be initialized. See `PulsarBrowser`, `PulsarRepositoryBrowser`, `PulsarDebugger`, `PulsarDetachedBrowser`, and `PulsarTestRunnerBrowser` for concrete uses.
 "
 Class {
 	#name : 'PulsarBaseBrowser',
