@@ -99,3 +99,14 @@ PulsarVolatileProjectModel >> packageModels [
 
 	^ packageModels
 ]
+
+{ #category : 'private' }
+PulsarVolatileProjectModel >> packagesOn: aBaselineClass [
+	| specs | 
+	
+	specs := self packageModels.
+	^ (specs 
+		select: [ :each | self environmentModel hasPackageNamed: each name ]
+		thenCollect: [ :each | self environmentModel packageNamed: each name ])
+		sorted: #name ascending
+]
