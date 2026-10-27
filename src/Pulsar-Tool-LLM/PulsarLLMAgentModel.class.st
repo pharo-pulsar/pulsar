@@ -1,29 +1,31 @@
 "
-I represent a Pulsar LLM agent: a conversational assistant bound to a single Pulsar entity (a class, method, debugger, or repository).
+I represent a Pulsar LLM agent bound to a single Pulsar entity (a class, method, debugger, or repository).
 
-I am the abstract base for the concrete agents in the `Agent` tag. I know how to open and reuse an LLM session for the entity I am attached to, stream the model's answer back chunk by chunk so it can be shown live, and keep the session until my editor is closed. The actual prompt is my subclasses' responsibility, so I stay independent of *what* is being explained or commented.
+I am the abstract base for the concrete agents in the Agent tag. I build the Explain, Comment, and Update comment prompts for my entity and contribute actions to the Agent toolbar menu. Selecting an action opens a new LLM terminal with the prompt; I do not own a session and I do not render output.
 
 My main collaborators are:
 
-- my subclasses (`PulsarLLMClassAgentModel`, `PulsarLLMMethodAgentModel`, `PulsarLLMDebugAgentModel`, `PulsarLLMRepositoryAgentModel`), which define the concrete `commentPrompt` and `explainPrompt`.
-- `PulsarLLMAgentPresenter`, which triggers `explainOn:` / `commentOn:` and renders each streamed chunk through `feed:kind:`.
-- `PulsarLLMChatConsole`, whose selected LLM determines the API used to create new agent sessions.
+- my subclasses (`PulsarLLMClassAgentModel`, `PulsarLLMMethodAgentModel`, `PulsarLLMDebugAgentModel`, `PulsarLLMRepositoryAgentModel`), which define the concrete `commentPrompt` and `explainPrompt`;
+- `PulsarLLMChatConsole`, which owns the terminal and client process;
+- `PulsarLLMChatConsoleModel`, which carries the client, title, and initial prompt for a new terminal.
 
 ## Public API and key messages
-- `explainOn: aPresenter` / `commentOn: aPresenter` — run the agent and stream the answer into the presenter.
-- `closeSession` — release the LLM session, e.g. when the editor closes.
+
+- `openExplainOn:` / `openCommentOn:` / `openUpdateCommentOn:` — open a terminal with the corresponding prompt.
 - `title`, `iconName`, `fullName` — identity of the agent and its entity.
 - `commentPrompt` / `explainPrompt` — abstract; subclasses must implement.
-- `on: aModel` creates an agent for a model (see example).
+- `on: aModel` creates an agent for a model.
 
 ## Example
+
 ```smalltalk
 PulsarLLMClassAgentModel on: aClassModel
 ```
 
 ## References
+
 - `PvBaseModel` — superclass, provides `entity`, `environmentModel`, and the model protocol.
-- `PulsarLLMAgentPresenter` — the view that hosts and drives agents.
+- `PulsarLLMChatConsole` — the terminal panel that runs the selected client.
 "
 Class {
 	#name : 'PulsarLLMAgentModel',
@@ -87,52 +89,33 @@ PulsarLLMAgentModel >> commentPrompt [
 	^ self subclassResponsibility
 ]
 
-{ #category : 'private - definitions' }
-PulsarLLMAgentModel >> defineCancelActionOn: aBuilder [
-	<dockActions>
-	
-	aBuilder addGroup: #toolbar with: [ :group | group 
-		addActionWith: [ :action | action
-			priority: 1000;
-			name: 'Cancel';
-			iconName: 'stop';
-			description: 'Cancel the ongoing inference';
-			actionEnabled: [ :aPresenter | aPresenter isQuerying ];
-			action: [ :aPresenter | aPresenter cancelQuery ] ] ]
-]
-
-{ #category : 'private - definitions' }
+{ #category : 'actions' }
 PulsarLLMAgentModel >> defineCommentActionsOn: aBuilder [
 	<dockActions>
 	
 	self canComment ifFalse: [ ^ self ].
-	
+
 	aBuilder addGroup: #toolbar with: [ :group | group
 		addActionWith: [ :action | action
 			priority: 100;
 			name: 'Comment';
 			iconName: 'comment';
 			description: f'Add a comment to [self fullName]';
-			action: [ :aPresenter | aPresenter doComment ] ];
-		addActionWith: [ :action | action
-			priority: 100;
-			name: 'Update comment';
-			iconName: 'updateComment';
-			description: f'Update [self fullName] comment';
-			action: [ :aPresenter | aPresenter doComment ] ] ]
+			action: [ :aContext | self openCommentOn: aContext ] ] ]
 ]
 
-{ #category : 'private - definitions' }
+{ #category : 'actions' }
 PulsarLLMAgentModel >> defineExplainActionsOn: aBuilder [
+
 	<dockActions>
-	
-	aBuilder addGroup: #toolbar with: [ :group | group 
-		addActionWith: [ :action | action
-			priority: 1;
-			name: 'Explain';
-			iconName: 'explain';
-			description: f'Attempt to put [self fullName] in context to provide a better understanding of it';
-			action: [ :aPresenter | aPresenter doExplain ] ] ]
+	aBuilder addGroup: #toolbar with: [ :group |
+			group addActionWith: [ :action |
+					action
+						priority: 1;
+						name: 'Explain';
+						iconName: 'explain';
+						description: f'Attempt to put [self fullName] in context to provide a better understanding of it';
+						action: [ :aContext | self openExplainOn: aContext ] ] ]
 ]
 
 { #category : 'private' }
@@ -190,6 +173,38 @@ PulsarLLMAgentModel >> iconName [
 	^ 'agent'
 ]
 
+{ #category : 'private' }
+PulsarLLMAgentModel >> nameForAgent [
+
+	^ self entity fullName
+]
+
+{ #category : 'private' }
+PulsarLLMAgentModel >> openCommentOn: aContext [
+
+	self openPrompt: self commentPrompt on: aContext
+]
+
+{ #category : 'private' }
+PulsarLLMAgentModel >> openExplainOn: aContext [
+
+	self openPrompt: self explainPrompt on: aContext
+]
+
+{ #category : 'private' }
+PulsarLLMAgentModel >> openPrompt: aString on: aContext [
+	| chatModel |
+	
+	chatModel := PulsarLLMChatConsoleModel new 
+		initialPrompt: aString;
+		yourself.
+	
+	aContext notificationCenter announce: (PulsarRequestNewLLMTerminal new
+		beUnique; "push to existing tool (if any)"
+		model: chatModel;
+		yourself)
+]
+
 { #category : 'accessing' }
 PulsarLLMAgentModel >> pulsarEditorClass [
 
@@ -206,12 +221,6 @@ PulsarLLMAgentModel >> session [
 PulsarLLMAgentModel >> title [
 
 	^ f'Assistant on: [self entity title]'
-]
-
-{ #category : 'private - prompts' }
-PulsarLLMAgentModel >> updateCommentPrompt [
-
-	^ self subclassResponsibility
 ]
 
 { #category : 'accessing - ui' }

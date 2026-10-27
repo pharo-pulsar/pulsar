@@ -1,7 +1,20 @@
 "
-I am the model of a LLM agent working on a class (PvClassModel) in the Pulsar class editor.
+I am the LLM agent attached to a class in the Pulsar class editor. I supply the class-specific part of an agent: the prompts that ask the model to explain the class, to write its comment, or to update an existing comment. The rest of the agent behaviour, such as opening a session, streaming the answer, and closing the session, is inherited from `PulsarLLMAgentModel`.
 
-I provide the class-specific prompts (explain, comment) consumed by a PulsarLLMAgentPresenter. Session management and streaming come from PulsarLLMAgentModel.
+My prompts embed the full name of the class and ask the model to place its result in the class editor without saving, so the programmer reviews the comment before accepting it.
+
+## Example
+
+```smalltalk
+(PulsarLLMClassAgentModel on: aClassModel)
+    commentOn: anAgentPresenter
+```
+
+## References
+
+- `PulsarLLMAgentModel`: superclass, providing the session, the streaming, and the toolbar actions that call `explainOn:` and `commentOn:`.
+- `PulsarLLMAgentPresenter`: the presenter that hosts the agent and renders the streamed answer.
+- `PvBaseModel`: base of all models, from which the agent hierarchy inherits.
 "
 Class {
 	#name : 'PulsarLLMClassAgentModel',
@@ -26,6 +39,7 @@ Write a Pharo class (or trait) comment (do not save) to the class editor [self f
 - Mention significant state, invariants, or usage patterns only when relevant.
 
 **Constraints:**
+- If comment already exists, update it instead creating from scratch.
 - Focus on the abstraction and its intent, not implementation details.
 - Don''t enumerate methods or accessors.
 - Don''t explain Smalltalk fundamentals.
@@ -65,39 +79,6 @@ Explain the class [self fullName].
 - Don''t speculate beyond the available code.
 - Don''t perform unrelated exploration or code review.
 - Return only the explanation.
-
-Skip any image save & backup phase.
-Skip any learning phase.'
-]
-
-{ #category : 'accessing' }
-PulsarLLMClassAgentModel >> updateCommentPrompt [
-
-	<pulsarSourceEditor: 'markdown'>
-	^ f'using pulsar
-Verify the comment of the Pharo class (or trait) comment (do not save) in the class editor [self fullName] to be sure is up to date. 
-If comment is not there, add it (do not save).
-
-**Goal:** Document the class so a Smalltalk programmer can quickly understand its purpose, responsibilities, and intended usage.
-
-**Content:**
-- Explain what the class represents and why it exists.
-- Describe its main responsibilities and important collaborators.
-- Mention significant state, invariants, or usage patterns only when relevant.
-
-**Constraints:**
-- Focus on the abstraction and its intent, not implementation details.
-- Don''t enumerate methods or accessors.
-- Don''t explain Smalltalk fundamentals.
-- Don''t repeat information obvious from the class name.
-- Don''t invent behavior or design intentions unsupported by the code.
-- Avoid boilerplate and unnecessary headings.
-- Use clear, natural English.
-- Return only the class comment.
-- Output is in markdown.
-
-Consider adding one simple example.
-Consider adding one or more usage references. 
 
 Skip any image save & backup phase.
 Skip any learning phase.'

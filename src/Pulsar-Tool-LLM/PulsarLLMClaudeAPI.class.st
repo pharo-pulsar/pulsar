@@ -1,16 +1,29 @@
 "
-I am a client for the Claude Code CLI in persistent stream-json mode.
+I am a client for the Claude Code CLI, used as an LLM agent backend in Pulsar. Unlike the OpenCode client, I do not talk to a server. Each Pulsar session gets its own long-lived `claude` process, which keeps the conversation context across turns, so I only write user messages to it and read back the events it streams.
 
-Unlike the OpenCode API, I do not talk to a server. I spawn one long-lived claude process per Pulsar session, write newline-delimited user messages to its stdin, and read the NDJSON events it emits on stdout. The process keeps the conversation context across turns, so no per-turn startup or --resume is needed.
+I offer the vocabulary that `PulsarLLMAgentSession` expects: sessions are created, messaged, aborted and deleted by id, and replies arrive as chunks tagged with a kind (text, reasoning, tool, tool error, error). I manage the sessions and their configuration. The process itself and the translation of its events into chunks belong to `PulsarLLMClaudeProcess`.
 
-I answer the same vocabulary as PulsarLLMAgentSession expects: #createSession:, #deleteSession:, #abortSession:, #sendText:toSession:, #sendText:toSession:do:, #sendText:toSession:kinds:do:, and #answerTextFrom:. My PulsarLLMClaudeProcess collaborator owns the process and translates events into text, reasoning, tool, tool error, and error chunks.
+Things worth knowing:
 
-I launch Claude in non-bare mode so it keeps using the normal Claude authentication. The process working directory is the image directory by default, so the .mcp.json prepared by PulsarLLMClaudeModel is discovered. I pass --dangerously-skip-permissions so tools run without an interactive permission prompt.
-
-Thinking is enabled by default and controlled by the application #thinking setting. When enabled I pass --thinking=adaptive and --thinking-display=summarized; when disabled I pass --thinking=disabled.
+- Claude runs in non-bare mode, so the normal Claude authentication is used.
+- Permission prompts are skipped, so tools run without interaction.
+- The working directory defaults to the image directory, where the `.mcp.json` prepared by `PulsarLLMClaudeModel` is discovered.
+- Thinking is on by default and follows the application's `thinking` setting.
 
 Example:
-PulsarLLMClaudeAPI new newSession query: 'Hello from Pharo'
+
+```smalltalk
+| api sessionID |
+api := PulsarLLMClaudeAPI new.
+sessionID := (api createSession: 'Pharo stream example') at: 'id'.
+api
+	sendText: 'Count from 1 to 5.'
+	toSession: sessionID
+	do: [ :chunk :kind | Transcript show: '[', kind asString, '] ', chunk; cr ].
+api deleteSession: sessionID
+```
+
+See also `PulsarLLMClaudeAPI class>>#exampleStream` and `PulsarLLMClaudeAPI class>>#exampleConversation`.
 "
 Class {
 	#name : 'PulsarLLMClaudeAPI',

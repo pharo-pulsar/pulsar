@@ -234,6 +234,7 @@ PulsarBaseBrowser >> addTool: ann [
 		(self findPresenterClass: ann toolClass) ifNotNil: [ :aPresenter |
 			aPresenter withPanelWidgetDo: [ :aPanelWidget | 
 				aPanelWidget raiseAndTakeKeyboardFocus ].
+			aPresenter announcer announce: ann.
 			^ self ] ].
 
 	self addPresenterClass: ann toolClass model: ann model

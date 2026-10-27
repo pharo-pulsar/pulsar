@@ -5,13 +5,17 @@ PvClassModel >> defineAgentActionsOn: aBuilder [
 
 	<dockActions>
 	aBuilder addGroup: #decoration with: [ :group |
-			group addActionWith: [ :action |
-					action
+			| agentModel agentActions |
+			agentModel := self newAgentModel.
+			agentActions := agentModel actions actionsFor: #toolbar.
+			agentActions entries do: [ :each | each actionVisible: [ :aContext | aContext application settings isFeatureEnabled: #llm ] ].
+			group addGroupWith: [ :agentGroup |
+					agentGroup
 						name: 'Agent';
 						description: f'Agent actions on [self name]';
 						iconName: 'agent';
-						actionVisible: [ :aContext | aContext application settings isFeatureEnabled: #llm ];
-						action: [ :aContext | (PulsarLLMAgent newModel: self callerAction: action callerPresenter: aContext) show ] ] ]
+						beToolbarMenuButton;
+						addAll: agentActions entries ] ]
 ]
 
 { #category : '*Pulsar-Tool-LLM' }

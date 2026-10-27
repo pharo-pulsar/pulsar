@@ -59,14 +59,17 @@ PulsarLLMPiModel >> ensureEnvironment [
 ]
 
 { #category : 'private' }
-PulsarLLMPiModel >> performConnectTo: aTerminalPresenter [
+PulsarLLMPiModel >> performConnectTo: aTerminalPresenter withPrompt: aString [
 	| command |
 	
 	command := PulsarWhich pathOfProgram:  'pi'.
 	command ifEmpty: [ 
 		self error: 'Pi not found. Please install it and make sure it can be found in the PATH.' ].
 
-	self spawn: command arguments: #() in: aTerminalPresenter
+	self 
+		spawnFromHost: command 
+		arguments: (aString ifNotNil: [ self ensurePromptCompliance: aString ] ifNil: [ #() ])
+		in: aTerminalPresenter
 ]
 
 { #category : 'actions' }

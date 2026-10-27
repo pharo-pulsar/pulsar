@@ -82,14 +82,17 @@ PulsarLLMCodexModel >> ensureConfig [
 ]
 
 { #category : 'private' }
-PulsarLLMCodexModel >> performConnectTo: aTerminalPresenter [
+PulsarLLMCodexModel >> performConnectTo: aTerminalPresenter withPrompt: aString [
 	| command |
 	
 	command := PulsarWhich pathOfProgram: 'codex'.
 	command ifEmpty: [ 
 		self error: 'Codex not found. Please install it and make sure it can be found in the PATH.' ].
 
-	self spawn: 'codex' arguments: #() in: aTerminalPresenter
+	self 
+		spawnFromHost: command 
+		arguments: (aString ifNotNil: [ { self ensurePromptCompliance: aString } ] ifNil: [ #() ])
+		in: aTerminalPresenter
 ]
 
 { #category : 'actions' }

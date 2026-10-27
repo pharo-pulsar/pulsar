@@ -48,7 +48,7 @@ PulsarLLMDebugAgentModel >> explainPrompt [
 	<pulsarSourceEditor: 'markdown'>
 	
 	^ f'using pulsar
-explain the debug stack [self fullName].
+explain the debug stack in the debugger open with title "[self fullName]".
 
 **Goal:** Help a Smalltalk programmer understand what is happening, how execution reached this point, and why it stopped.
 

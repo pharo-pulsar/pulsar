@@ -49,8 +49,11 @@ PulsarLLMAgentSession >> delete [
 
 { #category : 'private' }
 PulsarLLMAgentSession >> ensureSession [
+	"Answers the id of this agent's session, creating the session on the server the first time 
+	 it is needed. Later calls return the cached id without contacting the server."
 
-	^ sessionId ifNil: [ sessionId := (api createSession: 'Pharo Agent Session') at: 'id' ]
+	^ sessionId ifNil: [ 
+		sessionId := (api createSession: f'Pharo Agent Session: [UUID new]') at: 'id' ]
 ]
 
 { #category : 'accessing' }

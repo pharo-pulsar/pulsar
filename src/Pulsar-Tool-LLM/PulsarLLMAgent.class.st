@@ -1,3 +1,33 @@
+"
+I am the entry point that opens the LLM agent for a Pulsar tool. I am created from the context of what the user is looking at (a method, a class, a debugger, or a repository diff) and I turn that context into an agent session, so the conversation is anchored to that entity.
+
+My responsibilities are to ask the caller model for a context-specific agent model, to instantiate a `PulsarLLMAgentPresenter` on it, and to show that presenter in a modal popover attached to the action that triggered me. I also wire the agent presenter to the caller's notification center when one is available, falling back to a null announcer otherwise, so the agent can report back to the surrounding tool.
+
+I collaborate with:
+
+- **Caller models** (`PvMethodModel`, `PvClassModel`, `PulsarDebuggerModel`, `PulsarRepositoryDiffEditor`): they provide the agent model through `newAgentModel` and the context the agent works on.
+- **`PulsarLLMAgentPresenter`**: the agent user interface that I instantiate and display.
+- **The caller presenter and action**: the presenter gives me access to the window and notification center, and the action is the popover anchor.
+
+## Public API and Key Messages
+
+- `PulsarLLMAgent class >> newModel:callerAction:callerPresenter:` creates an agent for a model and its caller.
+- `show` displays the agent in a popover.
+
+## Usage
+
+I am created in dock action definitions, such as `PvMethodModel>>defineAgentActionsOn:`, each time the user activates the Agent action:
+
+```smalltalk
+action: [ :aContext |
+	(PulsarLLMAgent
+		newModel: self
+		callerAction: action
+		callerPresenter: aContext) show ]
+```
+
+See also `PvClassModel>>defineAgentActionsOn:`, `PulsarDebuggerModel>>defineAgentActionsOn:`, and `PulsarRepositoryDiffEditor>>defineAgentActionsOn:`.
+"
 Class {
 	#name : 'PulsarLLMAgent',
 	#superclass : 'Object',

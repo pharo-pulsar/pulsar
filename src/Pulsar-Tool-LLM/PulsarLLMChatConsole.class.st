@@ -1,15 +1,11 @@
 "
-I am the panel where a programmer holds a live conversation with an LLM agent from inside Pulsar. I wrap a command-line agent session in an embedded terminal and surround it with the controls needed to start, stop, and retarget that session without leaving the IDE.
+I am a Pulsar terminal panel for an LLM client.
 
-I own the presentation of a session, not its mechanics. A `PulsarLLMModel` subclass knows how to prepare its environment, connect to the terminal I supply, and disconnect; I choose the agent, reflect its connection state, and keep the toolbar in sync. The model selector lists the agents returned by `PulsarLLMModel class>>allModels`; changing it reconnects an active session to the new agent and remembers the choice through the application settings. Opening the window and toggling the connect control drive the same connection path, while closing the window disconnects.
+Each panel owns one VTE terminal and one client process. The client class is captured from the global LLM setting when the panel is created, so changing the setting only affects new terminals. Multiple panels can coexist, each with its own conversation and process, while all of them share the single MCP server exposed by PulsarLLMSharedMCPServer.
 
-The terminal is a `VteTerminalPresenter`, and the surrounding toolbar is a `PulsarEditorToolbarPresenter`. A thinking-output toggle is enabled for agents that support it and is persisted in the application settings. An `updating` flag guards programmatic toolbar changes so they do not re-enter the connection callbacks.
+I am opened from the New LLM terminal browser action or from an agent menu item. Agent menu items carry an initial prompt; I send it to the client once the terminal starts. Closing me terminates my client process and releases my MCP reference. Snapshot restoration keeps the panel title and client but does not reconnect or resend prompts.
 
-I am normally reached from the Pulsar browser dock action defined in `PulsarBrowser>>defineOpenCodeExtraActionsOn:`.
-
-```
-PulsarLLMChatConsole new open
-```
+The client TUI owns client-specific controls such as thinking display.
 "
 Class {
 	#name : 'PulsarLLMChatConsole',
@@ -19,9 +15,7 @@ Class {
 	#instVars : [
 		'toolbarPresenter',
 		'terminalPresenter',
-		'toggleConnectButtonPresenter',
-		'modelSelectorPresenter',
-		'thinkingTogglePresenter',
+		'clientModel',
 		'updating'
 	],
 	#category : 'Pulsar-Tool-LLM-View',
@@ -43,12 +37,21 @@ PulsarLLMChatConsole class >> defaultTitle [
 	^ 'Assistant'
 ]
 
+{ #category : 'accessing' }
+PulsarLLMChatConsole >> clientModel [
+
+	^ clientModel
+]
+
+{ #category : 'accessing' }
+PulsarLLMChatConsole >> clientModel: aModel [
+
+	clientModel := aModel
+]
+
 { #category : 'initialization' }
 PulsarLLMChatConsole >> connectPresenters [
 
-	"modelSelectorPresenter whenSelectedItemChangedDo: [ :selectedClass |
-		self switchLLMModel: selectedClass ]."
-		
 	terminalPresenter whenChildExitedDo: [ :ann |
 		logger debug: 'Exit with code: ' , ann status asString.
 		self doDisconnectClosing: self isUpdating not ]
@@ -69,44 +72,60 @@ PulsarLLMChatConsole >> doClose [
 	self doDisconnectClosing: true
 ]
 
-{ #category : 'actions' }
+{ #category : 'private' }
 PulsarLLMChatConsole >> doConnect [
+
 	self isConnected ifTrue: [ ^ self ].
-	
-	[ 
+
+	[
 		self updatingWhile: [
 			self model 
-				prepare;
-				"connecting will trigger a status change, but the connected flag 
-			 	will prevent a re-execution" 
+				clientClass: self usingLLM;
 				connectTo: terminalPresenter.
-		
-			self updateStatus ].
+			self updateTitle.
+			self updateStatus ] 
 	]
-	on: Error 
-	do: [ :e | terminalPresenter feedLine: 'Error: ', e messageText ]
+	on: Error
+	do: [ :e |
+		terminalPresenter terminateAllSpawns.
+			terminalPresenter feedLine: f'Error: [e messageText]'.
+			self updatingWhile: [ self updateStatus ] ]
 ]
 
-{ #category : 'actions' }
+{ #category : 'private' }
 PulsarLLMChatConsole >> doDisconnect [
 
-	self isConnected ifFalse: [ ^ self ].
-	
-	self updatingWhile: [ 
-		terminalPresenter terminateAllSpawns.
-		self model disconnect.
-		"disconnecting will also trigger a status change, but the connected flag 
-		 will prevent a re-execution" 
-		self updateStatus ]
+	self clientModel ifNotNil: [ :aModel | aModel disconnect ].
+	self clientModel: nil.
+	terminalPresenter ifNotNil: [ :aPresenter | aPresenter terminateAllSpawns ].
+	self updatingWhile: [ self updateStatus ]
 ]
 
-{ #category : 'actions' }
+{ #category : 'private' }
 PulsarLLMChatConsole >> doDisconnectClosing: aBoolean [
 
 	self doDisconnect.
-	aBoolean ifTrue: [ 
-		self withNearWindowLikeDo: [ :aWindow | 
-			aWindow close ] ]
+	aBoolean ifTrue: [ self withNearWindowLikeDo: [ :aWindow | aWindow close ] ]
+]
+
+{ #category : 'actions' }
+PulsarLLMChatConsole >> doNewTerminal [
+
+	self notificationCenter announce: PulsarRequestNewLLMTerminal new
+]
+
+{ #category : 'events' }
+PulsarLLMChatConsole >> eventRequestNewTerminal: ann [
+	"Handles a new-terminal request by feeding its initial prompt into this
+	console's existing terminal rather than opening another one. The prompt
+	comes from the announcement's model, and empty or nil prompts are
+	ignored."
+	| prompt |
+	 
+	prompt := ann model initialPrompt.
+	prompt isEmptyOrNil ifTrue: [ ^ self ].
+
+	terminalPresenter feedChildMultipleLine: prompt withPlatformLineEndings
 ]
 
 { #category : 'events' }
@@ -114,14 +133,14 @@ PulsarLLMChatConsole >> eventThemeChanged: ann [
 	super eventThemeChanged: ann.
 	ann isDark
 		ifTrue: [ terminalPresenter beDarkTheme ]
-		ifFalse: [ terminalPresenter beLightTheme ].
-
+		ifFalse: [ terminalPresenter beLightTheme ]
 ]
 
 { #category : 'initialization' }
 PulsarLLMChatConsole >> initialize [
 
-	self setModelBeforeInitialization: self usingLLM new.
+	model ifNil: [
+		self setModelBeforeInitialization: PulsarLLMChatConsoleModel new ].
 	super initialize
 ]
 
@@ -132,45 +151,19 @@ PulsarLLMChatConsole >> initializePresenters [
 
 	toolbarPresenter := self instantiate: PulsarEditorToolbarPresenter.
 
-	(toggleConnectButtonPresenter := self newToggleButton)
-		addStyle: 'flat';
-		icon: (self iconNamed: 'chat-connect');
-		help: 'Toggle MCP connect';
-		state: self isConnected;
-		whenChangedDo: [ :state | self toggleConnection: state ];
-		yourself.
-
-	"modelSelectorPresenter := self newDropDown
-		                          addStyle: 'flat';
-		                          display: [ :each | each label ];
-		                          yourself."
-
-	(thinkingTogglePresenter := self newToggleButton)
-		addStyle: 'flat';
-		icon: (self iconNamed: 'agent');
-		help: 'Enable thinking output for new Claude agent sessions';
-		state: self thinking;
-		whenChangedDo: [ :state | self thinking: state ];
-		yourself.
-
 	toolbarPresenter
-		"addPresenter: (self newPresenter
-			layout: (SpBoxLayout newVertical
-				vAlignCenter;
-				add: modelSelectorPresenter;
-				yourself);
-			yourself);"
-		addPresenter: (self newToolbar
-			displayMode: self application toolbarDisplayMode;
-			add: toggleConnectButtonPresenter;
-			add: thinkingTogglePresenter;
-			yourself);
 		addPresenter: (self newToolbar
 			beIcons;
 			add: (self newButton
 				addStyle: 'flat';
+				icon: (self iconNamed: 'add');
+				help: 'New LLM terminal';
+				action: [ self doNewTerminal ];
+				yourself);
+			add: (self newButton
+				addStyle: 'flat';
 				icon: (self iconNamed: 'close');
-				help: 'Close OpenCode';
+				help: 'Close terminal';
 				action: [ self doClose ];
 				yourself);
 			yourself).
@@ -183,16 +176,15 @@ PulsarLLMChatConsole >> initializePresenters [
 PulsarLLMChatConsole >> initializeWindow: aWindowPresenter [
 
 	aWindowPresenter
-		title: self class defaultTitle;
+		title: self model title;
 		windowIcon: (self iconNamed: self panelPlacedIconName);
-		whenOpenedDo: [ 
-			self scheduleJob: [ self doConnect ] ]
+		whenOpenedDo: [ self model autoConnect ifTrue: [ self scheduleJob: [ self doConnect ] ] ]
 ]
 
 { #category : 'testing' }
 PulsarLLMChatConsole >> isConnected [
 
-	^ self model isConnected
+	^ self clientModel notNil and: [ self clientModel isConnected ]
 ]
 
 { #category : 'private' }
@@ -201,33 +193,14 @@ PulsarLLMChatConsole >> panelPlacedIconName [
 	^ "'chat'" 'agent'
 ]
 
-{ #category : 'private - actions' }
-PulsarLLMChatConsole >> switchLLMModel: aModelClass [
+{ #category : 'initialization' }
+PulsarLLMChatConsole >> registerToEvents [
 
-	| wasConnected |
-	self isUpdating ifTrue: [ ^ self ].
-	aModelClass ifNil: [ ^ self ].
-	aModelClass = self model class ifTrue: [ ^ self ].
-
-	self scheduleJob: [
-			self updatingWhile: [
-					wasConnected := self isConnected.
-					wasConnected ifTrue: [ self doDisconnectClosing: false ].
-					self usingLLM: aModelClass.
-					self model: aModelClass new.
-					wasConnected ifTrue: [ self doConnect ] ] ]
-]
-
-{ #category : 'accessing' }
-PulsarLLMChatConsole >> thinking [
-
-	^ self application settings thinking
-]
-
-{ #category : 'accessing' }
-PulsarLLMChatConsole >> thinking: aBoolean [
-
-	self application settings thinking: aBoolean
+	super registerToEvents.
+	self announcer
+		when: PulsarRequestNewLLMTerminal 
+		send: #eventRequestNewTerminal: 
+		to: self	
 ]
 
 { #category : 'private - actions' }
@@ -243,43 +216,22 @@ PulsarLLMChatConsole >> toggleConnection: aState [
 PulsarLLMChatConsole >> updatePresenter [
 
 	self updateTitle.
-	self updateStatus.
-
-	"modelSelectorPresenter
-		items: PulsarLLMModel allModels;
-		selectItem: self model class."
-
-	thinkingTogglePresenter
-		state: self thinking;
-		visible: self model hasThinkingToggle
+	self updatingWhile: [ self updateStatus ]
 ]
 
 { #category : 'initialization' }
 PulsarLLMChatConsole >> updateStatus [
-
-	toggleConnectButtonPresenter 
-		help: ('Toggle MCP connect (current: {1}CONNECTED)' format: { self isConnected 
-			ifTrue: [ '' ] 
-			ifFalse: [ 'DIS' ]});
-		state: self isConnected not
+	
 ]
 
 { #category : 'initialization' }
 PulsarLLMChatConsole >> updateTitle [
 
-	toolbarPresenter title: ('{1}: {2}' format: { 
-		self class defaultTitle. 
-		self model name })
+	toolbarPresenter title: self model title
 ]
 
 { #category : 'private' }
 PulsarLLMChatConsole >> usingLLM [
 
 	^ PulsarLLMModel findAgentNamed: self application settings agentName
-]
-
-{ #category : 'accessing' }
-PulsarLLMChatConsole >> usingLLM: aModelClass [
-
-	self application settings agentName: aModelClass label
 ]

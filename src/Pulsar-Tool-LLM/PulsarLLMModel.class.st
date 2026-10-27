@@ -1,11 +1,11 @@
 "
-I am the abstract base class for LLM integration models in Pulsar.
+I am the abstract base class for LLM client models in Pulsar.
 
-I define the common protocol for preparing an LLM environment, connecting to it, and disconnecting. Subclasses must implement #prepare, #connectTo:, and #disconnect.
+I define the common protocol for preparing an LLM environment, connecting a client process to a terminal, and disconnecting. Subclasses must implement #prepare and #performConnectTo:.
 
-I hold the shared MCP server instance (mcp) that exposes Pharo tools to the LLM, and a connected flag tracking whether a session is active.
+I hold a connected flag, but I do not own the MCP server. PulsarLLMSharedMCPServer provides one server for every terminal, and #startMCP / #stopMCP acquire and release a reference to it. #connectTo:withPrompt: starts the client and can inject an initial prompt into its terminal.
 
-I provide reusable utilities for subclasses: #startMCP / #stopMCP to control the MCP server lifecycle, and #ensureAgent to write the AGENTS.md guidance file into the image directory.
+I provide reusable utilities for subclasses: #startMCP / #stopMCP and #ensureAgent to write the AGENTS.md guidance file into the image directory.
 "
 Class {
 	#name : 'PulsarLLMModel',
@@ -337,12 +337,32 @@ PulsarLLMModel >> api [
 	^ self class newAPI
 ]
 
-{ #category : 'actions' }
+{ #category : 'connection' }
 PulsarLLMModel >> connectTo: aTerminalPresenter [
-	
+
 	self startMCP.
-	self performConnectTo: aTerminalPresenter.
-	self connected: true
+	[	
+		self performConnectTo: aTerminalPresenter. 
+		connected := true.
+	]
+	on: Error
+	do: [ :e |
+		self stopMCP.
+		e pass ]
+]
+
+{ #category : 'connection' }
+PulsarLLMModel >> connectTo: aTerminalPresenter withPrompt: aString [
+
+	self startMCP.
+	[	
+		self performConnectTo: aTerminalPresenter withPrompt: aString. 
+		connected := true.
+	]
+	on: Error
+	do: [ :e |
+		self stopMCP.
+		e pass ]
 ]
 
 { #category : 'private' }
@@ -365,6 +385,14 @@ PulsarLLMModel >> ensureAgent [
 	ref := FileLocator imageDirectory / 'AGENTS.md'.
 	ref exists ifFalse: [ 
 		ref writeStreamDo: [ :stream | stream << self class agentsDefinition ] ]
+]
+
+{ #category : 'private' }
+PulsarLLMModel >> ensurePromptCompliance: aString [
+
+	^ aString last = Character cr 
+		ifTrue: [ aString ]
+		ifFalse: [ aString, String cr ]
 ]
 
 { #category : 'private' }
@@ -413,6 +441,12 @@ PulsarLLMModel >> name [
 
 { #category : 'private' }
 PulsarLLMModel >> performConnectTo: aTerminalPresenter [
+
+	self performConnectTo: aTerminalPresenter withPrompt: nil
+]
+
+{ #category : 'private' }
+PulsarLLMModel >> performConnectTo: aTerminalPresenter withPrompt: aString [
 
 	self subclassResponsibility
 ]
@@ -475,21 +509,14 @@ PulsarLLMModel >> spawnFromHost: aCommand arguments: aCollection in: aTerminalPr
 		arguments: aCollection
 ]
 
-{ #category : 'private' }
+{ #category : 'connection' }
 PulsarLLMModel >> startMCP [
 
-	(mcp isNotNil and: [ mcp isRunning ]) ifTrue: [ ^ self ].
-
-	mcp := MCP new.
-	mcp server 
-		loggingOff;
-		port: self class mcpPort.
-	mcp start
+	PulsarLLMSharedMCPServer default ensureStarted
 ]
 
-{ #category : 'private' }
+{ #category : 'connection' }
 PulsarLLMModel >> stopMCP [
 
-	(mcp isNotNil and: [ mcp isRunning ]) 
-		ifTrue: [ mcp stop ]
+	PulsarLLMSharedMCPServer default stop
 ]

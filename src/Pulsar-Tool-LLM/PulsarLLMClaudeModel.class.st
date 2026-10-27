@@ -100,7 +100,7 @@ PulsarLLMClaudeModel >> hasThinkingToggle [
 ]
 
 { #category : 'private' }
-PulsarLLMClaudeModel >> performConnectTo: aTerminalPresenter [
+PulsarLLMClaudeModel >> performConnectTo: aTerminalPresenter withPrompt: aString [
 	| command |
 	
 	command := PulsarWhich pathOfProgram: 'claude'.
@@ -108,8 +108,8 @@ PulsarLLMClaudeModel >> performConnectTo: aTerminalPresenter [
 		self error: 'Claude not found. Please install it and make sure it can be found in the PATH.' ].
 
 	self 
-		spawnFromHost: command trimBoth
-		arguments: #()
+		spawnFromHost: command
+		arguments: (aString ifNotNil: [ { self ensurePromptCompliance: aString } ] ifNil: [ #() ])
 		in: aTerminalPresenter
 ]
 

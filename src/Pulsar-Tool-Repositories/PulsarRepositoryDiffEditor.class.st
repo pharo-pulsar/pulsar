@@ -70,13 +70,19 @@ PulsarRepositoryDiffEditor >> defineAgentActionsOn: aBuilder [
 
 	<dockActions>
 	aBuilder addGroup: #agent with: [ :group |
-			group addActionWith: [ :action |
-					action
-						name: 'Agent';
-						description: 'Agent actions on this diff';
-						iconName: 'agent';
-						actionVisible: [ :aContext | (aContext application settings isFeatureEnabled: #llm) and: [ self model isEmpty not ] ];
-						action: [ :aContext | (PulsarLLMAgent newModel: self model callerAction: action callerPresenter: aContext) show ] ] ]
+			              | agentModel agentActions |
+			              agentModel := self model newAgentModel.
+			              agentActions := agentModel actions actionsFor: #toolbar.
+			              agentActions entries do: [ :each |
+				              each actionVisible: [ :aContext |
+					              (aContext application settings isFeatureEnabled: #llm) and: [ self model isEmpty not ] ] ].
+			              group addGroupWith: [ :agentGroup |
+					              agentGroup
+						              name: 'Agent';
+						              description: 'Agent actions on this diff';
+						              iconName: 'agent';
+						              beToolbarMenuButton;
+						              addAll: agentActions entries ] ]
 ]
 
 { #category : 'events' }

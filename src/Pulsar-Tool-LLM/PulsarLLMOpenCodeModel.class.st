@@ -69,26 +69,18 @@ PulsarLLMOpenCodeModel >> ensureExa [
 ]
 
 { #category : 'private' }
-PulsarLLMOpenCodeModel >> performConnectTo: aTerminalPresenter [
+PulsarLLMOpenCodeModel >> performConnectTo: aTerminalPresenter withPrompt: aString [
 	| command |
 	
-	command := PulsarWhich pathOfProgram:  'opencode'.
+	command := PulsarWhich pathOfProgram: 'opencode'.
 	command ifEmpty: [ 
 		self error: 'OpenCode not found. Please install it and make sure it can be found in the PATH.' ].
 
-	"spawn serve"
-	"self spawn: 'opencode' arguments: #('serve' '--port' '4096') in: aTerminalPresenter."
-	"spawn opencode"
-	"self spawn: 'opencode' arguments: #('--server' 'http://127.0.0.1:4096') in: aTerminalPresenter."
-	
-	"self 
-		spawnFromHost: command trimBoth 
-		arguments: #('serve' '--port' '4096') 
-		in: aTerminalPresenter."
-		
 	self 
-		spawnFromHost: command trimBoth
-		arguments: #('--port' '4096')
+		spawnFromHost: command 
+		arguments: (aString 
+			ifNotNil: [ { '--prompt'. self ensurePromptCompliance: aString } ]
+			ifNil: [ #() ])
 		in: aTerminalPresenter
 ]
 

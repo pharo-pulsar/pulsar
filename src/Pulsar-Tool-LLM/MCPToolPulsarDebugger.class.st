@@ -1,3 +1,14 @@
+"
+I am the MCP tool that lets a remote MCP client drive the debuggers currently open in the running Pulsar IDE.
+
+I find them through the running `PulsarApplication` (inherited from `MCPPulsarTool`): each open `PulsarDebugger` window wraps a `PulsarDebuggerModel` that exposes the debug session's stack, and I address debuggers by a 1-based window index across all open ones. Against that model I expose four operations: list the open debuggers; inspect a stack, including the source of each context; step the top context (stepInto, stepOver, stepThrough, proceed, restart); and evaluate an expression in a chosen stack context.
+
+```smalltalk
+PulsarApplication running windows
+    select: [ :each | each isKindOf: PulsarDebugger ]
+""The open debuggers I can drive""
+```
+"
 Class {
 	#name : 'MCPToolPulsarDebugger',
 	#superclass : 'MCPPulsarTool',

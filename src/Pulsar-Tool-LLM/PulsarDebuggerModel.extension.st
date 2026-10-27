@@ -5,16 +5,20 @@ PulsarDebuggerModel >> defineAgentActionsOn: aBuilder [
 
 	<dockActions>
 	aBuilder addGroup: #stack with: [ :group |
+			| agentModel agentActions |
+			agentModel := self newAgentModel.
+			agentActions := agentModel actions actionsFor: #toolbar.
+			agentActions entries do: [ :each | each actionVisible: [ :aContext | aContext application settings isFeatureEnabled: #llm ] ].
 			group
 				priority: 200;
-				addActionWith: [ :action |
-						action
+				addGroupWith: [ :agentGroup |
+						agentGroup
 							priority: 210;
 							name: 'Agent';
 							description: 'Agent actions on this stack';
 							iconName: 'agent';
-							actionVisible: [ :aContext | aContext application settings isFeatureEnabled: #llm ];
-							action: [ :aContext | (PulsarLLMAgent newModel: self callerAction: action callerPresenter: aContext) show ] ] ]
+							beToolbarMenuButton;
+							addAll: agentActions entries ] ]
 ]
 
 { #category : '*Pulsar-Tool-LLM' }
