@@ -50,6 +50,16 @@ PulsarGtkConfiguration >> addCustomStyle [
 			do: [ :eachReference | self addCSSProviderFromReference: eachReference ] ]
 ]
 
+{ #category : 'accessing - settings' }
+PulsarGtkConfiguration >> agent: aSymbol [
+	"Set the LLM agent label used by Pulsar's chat console and agent sessions. 
+	 aSymbol should match the label of a registered LLM model: 
+	 `PulsarLLMModel allModels collect: #label`; matching is case-insensitive 
+	 and unknown names fall back to the OpenCode model."
+	 
+	self settings agentName: aSymbol
+]
+
 { #category : 'private' }
 PulsarGtkConfiguration >> announceSyntaxHighlightThemeChanged [
 
@@ -235,7 +245,7 @@ PulsarGtkConfiguration >> defaultSyntaxHighlightThemeNameLight [
 	^ 'CodeLight'
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - style' }
 PulsarGtkConfiguration >> forceDark [
 
 	self reset.
@@ -244,7 +254,7 @@ PulsarGtkConfiguration >> forceDark [
 	self settings theme: #dark
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - style' }
 PulsarGtkConfiguration >> forceLight [
 
 	self reset.
@@ -306,7 +316,7 @@ PulsarGtkConfiguration >> paletteStyle [
 		ifFalse: [ self lightPaletteStyle ]
 ]
 
-{ #category : 'accessing' }
+{ #category : 'accessing - style' }
 PulsarGtkConfiguration >> preferSystem [
 
 	self reset.
@@ -566,7 +576,7 @@ PulsarGtkConfiguration >> styleManager [
 	^ styleManager
 ]
 
-{ #category : 'accessing - style' }
+{ #category : 'accessing - settings' }
 PulsarGtkConfiguration >> styleScheme: aString [
 
 	super styleScheme: aString.
@@ -584,7 +594,7 @@ PulsarGtkConfiguration >> syntaxHighlightTheme [
 				ifNil: [ self defaultSyntaxHighlightThemeName ] ]
 ]
 
-{ #category : 'accessing - style' }
+{ #category : 'accessing - settings' }
 PulsarGtkConfiguration >> syntaxHighlightTheme: aName [
 
 	super syntaxHighlightTheme: aName.
@@ -592,6 +602,16 @@ PulsarGtkConfiguration >> syntaxHighlightTheme: aName [
 		ifTrue: [ self settings syntaxHighlightThemeDark: aName ]
 		ifFalse: [ self settings syntaxHighlightThemeLight: aName ].
 	self announceSyntaxHighlightThemeChanged
+]
+
+{ #category : 'accessing - settings' }
+PulsarGtkConfiguration >> theme: aSymbol [
+
+	aSymbol = #dark ifTrue: [ self forceDark ].
+	aSymbol = #light ifTrue: [ self forceLight ].
+	aSymbol = #system ifTrue: [ self preferSystem ].
+
+	self error: f'[aSymbol] not supported.'
 ]
 
 { #category : 'private' }
