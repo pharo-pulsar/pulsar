@@ -8,12 +8,13 @@ Class {
 
 { #category : 'private - prompts' }
 PulsarLLMMethodAgentModel >> commentPrompt [
+
 	<pulsarSourceEditor: 'markdown'>
-	
 	^ f'using pulsar
 Write and add a Pharo method comment for the method at the editor [self fullName] (do not save).
+Only put the text in the open method editor buffer; do not apply it, update the method, or save the image.
 
-**Goal:** Document the method''s behavioral contract and intent, helping a Smalltalk programmer understand why and when to use it.
+**Goal:** Document the method''''s behavioral contract and intent, helping a Smalltalk programmer understand why and when to use it.
 
 **Content:**
 - Explain what the method accomplishes.
@@ -24,10 +25,10 @@ Write and add a Pharo method comment for the method at the editor [self fullName
 - If comment already exists, update it instead creating from scratch.
 - Maximum 60 words, preferably 1–3 sentences.
 - Describe the contract, not the step-by-step implementation.
-- Don''t paraphrase the method name or translate statements into prose.
-- Don''t explain basic Smalltalk syntax or idioms.
-- Don''t document obvious details.
-- Don''t invent guarantees unsupported by the code.
+- Don''''t paraphrase the method name or translate statements into prose.
+- Don''''t explain basic Smalltalk syntax or idioms.
+- Don''''t document obvious details.
+- Don''''t invent guarantees unsupported by the code.
 - Avoid boilerplate.
 - Use clear, natural English.
 - Return only the method comment text, without Smalltalk comment delimiters.

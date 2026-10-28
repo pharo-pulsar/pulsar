@@ -1,5 +1,24 @@
 "
-A message browser (to show senders and implementors)
+A message-set browser for Pulsar. It presents the result of a system query — senders, implementors, references, stores, and similar method sets — as a filterable list paired with a method preview, so those results can be explored and opened without leaving the current browsing context.
+
+The browser is driven by `PulsarMessageModel`, which supplies the query title, the environment, and the compiled methods; each method is presented through a lazy `PvMethodModel`. The model is a fixed result rather than a live query: filtering only narrows the displayed entries, it never reruns the query. The header shows the title as a breadcrumb and reports the visible and total message counts.
+
+Selecting an entry transmits its method model to the embedded `PulsarMethodEditor`, where the method can be read and edited. Activating an entry announces it through the Pulsar notification center and, for a popover, closes the popover so navigation continues in the target editor. System navigation normally opens the browser through `PulsarSystemNavigation>>browseMessageList:name:autoSelect:refreshingBlock:` as a popover attached to the responder; it can also be pinned or docked in an editor panel or detached into a `PulsarDetachedBrowser`. It participates in Pulsar's editor and panel protocols but is not itself an editable document.
+
+A `PulsarMessageSnapshot` records when the browser was last presented, so a restored session can preserve its recency.
+
+Example:
+```smalltalk
+PulsarMessageBrowser
+    newApplication: anApplication
+    model: (PulsarMessageModel
+        newEnvironment: (PvEnvironmentModel onSystem)
+        title: 'Senders of #printString'
+        methods: (SystemNavigation default allCallsOn: #printString))
+    open
+```
+
+See `PulsarMessageModel` for the query-result model and `PulsarMessageBrowserTest` for a minimal construction with a fixed method set.
 "
 Class {
 	#name : 'PulsarMessageBrowser',
@@ -62,6 +81,19 @@ PulsarMessageBrowser >> defaultLayout [
 		yourself
 ]
 
+{ #category : 'private - definitions' }
+PulsarMessageBrowser >> defineContextActionsOn: aBuilder [
+	<dockActions>
+	
+	aBuilder addGroup: #methodContext with: [ :group | group 
+		addActionWith: [ :action | action 
+			dynamicName: [ f'Inspect [self selectedItemName]' ];
+			description: 'Inspect current method';
+			shortcutKey: $i actionModifier;
+			actionEnabled: [ self selectedItem isNotNil ];
+			action: [ self systemNavigation inspect: self selectedItem entity ] ] ]
+]
+
 { #category : 'initialization' }
 PulsarMessageBrowser >> initializePopover: aPopoverPresenter [
 	| nearWindow |
@@ -96,6 +128,11 @@ PulsarMessageBrowser >> initializePresenters [
 	messageListPresenter := self newFilteringList
 		addStyle: 'stList';
 		display: #fullName;
+		actions: (SpActionGroup new 
+			add: self actions;
+			addDynamicGroupWith: [ :group | 
+				self selectedItem ifNotNil: [ :aModel | 
+					group add: (aModel actionsWithContextOn: self) ] ]);
 		whenFilterChangedDo: [ self updateCount ];
 		yourself.
 		
@@ -113,6 +150,12 @@ PulsarMessageBrowser >> messageCount [
 	^ shownSize = fullSize
 		ifTrue: [ shownSize asString ]
 		ifFalse: [ '{1} / {2}' format: { shownSize. fullSize } ]
+]
+
+{ #category : 'private' }
+PulsarMessageBrowser >> messageListPresenter [
+
+	^ messageListPresenter
 ]
 
 { #category : 'private' }
@@ -134,6 +177,22 @@ PulsarMessageBrowser >> notifyActivateEntity: anEntity [
 PulsarMessageBrowser >> panelPosition [
 
 	^ panelPosition ifNil: [ panelPosition := self class defaultPanelPosition ]
+]
+
+{ #category : 'private' }
+PulsarMessageBrowser >> selectedItem [
+
+	messageListPresenter ifNil: [ ^ nil ].
+
+	^ messageListPresenter selectedItem
+]
+
+{ #category : 'private' }
+PulsarMessageBrowser >> selectedItemName [
+
+	^ self selectedItem 
+		ifNotNil: [ :aModel | aModel fullName ]
+		ifNil: [ 'NONE' ]
 ]
 
 { #category : 'accessing - snapshot' }

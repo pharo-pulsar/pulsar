@@ -1,3 +1,18 @@
+"
+A model for a method list produced by a system query, such as senders, implementors, or references. It packages the query title, the environment, and the resulting compiled methods for `PulsarMessageBrowser`; it is not the model of a single method, and unlike the `PvBaseModel` family it has no entity of its own.
+
+It wraps each compiled method in a `PvMethodModel`, created lazily and cached for the browser's filterable list; those wrappers provide the per-method identity, navigation, and actions. The model names `PulsarMessageBrowser` as its Pulsar editor, and its title is also its display name. A message list is a fixed result, not a live query, so the model does not follow later changes in the environment.
+
+The normal creation path is `PulsarSystemNavigation>>browseMessageList:name:autoSelect:refreshingBlock:`, which supplies the environment, label, and query results before opening the browser. The class-side constructor builds the same model directly.
+
+Example:
+```smalltalk
+PulsarMessageModel
+    newEnvironment: anEnvironmentModel
+    title: 'Senders of #foo'
+    methods: aCollectionOfCompiledMethods
+```
+"
 Class {
 	#name : 'PulsarMessageModel',
 	#superclass : 'Object',

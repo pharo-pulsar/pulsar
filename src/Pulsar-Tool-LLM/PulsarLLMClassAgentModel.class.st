@@ -1,20 +1,24 @@
 "
-I am the LLM agent attached to a class in the Pulsar class editor. I supply the class-specific part of an agent: the prompts that ask the model to explain the class, to write its comment, or to update an existing comment. The rest of the agent behaviour, such as opening a session, streaming the answer, and closing the session, is inherited from `PulsarLLMAgentModel`.
+I bind the Pulsar assistant to a single class or trait, so the class as a whole — rather than one of its methods — can be explained or given a comment.
 
-My prompts embed the full name of the class and ask the model to place its result in the class editor without saving, so the programmer reviews the comment before accepting it.
+My reason to exist is the class-specific part of that conversation: I hold the prompts that tell the model how to introduce a class to a Smalltalk programmer and what a useful class comment contains. Everything mechanical is inherited. `PulsarLLMAgentModel` owns the LLM session and streams the answer, and contributes the Explain and Comment actions to the Agent menu of the class editor and browser. I do not own a session and I do not render output.
+
+My entity is a `PvClassModel`, the model behind both the browser outline and the class editor. The comment prompt has a deliberate effect on the workflow: it instructs the external agent to write the comment into the open class editor and explicitly not save it, so the text stays dirty for the user to review and accept. The explain prompt only produces text in the terminal.
+
+Apart from the entity I wrap, I carry no state; the session materialises in my superclass only when an action runs. Callers get a fresh instance per toolbar action.
 
 ## Example
 
 ```smalltalk
-(PulsarLLMClassAgentModel on: aClassModel)
-    commentOn: anAgentPresenter
+PulsarLLMClassAgentModel on: aClassModel
 ```
 
 ## References
 
-- `PulsarLLMAgentModel`: superclass, providing the session, the streaming, and the toolbar actions that call `explainOn:` and `commentOn:`.
-- `PulsarLLMAgentPresenter`: the presenter that hosts the agent and renders the streamed answer.
-- `PvBaseModel`: base of all models, from which the agent hierarchy inherits.
+- `PulsarLLMAgentModel` — my superclass; session, streaming, and the menu actions.
+- `PulsarLLMAgentPresenter` — the terminal panel that runs my prompts and shows the answer.
+- `PvClassModel` — the class (or trait) model I wrap; `newAgentModel` answers me.
+- `PulsarLLMMethodAgentModel` — the equivalent agent for a single method.
 "
 Class {
 	#name : 'PulsarLLMClassAgentModel',
@@ -26,10 +30,11 @@ Class {
 
 { #category : 'accessing' }
 PulsarLLMClassAgentModel >> commentPrompt [
-
+	
 	<pulsarSourceEditor: 'markdown'>
 	^ f'using pulsar
 Write a Pharo class (or trait) comment (do not save) to the class editor [self fullName].
+Only put the text in the open class editor buffer; do not apply it to the class, update the class comment, or save the image.
 
 **Goal:** Document the class so a Smalltalk programmer can quickly understand its purpose, responsibilities, and intended usage.
 
@@ -41,10 +46,10 @@ Write a Pharo class (or trait) comment (do not save) to the class editor [self f
 **Constraints:**
 - If comment already exists, update it instead creating from scratch.
 - Focus on the abstraction and its intent, not implementation details.
-- Don''t enumerate methods or accessors.
-- Don''t explain Smalltalk fundamentals.
-- Don''t repeat information obvious from the class name.
-- Don''t invent behavior or design intentions unsupported by the code.
+- Don''''t enumerate methods or accessors.
+- Don''''t explain Smalltalk fundamentals.
+- Don''''t repeat information obvious from the class name.
+- Don''''t invent behavior or design intentions unsupported by the code.
 - Avoid boilerplate and unnecessary headings.
 - Use clear, natural English.
 - Return only the class comment.
