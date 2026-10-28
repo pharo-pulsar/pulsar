@@ -14,7 +14,7 @@ PulsarTaskAnnouncer class >> synchronicAnnouncements [
 	^ { SpWindowWillClose. PulsarModelDeactivated }
 ]
 
-{ #category : 'announce' }
+{ #category : 'announcing' }
 PulsarTaskAnnouncer >> announce: anAnnouncement [
 
 	logger trace: anAnnouncement.
@@ -28,6 +28,24 @@ PulsarTaskAnnouncer >> announce: anAnnouncement [
 		[ super announce: anAnnouncement ]
 		on: Error 
 		fork: [ :e | e pass ] ]
+]
+
+{ #category : 'announcing' }
+PulsarTaskAnnouncer >> announceError: anError [
+
+	self announce: (PulsarErrorAnnouncement newValue: anError)
+]
+
+{ #category : 'announcing' }
+PulsarTaskAnnouncer >> announceInform: aString [
+
+	self announce: (PulsarInformAnnouncement newValue: aString)
+]
+
+{ #category : 'announcing' }
+PulsarTaskAnnouncer >> announceWarning: aWarning [
+
+	self announce: (PulsarWarningAnnouncement newValue: aWarning)
 ]
 
 { #category : 'testing' }

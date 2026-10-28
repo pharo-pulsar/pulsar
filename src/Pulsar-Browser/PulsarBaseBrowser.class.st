@@ -411,6 +411,26 @@ PulsarBaseBrowser >> ensureTool: aToolClass model: aModel [
 ]
 
 { #category : 'events' }
+PulsarBaseBrowser >> eventErrorNotification: ann [
+
+	logger error: ann value.
+	self addToast: (SpPanelToast new 
+		title: f'<span foreground="red">[ann value asString contractTo: 80]</span>';
+		actionLabel: 'Debug';
+		action: [ ann value signal ];
+		yourself)
+]
+
+{ #category : 'events' }
+PulsarBaseBrowser >> eventInformNotification: ann [
+
+	logger trace: ann value message: 'inform'.
+	self addToast: (SpPanelToast new 
+		title: ann value;
+		yourself)
+]
+
+{ #category : 'events' }
 PulsarBaseBrowser >> eventJobEnd: ann [
 
 	self jobEnd
@@ -455,6 +475,15 @@ PulsarBaseBrowser >> eventTestSuiteEnded: aTestSuiteEnded [
 		self inform: (f'Test run: <span foreground="[resultColor]">[message].</span>') ]
 ]
 
+{ #category : 'events' }
+PulsarBaseBrowser >> eventWarningNotification: ann [
+
+	logger warning: ann value messageText.
+	self addToast: (SpPanelToast new 
+		title: f'<span foreground="orange">Warning: [ann value messageText]</span>';
+		yourself)
+]
+
 { #category : 'accessing' }
 PulsarBaseBrowser >> findAllPresentersClass: aClass [
 	"answer sll presenters matching the class."
@@ -493,10 +522,9 @@ PulsarBaseBrowser >> hasPresenterClass: aClass [
 { #category : 'simple dialog helpers' }
 PulsarBaseBrowser >> inform: aString [
 
-	logger trace: aString message: 'inform'.
-	self addToast: (SpPanelToast new 
-		title: aString;
-		yourself)
+	self deprecated: 'Use a notification'.
+	
+	self eventInformNotification: (PulsarInformAnnouncement newValue: aString)
 ]
 
 { #category : 'initialization' }
@@ -676,7 +704,10 @@ PulsarBaseBrowser >> registerToEvents [
 		when: PulsarModelActivated send: #eventModelActivated: to: self;
 		when: PulsarModelDeactivated send: #eventModelDeactivated: to: self;
 		when: PulsarManyModelDeactivated send: #eventManyModelDeactivated: to: self;
-		when: PulsarRequestToolAnnouncement send: #addTool: to: self
+		when: PulsarRequestToolAnnouncement send: #addTool: to: self;
+		when: PulsarErrorAnnouncement send: #eventErrorNotification: to: self;
+		when: PulsarWarningAnnouncement send: #eventWarningNotification: to: self;
+		when: PulsarInformAnnouncement send: #eventInformNotification: to: self
 ]
 
 { #category : 'initialization' }
