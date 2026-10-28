@@ -1,4 +1,4 @@
-<p align="center"><img src="images/screenshot-dark.png" style="width:49%; margin:0 0.5%" alt="Pulsar in the dark theme"><img src="images/screenshot-light.png" style="width:49%; margin:0 0.5%" alt="Pulsar in the light theme"></p>
+<p align="center"><img src="images/screenshot-dark.png" width="47%" alt="Pulsar in the dark theme">&nbsp;&nbsp;&nbsp;<img src="images/screenshot-light.png" width="47%" alt="Pulsar in the light theme"></p>
 <h1 align="center">Pulsar: A coding-first IDE for Pharo.</h1>
 
 Pulsar brings [Pharo](https://pharo.org)'s live, reflective development model into a focused,
@@ -148,7 +148,7 @@ The bundled [Material Design Icons](LICENSE-Templarian-MDI) and
 ---
 
 <p align="center">
-  <img src="resources/logos/pulsar.png" height="64" alt="Pulsar logo" style="vertical-align:middle">
-  &nbsp;built with&nbsp;
-  <img src="resources/logos/pharo.png" height="64" alt="Pharo logo" style="vertical-align:middle">
+  <img src="resources/logos/pulsar.png" height="64" alt="Pulsar logo">
+  &nbsp;&nbsp;
+  <img src="resources/logos/pharo.png" height="64" alt="Pharo logo">
 </p>
