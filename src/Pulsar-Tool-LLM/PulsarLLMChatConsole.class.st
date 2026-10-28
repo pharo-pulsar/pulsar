@@ -88,8 +88,7 @@ PulsarLLMChatConsole >> doConnect [
 	on: Error
 	do: [ :e |
 		terminalPresenter terminateAllSpawns.
-			terminalPresenter feedLine: f'Error: [e messageText]'.
-			self updatingWhile: [ self updateStatus ] ]
+		self notificationCenter announceError: e ]
 ]
 
 { #category : 'private' }
@@ -105,7 +104,8 @@ PulsarLLMChatConsole >> doDisconnect [
 PulsarLLMChatConsole >> doDisconnectClosing: aBoolean [
 
 	self doDisconnect.
-	aBoolean ifTrue: [ self withNearWindowLikeDo: [ :aWindow | aWindow close ] ]
+	aBoolean ifTrue: [ 
+		self withNearWindowLikeDo: [ :aWindow | aWindow close ] ]
 ]
 
 { #category : 'actions' }
