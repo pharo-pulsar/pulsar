@@ -25,6 +25,7 @@ PulsarSettings class >> defaultSettings [
 
 { #category : 'defaults' }
 PulsarSettings class >> defaultSettingsDefinition [
+	<pulsarSourceEditor: 'json'>
 
 	^ '{
 	#ui: { 
@@ -40,7 +41,7 @@ PulsarSettings class >> defaultSettingsDefinition [
 	},
 	#features : {
 		#experimental: false,
-		#llm: false
+		#llm: true
 	}
 }
 '
