@@ -127,7 +127,7 @@ PulsarEditor >> doCopyToClipboard [
 
 	self model ifNil: [ ^ self ].
 	self application copyToClipboard: self model fullName.
-	self withWindowDo: [ :w | w  inform: 'Copied to clipboard' ]
+	self notificationCenter inform: 'Copied to clipboard'
 ]
 
 { #category : 'private - actions' }

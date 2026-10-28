@@ -97,12 +97,12 @@ PulsarTerminalInterface >> preferredMacTerminalProgram [
 PulsarTerminalInterface >> terminalShellCommand: aPath [
 	"Answer a <String> with the shell command to open a terminal for the receiver's OS"
 
-	OSPlatform current isWindows ifTrue: [ ^ self openWindowsTerminalCommand: aPath ].
-	OSPlatform current isMacOS ifTrue: [ ^ self openMacTerminalShellCommand: aPath ].
-	OSPlatform current isFlatpak ifTrue: [ ^ self openFlatpakTerminalShellCommand: aPath ]. 
-	OSPlatform current isLinux ifTrue: [ ^ self openLinuxTerminalShellCommand: aPath ].
+	OSPlatform current isWindows 	ifTrue: [ ^ self openWindowsTerminalCommand: aPath ].
+	OSPlatform current isMacOS 		ifTrue: [ ^ self openMacTerminalShellCommand: aPath ].
+	OSPlatform current isFlatpak 	ifTrue: [ ^ self openFlatpakTerminalShellCommand: aPath ]. 
+	OSPlatform current isLinux 		ifTrue: [ ^ self openLinuxTerminalShellCommand: aPath ].
 
-	self inform: 'No terminal for platform implemented'.
+	logger info: 'No terminal for platform implemented'.
 	
 	^ String empty
 ]

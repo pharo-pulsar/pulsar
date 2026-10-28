@@ -47,7 +47,7 @@ PulsarContextStackPresenter >> doCopyToClipboard [
 
 	self model ifNil: [ ^ self ].
 	self model doCopyToClipboardOn: self application.
-	self withWindowDo: [ :w | w inform: 'Copied to clipboard' ]
+	self notificationCenter inform: 'Copied to clipboard'
 ]
 
 { #category : 'private' }

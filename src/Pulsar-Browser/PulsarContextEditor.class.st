@@ -162,7 +162,7 @@ PulsarContextEditor >> updateModel: aString [
 	| force contextInteractionModel |
 	
 	self model canNotBeCompiledReason ifNotNil: [ :aReason |
-		self withWindowDo: [ :aWindow | aWindow inform: f'Can''t save: [aReason]' ].
+		self notificationCenter inform: f'Can''t save: [aReason]'.
 		^ false ].
 	
 	"since the context editor presenter works with a debugger interaction model, 

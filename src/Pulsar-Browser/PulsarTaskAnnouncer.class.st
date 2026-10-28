@@ -31,25 +31,25 @@ PulsarTaskAnnouncer >> announce: anAnnouncement [
 ]
 
 { #category : 'announcing' }
-PulsarTaskAnnouncer >> announceError: anError [
+PulsarTaskAnnouncer >> error: anError [
 
 	self announce: (PulsarErrorAnnouncement newValue: anError)
 ]
 
 { #category : 'announcing' }
-PulsarTaskAnnouncer >> announceInform: aString [
+PulsarTaskAnnouncer >> inform: aString [
 
 	self announce: (PulsarInformAnnouncement newValue: aString)
-]
-
-{ #category : 'announcing' }
-PulsarTaskAnnouncer >> announceWarning: aWarning [
-
-	self announce: (PulsarWarningAnnouncement newValue: aWarning)
 ]
 
 { #category : 'testing' }
 PulsarTaskAnnouncer >> isSynchronic: anAnnouncement [ 
 
 	^ self class synchronicAnnouncements includes: anAnnouncement class
+]
+
+{ #category : 'announcing' }
+PulsarTaskAnnouncer >> warning: aWarning [
+
+	self announce: (PulsarWarningAnnouncement newValue: aWarning)
 ]

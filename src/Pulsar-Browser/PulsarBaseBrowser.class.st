@@ -472,7 +472,7 @@ PulsarBaseBrowser >> eventTestSuiteEnded: aTestSuiteEnded [
 		aTestSuiteEnded testResult hasFailures ifTrue: [ message := 'Has failures' ].
 		aTestSuiteEnded testResult hasErrors ifTrue: [ message := 'Has errors' ].
 		resultColor := self application colorForTestResultAt: aTestSuiteEnded testResult status.
-		self inform: (f'Test run: <span foreground="[resultColor]">[message].</span>') ]
+		self notificationCenter inform: (f'Test run: <span foreground="[resultColor]">[message].</span>') ]
 ]
 
 { #category : 'events' }
@@ -743,7 +743,7 @@ PulsarBaseBrowser >> saveImage [
 	[ Smalltalk snapshot: true andQuit: false ] 
 	fork.
 
-	self inform: 'Image saved'
+	self notificationCenter inform: 'Image saved'
 ]
 
 { #category : 'private' }

@@ -47,7 +47,7 @@ PulsarCommitInfoPresenter >> doCopyCommitIdToClipboard [
 
 	self model ifNil: [ ^ self ].
 	self application copyToClipboard: self model id.
-	self withWindowDo: [ :w | w  inform: 'Copied to clipboard' ]
+	self notificationCenter inform: 'Copied to clipboard'
 ]
 
 { #category : 'private - actions' }
