@@ -79,8 +79,8 @@ PulsarLLMOpenCodeModel >> performConnectTo: aTerminalPresenter withPrompt: aStri
 	self 
 		spawnFromHost: command 
 		arguments: (aString 
-			ifNotNil: [ { '--prompt'. self ensurePromptCompliance: aString } ]
-			ifNil: [ #() ])
+			ifNotNil: [ { '--standalone'. '--prompt'. self ensurePromptCompliance: aString } ]
+			ifNil: [ #('--standalone') ])
 		in: aTerminalPresenter
 ]
 
