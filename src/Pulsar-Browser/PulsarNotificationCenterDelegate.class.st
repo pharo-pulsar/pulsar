@@ -31,6 +31,18 @@ PulsarNotificationCenterDelegate >> announce: anAnnouncement [
 ]
 
 { #category : 'forwarding' }
+PulsarNotificationCenterDelegate >> error: anObject [
+
+	target ifNotNil: [ target error: anObject ]
+]
+
+{ #category : 'forwarding' }
+PulsarNotificationCenterDelegate >> inform: anObject [
+
+	target ifNotNil: [ target inform: anObject ]
+]
+
+{ #category : 'forwarding' }
 PulsarNotificationCenterDelegate >> suspendAllWhile: aBlock [
 
 	target ifNotNil: [ target suspendAllWhile: aBlock ]
@@ -52,6 +64,12 @@ PulsarNotificationCenterDelegate >> target: anAnnouncer [
 PulsarNotificationCenterDelegate >> unsubscribe: anObject [
 
 	target ifNotNil: [ target unsubscribe: anObject ]
+]
+
+{ #category : 'forwarding' }
+PulsarNotificationCenterDelegate >> warning: anObject [
+
+	target ifNotNil: [ target warning: anObject ]
 ]
 
 { #category : 'forwarding' }
