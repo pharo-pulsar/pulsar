@@ -16,7 +16,8 @@ Class {
 		'toolbarPresenter',
 		'terminalPresenter',
 		'clientModel',
-		'updating'
+		'updating',
+		'terminationRequested'
 	],
 	#category : 'Pulsar-Tool-LLM-View',
 	#package : 'Pulsar-Tool-LLM',
@@ -53,8 +54,17 @@ PulsarLLMChatConsole >> clientModel: aModel [
 PulsarLLMChatConsole >> connectPresenters [
 
 	terminalPresenter whenChildExitedDo: [ :ann |
-		logger debug: 'Exit with code: ' , ann status asString.
-		self doDisconnectClosing: self isUpdating not ]
+			| exitStatus |
+			exitStatus := ann exitStatus.
+			logger debug: f'Terminal exit: [exitStatus description]'.
+			(exitStatus isSuccess 
+				or: [ terminationRequested 
+				or: [ exitStatus isInterrupted ] ]) 
+				ifFalse: [
+					self notificationCenter warning: (Warning new
+						messageText: f'Terminal [exitStatus description]';
+						yourself) ].
+			self doDisconnectClosing: self isUpdating not ]
 ]
 
 { #category : 'layout' }
@@ -76,24 +86,25 @@ PulsarLLMChatConsole >> doClose [
 PulsarLLMChatConsole >> doConnect [
 
 	self isConnected ifTrue: [ ^ self ].
+	terminationRequested := false.
 
 	[
 		self updatingWhile: [
-			self model 
-				clientClass: self usingLLM;
-				connectTo: terminalPresenter.
-			self updateTitle.
-			self updateStatus ] 
-	]
+			self model
+					clientClass: self usingLLM;
+					connectTo: terminalPresenter.
+				self updateTitle.
+				self updateStatus ] ]
 	on: Error
 	do: [ :e |
 		terminalPresenter terminateAllSpawns.
-		self notificationCenter announceError: e ]
+		self notificationCenter error: e ]
 ]
 
 { #category : 'private' }
 PulsarLLMChatConsole >> doDisconnect [
 
+	terminationRequested := true.
 	self clientModel ifNotNil: [ :aModel | aModel disconnect ].
 	self clientModel: nil.
 	terminalPresenter ifNotNil: [ :aPresenter | aPresenter terminateAllSpawns ].
@@ -103,9 +114,14 @@ PulsarLLMChatConsole >> doDisconnect [
 { #category : 'private' }
 PulsarLLMChatConsole >> doDisconnectClosing: aBoolean [
 
-	self doDisconnect.
-	aBoolean ifTrue: [ 
-		self withNearWindowLikeDo: [ :aWindow | aWindow close ] ]
+	[ 
+		self doDisconnect.
+		aBoolean ifTrue: [ 
+			self withNearWindowLikeDo: [ :aWindow | aWindow close ] ] 
+	] 
+	on: Error 
+	do: [ :e | 
+		self notificationCenter error: e ]
 ]
 
 { #category : 'actions' }
