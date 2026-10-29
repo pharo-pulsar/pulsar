@@ -141,7 +141,7 @@ PulsarLLMChatConsole >> eventRequestNewTerminal: ann [
 	prompt := ann model initialPrompt.
 	prompt isEmptyOrNil ifTrue: [ ^ self ].
 
-	terminalPresenter feedChildMultipleLine: prompt withPlatformLineEndings
+	terminalPresenter feedChildMultipleLine: prompt trimBoth withPlatformLineEndings
 ]
 
 { #category : 'events' }

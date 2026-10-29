@@ -67,7 +67,9 @@ PulsarLLMRepositoryAgentModel >> commitForExplanation [
 { #category : 'prompts' }
 PulsarLLMRepositoryAgentModel >> commitForExplanationId [
 
-	^ self commitForExplanation ifNil: [ '' ] ifNotNil: [ :commit | commit id asString ]
+	^ self commitForExplanation 
+		ifNotNil: [ :commit | commit id asString ]
+		ifNil: [ '' ]
 ]
 
 { #category : 'prompts' }
@@ -107,15 +109,14 @@ Skip any learning phase.'
 PulsarLLMRepositoryAgentModel >> explanationSubject [
 
 	self isRootSelection ifTrue: [ ^ self rootExplanationSubject ].
-	^ 'the changes to ' , self entity name
+	^ f'the changes to [self entity name]'
 ]
 
 { #category : 'prompts' }
 PulsarLLMRepositoryAgentModel >> focusInstructions [
 
 	self isRootSelection ifTrue: [ ^ '' ].
-	^ f'
-Focus the explanation on the entries whose path contains [self nodePath].'
+	^ f'Focus the explanation on the entries whose path contains [self nodePath].'
 ]
 
 { #category : 'prompts' }
