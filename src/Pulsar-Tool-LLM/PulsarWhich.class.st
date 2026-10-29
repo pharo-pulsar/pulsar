@@ -36,10 +36,13 @@ PulsarWhich class >> uniqueInstance [
 
 { #category : 'private' }
 PulsarWhich >> homePathFromFlatpakAsList [
-	"this should work for linux/macOS and windows"
-	| homePath |
+	| homePath shellOnHost |
 
-	homePath := LibC resultOfCommand: 'flatpak-spawn --host sh -lc ''printf "%s\n" "$PATH"'''.
+	shellOnHost := (LibC resultOfCommand: 'flatpak-spawn --host sh -lc ''printf "%s\n" "$SHELL"''') trimBoth.
+	"if I did not get a shell, use default"
+	shellOnHost ifEmpty: [ shellOnHost := 'sh' ].
+	
+	homePath := LibC resultOfCommand: f'flatpak-spawn --host [shellOnHost] -lc ''printf "%s\n" "$PATH"'''.
 	^ homePath substrings: ':;'
 ]
 
