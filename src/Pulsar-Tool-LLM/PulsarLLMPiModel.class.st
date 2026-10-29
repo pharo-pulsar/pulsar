@@ -1,11 +1,18 @@
 "
-I am the concrete model for integrating with the OpenCode CLI tool.
+I am the concrete `PulsarLLMModel` that runs the `pi` coding agent as a Pulsar LLM terminal client.
 
-On #prepare I ensure configuration files exist: AGENTS.md (Pharo MCP guidance for the LLM) and opencode.json (MCP server URL for the OpenCode client).
+I supply the `pi`-specific half of a session; the shared Pharo MCP server, the `AGENTS.md` guidance, skill installation, the connection flag, and the connect/disconnect lifecycle come from `PulsarLLMModel`.
 
-On #connectTo: I start the Pharo MCP server and spawn the opencode CLI in the given terminal presenter, connecting the LLM to the running image.
+On `#prepare` I add the configuration `pi` needs: a `.pi` directory next to the image holding an `mcp-adapter.json` that declares the Pharo MCP server and enables direct tool access. It is written only when missing, so a local adaptation survives. On connect the inherited flow starts the MCP server and I resolve `pi` through `PulsarWhich`, raising an error that names the `PATH` requirement when the executable is absent, then spawn it in the caller's terminal presenter with the image directory as working directory - which is what makes the local configuration apply. An optional initial prompt travels as a command-line argument, normalized by `ensurePromptCompliance:` to end with a newline so the client submits it.
 
-On #disconnect I stop the MCP server and mark the session as ended.
+I hold no state of my own, and `#isAvailable` answers true unconditionally, so a missing executable surfaces only when a session is attempted. An LLM terminal (`PulsarLLMChatConsole`) takes its client class from the application's `agentName` setting through `PulsarLLMModel class>>findAgentNamed:`, which matches my label `Pi`; the same flow can be driven directly:
+
+```
+PulsarLLMPiModel new
+    connectTo: aTerminalPresenter
+```
+
+`PulsarLLMOpenCodeModel`, `PulsarLLMClaudeModel` and `PulsarLLMCodexModel` are peers of the same shape for other clients.
 "
 Class {
 	#name : 'PulsarLLMPiModel',
@@ -46,7 +53,7 @@ PulsarLLMPiModel >> ensureConfig [
 	| dir ref |
 
 	dir := (FileLocator imageDirectory / '.pi') ensureCreateDirectory.
-	ref := dir / 'mcp.json'. 
+	ref := dir / 'mcp-adapter.json'. 
 	ref exists ifFalse: [ 
 		ref writeStreamDo: [ :stream | stream << self class configDefinition ] ]
 ]
@@ -67,7 +74,7 @@ PulsarLLMPiModel >> performConnectTo: aTerminalPresenter withPrompt: aString [
 		self error: 'Pi not found. Please install it and make sure it can be found in the PATH.' ].
 
 	self 
-		spawnFromHost: command 
+		spawn: 'pi'
 		arguments: (aString ifNotNil: [ self ensurePromptCompliance: aString ] ifNil: [ #() ])
 		in: aTerminalPresenter
 ]
