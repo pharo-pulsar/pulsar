@@ -144,6 +144,15 @@ PulsarRepositoryDiffEditor >> model [
 	^ super model ifNil: [ PulsarEmptyDiffNode new ]
 ]
 
+{ #category : 'accessing - model' }
+PulsarRepositoryDiffEditor >> model: aModel [
+
+	self model = aModel ifTrue: [ ^ self ].
+
+	actions := nil.
+	super model: aModel
+]
+
 { #category : 'private' }
 PulsarRepositoryDiffEditor >> mutex [
 
