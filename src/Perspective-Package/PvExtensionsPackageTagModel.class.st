@@ -29,10 +29,10 @@ PvExtensionsPackageTagModel >> children [
 { #category : 'accessing' }
 PvExtensionsPackageTagModel >> classes [
 
-	^ self entity extendedClasses 
-		collect: [ :each | 
-			PvExtendedClassModel 
-				newEnvironment: self environmentModel 
+	^ self entity extendedClasses
+		collect: [ :each |
+			PvExtendedClassModel
+				newEnvironment: self environmentModel
 				entity: each ]
 		as: OrderedCollection
 ]

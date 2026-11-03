@@ -221,6 +221,17 @@ PulsarMultiProjectModel >> newProjectNamed: aName [
 ]
 
 { #category : 'private' }
+PulsarMultiProjectModel >> normalizedProjectName: aString [
+	"Answer aString without an optional BaselineOf prefix, ready to compare with project names."
+
+	| name |
+	name := aString asString trimBoth.
+	^ (name asLowercase beginsWith: 'baselineof')
+		  ifTrue: [ name allButFirst: 10 ]
+		  ifFalse: [ name ]
+]
+
+{ #category : 'private' }
 PulsarMultiProjectModel >> pathTo: aPath in: aCollection [
 	| segment |
 
@@ -234,19 +245,38 @@ PulsarMultiProjectModel >> pathTo: aPath in: aCollection [
 	^ #()
 ]
 
+{ #category : 'accessing' }
+PulsarMultiProjectModel >> projectNamed: aString [
+	"Answer the open project whose name matches aString, or nil. Accept an optional BaselineOf prefix and ignore case."
+
+	| normalizedName |
+	aString ifNil: [ ^ nil ].
+	self children detect: [ :each | each name = aString ] ifFound: [ :project | ^ project ].
+	normalizedName := self normalizedProjectName: aString.
+	^ self children detect: [ :each | each name sameAs: normalizedName ] ifNone: [ nil ]
+]
+
 { #category : 'actions' }
 PulsarMultiProjectModel >> removeProjectModel: aModel [
 
 	aModel isVolatileProject ifTrue: [
-			| packageName package |
-			packageName := aModel name capitalized.
-			(self environmentModel hasPackageNamed: packageName) ifTrue: [
-					package := self environmentModel packageNamed: packageName.
-					package definedClasses isEmpty ifTrue: [
-							self environmentModel removePackageNamed: packageName.
-							aModel packageModels removeAll ] ].
-			PulsarVolatileProjectSpec unregisterProjectNamed: aModel name ].
+		self removeVolatileProjectModel: aModel ].
+	
 	projectModels := projectModels copyWithout: aModel
+]
+
+{ #category : 'actions' }
+PulsarMultiProjectModel >> removeVolatileProjectModel: aModel [
+	| packageName package |
+
+	packageName := aModel name capitalized.
+	(self environmentModel hasPackageNamed: packageName) ifTrue: [
+			package := self environmentModel packageNamed: packageName.
+			package definedClasses ifEmpty: [
+				self environmentModel removePackageNamed: packageName.
+				aModel packageModels removeAll ] ].
+	
+	PulsarVolatileProjectSpec unregisterProjectNamed: aModel name
 ]
 
 { #category : 'actions' }

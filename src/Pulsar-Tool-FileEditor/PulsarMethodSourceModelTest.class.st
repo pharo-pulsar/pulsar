@@ -6,6 +6,12 @@ Class {
 	#tag : 'Model'
 }
 
+{ #category : 'support' }
+PulsarMethodSourceModelTest >> environmentModel [
+
+	^ PvEnvironmentModel onSystem
+]
+
 { #category : 'tests' }
 PulsarMethodSourceModelTest >> fStringExample [
 
@@ -55,7 +61,7 @@ PulsarMethodSourceModelTest >> plainLiteralUpdateExample [
 PulsarMethodSourceModelTest >> testSourceCodeWithFString [
 	| model |
 
-	model := PulsarMethodSourceModel newEnvironment: nil entity: self class>>#fStringExample.
+	model := PulsarMethodSourceModel newEnvironment: self environmentModel entity: self class>>#fStringExample.
 	
 	self assert: model sourceCode equals: 'test [42]'
 ]
@@ -64,7 +70,7 @@ PulsarMethodSourceModelTest >> testSourceCodeWithFString [
 PulsarMethodSourceModelTest >> testUpdateWithFStringKeepsFStringForm [
 
 	| model |
-	model := PulsarMethodSourceModel newEnvironment: nil entity: self class >> #fStringFormExample.
+	model := PulsarMethodSourceModel newEnvironment: self environmentModel entity: self class >> #fStringFormExample.
 	self assert: (model updateWith: 'plain text').
 
 	self assert: ((self class >> #fStringFormExample) sourceCode includesSubstring: 'f''plain text''').
@@ -75,7 +81,7 @@ PulsarMethodSourceModelTest >> testUpdateWithFStringKeepsFStringForm [
 PulsarMethodSourceModelTest >> testUpdateWithFStringPreservesMethodParts [
 
 	| model source |
-	model := PulsarMethodSourceModel newEnvironment: nil entity: self class >> #fStringUpdateExample.
+	model := PulsarMethodSourceModel newEnvironment: self environmentModel entity: self class >> #fStringUpdateExample.
 	self assert: (model updateWith: 'new { color: red; }').
 
 	source := (self class >> #fStringUpdateExample) sourceCode.
@@ -90,7 +96,7 @@ PulsarMethodSourceModelTest >> testUpdateWithFStringPreservesMethodParts [
 PulsarMethodSourceModelTest >> testUpdateWithInvalidFStringAnswersFalse [
 
 	| model |
-	model := PulsarMethodSourceModel newEnvironment: nil entity: self class >> #invalidFStringExample.
+	model := PulsarMethodSourceModel newEnvironment: self environmentModel entity: self class >> #invalidFStringExample.
 	self deny: (model updateWith: 'unclosed [').
 	self assert: ((self class >> #invalidFStringExample) sourceCode includesSubstring: 'f''original''')
 ]
@@ -99,7 +105,7 @@ PulsarMethodSourceModelTest >> testUpdateWithInvalidFStringAnswersFalse [
 PulsarMethodSourceModelTest >> testUpdateWithNoEmbeddedTextAnswersFalse [
 
 	| model |
-	model := PulsarMethodSourceModel newEnvironment: nil entity: self class >> #noEmbeddedTextExample.
+	model := PulsarMethodSourceModel newEnvironment: self environmentModel entity: self class >> #noEmbeddedTextExample.
 	self deny: (model updateWith: 'anything').
 	self assert: self class new noEmbeddedTextExample equals: 42
 ]
@@ -108,7 +114,7 @@ PulsarMethodSourceModelTest >> testUpdateWithNoEmbeddedTextAnswersFalse [
 PulsarMethodSourceModelTest >> testUpdateWithPlainLiteralPreservesMethodParts [
 
 	| model source |
-	model := PulsarMethodSourceModel newEnvironment: nil entity: self class >> #plainLiteralUpdateExample.
+	model := PulsarMethodSourceModel newEnvironment: self environmentModel entity: self class >> #plainLiteralUpdateExample.
 	self assert: (model updateWith: 'it''s fine').
 
 	source := (self class >> #plainLiteralUpdateExample) sourceCode.

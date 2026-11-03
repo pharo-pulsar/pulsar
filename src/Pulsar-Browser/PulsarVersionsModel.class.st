@@ -43,14 +43,14 @@ PulsarVersionsModel >> iconName [
 
 { #category : 'accessing' }
 PulsarVersionsModel >> includingRepositories [
-	| repositories packageName |
-	
+
+	| packageName |
 	packageName := self entity package name.
-	^ IceRepository repositories 
+	^ IceRepository repositories
 		select: [ :each | each includesPackageNamed: packageName ]
-		thenCollect: [ :each | 
-			PulsarRepositoryModel 
-				newEnvironment: self environmentModel 
+		thenCollect: [ :each |
+			PulsarRepositoryModel
+				newEnvironment: self environmentModel
 				entity: each ]
 ]
 

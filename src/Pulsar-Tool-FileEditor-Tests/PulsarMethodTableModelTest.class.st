@@ -8,10 +8,16 @@ Class {
 	#package : 'Pulsar-Tool-FileEditor-Tests'
 }
 
+{ #category : 'support' }
+PulsarMethodTableModelTest >> environmentModel [
+
+	^ PvEnvironmentModel onSystem
+]
+
 { #category : 'private' }
 PulsarMethodTableModelTest >> newModel [
 
-	^ PulsarMethodTableModel newEnvironment: nil entity: self class >> #sampleTableForTest
+	^ PulsarMethodTableModel newEnvironment: self environmentModel entity: self class >> #sampleTableForTest
 ]
 
 { #category : 'private' }

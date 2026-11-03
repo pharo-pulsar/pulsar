@@ -26,18 +26,18 @@ PvMethodHierarchyNodeModel >> children [
 
 { #category : 'accessing' }
 PvMethodHierarchyNodeModel >> findParentFrom: nodes [
-	| parents parentNodes |
 
+	| parents parentNodes |
 	parent ifNotNil: [ ^ self ].
-	
-	parents := nodes select: [ :each | 
+
+	parents := nodes select: [ :each |
 		each ~= self and: [ self entity origin inheritsFrom: each entity origin ] ].
 	parents ifEmpty: [ ^ self ].
-	
-	parents size = 1 ifTrue: [ 
+
+	parents size = 1 ifTrue: [
 		parents first addChildNode: self.
 		^ self ].
-	
+
 	"sort and find"
 	parentNodes := parents sorted: [ :a | a entity origin classDepth ] ascending.
 	parentNodes last addChildNode: self

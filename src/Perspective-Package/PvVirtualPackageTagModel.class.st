@@ -18,11 +18,10 @@ PvVirtualPackageTagModel class >> order [
 	^ 100
 ]
 
-{ #category : 'instance creation' }
+{ #category : 'accessing' }
 PvVirtualPackageTagModel class >> virtualModelsFor: aPackage [
 
 	^ self allSubclasses select: [ :each | each canBeUsedFor: aPackage ]
-
 ]
 
 { #category : 'testing' }

@@ -11,7 +11,7 @@ Class {
 { #category : 'default' }
 PvPerspectiveBrowser class >> defaultEnvironment [
 
-	^ PvSystemEnvironment new
+	^ PulsarSystemEnvironment new
 ]
 
 { #category : 'as yet unclassified' }

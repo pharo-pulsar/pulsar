@@ -16,116 +16,116 @@ PvOutlineClassModel >> children [
 	  self collectMethods
 ]
 
-{ #category : 'accessing - collecting' }
+{ #category : 'accessing' }
 PvOutlineClassModel >> collectClassMethods [
-	
+
 	"I need to use visibleMethods here because otherwise it will show TraitedClass methods"
-	^ (self entity classSide visibleMethods 
+	^ (self entity classSide visibleMethods
 		collect: [ :each | PvMethodModel newEnvironment: self environmentModel entity: each ])
 		sorted: #name ascending
 ]
 
-{ #category : 'accessing - collecting' }
+{ #category : 'accessing' }
 PvOutlineClassModel >> collectClassMethodsForProtocol: aProtocol [
 
 	^ (aProtocol methods
 		collect: [ :each |
-			PvMethodModel 
-				newEnvironment: self environmentModel 
+			PvMethodModel
+				newEnvironment: self environmentModel
 				entity: each ])
 		sorted: [ :a | a selector ] ascending
 ]
 
-{ #category : 'accessing - collecting' }
+{ #category : 'accessing' }
 PvOutlineClassModel >> collectClassProtocols [
-	
+
 	^ self collectProtocolsOn: self entity classSide
 ]
 
-{ #category : 'accessing - collecting' }
+{ #category : 'accessing' }
 PvOutlineClassModel >> collectClassSharedVariables [
-	
+
 	^ self entity classSide classPool keys
-		collect: [ :each | 
+		collect: [ :each |
 			PvSharedVaribleModel
-				newEnvironment: self environmentModel 
+				newEnvironment: self environmentModel
 				entity: self entity classSide
 				name: each ]
 ]
 
-{ #category : 'accessing - collecting' }
+{ #category : 'accessing' }
 PvOutlineClassModel >> collectClassVariables [
-		
-	^ (self entity classSide slots 
+
+	^ (self entity classSide slots
 		collect: [ :each | PvSlotModel newEnvironment: self environmentModel entity: each ])
 		copyWithFirst: (PulsarNoneVirtualSlot newEntity: self entity classSide)
 ]
 
-{ #category : 'accessing - collecting' }
+{ #category : 'accessing' }
 PvOutlineClassModel >> collectMethods [
-	
-	^ (self entity instanceSide methods 
+
+	^ (self entity instanceSide methods
 		collect: [ :each | PvMethodModel newEnvironment: self environmentModel entity: each ])
 		sorted: #name ascending
 ]
 
-{ #category : 'accessing - collecting' }
+{ #category : 'accessing' }
 PvOutlineClassModel >> collectMethodsForProtocol: aProtocol [
 
 	^ aProtocol methods
-		select: [ :each | (self entity instanceSide methodDict includesKey: each selector) ] 
-		thenCollect: [ :each | 
-			PvMethodModel 
-				newEnvironment: self environmentModel 
+		select: [ :each | (self entity instanceSide methodDict includesKey: each selector) ]
+		thenCollect: [ :each |
+			PvMethodModel
+				newEnvironment: self environmentModel
 				entity: each ]
 ]
 
-{ #category : 'accessing - collecting' }
+{ #category : 'accessing' }
 PvOutlineClassModel >> collectProtocols [
-	
+
 	^ self collectProtocolsOn: self entity instanceSide
 ]
 
-{ #category : 'accessing - collecting' }
+{ #category : 'accessing' }
 PvOutlineClassModel >> collectProtocolsOn: aClassOrMetaclass [
-	
+
 	^ Array streamContents: [ :stream |
 		"all methods"
 		stream nextPut: (PulsarAllMethodsVirtualProtocol newEntity: aClassOrMetaclass).
 		"virtual protocols (add listing here)"
-		self virtualProtocolClasses do: [ :eachClass | 
+		self virtualProtocolClasses do: [ :eachClass |
 			| virtualProtocol |
 			virtualProtocol := eachClass newEntity: aClassOrMetaclass.
 			virtualProtocol shouldBeDisplayed
 				ifTrue: [ stream nextPut: virtualProtocol ] ].
 		"trait methods"
 		self entity traits do: [ :each |
-			stream nextPut: (PulsarTraitMethodsVirtualProtocol 
-				newEntity: aClassOrMetaclass 
+			stream nextPut: (PulsarTraitMethodsVirtualProtocol
+				newEntity: aClassOrMetaclass
 				trait: each) ].
 		"protocol methods"
-		stream nextPutAll: (((aClassOrMetaclass protocols 
+		stream nextPutAll: (((aClassOrMetaclass protocols
 			collect: [ :each | PvProtocolModel newEnvironment: self environmentModel entity: each ])
 			reject: #isEmpty)
 			sorted: #name ascending) ]
 ]
 
-{ #category : 'accessing - collecting' }
+{ #category : 'accessing' }
 PvOutlineClassModel >> collectTraitUsers [
-	
-	^ self entity users 
-		collect: [ :eachClass | 
-			PvClassModel 
+
+	^ self entity users
+		collect: [ :eachClass |
+			PvClassModel
 				newEnvironment: self environmentModel
 				entity: eachClass ]
 		as: Array
 ]
 
-{ #category : 'accessing - collecting' }
+{ #category : 'accessing' }
 PvOutlineClassModel >> collectVariables [
-	
+
 	^ (self entity instanceSide slots
-		collect: [ :each | PvSlotModel newEnvironment: self entity: each ])
+		collect: [ :each | PvSlotModel newEnvironment: self environmentModel entity: each ])
 		copyWithFirst: (PulsarNoneVirtualSlot newEntity: self entity instanceSide)
 ]
 

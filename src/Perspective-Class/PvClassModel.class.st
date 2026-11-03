@@ -72,26 +72,26 @@ PvClassModel >> actionsWithContextOn: aContextPresenter [
 		copyWithContext: (PulsarRefactorClassContext on: aContextPresenter)
 ]
 
-{ #category : 'updating' }
+{ #category : 'accessing' }
 PvClassModel >> addClassVariableNamed: aName type: aClass [
 
 	"class side variables are not slots for the moment (sadly)"
 	self entity classSide addInstVarNamed: aName asSymbol
 ]
 
-{ #category : 'updating' }
+{ #category : 'accessing' }
 PvClassModel >> addProtocolNamed: aName [
 
 	self entity addProtocol: (Protocol named: aName)
 ]
 
-{ #category : 'updating' }
+{ #category : 'accessing' }
 PvClassModel >> addSharedVariableNamed: aName [
 
 	self entity addClassVarNamed: aName
 ]
 
-{ #category : 'updating' }
+{ #category : 'accessing' }
 PvClassModel >> addVariableNamed: aName type: aClass [
 
 	self entity addSlot: (aClass named: aName asSymbol)
@@ -101,8 +101,8 @@ PvClassModel >> addVariableNamed: aName type: aClass [
 PvClassModel >> allTestMethods [
 
 	^ self entity allTestSelectors
-		collect: [ :each | 
-			PvMethodModel 
+		collect: [ :each |
+			PvMethodModel
 				newEnvironment: self environmentModel
 				entity: self entity >> each ]
 ]
@@ -123,9 +123,9 @@ PvClassModel >> asOutlineClassModel [
 
 { #category : 'converting' }
 PvClassModel >> asPackageModel [
-	
-	^ PvPackageModel 
-		newEnvironment: self environmentModel 
+
+	^ PvPackageModel
+		newEnvironment: self environmentModel
 		parent: nil
 		entity: self entity package
 ]
@@ -138,27 +138,21 @@ PvClassModel >> beForNewClass [
 
 { #category : 'accessing' }
 PvClassModel >> classDefinitionString [
-	
-	self flag: #TODO. "I do not like to use an if here... but for now is easier 
-	than pollute the model"
-	^ self entity isClassOrTrait 
-		ifTrue: [ (PvFluidClassDefinitionPrinter for: self entity) definitionString ]
-		ifFalse: [ self entity classDefinitionString ]
+
+	^ self environment definitionStringOf: self entity
 ]
 
 { #category : 'accessing' }
 PvClassModel >> classDepth [
-	
+
 	^ self entity classDepth
 ]
 
-{ #category : 'accessing - navigating' }
+{ #category : 'accessing' }
 PvClassModel >> classHierarchyTopModel [
-	| node prevNode |
 
-	prevNode := PvClassHierarchyNodeModel 
-		newEnvironment: self environmentModel 
-		entity: self entity.
+	| node prevNode |
+	prevNode := PvClassHierarchyNodeModel newEnvironment: self environmentModel entity: self entity.
 	prevNode childrenNodeProvider: [ :anEntity | anEntity subclasses ].
 
 	self entity allSuperclasses do: [ :each |
@@ -166,10 +160,10 @@ PvClassModel >> classHierarchyTopModel [
 		node child: prevNode.
 		prevNode := node ].
 
-	^ node
+	^ node ifNil: [ prevNode ]
 ]
 
-{ #category : 'accessing - parallel hierarchy' }
+{ #category : 'accessing' }
 PvClassModel >> classSide [
 
 	^ self entity classSide
@@ -263,7 +257,7 @@ PvClassModel >> hierarchyTopModel [
 		ifFalse: [ self classHierarchyTopModel ]
 ]
 
-{ #category : 'accessing - ui' }
+{ #category : 'accessing' }
 PvClassModel >> iconName [
 
 	^ self entity systemIconName
@@ -283,8 +277,8 @@ PvClassModel >> includesSelectorInAnySide: aSelector [
 ]
 
 { #category : 'testing' }
-PvClassModel >> inheritsFrom: aClassModel [ 
-	
+PvClassModel >> inheritsFrom: aClassModel [
+
 	aClassModel ifNil: [ ^ false ].
 	^ self entity instanceSide inheritsFrom: aClassModel entity instanceSide
 ]
@@ -296,7 +290,7 @@ PvClassModel >> initialize [
 	isNew := false
 ]
 
-{ #category : 'accessing - parallel hierarchy' }
+{ #category : 'accessing' }
 PvClassModel >> instanceSide [
 
 	^ self entity instanceSide
@@ -320,14 +314,12 @@ PvClassModel >> isDeprecated [
 	^ self entity isDeprecated
 ]
 
-{ #category : 'accessing - navigating' }
+{ #category : 'testing' }
 PvClassModel >> isLargeHierarchy [
 
 	self isTrait ifTrue: [ ^ false ].
 
-	^ {
-		  Object.
-		  ProtoObject } includes: self entity
+	^ { Object. ProtoObject } includes: self entity
 ]
 
 { #category : 'testing' }
@@ -391,7 +383,16 @@ PvClassModel >> printOn: stream [
 	stream << '(' << self name << ')'
 ]
 
-{ #category : 'updating' }
+{ #category : 'testing' }
+PvClassModel >> runTestAnnouncingTo: anAnnouncer [
+
+	NewTestRunner
+		executeSuite: self entity suite
+		announcingTo: anAnnouncer
+		inMode: ExecutionMode runTestsMode
+]
+
+{ #category : 'accessing' }
 PvClassModel >> saveComment: aString [
 
 	self entity comment: aString
@@ -409,27 +410,20 @@ PvClassModel >> shortName [
 	^ self name contractTo: self class shortSize
 ]
 
-{ #category : 'accessing - navigating' }
+{ #category : 'accessing' }
 PvClassModel >> traitHierarchyTopModel [
+
 	| node |
-	
-	node := PvClassHierarchyNodeModel 
-		newEnvironment: self environmentModel 
-		entity: self entity.
-	
-	node childrenNodeProvider: [ :anEntity | 
-		anEntity traitUsers asArray ].
-	
+	node := PvClassHierarchyNodeModel newEnvironment: self environmentModel entity: self entity.
+	node childrenNodeProvider: [ :anEntity | anEntity traitUsers asArray ].
 	^ node
 ]
 
 { #category : 'accessing' }
 PvClassModel >> traits [
 
-	^ self entity traits collect: [ :each | 
-		PvClassModel 
-			newEnvironment: self environmentModel
-			entity: each ]
+	^ self entity traits collect: [ :each |
+		PvClassModel newEnvironment: self environmentModel entity: each ]
 ]
 
 { #category : 'updating' }

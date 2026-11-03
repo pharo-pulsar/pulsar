@@ -38,10 +38,10 @@ PvSharedVaribleModel >> name: aName [
 	name := aName
 ]
 
-{ #category : 'removing' }
+{ #category : 'accessing' }
 PvSharedVaribleModel >> removeSharedVariable [
+
 	| instanceClass |
-	
 	instanceClass := self entity instanceSide.
 	instanceClass removeClassVariable: (instanceClass classVariables detect: [ :each | each key = self name ])
 ]

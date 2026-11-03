@@ -8,14 +8,14 @@ Class {
 
 { #category : 'tests' }
 PvMethodModelTest >> testHierarchyTopModelForClassSide [
-	| model topModel |
 
-	model := PvMethodModel 
-		newEnvironment: nil
+	| model topModel |
+	model := PvMethodModel
+		newEnvironment: PvEnvironmentModel onSystem
 		entity: Collection class>>#newFromArray:.
-	
+
 	topModel := model hierarchyTopModel.
-	
+
 	self assert: topModel entity equals: Object class>>#newFromArray:.
 	self denyEmpty: topModel children.
 	self assert: topModel children first entity equals: Collection class>>#newFromArray:

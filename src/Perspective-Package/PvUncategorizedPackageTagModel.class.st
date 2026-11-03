@@ -9,8 +9,7 @@ Class {
 { #category : 'testing' }
 PvUncategorizedPackageTagModel class >> canBeUsedFor: aPackage [
 
-	^ (aPackage includesClassTagNamed: aPackage name)"
-		and: [ (aPackage classesForClassTag: aPackage name) notEmpty ]"
+	^ aPackage includesClassTagNamed: aPackage name
 ]
 
 { #category : 'accessing' }
@@ -28,7 +27,7 @@ PvUncategorizedPackageTagModel >> children [
 { #category : 'accessing' }
 PvUncategorizedPackageTagModel >> classes [
 
-	^ ((self entity classesForClassTag: self entity name) 
+	^ ((self entity classesForClassTag: self entity name)
 		collect: [ :each | PvClassModel newEnvironment: self environmentModel entity: each ])
 		sorted: #name ascending
 ]

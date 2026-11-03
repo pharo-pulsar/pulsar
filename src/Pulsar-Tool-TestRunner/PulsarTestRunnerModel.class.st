@@ -162,15 +162,19 @@ PulsarTestRunnerModel >> runSuite: aTestSuite for: caseCollection announcingTo: 
         inMode: ExecutionMode runTestsMode
 ]
 
-{ #category : 'selection' }
+{ #category : 'accessing' }
 PulsarTestRunnerModel >> selectCaseFromModel: aMethodModel [
-	"Set pendingSelection to the PulsarTestCase matching aMethodModel's entity."
 
+	"Set pendingSelection to the PulsarTestCase matching aMethodModel's entity."
 	| targetClass targetSelector |
 	targetClass := aMethodModel methodClass.
 	targetSelector := aMethodModel entity selector.
-	pendingSelection := (self suites detect: [ :each | each entity = targetClass ] ifNone: [ nil ]) ifNotNil: [ :suite |
-		                    suite children detect: [ :each | each entity selector = targetSelector ] ifNone: [ nil ] ]
+	pendingSelection := (self suites
+		detect: [ :each | each entity = targetClass ]
+		ifNone: [ nil ]) ifNotNil: [ :suite |
+			suite children
+				detect: [ :each | each entity selector = targetSelector ]
+				ifNone: [ nil ] ]
 ]
 
 { #category : 'selection' }

@@ -17,40 +17,40 @@ PvEnvironmentModel class >> newEntity: anEnvironment [
 { #category : 'instance creation' }
 PvEnvironmentModel class >> onSystem [
 
-	^ self newEntity: PvSystemEnvironment new
+	^ self newEntity: PulsarSystemEnvironment new
 ]
 
 { #category : 'accessing' }
-PvEnvironmentModel >> addPackageNamed: aString [ 
-	
+PvEnvironmentModel >> addPackageNamed: aString [
+
 	^ self entity addPackageNamed: aString
 ]
 
 { #category : 'accessing' }
 PvEnvironmentModel >> allBaselines [
-	
-	^ self entity allBaselines 
+
+	^ self entity allBaselines
 ]
 
-{ #category : 'accessing - navigating' }
+{ #category : 'accessing' }
 PvEnvironmentModel >> allBehaviors [
 
 	^ self entity allBehaviors
 ]
 
-{ #category : 'accessing - navigating' }
+{ #category : 'accessing' }
 PvEnvironmentModel >> allClassesAndTraits [
 
 	^ self entity allClassesAndTraits
 ]
 
-{ #category : 'accessing - navigating' }
+{ #category : 'accessing' }
 PvEnvironmentModel >> allPackages [
 
 	^ self entity allPackages
 ]
 
-{ #category : 'converting' }
+{ #category : 'accessing' }
 PvEnvironmentModel >> asRBNamespace [
 
 	^ self entity asRBNamespace
@@ -70,12 +70,10 @@ PvEnvironmentModel >> canBeRenamed [
 
 { #category : 'accessing' }
 PvEnvironmentModel >> children [
+
 	^ (self entity allPackages collect: [ :each |
-		PvPackageModel 
-			newEnvironment: self 
-			parent: nil 
-			entity: each ]) 
-		sorted: #name ascending
+		   PvPackageModel newEnvironment: self parent: nil entity: each ])
+		  sorted: #name ascending
 ]
 
 { #category : 'accessing' }
@@ -86,17 +84,14 @@ PvEnvironmentModel >> classNamed: aName [
 
 { #category : 'accessing' }
 PvEnvironmentModel >> classesMatching: aName [
-	
-	^ self entity allClassesAndTraits select: [ :each | 
-		each name 
-			includesSubstring: aName 
-			caseSensitive: false ]
+
+	^ self entity classesMatching: aName
 ]
 
 { #category : 'accessing' }
 PvEnvironmentModel >> compilerForClass: aClass [
 
-	^ aClass compilerClass new
+	^ self environment compilerForClass: aClass
 ]
 
 { #category : 'accessing - navigating' }
@@ -106,9 +101,9 @@ PvEnvironmentModel >> environmentModel [
 	^ self
 ]
 
-{ #category : 'testing' }
-PvEnvironmentModel >> hasPackageNamed: aString [ 
-	
+{ #category : 'accessing' }
+PvEnvironmentModel >> hasPackageNamed: aString [
+
 	^ self entity hasPackageNamed: aString
 ]
 
@@ -139,8 +134,8 @@ PvEnvironmentModel >> newPackageModelFor: aName [
 ]
 
 { #category : 'accessing' }
-PvEnvironmentModel >> packageNamed: aString [ 
-	
+PvEnvironmentModel >> packageNamed: aString [
+
 	^ self entity packageNamed: aString
 ]
 

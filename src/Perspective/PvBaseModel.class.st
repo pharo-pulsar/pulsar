@@ -126,6 +126,13 @@ PvBaseModel >> entity: anObject [
 	entity := anObject
 ]
 
+{ #category : 'accessing' }
+PvBaseModel >> environment [
+	"Answer the environment facade this model must use for every metamodel query."
+
+	^ self environmentModel entity
+]
+
 { #category : 'private' }
 PvBaseModel >> findRecursivelyPathForClassModel: aClassModel inNode: aNode [
 

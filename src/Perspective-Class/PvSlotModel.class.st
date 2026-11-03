@@ -78,7 +78,7 @@ PvSlotModel >> name [
 	^ self entity name
 ]
 
-{ #category : 'actions' }
+{ #category : 'accessing' }
 PvSlotModel >> removeSlot [
 
 	^ self variableClass removeSlot: self entity

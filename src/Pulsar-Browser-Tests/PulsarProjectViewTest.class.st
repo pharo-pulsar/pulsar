@@ -127,6 +127,33 @@ PulsarProjectViewTest >> testExpandedBranchSurvivesRefresh [
 	self assert: (tree isExpanded: #(1 1)).
 ]
 
+{ #category : 'tests' }
+PulsarProjectViewTest >> testRemoveProjectNamed [
+	"Test removing an open project by name."
+
+	| projectCount removedProject |
+	self openBrowserOnProject.
+	self waitForUI.
+	projectCount := browser projectView openedProjects size.
+	self assert: projectCount > 0.
+	removedProject := browser projectView removeProjectNamed: 'BaselineOfPulsar'.
+	self assert: removedProject isNotNil.
+	self assert: removedProject name equals: 'Pulsar'.
+	self assert: browser projectView openedProjects size equals: projectCount - 1
+]
+
+{ #category : 'tests' }
+PulsarProjectViewTest >> testRemoveUnknownProjectNamed [
+	"Test removing a project that is not open leaves the tree unchanged."
+
+	| projectCount |
+	self openBrowserOnProject.
+	self waitForUI.
+	projectCount := browser projectView openedProjects size.
+	self assert: (browser projectView removeProjectNamed: 'Unknown') isNil.
+	self assert: browser projectView openedProjects size equals: projectCount
+]
+
 { #category : 'running' }
 PulsarProjectViewTest >> testRemovedProjectIsPrunedFromExpandedItems [
 	| tree project |

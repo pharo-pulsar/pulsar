@@ -58,14 +58,14 @@ PulsarMethodSourceModel >> isSmalltalk [
 	^ false.
 ]
 
-{ #category : 'private' }
+{ #category : 'accessing' }
 PulsarMethodSourceModel >> newFStringNodeFor: aString [
 	"Answer an f-string node containing aString as raw source text.
 	Answer nil if the text cannot be scanned as an f-string body."
 
 	| quote source token parser |
 	quote := String with: $'.
-	source := 'f' , quote , aString , quote.
+	source := 'f' , quote , (aString escapeCharacter: $') , quote.
 	token := (OCFStringScanner on: (ReadStream on: source)) next.
 	(token isKindOf: OCFStringToken) ifFalse: [ ^ nil ].
 
@@ -74,7 +74,7 @@ PulsarMethodSourceModel >> newFStringNodeFor: aString [
 	^ parser parseFStringToken: token
 ]
 
-{ #category : 'updating' }
+{ #category : 'accessing' }
 PulsarMethodSourceModel >> newSourceFor: aString [
 	"Answer my method source with the embedded document replaced by aString.
 	The replacement is done over the AST, so pragmas, comments and any other
@@ -86,7 +86,7 @@ PulsarMethodSourceModel >> newSourceFor: aString [
 	targetNode ifNil: [ ^ nil ].
 
 	newNode := self 
-		replacementNodeFor: (aString escapeCharacter: $') 
+		replacementNodeFor: aString 
 		replacing: targetNode.
 	newNode ifNil: [ ^ nil ].
 

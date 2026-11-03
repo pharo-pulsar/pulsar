@@ -37,10 +37,10 @@ PulsarTestSuite >> children [
 { #category : 'accessing' }
 PulsarTestSuite >> collectCases [
 
-	^ self entity allTestSelectors collect: [ :eachSelector | 
-		PulsarTestCase 
-			newEnvironment: self environmentModel 
-			parent: self 
+	^ self entity allTestSelectors collect: [ :eachSelector |
+		PulsarTestCase
+			newEnvironment: self environmentModel
+			parent: self
 			entity: (self entity selector: eachSelector) ]
 ]
 

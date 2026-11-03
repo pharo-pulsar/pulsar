@@ -61,22 +61,22 @@ PulsarProjectModel >> children [
 		stream nextPutAll: self collectDependencyModels"
 ]
 
-{ #category : 'private' }
+{ #category : 'accessing' }
 PulsarProjectModel >> collectDependencyModels [
 
 	^ Array streamContents: [ :stream |
-		self entity new project version projects do: [ :each |
-			self class environment 
-				at: each className asSymbol
-				ifPresent: [ :aBaselineClass |
-					stream nextPut: (PvTreeNodeModel
-						newModel: (PulsarProjectModel 
-							newEnvironment: self environmentModel
-							parent: self parentModel
-							entity: aBaselineClass)
-						name: each name 
-						iconName: 'project'
-						children: (self collectPackageModelsOn: aBaselineClass)) ] ] ]
+		(self environment projectSpecsOfBaseline: self entity) do: [ :each |
+			| aBaselineClass |
+			aBaselineClass := self environment classNamed: each className asSymbol.
+			aBaselineClass ifNotNil: [
+				stream nextPut: (PvTreeNodeModel
+					newModel: (PulsarProjectModel
+						newEnvironment: self environmentModel
+						parent: self parentModel
+						entity: aBaselineClass)
+					name: each name
+					iconName: 'project'
+					children: (self collectPackageModelsOn: aBaselineClass)) ] ] ]
 ]
 
 { #category : 'accessing' }
@@ -85,16 +85,16 @@ PulsarProjectModel >> collectPackageModels [
 	^ self collectPackageModelsOn: self entity
 ]
 
-{ #category : 'private' }
+{ #category : 'accessing' }
 PulsarProjectModel >> collectPackageModelsOn: aBaselineClass [
-	| specs | 
-	
+
+	| specs |
 	"This does not resist demeters law, badly"
-	specs := aBaselineClass new project version packages.
-	^ (specs 
+	specs := self environment packagesOfBaseline: aBaselineClass.
+	^ (specs
 		select: [ :each | self environmentModel hasPackageNamed: each name ]
-		thenCollect: [ :each | 
-			PvPackageModel 
+		thenCollect: [ :each |
+			PvPackageModel
 				newEnvironment: self environmentModel
 				parent: self
 				entity: (self environmentModel packageNamed: each name) ])
@@ -103,15 +103,16 @@ PulsarProjectModel >> collectPackageModelsOn: aBaselineClass [
 
 { #category : 'accessing' }
 PulsarProjectModel >> dependencesEnvironment [
-	| dict |
 
+	| dict |
 	dict := SystemDictionary new.
 	self flag: #TODO. "This is kind of horrible, but well..."
-	self entity new project version projects do: [ :eachProject |  
+	(self environment projectSpecsOfBaseline: self entity) do: [ :eachProject |
 		eachProject className ifNotNil: [ :aName |
-			(self packagesOn: (self class environment classNamed: aName)) 
-				do: [ :eachPackage | 
-					eachPackage definedClasses do: [ :each | dict at: each name put: each ] ] ] ].
+			(self packagesOn: (self environment classNamed: aName))
+				do: [ :eachPackage |
+					eachPackage definedClasses do: [ :each |
+						dict at: each name put: each ] ] ] ].
 	^ dict
 ]
 
@@ -125,10 +126,10 @@ PulsarProjectModel >> dependencyModels [
 		version projects
 ]
 
-{ #category : 'private' }
+{ #category : 'accessing' }
 PulsarProjectModel >> detectRepository [
 
-	^ IceRepository registry 
+	^ IceRepository registry
 		detect: [ :each | each includesPackageNamed: self entity name ]
 		ifNone: [ nil ]
 ]
@@ -161,13 +162,13 @@ PulsarProjectModel >> name [
 	^ self entity name allButFirst: 10 "BaselineOf"
 ]
 
-{ #category : 'private' }
+{ #category : 'accessing' }
 PulsarProjectModel >> packagesOn: aBaselineClass [
-	| specs | 
-	
+
+	| specs |
 	"This does not resist demeters law, badly"
-	specs := aBaselineClass new project version packages.
-	^ (specs 
+	specs := self environment packagesOfBaseline: aBaselineClass.
+	^ (specs
 		select: [ :each | self environmentModel hasPackageNamed: each name ]
 		thenCollect: [ :each | self environmentModel packageNamed: each name ])
 		sorted: #name ascending
@@ -175,12 +176,13 @@ PulsarProjectModel >> packagesOn: aBaselineClass [
 
 { #category : 'accessing' }
 PulsarProjectModel >> projectEnvironment [
-	| dict |
 
+	| dict |
 	dict := SystemEnvironment new.
-	(self packagesOn: self entity) 
-		do: [ :eachPackage | 
-			eachPackage definedClasses do: [ :each | dict at: each name put: each ] ].
+	(self packagesOn: self entity)
+		do: [ :eachPackage |
+			eachPackage definedClasses do: [ :each |
+				dict at: each name put: each ] ].
 	^ dict
 ]
 
@@ -193,5 +195,5 @@ PulsarProjectModel >> repositoryModel [
 { #category : 'accessing' }
 PulsarProjectModel >> systemEnvironment [
 
-	^ self class environment
+	^ self environment systemDictionary
 ]

@@ -62,7 +62,7 @@ PulsarStackView >> closeEditors: aCollection [
 		ifTrue: [ self closeEditor: aCollection anyOne ].
 		
 	self notificationCenter 
-		announce: (PulsarManyModelDeactivated newValue: (aCollection collect: #realModel))
+		announce: (PulsarManyModelDeactivated newValue: aCollection)
 ]
 
 { #category : 'layout' }

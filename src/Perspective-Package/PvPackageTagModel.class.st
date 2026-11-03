@@ -41,10 +41,10 @@ PvPackageTagModel >> children [
 
 { #category : 'accessing' }
 PvPackageTagModel >> classDefinitionString [
-	
-	^ PvFluidClassDefinitionPrinter new 
+
+	^ PvFluidClassDefinitionPrinter new
 		classDefinitionTemplateInPackage: self package name
-		tag: (self entity isRoot 
+		tag: (self entity isRoot
 			ifTrue: [ nil ]
 			ifFalse: [ self name ])
 ]
@@ -53,9 +53,9 @@ PvPackageTagModel >> classDefinitionString [
 PvPackageTagModel >> classes [
 
 	^ (self entity classes
-		collect: [ :each | 
-			PvClassModel 
-				newEnvironment: self environmentModel 
+		collect: [ :each |
+			PvClassModel
+				newEnvironment: self environmentModel
 				parent: self
 				entity: each ]
 		as: OrderedCollection)
@@ -100,7 +100,7 @@ PvPackageTagModel >> isPackageTag [
 	^ true
 ]
 
-{ #category : 'testing' }
+{ #category : 'accessing' }
 PvPackageTagModel >> isRoot [
 
 	^ self entity isRoot
@@ -124,7 +124,7 @@ PvPackageTagModel >> package [
 	^ self entity package
 ]
 
-{ #category : 'actions' }
+{ #category : 'accessing' }
 PvPackageTagModel >> renameTo: aNewName [
 
 	self entity renameTo: aNewName
@@ -132,10 +132,10 @@ PvPackageTagModel >> renameTo: aNewName [
 
 { #category : 'accessing' }
 PvPackageTagModel >> traitDefinitionString [
-	
-	^ PvFluidClassDefinitionPrinter new 
+
+	^ PvFluidClassDefinitionPrinter new
 		traitDefinitionTemplateInPackage: self package name
-		tag: (self entity isRoot 
+		tag: (self entity isRoot
 			ifTrue: [ nil ]
 			ifFalse: [ self name ])
 ]

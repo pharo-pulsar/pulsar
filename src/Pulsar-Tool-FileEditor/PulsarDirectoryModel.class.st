@@ -43,7 +43,7 @@ PulsarDirectoryModel >> createDirectoryNamed: aString [
 	"Create a new directory with the given name inside this one and return its model."
 	| dirRef |
 	
-	dirRef := self entity / aString ensureCreateDirectory.
+	dirRef := (self entity / aString) ensureCreateDirectory.
 	^ PulsarDirectoryModel 
 		newEnvironment: self environmentModel 
 		parent: self 

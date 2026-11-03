@@ -59,7 +59,7 @@ PvProtocolModel >> isProtected [
 
 { #category : 'testing' }
 PvProtocolModel >> isUnclassified [
-	
+
 	^ self entity isUnclassifiedProtocol
 ]
 
@@ -71,8 +71,8 @@ PvProtocolModel >> isVirtual [
 
 { #category : 'accessing' }
 PvProtocolModel >> methods [
-	
-	^ self entity methods 
+
+	^ self entity methods
 		reject: [ :each | each origin = TraitedClass ]
 ]
 
@@ -97,16 +97,16 @@ PvProtocolModel >> order [
 	^ 100
 ]
 
-{ #category : 'actions' }
+{ #category : 'accessing' }
 PvProtocolModel >> renameProtocolTo: aName [
 
-	self entity owningClass 
-		renameProtocol: self name 
+	self entity owningClass
+		renameProtocol: self name
 		as: aName
 ]
 
 { #category : 'accessing' }
 PvProtocolModel >> selectors [
-	
+
 	^ self methods collect: #selector
 ]

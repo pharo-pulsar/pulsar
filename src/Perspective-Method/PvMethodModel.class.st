@@ -51,10 +51,11 @@ PvMethodModel class >> newMethod: aMethod [
 ]
 
 { #category : 'comparing' }
-PvMethodModel >> = other [
-	"I do not compare by entity because entity can change (a compiled method changes and I 
-	 could still have a reference to the old one)"
+PvMethodModel >> =
 
+	other [
+	"I do not compare by entity because entity can change (a compiled method changes and I
+	 could still have a reference to the old one)"
 	^ self species = other species
 		and: [ self entity methodClass = other entity methodClass
 		and: [ self entity selector = other entity selector ] ]
@@ -98,16 +99,16 @@ PvMethodModel >> asOutlineClassModel [
 
 { #category : 'converting' }
 PvMethodModel >> asPackageModel [
-	
-	^ PvPackageModel 
-		newEnvironment: self environmentModel 
+
+	^ PvPackageModel
+		newEnvironment: self environmentModel
 		parent: nil
 		entity: self methodClass package
 ]
 
-{ #category : 'updating' }
-PvMethodModel >> classifyMethodAs: aString [ 
-	
+{ #category : 'accessing' }
+PvMethodModel >> classifyMethodAs: aString [
+
 	self entity protocol: aString
 ]
 
@@ -191,7 +192,7 @@ PvMethodModel >> defineExtraContextActionsOn: aBuilder [
 			action: [ :aContext | aContext doFormatMethod ] ] ]
 ]
 
-{ #category : 'private - definitions' }
+{ #category : 'actions' }
 PvMethodModel >> defineRefactorActionsOn: aBuilder [
 	"this actions cannot be used directly in this context (the model 
 	 context), because execute them require interact with the UI"
@@ -245,6 +246,24 @@ PvMethodModel >> editorClass [
 	^ PvMethodEditorView
 ]
 
+{ #category : 'accessing' }
+PvMethodModel >> editorSource: aCollection [
+
+	<pulsarMethodEditor>
+	(self entity hasPragmaNamed: #pulsarSourceEditor:) ifFalse: [ ^ self ].
+	aCollection add: (PulsarMethodSourceModel
+		newEnvironment: self environmentModel
+		entity: self entity)
+]
+
+{ #category : 'accessing' }
+PvMethodModel >> editorTable: aCollection [
+
+	<pulsarMethodEditor>
+	(self entity hasPragmaNamed: #pulsarTableEditor:) ifFalse: [ ^ self ].
+	aCollection add: (PulsarMethodTableModel newEnvironment: self environmentModel entity: self entity)
+]
+
 { #category : 'accessing - editor' }
 PvMethodModel >> extraEditors [
 	| editors |
@@ -259,9 +278,34 @@ PvMethodModel >> extraEditors [
 ]
 
 { #category : 'accessing' }
+PvMethodModel >> ffiCallArrayNode [
+
+	"Answer the literal array node that is the first argument of a single ffiCall: family send in this method, or nil if the method is not a simple FFI call."
+	| body statement send firstArgument ast |
+	ast := self entity ast.
+	ast ifNil: [ ^ nil ].
+
+	body := ast body.
+	body statements size = 1 ifFalse: [ ^ nil ].
+	statement := body statements first.
+	send := (statement isKindOf: OCMessageNode)
+		        ifTrue: [ statement ]
+		        ifFalse: [
+				        (statement isKindOf: OCReturnNode)
+					        ifTrue: [ statement value ]
+					        ifFalse: [ nil ] ].
+	(send isKindOf: OCMessageNode) ifFalse: [ ^ nil ].
+	(send selector beginsWith: 'ffiCall:') ifFalse: [ ^ nil ].
+	firstArgument := send arguments first.
+	^ (firstArgument isKindOf: OCLiteralArrayNode)
+		  ifTrue: [ firstArgument ]
+		  ifFalse: [ nil ]
+]
+
+{ #category : 'accessing' }
 PvMethodModel >> formattedSourceCode [
 
-	^ self entity ast 
+	^ self entity ast
 		ifNotNil: [ :ast | ast formattedCode ]
 		ifNil: [ self sourceCode ]
 ]
@@ -279,14 +323,14 @@ PvMethodModel >> fullName [
 { #category : 'testing' }
 PvMethodModel >> hasDefinedProtocol [
 
-	^ self protocol isNotNil and: [ self protocol isUnclassifiedProtocol not ] 
+	^ self protocol isNotNil and: [ self protocol isUnclassifiedProtocol not ]
 ]
 
 { #category : 'comparing' }
 PvMethodModel >> hash [
-	"I do not compare by entity because entity can change (a compiled method changes and I 
-	 could still have a reference to the old one)"
 
+	"I do not compare by entity because entity can change (a compiled method changes and I
+	 could still have a reference to the old one)"
 	^ (self species hash
 		bitXor: self entity methodClass hash)
 		bitXor: self entity selector hash
@@ -298,33 +342,21 @@ PvMethodModel >> hierarchyPresenterClass [
 	^ PulsarMethodHierarchyPresenter
 ]
 
-{ #category : 'accessing - navigating' }
+{ #category : 'accessing' }
 PvMethodModel >> hierarchyTopModel [
-	| systemNavigation nodes |
-	
-	systemNavigation := PvSystemNavigation new.
-	self isLargeHierarchy ifFalse: [
-			| environment |
-			environment := SystemEnvironment new.
-			self entity origin allSuperclasses 
-				do: [ :each | environment at: each instanceSide name put: each instanceSide ].
-			self entity origin withAllSubclasses 
-				do: [ :each | environment at: each instanceSide name put: each instanceSide ].
-			systemNavigation environment: environment ].
-	
-	nodes := (systemNavigation allImplementorsOf: self entity selector)
-		collect: [ :each | 
-			PvMethodHierarchyNodeModel 
-				newEnvironment: self environmentModel 
-				entity: each ].
-	
-	nodes do: [ :each | each findParentFrom: nodes ].
 
-	^ nodes 
+	| nodes |
+	nodes := ((self environment allImplementorsOf: self selector) asArray
+		collect: [ :each |
+			PvMethodHierarchyNodeModel
+				newEnvironment: self environmentModel
+				entity: each ]).
+	nodes do: [ :each | each findParentFrom: nodes ].
+	^ nodes
 		detect: [ :each | each parent isNil ]
-		ifNone: [ 
-			PvMethodHierarchyNodeModel 
-				newEnvironment: self environmentModel 
+		ifNone: [
+			PvMethodHierarchyNodeModel
+				newEnvironment: self environmentModel
 				entity: self entity ]
 ]
 
@@ -340,18 +372,18 @@ PvMethodModel >> includesClassModel [
 	^ true
 ]
 
-{ #category : 'actions' }
+{ #category : 'accessing' }
 PvMethodModel >> installIconStylerOn: aPresenter [
+
 	| method |
-	
 	self isNew ifTrue: [ ^ self ].
-	
+
 	method := self entity.
 	method ifNil: [ ^ self ].
-	
-	method ast ifNotNil: [ :anAST |	
+
+	method ast ifNotNil: [ :anAST |
 		IconStyler withSpecStaticStyler
-			styleText: aPresenter 
+			styleText: aPresenter
 			withAst: anAST ]
 ]
 
@@ -364,11 +396,11 @@ PvMethodModel >> isExampleMethod [
 
 { #category : 'testing' }
 PvMethodModel >> isInstanceSide [
-	
+
 	^ self entity methodClass isInstanceSide
 ]
 
-{ #category : 'accessing - navigating' }
+{ #category : 'testing' }
 PvMethodModel >> isLargeHierarchy [
 
 	^ { Object. ProtoObject } includes: self entity methodClass
@@ -408,34 +440,34 @@ PvMethodModel >> isSameClass: aClass [
 { #category : 'testing' }
 PvMethodModel >> isScriptMethod [
 
-	^ (self entity pragmas collect: [ :each | each selector ]) 
+	^ (self entity pragmas collect: [ :each | each selector ])
 		includes: #script
 ]
 
 { #category : 'testing' }
 PvMethodModel >> isTestError [
-	"this assumes the method is a test method"
 
+	"this assumes the method is a test method"
 	^ self methodClass methodRaisedError: self selector
 ]
 
 { #category : 'testing' }
 PvMethodModel >> isTestFailure [
-	"this assumes the method is a test method"
 
+	"this assumes the method is a test method"
 	^ self methodClass methodFailed: self selector
 ]
 
 { #category : 'testing' }
 PvMethodModel >> isTestMethod [
-	
+
 	^ self entity isTestMethod
 ]
 
 { #category : 'testing' }
 PvMethodModel >> isTestPassed [
-	"this assumes the method is a test method"
 
+	"this assumes the method is a test method"
 	^ self methodClass methodPassed: self selector
 ]
 
@@ -452,7 +484,7 @@ PvMethodModel >> isUsingVariable: aVariableModel [
 	^ aVariableModel isIncludedIn: self
 ]
 
-{ #category : 'updating' }
+{ #category : 'testing' }
 PvMethodModel >> lastTestExecutionResult [
 	| lastClassResult result testCase | 
 
@@ -523,18 +555,18 @@ PvMethodModel >> protocol: aProtocol [
 	self entity protocol: aProtocol
 ]
 
-{ #category : 'accessing' }
+{ #category : 'converting' }
 PvMethodModel >> protocolModel [
-	
-	^ PvProtocolModel 
-		newEnvironment: self environmentModel 
+
+	^ PvProtocolModel
+		newEnvironment: self environmentModel
 		entity: self entity protocol
 ]
 
 { #category : 'accessing' }
 PvMethodModel >> protocolName [
-	
-	^ self protocol 
+
+	^ self protocol
 		ifNotNil: [ :aProtocol | aProtocol name ]
 		ifNil: [ 'no protocol' ]
 ]
@@ -545,22 +577,36 @@ PvMethodModel >> pulsarEditorClass [
 	^ PulsarTabbedMethodEditor
 ]
 
-{ #category : 'updating' }
+{ #category : 'accessing' }
 PvMethodModel >> removeMethod [
 
 	self entity removeFromSystem
 ]
 
-{ #category : 'actions' }
+{ #category : 'testing' }
 PvMethodModel >> runScript [
+
 	| result |
-	
 	result := self entity valueWithReceiver: self entity methodClass instanceSide.
-	"avoid result if it was ^self" 
-	(result isBehavior and: [ result = self entity methodClass instanceSide ]) 
+	"avoid result if it was ^self"
+	(result isBehavior and: [ result = self entity methodClass instanceSide ])
 		ifTrue: [ ^ nil ].
-	
+
 	^ result
+]
+
+{ #category : 'testing' }
+PvMethodModel >> runTestAnnouncingTo: anAnnouncer [
+
+	| testSuite |
+	testSuite := TestSuite new
+		addTest: (self methodClass selector: self entity selector);
+		yourself.
+
+	NewTestRunner
+		executeSuite: testSuite
+		announcingTo: anAnnouncer
+		inMode: ExecutionMode debugMode
 ]
 
 { #category : 'accessing' }
@@ -583,7 +629,7 @@ PvMethodModel >> shortName [
 
 { #category : 'accessing' }
 PvMethodModel >> sourceCode [
-	
+
 	^ self entity sourceCode
 ]
 
@@ -594,7 +640,7 @@ PvMethodModel >> spotterTitle [
 		stream << self windowTitle << ' (' << self methodClass name << ')' ]
 ]
 
-{ #category : 'updating' }
+{ #category : 'accessing' }
 PvMethodModel >> updateWith: aString notifying: anInteractionModel [
  	| compiler newMethod newSelector selectedClass protocol installer |
 	

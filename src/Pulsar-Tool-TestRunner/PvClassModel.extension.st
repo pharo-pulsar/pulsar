@@ -29,12 +29,3 @@ PvClassModel >> prepareRunnerSelection: aRunnerModel [
 
 	aRunnerModel selectSuiteFromModel: self
 ]
-
-{ #category : '*Pulsar-Tool-TestRunner' }
-PvClassModel >> runTestAnnouncingTo: anAnnouncer [
-
-	NewTestRunner 
-		executeSuite: self entity suite 
-		announcingTo: anAnnouncer 
-		inMode: ExecutionMode runTestsMode
-]

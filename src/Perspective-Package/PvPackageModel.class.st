@@ -45,14 +45,14 @@ PvPackageModel >> asPackageModel [
 PvPackageModel >> children [
 
 	^ (((self entity tags
-		reject: [ :each | each name = self name ]) 
+		reject: [ :each | each name = self name ])
 		collect: [ :each | PvPackageTagModel newEnvironment: self environmentModel entity: each ]
 		as: OrderedCollection)
-		addAll: ((PvVirtualPackageTagModel 
+		addAll: ((PvVirtualPackageTagModel
 			virtualModelsFor: self entity)
-			collect: [ :each | 
-				each 
-					newEnvironment: self environmentModel 
+			collect: [ :each |
+				each
+					newEnvironment: self environmentModel
 					parent: self
 					entity: self entity ]);
 		sorted: #order ascending, #name ascending)
@@ -70,9 +70,9 @@ PvPackageModel >> classDefinitionString [
 { #category : 'accessing' }
 PvPackageModel >> classes [
 
-	^ self entity definedClasses
+	^ (self entity definedClasses
 		collect: [ :each | PvClassModel newEnvironment: self environmentModel entity: each ]
-		as: OrderedCollection
+		as: OrderedCollection)
 ]
 
 { #category : 'accessing' }
@@ -183,13 +183,13 @@ PvPackageModel >> pulsarEditorClass [
 	^ PulsarPackageEditor
 ]
 
-{ #category : 'actions' }
+{ #category : 'accessing' }
 PvPackageModel >> renameTo: aNewName [
 
 	self entity renameTo: aNewName
 ]
 
-{ #category : 'updating' }
+{ #category : 'accessing' }
 PvPackageModel >> saveComment: aString [
 
 	| manifestClass |

@@ -256,6 +256,17 @@ PulsarProjectView >> removeProjectModel: aProjectModel [
 	self withWindowDo: [ :aWindow | aWindow updateTitle ]
 ]
 
+{ #category : 'actions' }
+PulsarProjectView >> removeProjectNamed: aString [
+	"Remove the open project matching aString and answer it, or answer nil when there is no such project."
+
+	| project |
+	project := self model projectNamed: aString.
+	project ifNil: [ ^ nil ].
+	self removeProjectModel: project.
+	^ project
+]
+
 { #category : 'accessing - snapshot' }
 PulsarProjectView >> snapshot [
 

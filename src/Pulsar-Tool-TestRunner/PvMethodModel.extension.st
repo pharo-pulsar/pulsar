@@ -29,17 +29,3 @@ PvMethodModel >> prepareRunnerSelection: aRunnerModel [
 
 	aRunnerModel selectCaseFromModel: self
 ]
-
-{ #category : '*Pulsar-Tool-TestRunner' }
-PvMethodModel >> runTestAnnouncingTo: anAnnouncer [
-	| testSuite |
-	
-	testSuite := TestSuite new
-		addTest: (self methodClass selector: self entity selector);
-		yourself.
-
-	NewTestRunner 
-		executeSuite: testSuite 
-		announcingTo: anAnnouncer 
-		inMode: ExecutionMode debugMode
-]

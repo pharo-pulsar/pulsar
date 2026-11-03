@@ -8,16 +8,22 @@ Class {
 	#package : 'Pulsar-Tool-FileEditor-Tests'
 }
 
+{ #category : 'support' }
+PulsarFFIModelTest >> environmentModel [
+
+	^ PvEnvironmentModel onSystem
+]
+
 { #category : 'samples' }
 PulsarFFIModelTest >> newModel [
 
-	^ PulsarFFIModel newEnvironment: nil entity: self class >> #sampleFFICall:
+	^ PulsarFFIModel newEnvironment: self environmentModel entity: self class >> #sampleFFICall:
 ]
 
 { #category : 'samples' }
 PulsarFFIModelTest >> newMultiModel [
 
-	^ PulsarFFIModel newEnvironment: nil entity: self class >> #sampleFFIMulti
+	^ PulsarFFIModel newEnvironment: self environmentModel entity: self class >> #sampleFFIMulti
 ]
 
 { #category : 'samples' }
@@ -86,7 +92,7 @@ PulsarFFIModelTest >> testFfiTextStripsParens [
 PulsarFFIModelTest >> testIsFFICall [
 
 	self assert: self newModel ffiCallArrayNode notNil.
-	self assert: (PulsarFFIModel newEnvironment: nil entity: self class >> #samplePlain) ffiCallArrayNode isNil
+	self assert: (PulsarFFIModel newEnvironment: self environmentModel entity: self class >> #samplePlain) ffiCallArrayNode isNil
 ]
 
 { #category : 'tests' }

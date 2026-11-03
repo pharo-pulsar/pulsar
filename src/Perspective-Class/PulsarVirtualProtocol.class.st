@@ -12,7 +12,7 @@ Class {
 { #category : 'instance creation' }
 PulsarVirtualProtocol class >> newEntity: anObject [
 
-	^ self new 
+	^ self new
 		entity: anObject;
 		yourself
 ]
@@ -105,7 +105,7 @@ PulsarVirtualProtocol >> order [
 
 { #category : 'accessing' }
 PulsarVirtualProtocol >> selectors [
-	
+
 	^ self methods collect: #selector
 ]
 
