@@ -9,7 +9,7 @@ Class {
 { #category : 'running' }
 PulsarProjectModelTest >> pulsarProjectModel [
 
-	^ PulsarProjectModel newEnvironment: self environmentModel entity: BaselineOfPulsar
+	^ PulsarProjectModel newEnvironment: self environmentModel entity: self baselineFixture
 ]
 
 { #category : 'tests - ui' }
@@ -28,10 +28,10 @@ PulsarProjectModelTest >> testIsProject [
 	self assert: model isProject
 ]
 
-{ #category : 'tests - accessing' }
+{ #category : 'tests' }
 PulsarProjectModelTest >> testNameStripsBaselineOf [
-	| model |
 
+	| model |
 	model := self pulsarProjectModel.
-	self assert: model name equals: 'Pulsar'
+	self assert: model name equals: (self baselineFixture name allButFirst: 10)
 ]

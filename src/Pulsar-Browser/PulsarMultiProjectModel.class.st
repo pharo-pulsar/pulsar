@@ -15,6 +15,15 @@ PulsarMultiProjectModel class >> newEnvironment: anEnvironmentModel [
 	^ self newEnvironment: anEnvironmentModel entity: nil
 ]
 
+{ #category : 'instance creation' }
+PulsarMultiProjectModel class >> newWithoutVolatileProjectsEnvironment: anEnvironmentModel [
+
+	^ self basicNew
+		environmentModel: anEnvironmentModel;
+		initializeWithoutVolatileProjects;
+		yourself
+]
+
 { #category : 'visiting' }
 PulsarMultiProjectModel >> accept: aVisitor [
 
@@ -166,8 +175,8 @@ PulsarMultiProjectModel >> findRootForEntity: anEntity [
 
 { #category : 'initialization' }
 PulsarMultiProjectModel >> initialize [
-	projectModels := #().
-	super initialize.
+
+	self initializeWithoutVolatileProjects.
 	self initializeVolatileProjects
 ]
 
@@ -190,6 +199,13 @@ PulsarMultiProjectModel >> initializeVolatileProjects [
 	"I want one Sandbox project always, so people can start to work right now"
 	projectModels ifEmpty: [ 
 		self ensureVolatileProjectNamed: 'Sandbox' ]
+]
+
+{ #category : 'private' }
+PulsarMultiProjectModel >> initializeWithoutVolatileProjects [
+
+	projectModels := #().
+	super initialize
 ]
 
 { #category : 'accessing' }

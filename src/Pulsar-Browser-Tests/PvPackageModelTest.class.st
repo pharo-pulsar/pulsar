@@ -9,7 +9,7 @@ Class {
 { #category : 'running' }
 PvPackageModelTest >> packageModel [
 
-	^ PvPackageModel newEnvironment: self environmentModel entity: (PackageOrganizer default packageNamed: 'Kernel')
+	^ PvPackageModel newEnvironment: self environmentModel entity: (self environmentModel packageNamed: 'Kernel')
 ]
 
 { #category : 'tests - parent-child' }

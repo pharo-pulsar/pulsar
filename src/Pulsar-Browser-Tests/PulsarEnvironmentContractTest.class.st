@@ -8,7 +8,7 @@ Class {
 { #category : 'running' }
 PulsarEnvironmentContractTest >> environment [
 
-	^ self subclassResponsibility
+	^ PulsarModelTestEnvironment current
 ]
 
 { #category : 'tests' }

@@ -37,13 +37,13 @@ PvClassModelTest >> testIncludesClassModel [
 	self assert: model includesClassModel
 ]
 
-{ #category : 'tests - accessing' }
+{ #category : 'tests' }
 PvClassModelTest >> testInstanceSideAndClassSide [
-	| model |
 
+	| model |
 	model := self classModel.
-	self assert: model instanceSide equals: Object.
-	self assert: model classSide equals: Object class
+	self assert: model instanceSide name equals: 'Object'.
+	self assert: model classSide name equals: 'Object class'
 ]
 
 { #category : 'tests - predicates' }
@@ -62,11 +62,11 @@ PvClassModelTest >> testIsNewDefaultsToFalse [
 	self deny: model isNew
 ]
 
-{ #category : 'tests - predicates' }
+{ #category : 'tests' }
 PvClassModelTest >> testIsTestCaseDetectsTestCase [
-	| model |
 
-	model := PvClassModel newEnvironment: self environmentModel entity: PvBaseModelTest.
+	| model |
+	model := PvClassModel newEnvironment: self environmentModel entity: TestCase.
 	self assert: model isTestCase
 ]
 

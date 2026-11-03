@@ -10,7 +10,7 @@ Class {
 PvEnvironmentModelTest >> testAllBehaviorsNotEmpty [
 	| model |
 
-	model := PvEnvironmentModel onSystem.
+	model := self environmentModel.
 	self assert: model allBehaviors isNotEmpty
 ]
 
@@ -18,7 +18,7 @@ PvEnvironmentModelTest >> testAllBehaviorsNotEmpty [
 PvEnvironmentModelTest >> testAllPackagesNotEmpty [
 	| model |
 
-	model := PvEnvironmentModel onSystem.
+	model := self environmentModel.
 	self assert: model allPackages isNotEmpty
 ]
 
@@ -26,7 +26,7 @@ PvEnvironmentModelTest >> testAllPackagesNotEmpty [
 PvEnvironmentModelTest >> testCannotBeRemovedOrRenamed [
 	| model |
 
-	model := PvEnvironmentModel onSystem.
+	model := self environmentModel.
 	self deny: model canBeRemoved.
 	self deny: model canBeRenamed
 ]
@@ -35,34 +35,34 @@ PvEnvironmentModelTest >> testCannotBeRemovedOrRenamed [
 PvEnvironmentModelTest >> testChildrenReturnsPackages [
 	| model children |
 
-	model := PvEnvironmentModel onSystem.
+	model := self environmentModel.
 	children := model children.
 	self assert: children isNotEmpty.
 	self assert: (children allSatisfy: [ :each | each isKindOf: PvPackageModel ])
 ]
 
-{ #category : 'tests - entity' }
+{ #category : 'tests' }
 PvEnvironmentModelTest >> testClassNamed [
-	| model |
 
-	model := PvEnvironmentModel onSystem.
-	self assert: (model classNamed: #Object) equals: Object
+	| model |
+	model := self environmentModel.
+	self assert: (model classNamed: #Object) name equals: 'Object'
 ]
 
-{ #category : 'tests - entity' }
+{ #category : 'tests' }
 PvEnvironmentModelTest >> testClassesMatching [
-	| model results |
 
-	model := PvEnvironmentModel onSystem.
+	| model results |
+	model := self environmentModel.
 	results := model classesMatching: 'Object'.
-	self assert: (results includes: Object)
+	self assert: (results anySatisfy: [ :each | each name = 'Object' ])
 ]
 
 { #category : 'tests - environment' }
 PvEnvironmentModelTest >> testEnvironmentModelReturnsSelf [
 	| model |
 
-	model := PvEnvironmentModel onSystem.
+	model := self environmentModel.
 	self assert: model environmentModel equals: model
 ]
 
@@ -70,7 +70,7 @@ PvEnvironmentModelTest >> testEnvironmentModelReturnsSelf [
 PvEnvironmentModelTest >> testHasPackageNamed [
 	| model |
 
-	model := PvEnvironmentModel onSystem.
+	model := self environmentModel.
 	self assert: (model hasPackageNamed: 'Kernel')
 ]
 
@@ -78,7 +78,7 @@ PvEnvironmentModelTest >> testHasPackageNamed [
 PvEnvironmentModelTest >> testIconName [
 	| model |
 
-	model := PvEnvironmentModel onSystem.
+	model := self environmentModel.
 	self assert: model iconName equals: 'systemEnvironment'
 ]
 
@@ -86,25 +86,16 @@ PvEnvironmentModelTest >> testIconName [
 PvEnvironmentModelTest >> testName [
 	| model |
 
-	model := PvEnvironmentModel onSystem.
+	model := self environmentModel.
 	self assert: model name isNotNil.
 	self assert: model name isString
 ]
 
-{ #category : 'tests - creation' }
+{ #category : 'tests' }
 PvEnvironmentModelTest >> testNewMultiProjectModel [
-	| model projectModel |
 
-	model := PvEnvironmentModel onSystem.
-	projectModel := model newMultiProjectModel.
-	self assert: (projectModel isKindOf: PulsarMultiProjectModel)
-]
-
-{ #category : 'tests - creation' }
-PvEnvironmentModelTest >> testOnSystemCreatesModel [
 	| model |
-
-	model := PvEnvironmentModel onSystem.
-	self assert: (model isKindOf: PvEnvironmentModel).
-	self assert: model entity isNotNil
+	model := self environmentModel.
+	self withCleanVolatileProjects: [
+		self assert: (model newMultiProjectModel isKindOf: PulsarMultiProjectModel) ]
 ]

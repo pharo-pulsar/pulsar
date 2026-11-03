@@ -8,9 +8,9 @@ Class {
 
 { #category : 'running' }
 PvSlotModelTest >> slotModel [
-	| slot |
 
-	slot := Object class allSlots first.
+	| slot |
+	slot := Point slots first.
 	^ PvSlotModel newEnvironment: self environmentModel entity: slot
 ]
 

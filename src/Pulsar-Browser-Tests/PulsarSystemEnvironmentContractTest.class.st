@@ -30,6 +30,15 @@ PulsarSystemEnvironmentContractTest >> testCompilerForClass [
 ]
 
 { #category : 'tests' }
+PulsarSystemEnvironmentContractTest >> testEnvironmentModelOnSystem [
+
+	| model |
+	model := PvEnvironmentModel onSystem.
+	self assert: (model isKindOf: PvEnvironmentModel).
+	self assert: (model entity isKindOf: PulsarSystemEnvironment)
+]
+
+{ #category : 'tests' }
 PulsarSystemEnvironmentContractTest >> testLoadedProjectsAreResolved [
 
 	self assert: (self environment loadedProjects allSatisfy: [ :each | each isResolved ])

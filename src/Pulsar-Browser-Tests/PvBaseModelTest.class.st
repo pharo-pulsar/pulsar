@@ -6,10 +6,18 @@ Class {
 	#tag : 'Model'
 }
 
-{ #category : 'accessing' }
+{ #category : 'running' }
+PvBaseModelTest >> baselineFixture [
+
+	^ self environmentModel allBaselines
+		detect: [ :each | each name = 'BaselineOfPulsar' ]
+		ifNone: [ self environmentModel allBaselines first ]
+]
+
+{ #category : 'running' }
 PvBaseModelTest >> environmentModel [
 
-	^ PvEnvironmentModel onSystem
+	^ PvEnvironmentModel newEntity: PulsarModelTestEnvironment current
 ]
 
 { #category : 'tests - visiting' }
@@ -300,4 +308,15 @@ PvBaseModelTest >> testRealModelReturnsSelf [
 
 	model := PvBaseModelForTest newEnvironment: self environmentModel.
 	self assert: model realModel equals: model
+]
+
+{ #category : 'running' }
+PvBaseModelTest >> withCleanVolatileProjects: aBlock [
+
+	| specs original result |
+	specs := PulsarVolatileProjectSpec specs.
+	original := specs copy.
+	[ result := aBlock value ]
+		ensure: [ specs removeAll; addAll: original ].
+	^ result
 ]

@@ -11,7 +11,7 @@ PvMethodModelTest >> testHierarchyTopModelForClassSide [
 
 	| model topModel |
 	model := PvMethodModel
-		newEnvironment: PvEnvironmentModel onSystem
+		newEnvironment: self environmentModel
 		entity: Collection class>>#newFromArray:.
 
 	topModel := model hierarchyTopModel.

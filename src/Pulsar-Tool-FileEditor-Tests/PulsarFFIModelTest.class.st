@@ -28,7 +28,7 @@ PulsarFFIModelTest >> newMultiModel [
 
 { #category : 'samples' }
 PulsarFFIModelTest >> sampleFFICall: value [
-	self ffiCall: #(int my_c_function (self, long value))
+	self ffiCall: #(int my_c_function (self, int value))
 ]
 
 { #category : 'samples' }
