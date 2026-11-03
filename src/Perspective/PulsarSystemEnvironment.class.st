@@ -91,6 +91,30 @@ PulsarSystemEnvironment >> isLocal [
 	^ true
 ]
 
+{ #category : 'projects' }
+PulsarSystemEnvironment >> loadedProjectFor: aRepository [
+
+	| packages baseline |
+	packages := aRepository workingCopy packages.
+	baseline := packages
+		detect: [ :each | each name beginsWith: 'BaselineOf' ]
+		ifNone: [ nil ].
+	^ PulsarLoadedProject new
+		name: aRepository name;
+		baselineName: (baseline ifNil: [ nil ] ifNotNil: [ :each | each name ]);
+		packageNames: (packages collect: [ :each | each name ]);
+		origin: (self originOfRepository: aRepository);
+		version: (self versionOfRepository: aRepository);
+		repository: aRepository;
+		yourself
+]
+
+{ #category : 'projects' }
+PulsarSystemEnvironment >> loadedProjects [
+
+	^ IceRepository registry collect: [ :each | self loadedProjectFor: each ]
+]
+
 { #category : 'capabilities' }
 PulsarSystemEnvironment >> localClassOf: aClass [
 
@@ -113,6 +137,12 @@ PulsarSystemEnvironment >> name [
 PulsarSystemEnvironment >> organizer [
 
 	^ PackageOrganizer default
+]
+
+{ #category : 'projects' }
+PulsarSystemEnvironment >> originOfRepository: aRepository [
+
+	^ [ aRepository location pathString ] on: Error do: [ :e | nil ]
 ]
 
 { #category : 'environment' }
@@ -172,4 +202,11 @@ PulsarSystemEnvironment >> systemDictionary [
 PulsarSystemEnvironment >> valueOfMethod: aMethod withReceiver: aReceiver [
 
 	^ aMethod valueWithReceiver: aReceiver
+]
+
+{ #category : 'projects' }
+PulsarSystemEnvironment >> versionOfRepository: aRepository [
+
+	^ [ aRepository headCommit ifNil: [ nil ] ifNotNil: [ :commit | commit id ] ]
+		on: Error do: [ :e | nil ]
 ]

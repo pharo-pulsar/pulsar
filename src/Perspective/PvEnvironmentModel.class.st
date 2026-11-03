@@ -114,6 +114,12 @@ PvEnvironmentModel >> iconName [
 ]
 
 { #category : 'accessing' }
+PvEnvironmentModel >> loadedProjects [
+
+	^ self entity loadedProjects
+]
+
+{ #category : 'accessing' }
 PvEnvironmentModel >> name [
 
 	^ self entity name

@@ -20,5 +20,9 @@ PulsarEnvironmentCompletenessTest >> testSystemEnvironmentDoesNotAddUndocumented
 	| extra |
 	extra := PulsarSystemEnvironment selectors reject: [ :sel |
 		PulsarEnvironment canUnderstand: sel ].
-	self assert: (extra difference: #(#organizer #packages)) isEmpty
+	self assert: (extra difference: #(
+		organizer
+		loadedProjectFor:
+		originOfRepository:
+		versionOfRepository:)) isEmpty
 ]

@@ -90,6 +90,13 @@ PulsarEnvironment >> isLocal [
 	^ false
 ]
 
+{ #category : 'projects' }
+PulsarEnvironment >> loadedProjects [
+
+	"Answer the projects loaded in this environment as PulsarLoadedProject descriptors."
+	^ self subclassResponsibility
+]
+
 { #category : 'capabilities' }
 PulsarEnvironment >> localClassOf:aClass [ 
 	^ self subclassResponsibility

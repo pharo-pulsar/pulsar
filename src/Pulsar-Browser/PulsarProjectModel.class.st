@@ -129,6 +129,12 @@ PulsarProjectModel >> dependencyModels [
 { #category : 'accessing' }
 PulsarProjectModel >> detectRepository [
 
+	| loadedProject |
+	loadedProject := self environmentModel loadedProjects
+		detect: [ :each | each baselineName = self entity name ]
+		ifNone: [ nil ].
+	loadedProject ifNotNil: [ :each |
+		each repository ifNotNil: [ :repository | ^ repository ] ].
 	^ IceRepository registry
 		detect: [ :each | each includesPackageNamed: self entity name ]
 		ifNone: [ nil ]

@@ -30,6 +30,22 @@ PulsarSystemEnvironmentContractTest >> testCompilerForClass [
 ]
 
 { #category : 'tests' }
+PulsarSystemEnvironmentContractTest >> testLoadedProjectsAreResolved [
+
+	self assert: (self environment loadedProjects allSatisfy: [ :each | each isResolved ])
+]
+
+{ #category : 'tests' }
+PulsarSystemEnvironmentContractTest >> testLoadedProjectsMatchTheRepositoryRegistry [
+
+	| environment names |
+	environment := self environment.
+	names := environment loadedProjects collect: [ :each | each name ].
+	self assert: names asSet
+		equals: (IceRepository registry collect: [ :each | each name ]) asSet
+]
+
+{ #category : 'tests' }
 PulsarSystemEnvironmentContractTest >> testLocalClassOfIdentity [
 
 	self assert: (self environment localClassOf: Object) == Object

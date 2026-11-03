@@ -18,14 +18,16 @@ PulsarRepositoriesModel class >> on: aSystemEnvironmentModel [
 		entity: nil
 ]
 
-{ #category : 'private' }
+{ #category : 'accessing' }
 PulsarRepositoriesModel >> collectRepositories [
 
-	^ IceRepository registry collect: [ :each | 
-		PulsarRepositoryModel 
-			newEnvironment: self environmentModel 
-			parent: self 
-			entity: each ]
+	^ self environmentModel loadedProjects
+		select: [ :each | each repository notNil ]
+		thenCollect: [ :each |
+			PulsarRepositoryModel
+				newEnvironment: self environmentModel
+				parent: self
+				entity: each repository ]
 ]
 
 { #category : 'accessing' }

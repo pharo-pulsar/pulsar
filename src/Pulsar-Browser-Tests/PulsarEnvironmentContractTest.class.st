@@ -72,6 +72,13 @@ PulsarEnvironmentContractTest >> testDefinitionString [
 ]
 
 { #category : 'tests' }
+PulsarEnvironmentContractTest >> testLoadedProjectsAreDescriptors [
+
+	self assert: (self environment loadedProjects allSatisfy: [ :each |
+		each isKindOf: PulsarLoadedProject ])
+]
+
+{ #category : 'tests' }
 PulsarEnvironmentContractTest >> testNameIsNotEmpty [
 
 	self assert: self environment name isNotEmpty
