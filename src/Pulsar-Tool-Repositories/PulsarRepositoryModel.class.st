@@ -255,7 +255,7 @@ PulsarRepositoryModel >> headTags [
 { #category : 'testing' }
 PulsarRepositoryModel >> includesBaseline: aBaselineName [
 
-	^ self baselines anySatisfy: [ :each | each name = aBaselineName ]
+	^ self baselines anySatisfy: [ :each | each baselineName = aBaselineName ]
 ]
 
 { #category : 'accessing' }
