@@ -10,7 +10,7 @@ PulsarApplication running windows
 ```
 "
 Class {
-	#name : 'MCPToolPulsarDebugger',
+	#name : 'MCPPulsarDebugger',
 	#superclass : 'MCPPulsarTool',
 	#category : 'Pulsar-Tool-LLM-MCP-Tools',
 	#package : 'Pulsar-Tool-LLM',
@@ -18,7 +18,7 @@ Class {
 }
 
 { #category : 'private' }
-MCPToolPulsarDebugger >> debuggerModelAt: aWindowIndex [
+MCPPulsarDebugger >> debuggerModelAt: aWindowIndex [
 
 	| models |
 	models := self debuggerModels.
@@ -29,19 +29,19 @@ MCPToolPulsarDebugger >> debuggerModelAt: aWindowIndex [
 ]
 
 { #category : 'private' }
-MCPToolPulsarDebugger >> debuggerModels [
+MCPPulsarDebugger >> debuggerModels [
 
 	^ (self pulsarApplication windows select: [ :each | each isKindOf: PulsarDebugger ] thenCollect: [ :each | each model ]) asArray
 ]
 
 { #category : 'defaults' }
-MCPToolPulsarDebugger >> defaultDescription [
+MCPPulsarDebugger >> defaultDescription [
 
 	^ 'Interact with open Pulsar debuggers. list shows all debugger windows with stack summaries. inspect shows the full stack of a chosen debugger, including source code for each context. step performs stepping actions (stepInto, stepOver, stepThrough, proceed, restart) on the top context. evaluate runs Smalltalk code in a chosen context.'
 ]
 
 { #category : 'defaults' }
-MCPToolPulsarDebugger >> defaultInputSchema [
+MCPPulsarDebugger >> defaultInputSchema [
 
 	^ MCPStructureInputSchema new
 		  type: 'object';
@@ -67,13 +67,13 @@ MCPToolPulsarDebugger >> defaultInputSchema [
 ]
 
 { #category : 'defaults' }
-MCPToolPulsarDebugger >> defaultName [
+MCPPulsarDebugger >> defaultName [
 
 	^ 'pulsar-debugger'
 ]
 
 { #category : 'schema' }
-MCPToolPulsarDebugger >> defaultOutputSchema [
+MCPPulsarDebugger >> defaultOutputSchema [
 
 	| debuggerItemSchema stackItemSchema |
 	debuggerItemSchema := MCPStructureProperties new
@@ -115,13 +115,13 @@ MCPToolPulsarDebugger >> defaultOutputSchema [
 ]
 
 { #category : 'defaults' }
-MCPToolPulsarDebugger >> defaultTitle [
+MCPPulsarDebugger >> defaultTitle [
 
 	^ 'Pulsar Debugger'
 ]
 
 { #category : 'private' }
-MCPToolPulsarDebugger >> evaluateInDebuggerAt: windowIndex request: aRequest [
+MCPPulsarDebugger >> evaluateInDebuggerAt: windowIndex request: aRequest [
 	"Evaluate Smalltalk code in a specific context of the chosen debugger."
 
 	| model stack contextIndex context code result |
@@ -146,7 +146,7 @@ MCPToolPulsarDebugger >> evaluateInDebuggerAt: windowIndex request: aRequest [
 ]
 
 { #category : 'executing' }
-MCPToolPulsarDebugger >> executeWithRequest: request [
+MCPPulsarDebugger >> executeWithRequest: request [
 	"Dispatch to list, inspect, step, or evaluate based on the operation argument."
 
 	| operation windowIndex contextIndex |
@@ -164,7 +164,7 @@ MCPToolPulsarDebugger >> executeWithRequest: request [
 ]
 
 { #category : 'private - results' }
-MCPToolPulsarDebugger >> formattedDataContentBlocks: aDictionary [
+MCPPulsarDebugger >> formattedDataContentBlocks: aDictionary [
 	"Format debugger list, stack inspect, or step/evaluate results as text content blocks."
 
 	| debuggers stack resultText lines |
@@ -194,7 +194,7 @@ MCPToolPulsarDebugger >> formattedDataContentBlocks: aDictionary [
 ]
 
 { #category : 'operations' }
-MCPToolPulsarDebugger >> inspectDebuggerAt: windowIndex contextIndex: contextIndex [
+MCPPulsarDebugger >> inspectDebuggerAt: windowIndex contextIndex: contextIndex [
 	"Inspect the stack of a debugger, or a single context if contextIndex is provided."
 
 	| model stack contexts |
@@ -226,7 +226,7 @@ MCPToolPulsarDebugger >> inspectDebuggerAt: windowIndex contextIndex: contextInd
 ]
 
 { #category : 'private' }
-MCPToolPulsarDebugger >> listDebuggers [
+MCPPulsarDebugger >> listDebuggers [
 
 	| models |
 	models := self debuggerModels.
@@ -243,7 +243,7 @@ MCPToolPulsarDebugger >> listDebuggers [
 ]
 
 { #category : 'private' }
-MCPToolPulsarDebugger >> stepDebuggerAt: windowIndex request: aRequest [
+MCPPulsarDebugger >> stepDebuggerAt: windowIndex request: aRequest [
 	"Apply a stepping action to the top context of the chosen debugger."
 
 	| model stack topContext action |

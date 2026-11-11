@@ -139,6 +139,19 @@ PulsarRepositoryModel >> checkoutStrategies [
 	^ IceCheckoutStrategy allStrategies
 ]
 
+{ #category : 'actions' }
+PulsarRepositoryModel >> commitChangesWithMessage: aString [
+	"Commit the active changes of the repository with aString."
+
+	| activeNodes diff |
+	activeNodes := self activeNodes.
+	activeNodes ifEmpty: [ IceNothingToCommit signal ].
+	diff := self diffToReferenceCommit.
+	self entity workingCopy commitChanges: (diff copyWithOnly: activeNodes) withMessage: aString.
+	self resetDiff.
+	^ self
+]
+
 { #category : 'accessing' }
 PulsarRepositoryModel >> commitsUpTo: aNumber inBranch: aRepositoryBranchModel [
 	| branch |
@@ -210,6 +223,15 @@ PulsarRepositoryModel >> discardChangesOn: aNode [
 
 	self entity workingCopy discardChanges: aNode entity.
 	self resetDiff
+]
+
+{ #category : 'actions' }
+PulsarRepositoryModel >> fetchRemote: aRemote [
+	"Fetch the repository, or only aRemote when it is not nil."
+
+	aRemote ifNil: [ self entity fetch ] ifNotNil: [ :remote | self entity fetchFrom: remote ].
+	self resetDiff.
+	^ self
 ]
 
 { #category : 'actions - command' }
@@ -586,6 +608,28 @@ PulsarRepositoryModel >> packages [
 PulsarRepositoryModel >> project [
 
 	^ self entity project
+]
+
+{ #category : 'actions' }
+PulsarRepositoryModel >> pullFromRemote: aRemote [
+	"Pull from aRemote, or from the upstream remote when aRemote is nil."
+
+	| remote |
+	remote := aRemote ifNil: [ self entity branch upstream remote ].
+	self entity pullFrom: remote.
+	self resetDiff.
+	^ self
+]
+
+{ #category : 'actions' }
+PulsarRepositoryModel >> pushToRemote: aRemote [
+	"Push to aRemote, or to the remote to push when aRemote is nil."
+
+	| remote |
+	remote := aRemote ifNil: [ self remoteToPush ].
+	self entity pushTo: remote.
+	self resetDiff.
+	^ self
 ]
 
 { #category : 'actions' }

@@ -40,7 +40,7 @@ BaselineOfPulsar >> baseline: spec [
 			spec package: 'Pulsar-Tool-HTML' with: [ spec requires: 'Pulsar-Browser' ].
 			spec package: 'Pulsar-Tool-TestRunner' with: [ spec requires: 'Pulsar-Browser' ].
 			spec package: 'Pulsar-Tool-MorphicWorld' with: [ spec requires: 'Pulsar-Browser' ].
-			spec package: 'Pulsar-Tool-LLM' with: [ spec requires: #( 'Pulsar-Browser' 'Vte' 'MCP' ) ].
+			spec package: 'Pulsar-Tool-LLM' with: [ spec requires: #( 'Pulsar-Browser' 'Vte' 'MCP' 'Pulsar-Tool-Repositories' ) ].
 			spec package: 'Pulsar-Tool-TestRunner' with: [ spec requires: 'Pulsar-Browser' ]. "tests"
 			spec package: 'Pulsar-Browser-Tests' with: [ spec requires: 'Pulsar-Browser' ] ]
 ]
