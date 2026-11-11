@@ -85,3 +85,29 @@ PvClassModelTest >> testPackageName [
 	model := self classModel.
 	self assert: model packageName equals: 'Kernel'
 ]
+
+{ #category : 'tests' }
+PvClassModelTest >> testSaveCommentNormalizesLineEndings [
+	"Comments arriving with LF (Gtk text buffers) must be stored with CR, like Pharo and Tonel expect."
+
+	| model originalComment |
+	model := self classModel.
+	originalComment := model entity comment.
+	[
+		model saveComment: 'first line' , String lf , 'second line' , String cr , 'third line'.
+		self assert: model entity comment equals: 'first line' , String cr , 'second line' , String cr , 'third line' ] ensure: [
+		model entity comment: originalComment ]
+]
+
+{ #category : 'tests' }
+PvClassModelTest >> testSaveCommentWithSameContentAndDifferentLineEndingsKeepsCommentEqual [
+	"Saving the same text again with different line endings must not alter the stored comment."
+
+	| model originalComment |
+	model := self classModel.
+	originalComment := model entity comment.
+	[
+		model saveComment: 'same' , String cr , 'content'.
+		model saveComment: 'same' , String lf , 'content'.
+		self assert: model entity comment equals: 'same' , String cr , 'content' ] ensure: [ model entity comment: originalComment ]
+]

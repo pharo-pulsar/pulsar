@@ -67,9 +67,9 @@ PulsarClassEditor >> acceptVisitor: aVisitor [
 PulsarClassEditor >> commentChangedFrom: oldText to: newText [
 
 	self isUpdating ifTrue: [ ^ self ].
-
-	oldText = newText ifTrue: [ ^ self ].
-	(commentDirty and: [ newText = self model commentOrTemplate ]) ifTrue: [ ^ self commentUnmarkDirty ].
+	(self commentText: oldText isEquivalentTo: newText) ifTrue: [ ^ self ].
+	(commentDirty and: [ self commentText: newText isEquivalentTo: self model commentOrTemplate ]) ifTrue: [
+		^ self commentUnmarkDirty ].
 
 	self commentMarkDirty
 ]
@@ -102,6 +102,13 @@ PulsarClassEditor >> commentOverlayLayout [
 PulsarClassEditor >> commentPresenter [
 
 	^ commentPresenter
+]
+
+{ #category : 'private - updating' }
+PulsarClassEditor >> commentText: aString isEquivalentTo: anotherString [
+	"Compare two comment texts ignoring their line ending style (Gtk buffers use LF, Pharo comments use CR)."
+
+	^ aString withInternalLineEndings = anotherString withInternalLineEndings
 ]
 
 { #category : 'private - updating' }

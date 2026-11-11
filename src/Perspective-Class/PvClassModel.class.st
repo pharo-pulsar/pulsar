@@ -394,8 +394,9 @@ PvClassModel >> runTestAnnouncingTo: anAnnouncer [
 
 { #category : 'accessing' }
 PvClassModel >> saveComment: aString [
+	"Store my comment normalizing line endings: Gtk text presenters hand us LF, while Pharo comments and Tonel-loaded definitions use CR."
 
-	self entity comment: aString
+	self entity comment: aString withInternalLineEndings
 ]
 
 { #category : 'accessing' }
