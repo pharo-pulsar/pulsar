@@ -1,3 +1,16 @@
+"
+PulsarBrowser is Pulsar's main window: a dock that combines the environment navigator with the development tools used alongside it.
+
+It is the default concrete `PulsarBaseBrowser`, and most of its docking, action, announcement and persistence behaviour comes from that superclass. This class supplies the standard workspace rather than new browsing logic: a project view for navigating projects, packages and classes; a class outline; and toggleable panels for the editor stack, repositories, critiques, flags, playground and image file system. Tools are docked as unique panels, so requesting one that is already present raises it, while its toggle action removes it. The window title tracks the image location and the projects currently open in the project view.
+
+The browser is the entry point for opening code: `openClass:` and `openMethod:` activate a class or method model in the project view, which docks the matching editor, and `openProject:` adds a baseline project to the navigation tree. `PulsarApplication start` opens a `PulsarBrowser` when there is no session snapshot to restore, and further browser windows can be spawned from an existing one.
+
+```smalltalk
+(PulsarBrowser newApplication: PulsarApplication running) open
+```
+
+The project and outline presenters are cached in the `projectView` and `outlineView` instance variables because title updates, project actions and the initial keyboard focus need them directly. When a snapshot is restored these references are rebound to the restored presenters instead of being recreated. Browser state is captured by `PulsarBrowserSnapshot`, so panel sizes and the set of docked panels survive an image save.
+"
 Class {
 	#name : 'PulsarBrowser',
 	#superclass : 'PulsarBaseBrowser',

@@ -91,10 +91,10 @@ PulsarLLMChatConsole >> doConnect [
 	[
 		self updatingWhile: [
 			self model
-					clientClass: self usingLLM;
-					connectTo: terminalPresenter.
-				self updateTitle.
-				self updateStatus ] ]
+				defaultClass: self usingLLM;
+				connectTo: terminalPresenter.
+			self updateTitle.
+			self updateStatus ] ]
 	on: Error
 	do: [ :e |
 		terminalPresenter terminateAllSpawns.

@@ -21,7 +21,8 @@ Class {
 		'initialPrompt',
 		'title',
 		'autoConnect',
-		'clientModel'
+		'clientModel',
+		'defaultClass'
 	],
 	#category : 'Pulsar-Tool-LLM-Model',
 	#package : 'Pulsar-Tool-LLM',
@@ -43,7 +44,7 @@ PulsarLLMChatConsoleModel >> autoConnect: aBoolean [
 { #category : 'accessing' }
 PulsarLLMChatConsoleModel >> clientClass [
 
-	^ clientClass
+	^ clientClass ifNil: [ self defaultClass ]
 ]
 
 { #category : 'accessing' }
@@ -73,6 +74,21 @@ PulsarLLMChatConsoleModel >> connectTo: aTerminalPresenter [
 	ensure: [
 		"consumed"
 		self initialPrompt: nil ]
+]
+
+{ #category : 'accessing' }
+PulsarLLMChatConsoleModel >> defaultClass [
+
+	^ defaultClass ifNil: [ 
+		PulsarLLMModel allModels 
+			ifNotEmpty: [ :aCollection | aCollection anyOne ]
+			ifEmpty: [ nil ] ]
+]
+
+{ #category : 'accessing' }
+PulsarLLMChatConsoleModel >> defaultClass: aClass [
+
+	defaultClass := aClass
 ]
 
 { #category : 'accessing' }
