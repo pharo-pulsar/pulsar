@@ -81,6 +81,15 @@ PvMethodModel >> actionsWithContextOn: aContextPresenter [
 		copyWithContext: (PulsarRefactorMethodContext on: aContextPresenter)
 ]
 
+{ #category : 'accessing' }
+PvMethodModel >> allAvailableExtensionNames [
+	"this is used to select protocols"
+
+	^ (self environmentModel allPackages
+		collect: [ :each | '*', each name ])
+		sorted: #yourself ascending
+]
+
 { #category : 'converting' }
 PvMethodModel >> asClassModel [
 	

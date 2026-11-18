@@ -1,3 +1,23 @@
+"
+A searchable chooser for the protocol (method category) a method belongs to, opened as a popup from the Pulsar method editor.
+
+A search field sits above a list of all protocols currently defined in the system. Typing selects the first protocol that starts with the typed text; pressing Enter, or activating a list item, confirms the choice and hands the protocol name to the host through the block installed with `onSelect:`. Escape runs the `onAbort:` block instead, letting the host dismiss the popup without changing anything. Typing a leading `*` swaps the list for the names of extension packages, so a method can also be moved into an extension protocol.
+
+The presenter is instantiated (`instantiate:on:`) on the method editor's method model, which must answer `protocolName` so the chooser opens pre-selected on the method's current protocol. What a selection means is left entirely to the host: reclassifying the method, closing the popover and returning keyboard focus are the host's job. Both current hosts embed this presenter in a popover anchored on the protocol button of the method editor — see `PulsarProtocolButtonPresenter>>#popupProtocol` and `PvMethodEditorFooterPresenter>>#popupProtocol`.
+
+Example:
+
+```smalltalk
+chooser := self instantiate: PvMethodProtocolChooserPresenter on: methodModel.
+chooser
+	onSelect: [ :protocolName | self model classifyMethodAs: protocolName ];
+	onAbort: [ popover dismiss ].
+popover
+	presenter: chooser;
+	relativeTo: protocolButton;
+	popup.
+```
+"
 Class {
 	#name : 'PvMethodProtocolChooserPresenter',
 	#superclass : 'SpPresenter',
@@ -9,7 +29,9 @@ Class {
 		'selectAction',
 		'abortAction',
 		'protocols',
-		'updating'
+		'updating',
+		'protocolListKind',
+		'extensions'
 	],
 	#category : 'Perspective-Method-View',
 	#package : 'Perspective-Method',
@@ -40,15 +62,46 @@ PvMethodProtocolChooserPresenter >> defaultLayout [
 ]
 
 { #category : 'private' }
+PvMethodProtocolChooserPresenter >> ensureProtocolExtensionList [
+
+	protocolListKind == #extension ifTrue: [ ^ self ].
+	
+	protocolListKind := #extension.
+	protocolListPresenter items: self extensions
+]
+
+{ #category : 'private' }
+PvMethodProtocolChooserPresenter >> ensureProtocolList [
+
+	protocolListKind == #protocol ifTrue: [ ^ self ].
+	
+	protocolListKind := #protocol.
+	protocolListPresenter items: self protocols
+]
+
+{ #category : 'private' }
+PvMethodProtocolChooserPresenter >> extensions [
+
+	^ extensions ifNil: [ 
+		extensions := self model allAvailableExtensionNames ]
+]
+
+{ #category : 'private' }
 PvMethodProtocolChooserPresenter >> filterProtocolsWith: aString [
 	"Selects the first that begins with my string (unless this is nil or unclassified)"
 	| searchString |
 	
 	updating ifTrue: [ ^ self ].
 	aString ifNil: [ ^ self ].
+	
+	(aString beginsWith: '*')
+		ifTrue: [ self ensureProtocolExtensionList ]
+		ifFalse: [ self ensureProtocolList ].	
+		
 	self updatingWhile: [
 		searchString := aString trimBoth asLowercase.
 		searchString = Protocol unclassified ifTrue: [ ^ self ].
+		
 		protocolListPresenter items withIndexDo: [ :each :index |
 			(each asLowercase beginsWith: searchString) ifTrue: [
 				self updatingWhile: [ 
@@ -88,7 +141,7 @@ PvMethodProtocolChooserPresenter >> onSelect: aBlock [
 	selectAction := aBlock
 ]
 
-{ #category : 'private - accessing' }
+{ #category : 'private' }
 PvMethodProtocolChooserPresenter >> protocols [
 
 	^ protocols ifNil: [ 
@@ -116,7 +169,7 @@ PvMethodProtocolChooserPresenter >> updateName: aString [
 PvMethodProtocolChooserPresenter >> updatePresenter [
 
 	self updatingWhile: [
-		protocolListPresenter items: self protocols.		
+		self ensureProtocolList.
 		self model ifNotNil: [ 
 			| protocolName | 
 			protocolName := self model protocolName.
