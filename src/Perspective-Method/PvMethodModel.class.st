@@ -81,6 +81,12 @@ PvMethodModel >> actionsWithContextOn: aContextPresenter [
 		copyWithContext: (PulsarRefactorMethodContext on: aContextPresenter)
 ]
 
+{ #category : 'adding' }
+PvMethodModel >> addProtocolNamed: protocolName [
+
+	^ self asClassModel addProtocolNamed: protocolName
+]
+
 { #category : 'accessing' }
 PvMethodModel >> allAvailableExtensionNames [
 	"this is used to select protocols"

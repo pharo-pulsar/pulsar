@@ -198,17 +198,16 @@ PulsarClassOutlineSideView >> dismissPreview [
 PulsarClassOutlineSideView >> doAddProtocolCommand: aCommand [
 	| dialog protocolName |
 
-	dialog := self instantiate: PulsarRequestPresenter.
-	dialog label: 'Protocol Name'.
-	dialog acceptLabel: 'Add'.
+	dialog := self instantiate: PvMethodProtocolChooserPresenter.
+	dialog onSelect: [ :aString | protocolName := aString ].
 	
 	dialog asPopover
 		relativeTo: aCommand presenter;
 		popupModalAndWait.
-	dialog isOk ifFalse: [ ^ self ].
-	
-	protocolName := dialog text.
-	self model asClassModel addProtocolNamed: protocolName.
+
+	protocolName ifNil: [ ^ self ].
+
+	self model addProtocolNamed: protocolName.
 	self updateProtocols.
 	protocolListPresenter selectItem: (protocolListPresenter items detect: [ :each | each name = protocolName ])
 ]
@@ -324,18 +323,15 @@ PulsarClassOutlineSideView >> doRenameProtocolCommand: anAction [
 	self flag: #TODO. "Validate can be renamed (e.g. if is virtual, but this should be 
 	by enable/disable the option in the menu)"
 
-	dialog := self instantiate: PulsarRequestPresenter.
-	dialog 
-		label: 'Protocol Name';
-		text: selectedProtocolModel name.
-	dialog acceptLabel: 'Rename'.
+	dialog := self instantiate: PvMethodProtocolChooserPresenter.
+	dialog updateName: selectedProtocolModel name.
+	dialog onSelect: [ :aString | protocolName := aString ].
 	
 	dialog asPopover
 		relativeTo: (protocolListPresenter selectedRowPresenter ifNil: [ protocolListPresenter ]);
 		popupModalAndWait.
-	dialog isOk ifFalse: [ ^ self ].
 	
-	protocolName := dialog text.
+	protocolName ifNil: [ ^ self ].
 	selectedProtocolModel renameProtocolTo: protocolName.
 	self updateProtocols.
 	protocolListPresenter 

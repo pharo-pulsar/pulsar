@@ -83,7 +83,9 @@ PvMethodProtocolChooserPresenter >> ensureProtocolList [
 PvMethodProtocolChooserPresenter >> extensions [
 
 	^ extensions ifNil: [ 
-		extensions := self model allAvailableExtensionNames ]
+		extensions := self model 
+			ifNotNil: [ :aModel | aModel allAvailableExtensionNames ]
+			ifNil: [ #() ] ]
 ]
 
 { #category : 'private' }
@@ -114,6 +116,10 @@ PvMethodProtocolChooserPresenter >> initialize [
 
 	super initialize.
 	updating := false
+]
+
+{ #category : 'initialization' }
+PvMethodProtocolChooserPresenter >> initializePopover: aPopoverPresenter [
 ]
 
 { #category : 'initialization' }
@@ -153,8 +159,11 @@ PvMethodProtocolChooserPresenter >> protocols [
 { #category : 'private' }
 PvMethodProtocolChooserPresenter >> triggerAbort [
 
-	abortAction ifNil: [ ^ self ].
-	abortAction value
+	abortAction ifNotNil: [ 
+		abortAction value ].
+
+	"if we are in a popover, this cancels the operation"
+	self withPopoverDo: #dismiss
 ]
 
 { #category : 'private' }
@@ -185,7 +194,10 @@ PvMethodProtocolChooserPresenter >> updateProtocol: aString [
 	updating ifTrue: [ ^ self ].
 	selectAction ifNil: [ ^ self ].
 	self updatingWhile: [
-		selectAction value: aString ]
+		selectAction value: aString ].
+		
+	"if we are in a popover, we then finish"
+	self withPopoverDo: #dismiss
 ]
 
 { #category : 'private - updating' }
