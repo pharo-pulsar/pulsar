@@ -38,7 +38,9 @@ PulsarApplication class >> defaultBackendName [
 { #category : 'class initialization' }
 PulsarApplication class >> initialize [
 	
-	SessionManager default registerGuiClassNamed: self name atPriority: 10
+	SessionManager default 
+		registerGuiClassNamed: self name
+		atPriority: 10
 ]
 
 { #category : 'private' }
@@ -128,6 +130,8 @@ PulsarApplication class >> running: anApplication [
 
 { #category : 'system startup' }
 PulsarApplication class >> shutDown: quitting [
+
+	logger trace: self running.
 
 	self running ifNotNil: [ :anApplication | 
 		anApplication shutDown: quitting ].
@@ -517,8 +521,8 @@ PulsarApplication >> run [
 
 	self class running ifNotNil: [ :anApplication | 
 		anApplication shutDown: false ].
-	self backend runOn: self.
-	self class running: self
+	self class running: self.
+	self backend runOn: self
 ]
 
 { #category : 'accessing' }
