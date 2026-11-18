@@ -40,14 +40,14 @@ PulsarRepositoryCheckoutPreviewModel >> checkoutCommitish: aCommitish withDiff: 
 
 { #category : 'actions - command' }
 PulsarRepositoryCheckoutPreviewModel >> checkoutConflictBetween: aLocalBranch and: aRemoteBranch strategy: aCheckoutStrategy context: aContext [
-
 	| resolution |
 
 	resolution := self
-		              resolutionForConflictBetween: aLocalBranch
-		              and: aRemoteBranch
-		              context: aContext.
+		resolutionForConflictBetween: aLocalBranch
+		and: aRemoteBranch
+		context: aContext.
 	resolution ifNil: [ ^ nil ].
+	
 	resolution key = #checkoutLocal ifTrue: [
 		^ self checkoutCommitish: aLocalBranch diffTo: aLocalBranch strategy: aCheckoutStrategy ].
 	resolution key = #newBranch ifTrue: [
@@ -60,7 +60,8 @@ PulsarRepositoryCheckoutPreviewModel >> checkoutConflictBetween: aLocalBranch an
 			  resetLocalBranch: aLocalBranch
 			  to: aRemoteBranch
 			  strategy: aCheckoutStrategy ].
-	self error: 'Unknown checkout resolution: ' , resolution key printString
+		
+	self error: f'Unknown checkout resolution: [resolution key]' 
 ]
 
 { #category : 'accessing' }
@@ -71,14 +72,15 @@ PulsarRepositoryCheckoutPreviewModel >> checkoutDiffNode [
 
 { #category : 'private' }
 PulsarRepositoryCheckoutPreviewModel >> checkoutNewLocalBranchNamed: aString at: aRemoteBranch strategy: aCheckoutStrategy [
-
 	| diff localBranch |
 
 	diff := (self newDiffNodeTo: aRemoteBranch) entity.
-	localBranch := self repositoryModel entity
-		               createBranch: aString
-		               inCommit: aRemoteBranch commit.
+	
+	localBranch := self repositoryModel 
+		createBranch: aString 
+		fromCommit: aRemoteBranch commit.
 	localBranch setUpstream: aRemoteBranch.
+
 	^ self
 		  checkoutCommitish: localBranch
 		  withDiff: diff

@@ -173,6 +173,14 @@ PulsarRepositoryModel >> commitsUpTo: aNumber inBranch: aRepositoryBranchModel [
 							entity: aCommit) ] ] ] ]
 ]
 
+{ #category : 'actions' }
+PulsarRepositoryModel >> createBranch: aName fromCommit: aCommit [
+
+	^ self entity
+		createBranch: aName
+		inCommit: aCommit
+]
+
 { #category : 'private' }
 PulsarRepositoryModel >> critical: aBlock [
 

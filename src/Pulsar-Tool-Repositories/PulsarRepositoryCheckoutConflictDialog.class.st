@@ -31,7 +31,7 @@ PulsarRepositoryCheckoutConflictDialog >> confirmReset [
 { #category : 'layout' }
 PulsarRepositoryCheckoutConflictDialog >> defaultLayout [
 
-	^ SpBoxLayout newTopToBottom
+	^ SpBoxLayout newVertical
 		spacing: 8;
 		borderWidth: 10;
 		add: messagePresenter expand: false;
@@ -156,9 +156,7 @@ PulsarRepositoryCheckoutConflictDialog >> updateMessage [
 
 	messagePresenter ifNil: [ ^ self ].
 	(remoteBranch isNil or: [ existingBranch isNil ]) ifTrue: [ ^ self ].
-	messagePresenter label: ('The local branch <b>{1}</b> already exists and <b>{2}</b> points to a different commit. What do you want to do?' format: {
-			 existingBranch name.
-			 remoteBranch name })
+	messagePresenter label: f'The local branch <b>[existingBranch name]</b> already exists and <b>[remoteBranch name]</b> points to a different commit. What do you want to do?'
 ]
 
 { #category : 'initialization' }
