@@ -425,8 +425,8 @@ PulsarRepositoryModel >> newCheckoutActionWithStrategy: aCheckoutStrategy [
 		  repository: self entity;
 		  onSuccessRepositoryModified;
 		  action: [
-				  aCheckoutStrategy committish: self entity head.
-				  self entity checkout: aCheckoutStrategy ];
+			  aCheckoutStrategy committish: self entity head.
+			  self entity head checkout: aCheckoutStrategy ];
 		  yourself
 ]
 
