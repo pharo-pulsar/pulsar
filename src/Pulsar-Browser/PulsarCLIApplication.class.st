@@ -11,6 +11,12 @@ Class {
 }
 
 { #category : 'private - commandline' }
+PulsarCLIApplication class >> addBaseFlagsTo: aSpec [
+
+	aSpec addFlag: #verbose description: 'Enable verbose information'
+]
+
+{ #category : 'private - commandline' }
 PulsarCLIApplication class >> addOpenFlagsTo: aSpec [
 
 	aSpec
@@ -38,6 +44,7 @@ PulsarCLIApplication class >> commandSpecification [
 		commandClass: self;
 		addHelp.
 	
+	self addBaseFlagsTo: spec.
 	"as open is the default, add the flags for open too"
 	self addOpenFlagsTo: spec.
 	
@@ -120,6 +127,7 @@ PulsarCLIApplication >> executeOpen [
 	"reset cleans up but it does not stop the execution of the IDE"
 
 	(self hasFlag: #reset) ifTrue: [ self forceReset ].
+	(self hasFlag: #verbose) ifTrue: [ self enableTrace: 'info' ].
 	(self hasFlag: #logLevel) ifTrue: [ self enableTrace: (self positional: #logLevel) ].
 	(self hasFlag: #logFilterByClass) 
 		ifTrue: [ self addFilterByClass: (self positional: #logFilterByClass) ].
